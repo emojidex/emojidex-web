@@ -21,7 +21,7 @@ module.exports = function(grunt) {
 		concat: {
 			dist: {
 				src: ["src/jquery.boilerplate.js"],
-				dest: "dist/jquery.boilerplate.js"
+				dest: "dist/jquery.emojidex.js"
 			},
 			options: {
 				banner: "<%= meta.banner %>"
@@ -40,7 +40,7 @@ module.exports = function(grunt) {
 		uglify: {
 			my_target: {
 				src: ["dist/jquery.boilerplate.js"],
-				dest: "dist/jquery.boilerplate.min.js"
+				dest: "dist/jquery.emojidex.min.js"
 			},
 			options: {
 				banner: "<%= meta.banner %>"
