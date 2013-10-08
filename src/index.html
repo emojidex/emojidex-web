@@ -6,18 +6,23 @@
     <title></title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
-    <link rel="stylesheet" href="assets/jquery-emojiarea/jquery.emojiarea.css">
-    <link rel="stylesheet" href="assets/jquery-emojiarea/example/stylesheet.css">
+    <link rel="stylesheet" href="assets/js/jquery-emojiarea/jquery.emojiarea.css">
+    <link rel="stylesheet" href="assets/js/jquery-emojiarea/example/stylesheet.css">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-    <script src="assets/jquery-emojiarea/jquery.emojiarea.js"></script>
-    <script src="assets/jquery-emojiarea/packs/basic/emojis.js"></script>
+    <script src="assets/js/jquery-emojiarea/jquery.emojiarea.js"></script>
+    <script src="assets/js/jquery-emojiarea/packs/basic/emojis.js"></script>
 
-    <script src="assets/jquery-textcomplete/jquery.textcomplete.js"></script>
-    <script src="assets/jquery-textcomplete/media/javascripts/main.js"></script>
-    <script src="assets/jquery-textcomplete/media/javascripts/emoji.js"></script>
-    <link href="assets/jquery-textcomplete/media/stylesheets/main.css" rel="stylesheet">
-    <link href="assets/jquery-textcomplete/media/stylesheets/bootstrap.css" rel="stylesheet">
+    <script src="assets/js/jquery-textcomplete/jquery.textcomplete.js"></script>
+    <script src="assets/js/jquery-textcomplete/media/javascripts/main.js"></script>
+    <script src="assets/js/jquery-textcomplete/media/javascripts/emoji.js"></script>
+    <link href="assets/js/jquery-textcomplete/media/stylesheets/main.css" rel="stylesheet">
+    <link href="assets/js/jquery-textcomplete/media/stylesheets/bootstrap.css" rel="stylesheet">
 
+    <script type="text/javascript" >
+    $.getJSON("assets/json/utf-emoji.json", function(emoji){
+
+    })
+    </script>
 
   </head>
   <body>
@@ -58,7 +63,7 @@
                 }));
             },
             template: function (value) {
-                return '<img src="assets/jquery-textcomplete/media/images/emoji/' + value + '.png"></img>' + value;
+                return '<img src="assets/js/jquery-textcomplete/media/images/emoji/' + value + '.png"></img>' + value;
             },
             replace: function (value) {
                 return ':' + value + ': ';
