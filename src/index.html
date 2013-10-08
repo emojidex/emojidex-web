@@ -18,7 +18,7 @@
     <link href="assets/js/jquery-textcomplete/media/stylesheets/main.css" rel="stylesheet">
     <link href="assets/js/jquery-textcomplete/media/stylesheets/bootstrap.css" rel="stylesheet">
 
-    <script type="text/javascript" >
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js">
     $.getJSON("assets/json/utf-emoji.json", function(emoji){
 
     })
@@ -40,7 +40,7 @@
       <div class="value"><pre id="emojis-wysiwyg-value"></pre></div>
     </div>
 
-    <script>
+    <script src="assets/js/jquery-emojiarea/jquery.emojiarea.min.js">
     $('.emojis-plain').emojiarea({wysiwyg: false});
     
     var $wysiwyg = $('.emojis-wysiwyg').emojiarea({wysiwyg: true});
@@ -53,7 +53,7 @@
 
     </script>
 
-    <script>
+    <script src="assets/js/jquery-textcomplete/jquery.textcomplete.min.js">
     $('textarea').textcomplete({
         emoji: {
             match: /\B:([\-+\w]*)$/,
