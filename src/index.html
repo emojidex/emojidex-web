@@ -9,14 +9,13 @@
     <link rel="stylesheet" href="assets/js/jquery-emojiarea/jquery.emojiarea.css">
     <link rel="stylesheet" href="assets/js/jquery-emojiarea/example/stylesheet.css">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script src="assets/js/jquery-emojiarea/jquery.emojiarea.js"></script>
+    <script src="assets/js/jquery-emojiarea/jquery.emojiarea.min.js"></script>
     <script src="assets/js/jquery-emojiarea/packs/basic/emojis.js"></script>
     
-    <script src="assets/js/jquery-textcomplete/jquery.textcomplete.js"></script>
-    <script src="assets/js/jquery-textcomplete/media/javascripts/main.js"></script>
+    <script src="assets/js/jquery-textcomplete/jquery.textcomplete.min.js"></script>
     <script src="assets/js/jquery-textcomplete/media/javascripts/emoji.js"></script> 
-    <link href="assets/js/jquery-textcomplete/media/stylesheets/main.css" rel="stylesheet">
-    <link href="assets/js/jquery-textcomplete/media/stylesheets/bootstrap.css" rel="stylesheet">
+    <link href="assets/js/jquery-textcomplete/jquery.textcomplete.css" rel="stylesheet">
+
     <script>
       $(document).ready(function(){
         $.getJSON("assets/json/utf-emoji.json", function(emoji){
@@ -43,6 +42,7 @@
         <pre id="emojis-wysiwyg-value"></pre>
       </div>
     </div>
+
     <script>
        $('.emojis-plain').emojiarea({wysiwyg: false});
     
