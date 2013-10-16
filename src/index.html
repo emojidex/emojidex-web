@@ -18,7 +18,7 @@
 
     <script>
       $(document).ready(function(){
-        $.emojiarea.path = '../../emojidex-toolkit/lib/emojidex/utf';
+        $.emojiarea.path = 'assets/img/utf';
         $.getJSON("assets/json/utf-emoji.json", function(emoji){
           for (var i in emoji) {
             $.emojiarea.icons[':' + emoji[i].name + ':'] = emoji[i].name + '.svg';
