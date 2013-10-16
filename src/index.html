@@ -8,8 +8,7 @@
     <meta name="viewport" content="width=device-width">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 
-    <script src="assets/js/jquery-emojiarea/jquery.emojiarea.phantom.js"></script>
-    <script src="assets/js/jquery-emojiarea/packs/basic/emojis.js"></script>
+    <script src="assets/js/jquery-emojiarea/jquery.emojiarea.min.js"></script>
     <link rel="stylesheet" href="assets/js/jquery-emojiarea/jquery.emojiarea.css">
     <link rel="stylesheet" href="assets/js/jquery-emojiarea/example/stylesheet.css">
     
@@ -19,9 +18,10 @@
 
     <script>
       $(document).ready(function(){
+        $.emojiarea.path = '../../emojidex-toolkit/lib/emojidex/utf';
         $.getJSON("assets/json/utf-emoji.json", function(emoji){
           for (var i in emoji) {
-            $.emojiarea.icons[emoji[i].name] = emoji[i].name + '.svg';
+            $.emojiarea.icons[':' + emoji[i].name + ':'] = emoji[i].name + '.svg';
           }
         })
       });
