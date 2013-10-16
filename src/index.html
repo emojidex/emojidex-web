@@ -8,18 +8,18 @@
     <meta name="viewport" content="width=device-width">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 
-    <script src="assets/js/jquery-emojiarea/jquery.emojiarea.min.js"></script>
-    <link rel="stylesheet" href="assets/js/jquery-emojiarea/jquery.emojiarea.css">
-    <link rel="stylesheet" href="assets/js/jquery-emojiarea/example/stylesheet.css">
+    <script src="assets/libs/jquery-emojiarea/jquery.emojiarea.min.js"></script>
+    <link rel="stylesheet" href="assets/libs/jquery-emojiarea/jquery.emojiarea.css">
+    <link rel="stylesheet" href="assets/libs/jquery-emojiarea/example/stylesheet.css">
     
-    <script src="assets/js/jquery-textcomplete-content/jquery.textcomplete.content.js"></script>
-    <script src="assets/js/jquery-textcomplete/media/javascripts/emoji.js"></script> 
-    <link href="assets/js/jquery-textcomplete/jquery.textcomplete.css" rel="stylesheet">
+    <script src="assets/libs/jquery-textcomplete-content/jquery.textcomplete.content.js"></script>
+    <script src="assets/libs/jquery-textcomplete/media/javascripts/emoji.js"></script> 
+    <link href="assets/libs/jquery-textcomplete/jquery.textcomplete.css" rel="stylesheet">
 
     <script>
       $(document).ready(function(){
         $.emojiarea.path = 'assets/img/utf';
-        $.getJSON("assets/json/utf-emoji.json", function(emoji){
+        $.getJSON("assets/json/poe_non_anime.json", function(emoji){
           for (var i in emoji) {
             $.emojiarea.icons[':' + emoji[i].name + ':'] = emoji[i].name + '.svg';
           }
@@ -68,7 +68,7 @@
              }));
            },
            template: function (value) {
-             return '<img src="assets/js/jquery-textcomplete/media/images/emoji/' + value + '.png"></img>' + value;
+             return '<img src="assets/libs/jquery-textcomplete/media/images/emoji/' + value + '.png"></img>' + value;
            },
            replace: function (value) {
               return ':' + value + ': ';
