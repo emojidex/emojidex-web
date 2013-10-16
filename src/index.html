@@ -6,20 +6,23 @@
     <title></title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+    <script src="assets/js/jquery-emojiarea/jquery.emojiarea.phantom.js"></script>
+    <script src="assets/js/jquery-emojiarea/packs/basic/emojis.js"></script>
     <link rel="stylesheet" href="assets/js/jquery-emojiarea/jquery.emojiarea.css">
     <link rel="stylesheet" href="assets/js/jquery-emojiarea/example/stylesheet.css">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script src="assets/js/jquery-emojiarea/jquery.emojiarea.min.js"></script>
-    <script src="assets/js/jquery-emojiarea/packs/basic/emojis.js"></script>
     
-    <script src="assets/js/jquery-textcomplete/jquery.textcomplete.min.js"></script>
+    <script src="assets/js/jquery-textcomplete-content/jquery.textcomplete.content.js"></script>
     <script src="assets/js/jquery-textcomplete/media/javascripts/emoji.js"></script> 
     <link href="assets/js/jquery-textcomplete/jquery.textcomplete.css" rel="stylesheet">
 
     <script>
       $(document).ready(function(){
         $.getJSON("assets/json/utf-emoji.json", function(emoji){
-          
+          for (var i in emoji) {
+            $.emojiarea.icons[emoji[i].name] = emoji[i].name + '.svg';
+          }
         })
       });
     </script>
@@ -56,7 +59,7 @@
     
     </script>
     <script>
-       $('textarea').textcomplete({
+       $('.emojis-plain').textcomplete({
          emoji: {
            match: /\B:([\-+\w]*)$/,
            search: function (term, callback) {
@@ -75,5 +78,6 @@
          }
        });
     </script>
+
   </body>
 </html>
