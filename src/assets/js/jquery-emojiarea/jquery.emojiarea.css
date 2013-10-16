@@ -21,7 +21,7 @@
 }
 .emoji-menu > div {
 	max-height: 200px;
-	overflow: hidden;
+	overflow: auto;
 	background: #fff;
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
