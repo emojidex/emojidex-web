@@ -6,37 +6,78 @@
     <title></title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
-    <link rel="stylesheet" href="assets/jquery-emojiarea/jquery.emojiarea.css">
-    <link rel="stylesheet" href="assets/jquery-emojiarea/example/stylesheet.css">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-    <script src="assets/jquery-emojiarea/jquery.emojiarea.js"></script>
-    <script src="assets/jquery-emojiarea/packs/basic/emojis.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+    <script src="assets/js/jquery-emojiarea/jquery.emojiarea.phantom.js"></script>
+    <script src="assets/js/jquery-emojiarea/packs/basic/emojis.js"></script>
+    <link rel="stylesheet" href="assets/js/jquery-emojiarea/jquery.emojiarea.css">
+    <link rel="stylesheet" href="assets/js/jquery-emojiarea/example/stylesheet.css">
+    
+    <script src="assets/js/jquery-textcomplete-content/jquery.textcomplete.content.js"></script>
+    <script src="assets/js/jquery-textcomplete/media/javascripts/emoji.js"></script> 
+    <link href="assets/js/jquery-textcomplete/jquery.textcomplete.css" rel="stylesheet">
+
+    <script>
+      $(document).ready(function(){
+        $.getJSON("assets/json/utf-emoji.json", function(emoji){
+          for (var i in emoji) {
+            $.emojiarea.icons[emoji[i].name] = emoji[i].name + '.svg';
+          }
+        })
+      });
+    </script>
   </head>
   <body>
     <h1>emojidex-coffee Example</h1>
-    
     <div class="example">
       <h2>Plain-Text</h2>
-      <form><textarea rows="5" class="emojis-plain">Hello :neckbeard:</textarea></form>
+      <form>
+        <textarea rows="5" class="emojis-plain">Hello :neckbeard:</textarea>
+      </form>
     </div>
-    
     <div class="example">
       <h2>WYSIWYG</h2>
-      <form><textarea rows="5" class="emojis-wysiwyg">Hello :neckbeard:</textarea></form>
+      <form>
+        <textarea rows="5" class="emojis-wysiwyg">Hello :neckbeard:</textarea>
+      </form>
       <h3>Value:</h3>
-      <div class="value"><pre id="emojis-wysiwyg-value"></pre></div>
+      <div class="value">
+        <pre id="emojis-wysiwyg-value"></pre>
+      </div>
     </div>
-    
+
     <script>
-    $('.emojis-plain').emojiarea({wysiwyg: false});
+       $('.emojis-plain').emojiarea({wysiwyg: false});
     
-    var $wysiwyg = $('.emojis-wysiwyg').emojiarea({wysiwyg: true});
-    var $wysiwyg_value = $('#emojis-wysiwyg-value');
+       var $wysiwyg = $('.emojis-wysiwyg').emojiarea({wysiwyg: true});
+       var $wysiwyg_value = $('#emojis-wysiwyg-value');
     
-    $wysiwyg.on('change', function() {
-      $wysiwyg_value.text($(this).val());
-    });
-    $wysiwyg.trigger('change');
+       $wysiwyg.on('change', function() {
+         $wysiwyg_value.text($(this).val());
+       });
+       $wysiwyg.trigger('change');
+    
     </script>
+    <script>
+       $('.emojis-plain').textcomplete({
+         emoji: {
+           match: /\B:([\-+\w]*)$/,
+           search: function (term, callback) {
+             callback($.map(emojies, function (emoji) {
+                return emoji.indexOf(term) === 0 ? emoji : null;
+             }));
+           },
+           template: function (value) {
+             return '<img src="assets/js/jquery-textcomplete/media/images/emoji/' + value + '.png"></img>' + value;
+           },
+           replace: function (value) {
+              return ':' + value + ': ';
+           },
+           index: 1,
+           maxCount: 5
+         }
+       });
+    </script>
+
   </body>
 </html>
