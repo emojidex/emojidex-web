@@ -8,13 +8,16 @@
     <meta name="viewport" content="width=device-width">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 
-    <script src="assets/libs/jquery-emojiarea/jquery.emojiarea.min.js"></script>
+    <script src="assets/libs/jquery-emojiarea/jquery.emojiarea.poe.js"></script>
     <link rel="stylesheet" href="assets/libs/jquery-emojiarea/jquery.emojiarea.css">
     <link rel="stylesheet" href="assets/libs/jquery-emojiarea/example/stylesheet.css">
     
     <script src="assets/libs/jquery-textcomplete-content/jquery.textcomplete.content.js"></script>
     <script src="assets/libs/jquery-textcomplete/media/javascripts/emoji.js"></script> 
     <link href="assets/libs/jquery-textcomplete/jquery.textcomplete.css" rel="stylesheet">
+
+    <script src="assets/libs/bootstrap-3.0.0/js/bootstrap.min.js"></script>
+    <link href="assets/libs/bootstrap-3.0.0/css/bootstrap.min.css" rel="stylesheet">
 
     <script>
       $(document).ready(function(){
@@ -28,6 +31,22 @@
     </script>
   </head>
   <body>
+
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#ka" data-toggle="tab">ka</a></li>
+  <li><a href="#o" data-toggle="tab">o</a></li>
+  <li><a href="#moji" data-toggle="tab">moji</a></li>
+</ul>
+
+<div class="tab-content">
+  <div class="tab-pane active" id="kao">ka</div>
+  <div class="tab-pane" id="o">o</div>
+  <div class="tab-pane" id="moji">moji</div>
+</div>
+
+
+
+
     <h1>emojidex-coffee Example</h1>
     <div class="example">
       <h2>Plain-Text</h2>
