@@ -32,7 +32,6 @@
 	$.emojiarea = {
 		path: '',
 		icons: {},
-		category: {},
 		defaults: {
 			button: null,
 			buttonLabel: 'Emojis',
@@ -411,39 +410,11 @@
 			path += '/';
 		}
 
-		// html.push('<ul class="nav nav-tabs">');
-		// 	html.push('<li class="dropdown">');
-		// 		html.push('<a class="dropdown-toggle" data-toggle="dropdown" href="#">category<span class="caret"></span></a>');
-		// 		html.push('<ul>');
-		// 			html.push('<li><a href="#">test</a></li>');
-		// 		html.push('</ul>');
-		// 	html.push('/li>');
-		// html.push('</ul>');
-		// html.push('<ul class="nav nav-tabs">');
-		// html.push('<li class="active"><a href="#' + category[0] + '" data-toggle="tab">' + category[0] + '</a></li>');
-		// for (var i = 1; i < category.length; i ++) {
-		// 	html.push('<li><a href="#' + category[i] + '" data-toggle="tab">' + category[i] + '</a></li>');
-		// }
-		// html.push('</ul>');
-		// html.push('<div class="tab-content">');
-		// // for (var i = 0; i < category.length; i ++) {
-		// // 	for (var key in options) {
-		// // 		if (options.hasOwnProperty(key) && options[key].category == category[i]) {
-		// // 			var filename = options[key].name;
-		// // 			html.push('<div class="tab-pane" id="' + category[i] + '">');
-		// // 			html.push('<a href="javascript:void(0)" title="' + util.htmlEntities(key) + '">' + EmojiArea.createIcon(key) + '<span class="label">' + util.htmlEntities(key) + '</span></a>');
-		// // 		}
-		// // 	html.push('</div>)';
-		// // }
-		// html.push('</div>');
-
 		for (var key in options) {
 			for (var i = 0; i < options[key].length; i ++) {
-				console.log('one out!');
 				if (options.hasOwnProperty(key)) {
-					var filename = options[key].name;
-					console.log('two out!');
-					html.push('<a href="javascript:void(0)" title="' + util.htmlEntities(options[key].name) + '">' + EmojiArea.createIcon(options[key].name) + '<span class="label">' + util.htmlEntities(options[key].name) + '</span></a>');
+					var filename = options[key][i].name;
+					html.push('<a href="javascript:void(0)" title="' + util.htmlEntities(options[key][i].name) + '">' + EmojiArea.createIcon(options[key][i].name) + '<span class="label">' + util.htmlEntities(options[key][i].name) + '</span></a>');
 				}
 			}
 		}
