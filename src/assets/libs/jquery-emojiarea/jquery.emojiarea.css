@@ -12,7 +12,7 @@
 .emoji-menu {
 	position: absolute;
 	z-index: 999;
-	width: 195px;
+	width: 180px;
 	margin-left: -100px;
 	padding: 0;
 	-webkit-box-sizing: border-box;
@@ -47,7 +47,7 @@
 	float: left;
 }
 .emoji-menu a:hover {
-	background-color: #eee;
+	background-color: #fffae7;
 }
 .emoji-menu:after {
 	content: ' ';

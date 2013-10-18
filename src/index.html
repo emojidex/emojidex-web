@@ -14,7 +14,7 @@
     
     <script src="assets/libs/jquery-textcomplete-content/jquery.textcomplete.content.js"></script>
     <script src="assets/libs/jquery-textcomplete/media/javascripts/emoji.js"></script> 
-    <link href="assets/libs/jquery-textcomplete/jquery.textcomplete.css" rel="stylesheet">
+    <link href="assets/libs/jquery-textcomplete/jquery.textcomplete.poe.css" rel="stylesheet">
 
     <script src="assets/libs/bootstrap-3.0.0/js/bootstrap.min.js"></script>
     <link href="assets/libs/bootstrap-3.0.0/css/bootstrap.min.css" rel="stylesheet">
@@ -22,30 +22,56 @@
     <script>
       $(document).ready(function(){
         $.emojiarea.path = 'assets/img/utf';
-        $.getJSON("assets/json/poe_non_anime.json", function(emoji){
-          for (var i in emoji) {
-            $.emojiarea.icons[':' + emoji[i].name + ':'] = emoji[i].name + '.svg';
-          }
+        $.getJSON("assets/json/utf_emoji_by_categories_non_anime.json", function(emoji){
+            $.emojiarea.icons = emoji;
         })
       });
     </script>
   </head>
   <body>
 
-<ul class="nav nav-tabs">
+<!-- <ul class="nav nav-tabs">
   <li class="active"><a href="#ka" data-toggle="tab">ka</a></li>
   <li><a href="#o" data-toggle="tab">o</a></li>
-  <li><a href="#moji" data-toggle="tab">moji</a></li>
-</ul>
+  <li><a href="#moji" data-toggle="tab">moji</a></li> -->
 
-<div class="tab-content">
+
+<!-- <div class="tab-content">
   <div class="tab-pane active" id="kao">ka</div>
   <div class="tab-pane" id="o">o</div>
   <div class="tab-pane" id="moji">moji</div>
-</div>
+</div> -->
 
+<!-- 
+<ul class="dropdown-menu" role="menu" aria-labelledby="myTabDrop1">
+  <li class="active"><a href="#dropdown1" tabindex="-1" data-toggle="tab">@fat</a></li>
+  <li><a href="#dropdown2" tabindex="-1" data-toggle="tab">@mdo</a></li>
+</ul>
+ -->
+<ul class="nav nav-tabs">
+  <li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#test">test<span class="caret"></span></a>
+    <ul class="dropdown-menu" role="menu">
+      <li><a href="#test1" data-toggle="tab">o</a></li>
+      <li><a href="#test2" data-toggle="tab">moji</a></li>
+    </ul>
+  </li>
+</ul>
 
-
+  <div id="myTabContent" class="tab-content">
+    <div class="tab-pane fade active in" id="test1">
+      <p>d</p>
+    </div>
+    <div class="tab-pane fade" id="test2">
+      <p>s</p>
+    </div>
+    <div class="tab-pane fade" id="dropdown1">
+      <p>a</p>
+    </div>
+    <div class="tab-pane fade" id="dropdown2">
+      <p>T</p>
+    </div>
+  </div>
 
     <h1>emojidex-coffee Example</h1>
     <div class="example">
