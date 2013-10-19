@@ -72,7 +72,6 @@
     targets = $('.replace')
     $.each(targets, function(i, target){
       $(target).text($(target).text().replace(/\:(?!\:)\w*\:/gm, function(match){
-        console.log(match)
         match = match.replace(/\:/g, "")
         return "<span style='color:red'>" + match + "</span>"
       }))
