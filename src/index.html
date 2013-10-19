@@ -18,9 +18,9 @@
 
     <script src="assets/libs/bootstrap-3.0.0/js/bootstrap.min.js"></script>
     <link href="assets/libs/bootstrap-3.0.0/css/bootstrap.min.css" rel="stylesheet">
-
   </head>
   <body>
+
 
 
 
@@ -53,8 +53,32 @@
   </div>
 </div>
 
+<hr>
+<div class="replace">
+  :aaa:::te<br>s<br>t:
+</div>
+<div class="replace">
+  :bbb:::rrr::fix:
+</div>
+<div class="replace">
+  :ccc:
+</div>
+<hr>
+
 <script>
   $(document).ready(function(){
+
+    // for replace
+    targets = $('.replace')
+    $.each(targets, function(i, target){
+      $(target).text($(target).text().replace(/\:(?!\:)\w*\:/gm, function(match){
+        console.log(match)
+        match = match.replace(/\:/g, "")
+        return "<span style='color:red'>" + match + "</span>"
+      }))
+      rehtml= $(target).text()
+      $(target).empty().append(rehtml)
+    })
 
     // for test
     $.emojiarea.path = 'assets/img/utf/';
