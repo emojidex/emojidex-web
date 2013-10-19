@@ -47,7 +47,7 @@
 	float: left;
 }
 .emoji-menu a:hover {
-	background-color: #eee;
+	background-color: #fffae7;
 }
 .emoji-menu:after {
 	content: ' ';
@@ -56,4 +56,9 @@
 }
 .emoji-menu a .label {
 	display: none;
+}
+
+div > a > img {
+	width: 25px;
+	height: 25px;
 }

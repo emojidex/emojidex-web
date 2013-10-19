@@ -199,7 +199,7 @@
 	};
 
 	EmojiArea.createIcon = function(emoji) {
-		var filename = $.emojiarea.icons[emoji];
+		var filename = emoji + '.svg';
 		var path = $.emojiarea.path || '';
 		if (path.length && path.charAt(path.length - 1) !== '/') {
 			path += '/';
@@ -393,7 +393,6 @@
 			e.stopPropagation();
 			return false;
 		});
-
 		this.load();
 	};
 
@@ -406,14 +405,17 @@
 		var html = [];
 		var options = $.emojiarea.icons;
 		var path = $.emojiarea.path;
+		var category = $.emojiarea.category;
 		if (path.length && path.charAt(path.length - 1) !== '/') {
 			path += '/';
 		}
 
 		for (var key in options) {
-			if (options.hasOwnProperty(key)) {
-				var filename = options[key];
-				html.push('<a href="javascript:void(0)" title="' + util.htmlEntities(key) + '">' + EmojiArea.createIcon(key) + '<span class="label">' + util.htmlEntities(key) + '</span></a>');
+			for (var i = 0; i < options[key].length; i ++) {
+				if (options.hasOwnProperty(key)) {
+					var filename = options[key][i].name;
+					html.push('<a href="javascript:void(0)" title="' + util.htmlEntities(options[key][i].name) + '">' + EmojiArea.createIcon(options[key][i].name) + '<span class="label">' + util.htmlEntities(options[key][i].name) + '</span></a>');
+				}
 			}
 		}
 
