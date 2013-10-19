@@ -19,131 +19,114 @@
     <script src="assets/libs/bootstrap-3.0.0/js/bootstrap.min.js"></script>
     <link href="assets/libs/bootstrap-3.0.0/css/bootstrap.min.css" rel="stylesheet">
 
-    <script>
-      $(document).ready(function(){
-        $.emojiarea.path = 'assets/img/utf/';
-        $.getJSON("assets/json/utf_emoji_by_categories_non_anime.json", function(emoji){
-          $.emojiarea.icons = emoji;
-
-          function setImage (category) {
-            var html = "";
-            for (var i = 0; i < $.emojiarea.icons[category].length; i ++) {
-              html += '<a href="javascript:void(0)" title="' + $.emojiarea.icons[category][i].name + '"><img src="' + $.emojiarea.path + $.emojiarea.icons[category][i].name + '.svg" alt="' + $.emojiarea.icons[category][i].name + '"></a>';
-            }
-            return html;
-          }
-
-          var flag = true;
-          for (var category in $.emojiarea.icons) {
-            if (flag) {
-              $('.dropdown-menu').append('<li class="active"><a href="#' + category + '" data-toggle="tab">' + category + '</a></li>');
-                flag = false;
-            } else {
-              $('.dropdown-menu').append('<li><a href="#' + category + '" data-toggle="tab">' + category + '</a></li>');
-            }
-          }
-
-          flag = true;
-          for (var category in $.emojiarea.icons) {
-            if (flag) {
-              $('#myTabContent').append('<div class="tab-pane fade active in" id="' + category + '">' + setImage(category) + '</div>');
-              flag = false;
-            } else {
-              $('#myTabContent').append('<div class="tab-pane fade" id="' + category + '">' + setImage(category) + '</div>');
-            }
-          }
-        })
-      });
-    </script>
   </head>
   <body>
 
-<!-- <ul class="nav nav-tabs">
-  <li class="active"><a href="#ka" data-toggle="tab">ka</a></li>
-  <li><a href="#o" data-toggle="tab">o</a></li>
-  <li><a href="#moji" data-toggle="tab">moji</a></li>
 
 
-<div class="tab-content">
-  <div class="tab-pane active" id="kao">ka</div>
-  <div class="tab-pane" id="o">o</div>
-  <div class="tab-pane" id="moji">moji</div>
-</div> -->
-
-
-<!-- <ul class="dropdown-menu" role="menu" aria-labelledby="myTabDrop1">
-  <li class="active"><a href="#dropdown1" tabindex="-1" data-toggle="tab">@fat</a></li>
-  <li><a href="#dropdown2" tabindex="-1" data-toggle="tab">@mdo</a></li>
-</ul>
- -->
 <ul class="nav nav-tabs">
-  <li class="dropdown">
+  <li class="dropdown active">
     <a class="dropdown-toggle" data-toggle="dropdown" href="#category">category<span class="caret"></span></a>
     <ul class="dropdown-menu" role="menu">
     </ul>
   </li>
 </ul>
 
-  <div id="myTabContent" class="tab-content">
- <!--   <div class="tab-pane fade active in" id="nature">
-       <p>d</p>
-    </div>
-    <div class="tab-pane fade" id="cosmos">
-      <p>s</p>
-    </div> -->
+<div id="myTabContent" class="tab-content">
+</div>
+
+<h1>emojidex-coffee Example</h1>
+<div class="example">
+  <h2>Plain-Text</h2>
+  <form>
+    <textarea rows="5" class="emojis-plain">Hello :neckbeard:</textarea>
+  </form>
+</div>
+<div class="example">
+  <h2>WYSIWYG</h2>
+  <form>
+    <textarea rows="5" class="emojis-wysiwyg">Hello :neckbeard:</textarea>
+  </form>
+  <h3>Value:</h3>
+  <div class="value">
+    <pre id="emojis-wysiwyg-value"></pre>
   </div>
+</div>
 
-    <h1>emojidex-coffee Example</h1>
-    <div class="example">
-      <h2>Plain-Text</h2>
-      <form>
-        <textarea rows="5" class="emojis-plain">Hello :neckbeard:</textarea>
-      </form>
-    </div>
-    <div class="example">
-      <h2>WYSIWYG</h2>
-      <form>
-        <textarea rows="5" class="emojis-wysiwyg">Hello :neckbeard:</textarea>
-      </form>
-      <h3>Value:</h3>
-      <div class="value">
-        <pre id="emojis-wysiwyg-value"></pre>
-      </div>
-    </div>
+<script>
+  $(document).ready(function(){
 
-    <script>
-       $('.emojis-plain').emojiarea({wysiwyg: false});
-    
-       var $wysiwyg = $('.emojis-wysiwyg').emojiarea({wysiwyg: true});
-       var $wysiwyg_value = $('#emojis-wysiwyg-value');
-    
-       $wysiwyg.on('change', function() {
-         $wysiwyg_value.text($(this).val());
-       });
-       $wysiwyg.trigger('change');
-    
-    </script>
-    <script>
-       $('.emojis-plain').textcomplete({
-         emoji: {
-           match: /\B:([\-+\w]*)$/,
-           search: function (term, callback) {
-             callback($.map(emojies, function (emoji) {
-                return emoji.indexOf(term) === 0 ? emoji : null;
-             }));
-           },
-           template: function (value) {
-             return '<img src="assets/libs/jquery-textcomplete/media/images/emoji/' + value + '.png"></img>' + value;
-           },
-           replace: function (value) {
-              return ':' + value + ': ';
-           },
-           index: 1,
-           maxCount: 5
-         }
-       });
+    // for test
+    $.emojiarea.path = 'assets/img/utf/';
+    $.getJSON("assets/json/utf_emoji_by_categories_non_anime.json", function(emoji){
+      $.emojiarea.icons = emoji;
 
-    </script>
+      function setImage (category) {
+        html = "";
+        for (i = 0; i < $.emojiarea.icons[category].length; i++) {
+          html += '<a href="javascript:void(0)" title="' + $.emojiarea.icons[category][i].name + '"><img src="' + $.emojiarea.path + $.emojiarea.icons[category][i].name + '.svg" alt="' + $.emojiarea.icons[category][i].name + '"></a>';
+        }
+        return html;
+      }
+
+      flag = true;
+      for (category in $.emojiarea.icons) {
+        if (flag) {
+          $('.dropdown-menu').append('<li class="active"><a href="#' + category + '" data-toggle="tab">' + category + '</a></li>');
+            flag = false;
+        } else {
+          $('.dropdown-menu').append('<li><a href="#' + category + '" data-toggle="tab">' + category + '</a></li>');
+        }
+      }
+
+      flag = true;
+      for (category in $.emojiarea.icons) {
+        if (flag) {
+          $('#myTabContent').append('<div class="tab-pane fade in active" id="' + category + '">' + setImage(category) + '</div>');
+          flag = false;
+        } else {
+          $('#myTabContent').append('<div class="tab-pane fade" id="' + category + '">' + setImage(category) + '</div>');
+        }
+      }
+    })
+
+
+    // for emojiaera
+    $('.emojis-plain').emojiarea({wysiwyg: false});
+
+    var $wysiwyg = $('.emojis-wysiwyg').emojiarea({wysiwyg: true});
+    var $wysiwyg_value = $('#emojis-wysiwyg-value');
+
+    $wysiwyg.on('change', function() {
+      $wysiwyg_value.text($(this).val());
+    });
+    $wysiwyg.trigger('change');
+
+
+    // for textcomplete
+    $('.emojis-plain').textcomplete({
+      emoji: {
+        match: /\B:([\-+\w]*)$/,
+        search: function (term, callback) {
+          callback($.map(emojies, function (emoji) {
+            return emoji.indexOf(term) === 0 ? emoji : null;
+          }));
+        },
+        template: function (value) {
+          return '<img src="assets/libs/jquery-textcomplete/media/images/emoji/' + value + '.png"></img>' + value;
+        },
+        replace: function (value) {
+          return ':' + value + ': ';
+        },
+        index: 1,
+        maxCount: 5
+      }
+    });
+
+  });
+</script>
+
+
 
   </body>
 </html>
