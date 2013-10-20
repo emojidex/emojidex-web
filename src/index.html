@@ -69,10 +69,9 @@
 $(document).ready(function(){
 
   // for replace
-  targets = $('.replace')
-  $.each(targets, function(i, target){
-    replaced_html = target.innerHTML.replace(/\:(?!\:)\w*\:/gm, function(matched_string){
-      matched_string = matched_string.replace(/\:/g, "")
+  $.each($('.replace'), function(i, target){
+    replaced_html = target.innerHTML.replace(/:(?!:)\w*:/gm, function(matched_string){
+      matched_string = matched_string.replace(/:/g, "")
       return "<span style='color:red'>" + matched_string + "</span>"
     })
     $(target).empty().append(replaced_html)
