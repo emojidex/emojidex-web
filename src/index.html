@@ -55,98 +55,97 @@
 
 <hr>
 <div class="replace">
-  :aaa:::te<br>s<br>t:
+  :aaa:::bbb<br>:ccc::<br>ddd:
 </div>
 <div class="replace">
-  :bbb:::rrr::fix:
+  :eee:::::fff:
 </div>
 <div class="replace">
-  :ccc:
+  :ggg:
 </div>
 <hr>
 
 <script>
-  $(document).ready(function(){
+$(document).ready(function(){
 
-    // for replace
-    targets = $('.replace')
-    $.each(targets, function(i, target){
-      $(target).text($(target).text().replace(/\:(?!\:)\w*\:/gm, function(match){
-        match = match.replace(/\:/g, "")
-        return "<span style='color:red'>" + match + "</span>"
-      }))
-      rehtml= $(target).text()
-      $(target).empty().append(rehtml)
+  // for replace
+  targets = $('.replace')
+  $.each(targets, function(i, target){
+    replaced_html = target.innerHTML.replace(/\:(?!\:)\w*\:/gm, function(matched_string){
+      matched_string = matched_string.replace(/\:/g, "")
+      return "<span style='color:red'>" + matched_string + "</span>"
     })
+    $(target).empty().append(replaced_html)
+  })
 
-    // for test
-    $.emojiarea.path = 'assets/img/utf/';
-    $.getJSON("assets/json/utf_emoji_by_categories_non_anime.json", function(emoji){
-      $.emojiarea.icons = emoji;
+  // for test
+  $.emojiarea.path = 'assets/img/utf/';
+  $.getJSON("assets/json/utf_emoji_by_categories_non_anime.json", function(emoji){
+    $.emojiarea.icons = emoji;
 
-      function setImage (category) {
-        html = "";
-        for (i = 0; i < $.emojiarea.icons[category].length; i++) {
-          html += '<a href="javascript:void(0)" title="' + $.emojiarea.icons[category][i].name + '"><img src="' + $.emojiarea.path + $.emojiarea.icons[category][i].name + '.svg" alt="' + $.emojiarea.icons[category][i].name + '"></a>';
-        }
-        return html;
+    function setImage (category) {
+      html = "";
+      for (i = 0; i < $.emojiarea.icons[category].length; i++) {
+        html += '<a href="javascript:void(0)" title="' + $.emojiarea.icons[category][i].name + '"><img src="' + $.emojiarea.path + $.emojiarea.icons[category][i].name + '.svg" alt="' + $.emojiarea.icons[category][i].name + '"></a>';
       }
+      return html;
+    }
 
-      flag = true;
-      for (category in $.emojiarea.icons) {
-        if (flag) {
-          $('.dropdown-menu').append('<li class="active"><a href="#' + category + '" data-toggle="tab">' + category + '</a></li>');
-            flag = false;
-        } else {
-          $('.dropdown-menu').append('<li><a href="#' + category + '" data-toggle="tab">' + category + '</a></li>');
-        }
-      }
-
-      flag = true;
-      for (category in $.emojiarea.icons) {
-        if (flag) {
-          $('#myTabContent').append('<div class="tab-pane fade in active" id="' + category + '">' + setImage(category) + '</div>');
+    flag = true;
+    for (category in $.emojiarea.icons) {
+      if (flag) {
+        $('.dropdown-menu').append('<li class="active"><a href="#' + category + '" data-toggle="tab">' + category + '</a></li>');
           flag = false;
-        } else {
-          $('#myTabContent').append('<div class="tab-pane fade" id="' + category + '">' + setImage(category) + '</div>');
-        }
+      } else {
+        $('.dropdown-menu').append('<li><a href="#' + category + '" data-toggle="tab">' + category + '</a></li>');
       }
-    })
+    }
 
-
-    // for emojiaera
-    $('.emojis-plain').emojiarea({wysiwyg: false});
-
-    var $wysiwyg = $('.emojis-wysiwyg').emojiarea({wysiwyg: true});
-    var $wysiwyg_value = $('#emojis-wysiwyg-value');
-
-    $wysiwyg.on('change', function() {
-      $wysiwyg_value.text($(this).val());
-    });
-    $wysiwyg.trigger('change');
-
-
-    // for textcomplete
-    $('.emojis-plain').textcomplete({
-      emoji: {
-        match: /\B:([\-+\w]*)$/,
-        search: function (term, callback) {
-          callback($.map(emojies, function (emoji) {
-            return emoji.indexOf(term) === 0 ? emoji : null;
-          }));
-        },
-        template: function (value) {
-          return '<img src="assets/libs/jquery-textcomplete/media/images/emoji/' + value + '.png"></img>' + value;
-        },
-        replace: function (value) {
-          return ':' + value + ': ';
-        },
-        index: 1,
-        maxCount: 5
+    flag = true;
+    for (category in $.emojiarea.icons) {
+      if (flag) {
+        $('#myTabContent').append('<div class="tab-pane fade in active" id="' + category + '">' + setImage(category) + '</div>');
+        flag = false;
+      } else {
+        $('#myTabContent').append('<div class="tab-pane fade" id="' + category + '">' + setImage(category) + '</div>');
       }
-    });
+    }
+  })
 
+
+  // for emojiaera
+  $('.emojis-plain').emojiarea({wysiwyg: false});
+
+  var $wysiwyg = $('.emojis-wysiwyg').emojiarea({wysiwyg: true});
+  var $wysiwyg_value = $('#emojis-wysiwyg-value');
+
+  $wysiwyg.on('change', function() {
+    $wysiwyg_value.text($(this).val());
   });
+  $wysiwyg.trigger('change');
+
+
+  // for textcomplete
+  $('.emojis-plain').textcomplete({
+    emoji: {
+      match: /\B:([\-+\w]*)$/,
+      search: function (term, callback) {
+        callback($.map(emojies, function (emoji) {
+          return emoji.indexOf(term) === 0 ? emoji : null;
+        }));
+      },
+      template: function (value) {
+        return '<img src="assets/libs/jquery-textcomplete/media/images/emoji/' + value + '.png"></img>' + value;
+      },
+      replace: function (value) {
+        return ':' + value + ': ';
+      },
+      index: 1,
+      maxCount: 5
+    }
+  });
+
+});
 </script>
 
 
