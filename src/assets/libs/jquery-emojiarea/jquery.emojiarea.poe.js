@@ -225,7 +225,12 @@
 	};
 
 	EmojiArea_Plain.prototype.insert = function(emoji) {
-		if (!$.emojiarea.icons.hasOwnProperty(emoji)) return;
+		for (var category in $.emojiarea.icons) {	
+			for (var i = 0; i < $.emojiarea.icons[category]; i ++) {
+				if (!$.emojiarea.icons[category][i].hasOwnProperty(emoji)) return;
+			}	
+		}
+		emoji = ':' + emoji + ':'
 		util.insertAtCursor(emoji, this.$textarea[0]);
 		this.$textarea.trigger('change');
 	};
@@ -285,6 +290,7 @@
 	EmojiArea_WYSIWYG.prototype.insert = function(emoji) {
 		var content;
 		var $img = $(EmojiArea.createIcon(emoji));
+		$img[0].alt = ':' + $img[0].alt + ':';
 		if ($img[0].attachEvent) {
 			$img[0].attachEvent('onresizestart', function(e) { e.returnValue = false; }, false);
 		}
@@ -387,6 +393,7 @@
 
 		this.$menu.on('click', 'a', function(e) {
 			var emoji = $('.label', $(this)).text();
+			if (!emoji) { return }
 			window.setTimeout(function() {
 				self.onItemSelected.apply(self, [emoji]);
 			}, 0);
@@ -405,20 +412,41 @@
 		var html = [];
 		var options = $.emojiarea.icons;
 		var path = $.emojiarea.path;
-		var category = $.emojiarea.category;
 		if (path.length && path.charAt(path.length - 1) !== '/') {
 			path += '/';
 		}
 
-		for (var key in options) {
-			for (var i = 0; i < options[key].length; i ++) {
-				if (options.hasOwnProperty(key)) {
-					var filename = options[key][i].name;
-					html.push('<a href="javascript:void(0)" title="' + util.htmlEntities(options[key][i].name) + '">' + EmojiArea.createIcon(options[key][i].name) + '<span class="label">' + util.htmlEntities(options[key][i].name) + '</span></a>');
-				}
+		function setImage (category) {
+			var html = "";
+			for (var i = 0; i < $.emojiarea.icons[category].length; i ++) {
+				html += '<a href="javascript:void(0)" title="' + options[category][i].name + '">' + EmojiArea.createIcon(options[category][i].name) + '<span class="label">' + util.htmlEntities(options[category][i].name) + '</span></a>';
 			}
+			return html;
 		}
 
+		html.push('<ul class="nav nav-tabs"><li class="dropdown active"><a class="dropdown-toggle" data-toggle="dropdown" href="#category">category<span class="caret"></span></a><ul class="dropdown-menu" role="menu">');
+		var flag = true;
+		for (var category in $.emojiarea.icons) {
+			if (flag) {
+				html.push('<li class="active"><a href="#' + category + '" data-toggle="tab">' + category + '</a></li>');
+				flag = false;
+			} else {
+				html.push('<li><a href="#' + category + '" data-toggle="tab">' + category + '</a></li>');
+			}
+		}
+		html.push('</ul></li></ul><div id="myTabContent" class="tab-content">');
+
+		flag = true;
+		for (var category in $.emojiarea.icons) {
+			if (flag) {
+				html.push('<div class="tab-pane fade active in" id="' + category + '">' + setImage(category) + '</div>');
+				flag = false;
+			} else {
+				html.push('<div class="tab-pane fade" id="' + category + '">' + setImage(category) + '</div>');
+			}
+		}
+		html.push('</div>');
+		
 		this.$items.html(html.join(''));
 	};
 
