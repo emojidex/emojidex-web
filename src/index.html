@@ -19,32 +19,43 @@
     <script src="assets/libs/bootstrap-3.0.0/js/bootstrap.min.js"></script>
     <link href="assets/libs/bootstrap-3.0.0/css/bootstrap.min.css" rel="stylesheet">
 
+
+    <link href="assets/css/emojidex.css" rel="stylesheet">
+
     <script>
       $(document).ready(function(){
+
         $.emojiarea.path = 'assets/img/utf/';
         $.getJSON("assets/json/utf_emoji_by_categories_non_anime.json", function(emoji){
           $.emojiarea.icons = emoji;
+          setEmojiImages()
         })
 
-        $wysiwyg.on('change', function() {
-          var emoji_name = $(this).val().match(/:[\-\w]+:/g);
-          for (var category in $.emojiarea.icons) { 
-            for (var i = 0; i < $.emojiarea.icons[category].length; i ++) {
-              for (var j = 0; j < emoji_name.length; j ++) {
-                if ($.emojiarea.icons[category][i].name == emoji_name[j].replace(/:/g, '')) {
-                  var filename = emoji_name[j] + '.svg';
-                  var path = $.emojiarea.path || '';
-                  if (path.length && path.charAt(path.length - 1) !== '/') {
-                    path += '/';
+        // for replace
+        function setEmojiImages(){        
+          $.each($('.emojidex_replace'), function(i, target){
+            replaced_html = target.innerHTML.replace(/:[\-\w]+:/gm, function(matched_string){
+              replaced = matched_string
+              for (var category in $.emojiarea.icons) {
+                emojis = $.emojiarea.icons[category]
+                for (i = 0; i < emojis.length; i++) {
+                  matched_string = matched_string.replace(/:/g, "");
+                  if (emojis[i].name == matched_string) {
+                    var path = $.emojiarea.path || '';
+                    if (path.length && path.charAt(path.length - 1) !== '/') {
+                      path += '/';
+                    }
+                    replaced = '<img src="' + path + matched_string + '.svg" alt="' + matched_string + '">';
+                    break
                   }
-                  $(this).val($(this).val().replace(emoji_name[j], '<img src="' + path + filename + '" alt="' + emoji_name[j] + '">'));
-                  console.log($(this).val());
-                  console.log(emoji_name[j]);
                 }
+                return replaced;
               }
-            }
-          }
-        });
+            })
+            $(target).empty().append(replaced_html)
+          })
+        }
+        
       });
     </script>
   </head>
@@ -58,7 +69,7 @@
       </form>
     </div>
 
-    <div id="emojidex-replace">
+    <div class="emojidex_replace">
       :snail: ::bbb::c::d::ee:f::
     </div>
 
