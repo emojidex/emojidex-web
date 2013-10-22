@@ -25,6 +25,26 @@
         $.getJSON("assets/json/utf_emoji_by_categories_non_anime.json", function(emoji){
           $.emojiarea.icons = emoji;
         })
+
+        $wysiwyg.on('change', function() {
+          var emoji_name = $(this).val().match(/:[\-\w]+:/g);
+          for (var category in $.emojiarea.icons) { 
+            for (var i = 0; i < $.emojiarea.icons[category].length; i ++) {
+              for (var j = 0; j < emoji_name.length; j ++) {
+                if ($.emojiarea.icons[category][i].name == emoji_name[j].replace(/:/g, '')) {
+                  var filename = emoji_name[j] + '.svg';
+                  var path = $.emojiarea.path || '';
+                  if (path.length && path.charAt(path.length - 1) !== '/') {
+                    path += '/';
+                  }
+                  $(this).val($(this).val().replace(emoji_name[j], '<img src="' + path + filename + '" alt="' + emoji_name[j] + '">'));
+                  console.log($(this).val());
+                  console.log(emoji_name[j]);
+                }
+              }
+            }
+          }
+        });
       });
     </script>
   </head>
@@ -37,6 +57,11 @@
         <textarea rows="5" class="emojis-plain">Hello :neckbeard:</textarea>
       </form>
     </div>
+
+    <div id="emojidex-replace">
+      :snail: ::bbb::c::d::ee:f::
+    </div>
+
     <div class="example">
       <h2>WYSIWYG</h2>
       <form>
@@ -49,15 +74,15 @@
     </div>
 
     <script>
-       $('.emojis-plain').emojiarea({wysiwyg: false});
+      $('.emojis-plain').emojiarea({wysiwyg: false});
     
-       var $wysiwyg = $('.emojis-wysiwyg').emojiarea({wysiwyg: true});
-       var $wysiwyg_value = $('#emojis-wysiwyg-value');
+      var $wysiwyg = $('.emojis-wysiwyg').emojiarea({wysiwyg: true});
+      var $wysiwyg_value = $('#emojis-wysiwyg-value');
     
-       $wysiwyg.on('change', function() {
-         $wysiwyg_value.text($(this).val());
-       });
-       $wysiwyg.trigger('change');
+      $wysiwyg.on('change', function() {
+        $wysiwyg_value.text($(this).val());
+      });
+      $wysiwyg.trigger('change');
     
     </script>
     <script>

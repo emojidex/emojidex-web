@@ -393,7 +393,7 @@
 
 		this.$menu.on('click', 'a', function(e) {
 			var emoji = $('.label', $(this)).text();
-			if (!emoji) { return }
+			if (!emoji) return
 			window.setTimeout(function() {
 				self.onItemSelected.apply(self, [emoji]);
 			}, 0);
