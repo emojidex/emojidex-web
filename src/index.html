@@ -26,8 +26,15 @@
     <script>
 
       $(document).ready(function(){
-        $('.emojidex_replace').emojidex();
+        $('.emojidex_replace').emojidex({
+          emojiarea: {
+            emojiarea_planeText: $('#emoji-input-not-wysing'),
+            emojiarea_wysing: $('#emoji-input-wysing'),
+            emojiarea_output_value: $('#emoji-output')
+          }
+        });
       });
+
     </script>
   </head>
   <body>
@@ -36,7 +43,7 @@
     <div class="example">
       <h2>Plain-Text</h2>
       <form>
-        <textarea rows="5" class="emojis-plain">Hello :neckbeard:</textarea>
+        <textarea rows="5" class="emojis-plain" id="emoji-input-not-wysing">Hello :neckbeard:</textarea>
       </form>
     </div>
 
@@ -47,26 +54,14 @@
     <div class="example">
       <h2>WYSIWYG</h2>
       <form>
-        <textarea rows="5" class="emojis-wysiwyg">Hello :neckbeard:</textarea>
+        <textarea rows="5" class="emojis-wysiwyg" id="emoji-input-wysing">Hello :neckbeard:</textarea>
       </form>
       <h3>Value:</h3>
       <div class="value">
-        <pre id="emojis-wysiwyg-value"></pre>
+        <pre id="emoji-output"></pre>
       </div>
     </div>
 
-    <script>
-      $('.emojis-plain').emojiarea({wysiwyg: false});
-    
-      var $wysiwyg = $('.emojis-wysiwyg').emojiarea({wysiwyg: true});
-      var $wysiwyg_value = $('#emojis-wysiwyg-value');
-    
-      $wysiwyg.on('change', function() {
-        $wysiwyg_value.text($(this).val());
-      });
-      $wysiwyg.trigger('change');
-    
-    </script>
     <script>
        $('.emojis-plain').textcomplete({
          emoji: {
