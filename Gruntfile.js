@@ -17,10 +17,20 @@ module.exports = function(grunt) {
 				" */\n"
 		},
 
+		// CoffeeScript compilation
+		coffee: {
+			compile: {
+				files: {
+					"src/jquery.emojidex.js": "src/jquery.emojidex.coffee",
+					"dist/jquery.emojidex.js": "src/jquery.emojidex.coffee"
+				}
+			}
+		},
+
 		// Concat definitions
 		concat: {
 			dist: {
-				src: ["src/jquery.boilerplate.js"],
+				src: ["src/jquery.emojidex.js"],
 				dest: "dist/jquery.emojidex.js"
 			},
 			options: {
@@ -30,7 +40,7 @@ module.exports = function(grunt) {
 
 		// Lint definitions
 		jshint: {
-			files: ["src/jquery.boilerplate.js"],
+			files: ["src/jquery.emojidex.js"],
 			options: {
 				jshintrc: ".jshintrc"
 			}
@@ -44,15 +54,6 @@ module.exports = function(grunt) {
 			},
 			options: {
 				banner: "<%= meta.banner %>"
-			}
-		},
-
-		// CoffeeScript compilation
-		coffee: {
-			compile: {
-				files: {
-					"dist/jquery.emojidex.js": "src/jquery.emojidex.coffee"
-				}
 			}
 		}
 
