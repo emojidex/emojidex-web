@@ -39,7 +39,7 @@ module.exports = function(grunt) {
 		// Minify definitions
 		uglify: {
 			my_target: {
-				src: ["dist/jquery.boilerplate.js"],
+				src: ["dist/jquery.emojidex.js"],
 				dest: "dist/jquery.emojidex.min.js"
 			},
 			options: {
@@ -51,7 +51,7 @@ module.exports = function(grunt) {
 		coffee: {
 			compile: {
 				files: {
-					"dist/jquery.emojidex.js": "src/jquery.boilerplate.coffee"
+					"dist/jquery.emojidex.js": "src/jquery.emojidex.coffee"
 				}
 			}
 		}

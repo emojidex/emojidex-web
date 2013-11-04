@@ -1,3 +1,16 @@
+# emojidex coffee plugin for jQuery/Zepto and compatible
+#
+# =LICENSE=
+# When used with the emojidex service enabled this library is
+#   licensed under the LGPL[https://www.gnu.org/licenses/lgpl.html].
+# When modified to not use the emojidex service this library is
+#   dual licensed under
+#   GPL v3[https://www.gnu.org/licenses/gpl.html]
+#   AGPL v3[https://www.gnu.org/licenses/agpl.html]
+# 
+# The
+# Copyright 2013 Genshin Souzou Kabushiki Kaisha
+
 do ($ = jQuery, window, document) ->
 
 	pluginName = "emojidex"
