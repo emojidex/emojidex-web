@@ -26,12 +26,12 @@ do ($ = jQuery, window, document) ->
 			@_name = pluginName
 
 			# exec functions
-			@loadEmojidexJSON(@element)
+			@loadEmojidexJSON(@element, @options)
 			@setEmojiarea(@options)
 
-		loadEmojidexJSON: (element) ->
-			$.emojiarea.path = "assets/img/utf/"
-			$.getJSON "assets/json/utf_emoji_by_categories_non_anime.json", (emoji) ->
+		loadEmojidexJSON: (element, options) ->
+			$.emojiarea.path = options.path_emoji_img
+			$.getJSON options.path_emoji_json, (emoji) ->
 				Plugin.prototype.setEmojiIcon(emoji, element)
 
 		setEmojiIcon: (emoji, element) ->
