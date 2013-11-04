@@ -1,8 +1,8 @@
 /*
- *  jQuery Emojidex - v3.3.1
- *  A jump-start for jQuery plugins development.
- *  http://jqueryboilerplate.com
+ *  jQuery Emojidex - v0.1.0
+ *  emojidex coffee plugin for jQuery/Zepto and compatible
+ *  https://github.com/Genshin/emojidex-coffee#emojidex-coffee
  *
- *  Made by Zeno Rocha
- *  Under MIT License
+ *  Made by Genshin
+ *  Under LGPL License
  */

@@ -1,14 +1,14 @@
 {
-	"name": "jquery-boilerplate",
-	"title": "jQuery Boilerplate",
-	"description": "A jump-start for jQuery plugins development.",
-	"author": "Zeno Rocha",
+	"name": "emojidex",
+	"title": "jQuery Emojidex",
+	"description": "emojidex coffee plugin for jQuery/Zepto and compatible",
+	"author": "Genshin",
 	"repository": {
 		"type" : "git",
-		"url" : "http://github.com/jquery-boilerplate/jquery-boilerplate.git"
+		"url" : "https://github.com/Genshin/emojidex-coffee.git"
 	},
-	"homepage": "https://github.com/jquery-boilerplate/jquery-boilerplate/",
-	"version": "3.3.1",
+	"homepage": "https://github.com/Genshin/emojidex-coffee#emojidex-coffee",
+	"version": "0.1.0",
 	"devDependencies": {
 		"grunt": "~0.4.1",
 		"grunt-cli": "~0.1.7",

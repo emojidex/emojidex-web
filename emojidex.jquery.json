@@ -1,40 +1,27 @@
 {
 	"name": "emojidex",
 	"title": "jQuery Emojidex",
-	"description": "A jump-start for jQuery plugins development.",
+	"description": "emojidex coffee plugin for jQuery/Zepto and compatible",
 	"keywords": [
 		"jquery",
-		"boilerplate",
+		"emojidex",
 		"plugins"
 	],
-	"version": "3.3.1",
+	"version": "0.1.0",
 	"author": {
-		"name": "Zeno Rocha",
-		"email": "zno.rocha@gmail.com",
-		"url": "https://github.com/zenorocha"
+		"name": "Genshin",
+		"url": "https://github.com/Genshin"
 	},
-	"maintainers": [
-		{
-			"name": "Zeno Rocha",
-			"email": "zno.rocha@gmail.com",
-			"url": "https://github.com/zenorocha"
-		},
-		{
-			"name": "Addy Osmani",
-			"email": "addyosmani@gmail.com",
-			"url": "https://github.com/addyosmani"
-		}
-	],
 	"licenses": [
 		{
-			"type": "MIT",
-			"url": "http://zenorocha.mit-license.org/"
+			"type": "LGPL",
+			"url": "https://www.gnu.org/licenses/lgpl.html"
 		}
 	],
-	"bugs": "https://github.com/jquery-boilerplate/boilerplate/issues",
-	"homepage": "http://jqueryboilerplate.com",
-	"docs": "https://github.com/jquery-boilerplate/boilerplate#readme",
-	"download": "https://github.com/jquery-boilerplate/boilerplate/archive/master.zip",
+	"bugs": "https://github.com/Genshin/emojidex-coffee/issues",
+	"homepage": "https://github.com/Genshin/emojidex-coffee#emojidex-coffee",
+	"docs": "https://github.com/Genshin/emojidex-coffee",
+	"download": "https://github.com/Genshin/emojidex-coffee/archive/master.zip",
 	"dependencies": {
 		"jquery": ">=1.4"
 	}
