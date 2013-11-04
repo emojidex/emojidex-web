@@ -2,9 +2,7 @@
   (function($, window, document) {
     var Plugin, defaults, pluginName;
     pluginName = "emojidex";
-    defaults = {
-      property: "replace_field"
-    };
+    defaults = {};
     Plugin = (function() {
       function Plugin(element, options) {
         this.element = element;

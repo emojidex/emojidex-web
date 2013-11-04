@@ -14,13 +14,9 @@
 do ($ = jQuery, window, document) ->
 
 	pluginName = "emojidex"
-	defaults =
-		property: "replace_field"
-
+	defaults = {}
 	class Plugin
 		constructor: (@element, options) ->
-
-			# don't touch
 			@options = $.extend {}, defaults, options
 			@_defaults = defaults
 			@_name = pluginName
@@ -62,7 +58,6 @@ do ($ = jQuery, window, document) ->
 				$wysiwyg_value.text $(this).val()
 
 			$wysiwyg.trigger "change"
-
 
 
 	$.fn[pluginName] = (options) ->

@@ -12,10 +12,6 @@
     <link rel="stylesheet" href="../src/assets/libs/jquery-emojiarea/jquery.emojiarea.css">
     <link rel="stylesheet" href="../src/assets/libs/jquery-emojiarea/example/stylesheet.css">
     
-    <script src="../src/assets/libs/jquery-textcomplete-content/jquery.textcomplete.content.js"></script>
-    <script src="../src/assets/libs/jquery-textcomplete/jquery.textcomplete.js"></script> 
-    <link href="../src/assets/libs/jquery-textcomplete/jquery.textcomplete.poe.css" rel="stylesheet">
-
     <script src="../src/assets/libs/bootstrap-3.0.0/js/bootstrap.min.js"></script>
     <link href="../src/assets/libs/bootstrap-3.0.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="../src/assets/css/emojidex.css" rel="stylesheet">
@@ -62,28 +58,6 @@
         <pre id="emoji-output"></pre>
       </div>
     </div>
-
-    <script>
-       $('.emojis-plain').textcomplete({
-         emoji: {
-           match: /\B:([\-+\w]*)$/,
-           search: function (term, callback) {
-             callback($.map(emojies, function (emoji) {
-                return emoji.indexOf(term) === 0 ? emoji : null;
-             }));
-           },
-           template: function (value) {
-             return '<img src="assets/libs/jquery-textcomplete/media/images/emoji/' + value + '.png"></img>' + value;
-           },
-           replace: function (value) {
-              return ':' + value + ': ';
-           },
-           index: 1,
-           maxCount: 5
-         }
-       });
-
-    </script>
 
   </body>
 </html>
