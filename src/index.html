@@ -18,136 +18,70 @@
 
     <script src="assets/libs/bootstrap-3.0.0/js/bootstrap.min.js"></script>
     <link href="assets/libs/bootstrap-3.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/css/emojidex.css" rel="stylesheet">
+
+    <script src="../dist/jquery.emojidex.js"></script> 
+
+    <script>
+
+      $(document).ready(function(){
+        $('.emojidex_replace').emojidex({
+          emojiarea: {
+            emojiarea_planeText: $('#emoji-input-not-wysing'),
+            emojiarea_wysing: $('#emoji-input-wysing'),
+            emojiarea_output_value: $('#emoji-output')
+          }
+        });
+      });
+
+    </script>
   </head>
   <body>
+  
+    <h1>emojidex-coffee Example</h1>
+    <div class="example">
+      <h2>Plain-Text</h2>
+      <form>
+        <textarea rows="5" class="emojis-plain" id="emoji-input-not-wysing">Hello :neckbeard:</textarea>
+      </form>
+    </div>
 
+    <div class="emojidex_replace">
+      :snail: ::bbb::c::d::ee:f::
+    </div>
 
+    <div class="example">
+      <h2>WYSIWYG</h2>
+      <form>
+        <textarea rows="5" class="emojis-wysiwyg" id="emoji-input-wysing">Hello :neckbeard:</textarea>
+      </form>
+      <h3>Value:</h3>
+      <div class="value">
+        <pre id="emoji-output"></pre>
+      </div>
+    </div>
 
+    <script>
+       $('.emojis-plain').textcomplete({
+         emoji: {
+           match: /\B:([\-+\w]*)$/,
+           search: function (term, callback) {
+             callback($.map(emojies, function (emoji) {
+                return emoji.indexOf(term) === 0 ? emoji : null;
+             }));
+           },
+           template: function (value) {
+             return '<img src="assets/libs/jquery-textcomplete/media/images/emoji/' + value + '.png"></img>' + value;
+           },
+           replace: function (value) {
+              return ':' + value + ': ';
+           },
+           index: 1,
+           maxCount: 5
+         }
+       });
 
-<ul class="nav nav-tabs">
-  <li class="dropdown active">
-    <a class="dropdown-toggle" data-toggle="dropdown" href="#category">category<span class="caret"></span></a>
-    <ul class="dropdown-menu" role="menu">
-    </ul>
-  </li>
-</ul>
-
-<div id="myTabContent" class="tab-content">
-</div>
-
-<h1>emojidex-coffee Example</h1>
-<div class="example">
-  <h2>Plain-Text</h2>
-  <form>
-    <textarea rows="5" class="emojis-plain">Hello :neckbeard:</textarea>
-  </form>
-</div>
-<div class="example">
-  <h2>WYSIWYG</h2>
-  <form>
-    <textarea rows="5" class="emojis-wysiwyg">Hello :neckbeard:</textarea>
-  </form>
-  <h3>Value:</h3>
-  <div class="value">
-    <pre id="emojis-wysiwyg-value"></pre>
-  </div>
-</div>
-
-<hr>
-<div class="replace">
-  :aaa:::bbb<br>:ccc::<br>ddd:
-</div>
-<div class="replace">
-  :eee:::::fff:
-</div>
-<div class="replace">
-  :ggg:
-</div>
-<hr>
-
-<script>
-$(document).ready(function(){
-
-  // for replace
-  $.each($('.replace'), function(i, target){
-    replaced_html = target.innerHTML.replace(/:(?!:)\w*:/gm, function(matched_string){
-      matched_string = matched_string.replace(/:/g, "")
-      return "<span style='color:red'>" + matched_string + "</span>"
-    })
-    $(target).empty().append(replaced_html)
-  })
-
-  // for test
-  $.emojiarea.path = 'assets/img/utf/';
-  $.getJSON("assets/json/utf_emoji_by_categories_non_anime.json", function(emoji){
-    $.emojiarea.icons = emoji;
-
-    function setImage (category) {
-      html = "";
-      for (i = 0; i < $.emojiarea.icons[category].length; i++) {
-        html += '<a href="javascript:void(0)" title="' + $.emojiarea.icons[category][i].name + '"><img src="' + $.emojiarea.path + $.emojiarea.icons[category][i].name + '.svg" alt="' + $.emojiarea.icons[category][i].name + '"></a>';
-      }
-      return html;
-    }
-
-    flag = true;
-    for (category in $.emojiarea.icons) {
-      if (flag) {
-        $('.dropdown-menu').append('<li class="active"><a href="#' + category + '" data-toggle="tab">' + category + '</a></li>');
-          flag = false;
-      } else {
-        $('.dropdown-menu').append('<li><a href="#' + category + '" data-toggle="tab">' + category + '</a></li>');
-      }
-    }
-
-    flag = true;
-    for (category in $.emojiarea.icons) {
-      if (flag) {
-        $('#myTabContent').append('<div class="tab-pane fade in active" id="' + category + '">' + setImage(category) + '</div>');
-        flag = false;
-      } else {
-        $('#myTabContent').append('<div class="tab-pane fade" id="' + category + '">' + setImage(category) + '</div>');
-      }
-    }
-  })
-
-
-  // for emojiaera
-  $('.emojis-plain').emojiarea({wysiwyg: false});
-
-  var $wysiwyg = $('.emojis-wysiwyg').emojiarea({wysiwyg: true});
-  var $wysiwyg_value = $('#emojis-wysiwyg-value');
-
-  $wysiwyg.on('change', function() {
-    $wysiwyg_value.text($(this).val());
-  });
-  $wysiwyg.trigger('change');
-
-
-  // for textcomplete
-  $('.emojis-plain').textcomplete({
-    emoji: {
-      match: /\B:([\-+\w]*)$/,
-      search: function (term, callback) {
-        callback($.map(emojies, function (emoji) {
-          return emoji.indexOf(term) === 0 ? emoji : null;
-        }));
-      },
-      template: function (value) {
-        return '<img src="assets/libs/jquery-textcomplete/media/images/emoji/' + value + '.png"></img>' + value;
-      },
-      replace: function (value) {
-        return ':' + value + ': ';
-      },
-      index: 1,
-      maxCount: 5
-    }
-  });
-
-});
-</script>
-
-
+    </script>
 
   </body>
 </html>
