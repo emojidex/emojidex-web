@@ -1,81 +1,66 @@
-(function() {
-  (function($, window, document) {
-    var Plugin, defaults, pluginName;
-    pluginName = "emojidex";
-    defaults = {
-      property: "replace_field"
-    };
-    Plugin = (function() {
-      function Plugin(element, options) {
-        this.element = element;
-        this.options = $.extend({}, defaults, options);
-        this._defaults = defaults;
-        this._name = pluginName;
-        this.loadEmojidexJSON(this.element);
-        this.setEmojiarea(this.options);
-      }
+/*
+ *  jQuery Boilerplate - v3.3.1
+ *  A jump-start for jQuery plugins development.
+ *  http://jqueryboilerplate.com
+ *
+ *  Made by Zeno Rocha
+ *  Under MIT License
+ */
+// the semi-colon before function invocation is a safety net against concatenated
+// scripts and/or other plugins which may not be closed properly.
+;(function ( $, window, document, undefined ) {
 
-      Plugin.prototype.loadEmojidexJSON = function(element) {
-        $.emojiarea.path = "assets/img/utf/";
-        return $.getJSON("assets/json/utf_emoji_by_categories_non_anime.json", function(emoji) {
-          return Plugin.prototype.setEmojiIcon(emoji, element);
-        });
-      };
+		// undefined is used here as the undefined global variable in ECMAScript 3 is
+		// mutable (ie. it can be changed by someone else). undefined isn't really being
+		// passed in so we can ensure the value of it is truly undefined. In ES5, undefined
+		// can no longer be modified.
 
-      Plugin.prototype.setEmojiIcon = function(emoji, element) {
-        $.emojiarea.icons = emoji;
-        return $.each($(element), function(i, target) {
-          var replaced_html;
-          replaced_html = target.innerHTML.replace(/:[\-\w]+:/g, function(matched_string) {
-            var category, emojis, path, replaced;
-            replaced = matched_string;
-            for (category in $.emojiarea.icons) {
-              emojis = $.emojiarea.icons[category];
-              i = 0;
-              while (i < emojis.length) {
-                matched_string = matched_string.replace(/:/g, "");
-                if (emojis[i].name === matched_string) {
-                  path = $.emojiarea.path || "";
-                  if (path.length && path.charAt(path.length - 1) !== "/") {
-                    path += "/";
-                  }
-                  replaced = "<img src=\"" + path + matched_string + ".svg\" alt=\"" + matched_string + "\">";
-                  break;
-                }
-                i++;
-              }
-            }
-            return replaced;
-          });
-          return $(target).empty().append(replaced_html);
-        });
-      };
+		// window and document are passed through as local variable rather than global
+		// as this (slightly) quickens the resolution process and can be more efficiently
+		// minified (especially when both are regularly referenced in your plugin).
 
-      Plugin.prototype.setEmojiarea = function(options) {
-        var $wysiwyg, $wysiwyg_value;
-        $wysiwyg = $(options.emojiarea["emojiarea_wysing"].selector).emojiarea({
-          wysiwyg: true
-        });
-        $wysiwyg_value = $(options.emojiarea["emojiarea_output_value"].selector);
-        $(options.emojiarea["emojiarea_planeText"].selector).emojiarea({
-          wysiwyg: false
-        });
-        $wysiwyg.on("change", function() {
-          return $wysiwyg_value.text($(this).val());
-        });
-        return $wysiwyg.trigger("change");
-      };
+		// Create the defaults once
+		var pluginName = "defaultPluginName",
+				defaults = {
+				propertyName: "value"
+		};
 
-      return Plugin;
+		// The actual plugin constructor
+		function Plugin ( element, options ) {
+				this.element = element;
+				// jQuery has an extend method which merges the contents of two or
+				// more objects, storing the result in the first object. The first object
+				// is generally empty as we don't want to alter the default options for
+				// future instances of the plugin
+				this.options = $.extend( {}, defaults, options );
+				this._defaults = defaults;
+				this._name = pluginName;
+				this.init();
+		}
 
-    })();
-    return $.fn[pluginName] = function(options) {
-      return this.each(function() {
-        if (!$.data(this, "plugin_" + pluginName)) {
-          return $.data(this, "plugin_" + pluginName, new Plugin(this, options));
-        }
-      });
-    };
-  })(jQuery, window, document);
+		Plugin.prototype = {
+				init: function () {
+						// Place initialization logic here
+						// You already have access to the DOM element and
+						// the options via the instance, e.g. this.element
+						// and this.options
+						// you can add more functions like the one below and
+						// call them like so: this.yourOtherFunction(this.element, this.options).
+						console.log("xD");
+				},
+				yourOtherFunction: function () {
+						// some logic
+				}
+		};
 
-}).call(this);
+		// A really lightweight plugin wrapper around the constructor,
+		// preventing against multiple instantiations
+		$.fn[ pluginName ] = function ( options ) {
+				return this.each(function() {
+						if ( !$.data( this, "plugin_" + pluginName ) ) {
+								$.data( this, "plugin_" + pluginName, new Plugin( this, options ) );
+						}
+				});
+		};
+
+})( jQuery, window, document );
