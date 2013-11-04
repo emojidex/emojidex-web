@@ -424,7 +424,7 @@
 			return html;
 		}
 
-		html.push('<ul class="nav nav-tabs"><li class="dropdown active"><a class="dropdown-toggle" data-toggle="dropdown" href="#category">category<span class="caret"></span></a><ul class="dropdown-menu" role="menu">');
+		html.push('<ul class="nav nav-tabs"><li class="dropdown active emoji-category"><a class="dropdown-toggle emoji-toggle" data-toggle="dropdown" href="#category">category<span class="caret"></span></a><ul class="dropdown-menu emoji-category-menu" role="menu">');
 		var flag = true;
 		for (var category in $.emojiarea.icons) {
 			if (flag) {
@@ -434,7 +434,7 @@
 				html.push('<li><a href="#' + category + '" data-toggle="tab">' + category + '</a></li>');
 			}
 		}
-		html.push('</ul></li></ul><div id="myTabContent" class="tab-content">');
+		html.push('</ul></li></ul><div class="tab-content emoji-content">');
 
 		flag = true;
 		for (var category in $.emojiarea.icons) {

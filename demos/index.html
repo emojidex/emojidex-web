@@ -19,7 +19,6 @@
     <script src="../dist/jquery.emojidex.min.js"></script> 
 
     <script>
-
       $(document).ready(function(){
         $('.emojidex_replace').emojidex({
         	path_emoji_json: "../src/assets/json/utf_emoji_by_categories_non_anime.json",
@@ -31,21 +30,24 @@
           }
         });
       });
-
     </script>
   </head>
   <body>
   
     <h1>emojidex-coffee Example</h1>
+    
+    <div class="example">
+      <h2>Emojidex replace</h2>
+      <div class="emojidex_replace">
+        :octopus::boar::frog_face:
+      </div>
+    </div>
+
     <div class="example">
       <h2>Plain-Text</h2>
       <form>
         <textarea rows="5" class="emojis-plain" id="emoji-input-not-wysing">Hello :neckbeard:</textarea>
       </form>
-    </div>
-
-    <div class="emojidex_replace">
-      :snail: ::bbb::c::d::ee:f::
     </div>
 
     <div class="example">
@@ -58,6 +60,13 @@
         <pre id="emoji-output"></pre>
       </div>
     </div>
+
+<ul class="nav nav-tabs nav-justified">
+  <li class="active"><a href="#">Home</a></li>
+  <li><a href="#">Profile</a></li>
+  <li><a href="#">Messages</a></li>
+</ul>
+
 
   </body>
 </html>

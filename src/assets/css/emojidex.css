@@ -4,3 +4,38 @@
   vertical-align: middle;
   margin: -3px 0 0 0;
 }
+
+.emoji-category {
+  width: 100%;
+}
+.emoji-toggle, .nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
+  border: none;
+  border-bottom: 1px solid #EEE;
+  width: 100%;
+  text-align: center;
+}
+.emoji-category-menu {
+  width: 100%;
+}
+.emoji-category-menu > li > a {
+  width: 100%;
+}
+.emoji-category-menu > li > a:hover {
+  background-color: #79B2E4;
+}
+.emoji-menu {
+  width: 206px;
+  margin-left: -103px;
+}
+.emoji-menu > div {
+  overflow: visible;
+}
+.emoji-menu a {
+  margin: 0px;
+  border: none;
+}
+.emoji-content {
+  margin: 0px 0px 0px 15px;
+  height: 159px;
+  overflow: auto;
+}
