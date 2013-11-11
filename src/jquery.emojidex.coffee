@@ -44,18 +44,16 @@ do ($ = jQuery, window, document) ->
       path = $.emojiarea.path or ""
       path += "/"  if path.length and path.charAt(path.length - 1) isnt "/"
       $.each $(element), (i, target) ->
-        replaced_html = target.innerHTML.replace(/:[\-\w]+:/g, (matched_string) ->
-          img_tag = ""
+        replaced_html = target.innerHTML.replace /:[\-\w]+:/g, (matched_string) ->
+          retrun_string = matched_string
           for category of emojis_data
             emojis_in_category = emojis_data[category]
             for emoji in emojis_in_category
               matched_string = matched_string.replace(/:/g, "")
               if emoji.name is matched_string
-                img_tag = "<img src=\"" + path + matched_string + ".svg\" alt=\"" + matched_string + "\">"
+                retrun_string = '<img src="' + path + matched_string + '.svg" alt="' + matched_string + '"></img>'
                 break
-
-          return img_tag
-        )
+          return retrun_string
         $(target).empty().append replaced_html
 
     Plugin::setEmojiarea = (options) ->
