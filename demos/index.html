@@ -16,17 +16,21 @@
     <link href="../src/assets/libs/bootstrap-3.0.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="../src/assets/css/emojidex.css" rel="stylesheet">
 
-    <script src="../dist/jquery.emojidex.min.js"></script> 
+    <script src="../dist/jquery.emojidex.js"></script> 
 
     <script>
       $(document).ready(function(){
         $('.emojidex_replace').emojidex({
-        	path_emoji_json: "../src/assets/json/utf_emoji_by_categories_non_anime.json",
-        	path_emoji_img: "../src/assets/img/utf/",
+        	path_json: "../src/assets/json/utf_emoji_by_categories_non_anime.json",
+        	path_img: "../src/assets/img/utf/",
           emojiarea: {
-            emojiarea_planeText: $('#emoji-input-not-wysing'),
-            emojiarea_wysing: $('#emoji-input-wysing'),
-            emojiarea_output_value: $('#emoji-output')
+            plaintext: $('.emojidex-plaintext'), //emojidex_plaintext
+            wysiwyg: $('.emojidex-all'), //emojidex_wysiwyg
+            value_output: $('.emojidex-value_output') //emojidex_rawtext
+            //emojidex #all on (wysiwyg + controls)
+            //emojidex_controls #button and controls are added
+            //emojidex_wysiwyg #wysiwyg editor mode (controls not enabled by default, :->search enabled)
+            //emojidex_plaintext #raw text, no graphics
           }
         });
       });
@@ -39,25 +43,26 @@
     <div class="example">
       <h2>Emojidex replace</h2>
       <div class="emojidex_replace">
-        :octopus::boar::frog_face:
+        🛅😄😡💌❤😈👍
+        :octopus::boar::frogface::test:
       </div>
     </div>
 
     <div class="example">
       <h2>Plain-Text</h2>
       <form>
-        <textarea rows="5" class="emojis-plain" id="emoji-input-not-wysing">Hello :neckbeard:</textarea>
+        <textarea rows="5" class="emojidex-plaintext">Hello :neckbeard:</textarea>
       </form>
     </div>
 
     <div class="example">
       <h2>WYSIWYG</h2>
       <form>
-        <textarea rows="5" class="emojis-wysiwyg" id="emoji-input-wysing">Hello :neckbeard:</textarea>
+        <textarea rows="5" class="emojidex-all">Hello :neckbeard:</textarea>
       </form>
       <h3>Value:</h3>
       <div class="value">
-        <pre id="emoji-output"></pre>
+        <pre class="emojidex-value_output"></pre>
       </div>
     </div>
 

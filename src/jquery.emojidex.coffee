@@ -13,54 +13,60 @@
 
 do ($ = jQuery, window, document) ->
 
-	pluginName = "emojidex"
-	defaults = {}
-	class Plugin
-		constructor: (@element, options) ->
-			@options = $.extend {}, defaults, options
-			@_defaults = defaults
-			@_name = pluginName
+  pluginName = "emojidex"
+  defaults = {}
+  class Plugin
+    constructor: (@element, options) ->
+      @options = $.extend {}, defaults, options
+      @_defaults = defaults
+      @_name = pluginName
 
-			# exec functions
-			@loadEmojidexJSON(@element, @options)
-			@setEmojiarea(@options)
+      @loadEmojidexJSON(@element, @options)
+      @setEmojiarea(@options)
 
-		loadEmojidexJSON: (element, options) ->
-			$.emojiarea.path = options.path_emoji_img
-			$.getJSON options.path_emoji_json, (emoji) ->
-				Plugin.prototype.setEmojiIcon(emoji, element)
+    loadEmojidexJSON: (element, options) ->
+      $.emojiarea.path = options.path_img
+      $.getJSON options.path_json, (emojis_data) ->
+        $.emojiarea.icons = emojis_data
+        Plugin.prototype.setEmojiIconForUTF emojis_data, element
+        Plugin.prototype.setEmojiIconForCode emojis_data, element
 
-		setEmojiIcon: (emoji, element) ->
-			$.emojiarea.icons = emoji
-			$.each $(element), (i, target) ->
-				replaced_html = target.innerHTML.replace(/:[\-\w]+:/g, (matched_string) ->
-					replaced = matched_string
-					for category of $.emojiarea.icons
-						emojis = $.emojiarea.icons[category]
-						i = 0
-						while i < emojis.length
-							matched_string = matched_string.replace(/:/g, "")
-							if emojis[i].name is matched_string
-								path = $.emojiarea.path or ""
-								path += "/"  if path.length and path.charAt(path.length - 1) isnt "/"
-								replaced = "<img src=\"" + path + matched_string + ".svg\" alt=\"" + matched_string + "\">"
-								break
-							i++
-					return replaced
-				)
-				$(target).empty().append replaced_html
+    setEmojiIconForUTF: (emojis_data, element) ->
+      # $.each $(element), (i, target) ->
+      #   replaced = ""
+      #   for category of emojis_data
+      #     console.dir(category)
+      #     emojis_in_category = emojis_data[category]
+      #     for emoji of emojis_in_category
+      #       console.dir emoji
 
-		Plugin::setEmojiarea = (options) ->
-			$wysiwyg = $(options.emojiarea["emojiarea_wysing"].selector).emojiarea(wysiwyg: true)
-			$wysiwyg_value = $(options.emojiarea["emojiarea_output_value"].selector)
-			$(options.emojiarea["emojiarea_planeText"].selector).emojiarea wysiwyg: false
-			$wysiwyg.on "change", ->
-				$wysiwyg_value.text $(this).val()
+    setEmojiIconForCode: (emojis_data, element) ->
+      path = $.emojiarea.path or ""
+      path += "/"  if path.length and path.charAt(path.length - 1) isnt "/"
+      $.each $(element), (i, target) ->
+        replaced_html = target.innerHTML.replace(/:[\-\w]+:/g, (matched_string) ->
+          img_tag = ""
+          for category of emojis_data
+            emojis_in_category = emojis_data[category]
+            for emoji in emojis_in_category
+              matched_string = matched_string.replace(/:/g, "")
+              if emoji.name is matched_string
+                img_tag = "<img src=\"" + path + matched_string + ".svg\" alt=\"" + matched_string + "\">"
+                break
 
-			$wysiwyg.trigger "change"
+          return img_tag
+        )
+        $(target).empty().append replaced_html
 
+    Plugin::setEmojiarea = (options) ->
+      options.emojiarea["plaintext"].emojiarea wysiwyg: false
+      options.emojiarea["wysiwyg"].emojiarea(wysiwyg: true)
+      
+      options.emojiarea["wysiwyg"].on "change", ->
+        options.emojiarea["value_output"].text $(this).val()
+      options.emojiarea["wysiwyg"].trigger "change"
 
-	$.fn[pluginName] = (options) ->
-		@each ->
-			if !$.data(@, "plugin_#{pluginName}")
-				$.data(@, "plugin_#{pluginName}", new Plugin(@, options))
+  $.fn[pluginName] = (options) ->
+    @each ->
+      if !$.data(@, "plugin_#{pluginName}")
+        $.data(@, "plugin_#{pluginName}", new Plugin(@, options))

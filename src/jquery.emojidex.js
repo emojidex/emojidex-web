@@ -14,54 +14,55 @@
       }
 
       Plugin.prototype.loadEmojidexJSON = function(element, options) {
-        $.emojiarea.path = options.path_emoji_img;
-        return $.getJSON(options.path_emoji_json, function(emoji) {
-          return Plugin.prototype.setEmojiIcon(emoji, element);
+        $.emojiarea.path = options.path_img;
+        return $.getJSON(options.path_json, function(emojis_data) {
+          $.emojiarea.icons = emojis_data;
+          Plugin.prototype.setEmojiIconForUTF(emojis_data, element);
+          return Plugin.prototype.setEmojiIconForCode(emojis_data, element);
         });
       };
 
-      Plugin.prototype.setEmojiIcon = function(emoji, element) {
-        $.emojiarea.icons = emoji;
+      Plugin.prototype.setEmojiIconForUTF = function(emojis_data, element) {};
+
+      Plugin.prototype.setEmojiIconForCode = function(emojis_data, element) {
+        var path;
+        path = $.emojiarea.path || "";
+        if (path.length && path.charAt(path.length - 1) !== "/") {
+          path += "/";
+        }
         return $.each($(element), function(i, target) {
           var replaced_html;
           replaced_html = target.innerHTML.replace(/:[\-\w]+:/g, function(matched_string) {
-            var category, emojis, path, replaced;
-            replaced = matched_string;
-            for (category in $.emojiarea.icons) {
-              emojis = $.emojiarea.icons[category];
-              i = 0;
-              while (i < emojis.length) {
+            var category, emoji, emojis_in_category, img_tag, _i, _len;
+            img_tag = "";
+            for (category in emojis_data) {
+              emojis_in_category = emojis_data[category];
+              for (_i = 0, _len = emojis_in_category.length; _i < _len; _i++) {
+                emoji = emojis_in_category[_i];
                 matched_string = matched_string.replace(/:/g, "");
-                if (emojis[i].name === matched_string) {
-                  path = $.emojiarea.path || "";
-                  if (path.length && path.charAt(path.length - 1) !== "/") {
-                    path += "/";
-                  }
-                  replaced = "<img src=\"" + path + matched_string + ".svg\" alt=\"" + matched_string + "\">";
+                if (emoji.name === matched_string) {
+                  img_tag = "<img src=\"" + path + matched_string + ".svg\" alt=\"" + matched_string + "\">";
                   break;
                 }
-                i++;
               }
             }
-            return replaced;
+            return img_tag;
           });
           return $(target).empty().append(replaced_html);
         });
       };
 
       Plugin.prototype.setEmojiarea = function(options) {
-        var $wysiwyg, $wysiwyg_value;
-        $wysiwyg = $(options.emojiarea["emojiarea_wysing"].selector).emojiarea({
-          wysiwyg: true
-        });
-        $wysiwyg_value = $(options.emojiarea["emojiarea_output_value"].selector);
-        $(options.emojiarea["emojiarea_planeText"].selector).emojiarea({
+        options.emojiarea["plaintext"].emojiarea({
           wysiwyg: false
         });
-        $wysiwyg.on("change", function() {
-          return $wysiwyg_value.text($(this).val());
+        options.emojiarea["wysiwyg"].emojiarea({
+          wysiwyg: true
         });
-        return $wysiwyg.trigger("change");
+        options.emojiarea["wysiwyg"].on("change", function() {
+          return options.emojiarea["value_output"].text($(this).val());
+        });
+        return options.emojiarea["wysiwyg"].trigger("change");
       };
 
       return Plugin;

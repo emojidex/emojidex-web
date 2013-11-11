@@ -41,15 +41,21 @@ module.exports = (grunt) ->
       options:
         banner: "<%= meta.banner %>"
     
+    # Watch definitions
+    watch:
+      files: ["src/jquery.emojidex.coffee"]
+      tasks: ["coffee", "concat", "uglify"]
+
     # Lint definitions
     # jshint:
     #   files: ["src/jquery.emojidex.js"]
     #   options:
     #     jshintrc: ".jshintrc"
 
-  grunt.loadNpmTasks "grunt-contrib-concat"
-  grunt.loadNpmTasks "grunt-contrib-jshint"
-  grunt.loadNpmTasks "grunt-contrib-uglify"
   grunt.loadNpmTasks "grunt-contrib-coffee"
+  grunt.loadNpmTasks "grunt-contrib-concat"
+  grunt.loadNpmTasks "grunt-contrib-uglify"
+  grunt.loadNpmTasks "grunt-contrib-watch"
+  # grunt.loadNpmTasks "grunt-contrib-jshint"
   grunt.registerTask "default", ["coffee", "concat", "uglify"]
   grunt.registerTask "travis", ["jshint"]
