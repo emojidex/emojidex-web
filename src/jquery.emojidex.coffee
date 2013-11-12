@@ -32,16 +32,18 @@ do ($ = jQuery, window, document) ->
         Plugin.prototype.setEmojiIconForCode emojis_data, element
 
     setEmojiIconForUTF: (emojis_data, element) ->
-      # $.each $(element), (i, target) ->
-      #   replaced = ""
-      #   for category of emojis_data
-      #     console.dir(category)
-      #     emojis_in_category = emojis_data[category]
-      #     for emoji of emojis_in_category
-      #       console.dir emoji
+      $.each $(element), (i, target) ->
+        replaced_html = target.innerHTML
+        for category of emojis_data
+          emojis_in_category = emojis_data[category]
+          for emoji in emojis_in_category
+            pattern = new RegExp(emoji.moji, "g")
+            replaced_html = replaced_html.replace pattern, (matched_string) ->
+              return '<img src="' + $.emojiarea.path + emoji.name + '.svg" alt="' + emoji.name + '"></img>'
+        target.innerHTML = replaced_html
 
     setEmojiIconForCode: (emojis_data, element) ->
-      path = $.emojiarea.path or ""
+      path = $.emojiarea.path
       path += "/"  if path.length and path.charAt(path.length - 1) isnt "/"
       $.each $(element), (i, target) ->
         replaced_html = target.innerHTML.replace /:[\-\w]+:/g, (matched_string) ->
@@ -54,7 +56,7 @@ do ($ = jQuery, window, document) ->
                 retrun_string = '<img src="' + path + matched_string + '.svg" alt="' + matched_string + '"></img>'
                 break
           return retrun_string
-        $(target).empty().append replaced_html
+        target.innerHTML = replaced_html
 
     Plugin::setEmojiarea = (options) ->
       options.emojiarea["plaintext"].emojiarea wysiwyg: false

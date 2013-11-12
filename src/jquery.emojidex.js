@@ -22,11 +22,27 @@
         });
       };
 
-      Plugin.prototype.setEmojiIconForUTF = function(emojis_data, element) {};
+      Plugin.prototype.setEmojiIconForUTF = function(emojis_data, element) {
+        return $.each($(element), function(i, target) {
+          var category, emoji, emojis_in_category, pattern, replaced_html, _i, _len;
+          replaced_html = target.innerHTML;
+          for (category in emojis_data) {
+            emojis_in_category = emojis_data[category];
+            for (_i = 0, _len = emojis_in_category.length; _i < _len; _i++) {
+              emoji = emojis_in_category[_i];
+              pattern = new RegExp(emoji.moji, "g");
+              replaced_html = replaced_html.replace(pattern, function(matched_string) {
+                return '<img src="' + $.emojiarea.path + emoji.name + '.svg" alt="' + emoji.name + '"></img>';
+              });
+            }
+          }
+          return target.innerHTML = replaced_html;
+        });
+      };
 
       Plugin.prototype.setEmojiIconForCode = function(emojis_data, element) {
         var path;
-        path = $.emojiarea.path || "";
+        path = $.emojiarea.path;
         if (path.length && path.charAt(path.length - 1) !== "/") {
           path += "/";
         }
@@ -48,7 +64,7 @@
             }
             return retrun_string;
           });
-          return $(target).empty().append(replaced_html);
+          return target.innerHTML = replaced_html;
         });
       };
 
