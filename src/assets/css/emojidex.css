@@ -6,14 +6,6 @@ i[class*="emojidex-"] {
   vertical-align: bottom;
   display: inline-block;
 }
-
-.emojidex_replace img {
-  width: 20px;
-  height: 20px;
-  vertical-align: middle;
-  margin: -3px 0 0 0;
-}
-
 .emoji-category {
   width: 100%;
 }
