@@ -28,8 +28,17 @@ do ($ = jQuery, window, document) ->
       $.emojiarea.path = options.path_img
       $.getJSON options.path_json, (emojis_data) ->
         $.emojiarea.icons = emojis_data
+        Plugin.prototype.setEmojiCSS emojis_data
         Plugin.prototype.setEmojiIconForUTF emojis_data, element
         Plugin.prototype.setEmojiIconForCode emojis_data, element
+
+    setEmojiCSS: (emojis_data) ->
+      emojis_css = $('<style type="text/css" />')
+      for category of emojis_data
+        emojis_in_category = emojis_data[category]
+        for emoji in emojis_in_category
+          emojis_css.append "i.emojidex-" + emoji.moji + " {background-image: url('" + $.emojiarea.path + emoji.name + ".svg')}"
+      $("head").append emojis_css
 
     setEmojiIconForUTF: (emojis_data, element) ->
       $.each $(element), (i, target) ->
@@ -39,7 +48,7 @@ do ($ = jQuery, window, document) ->
           for emoji in emojis_in_category
             pattern = new RegExp(emoji.moji, "g")
             replaced_html = replaced_html.replace pattern, (matched_string) ->
-              return '<img src="' + $.emojiarea.path + emoji.name + '.svg" alt="' + emoji.name + '"></img>'
+              return '<i class="emojidex-' + emoji.moji + '"></i>'
         target.innerHTML = replaced_html
 
     setEmojiIconForCode: (emojis_data, element) ->
@@ -51,7 +60,7 @@ do ($ = jQuery, window, document) ->
             for emoji in emojis_in_category
               matched_string = matched_string.replace(/:/g, "")
               if emoji.name is matched_string
-                retrun_string = '<img src="' + $.emojiarea.path + matched_string + '.svg" alt="' + matched_string + '"></img>'
+                retrun_string = '<i class="emojidex-' + emoji.moji + '"></i>'
                 break
           return retrun_string
         target.innerHTML = replaced_html

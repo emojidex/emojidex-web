@@ -17,9 +17,23 @@
         $.emojiarea.path = options.path_img;
         return $.getJSON(options.path_json, function(emojis_data) {
           $.emojiarea.icons = emojis_data;
+          Plugin.prototype.setEmojiCSS(emojis_data);
           Plugin.prototype.setEmojiIconForUTF(emojis_data, element);
           return Plugin.prototype.setEmojiIconForCode(emojis_data, element);
         });
+      };
+
+      Plugin.prototype.setEmojiCSS = function(emojis_data) {
+        var category, emoji, emojis_css, emojis_in_category, _i, _len;
+        emojis_css = $('<style type="text/css" />');
+        for (category in emojis_data) {
+          emojis_in_category = emojis_data[category];
+          for (_i = 0, _len = emojis_in_category.length; _i < _len; _i++) {
+            emoji = emojis_in_category[_i];
+            emojis_css.append("i.emojidex-" + emoji.moji + " {background-image: url('" + $.emojiarea.path + emoji.name + ".svg')}");
+          }
+        }
+        return $("head").append(emojis_css);
       };
 
       Plugin.prototype.setEmojiIconForUTF = function(emojis_data, element) {
@@ -32,7 +46,7 @@
               emoji = emojis_in_category[_i];
               pattern = new RegExp(emoji.moji, "g");
               replaced_html = replaced_html.replace(pattern, function(matched_string) {
-                return '<img src="' + $.emojiarea.path + emoji.name + '.svg" alt="' + emoji.name + '"></img>';
+                return '<i class="emojidex-' + emoji.moji + '"></i>';
               });
             }
           }
@@ -52,7 +66,7 @@
                 emoji = emojis_in_category[_i];
                 matched_string = matched_string.replace(/:/g, "");
                 if (emoji.name === matched_string) {
-                  retrun_string = '<img src="' + $.emojiarea.path + matched_string + '.svg" alt="' + matched_string + '"></img>';
+                  retrun_string = '<i class="emojidex-' + emoji.moji + '"></i>';
                   break;
                 }
               }

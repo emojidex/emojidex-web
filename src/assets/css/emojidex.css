@@ -1,3 +1,12 @@
+i[class*="emojidex-"] {
+  background-size: 100%;
+  background-repeat: no-repeat;
+  width: 1.5em;
+  height: 1.5em;
+  vertical-align: bottom;
+  display: inline-block;
+}
+
 .emojidex_replace img {
   width: 20px;
   height: 20px;
