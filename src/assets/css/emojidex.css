@@ -1,10 +1,10 @@
 i[class*="emojidex-"] {
-  background-size: 100%;
-  background-repeat: no-repeat;
+  display: inline-block;
+  vertical-align: bottom;
   width: 1.5em;
   height: 1.5em;
-  vertical-align: bottom;
-  display: inline-block;
+  background-size: 100%;
+  background-repeat: no-repeat;
 }
 .emoji-category {
   width: 100%;
