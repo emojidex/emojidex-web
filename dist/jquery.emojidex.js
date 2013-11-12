@@ -49,11 +49,6 @@
       };
 
       Plugin.prototype.setEmojiIconForCode = function(emojis_data, element) {
-        var path;
-        path = $.emojiarea.path;
-        if (path.length && path.charAt(path.length - 1) !== "/") {
-          path += "/";
-        }
         return $.each($(element), function(i, target) {
           var replaced_html;
           replaced_html = target.innerHTML.replace(/:[\-\w]+:/g, function(matched_string) {
@@ -65,7 +60,7 @@
                 emoji = emojis_in_category[_i];
                 matched_string = matched_string.replace(/:/g, "");
                 if (emoji.name === matched_string) {
-                  retrun_string = '<img src="' + path + matched_string + '.svg" alt="' + matched_string + '"></img>';
+                  retrun_string = '<img src="' + $.emojiarea.path + matched_string + '.svg" alt="' + matched_string + '"></img>';
                   break;
                 }
               }

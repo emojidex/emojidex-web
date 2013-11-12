@@ -43,8 +43,6 @@ do ($ = jQuery, window, document) ->
         target.innerHTML = replaced_html
 
     setEmojiIconForCode: (emojis_data, element) ->
-      path = $.emojiarea.path
-      path += "/"  if path.length and path.charAt(path.length - 1) isnt "/"
       $.each $(element), (i, target) ->
         replaced_html = target.innerHTML.replace /:[\-\w]+:/g, (matched_string) ->
           retrun_string = matched_string
@@ -53,7 +51,7 @@ do ($ = jQuery, window, document) ->
             for emoji in emojis_in_category
               matched_string = matched_string.replace(/:/g, "")
               if emoji.name is matched_string
-                retrun_string = '<img src="' + path + matched_string + '.svg" alt="' + matched_string + '"></img>'
+                retrun_string = '<img src="' + $.emojiarea.path + matched_string + '.svg" alt="' + matched_string + '"></img>'
                 break
           return retrun_string
         target.innerHTML = replaced_html
