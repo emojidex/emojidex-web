@@ -12,9 +12,9 @@
 # Copyright 2013 Genshin Souzou Kabushiki Kaisha
 
 do ($ = jQuery, window, document) ->
-
   pluginName = "emojidex"
   defaults = {}
+
   class Plugin
     constructor: (@element, options) ->
       @options = $.extend {}, defaults, options
@@ -28,9 +28,9 @@ do ($ = jQuery, window, document) ->
       $.emojiarea.path = options.path_img
       $.getJSON options.path_json, (emojis_data) ->
         $.emojiarea.icons = emojis_data
-        Plugin.prototype.setEmojiCSS emojis_data
-        Plugin.prototype.setEmojiIconForUTF emojis_data, element
-        Plugin.prototype.setEmojiIconForCode emojis_data, element
+        Plugin::setEmojiCSS emojis_data
+        Plugin::setEmojiIconForUTF emojis_data, element
+        Plugin::setEmojiIconForCode emojis_data, element
 
     setEmojiCSS: (emojis_data) ->
       emojis_css = $('<style type="text/css" />')
@@ -65,7 +65,7 @@ do ($ = jQuery, window, document) ->
           return retrun_string
         target.innerHTML = replaced_html
 
-    Plugin::setEmojiarea = (options) ->
+    setEmojiarea: (options) ->
       options.emojiarea["plaintext"].emojiarea wysiwyg: false
       options.emojiarea["wysiwyg"].emojiarea(wysiwyg: true)
       
