@@ -13,7 +13,11 @@
 
 do ($ = jQuery, window, document) ->
   pluginName = "emojidex"
-  defaults = {}
+  defaults =
+    emojiarea:
+      plaintext: "emojidex-plaintext"
+      wysiwyg: "emojidex-wysiwyg"
+      value_output: "emojidex-rawtext"
 
   class Plugin
     constructor: (@element, options) ->
@@ -21,8 +25,8 @@ do ($ = jQuery, window, document) ->
       @_defaults = defaults
       @_name = pluginName
 
-      @loadEmojidexJSON(@element, @options)
-      @setEmojiarea(@options)
+      @loadEmojidexJSON @element, @options
+      @setEmojiarea @options
 
     loadEmojidexJSON: (element, options) ->
       $.emojiarea.path = options.path_img
@@ -40,6 +44,9 @@ do ($ = jQuery, window, document) ->
           emojis_css.append "i.emojidex-" + emoji.moji + " {background-image: url('" + $.emojiarea.path + emoji.name + ".svg')}"
       $("head").append emojis_css
 
+    getEmojiTag: (emoji) ->
+      return '<i class="emojidex-' + emoji.moji + '"></i>'
+
     setEmojiIconForUTF: (emojis_data, element) ->
       $.each $(element), (i, target) ->
         replaced_html = target.innerHTML
@@ -48,7 +55,7 @@ do ($ = jQuery, window, document) ->
           for emoji in emojis_in_category
             pattern = new RegExp(emoji.moji, "g")
             replaced_html = replaced_html.replace pattern, (matched_string) ->
-              return '<i class="emojidex-' + emoji.moji + '"></i>'
+              return Plugin::getEmojiTag emoji
         target.innerHTML = replaced_html
 
     setEmojiIconForCode: (emojis_data, element) ->
@@ -60,7 +67,7 @@ do ($ = jQuery, window, document) ->
             for emoji in emojis_in_category
               matched_string = matched_string.replace(/:/g, "")
               if emoji.name is matched_string
-                retrun_string = '<i class="emojidex-' + emoji.moji + '"></i>'
+                retrun_string = Plugin::getEmojiTag emoji
                 break
           return retrun_string
         target.innerHTML = replaced_html
