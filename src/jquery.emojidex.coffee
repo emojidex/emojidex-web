@@ -74,7 +74,7 @@ do ($ = jQuery, window, document) ->
 
     setEmojiarea: (options) ->
       options.emojiarea["plaintext"].emojiarea wysiwyg: false
-      options.emojiarea["wysiwyg"].emojiarea(wysiwyg: true)
+      options.emojiarea["wysiwyg"].emojiarea wysiwyg: true
       
       options.emojiarea["wysiwyg"].on "change", ->
         options.emojiarea["value_output"].text $(this).val()
