@@ -2,7 +2,13 @@
   (function($, window, document) {
     var Plugin, defaults, pluginName;
     pluginName = "emojidex";
-    defaults = {};
+    defaults = {
+      emojiarea: {
+        plaintext: "emojidex-plaintext",
+        wysiwyg: "emojidex-wysiwyg",
+        value_output: "emojidex-rawtext"
+      }
+    };
     Plugin = (function() {
       function Plugin(element, options) {
         this.element = element;
@@ -36,6 +42,10 @@
         return $("head").append(emojis_css);
       };
 
+      Plugin.prototype.getEmojiTag = function(emoji) {
+        return '<i class="emojidex-' + emoji.moji + '"></i>';
+      };
+
       Plugin.prototype.setEmojiIconForUTF = function(emojis_data, element) {
         return $.each($(element), function(i, target) {
           var category, emoji, emojis_in_category, pattern, replaced_html, _i, _len;
@@ -46,7 +56,7 @@
               emoji = emojis_in_category[_i];
               pattern = new RegExp(emoji.moji, "g");
               replaced_html = replaced_html.replace(pattern, function(matched_string) {
-                return '<i class="emojidex-' + emoji.moji + '"></i>';
+                return Plugin.prototype.getEmojiTag(emoji);
               });
             }
           }
@@ -66,7 +76,7 @@
                 emoji = emojis_in_category[_i];
                 matched_string = matched_string.replace(/:/g, "");
                 if (emoji.name === matched_string) {
-                  retrun_string = '<i class="emojidex-' + emoji.moji + '"></i>';
+                  retrun_string = Plugin.prototype.getEmojiTag(emoji);
                   break;
                 }
               }
