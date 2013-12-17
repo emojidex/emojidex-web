@@ -24,7 +24,6 @@ do ($ = jQuery, window, document) ->
       @options = $.extend {}, defaults, options
       @_defaults = defaults
       @_name = pluginName
-
       @loadEmojidexJSON @element, @options
       @setEmojiarea @options
 
@@ -32,50 +31,49 @@ do ($ = jQuery, window, document) ->
       $.emojiarea.path = options.path_img
       $.getJSON options.path_json, (emojis_data) ->
         $.emojiarea.icons = emojis_data
-        Plugin::setEmojiCSS emojis_data
-        Plugin::setEmojiIconForUTF emojis_data, element
-        Plugin::setEmojiIconForCode emojis_data, element
+        emoji_regexps = Plugin::setEmojiCSS_getEmojiRegexps emojis_data
+        Plugin::setEmojiIcon emojis_data, element, emoji_regexps
 
-    setEmojiCSS: (emojis_data) ->
+    setEmojiCSS_getEmojiRegexps: (emojis_data) ->
+      regexp_for_utf = ""
+      regexp_for_code = ":("
       emojis_css = $('<style type="text/css" />')
       for category of emojis_data
         emojis_in_category = emojis_data[category]
         for emoji in emojis_in_category
+          regexp_for_utf += emoji.moji + "|"
+          regexp_for_code += emoji.name + "|"
           emojis_css.append "i.emojidex-" + emoji.moji + " {background-image: url('" + $.emojiarea.path + emoji.name + ".svg')}"
       $("head").append emojis_css
+      return [regexp_for_utf.slice(0, -1), regexp_for_code.slice(0, -1) + "):"]
 
-    getEmojiTag: (emoji) ->
-      return '<i class="emojidex-' + emoji.moji + '"></i>'
-
-    setEmojiIconForUTF: (emojis_data, element) ->
-      $.each $(element), (i, target) ->
-        replaced_html = target.innerHTML
-        for category of emojis_data
-          emojis_in_category = emojis_data[category]
-          for emoji in emojis_in_category
-            pattern = new RegExp(emoji.moji, "g")
-            replaced_html = replaced_html.replace pattern, (matched_string) ->
-              return Plugin::getEmojiTag emoji
-        target.innerHTML = replaced_html
-
-    setEmojiIconForCode: (emojis_data, element) ->
-      $.each $(element), (i, target) ->
-        replaced_html = target.innerHTML.replace /:[\-\w]+:/g, (matched_string) ->
-          retrun_string = matched_string
+    setEmojiIcon: (emojis_data, element, emoji_regexps) ->
+      getEmojiTag = (emoji_utf) ->
+        return '<i class="emojidex-' + emoji_utf + '"></i>'
+      
+      replaceForUTF = (replaced_string, emoji_regexp) ->
+        replaced_string = replaced_string.replace new RegExp(emoji_regexp, "g"), (matched_string) ->
+          return getEmojiTag matched_string
+      
+      replaceForCode = (replaced_string, emoji_regexp, emojis_data) ->
+        replaced_string = replaced_string.replace new RegExp(emoji_regexp, "g"), (matched_string) ->
+          matched_string = matched_string.replace /:/g, ""
           for category of emojis_data
-            emojis_in_category = emojis_data[category]
-            for emoji in emojis_in_category
-              matched_string = matched_string.replace(/:/g, "")
+            for emoji in emojis_data[category]
               if emoji.name is matched_string
-                retrun_string = Plugin::getEmojiTag emoji
-                break
-          return retrun_string
-        target.innerHTML = replaced_html
+                return getEmojiTag emoji.moji
+
+      $(element).find(":not(iframe,textarea,script)").andSelf().contents().filter(->
+        @nodeType is Node.TEXT_NODE
+      ).each ->
+        replaced_string = @textContent
+        replaced_string = replaceForUTF replaced_string, emoji_regexps[0]
+        replaced_string = replaceForCode replaced_string, emoji_regexps[1], emojis_data
+        $(@).replaceWith replaced_string
 
     setEmojiarea: (options) ->
       options.emojiarea["plaintext"].emojiarea wysiwyg: false
       options.emojiarea["wysiwyg"].emojiarea wysiwyg: true
-      
       options.emojiarea["wysiwyg"].on "change", ->
         options.emojiarea["value_output"].text $(this).val()
       options.emojiarea["wysiwyg"].trigger "change"

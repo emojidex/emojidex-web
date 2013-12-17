@@ -22,68 +22,64 @@
       Plugin.prototype.loadEmojidexJSON = function(element, options) {
         $.emojiarea.path = options.path_img;
         return $.getJSON(options.path_json, function(emojis_data) {
+          var emoji_regexps;
           $.emojiarea.icons = emojis_data;
-          Plugin.prototype.setEmojiCSS(emojis_data);
-          Plugin.prototype.setEmojiIconForUTF(emojis_data, element);
-          return Plugin.prototype.setEmojiIconForCode(emojis_data, element);
+          emoji_regexps = Plugin.prototype.setEmojiCSS_getEmojiRegexps(emojis_data);
+          return Plugin.prototype.setEmojiIcon(emojis_data, element, emoji_regexps);
         });
       };
 
-      Plugin.prototype.setEmojiCSS = function(emojis_data) {
-        var category, emoji, emojis_css, emojis_in_category, _i, _len;
+      Plugin.prototype.setEmojiCSS_getEmojiRegexps = function(emojis_data) {
+        var category, emoji, emojis_css, emojis_in_category, regexp_for_code, regexp_for_utf, _i, _len;
+        regexp_for_utf = "";
+        regexp_for_code = ":(";
         emojis_css = $('<style type="text/css" />');
         for (category in emojis_data) {
           emojis_in_category = emojis_data[category];
           for (_i = 0, _len = emojis_in_category.length; _i < _len; _i++) {
             emoji = emojis_in_category[_i];
+            regexp_for_utf += emoji.moji + "|";
+            regexp_for_code += emoji.name + "|";
             emojis_css.append("i.emojidex-" + emoji.moji + " {background-image: url('" + $.emojiarea.path + emoji.name + ".svg')}");
           }
         }
-        return $("head").append(emojis_css);
+        $("head").append(emojis_css);
+        return [regexp_for_utf.slice(0, -1), regexp_for_code.slice(0, -1) + "):"];
       };
 
-      Plugin.prototype.getEmojiTag = function(emoji) {
-        return '<i class="emojidex-' + emoji.moji + '"></i>';
-      };
-
-      Plugin.prototype.setEmojiIconForUTF = function(emojis_data, element) {
-        return $.each($(element), function(i, target) {
-          var category, emoji, emojis_in_category, pattern, replaced_html, _i, _len;
-          replaced_html = target.innerHTML;
-          for (category in emojis_data) {
-            emojis_in_category = emojis_data[category];
-            for (_i = 0, _len = emojis_in_category.length; _i < _len; _i++) {
-              emoji = emojis_in_category[_i];
-              pattern = new RegExp(emoji.moji, "g");
-              replaced_html = replaced_html.replace(pattern, function(matched_string) {
-                return Plugin.prototype.getEmojiTag(emoji);
-              });
-            }
-          }
-          return target.innerHTML = replaced_html;
-        });
-      };
-
-      Plugin.prototype.setEmojiIconForCode = function(emojis_data, element) {
-        return $.each($(element), function(i, target) {
-          var replaced_html;
-          replaced_html = target.innerHTML.replace(/:[\-\w]+:/g, function(matched_string) {
-            var category, emoji, emojis_in_category, retrun_string, _i, _len;
-            retrun_string = matched_string;
+      Plugin.prototype.setEmojiIcon = function(emojis_data, element, emoji_regexps) {
+        var getEmojiTag, replaceForCode, replaceForUTF;
+        getEmojiTag = function(emoji_utf) {
+          return '<i class="emojidex-' + emoji_utf + '"></i>';
+        };
+        replaceForUTF = function(replaced_string, emoji_regexp) {
+          return replaced_string = replaced_string.replace(new RegExp(emoji_regexp, "g"), function(matched_string) {
+            return getEmojiTag(matched_string);
+          });
+        };
+        replaceForCode = function(replaced_string, emoji_regexp, emojis_data) {
+          return replaced_string = replaced_string.replace(new RegExp(emoji_regexp, "g"), function(matched_string) {
+            var category, emoji, _i, _len, _ref;
+            matched_string = matched_string.replace(/:/g, "");
             for (category in emojis_data) {
-              emojis_in_category = emojis_data[category];
-              for (_i = 0, _len = emojis_in_category.length; _i < _len; _i++) {
-                emoji = emojis_in_category[_i];
-                matched_string = matched_string.replace(/:/g, "");
+              _ref = emojis_data[category];
+              for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                emoji = _ref[_i];
                 if (emoji.name === matched_string) {
-                  retrun_string = Plugin.prototype.getEmojiTag(emoji);
-                  break;
+                  return getEmojiTag(emoji.moji);
                 }
               }
             }
-            return retrun_string;
           });
-          return target.innerHTML = replaced_html;
+        };
+        return $(element).find(":not(iframe,textarea,script)").andSelf().contents().filter(function() {
+          return this.nodeType === Node.TEXT_NODE;
+        }).each(function() {
+          var replaced_string;
+          replaced_string = this.textContent;
+          replaced_string = replaceForUTF(replaced_string, emoji_regexps[0]);
+          replaced_string = replaceForCode(replaced_string, emoji_regexps[1], emojis_data);
+          return $(this).replaceWith(replaced_string);
         });
       };
 
