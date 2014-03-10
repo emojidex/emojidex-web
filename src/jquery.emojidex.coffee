@@ -22,6 +22,7 @@ do ($ = jQuery, window, document) ->
 
   class Plugin
     constructor: (@element, options) ->
+      # start main --------
       @options = $.extend {}, defaults, options
       @_defaults = defaults
       @_name = pluginName
@@ -30,6 +31,8 @@ do ($ = jQuery, window, document) ->
 
     loadEmojidexJSON: (element, options) ->
       $.emojiarea.path = options.path_img
+
+      # get json date
       $.getJSON options.path_json, (emojis_data) ->
         $.emojiarea.icons = emojis_data
         emoji_regexps = Plugin::setEmojiCSS_getEmojiRegexps emojis_data
@@ -38,13 +41,17 @@ do ($ = jQuery, window, document) ->
     setEmojiCSS_getEmojiRegexps: (emojis_data) ->
       regexp_for_utf = ""
       regexp_for_code = ":("
+
       emojis_css = $('<style type="text/css" />')
       for category of emojis_data
         emojis_in_category = emojis_data[category]
+
         for emoji in emojis_in_category
           regexp_for_utf += emoji.moji + "|"
           regexp_for_code += emoji.name + "|"
+
           emojis_css.append "i.emojidex-" + emoji.moji + " {background-image: url('" + $.emojiarea.path + emoji.name + ".svg')}"
+
       $("head").append emojis_css
       return [regexp_for_utf.slice(0, -1), regexp_for_code.slice(0, -1) + "):"]
 
@@ -64,6 +71,7 @@ do ($ = jQuery, window, document) ->
               if emoji.name is matched_string
                 return getEmojiTag emoji.moji
 
+      # start main --------
       $(element).find(":not(iframe,textarea,script)").andSelf().contents().filter(->
         @nodeType is Node.TEXT_NODE
       ).each ->
