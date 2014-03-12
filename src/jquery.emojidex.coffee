@@ -34,9 +34,25 @@ do ($ = jQuery, window, document) ->
 
       # get json date
       $.getJSON options.path_json, (emojis_data) ->
+        emojis_data = Plugin::getCategorizedData emojis_data
         $.emojiarea.icons = emojis_data
         emoji_regexps = Plugin::setEmojiCSS_getEmojiRegexps emojis_data
         Plugin::setEmojiIcon emojis_data, element, emoji_regexps
+
+    getCategorizedData: (emojis_data) ->
+      category_names = []
+      for emoji in emojis_data
+        if category_names.indexOf(emoji.category) < 0
+          category_names.push(emoji.category)
+
+      new_emojis_data = {}
+      for category_name in category_names
+        new_emojis_data[category_name] = []
+
+      for emoji in emojis_data
+        new_emojis_data[emoji.category].push(emoji)
+
+      return new_emojis_data
 
     setEmojiCSS_getEmojiRegexps: (emojis_data) ->
       regexp_for_utf = ""
@@ -48,9 +64,9 @@ do ($ = jQuery, window, document) ->
 
         for emoji in emojis_in_category
           regexp_for_utf += emoji.moji + "|"
-          regexp_for_code += emoji.name + "|"
+          regexp_for_code += emoji.code + "|"
 
-          emojis_css.append "i.emojidex-" + emoji.moji + " {background-image: url('" + $.emojiarea.path + emoji.name + ".svg')}"
+          emojis_css.append "i.emojidex-" + emoji.moji + " {background-image: url('" + $.emojiarea.path + emoji.code + ".svg')}"
 
       $("head").append emojis_css
       return [regexp_for_utf.slice(0, -1), regexp_for_code.slice(0, -1) + "):"]
@@ -68,7 +84,7 @@ do ($ = jQuery, window, document) ->
           matched_string = matched_string.replace /:/g, ""
           for category of emojis_data
             for emoji in emojis_data[category]
-              if emoji.name is matched_string
+              if emoji.code is matched_string
                 return getEmojiTag emoji.moji
 
       # start main --------

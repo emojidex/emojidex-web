@@ -22,6 +22,7 @@ module.exports = (grunt) ->
         files:
           "src/jquery.emojidex.js": "src/jquery.emojidex.coffee"
           "dist/jquery.emojidex.js": "src/jquery.emojidex.coffee"
+          "dist/jquery.emojiarea.poe.js": "src/jquery.emojiarea.poe.coffee"
 
     # Concat definitions
     concat:
@@ -35,15 +36,19 @@ module.exports = (grunt) ->
     # Minify definitions
     uglify:
       my_target:
-        src: ["dist/jquery.emojidex.js"]
-        dest: "dist/jquery.emojidex.min.js"
+        src: [
+          "dist/jquery.emojidex.js"
+          "dist/jquery.emojiarea.poe.js"
+        ]
+        dest:
+          "dist/jquery.emojidex.min.js"
 
       options:
         banner: "<%= meta.banner %>"
     
     # Watch definitions
     watch:
-      files: ["src/jquery.emojidex.coffee"]
+      files: ["src/**/*.coffee"]
       tasks: ["coffee", "concat", "uglify"]
 
     # Lint definitions

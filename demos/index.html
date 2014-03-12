@@ -8,7 +8,6 @@
     <meta name="viewport" content="width=device-width">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 
-    <script src="../src/jquery.emojiarea.poe.js"></script>
     <link rel="stylesheet" href="../src/assets/libs/jquery-emojiarea/jquery.emojiarea.css">
     <link rel="stylesheet" href="stylesheet.css">
     
@@ -16,12 +15,12 @@
     <link href="../src/assets/libs/bootstrap-3.0.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="../src/assets/css/emojidex.css" rel="stylesheet">
 
-    <script src="../dist/jquery.emojidex.js"></script> 
+    <script src="../dist/jquery.emojidex.min.js"></script> 
 
     <script>
       $(document).ready(function(){
         $('.emojidex_replace').emojidex({
-        	path_json: "../src/assets/json/utf_emoji_by_categories_non_anime.json",
+        	path_json: "../src/assets/json/utf-emoji.json",
         	path_img: "../src/assets/img/utf/",
           emojiarea: {
             plaintext: $('.emojidex-plaintext'), //emojidex_plaintext
