@@ -40,19 +40,12 @@ do ($ = jQuery, window, document) ->
         Plugin::setEmojiIcon emojis_data, element, emoji_regexps
 
     getCategorizedData: (emojis_data) ->
-      category_names = []
-      for emoji in emojis_data
-        if category_names.indexOf(emoji.category) < 0
-          category_names.push(emoji.category)
-
       new_emojis_data = {}
-      for category_name in category_names
-        new_emojis_data[category_name] = []
-
       for emoji in emojis_data
-        new_emojis_data[emoji.category].push(emoji)
-
-      return new_emojis_data
+        unless new_emojis_data[emoji.category]? 
+          new_emojis_data[emoji.category] = [emoji]
+        else
+          new_emojis_data[emoji.category].push(emoji)
 
     setEmojiCSS_getEmojiRegexps: (emojis_data) ->
       regexp_for_utf = ""

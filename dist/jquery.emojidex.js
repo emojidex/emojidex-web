@@ -39,24 +39,18 @@
       };
 
       Plugin.prototype.getCategorizedData = function(emojis_data) {
-        var category_name, category_names, emoji, new_emojis_data, _i, _j, _k, _len, _len1, _len2;
-        category_names = [];
+        var emoji, new_emojis_data, _i, _len, _results;
+        new_emojis_data = {};
+        _results = [];
         for (_i = 0, _len = emojis_data.length; _i < _len; _i++) {
           emoji = emojis_data[_i];
-          if (category_names.indexOf(emoji.category) < 0) {
-            category_names.push(emoji.category);
+          if (new_emojis_data[emoji.category] == null) {
+            _results.push(new_emojis_data[emoji.category] = [emoji]);
+          } else {
+            _results.push(new_emojis_data[emoji.category].push(emoji));
           }
         }
-        new_emojis_data = {};
-        for (_j = 0, _len1 = category_names.length; _j < _len1; _j++) {
-          category_name = category_names[_j];
-          new_emojis_data[category_name] = [];
-        }
-        for (_k = 0, _len2 = emojis_data.length; _k < _len2; _k++) {
-          emoji = emojis_data[_k];
-          new_emojis_data[emoji.category].push(emoji);
-        }
-        return new_emojis_data;
+        return _results;
       };
 
       Plugin.prototype.setEmojiCSS_getEmojiRegexps = function(emojis_data) {
