@@ -120,7 +120,7 @@ do ($ = jQuery, window, document) ->
 
     setEmojiarea: (options) ->
       options.emojiarea["plaintext"].emojiarea wysiwyg: false
-      options.emojiarea["wysiwyg"].emojiarea wysiwyg: true
+      # options.emojiarea["wysiwyg"].emojiarea wysiwyg: true
       options.emojiarea["wysiwyg"].on "change", ->
         options.emojiarea["value_output"].text $(this).val()
       options.emojiarea["wysiwyg"].trigger "change"
@@ -138,7 +138,9 @@ do ($ = jQuery, window, document) ->
         at: ":"
         data: emojis
         tpl: "<li data-value=':${key}:'><img src='../src/assets/img/utf/${name}.svg'  height='20' width='20' /> ${name}</li>"
+        insert_tpl: "<img src='../src/assets/img/utf/${name}.svg' height='20' width='20' />"
       options.emojiarea["plaintext"].atwho(emoji_config)
+      options.emojiarea["wysiwyg"].atwho(emoji_config)
 
   $.fn[pluginName] = (options) ->
     @each ->

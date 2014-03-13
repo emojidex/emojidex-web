@@ -40,3 +40,13 @@ i[class*="emojidex-"] {
   height: 159px;
   overflow: auto;
 }
+
+.emojidex-all {
+  height: 100px;
+  width: 100%;
+  border: 1px solid #cccccc;
+  border-radius: 5px;
+  padding: 15px 15px;
+  background: white;
+  overflow-y: scroll;
+}

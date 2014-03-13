@@ -116,9 +116,6 @@
         options.emojiarea["plaintext"].emojiarea({
           wysiwyg: false
         });
-        options.emojiarea["wysiwyg"].emojiarea({
-          wysiwyg: true
-        });
         options.emojiarea["wysiwyg"].on("change", function() {
           return options.emojiarea["value_output"].text($(this).val());
         });
@@ -144,9 +141,11 @@
         emoji_config = {
           at: ":",
           data: emojis,
-          tpl: "<li data-value=':${key}:'><img src='../src/assets/img/utf/${name}.svg'  height='20' width='20' /> ${name}</li>"
+          tpl: "<li data-value=':${key}:'><img src='../src/assets/img/utf/${name}.svg'  height='20' width='20' /> ${name}</li>",
+          insert_tpl: "<img src='../src/assets/img/utf/${name}.svg' height='20' width='20' />"
         };
-        return options.emojiarea["plaintext"].atwho(emoji_config);
+        options.emojiarea["plaintext"].atwho(emoji_config);
+        return options.emojiarea["wysiwyg"].atwho(emoji_config);
       };
 
       return Plugin;
