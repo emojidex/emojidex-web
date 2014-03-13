@@ -46,6 +46,7 @@ do ($ = jQuery, window, document) ->
           new_emojis_data[emoji.category] = [emoji]
         else
           new_emojis_data[emoji.category].push emoji
+      return new_emojis_data
 
     setEmojiCSS_getEmojiRegexps: (emojis_data) ->
       regexp_for_utf = ""

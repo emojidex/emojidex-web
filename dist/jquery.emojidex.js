@@ -39,18 +39,17 @@
       };
 
       Plugin.prototype.getCategorizedData = function(emojis_data) {
-        var emoji, new_emojis_data, _i, _len, _results;
+        var emoji, new_emojis_data, _i, _len;
         new_emojis_data = {};
-        _results = [];
         for (_i = 0, _len = emojis_data.length; _i < _len; _i++) {
           emoji = emojis_data[_i];
           if (new_emojis_data[emoji.category] == null) {
-            _results.push(new_emojis_data[emoji.category] = [emoji]);
+            new_emojis_data[emoji.category] = [emoji];
           } else {
-            _results.push(new_emojis_data[emoji.category].push(emoji));
+            new_emojis_data[emoji.category].push(emoji);
           }
         }
-        return _results;
+        return new_emojis_data;
       };
 
       Plugin.prototype.setEmojiCSS_getEmojiRegexps = function(emojis_data) {
