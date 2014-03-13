@@ -70,7 +70,6 @@ do ($ = jQuery, window, document) ->
       #   json_data = xhr.response
       #   console.log json_data
 
-
       # xhr.onload = (event) ->
       #   arrayBuffer = xhr.responseText;
       #   console.log arraybuffer
@@ -135,11 +134,10 @@ do ($ = jQuery, window, document) ->
         key: value
         name: value
       )
-      emoji_config = {
-        at: ":",
-        data: emojis,
-        tpl:"<li data-value=':${key}:'><img src='../src/assets/img/utf/${name}.svg'  height='20' width='20' /> ${name}</li>",
-      }
+      emoji_config =
+        at: ":"
+        data: emojis
+        tpl: "<li data-value=':${key}:'><img src='../src/assets/img/utf/${name}.svg'  height='20' width='20' /> ${name}</li>"
       options.emojiarea["plaintext"].atwho(emoji_config)
 
   $.fn[pluginName] = (options) ->
