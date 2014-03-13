@@ -24,17 +24,17 @@
         this._defaults = defaults;
         this._name = pluginName;
         this.loadEmojidexJSON(this.element, this.options);
-        this.setEmojiarea(this.options);
       }
 
       Plugin.prototype.loadEmojidexJSON = function(element, options) {
-        $.emojiarea.path = options.path_img;
-        return $.getJSON(options.path_json, function(emojis_data) {
-          var emoji_regexps;
-          emojis_data = Plugin.prototype.getCategorizedData(emojis_data);
-          $.emojiarea.icons = emojis_data;
-          emoji_regexps = Plugin.prototype.setEmojiCSS_getEmojiRegexps(emojis_data);
-          return Plugin.prototype.setEmojiIcon(emojis_data, element, emoji_regexps);
+        return $.ajax({
+          url: "http://localhost:3000/api/v1/emoji",
+          dataType: "JSONP",
+          jsonpCallback: "callback",
+          type: "GET",
+          success: function(data) {
+            console.log(data);
+          }
         });
       };
 

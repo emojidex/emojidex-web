@@ -27,17 +27,26 @@ do ($ = jQuery, window, document) ->
       @_defaults = defaults
       @_name = pluginName
       @loadEmojidexJSON @element, @options
-      @setEmojiarea @options
+      # @setEmojiarea @options
 
     loadEmojidexJSON: (element, options) ->
-      $.emojiarea.path = options.path_img
 
+      $.ajax
+        url: "http://localhost:3000/api/v1/emoji"
+        dataType: "JSONP"
+        jsonpCallback: "callback"
+        type: "GET"
+        success: (data) ->
+          console.log data
+          return
+
+      # $.emojiarea.path = options.path_img
       # get json date
-      $.getJSON options.path_json, (emojis_data) ->
-        emojis_data = Plugin::getCategorizedData emojis_data
-        $.emojiarea.icons = emojis_data
-        emoji_regexps = Plugin::setEmojiCSS_getEmojiRegexps emojis_data
-        Plugin::setEmojiIcon emojis_data, element, emoji_regexps
+      # $.getJSON options.path_json, (emojis_data) ->
+      #   emojis_data = Plugin::getCategorizedData emojis_data
+      #   $.emojiarea.icons = emojis_data
+      #   emoji_regexps = Plugin::setEmojiCSS_getEmojiRegexps emojis_data
+      #   Plugin::setEmojiIcon emojis_data, element, emoji_regexps
 
     getCategorizedData: (emojis_data) ->
       new_emojis_data = {}
