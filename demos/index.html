@@ -11,17 +11,20 @@
     <script src="../src/jquery.emojiarea.poe.js"></script>
     <link rel="stylesheet" href="../src/assets/libs/jquery-emojiarea/jquery.emojiarea.css">
     <link rel="stylesheet" href="stylesheet.css">
+    <link rel="stylesheet" href="../src/assets/libs/At.js/css/jquery.atwho.css" />
     
     <script src="../src/assets/libs/bootstrap-3.0.0/js/bootstrap.min.js"></script>
     <link href="../src/assets/libs/bootstrap-3.0.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="../src/assets/css/emojidex.css" rel="stylesheet">
 
+    <script type="text/javascript" src="../src/assets/libs/At.js/js/jquery.atwho.js"></script>
+    <script type="text/javascript" src="../src/assets/libs/Caret.js/src/jquery.caret.js"></script>
     <script src="../dist/jquery.emojidex.js"></script> 
 
     <script>
       $(document).ready(function(){
         $('.emojidex_replace').emojidex({
-        	path_json: "../src/assets/json/utf-emoji.json",
+        	path_json: "../src/assets/json/utf-emoji_non_anime.json",
         	path_img: "../src/assets/img/utf/",
           emojiarea: {
             plaintext: $('.emojidex-plaintext'), //emojidex_plaintext
@@ -56,10 +59,16 @@
     </div>
 
     <div class="example">
+      <!--
       <h2>WYSIWYG</h2>
       <form>
         <textarea rows="5" class="emojidex-all">Hello :neckbeard:</textarea>
       </form>
+      -->
+      <h2>Show Emoji Icon</h2>
+      <div class="emojidex-all" contentEditable="true">
+        Hello :neckbeard:
+      </div>
       <h3>Value:</h3>
       <div class="value">
         <pre class="emojidex-value_output"></pre>
