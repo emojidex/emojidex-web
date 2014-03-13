@@ -11,17 +11,20 @@
     <script src="../src/jquery.emojiarea.poe.js"></script>
     <link rel="stylesheet" href="../src/assets/libs/jquery-emojiarea/jquery.emojiarea.css">
     <link rel="stylesheet" href="stylesheet.css">
+    <link rel="stylesheet" href="dist/css/jquery.atwho.css" />
     
     <script src="../src/assets/libs/bootstrap-3.0.0/js/bootstrap.min.js"></script>
     <link href="../src/assets/libs/bootstrap-3.0.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="../src/assets/css/emojidex.css" rel="stylesheet">
 
+    <script type="text/javascript" src="../src/assets/libs/At.js/js/jquery.atwho.js"></script>
+    <script type="text/javascript" src="../src/assets/libs/Caret.js/src/jquery.caret.js"></script>
     <script src="../dist/jquery.emojidex.js"></script> 
 
     <script>
       $(document).ready(function(){
         $('.emojidex_replace').emojidex({
-        	path_json: "../src/assets/json/utf-emoji.json",
+        	path_json: "../src/assets/json/utf-emoji_non_anime.json",
         	path_img: "../src/assets/img/utf/",
           emojiarea: {
             plaintext: $('.emojidex-plaintext'), //emojidex_plaintext
@@ -33,6 +36,18 @@
             //emojidex_plaintext #raw text, no graphics
           }
         });
+
+        var emojis = [ "aerial_tramway", "cyclone" ]
+        var emojis = $.map(emojis, function(value, i) {return {key: value, name:value}});
+        var emoji_config = {
+          at: ":",
+          data: emojis,
+          tpl:"<li data-value=':${key}:'><img src='../src/assets/img/utf/${name}.svg'  height='20' width='20' /> ${name}</li>",
+          insert_tpl: "<img src='http://a248.e.akamai.net/assets.github.com/images/icons/emoji/${name}.png'  height='20' width='20' />",
+        }
+        $inputor = $('#inputor').atwho(emoji_config);
+        $inputor.caret('pos', 47);
+        $inputor.focus().atwho('run');
       });
     </script>
   </head>
@@ -51,7 +66,7 @@
     <div class="example">
       <h2>Plain-Text</h2>
       <form>
-        <textarea rows="5" class="emojidex-plaintext">Hello :neckbeard:</textarea>
+        <textarea rows="5" class="emojidex-plaintext" id="inputor">Hello :neckbeard:</textarea>
       </form>
     </div>
 

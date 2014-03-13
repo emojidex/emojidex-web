@@ -34,23 +34,28 @@
           emojis_data = Plugin.prototype.getCategorizedData(emojis_data);
           $.emojiarea.icons = emojis_data;
           emoji_regexps = Plugin.prototype.setEmojiCSS_getEmojiRegexps(emojis_data);
-          return Plugin.prototype.setEmojiIcon(emojis_data, element, emoji_regexps);
+          Plugin.prototype.setEmojiIcon(emojis_data, element, emoji_regexps);
+          return Plugin.prototype.prepareAutoComplete(emojis_data, options);
         });
       };
 
       Plugin.prototype.getCategorizedData = function(emojis_data) {
-        var emoji, new_emojis_data, _i, _len, _results;
+        var emoji, new_emojis_data, _i, _len;
         new_emojis_data = {};
-        _results = [];
         for (_i = 0, _len = emojis_data.length; _i < _len; _i++) {
           emoji = emojis_data[_i];
           if (new_emojis_data[emoji.category] == null) {
-            _results.push(new_emojis_data[emoji.category] = [emoji]);
+            new_emojis_data[emoji.category] = [emoji];
           } else {
-            _results.push(new_emojis_data[emoji.category].push(emoji));
+            new_emojis_data[emoji.category].push(emoji);
           }
         }
-        return _results;
+        return new_emojis_data;
+      };
+
+      Plugin.prototype.getEmojiDataFromAPI = function(emojis_data) {
+        var url;
+        return url = "https://www.emojidex.com/api/v1/emoji/puni_pink";
       };
 
       Plugin.prototype.setEmojiCSS_getEmojiRegexps = function(emojis_data) {
@@ -118,6 +123,30 @@
           return options.emojiarea["value_output"].text($(this).val());
         });
         return options.emojiarea["wysiwyg"].trigger("change");
+      };
+
+      Plugin.prototype.prepareAutoComplete = function(emojis_data, options) {
+        var category, emoji, emoji_config, emojis, _i, _len, _ref;
+        emojis = [];
+        for (category in emojis_data) {
+          _ref = emojis_data[category];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            emoji = _ref[_i];
+            emojis.push(emoji.code);
+          }
+        }
+        emojis = $.map(emojis, function(value, i) {
+          return {
+            key: value,
+            name: value
+          };
+        });
+        emoji_config = {
+          at: ":",
+          data: emojis,
+          tpl: "<li data-value=':${key}:'><img src='../src/assets/img/utf/${name}.svg'  height='20' width='20' /> ${name}</li>"
+        };
+        return options.emojiarea["plaintext"].atwho(emoji_config);
       };
 
       return Plugin;

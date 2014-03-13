@@ -2387,13 +2387,6 @@
     "unicode": "1f482"
   },
   {
-    "moji": "💃",
-    "code": "dancer",
-    "code_ja": "ダンサー",
-    "category": "people",
-    "unicode": "1f483"
-  },
-  {
     "moji": "💄",
     "code": "lipstick",
     "code_ja": "リップスティック",
@@ -2469,13 +2462,6 @@
     "code_ja": "宝石",
     "category": "object",
     "unicode": "1f48e"
-  },
-  {
-    "moji": "💏",
-    "code": "kiss",
-    "code_ja": "カップルのキス",
-    "category": "people",
-    "unicode": "1f48f"
   },
   {
     "moji": "💐",
@@ -3984,14 +3970,6 @@
     "unicode": "1f61a"
   },
   {
-    "moji": "😛",
-    "code": "stuck_out_tongue",
-    "code_ja": "べー",
-    "emoticon": ":P",
-    "category": "faces",
-    "unicode": "1f61b"
-  },
-  {
     "moji": "😜",
     "code": "stuck_out_tongue_winking_eye",
     "code_ja": "あっかんべー",
@@ -4194,13 +4172,6 @@
     "code_ja": "にこ(ネコ)",
     "category": "faces",
     "unicode": "1f63a"
-  },
-  {
-    "moji": "😻",
-    "code": "smiling_cat_face_with_heart_shaped_eyes",
-    "code_ja": "目がハート(ネコ)",
-    "category": "faces",
-    "unicode": "1f63b"
   },
   {
     "moji": "😼",
