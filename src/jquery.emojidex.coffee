@@ -93,6 +93,7 @@ do ($ = jQuery, window, document) ->
       $("head").append emojis_css
       return [regexp_for_utf.slice(0, -1), regexp_for_code.slice(0, -1) + "):"]
 
+
     setEmojiIcon: (emojis_data, element, emoji_regexps) ->
       getEmojiTag = (emoji_utf) ->
         return '<i class="emojidex-' + emoji_utf + '"></i>'

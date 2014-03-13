@@ -51,14 +51,11 @@
           }
         }
         return new_emojis_data;
-<<<<<<< HEAD
-=======
       };
 
       Plugin.prototype.getEmojiDataFromAPI = function(emojis_data) {
         var url;
         return url = "https://www.emojidex.com/api/v1/emoji/puni_pink";
->>>>>>> atjs_test
       };
 
       Plugin.prototype.setEmojiCSS_getEmojiRegexps = function(emojis_data) {
