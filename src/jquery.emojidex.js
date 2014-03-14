@@ -20,7 +20,7 @@
 
       Plugin.prototype.loadEmojidexJSON = function(element, options) {
         return $.ajax({
-          url: "http://localhost:3000/api/v1/emoji",
+          url: "https://www.emojidex.com/api/v1/emoji",
           dataType: "JSONP",
           jsonpCallback: "callback",
           type: "GET",
