@@ -21,6 +21,7 @@ module.exports = (grunt) ->
       compile:
         files:
           "dist/jquery.emojidex.js": "src/jquery.emojidex.coffee"
+          "dist/test.js": "src/test.coffee"
 
 
     # Concat definitions
