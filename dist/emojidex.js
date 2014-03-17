@@ -24,30 +24,19 @@
         this._defaults = defaults;
         this._name = pluginName;
         this.loadEmojidexJSON(this.element, this.options);
+        this.setEmojiarea(this.options);
       }
 
       Plugin.prototype.loadEmojidexJSON = function(element, options) {
-        $.ajax({
-          url: "https://www.emojidex.com/api/v1/emoji",
-          dataType: "JSONP",
-          jsonpCallback: "callback",
-          type: "GET",
-          success: function(data) {}
+        $.emojiarea.path = options.path_img;
+        return $.getJSON(options.path_json, function(emojis_data) {
+          var emoji_regexps;
+          emojis_data = Plugin.prototype.getCategorizedData(emojis_data);
+          $.emojiarea.icons = emojis_data;
+          emoji_regexps = Plugin.prototype.setEmojiCSS_getEmojiRegexps(emojis_data);
+          Plugin.prototype.setLocalStorage(emojis_data);
+          return Plugin.prototype.setEmojiIcon(emojis_data, element, emoji_regexps);
         });
-        return $.ajax({
-          url: "https://www.emojidex.com/api/v1/emoji/emojidex_keyboard",
-          dataType: "JSONP",
-          jsonpCallback: "callback",
-          type: "GET",
-          success: function(data) {}
-        });
-      };
-
-      Plugin.prototype.lsTest = function(text) {
-        var test_string;
-        localStorage.setItem("ls_test", text);
-        test_string = localStorage.getItem("ls_test");
-        return console.log(test_string);
       };
 
       Plugin.prototype.getCategorizedData = function(emojis_data) {
@@ -85,6 +74,28 @@
         }
         $("head").append(emojis_css);
         return [regexp_for_utf.slice(0, -1), regexp_for_code.slice(0, -1) + "):"];
+      };
+
+      Plugin.prototype.setLocalStorage = function(emojis_data) {
+        var category, emoji, key, _results;
+        _results = [];
+        for (category in emojis_data) {
+          _results.push((function() {
+            var _i, _len, _ref, _results1;
+            _ref = emojis_data[category];
+            _results1 = [];
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              emoji = _ref[_i];
+              _results1.push(key = emoji["code"]);
+            }
+            return _results1;
+          })());
+        }
+        return _results;
+      };
+
+      Plugin.prototype.convertBase64 = function(key) {
+        return console.log("convert");
       };
 
       Plugin.prototype.setEmojiIcon = function(emojis_data, element, emoji_regexps) {

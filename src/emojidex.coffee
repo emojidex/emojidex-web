@@ -27,43 +27,37 @@ do ($ = jQuery, window, document) ->
       @_defaults = defaults
       @_name = pluginName
       @loadEmojidexJSON @element, @options
-      # @setEmojiarea @options
+      @setEmojiarea @options
 
     loadEmojidexJSON: (element, options) ->
 
-      $.ajax
-        url: "https://www.emojidex.com/api/v1/emoji"
-        dataType: "JSONP"
-        jsonpCallback: "callback"
-        type: "GET"
-        success: (data) ->
-          # console.log data
-          # console.log data["emoji"][5]
-          return
+      # $.ajax
+      #   url: "https://www.emojidex.com/api/v1/emoji"
+      #   dataType: "JSONP"
+      #   jsonpCallback: "callback"
+      #   type: "GET"
+      #   success: (data) ->
+      #     console.log data
+      #     console.log data["emoji"][5]
+      #     return
 
-      $.ajax
-        url: "https://www.emojidex.com/api/v1/emoji/emojidex_keyboard"
-        dataType: "JSONP"
-        jsonpCallback: "callback"
-        type: "GET"
-        success: (data) ->
-          # console.log data
-          return
+      # $.ajax
+      #   url: "https://www.emojidex.com/api/v1/emoji/emojidex_keyboard"
+      #   dataType: "JSONP"
+      #   jsonpCallback: "callback"
+      #   type: "GET"
+      #   success: (data) ->
+      #     console.log data
+      #     return
 
-      # $.emojiarea.path = options.path_img
+      $.emojiarea.path = options.path_img
       # get json date
-      # $.getJSON options.path_json, (emojis_data) ->
-      #   emojis_data = Plugin::getCategorizedData emojis_data
-      #   $.emojiarea.icons = emojis_data
-      #   emoji_regexps = Plugin::setEmojiCSS_getEmojiRegexps emojis_data
-      #   Plugin::setEmojiIcon emojis_data, element, emoji_regexps
-
-      # Plugin::lsTest "ls_test!!!!!"
-
-    lsTest: (text) ->
-      localStorage.setItem("ls_test", text)
-      test_string = localStorage.getItem("ls_test")
-      console.log test_string
+      $.getJSON options.path_json, (emojis_data) ->
+        emojis_data = Plugin::getCategorizedData emojis_data
+        $.emojiarea.icons = emojis_data
+        emoji_regexps = Plugin::setEmojiCSS_getEmojiRegexps emojis_data
+        Plugin::setLocalStorage emojis_data
+        Plugin::setEmojiIcon emojis_data, element, emoji_regexps
 
     getCategorizedData: (emojis_data) ->
       new_emojis_data = {}
@@ -116,6 +110,33 @@ do ($ = jQuery, window, document) ->
 
       $("head").append emojis_css
       return [regexp_for_utf.slice(0, -1), regexp_for_code.slice(0, -1) + "):"]
+
+    setLocalStorage: (emojis_data) ->
+      for category of emojis_data
+        for emoji in emojis_data[category]
+          key = emoji["code"]
+          # localStorage.setItem key, (Plugin::convertBase64 key)
+
+    convertBase64: (key) ->
+      console.log "convert"
+      # canvas = document.createElement("canvas")
+      #     return  if not canvas or not canvas.getContext or not canvas.getContext("2d")
+      #     image = new Image()
+      #     image.src = src
+      #     image.onload = ->
+            
+      #       # 画像をbase64にするためにCanvasを利用するので、
+      #       # クロスドメインの画像は無理かも。。
+      #       canvas = document.createElement("canvas")
+      #       canvas.width = @width
+      #       canvas.height = @height
+      #       canvas.getContext("2d").drawImage this, 0, 0
+      #       base64 = canvas.toDataURL()
+      #       storage.setItem createKey(src), base64
+      #       return
+
+      #     return
+          
 
 
     setEmojiIcon: (emojis_data, element, emoji_regexps) ->
