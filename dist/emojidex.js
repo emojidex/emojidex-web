@@ -6,172 +6,6 @@
  *  Made by Genshin
  *  Under LGPL License
  */
-(function() {
-  (function($, window, document) {
-    var Plugin, defaults, pluginName;
-    pluginName = "emojidex";
-    defaults = {
-      emojiarea: {
-        plaintext: "emojidex-plaintext",
-        wysiwyg: "emojidex-wysiwyg",
-        value_output: "emojidex-rawtext"
-      }
-    };
-    Plugin = (function() {
-      function Plugin(element, options) {
-        this.element = element;
-        this.options = $.extend({}, defaults, options);
-        this._defaults = defaults;
-        this._name = pluginName;
-        this.loadEmojidexJSON(this.element, this.options);
-        this.setEmojiarea(this.options);
-      }
-
-      Plugin.prototype.loadEmojidexJSON = function(element, options) {
-        $.emojiarea.path = options.path_img;
-        return $.getJSON(options.path_json, function(emojis_data) {
-          var emoji_regexps;
-          emojis_data = Plugin.prototype.getCategorizedData(emojis_data);
-          $.emojiarea.icons = emojis_data;
-          emoji_regexps = Plugin.prototype.setEmojiCSS_getEmojiRegexps(emojis_data);
-          Plugin.prototype.setEmojiIcon(emojis_data, element, emoji_regexps);
-          return Plugin.prototype.prepareAutoComplete(emojis_data, options);
-        });
-      };
-
-      Plugin.prototype.getCategorizedData = function(emojis_data) {
-        var emoji, new_emojis_data, _i, _len;
-        new_emojis_data = {};
-        for (_i = 0, _len = emojis_data.length; _i < _len; _i++) {
-          emoji = emojis_data[_i];
-          if (new_emojis_data[emoji.category] == null) {
-            new_emojis_data[emoji.category] = [emoji];
-          } else {
-            new_emojis_data[emoji.category].push(emoji);
-          }
-        }
-        return new_emojis_data;
-      };
-
-      Plugin.prototype.getEmojiDataFromAPI = function(emojis_data) {
-        var url;
-        return url = "https://www.emojidex.com/api/v1/emoji/puni_pink";
-      };
-
-      Plugin.prototype.setEmojiCSS_getEmojiRegexps = function(emojis_data) {
-        var category, emoji, emojis_css, emojis_in_category, regexp_for_code, regexp_for_utf, _i, _len;
-        regexp_for_utf = "";
-        regexp_for_code = ":(";
-        emojis_css = $('<style type="text/css" />');
-        for (category in emojis_data) {
-          emojis_in_category = emojis_data[category];
-          for (_i = 0, _len = emojis_in_category.length; _i < _len; _i++) {
-            emoji = emojis_in_category[_i];
-            regexp_for_utf += emoji.moji + "|";
-            regexp_for_code += emoji.code + "|";
-            emojis_css.append("i.emojidex-" + emoji.moji + " {background-image: url('" + $.emojiarea.path + emoji.code + ".svg')}");
-          }
-        }
-        $("head").append(emojis_css);
-        return [regexp_for_utf.slice(0, -1), regexp_for_code.slice(0, -1) + "):"];
-      };
-
-      Plugin.prototype.setEmojiIcon = function(emojis_data, element, emoji_regexps) {
-        var getEmojiTag, replaceForCode, replaceForUTF;
-        getEmojiTag = function(emoji_utf) {
-          return '<i class="emojidex-' + emoji_utf + '"></i>';
-        };
-        replaceForUTF = function(replaced_string, emoji_regexp) {
-          return replaced_string = replaced_string.replace(new RegExp(emoji_regexp, "g"), function(matched_string) {
-            return getEmojiTag(matched_string);
-          });
-        };
-        replaceForCode = function(replaced_string, emoji_regexp, emojis_data) {
-          return replaced_string = replaced_string.replace(new RegExp(emoji_regexp, "g"), function(matched_string) {
-            var category, emoji, _i, _len, _ref;
-            matched_string = matched_string.replace(/:/g, "");
-            for (category in emojis_data) {
-              _ref = emojis_data[category];
-              for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-                emoji = _ref[_i];
-                if (emoji.code === matched_string) {
-                  return getEmojiTag(emoji.moji);
-                }
-              }
-            }
-          });
-        };
-        return $(element).find(":not(iframe,textarea,script)").andSelf().contents().filter(function() {
-          return this.nodeType === Node.TEXT_NODE;
-        }).each(function() {
-          var replaced_string;
-          replaced_string = this.textContent;
-          replaced_string = replaceForUTF(replaced_string, emoji_regexps[0]);
-          replaced_string = replaceForCode(replaced_string, emoji_regexps[1], emojis_data);
-          return $(this).replaceWith(replaced_string);
-        });
-      };
-
-      Plugin.prototype.setEmojiarea = function(options) {
-        options.emojiarea["plaintext"].emojiarea({
-          wysiwyg: false
-        });
-        options.emojiarea["wysiwyg"].on("change", function() {
-          return options.emojiarea["value_output"].text($(this).val());
-        });
-        return options.emojiarea["wysiwyg"].trigger("change");
-      };
-
-      Plugin.prototype.prepareAutoComplete = function(emojis_data, options) {
-        var category, emoji, emoji_config, emojis, _i, _len, _ref;
-        emojis = [];
-        for (category in emojis_data) {
-          _ref = emojis_data[category];
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            emoji = _ref[_i];
-            emojis.push(emoji.code);
-          }
-        }
-        emojis = $.map(emojis, function(value, i) {
-          return {
-            key: value,
-            name: value
-          };
-        });
-        emoji_config = {
-          at: ":",
-          data: emojis,
-          tpl: "<li data-value=':${key}:'><img src='../src/assets/img/utf/${name}.svg'  height='20' width='20' /> ${name}</li>",
-          insert_tpl: "<img src='../src/assets/img/utf/${name}.svg' height='20' width='20' />"
-        };
-        options.emojiarea["plaintext"].atwho(emoji_config);
-        return options.emojiarea["wysiwyg"].atwho(emoji_config);
-      };
-
-      return Plugin;
-
-    })();
-    return $.fn[pluginName] = function(options) {
-      return this.each(function() {
-        if (!$.data(this, "plugin_" + pluginName)) {
-          return $.data(this, "plugin_" + pluginName, new Plugin(this, options));
-        }
-      });
-    };
-  })(jQuery, window, document);
-
-}).call(this);
-
-/*
- *  jQuery Emojidex - v0.1.0
- *  emojidex coffee plugin for jQuery/Zepto and compatible
- *  https://github.com/Genshin/emojidex-coffee#emojidex-coffee
- *
- *  Made by Genshin
- *  Under LGPL License
- */
-(function(){!function(a){var b,c,d;return d="emojidex",c={emojiarea:{plaintext:"emojidex-plaintext",wysiwyg:"emojidex-wysiwyg",value_output:"emojidex-rawtext"}},b=function(){function b(b,e){this.element=b,this.options=a.extend({},c,e),this._defaults=c,this._name=d,this.loadEmojidexJSON(this.element,this.options),this.setEmojiarea(this.options)}return b.prototype.loadEmojidexJSON=function(c,d){return a.emojiarea.path=d.path_img,a.getJSON(d.path_json,function(e){var f;return e=b.prototype.getCategorizedData(e),a.emojiarea.icons=e,f=b.prototype.setEmojiCSS_getEmojiRegexps(e),b.prototype.setEmojiIcon(e,c,f),b.prototype.prepareAutoComplete(e,d)})},b.prototype.getCategorizedData=function(a){var b,c,d,e;for(c={},d=0,e=a.length;e>d;d++)b=a[d],null==c[b.category]?c[b.category]=[b]:c[b.category].push(b);return c},b.prototype.getEmojiDataFromAPI=function(){var a;return a="https://www.emojidex.com/api/v1/emoji/puni_pink"},b.prototype.setEmojiCSS_getEmojiRegexps=function(b){var c,d,e,f,g,h,i,j;h="",g=":(",e=a('<style type="text/css" />');for(c in b)for(f=b[c],i=0,j=f.length;j>i;i++)d=f[i],h+=d.moji+"|",g+=d.code+"|",e.append("i.emojidex-"+d.moji+" {background-image: url('"+a.emojiarea.path+d.code+".svg')}");return a("head").append(e),[h.slice(0,-1),g.slice(0,-1)+"):"]},b.prototype.setEmojiIcon=function(b,c,d){var e,f,g;return e=function(a){return'<i class="emojidex-'+a+'"></i>'},g=function(a,b){return a=a.replace(new RegExp(b,"g"),function(a){return e(a)})},f=function(a,b,c){return a=a.replace(new RegExp(b,"g"),function(a){var b,d,f,g,h;a=a.replace(/:/g,"");for(b in c)for(h=c[b],f=0,g=h.length;g>f;f++)if(d=h[f],d.code===a)return e(d.moji)})},a(c).find(":not(iframe,textarea,script)").andSelf().contents().filter(function(){return this.nodeType===Node.TEXT_NODE}).each(function(){var c;return c=this.textContent,c=g(c,d[0]),c=f(c,d[1],b),a(this).replaceWith(c)})},b.prototype.setEmojiarea=function(b){return b.emojiarea.plaintext.emojiarea({wysiwyg:!1}),b.emojiarea.wysiwyg.on("change",function(){return b.emojiarea.value_output.text(a(this).val())}),b.emojiarea.wysiwyg.trigger("change")},b.prototype.prepareAutoComplete=function(b,c){var d,e,f,g,h,i,j;g=[];for(d in b)for(j=b[d],h=0,i=j.length;i>h;h++)e=j[h],g.push(e.code);return g=a.map(g,function(a){return{key:a,name:a}}),f={at:":",data:g,tpl:"<li data-value=':${key}:'><img src='../src/assets/img/utf/${name}.svg'  height='20' width='20' /> ${name}</li>",insert_tpl:"<img src='../src/assets/img/utf/${name}.svg' height='20' width='20' />"},c.emojiarea.plaintext.atwho(f),c.emojiarea.wysiwyg.atwho(f)},b}(),a.fn[d]=function(c){return this.each(function(){return a.data(this,"plugin_"+d)?void 0:a.data(this,"plugin_"+d,new b(this,c))})}}(jQuery,window,document)}).call(this),function(){!function(a){var b,c,d;return d="emojidex",c={emojiarea:{plaintext:"emojidex-plaintext",wysiwyg:"emojidex-wysiwyg",value_output:"emojidex-rawtext"}},b=function(){function b(b,e){this.element=b,this.options=a.extend({},c,e),this._defaults=c,this._name=d,this.loadEmojidexJSON(this.element,this.options),this.setEmojiarea(this.options)}return b.prototype.loadEmojidexJSON=function(c,d){return a.emojiarea.path=d.path_img,a.getJSON(d.path_json,function(e){var f;return e=b.prototype.getCategorizedData(e),a.emojiarea.icons=e,f=b.prototype.setEmojiCSS_getEmojiRegexps(e),b.prototype.setEmojiIcon(e,c,f),b.prototype.prepareAutoComplete(e,d)})},b.prototype.getCategorizedData=function(a){var b,c,d,e;for(c={},d=0,e=a.length;e>d;d++)b=a[d],null==c[b.category]?c[b.category]=[b]:c[b.category].push(b);return c},b.prototype.getEmojiDataFromAPI=function(){var a;return a="https://www.emojidex.com/api/v1/emoji/puni_pink"},b.prototype.setEmojiCSS_getEmojiRegexps=function(b){var c,d,e,f,g,h,i,j;h="",g=":(",e=a('<style type="text/css" />');for(c in b)for(f=b[c],i=0,j=f.length;j>i;i++)d=f[i],h+=d.moji+"|",g+=d.code+"|",e.append("i.emojidex-"+d.moji+" {background-image: url('"+a.emojiarea.path+d.code+".svg')}");return a("head").append(e),[h.slice(0,-1),g.slice(0,-1)+"):"]},b.prototype.setEmojiIcon=function(b,c,d){var e,f,g;return e=function(a){return'<i class="emojidex-'+a+'"></i>'},g=function(a,b){return a=a.replace(new RegExp(b,"g"),function(a){return e(a)})},f=function(a,b,c){return a=a.replace(new RegExp(b,"g"),function(a){var b,d,f,g,h;a=a.replace(/:/g,"");for(b in c)for(h=c[b],f=0,g=h.length;g>f;f++)if(d=h[f],d.code===a)return e(d.moji)})},a(c).find(":not(iframe,textarea,script)").andSelf().contents().filter(function(){return this.nodeType===Node.TEXT_NODE}).each(function(){var c;return c=this.textContent,c=g(c,d[0]),c=f(c,d[1],b),a(this).replaceWith(c)})},b.prototype.setEmojiarea=function(b){return b.emojiarea.plaintext.emojiarea({wysiwyg:!1}),b.emojiarea.wysiwyg.on("change",function(){return b.emojiarea.value_output.text(a(this).val())}),b.emojiarea.wysiwyg.trigger("change")},b.prototype.prepareAutoComplete=function(b,c){var d,e,f,g,h,i,j;g=[];for(d in b)for(j=b[d],h=0,i=j.length;i>h;h++)e=j[h],g.push(e.code);return g=a.map(g,function(a){return{key:a,name:a}}),f={at:":",data:g,tpl:"<li data-value=':${key}:'><img src='../src/assets/img/utf/${name}.svg'  height='20' width='20' /> ${name}</li>",insert_tpl:"<img src='../src/assets/img/utf/${name}.svg' height='20' width='20' />"},c.emojiarea.plaintext.atwho(f),c.emojiarea.wysiwyg.atwho(f)},b}(),a.fn[d]=function(c){return this.each(function(){return a.data(this,"plugin_"+d)?void 0:a.data(this,"plugin_"+d,new b(this,c))})}}(jQuery,window,document)}.call(this),function(){!function(a){var b,c,d;return d="emojidex",c={emojiarea:{plaintext:"emojidex-plaintext",wysiwyg:"emojidex-wysiwyg",value_output:"emojidex-rawtext"}},b=function(){function b(b,e){this.element=b,this.options=a.extend({},c,e),this._defaults=c,this._name=d,this.loadEmojidexJSON(this.element,this.options),this.setEmojiarea(this.options)}return b.prototype.loadEmojidexJSON=function(c,d){return a.emojiarea.path=d.path_img,a.getJSON(d.path_json,function(e){var f;return e=b.prototype.getCategorizedData(e),a.emojiarea.icons=e,f=b.prototype.setEmojiCSS_getEmojiRegexps(e),b.prototype.setEmojiIcon(e,c,f),b.prototype.prepareAutoComplete(e,d)})},b.prototype.getCategorizedData=function(a){var b,c,d,e;for(c={},d=0,e=a.length;e>d;d++)b=a[d],null==c[b.category]?c[b.category]=[b]:c[b.category].push(b);return c},b.prototype.getEmojiDataFromAPI=function(){var a;return a="https://www.emojidex.com/api/v1/emoji/puni_pink"},b.prototype.setEmojiCSS_getEmojiRegexps=function(b){var c,d,e,f,g,h,i,j;h="",g=":(",e=a('<style type="text/css" />');for(c in b)for(f=b[c],i=0,j=f.length;j>i;i++)d=f[i],h+=d.moji+"|",g+=d.code+"|",e.append("i.emojidex-"+d.moji+" {background-image: url('"+a.emojiarea.path+d.code+".svg')}");return a("head").append(e),[h.slice(0,-1),g.slice(0,-1)+"):"]},b.prototype.setEmojiIcon=function(b,c,d){var e,f,g;return e=function(a){return'<i class="emojidex-'+a+'"></i>'},g=function(a,b){return a=a.replace(new RegExp(b,"g"),function(a){return e(a)})},f=function(a,b,c){return a=a.replace(new RegExp(b,"g"),function(a){var b,d,f,g,h;a=a.replace(/:/g,"");for(b in c)for(h=c[b],f=0,g=h.length;g>f;f++)if(d=h[f],d.code===a)return e(d.moji)})},a(c).find(":not(iframe,textarea,script)").andSelf().contents().filter(function(){return this.nodeType===Node.TEXT_NODE}).each(function(){var c;return c=this.textContent,c=g(c,d[0]),c=f(c,d[1],b),a(this).replaceWith(c)})},b.prototype.setEmojiarea=function(b){return b.emojiarea.plaintext.emojiarea({wysiwyg:!1}),b.emojiarea.wysiwyg.on("change",function(){return b.emojiarea.value_output.text(a(this).val())}),b.emojiarea.wysiwyg.trigger("change")},b.prototype.prepareAutoComplete=function(b,c){var d,e,f,g,h,i,j;g=[];for(d in b)for(j=b[d],h=0,i=j.length;i>h;h++)e=j[h],g.push(e.code);return g=a.map(g,function(a){return{key:a,name:a}}),f={at:":",data:g,tpl:"<li data-value=':${key}:'><img src='../src/assets/img/utf/${name}.svg'  height='20' width='20' /> ${name}</li>",insert_tpl:"<img src='../src/assets/img/utf/${name}.svg' height='20' width='20' />"},c.emojiarea.plaintext.atwho(f),c.emojiarea.wysiwyg.atwho(f)},b}(),a.fn[d]=function(c){return this.each(function(){return a.data(this,"plugin_"+d)?void 0:a.data(this,"plugin_"+d,new b(this,c))})}}(jQuery,window,document)}.call(this),function(){!function(a,b,c){var d,e,f,g,h,i,j,k,l,m;d=1,l=3,k=["p","div","pre","form"],i=27,j=9,a.emojiarea={path:"",icons:{},defaults:{button:null,buttonLabel:"Emojis",buttonPosition:"after"}},a.fn.emojiarea=function(b){return b=a.extend({},a.emojiarea.defaults,b),this.each(function(){var d;d=a(this),"contentEditable"in c.body&&b.wysiwyg!==!1?new g(d,b):new f(d,b)})},m={},m.restoreSelection=function(){return b.getSelection?function(a){var c,d,e;for(e=b.getSelection(),e.removeAllRanges(),c=0,d=a.length;d>c;)e.addRange(a[c]),++c}:c.selection&&c.selection.createRange?function(a){a&&a.select()}:void 0}(),m.saveSelection=function(){return b.getSelection?function(){var a,c,d,e;if(e=b.getSelection(),d=[],e.rangeCount)for(a=0,c=e.rangeCount;c>a;)d.push(e.getRangeAt(a)),++a;return d}:c.selection&&c.selection.createRange?function(){var a;return a=c.selection,"none"!==a.type.toLowerCase()?a.createRange():null}:void 0}(),m.replaceSelection=function(){return b.getSelection?function(a){var d,e,f;e=void 0,f=b.getSelection(),d="string"==typeof a?c.createTextNode(a):a,f.getRangeAt&&f.rangeCount&&(e=f.getRangeAt(0),e.deleteContents(),e.insertNode(c.createTextNode(" ")),e.insertNode(d),e.setStart(d,0),b.setTimeout(function(){e=c.createRange(),e.setStartAfter(d),e.collapse(!0),f.removeAllRanges(),f.addRange(e)},0))}:c.selection&&c.selection.createRange?function(a){var b;b=c.selection.createRange(),"string"==typeof a?b.text=a:b.pasteHTML(a.outerHTML)}:void 0}(),m.insertAtCursor=function(a,b){var d,e,f,g;a=" "+a,g=b.value,d=void 0,f=void 0,e=void 0,"undefined"!=typeof b.selectionStart&&"undefined"!=typeof b.selectionEnd?(f=b.selectionStart,d=b.selectionEnd,b.value=g.substring(0,f)+a+g.substring(b.selectionEnd),b.selectionStart=b.selectionEnd=f+a.length):"undefined"!=typeof c.selection&&"undefined"!=typeof c.selection.createRange&&(b.focus(),e=c.selection.createRange(),e.text=a,e.select())},m.extend=function(a,b){var c;if("undefined"!=typeof a&&a||(a={}),"object"==typeof b)for(c in b)b.hasOwnProperty(c)&&(a[c]=b[c]);return a},m.escapeRegex=function(a){return(a+"").replace(/([.?*+^$[\]\\(){}|-])/g,"\\$1")},m.htmlEntities=function(a){return String(a).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")},e=function(){},e.prototype.setup=function(){var a;a=this,this.$editor.on("focus",function(){a.hasFocus=!0}),this.$editor.on("blur",function(){a.hasFocus=!1}),this.setupButton()},e.prototype.setupButton=function(){var b,c;c=this,b=void 0,this.options.button?b=a(this.options.button):this.options.button!==!1?(b=a('<a href="javascript:void(0)">'),b.html(this.options.buttonLabel),b.addClass("emoji-button"),b.attr({title:this.options.buttonLabel}),this.$editor[this.options.buttonPosition](b)):b=a(""),b.on("click",function(a){h.show(c),a.stopPropagation()}),this.$button=b},e.createIcon=function(b){var c,d;return c=b+".svg",d=a.emojiarea.path||"",d.length&&"/"!==d.charAt(d.length-1)&&(d+="/"),'<img src="'+d+c+'" alt="'+m.htmlEntities(b)+'">'},f=function(a,b){this.options=b,this.$textarea=a,this.$editor=a,this.setup()},f.prototype.insert=function(b){var c,d;for(c in a.emojiarea.icons)for(d=0;d<a.emojiarea.icons[c];){if(!a.emojiarea.icons[c][d].hasOwnProperty(b))return;d++}b=":"+b+":",m.insertAtCursor(b,this.$textarea[0]),this.$textarea.trigger("change")},f.prototype.val=function(){return this.$textarea.val()},m.extend(f.prototype,e.prototype),g=function(b,d){var f,g,h,i;i=this,this.options=d,this.$textarea=b,this.$editor=a("<div>").addClass("emoji-wysiwyg-editor"),this.$editor.text(b.val()),this.$editor.attr({contenteditable:"true"}),this.$editor.on("blur keyup paste",function(){return i.onChange.apply(i,arguments_)}),this.$editor.on("mousedown focus",function(){c.execCommand("enableObjectResizing",!1,!1)}),this.$editor.on("blur",function(){c.execCommand("enableObjectResizing",!0,!0)}),g=this.$editor.text(),f=a.emojiarea.icons;for(h in f)f.hasOwnProperty(h)&&(g=g.replace(new RegExp(m.escapeRegex(h),"g"),e.createIcon(h)));this.$editor.html(g),b.hide().after(this.$editor),this.setup(),this.$button.on("mousedown",function(){i.hasFocus&&(i.selection=m.saveSelection())})},g.prototype.onChange=function(){this.$textarea.val(this.val()).trigger("change")},g.prototype.insert=function(b){var c,d;d=void 0,c=a(e.createIcon(b)),c[0].alt=":"+c[0].alt+":",c[0].attachEvent&&c[0].attachEvent("onresizestart",function(a){a.returnValue=!1},!1),this.$editor.trigger("focus"),this.selection&&m.restoreSelection(this.selection);try{m.replaceSelection(c[0])}catch(f){}this.onChange()},g.prototype.val=function(){var a,b,c,e,f,g;for(f=[],e=[],b=function(){f.push(e.join("")),e=[]},g=function(a){var c,f,h,i,j;if(a.nodeType===l)e.push(a.nodeValue);else if(a.nodeType===d){if(j=a.tagName.toLowerCase(),i=-1!==k.indexOf(j),i&&e.length&&b(),"img"===j)return c=a.getAttribute("alt")||"",c&&e.push(c),void 0;for("br"===j&&b(),f=a.childNodes,h=0;h<f.length;)g(f[h]),h++;i&&e.length&&b()}},a=this.$editor[0].childNodes,c=0;c<a.length;)g(a[c]),c++;return e.length&&b(),f.join("\n")},m.extend(g.prototype,e.prototype),h=function(){var d,e,f;f=this,d=a(c.body),e=a(b),this.visible=!1,this.emojiarea=null,this.$menu=a("<div>"),this.$menu.addClass("emoji-menu"),this.$menu.hide(),this.$items=a("<div>").appendTo(this.$menu),d.append(this.$menu),d.on("keydown",function(a){(a.keyCode===i||a.keyCode===j)&&f.hide()}),d.on("mouseup",function(){f.hide()}),e.on("resize",function(){f.visible&&f.reposition()}),this.$menu.on("mouseup","a",function(a){return a.stopPropagation(),!1}),this.$menu.on("click","a",function(c){var d;return(d=a(".label",a(this)).text())?(c.stopPropagation(),!1):b.setTimeout(function(){f.onItemSelected.apply(f,[d])},0)}),this.load()},h.prototype.onItemSelected=function(a){this.emojiarea.insert(a),this.hide()},h.prototype.load=function(){var b,c,d,f,g,h;h=function(b){var c,d;for(c="",d=0;d<a.emojiarea.icons[b].length;)c+='<a href="javascript:void(0)" title="'+f[b][d].code+'">'+e.createIcon(f[b][d].code)+'<span class="label">'+m.htmlEntities(f[b][d].code)+"</span></a>",d++;return c},d=[],f=a.emojiarea.icons,g=a.emojiarea.path,g.length&&"/"!==g.charAt(g.length-1)&&(g+="/"),d.push('<ul class="nav nav-tabs"><li class="dropdown active emoji-category"><a class="dropdown-toggle emoji-toggle" data-toggle="dropdown" href="#category">category<span class="caret"></span></a><ul class="dropdown-menu emoji-category-menu" role="menu">'),c=!0;for(b in a.emojiarea.icons)c?(d.push('<li class="active"><a href="#'+b+'" data-toggle="tab">'+b+"</a></li>"),c=!1):d.push('<li><a href="#'+b+'" data-toggle="tab">'+b+"</a></li>");d.push('</ul></li></ul><div class="tab-content emoji-content">'),c=!0;for(b in a.emojiarea.icons)c?(d.push('<div class="tab-pane fade active in" id="'+b+'">'+h(b)+"</div>"),c=!1):d.push('<div class="tab-pane fade" id="'+b+'">'+h(b)+"</div>");d.push("</div>"),this.$items.html(d.join(""))},h.prototype.reposition=function(){var a,b;a=this.emojiarea.$button,b=a.offset(),b.top+=a.outerHeight(),b.left+=Math.round(a.outerWidth()/2),this.$menu.css({top:b.top,left:b.left})},h.prototype.hide=function(){this.emojiarea&&(this.emojiarea.menu=null,this.emojiarea.$button.removeClass("on"),this.emojiarea=null),this.visible=!1,this.$menu.hide()},h.prototype.show=function(a){this.emojiarea&&this.emojiarea===a||(this.emojiarea=a,this.emojiarea.menu=this,this.reposition(),this.$menu.show(),this.visible=!0)},h.show=function(){var a;return a=null,function(b){a=a||new h,a.show(b)}}()}(jQuery,window,document)}.call(this),function(){!function(a,b,c){var d,e,f,g,h,i,j,k,l,m;d=1,l=3,k=["p","div","pre","form"],i=27,j=9,a.emojiarea={path:"",icons:{},defaults:{button:null,buttonLabel:"Emojis",buttonPosition:"after"}},a.fn.emojiarea=function(b){return b=a.extend({},a.emojiarea.defaults,b),this.each(function(){var d;d=a(this),"contentEditable"in c.body&&b.wysiwyg!==!1?new g(d,b):new f(d,b)})},m={},m.restoreSelection=function(){return b.getSelection?function(a){var c,d,e;for(e=b.getSelection(),e.removeAllRanges(),c=0,d=a.length;d>c;)e.addRange(a[c]),++c}:c.selection&&c.selection.createRange?function(a){a&&a.select()}:void 0}(),m.saveSelection=function(){return b.getSelection?function(){var a,c,d,e;if(e=b.getSelection(),d=[],e.rangeCount)for(a=0,c=e.rangeCount;c>a;)d.push(e.getRangeAt(a)),++a;return d}:c.selection&&c.selection.createRange?function(){var a;return a=c.selection,"none"!==a.type.toLowerCase()?a.createRange():null}:void 0}(),m.replaceSelection=function(){return b.getSelection?function(a){var d,e,f;e=void 0,f=b.getSelection(),d="string"==typeof a?c.createTextNode(a):a,f.getRangeAt&&f.rangeCount&&(e=f.getRangeAt(0),e.deleteContents(),e.insertNode(c.createTextNode(" ")),e.insertNode(d),e.setStart(d,0),b.setTimeout(function(){e=c.createRange(),e.setStartAfter(d),e.collapse(!0),f.removeAllRanges(),f.addRange(e)},0))}:c.selection&&c.selection.createRange?function(a){var b;b=c.selection.createRange(),"string"==typeof a?b.text=a:b.pasteHTML(a.outerHTML)}:void 0}(),m.insertAtCursor=function(a,b){var d,e,f,g;a=" "+a,g=b.value,d=void 0,f=void 0,e=void 0,"undefined"!=typeof b.selectionStart&&"undefined"!=typeof b.selectionEnd?(f=b.selectionStart,d=b.selectionEnd,b.value=g.substring(0,f)+a+g.substring(b.selectionEnd),b.selectionStart=b.selectionEnd=f+a.length):"undefined"!=typeof c.selection&&"undefined"!=typeof c.selection.createRange&&(b.focus(),e=c.selection.createRange(),e.text=a,e.select())},m.extend=function(a,b){var c;if("undefined"!=typeof a&&a||(a={}),"object"==typeof b)for(c in b)b.hasOwnProperty(c)&&(a[c]=b[c]);return a},m.escapeRegex=function(a){return(a+"").replace(/([.?*+^$[\]\\(){}|-])/g,"\\$1")},m.htmlEntities=function(a){return String(a).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")},e=function(){},e.prototype.setup=function(){var a;a=this,this.$editor.on("focus",function(){a.hasFocus=!0}),this.$editor.on("blur",function(){a.hasFocus=!1}),this.setupButton()},e.prototype.setupButton=function(){var b,c;c=this,b=void 0,this.options.button?b=a(this.options.button):this.options.button!==!1?(b=a('<a href="javascript:void(0)">'),b.html(this.options.buttonLabel),b.addClass("emoji-button"),b.attr({title:this.options.buttonLabel}),this.$editor[this.options.buttonPosition](b)):b=a(""),b.on("click",function(a){h.show(c),a.stopPropagation()}),this.$button=b},e.createIcon=function(b){var c,d;return c=b+".svg",d=a.emojiarea.path||"",d.length&&"/"!==d.charAt(d.length-1)&&(d+="/"),'<img src="'+d+c+'" alt="'+m.htmlEntities(b)+'">'},f=function(a,b){this.options=b,this.$textarea=a,this.$editor=a,this.setup()},f.prototype.insert=function(b){var c,d;for(c in a.emojiarea.icons)for(d=0;d<a.emojiarea.icons[c];){if(!a.emojiarea.icons[c][d].hasOwnProperty(b))return;d++}b=":"+b+":",m.insertAtCursor(b,this.$textarea[0]),this.$textarea.trigger("change")},f.prototype.val=function(){return this.$textarea.val()},m.extend(f.prototype,e.prototype),g=function(b,d){var f,g,h,i;i=this,this.options=d,this.$textarea=b,this.$editor=a("<div>").addClass("emoji-wysiwyg-editor"),this.$editor.text(b.val()),this.$editor.attr({contenteditable:"true"}),this.$editor.on("blur keyup paste",function(){return i.onChange.apply(i,arguments_)}),this.$editor.on("mousedown focus",function(){c.execCommand("enableObjectResizing",!1,!1)}),this.$editor.on("blur",function(){c.execCommand("enableObjectResizing",!0,!0)}),g=this.$editor.text(),f=a.emojiarea.icons;for(h in f)f.hasOwnProperty(h)&&(g=g.replace(new RegExp(m.escapeRegex(h),"g"),e.createIcon(h)));this.$editor.html(g),b.hide().after(this.$editor),this.setup(),this.$button.on("mousedown",function(){i.hasFocus&&(i.selection=m.saveSelection())})},g.prototype.onChange=function(){this.$textarea.val(this.val()).trigger("change")},g.prototype.insert=function(b){var c,d;d=void 0,c=a(e.createIcon(b)),c[0].alt=":"+c[0].alt+":",c[0].attachEvent&&c[0].attachEvent("onresizestart",function(a){a.returnValue=!1},!1),this.$editor.trigger("focus"),this.selection&&m.restoreSelection(this.selection);try{m.replaceSelection(c[0])}catch(f){}this.onChange()},g.prototype.val=function(){var a,b,c,e,f,g;for(f=[],e=[],b=function(){f.push(e.join("")),e=[]},g=function(a){var c,f,h,i,j;if(a.nodeType===l)e.push(a.nodeValue);else if(a.nodeType===d){if(j=a.tagName.toLowerCase(),i=-1!==k.indexOf(j),i&&e.length&&b(),"img"===j)return c=a.getAttribute("alt")||"",c&&e.push(c),void 0;for("br"===j&&b(),f=a.childNodes,h=0;h<f.length;)g(f[h]),h++;i&&e.length&&b()}},a=this.$editor[0].childNodes,c=0;c<a.length;)g(a[c]),c++;return e.length&&b(),f.join("\n")},m.extend(g.prototype,e.prototype),h=function(){var d,e,f;f=this,d=a(c.body),e=a(b),this.visible=!1,this.emojiarea=null,this.$menu=a("<div>"),this.$menu.addClass("emoji-menu"),this.$menu.hide(),this.$items=a("<div>").appendTo(this.$menu),d.append(this.$menu),d.on("keydown",function(a){(a.keyCode===i||a.keyCode===j)&&f.hide()}),d.on("mouseup",function(){f.hide()}),e.on("resize",function(){f.visible&&f.reposition()}),this.$menu.on("mouseup","a",function(a){return a.stopPropagation(),!1}),this.$menu.on("click","a",function(c){var d;return(d=a(".label",a(this)).text())?(c.stopPropagation(),!1):b.setTimeout(function(){f.onItemSelected.apply(f,[d])},0)}),this.load()},h.prototype.onItemSelected=function(a){this.emojiarea.insert(a),this.hide()},h.prototype.load=function(){var b,c,d,f,g,h;h=function(b){var c,d;for(c="",d=0;d<a.emojiarea.icons[b].length;)c+='<a href="javascript:void(0)" title="'+f[b][d].code+'">'+e.createIcon(f[b][d].code)+'<span class="label">'+m.htmlEntities(f[b][d].code)+"</span></a>",d++;return c},d=[],f=a.emojiarea.icons,g=a.emojiarea.path,g.length&&"/"!==g.charAt(g.length-1)&&(g+="/"),d.push('<ul class="nav nav-tabs"><li class="dropdown active emoji-category"><a class="dropdown-toggle emoji-toggle" data-toggle="dropdown" href="#category">category<span class="caret"></span></a><ul class="dropdown-menu emoji-category-menu" role="menu">'),c=!0;for(b in a.emojiarea.icons)c?(d.push('<li class="active"><a href="#'+b+'" data-toggle="tab">'+b+"</a></li>"),c=!1):d.push('<li><a href="#'+b+'" data-toggle="tab">'+b+"</a></li>");d.push('</ul></li></ul><div class="tab-content emoji-content">'),c=!0;for(b in a.emojiarea.icons)c?(d.push('<div class="tab-pane fade active in" id="'+b+'">'+h(b)+"</div>"),c=!1):d.push('<div class="tab-pane fade" id="'+b+'">'+h(b)+"</div>");d.push("</div>"),this.$items.html(d.join(""))},h.prototype.reposition=function(){var a,b;a=this.emojiarea.$button,b=a.offset(),b.top+=a.outerHeight(),b.left+=Math.round(a.outerWidth()/2),this.$menu.css({top:b.top,left:b.left})},h.prototype.hide=function(){this.emojiarea&&(this.emojiarea.menu=null,this.emojiarea.$button.removeClass("on"),this.emojiarea=null),this.visible=!1,this.$menu.hide()},h.prototype.show=function(a){this.emojiarea&&this.emojiarea===a||(this.emojiarea=a,this.emojiarea.menu=this,this.reposition(),this.$menu.show(),this.visible=!0)},h.show=function(){var a;return a=null,function(b){a=a||new h,a.show(b)}}()}(jQuery,window,document)}.call(this),function(){!function(a){return"function"==typeof define&&define.amd?define(["jquery"],a):a(window.jQuery)}(function(a){var b,c,d,e,f,g,h,i,j,k=[].slice;d=function(){function b(b){this.current_flag=null,this.controllers={},this.alias_maps={},this.$inputor=a(b),this.listen()}return b.prototype.controller=function(a){return this.controllers[this.alias_maps[a]||a||this.current_flag]},b.prototype.set_context_for=function(a){return this.current_flag=a,this},b.prototype.reg=function(a,b){var c,d;return c=(d=this.controllers)[a]||(d[a]=new f(this,a)),b.alias&&(this.alias_maps[b.alias]=a),c.init(b),this},b.prototype.listen=function(){return this.$inputor.on("keyup.atwhoInner",function(a){return function(b){return a.on_keyup(b)}}(this)).on("keydown.atwhoInner",function(a){return function(b){return a.on_keydown(b)}}(this)).on("scroll.atwhoInner",function(a){return function(){var b;return null!=(b=a.controller())?b.view.hide():void 0}}(this)).on("blur.atwhoInner",function(a){return function(){var b;return(b=a.controller())?b.view.hide(b.get_opt("display_timeout")):void 0}}(this))},b.prototype.shutdown=function(){var a,b,c;c=this.controllers;for(b in c)a=c[b],a.destroy();return this.$inputor.off(".atwhoInner")},b.prototype.dispatch=function(){return a.map(this.controllers,function(a){return function(b){return b.look_up()?a.set_context_for(b.at):void 0}}(this))},b.prototype.on_keyup=function(b){var c;switch(b.keyCode){case h.ESC:b.preventDefault(),null!=(c=this.controller())&&c.view.hide();break;case h.DOWN:case h.UP:a.noop();break;default:this.dispatch()}},b.prototype.on_keydown=function(b){var c,d;if(c=null!=(d=this.controller())?d.view:void 0,c&&c.visible())switch(b.keyCode){case h.ESC:b.preventDefault(),c.hide();break;case h.UP:b.preventDefault(),c.prev();break;case h.DOWN:b.preventDefault(),c.next();break;case h.TAB:case h.ENTER:if(!c.visible())return;b.preventDefault(),c.choose();break;default:a.noop()}},b}(),f=function(){function c(c,e){this.app=c,this.at=e,this.$inputor=this.app.$inputor,this.oDocument=this.$inputor[0].ownerDocument,this.oWindow=this.oDocument.defaultView||this.oDocument.parentWindow,this.id=this.$inputor[0].id||d(),this.setting=null,this.query=null,this.pos=0,this.cur_rect=null,this.range=null,b.append(this.$el=a("<div id='atwho-ground-"+this.id+"'></div>")),this.model=new i(this),this.view=new j(this)}var d,e;return e=0,d=function(){return e+=1},c.prototype.init=function(b){return this.setting=a.extend({},this.setting||a.fn.atwho["default"],b),this.view.init(),this.model.reload(this.setting.data)},c.prototype.destroy=function(){return this.trigger("beforeDestroy"),this.model.destroy(),this.view.destroy()},c.prototype.call_default=function(){var b,c,d;d=arguments[0],b=2<=arguments.length?k.call(arguments,1):[];try{return g[d].apply(this,b)}catch(e){return c=e,a.error(""+c+" Or maybe At.js doesn't have function "+d)}},c.prototype.trigger=function(a,b){var c,d;return null==b&&(b=[]),b.push(this),c=this.get_opt("alias"),d=c?""+a+"-"+c+".atwho":""+a+".atwho",this.$inputor.trigger(d,b)},c.prototype.callbacks=function(a){return this.get_opt("callbacks")[a]||g[a]},c.prototype.get_opt=function(a){var b;try{return this.setting[a]}catch(c){return b=c,null}},c.prototype.content=function(){return this.$inputor.is("textarea, input")?this.$inputor.val():this.$inputor.text()},c.prototype.catch_query=function(){var a,b,c,d,e,f;return b=this.content(),a=this.$inputor.caret("pos"),f=b.slice(0,a),d=this.callbacks("matcher").call(this,this.at,f,this.get_opt("start_with_space")),"string"==typeof d&&d.length<=this.get_opt("max_len",20)?(e=a-d.length,c=e+d.length,this.pos=e,d={text:d.toLowerCase(),head_pos:e,end_pos:c},this.trigger("matched",[this.at,d.text])):this.view.hide(),this.query=d},c.prototype.rect=function(){var a,b;return(a=this.$inputor.caret("offset",this.pos-1))?("true"===this.$inputor.attr("contentEditable")&&(a=this.cur_rect||(this.cur_rect=a)||a),b=document.selection?0:2,{left:a.left,top:a.top,bottom:a.top+a.height+b}):void 0},c.prototype.reset_rect=function(){return"true"===this.$inputor.attr("contentEditable")?this.cur_rect=null:void 0},c.prototype.mark_range=function(){return"true"===this.$inputor.attr("contentEditable")&&(this.oWindow.getSelection&&(this.range=this.oWindow.getSelection().getRangeAt(0)),this.oDocument.selection)?this.ie8_range=this.oDocument.selection.createRange():void 0},c.prototype.insert_content_for=function(b){var c,d,e;return d=b.data("value"),e=this.get_opt("insert_tpl"),this.$inputor.is("textarea, input")||!e?d:(c=a.extend({},b.data("item-data"),{"atwho-data-value":d,"atwho-at":this.at}),this.callbacks("tpl_eval").call(this,e,c))},c.prototype.insert=function(b,c){var d,e,f,g,h,i,j,k,l,m,n;return d=this.$inputor,"true"===d.attr("contentEditable")&&(f="atwho-view-flag atwho-view-flag-"+(this.get_opt("alias")||this.at),g=""+b+"<span contenteditable='false'>&nbsp;<span>",h="<span contenteditable='false' class='"+f+"'>"+g+"</span>",e=a(h,this.oDocument).data("atwho-data-item",c.data("item-data")),this.oDocument.selection&&(e=a("<span contenteditable='true'></span>",this.oDocument).html(e))),d.is("textarea, input")?(b=""+b,l=d.val(),m=l.slice(0,Math.max(this.query.head_pos-this.at.length,0)),n=""+m+b+" "+l.slice(this.query.end_pos||0),d.val(n),d.caret("pos",m.length+b.length+1)):(j=this.range)?(i=j.startOffset-(this.query.end_pos-this.query.head_pos)-this.at.length,j.setStart(j.endContainer,Math.max(i,0)),j.setEnd(j.endContainer,j.endOffset),j.deleteContents(),j.insertNode(e[0]),j.collapse(!1),k=this.oWindow.getSelection(),k.removeAllRanges(),k.addRange(j)):(j=this.ie8_range)&&(j.moveStart("character",this.query.end_pos-this.query.head_pos-this.at.length),j.pasteHTML(g),j.collapse(!1),j.select()),d.is(":focus")||d.focus(),d.change()},c.prototype.render_view=function(a){var b;return b=this.get_opt("search_key"),a=this.callbacks("sorter").call(this,this.query.text,a.slice(0,1001),b),this.view.render(a.slice(0,this.get_opt("limit")))},c.prototype.look_up=function(){var b,c;return(b=this.catch_query())?(c=function(a){return a&&a.length>0?this.render_view(a):this.view.hide()},this.model.query(b.text,a.proxy(c,this)),b):void 0},c}(),i=function(){function b(a){this.context=a,this.at=this.context.at,this.storage=this.context.$inputor}return b.prototype.destroy=function(){return this.storage.data(this.at,null)},b.prototype.saved=function(){return this.fetch()>0},b.prototype.query=function(a,b){var c,d,e;return c=this.fetch(),d=this.context.get_opt("search_key"),c=this.context.callbacks("filter").call(this.context,a,c,d)||[],e=this.context.callbacks("remote_filter"),c.length>0||!e&&0===c.length?b(c):e.call(this.context,a,b)},b.prototype.fetch=function(){return this.storage.data(this.at)||[]},b.prototype.save=function(a){return this.storage.data(this.at,this.context.callbacks("before_save").call(this.context,a||[]))},b.prototype.load=function(a){return!this.saved()&&a?this._load(a):void 0},b.prototype.reload=function(a){return this._load(a)},b.prototype._load=function(b){return"string"==typeof b?a.ajax(b,{dataType:"json"}).done(function(a){return function(b){return a.save(b)}}(this)):this.save(b)},b}(),j=function(){function b(b){this.context=b,this.$el=a("<div class='atwho-view'><ul class='atwho-view-ul'></ul></div>"),this.timeout_id=null,this.context.$el.append(this.$el),this.bind_event()}return b.prototype.init=function(){var a;return a=this.context.get_opt("alias")||this.context.at.charCodeAt(0),this.$el.attr({id:"at-view-"+a})},b.prototype.destroy=function(){return this.$el.remove()},b.prototype.bind_event=function(){var b;return b=this.$el.find("ul"),b.on("mouseenter.atwho-view","li",function(c){return b.find(".cur").removeClass("cur"),a(c.currentTarget).addClass("cur")}).on("click",function(a){return function(b){return a.choose(),b.preventDefault()}}(this))},b.prototype.visible=function(){return this.$el.is(":visible")},b.prototype.choose=function(){var a,b;return a=this.$el.find(".cur"),b=this.context.insert_content_for(a),this.context.insert(this.context.callbacks("before_insert").call(this.context,b,a),a),this.context.trigger("inserted",[a]),this.hide()},b.prototype.reposition=function(b){var c;return b.bottom+this.$el.height()-a(window).scrollTop()>a(window).height()&&(b.bottom=b.top-this.$el.height()),c={left:b.left,top:b.bottom},this.$el.offset(c),this.context.trigger("reposition",[c])},b.prototype.next=function(){var a,b;return a=this.$el.find(".cur").removeClass("cur"),b=a.next(),b.length||(b=this.$el.find("li:first")),b.addClass("cur")},b.prototype.prev=function(){var a,b;return a=this.$el.find(".cur").removeClass("cur"),b=a.prev(),b.length||(b=this.$el.find("li:last")),b.addClass("cur")},b.prototype.show=function(){var a;return this.context.mark_range(),this.visible()||(this.$el.show(),this.context.trigger("shown")),(a=this.context.rect())?this.reposition(a):void 0
-},b.prototype.hide=function(a){var b;return isNaN(a&&this.visible())?(this.context.reset_rect(),this.$el.hide(),this.context.trigger("hidden")):(b=function(a){return function(){return a.hide()}}(this),clearTimeout(this.timeout_id),this.timeout_id=setTimeout(b,a))},b.prototype.render=function(b){var c,d,e,f,g,h,i;if(!(a.isArray(b)&&b.length>0))return void this.hide();for(this.$el.find("ul").empty(),d=this.$el.find("ul"),g=this.context.get_opt("tpl"),h=0,i=b.length;i>h;h++)e=b[h],e=a.extend({},e,{"atwho-at":this.context.at}),f=this.context.callbacks("tpl_eval").call(this.context,g,e),c=a(this.context.callbacks("highlighter").call(this.context,f,this.context.query.text)),c.data("item-data",e),d.append(c);return this.show(),d.find("li:first").addClass("cur")},b}(),h={DOWN:40,UP:38,ESC:27,TAB:9,ENTER:13},g={before_save:function(b){var c,d,e,f;if(!a.isArray(b))return b;for(f=[],d=0,e=b.length;e>d;d++)c=b[d],f.push(a.isPlainObject(c)?c:{name:c});return f},matcher:function(a,b,c){var d,e;return a=a.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g,"\\$&"),c&&(a="(?:^|\\s)"+a),e=new RegExp(a+"([A-Za-z0-9_+-]*)$|"+a+"([^\\x00-\\xff]*)$","gi"),d=e.exec(b),d?d[2]||d[1]:null},filter:function(a,b,c){var d,e,f,g;for(g=[],e=0,f=b.length;f>e;e++)d=b[e],~d[c].toLowerCase().indexOf(a)&&g.push(d);return g},remote_filter:null,sorter:function(a,b,c){var d,e,f,g;if(!a)return b;for(g=[],e=0,f=b.length;f>e;e++)d=b[e],d.atwho_order=d[c].toLowerCase().indexOf(a),d.atwho_order>-1&&g.push(d);return g.sort(function(a,b){return a.atwho_order-b.atwho_order})},tpl_eval:function(a,b){var c;try{return a.replace(/\$\{([^\}]*)\}/g,function(a,c){return b[c]})}catch(d){return c=d,""}},highlighter:function(a,b){var c;return b?(c=new RegExp(">\\s*(\\w*)("+b.replace("+","\\+")+")(\\w*)\\s*<","ig"),a.replace(c,function(a,b,c,d){return"> "+b+"<strong>"+c+"</strong>"+d+" <"})):a},before_insert:function(a){return a}},c={load:function(a,b){var c;return(c=this.controller(a))?c.model.load(b):void 0},getInsertedItemsWithIDs:function(b){var c,d,e;return(c=this.controller(b))?(b&&(b="-"+(c.get_opt("alias")||c.at)),d=[],e=a.map(this.$inputor.find("span.atwho-view-flag"+(b||"")),function(b){var c;return c=a(b).data("atwho-data-item"),d.indexOf(c.id)>-1?void 0:(c.id&&(d.push=c.id),c)}),[d,e]):[null,null]},getInsertedItems:function(a){return c.getInsertedItemsWithIDs.apply(this,[a])[1]},getInsertedIDs:function(a){return c.getInsertedItemsWithIDs.apply(this,[a])[0]},run:function(){return this.dispatch()},destroy:function(){return this.shutdown(),this.$inputor.data("atwho",null)}},e={init:function(b){var c,e;return e=(c=a(this)).data("atwho"),e||c.data("atwho",e=new d(this)),e.reg(b.at,b),this}},b=a("<div id='atwho-container'></div>"),a.fn.atwho=function(d){var f,g;return g=arguments,a("body").append(b),f=null,this.filter("textarea, input, [contenteditable=true]").each(function(){var b;return"object"!=typeof d&&d?c[d]?(b=a(this).data("atwho"))?f=c[d].apply(b,Array.prototype.slice.call(g,1)):void 0:a.error("Method "+d+" does not exist on jQuery.caret"):e.init.apply(this,g)}),f||this},a.fn.atwho["default"]={at:void 0,alias:void 0,data:null,tpl:"<li data-value='${atwho-at}${name}'>${name}</li>",insert_tpl:"<span>${atwho-data-value}</span>",callbacks:g,search_key:"name",start_with_space:!0,limit:5,max_len:20,display_timeout:300}})}.call(this);
 /*
 emojiarea.poe
 @author Yusuke Matsui
@@ -670,6 +504,162 @@ governing permissions and limitations under the License.
         menu.show(emojiarea);
       };
     })();
+  })(jQuery, window, document);
+
+}).call(this);
+
+(function() {
+  (function($, window, document) {
+    var Plugin, defaults, pluginName;
+    pluginName = "emojidex";
+    defaults = {
+      emojiarea: {
+        plaintext: "emojidex-plaintext",
+        wysiwyg: "emojidex-wysiwyg",
+        value_output: "emojidex-rawtext"
+      }
+    };
+    Plugin = (function() {
+      function Plugin(element, options) {
+        this.element = element;
+        this.options = $.extend({}, defaults, options);
+        this._defaults = defaults;
+        this._name = pluginName;
+        this.loadEmojidexJSON(this.element, this.options);
+        this.setEmojiarea(this.options);
+      }
+
+      Plugin.prototype.loadEmojidexJSON = function(element, options) {
+        $.emojiarea.path = options.path_img;
+        return $.getJSON(options.path_json, function(emojis_data) {
+          var emoji_regexps;
+          emojis_data = Plugin.prototype.getCategorizedData(emojis_data);
+          $.emojiarea.icons = emojis_data;
+          emoji_regexps = Plugin.prototype.setEmojiCSS_getEmojiRegexps(emojis_data);
+          Plugin.prototype.setEmojiIcon(emojis_data, element, emoji_regexps);
+          return Plugin.prototype.prepareAutoComplete(emojis_data, options);
+        });
+      };
+
+      Plugin.prototype.getCategorizedData = function(emojis_data) {
+        var emoji, new_emojis_data, _i, _len;
+        new_emojis_data = {};
+        for (_i = 0, _len = emojis_data.length; _i < _len; _i++) {
+          emoji = emojis_data[_i];
+          if (new_emojis_data[emoji.category] == null) {
+            new_emojis_data[emoji.category] = [emoji];
+          } else {
+            new_emojis_data[emoji.category].push(emoji);
+          }
+        }
+        return new_emojis_data;
+      };
+
+      Plugin.prototype.getEmojiDataFromAPI = function(emojis_data) {
+        var url;
+        return url = "https://www.emojidex.com/api/v1/emoji/puni_pink";
+      };
+
+      Plugin.prototype.setEmojiCSS_getEmojiRegexps = function(emojis_data) {
+        var category, emoji, emojis_css, emojis_in_category, regexp_for_code, regexp_for_utf, _i, _len;
+        regexp_for_utf = "";
+        regexp_for_code = ":(";
+        emojis_css = $('<style type="text/css" />');
+        for (category in emojis_data) {
+          emojis_in_category = emojis_data[category];
+          for (_i = 0, _len = emojis_in_category.length; _i < _len; _i++) {
+            emoji = emojis_in_category[_i];
+            regexp_for_utf += emoji.moji + "|";
+            regexp_for_code += emoji.code + "|";
+            emojis_css.append("i.emojidex-" + emoji.moji + " {background-image: url('" + $.emojiarea.path + emoji.code + ".svg')}");
+          }
+        }
+        $("head").append(emojis_css);
+        return [regexp_for_utf.slice(0, -1), regexp_for_code.slice(0, -1) + "):"];
+      };
+
+      Plugin.prototype.setEmojiIcon = function(emojis_data, element, emoji_regexps) {
+        var getEmojiTag, replaceForCode, replaceForUTF;
+        getEmojiTag = function(emoji_utf) {
+          return '<i class="emojidex-' + emoji_utf + '"></i>';
+        };
+        replaceForUTF = function(replaced_string, emoji_regexp) {
+          return replaced_string = replaced_string.replace(new RegExp(emoji_regexp, "g"), function(matched_string) {
+            return getEmojiTag(matched_string);
+          });
+        };
+        replaceForCode = function(replaced_string, emoji_regexp, emojis_data) {
+          return replaced_string = replaced_string.replace(new RegExp(emoji_regexp, "g"), function(matched_string) {
+            var category, emoji, _i, _len, _ref;
+            matched_string = matched_string.replace(/:/g, "");
+            for (category in emojis_data) {
+              _ref = emojis_data[category];
+              for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                emoji = _ref[_i];
+                if (emoji.code === matched_string) {
+                  return getEmojiTag(emoji.moji);
+                }
+              }
+            }
+          });
+        };
+        return $(element).find(":not(iframe,textarea,script)").andSelf().contents().filter(function() {
+          return this.nodeType === Node.TEXT_NODE;
+        }).each(function() {
+          var replaced_string;
+          replaced_string = this.textContent;
+          replaced_string = replaceForUTF(replaced_string, emoji_regexps[0]);
+          replaced_string = replaceForCode(replaced_string, emoji_regexps[1], emojis_data);
+          return $(this).replaceWith(replaced_string);
+        });
+      };
+
+      Plugin.prototype.setEmojiarea = function(options) {
+        options.emojiarea["plaintext"].emojiarea({
+          wysiwyg: false
+        });
+        options.emojiarea["wysiwyg"].on("change", function() {
+          return options.emojiarea["value_output"].text($(this).val());
+        });
+        return options.emojiarea["wysiwyg"].trigger("change");
+      };
+
+      Plugin.prototype.prepareAutoComplete = function(emojis_data, options) {
+        var category, emoji, emoji_config, emojis, _i, _len, _ref;
+        emojis = [];
+        for (category in emojis_data) {
+          _ref = emojis_data[category];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            emoji = _ref[_i];
+            emojis.push(emoji.code);
+          }
+        }
+        emojis = $.map(emojis, function(value, i) {
+          return {
+            key: value,
+            name: value
+          };
+        });
+        emoji_config = {
+          at: ":",
+          data: emojis,
+          tpl: "<li data-value=':${key}:'><img src='../src/assets/img/utf/${name}.svg'  height='20' width='20' /> ${name}</li>",
+          insert_tpl: "<img src='../src/assets/img/utf/${name}.svg' height='20' width='20' />"
+        };
+        options.emojiarea["plaintext"].atwho(emoji_config);
+        return options.emojiarea["wysiwyg"].atwho(emoji_config);
+      };
+
+      return Plugin;
+
+    })();
+    return $.fn[pluginName] = function(options) {
+      return this.each(function() {
+        if (!$.data(this, "plugin_" + pluginName)) {
+          return $.data(this, "plugin_" + pluginName, new Plugin(this, options));
+        }
+      });
+    };
   })(jQuery, window, document);
 
 }).call(this);

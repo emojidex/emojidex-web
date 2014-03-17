@@ -22,14 +22,14 @@ module.exports = (grunt) ->
         expand: true
         cwd: 'src/coffees/'
         src: ['**/*.coffee']
-        dest: 'dist/'
+        dest: 'src/javascripts/'
         rename: (dest, src) ->
           return dest + '/' + src.replace(/\.coffee$/, '.js')
 
     # Concat definitions
     concat:
       dist:
-        src: ["dist/**/*.js", "src/assets/libs/At.js/js/jquery.atwho.min.js", "src/assets/libs/Caret.js/src/jquery.caret.js"]
+        src: ["src/javascripts/**/*.js", "src/assets/libs/At.js/js/jquery.atwho.min.js", "src/assets/libs/Caret.js/src/jquery.caret.js"]
         dest: "dist/emojidex.js"
 
       options:
