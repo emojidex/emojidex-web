@@ -29,7 +29,7 @@ module.exports = (grunt) ->
     # Concat definitions
     concat:
       dist:
-        src: ["dist/emojidex.js"]
+        src: ["dist/**/*.js", "src/assets/libs/At.js/js/jquery.atwho.min.js", "src/assets/libs/Caret.js/src/jquery.caret.js"]
         dest: "dist/emojidex.js"
 
       options:
