@@ -19,15 +19,28 @@
       }
 
       Plugin.prototype.loadEmojidexJSON = function(element, options) {
-        return $.ajax({
+        $.ajax({
           url: "https://www.emojidex.com/api/v1/emoji",
           dataType: "JSONP",
           jsonpCallback: "callback",
           type: "GET",
-          success: function(data) {
-            console.log(data);
-          }
+          success: function(data) {}
         });
+        $.ajax({
+          url: "https://www.emojidex.com/api/v1/emoji/emojidex_keyboard",
+          dataType: "JSONP",
+          jsonpCallback: "callback",
+          type: "GET",
+          success: function(data) {}
+        });
+        return Plugin.prototype.lsTest("ls_test!!!!!");
+      };
+
+      Plugin.prototype.lsTest = function(text) {
+        var test_string;
+        localStorage.setItem("ls_test", text);
+        test_string = localStorage.getItem("ls_test");
+        return console.log(test_string);
       };
 
       Plugin.prototype.getCategorizedData = function(emojis_data) {

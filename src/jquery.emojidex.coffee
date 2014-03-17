@@ -37,7 +37,17 @@ do ($ = jQuery, window, document) ->
         jsonpCallback: "callback"
         type: "GET"
         success: (data) ->
-          console.log data
+          # console.log data
+          # console.log data["emoji"][5]
+          return
+
+      $.ajax
+        url: "https://www.emojidex.com/api/v1/emoji/emojidex_keyboard"
+        dataType: "JSONP"
+        jsonpCallback: "callback"
+        type: "GET"
+        success: (data) ->
+          # console.log data
           return
 
       # $.emojiarea.path = options.path_img
@@ -47,6 +57,13 @@ do ($ = jQuery, window, document) ->
       #   $.emojiarea.icons = emojis_data
       #   emoji_regexps = Plugin::setEmojiCSS_getEmojiRegexps emojis_data
       #   Plugin::setEmojiIcon emojis_data, element, emoji_regexps
+
+      Plugin::lsTest "ls_test!!!!!"
+
+    lsTest: (text) ->
+      localStorage.setItem("ls_test", text)
+      test_string = localStorage.getItem("ls_test")
+      console.log test_string
 
     getCategorizedData: (emojis_data) ->
       new_emojis_data = {}

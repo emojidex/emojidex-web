@@ -66,5 +66,112 @@
       </div>
     </div>
 
-  </body>
+    <div class="imgArea">
+      <script>
+
+  (function() {
+
+  // namespace
+  window.cacheModule = window.cacheModule || {};
+
+  // alias
+  var aCacheModule = window.cacheModule;
+  var storage = window.localStorage;
+
+  // LocalStorageがサポートされているかの判定式
+  var supportStorage = storage;
+
+  var PREFIX = 'yoheimcache:';
+  var version = '?ver=3.0.3';
+
+
+  // バージョンが変わっている場合には、キャッシュを削除する。
+  (function() {
+    if (supportStorage) {
+      var ver = storage.getItem('yoheimVersion');
+      if (ver !== version) {
+        storage.clear();
+        storage.setItem('yoheimVersion', version);
+      }
+    }
+  })();
+
+
+
+  // localStorage用のキー生成
+  var createKey = function(str) {return PREFIX + str + version;}
+  // バージョン付きのURL
+  var urlWithVersion = function(url) {return url + version;}
+
+
+  // 引数の内容から、imgタグを生成する。
+  var createImgTag = function(src, cssClass, options) {
+      var tag = '<img src="' + (src || '') + '" class="' + (cssClass || '') + '" ';
+      for (var prop in options) {
+        if (options.hasOwnProperty(prop)) {
+          tag += ' ' + prop + '="' + options[prop] + '"';
+        }
+      }
+      tag += '/>';
+
+      return tag;
+  }
+
+
+  /*
+    画像のロード
+  */
+  aCacheModule.loadImage = function(src, cssClass, options) {
+    options = options || {};
+
+    if (!supportStorage) {
+      // LocalStorageがサポートされていない場合は、imgタグを出力する
+      document.write(createImgTag(src, cssClass, options));
+      return;
+    
+    } else {
+
+      // LocalStorageにキャッシュがある場合、その画像を表示する
+      var base64 = storage.getItem(createKey(src));
+      if (base64) {
+        document.write(createImgTag(base64, cssClass, options));
+        return;
+      
+      } else {
+
+        // LocalStorageにキャッシュが無い場合は、imgタグを出力する
+        document.write(createImgTag(src, cssClass, options));
+
+        // そして、その後画像を別途取得して、LocalStorageへ保存しておく
+        window.addEventListener('load', function() {
+
+          var canvas = document.createElement("canvas");
+          if (!canvas || !canvas.getContext || !canvas.getContext('2d')) {
+            return;
+          }
+          var image = new Image();
+          image.src = src;
+          image.onload = function() {
+
+            // 画像をbase64にするためにCanvasを利用するので、
+            // クロスドメインの画像は無理かも。。
+            var canvas = document.createElement("canvas");
+            canvas.width = this.width;
+            canvas.height = this.height;
+            canvas.getContext('2d').drawImage(this, 0, 0);
+            var base64 = canvas.toDataURL();
+
+            storage.setItem(createKey(src), base64);
+          };
+        }, false);
+      }
+    }
+  };
+})();
+
+window.cacheModule.loadImage('test.svg', 'someClass', {width: '50px', style:'float:right; padding-left:7px;'});
+  </script>  
+    </div>
+ </body>
+
 </html>
