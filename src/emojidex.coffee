@@ -58,7 +58,7 @@ do ($ = jQuery, window, document) ->
       #   emoji_regexps = Plugin::setEmojiCSS_getEmojiRegexps emojis_data
       #   Plugin::setEmojiIcon emojis_data, element, emoji_regexps
 
-      Plugin::lsTest "ls_test!!!!!"
+      # Plugin::lsTest "ls_test!!!!!"
 
     lsTest: (text) ->
       localStorage.setItem("ls_test", text)
