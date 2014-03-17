@@ -20,8 +20,8 @@ module.exports = (grunt) ->
     coffee:
       compile:
         files:
-          "src/jquery.emojidex.js": "src/jquery.emojidex.coffee"
           "dist/jquery.emojidex.js": "src/jquery.emojidex.coffee"
+
 
     # Concat definitions
     concat:
@@ -43,7 +43,7 @@ module.exports = (grunt) ->
     
     # Watch definitions
     watch:
-      files: ["src/jquery.emojidex.coffee"]
+      files: ["src/**/*.coffee"]
       tasks: ["coffee", "concat", "uglify"]
 
     # Lint definitions
