@@ -20,8 +20,8 @@ module.exports = (grunt) ->
     coffee:
       glob_to_multiple:
         expand: true
-        cwd: 'src/'
-        src: ['*.coffee']
+        cwd: 'src/coffees/'
+        src: ['**/*.coffee']
         dest: 'dist/'
         rename: (dest, src) ->
           return dest + '/' + src.replace(/\.coffee$/, '.js')
@@ -46,7 +46,7 @@ module.exports = (grunt) ->
     
     # Watch definitions
     watch:
-      files: ["src/**/*.coffee"]
+      files: ["src/coffees/**/*.coffee"]
       tasks: ["coffee", "concat", "uglify"]
 
     # Lint definitions
