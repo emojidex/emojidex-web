@@ -74,6 +74,32 @@ do ($ = jQuery, window, document) ->
           new_emojis_data[emoji.category].push emoji
       return new_emojis_data
 
+    getEmojiDataFromAPI: (emojis_data) ->
+      url = "https://www.emojidex.com/api/v1/emoji/puni_pink"
+      # image_url = "https://www.emojidex.com/emoji/puni_pink.png"
+      # $.getJSON url, (data) ->
+      #   console.log "in"
+      # xhr = new XMLHttpRequest()
+      # xhr.open("GET", url)
+      # xhr.send()
+      # xhr.responseType = "json"
+      # xhr.onload = ->
+      #   console.log "in2"
+      # xhr.onerror = ->
+      #   console.log "in3"
+
+      # xhr.onreadystatechange = ->
+      #   console.log "in"
+      #   console.log xhr.response
+      #   json_data = xhr.response
+      #   console.log json_data
+
+      # xhr.onload = (event) ->
+      #   arrayBuffer = xhr.responseText;
+      #   console.log arraybuffer
+
+      # return
+
     setEmojiCSS_getEmojiRegexps: (emojis_data) ->
       regexp_for_utf = ""
       regexp_for_code = ":("
@@ -90,6 +116,7 @@ do ($ = jQuery, window, document) ->
 
       $("head").append emojis_css
       return [regexp_for_utf.slice(0, -1), regexp_for_code.slice(0, -1) + "):"]
+
 
     setEmojiIcon: (emojis_data, element, emoji_regexps) ->
       getEmojiTag = (emoji_utf) ->
@@ -118,10 +145,27 @@ do ($ = jQuery, window, document) ->
 
     setEmojiarea: (options) ->
       options.emojiarea["plaintext"].emojiarea wysiwyg: false
-      options.emojiarea["wysiwyg"].emojiarea wysiwyg: true
+      # options.emojiarea["wysiwyg"].emojiarea wysiwyg: true
       options.emojiarea["wysiwyg"].on "change", ->
         options.emojiarea["value_output"].text $(this).val()
       options.emojiarea["wysiwyg"].trigger "change"
+
+    prepareAutoComplete: (emojis_data, options) ->
+      emojis = []
+      for category of emojis_data
+        for emoji in emojis_data[category]
+          emojis.push emoji.code
+      emojis = $.map(emojis, (value, i) ->
+        key: value
+        name: value
+      )
+      emoji_config =
+        at: ":"
+        data: emojis
+        tpl: "<li data-value=':${key}:'><img src='../src/assets/img/utf/${name}.svg'  height='20' width='20' /> ${name}</li>"
+        insert_tpl: "<img src='../src/assets/img/utf/${name}.svg' height='20' width='20' />"
+      options.emojiarea["plaintext"].atwho(emoji_config)
+      options.emojiarea["wysiwyg"].atwho(emoji_config)
 
   $.fn[pluginName] = (options) ->
     @each ->
