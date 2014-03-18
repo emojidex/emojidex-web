@@ -32,18 +32,21 @@ do ($ = jQuery, window, document) ->
       @setEmojiarea @options
 
     loadEmojidexJSON: (element, options) ->
-      $.emojiarea.path = options.path_img
-
-      # get jsonp date use api
-      # Plugin::getEmojiDataFromAPI
-
-      # get json date
-      $.getJSON options.path_json, (emojis_data) ->
+      onLoadEmojisData = (emojis_data) ->
         emojis_data = Plugin::getCategorizedData emojis_data
         $.emojiarea.icons = emojis_data
         emoji_regexps = Plugin::setEmojiCSS_getEmojiRegexps emojis_data
         Plugin::setEmojiIcon emojis_data, element, emoji_regexps
         Plugin::prepareAutoComplete emojis_data, options
+        
+      # start main --------
+      $.emojiarea.path = options.path_img
+
+      # get jsonp date use api
+      # Plugin::getEmojiDataFromAPI onLoadEmojisData
+
+      # get json date
+      $.getJSON options.path_json, onLoadEmojisData
 
     getCategorizedData: (emojis_data) ->
       new_emojis_data = {}
@@ -54,7 +57,7 @@ do ($ = jQuery, window, document) ->
           new_emojis_data[emoji.category].push emoji
       return new_emojis_data
 
-    getEmojiDataFromAPI: (path_json) ->
+    getEmojiDataFromAPI: (callback) ->
       $.ajax
         url: "https://www.emojidex.com/api/v1/emoji"
         dataType: "jsonp"
@@ -63,6 +66,7 @@ do ($ = jQuery, window, document) ->
         success: (emojis_data) ->
           console.log "success: load jsonp"
           console.log emojis_data
+          # callback emojis_data
           return
         error: (data) ->
           console.log "error: load jsonp"
@@ -81,19 +85,22 @@ do ($ = jQuery, window, document) ->
           regexp_for_utf += emoji.moji + "|"
           regexp_for_code += emoji.code + "|"
 
-          emojis_css.append "i.emojidex-" + emoji.moji + " {background-image: url('" + $.emojiarea.path + emoji.code + ".svg')}"
+          emojis_css.append "i.emojidex-" + emoji.code + " {background-image: url('" + $.emojiarea.path + emoji.code + ".svg')}"
 
       $("head").append emojis_css
       return [regexp_for_utf.slice(0, -1), regexp_for_code.slice(0, -1) + "):"]
 
 
     setEmojiIcon: (emojis_data, element, emoji_regexps) ->
-      getEmojiTag = (emoji_utf) ->
-        return '<i class="emojidex-' + emoji_utf + '"></i>'
+      getEmojiTag = (emoji_code) ->
+        return '<i class="emojidex-' + emoji_code + '"></i>'
       
-      replaceForUTF = (replaced_string, emoji_regexp) ->
+      replaceForUTF = (replaced_string, emoji_regexp, emojis_data) ->
         replaced_string = replaced_string.replace new RegExp(emoji_regexp, "g"), (matched_string) ->
-          return getEmojiTag matched_string
+          for category of emojis_data
+            for emoji in emojis_data[category]
+              if emoji.moji is matched_string
+                return getEmojiTag emoji.code
       
       replaceForCode = (replaced_string, emoji_regexp, emojis_data) ->
         replaced_string = replaced_string.replace new RegExp(emoji_regexp, "g"), (matched_string) ->
@@ -101,14 +108,14 @@ do ($ = jQuery, window, document) ->
           for category of emojis_data
             for emoji in emojis_data[category]
               if emoji.code is matched_string
-                return getEmojiTag emoji.moji
+                return getEmojiTag emoji.code
 
       # start main --------
       $(element).find(":not(iframe,textarea,script)").andSelf().contents().filter(->
         @nodeType is Node.TEXT_NODE
       ).each ->
         replaced_string = @textContent
-        replaced_string = replaceForUTF replaced_string, emoji_regexps[0]
+        replaced_string = replaceForUTF replaced_string, emoji_regexps[0], emojis_data
         replaced_string = replaceForCode replaced_string, emoji_regexps[1], emojis_data
         $(@).replaceWith replaced_string
 
