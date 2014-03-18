@@ -34,7 +34,6 @@
           emojis_data = Plugin.prototype.getCategorizedData(emojis_data);
           $.emojiarea.icons = emojis_data;
           emoji_regexps = Plugin.prototype.setEmojiCSS_getEmojiRegexps(emojis_data);
-          Plugin.prototype.setLocalStorage(emojis_data);
           return Plugin.prototype.setEmojiIcon(emojis_data, element, emoji_regexps);
         });
       };
@@ -53,13 +52,8 @@
         return new_emojis_data;
       };
 
-      Plugin.prototype.getEmojiDataFromAPI = function(emojis_data) {
-        var url;
-        return url = "https://www.emojidex.com/api/v1/emoji/puni_pink";
-      };
-
       Plugin.prototype.setEmojiCSS_getEmojiRegexps = function(emojis_data) {
-        var category, emoji, emojis_css, emojis_in_category, regexp_for_code, regexp_for_utf, _i, _len;
+        var base64, category, emoji, emojis_css, emojis_in_category, regexp_for_code, regexp_for_utf, _i, _len;
         regexp_for_utf = "";
         regexp_for_code = ":(";
         emojis_css = $('<style type="text/css" />');
@@ -69,33 +63,50 @@
             emoji = emojis_in_category[_i];
             regexp_for_utf += emoji.moji + "|";
             regexp_for_code += emoji.code + "|";
-            emojis_css.append("i.emojidex-" + emoji.moji + " {background-image: url('" + $.emojiarea.path + emoji.code + ".svg')}");
+            base64 = Plugin.prototype.loadImageFromLocalStorage(emoji.code);
+            if (base64) {
+              emojis_css.append("i.emojidex-" + emoji.moji + " {background-image: url('" + base64 + "')}");
+            } else {
+              emojis_css.append("i.emojidex-" + emoji.moji + " {background-image: url('" + $.emojiarea.path + emoji.code + ".svg')}");
+            }
           }
         }
         $("head").append(emojis_css);
         return [regexp_for_utf.slice(0, -1), regexp_for_code.slice(0, -1) + "):"];
       };
 
-      Plugin.prototype.setLocalStorage = function(emojis_data) {
-        var category, emoji, key, _results;
-        _results = [];
-        for (category in emojis_data) {
-          _results.push((function() {
-            var _i, _len, _ref, _results1;
-            _ref = emojis_data[category];
-            _results1 = [];
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              emoji = _ref[_i];
-              _results1.push(key = emoji["code"]);
-            }
-            return _results1;
-          })());
+      Plugin.prototype.loadImageFromLocalStorage = function(key) {
+        var base64;
+        if (!localStorage) {
+          return null;
+        } else {
+          base64 = localStorage.getItem(key);
+          if (base64) {
+            return base64;
+          } else {
+            Plugin.prototype.setImageToLocalStorage(key);
+            return null;
+          }
         }
-        return _results;
       };
 
-      Plugin.prototype.convertBase64 = function(key) {
-        return console.log("convert");
+      Plugin.prototype.setImageToLocalStorage = function(key) {
+        var canvas, image;
+        canvas = document.createElement("canvas");
+        if (!canvas || !canvas.getContext || !canvas.getContext("2d")) {
+          return;
+        }
+        image = new Image();
+        image.src = $.emojiarea.path + key + ".svg";
+        return image.onload = function() {
+          var base64;
+          canvas = document.createElement("canvas");
+          canvas.width = this.width;
+          canvas.height = this.height;
+          canvas.getContext("2d").drawImage(this, 0, 0);
+          base64 = canvas.toDataURL();
+          localStorage.setItem(key, base64);
+        };
       };
 
       Plugin.prototype.setEmojiIcon = function(emojis_data, element, emoji_regexps) {

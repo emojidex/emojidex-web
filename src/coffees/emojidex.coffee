@@ -41,22 +41,12 @@ do ($ = jQuery, window, document) ->
       #     console.log data["emoji"][5]
       #     return
 
-      # $.ajax
-      #   url: "https://www.emojidex.com/api/v1/emoji/emojidex_keyboard"
-      #   dataType: "JSONP"
-      #   jsonpCallback: "callback"
-      #   type: "GET"
-      #   success: (data) ->
-      #     console.log data
-      #     return
-
       $.emojiarea.path = options.path_img
       # get json date
       $.getJSON options.path_json, (emojis_data) ->
         emojis_data = Plugin::getCategorizedData emojis_data
         $.emojiarea.icons = emojis_data
         emoji_regexps = Plugin::setEmojiCSS_getEmojiRegexps emojis_data
-        Plugin::setLocalStorage emojis_data
         Plugin::setEmojiIcon emojis_data, element, emoji_regexps
 
     getCategorizedData: (emojis_data) ->
@@ -67,32 +57,6 @@ do ($ = jQuery, window, document) ->
         else
           new_emojis_data[emoji.category].push emoji
       return new_emojis_data
-
-    getEmojiDataFromAPI: (emojis_data) ->
-      url = "https://www.emojidex.com/api/v1/emoji/puni_pink"
-      # image_url = "https://www.emojidex.com/emoji/puni_pink.png"
-      # $.getJSON url, (data) ->
-      #   console.log "in"
-      # xhr = new XMLHttpRequest()
-      # xhr.open("GET", url)
-      # xhr.send()
-      # xhr.responseType = "json"
-      # xhr.onload = ->
-      #   console.log "in2"
-      # xhr.onerror = ->
-      #   console.log "in3"
-
-      # xhr.onreadystatechange = ->
-      #   console.log "in"
-      #   console.log xhr.response
-      #   json_data = xhr.response
-      #   console.log json_data
-
-      # xhr.onload = (event) ->
-      #   arrayBuffer = xhr.responseText;
-      #   console.log arraybuffer
-
-      # return
 
     setEmojiCSS_getEmojiRegexps: (emojis_data) ->
       regexp_for_utf = ""
@@ -106,38 +70,39 @@ do ($ = jQuery, window, document) ->
           regexp_for_utf += emoji.moji + "|"
           regexp_for_code += emoji.code + "|"
 
-          emojis_css.append "i.emojidex-" + emoji.moji + " {background-image: url('" + $.emojiarea.path + emoji.code + ".svg')}"
+          base64 = Plugin::loadImageFromLocalStorage emoji.code
+          if base64
+            emojis_css.append "i.emojidex-" + emoji.moji + " {background-image: url('" + base64 + "')}"
+          else
+            emojis_css.append "i.emojidex-" + emoji.moji + " {background-image: url('" + $.emojiarea.path + emoji.code + ".svg')}"
 
       $("head").append emojis_css
       return [regexp_for_utf.slice(0, -1), regexp_for_code.slice(0, -1) + "):"]
+      
+    loadImageFromLocalStorage: (key) ->
+      unless localStorage
+        return null
+      else
+        base64 = localStorage.getItem key
+        if base64
+          return base64
+        else
+          Plugin::setImageToLocalStorage key
+          return null
 
-    setLocalStorage: (emojis_data) ->
-      for category of emojis_data
-        for emoji in emojis_data[category]
-          key = emoji["code"]
-          # localStorage.setItem key, (Plugin::convertBase64 key)
-
-    convertBase64: (key) ->
-      console.log "convert"
-      # canvas = document.createElement("canvas")
-      #     return  if not canvas or not canvas.getContext or not canvas.getContext("2d")
-      #     image = new Image()
-      #     image.src = src
-      #     image.onload = ->
-            
-      #       # 画像をbase64にするためにCanvasを利用するので、
-      #       # クロスドメインの画像は無理かも。。
-      #       canvas = document.createElement("canvas")
-      #       canvas.width = @width
-      #       canvas.height = @height
-      #       canvas.getContext("2d").drawImage this, 0, 0
-      #       base64 = canvas.toDataURL()
-      #       storage.setItem createKey(src), base64
-      #       return
-
-      #     return
-          
-
+    setImageToLocalStorage: (key) ->
+      canvas = document.createElement("canvas")
+      return if not canvas or not canvas.getContext or not canvas.getContext("2d")
+      image = new Image()
+      image.src = $.emojiarea.path + key + ".svg"
+      image.onload = ->
+        canvas = document.createElement("canvas")
+        canvas.width = @width
+        canvas.height = @height
+        canvas.getContext("2d").drawImage this, 0, 0
+        base64 = canvas.toDataURL()
+        localStorage.setItem key, base64
+        return
 
     setEmojiIcon: (emojis_data, element, emoji_regexps) ->
       getEmojiTag = (emoji_utf) ->
