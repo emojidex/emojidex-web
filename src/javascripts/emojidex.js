@@ -164,7 +164,7 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
             emojis.push(emoji.code);
           }
         }
-        emojis = $.map(emojis, function(value, i) {
+        emojis = $.map(emojis, function(value) {
           return {
             key: value,
             name: value
