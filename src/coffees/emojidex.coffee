@@ -1,16 +1,18 @@
-# emojidex coffee plugin for jQuery/Zepto and compatible
-#
-# =LICENSE=
-# When used with the emojidex service enabled this library is
-#   licensed under:
-#   * LGPL[https://www.gnu.org/licenses/lgpl.html].
-# When modified to not use the emojidex service this library is
-#   dual licensed under:
-#   * GPL v3[https://www.gnu.org/licenses/gpl.html]
-#   * AGPL v3[https://www.gnu.org/licenses/agpl.html]
-# 
-# The
-# Copyright 2013 Genshin Souzou Kabushiki Kaisha
+###
+emojidex coffee plugin for jQuery/Zepto and compatible
+
+=LICENSE=
+When used with the emojidex service enabled this library is
+  licensed under:
+  * LGPL[https://www.gnu.org/licenses/lgpl.html].
+When modified to not use the emojidex service this library is
+  dual licensed under:
+  * GPL v3[https://www.gnu.org/licenses/gpl.html]
+  * AGPL v3[https://www.gnu.org/licenses/agpl.html]
+
+The
+Copyright 2013 Genshin Souzou Kabushiki Kaisha
+###
 
 do ($ = jQuery, window, document) ->
   pluginName = "emojidex"
@@ -32,10 +34,12 @@ do ($ = jQuery, window, document) ->
     loadEmojidexJSON: (element, options) ->
       $.emojiarea.path = options.path_img
 
+      # get jsonp date use api
+      # Plugin::getEmojiDataFromAPI
+
       # get json date
       $.getJSON options.path_json, (emojis_data) ->
         emojis_data = Plugin::getCategorizedData emojis_data
-        # Plugin::getEmojiDataFromAPI emojis_data
         $.emojiarea.icons = emojis_data
         emoji_regexps = Plugin::setEmojiCSS_getEmojiRegexps emojis_data
         Plugin::setEmojiIcon emojis_data, element, emoji_regexps
@@ -50,31 +54,20 @@ do ($ = jQuery, window, document) ->
           new_emojis_data[emoji.category].push emoji
       return new_emojis_data
 
-    getEmojiDataFromAPI: (emojis_data) ->
-      url = "https://www.emojidex.com/api/v1/emoji/puni_pink"
-      # image_url = "https://www.emojidex.com/emoji/puni_pink.png"
-      # $.getJSON url, (data) ->
-      #   console.log "in"
-      # xhr = new XMLHttpRequest()
-      # xhr.open("GET", url)
-      # xhr.send()
-      # xhr.responseType = "json"
-      # xhr.onload = ->
-      #   console.log "in2"
-      # xhr.onerror = ->
-      #   console.log "in3"
-
-      # xhr.onreadystatechange = ->
-      #   console.log "in"
-      #   console.log xhr.response
-      #   json_data = xhr.response
-      #   console.log json_data
-
-      # xhr.onload = (event) ->
-      #   arrayBuffer = xhr.responseText;
-      #   console.log arraybuffer
-
-      # return
+    getEmojiDataFromAPI: (path_json) ->
+      $.ajax
+        url: "https://www.emojidex.com/api/v1/emoji"
+        dataType: "jsonp"
+        jsonpCallback: "callback"
+        type: "get"
+        success: (emojis_data) ->
+          console.log "success: load jsonp"
+          console.log emojis_data
+          return
+        error: (data) ->
+          console.log "error: load jsonp"
+          console.log data
+          return
 
     setEmojiCSS_getEmojiRegexps: (emojis_data) ->
       regexp_for_utf = ""

@@ -508,6 +508,23 @@ governing permissions and limitations under the License.
 
 }).call(this);
 
+/*
+emojidex coffee plugin for jQuery/Zepto and compatible
+
+=LICENSE=
+When used with the emojidex service enabled this library is
+  licensed under:
+  * LGPL[https://www.gnu.org/licenses/lgpl.html].
+When modified to not use the emojidex service this library is
+  dual licensed under:
+  * GPL v3[https://www.gnu.org/licenses/gpl.html]
+  * AGPL v3[https://www.gnu.org/licenses/agpl.html]
+
+The
+Copyright 2013 Genshin Souzou Kabushiki Kaisha
+*/
+
+
 (function() {
   (function($, window, document) {
     var Plugin, defaults, pluginName;
@@ -555,9 +572,21 @@ governing permissions and limitations under the License.
         return new_emojis_data;
       };
 
-      Plugin.prototype.getEmojiDataFromAPI = function(emojis_data) {
-        var url;
-        return url = "https://www.emojidex.com/api/v1/emoji/puni_pink";
+      Plugin.prototype.getEmojiDataFromAPI = function(path_json) {
+        return $.ajax({
+          url: "https://www.emojidex.com/api/v1/emoji",
+          dataType: "jsonp",
+          jsonpCallback: "callback",
+          type: "get",
+          success: function(emojis_data) {
+            console.log("success: load jsonp");
+            console.log(emojis_data);
+          },
+          error: function(data) {
+            console.log("error: load jsonp");
+            console.log(data);
+          }
+        });
       };
 
       Plugin.prototype.setEmojiCSS_getEmojiRegexps = function(emojis_data) {
