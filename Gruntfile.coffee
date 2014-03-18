@@ -18,16 +18,19 @@ module.exports = (grunt) ->
     
     # CoffeeScript compilation
     coffee:
-      compile:
-        files:
-          "dist/jquery.emojidex.js": "src/jquery.emojidex.coffee"
-
+      glob_to_multiple:
+        expand: true
+        cwd: 'src/coffees/'
+        src: ['**/*.coffee']
+        dest: 'src/javascripts/'
+        rename: (dest, src) ->
+          return dest + '/' + src.replace(/\.coffee$/, '.js')
 
     # Concat definitions
     concat:
       dist:
-        src: ["src/jquery.emojidex.js"]
-        dest: "dist/jquery.emojidex.js"
+        src: ["src/javascripts/**/*.js", "src/assets/libs/At.js/js/jquery.atwho.min.js", "src/assets/libs/Caret.js/src/jquery.caret.js"]
+        dest: "dist/emojidex.js"
 
       options:
         banner: "<%= meta.banner %>"
@@ -35,15 +38,15 @@ module.exports = (grunt) ->
     # Minify definitions
     uglify:
       my_target:
-        src: ["dist/jquery.emojidex.js"]
-        dest: "dist/jquery.emojidex.min.js"
+        src: ["dist/emojidex.js"]
+        dest: "dist/emojidex.min.js"
 
       options:
         banner: "<%= meta.banner %>"
     
     # Watch definitions
     watch:
-      files: ["src/**/*.coffee"]
+      files: ["src/coffees/**/*.coffee"]
       tasks: ["coffee", "concat", "uglify"]
 
     # Lint definitions
