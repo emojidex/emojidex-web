@@ -86,7 +86,7 @@ class EmojisLoaderPOE extends EmojisLoader
 class EmojisLoaderAPI extends EmojisLoader
   constructor: (@json_url) ->
     super
-    console.log 222
+    console.log "EmojisLoaderAPI --- start ---"
 
 do ($ = jQuery, window, document) ->
   pluginName = "emojidex"

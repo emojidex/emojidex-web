@@ -22,7 +22,7 @@ module.exports = (grunt) ->
         expand: true
         cwd: 'src/coffees/'
         src: ['all.coffee']
-        dest: 'src/javascripts/'
+        dest: 'src/compiled_js/'
         rename: (dest, src) ->
           return dest + '/' + src.replace(/\.coffee$/, '.js')
 
@@ -30,7 +30,8 @@ module.exports = (grunt) ->
     concat:
       src_coffee:
         src:[
-          'src/coffee/**/*.coffee'
+          'src/coffees/scripts/emojidex.coffee'
+          'src/coffees/scripts/**/*.coffee'
         ]
         dest: 'src/coffees/all.coffee'
 
@@ -38,7 +39,7 @@ module.exports = (grunt) ->
         options:
           banner: '<%= meta.banner %>'
         src: [
-          'src/javascripts/**/*.js'
+          'src/compiled_js/**/*.js'
           'src/assets/libs/At.js/js/jquery.atwho.min.js'
           'src/assets/libs/Caret.js/src/jquery.caret.js'
         ]
