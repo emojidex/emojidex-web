@@ -144,10 +144,10 @@ do ($ = jQuery, window, document) ->
       for category of emojis_data
         for emoji in emojis_data[category]
           emojis.push emoji.code
-      emojis = $.map(emojis, (value, i) ->
+      emojis = $.map emojis, (value) ->
         key: value
         name: value
-      )
+
       emoji_config =
         at: ":"
         data: emojis
