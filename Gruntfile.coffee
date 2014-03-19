@@ -21,19 +21,29 @@ module.exports = (grunt) ->
       glob_to_multiple:
         expand: true
         cwd: 'src/coffees/'
-        src: ['**/*.coffee']
+        src: ['all.coffee']
         dest: 'src/javascripts/'
         rename: (dest, src) ->
           return dest + '/' + src.replace(/\.coffee$/, '.js')
 
     # Concat definitions
     concat:
-      dist:
-        src: ["src/javascripts/**/*.js", "src/assets/libs/At.js/js/jquery.atwho.min.js", "src/assets/libs/Caret.js/src/jquery.caret.js"]
-        dest: "dist/emojidex.js"
-
       options:
         banner: "<%= meta.banner %>"
+      
+      src_coffee:
+        src:[
+          "src/coffee/**/*.coffee"
+        ]
+        dest: "all.coffee"
+
+      src_js:
+        src: [
+          "src/javascripts/**/*.js"
+          "src/assets/libs/At.js/js/jquery.atwho.min.js"
+          "src/assets/libs/Caret.js/src/jquery.caret.js"
+        ]
+        dest: "dist/emojidex.js"
     
     # Minify definitions
     uglify:
@@ -47,7 +57,7 @@ module.exports = (grunt) ->
     # Watch definitions
     watch:
       files: ["src/coffees/**/*.coffee"]
-      tasks: ["coffee", "concat", "uglify"]
+      tasks: ["concat:src_coffee", "coffee", "concat", "uglify"]
 
     # Lint definitions
     # jshint:
