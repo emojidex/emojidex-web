@@ -41,16 +41,53 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
       function Plugin(element, options) {
         var _this = this;
         this.element = element;
+        this.emojis_data_array = [];
         this.options = $.extend({}, defaults, options);
         this._defaults = defaults;
         this._name = pluginName;
         this.setEmojiarea(this.options);
         $.emojiarea.path = options.path_img;
         this.poe_emojis = new EmojisLoaderPOE(this.element, this.options);
-        this.poe_emojis.load(function(backed_obj) {});
+        this.poe_emojis.load(function() {
+          _this.emojis_data_array.push(_this.poe_emojis.emojis_data);
+          return _this.setAutoComplete(_this.options);
+        });
         this.api_emojis = new EmojisLoaderAPI;
-        this.api_emojis.load(function(backed_obj) {});
+        this.api_emojis.load(function() {
+          _this.emojis_data_array.push(_this.api_emojis.emojis_data);
+          return _this.setAutoComplete(_this.options);
+        });
       }
+
+      Plugin.prototype.setAutoComplete = function(options) {
+        var category, emoji, emoji_config, emojis, emojis_data, _i, _j, _len, _len1, _ref, _ref1;
+        if (this.emojis_data_array.length === 2) {
+          emojis = [];
+          _ref = this.emojis_data_array;
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            emojis_data = _ref[_i];
+            for (category in emojis_data) {
+              _ref1 = emojis_data[category];
+              for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+                emoji = _ref1[_j];
+                emojis.push({
+                  key: emoji.code,
+                  name: emoji.code,
+                  img_url: emoji.img_url
+                });
+              }
+            }
+          }
+          emoji_config = {
+            at: ":",
+            data: emojis,
+            tpl: "<li data-value=':${key}:'><img src='${img_url}' height='20' width='20' /> ${name}</li>",
+            insert_tpl: "<img src='${img_url}' height='20' width='20' />"
+          };
+          options.emojiarea["plaintext"].atwho(emoji_config);
+          return options.emojiarea["wysiwyg"].atwho(emoji_config);
+        }
+      };
 
       Plugin.prototype.setEmojiarea = function(options) {
         options.emojiarea["plaintext"].emojiarea({
@@ -60,32 +97,6 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
           return options.emojiarea["value_output"].text($(this).val());
         });
         return options.emojiarea["wysiwyg"].trigger("change");
-      };
-
-      Plugin.prototype.prepareAutoComplete = function(emojis_data, options) {
-        var category, emoji, emoji_config, emojis, _i, _len, _ref;
-        emojis = [];
-        for (category in emojis_data) {
-          _ref = emojis_data[category];
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            emoji = _ref[_i];
-            emojis.push(emoji.code);
-          }
-        }
-        emojis = $.map(emojis, function(value) {
-          return {
-            key: value,
-            name: value
-          };
-        });
-        emoji_config = {
-          at: ":",
-          data: emojis,
-          tpl: "<li data-value=':${key}:'><img src='../src/assets/img/utf/${name}.svg'  height='20' width='20' /> ${name}</li>",
-          insert_tpl: "<img src='../src/assets/img/utf/${name}.svg' height='20' width='20' />"
-        };
-        options.emojiarea["plaintext"].atwho(emoji_config);
-        return options.emojiarea["wysiwyg"].atwho(emoji_config);
       };
 
       return Plugin;
@@ -106,31 +117,7 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
       return console.log(emojis_data);
     };
 
-    return EmojisLoader;
-
-  })();
-
-  EmojisLoaderAPI = (function(_super) {
-    __extends(EmojisLoaderAPI, _super);
-
-    function EmojisLoaderAPI(json_url) {
-      this.json_url = json_url;
-      EmojisLoaderAPI.__super__.constructor.apply(this, arguments);
-      console.log("EmojisLoaderAPI --- start ---");
-    }
-
-    EmojisLoaderAPI.prototype.load = function(callback) {
-      var onLoadEmojisData,
-        _this = this;
-      onLoadEmojisData = function(emojis_data) {
-        _this.emojis_data = _this.getCategorizedData(emojis_data);
-        return console.log(_this.emojis_data);
-      };
-      this.getEmojiDataFromAPI(onLoadEmojisData);
-      return this;
-    };
-
-    EmojisLoaderAPI.prototype.getCategorizedData = function(emojis_data) {
+    EmojisLoader.prototype.getCategorizedData = function(emojis_data) {
       var emoji, new_emojis_data, _i, _len;
       new_emojis_data = {};
       for (_i = 0, _len = emojis_data.length; _i < _len; _i++) {
@@ -152,65 +139,7 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
       return new_emojis_data;
     };
 
-    EmojisLoaderAPI.prototype.getEmojiDataFromAPI = function(callback) {
-      return $.ajax({
-        url: "https://www.emojidex.com/api/v1/emoji",
-        dataType: "jsonp",
-        jsonpCallback: "callback",
-        type: "get",
-        success: function(emojis_data) {
-          console.log("success: load jsonp");
-          console.log(emojis_data);
-          callback(emojis_data.emoji);
-        },
-        error: function(emojis_data) {
-          console.log("error: load jsonp");
-          console.log(data);
-        }
-      });
-    };
-
-    return EmojisLoaderAPI;
-
-  })(EmojisLoader);
-
-  EmojisLoaderPOE = (function(_super) {
-    __extends(EmojisLoaderPOE, _super);
-
-    function EmojisLoaderPOE(element, options) {
-      this.element = element;
-      this.options = options;
-      EmojisLoaderPOE.__super__.constructor.apply(this, arguments);
-    }
-
-    EmojisLoaderPOE.prototype.load = function(callback) {
-      var onLoadEmojisData,
-        _this = this;
-      onLoadEmojisData = function(emojis_data) {
-        _this.emojis_data = _this.getCategorizedData(emojis_data);
-        _this.emoji_regexps = _this.setEmojiCSS_getEmojiRegexps(_this.emojis_data);
-        _this.setEmojiIcon(_this.emojis_data);
-        return callback(_this);
-      };
-      $.getJSON(this.options.path_json, onLoadEmojisData);
-      return this;
-    };
-
-    EmojisLoaderPOE.prototype.getCategorizedData = function(emojis_data) {
-      var emoji, new_emojis_data, _i, _len;
-      new_emojis_data = {};
-      for (_i = 0, _len = emojis_data.length; _i < _len; _i++) {
-        emoji = emojis_data[_i];
-        if (new_emojis_data[emoji.category] == null) {
-          new_emojis_data[emoji.category] = [emoji];
-        } else {
-          new_emojis_data[emoji.category].push(emoji);
-        }
-      }
-      return new_emojis_data;
-    };
-
-    EmojisLoaderPOE.prototype.setEmojiCSS_getEmojiRegexps = function(emojis_data) {
+    EmojisLoader.prototype.setEmojiCSS_getEmojiRegexps = function(emojis_data) {
       var category, emoji, emojis_css, emojis_in_category, regexp_for_code, regexp_for_utf, _i, _len;
       regexp_for_utf = "";
       regexp_for_code = ":(";
@@ -221,14 +150,14 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
           emoji = emojis_in_category[_i];
           regexp_for_utf += emoji.moji + "|";
           regexp_for_code += emoji.code + "|";
-          emojis_css.append("i.emojidex-" + emoji.moji + " {background-image: url('" + $.emojiarea.path + emoji.code + ".svg')}");
+          emojis_css.append("i.emojidex-" + emoji.moji + " {background-image: url('" + emoji.img_url + "')}");
         }
       }
       $("head").append(emojis_css);
       return [regexp_for_utf.slice(0, -1), regexp_for_code.slice(0, -1) + "):"];
     };
 
-    EmojisLoaderPOE.prototype.setEmojiIcon = function(emojis_data) {
+    EmojisLoader.prototype.setEmojiIcon = function(emojis_data) {
       var getEmojiTag, replaceForCode, replaceForUTF,
         _this = this;
       getEmojiTag = function(emoji_utf) {
@@ -263,6 +192,78 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
         replaced_string = replaceForCode(replaced_string, emojis_data);
         return $(this).replaceWith(replaced_string);
       });
+    };
+
+    return EmojisLoader;
+
+  })();
+
+  EmojisLoaderAPI = (function(_super) {
+    __extends(EmojisLoaderAPI, _super);
+
+    function EmojisLoaderAPI(json_url) {
+      this.json_url = json_url;
+      EmojisLoaderAPI.__super__.constructor.apply(this, arguments);
+    }
+
+    EmojisLoaderAPI.prototype.load = function(callback) {
+      var onLoadEmojisData,
+        _this = this;
+      onLoadEmojisData = function(emojis_data) {
+        var emoji, _i, _len;
+        for (_i = 0, _len = emojis_data.length; _i < _len; _i++) {
+          emoji = emojis_data[_i];
+          emoji.img_url = "http://assets.emojidex.com/emoji/" + emoji.code + "/px32.png";
+        }
+        _this.emojis_data = _this.getCategorizedData(emojis_data);
+        return callback(_this);
+      };
+      this.getEmojiDataFromAPI(onLoadEmojisData);
+      return this;
+    };
+
+    EmojisLoaderAPI.prototype.getEmojiDataFromAPI = function(callback) {
+      return $.ajax({
+        url: "https://www.emojidex.com/api/v1/emoji",
+        dataType: "jsonp",
+        jsonpCallback: "callback",
+        type: "get",
+        success: function(emojis_data) {
+          callback(emojis_data.emoji);
+        },
+        error: function(emojis_data) {}
+      });
+    };
+
+    return EmojisLoaderAPI;
+
+  })(EmojisLoader);
+
+  EmojisLoaderPOE = (function(_super) {
+    __extends(EmojisLoaderPOE, _super);
+
+    function EmojisLoaderPOE(element, options) {
+      this.element = element;
+      this.options = options;
+      EmojisLoaderPOE.__super__.constructor.apply(this, arguments);
+    }
+
+    EmojisLoaderPOE.prototype.load = function(callback) {
+      var onLoadEmojisData,
+        _this = this;
+      onLoadEmojisData = function(emojis_data) {
+        var emoji, _i, _len;
+        for (_i = 0, _len = emojis_data.length; _i < _len; _i++) {
+          emoji = emojis_data[_i];
+          emoji.img_url = _this.options.path_img + emoji.code + ".svg";
+        }
+        _this.emojis_data = _this.getCategorizedData(emojis_data);
+        _this.emoji_regexps = _this.setEmojiCSS_getEmojiRegexps(_this.emojis_data);
+        _this.setEmojiIcon(_this.emojis_data);
+        return callback(_this);
+      };
+      $.getJSON(this.options.path_json, onLoadEmojisData);
+      return this;
     };
 
     return EmojisLoaderPOE;

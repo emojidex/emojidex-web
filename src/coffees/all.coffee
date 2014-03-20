@@ -29,7 +29,8 @@ do ($ = jQuery, window, document) ->
 
   class Plugin
     constructor: (@element, options) ->
-      # start main --------
+      @emojis_data_array = []
+
       @options = $.extend {}, defaults, options
       @_defaults = defaults
       @_name = pluginName
@@ -38,13 +39,33 @@ do ($ = jQuery, window, document) ->
       $.emojiarea.path = options.path_img
       
       @poe_emojis = new EmojisLoaderPOE @element, @options
-      @poe_emojis.load (backed_obj)->
-        # console.log loaded.emojis_data
+      @poe_emojis.load =>
+        @emojis_data_array.push @poe_emojis.emojis_data
+        @setAutoComplete @options
 
       @api_emojis = new EmojisLoaderAPI
-      @api_emojis.load (backed_obj)=>
-        # console.log 333
-        # console.log @api_emojis
+      @api_emojis.load =>
+        @emojis_data_array.push @api_emojis.emojis_data
+        @setAutoComplete @options
+
+    setAutoComplete: (options) ->
+      if @emojis_data_array.length is 2  
+        emojis = []
+        for emojis_data in @emojis_data_array
+          for category of emojis_data
+            for emoji in emojis_data[category]
+              emojis.push
+                key: emoji.code
+                name: emoji.code
+                img_url: emoji.img_url
+        
+        emoji_config =
+          at: ":"
+          data: emojis
+          tpl: "<li data-value=':${key}:'><img src='${img_url}' height='20' width='20' /> ${name}</li>"
+          insert_tpl: "<img src='${img_url}' height='20' width='20' />"
+        options.emojiarea["plaintext"].atwho(emoji_config)
+        options.emojiarea["wysiwyg"].atwho(emoji_config)
 
     setEmojiarea: (options) ->
       options.emojiarea["plaintext"].emojiarea wysiwyg: false
@@ -53,23 +74,6 @@ do ($ = jQuery, window, document) ->
         options.emojiarea["value_output"].text $(this).val()
       options.emojiarea["wysiwyg"].trigger "change"
 
-    prepareAutoComplete: (emojis_data, options) ->
-      emojis = []
-      for category of emojis_data
-        for emoji in emojis_data[category]
-          emojis.push emoji.code
-      emojis = $.map emojis, (value) ->
-        key: value
-        name: value
-
-      emoji_config =
-        at: ":"
-        data: emojis
-        tpl: "<li data-value=':${key}:'><img src='../src/assets/img/utf/${name}.svg'  height='20' width='20' /> ${name}</li>"
-        insert_tpl: "<img src='../src/assets/img/utf/${name}.svg' height='20' width='20' />"
-      options.emojiarea["plaintext"].atwho(emoji_config)
-      options.emojiarea["wysiwyg"].atwho(emoji_config)
-
 class EmojisLoader
   emojis_data: null
   element: null
@@ -77,20 +81,6 @@ class EmojisLoader
 
   loadedEmojisData: (emojis_data)->
     console.log emojis_data
-class EmojisLoaderAPI extends EmojisLoader
-  constructor: (@json_url) ->
-    super
-    console.log "EmojisLoaderAPI --- start ---"
-
-  load: (callback)->
-    onLoadEmojisData = (emojis_data) =>
-      @emojis_data = @getCategorizedData emojis_data
-      console.log @emojis_data
-      # @emoji_regexps = @setEmojiCSS_getEmojiRegexps @emojis_data
-      # @setEmojiIcon @emojis_data
-
-    @getEmojiDataFromAPI onLoadEmojisData
-    @
 
   getCategorizedData: (emojis_data) ->
     new_emojis_data = {}
@@ -110,46 +100,6 @@ class EmojisLoaderAPI extends EmojisLoader
 
     return new_emojis_data
 
-  getEmojiDataFromAPI: (callback) ->
-    $.ajax
-      url: "https://www.emojidex.com/api/v1/emoji"
-      dataType: "jsonp"
-      jsonpCallback: "callback"
-      type: "get"
-      success: (emojis_data) ->
-        console.log "success: load jsonp"
-        console.log emojis_data
-        callback emojis_data.emoji
-        return
-      error: (emojis_data) ->
-        console.log "error: load jsonp"
-        console.log data
-        return
-class EmojisLoaderPOE extends EmojisLoader
-  constructor: (@element, @options) ->
-    super
-
-  load: (callback) ->
-    onLoadEmojisData = (emojis_data) =>
-      @emojis_data = @getCategorizedData emojis_data
-      @emoji_regexps = @setEmojiCSS_getEmojiRegexps @emojis_data
-      @setEmojiIcon @emojis_data
-      callback @
-      # Plugin::prepareAutoComplete emojis_data, options
-      
-    # start main --------
-    $.getJSON @options.path_json, onLoadEmojisData
-    @
-
-  getCategorizedData: (emojis_data) ->
-    new_emojis_data = {}
-    for emoji in emojis_data
-      unless new_emojis_data[emoji.category]? 
-        new_emojis_data[emoji.category] = [emoji]
-      else
-        new_emojis_data[emoji.category].push emoji
-    return new_emojis_data
-
   setEmojiCSS_getEmojiRegexps: (emojis_data) ->
     regexp_for_utf = ""
     regexp_for_code = ":("
@@ -160,7 +110,7 @@ class EmojisLoaderPOE extends EmojisLoader
       for emoji in emojis_in_category
         regexp_for_utf += emoji.moji + "|"
         regexp_for_code += emoji.code + "|"
-        emojis_css.append "i.emojidex-" + emoji.moji + " {background-image: url('" + $.emojiarea.path + emoji.code + ".svg')}"
+        emojis_css.append "i.emojidex-" + emoji.moji + " {background-image: url('" + emoji.img_url + "')}"
     $("head").append emojis_css
     
     return [regexp_for_utf.slice(0, -1), regexp_for_code.slice(0, -1) + "):"]
@@ -189,6 +139,56 @@ class EmojisLoaderPOE extends EmojisLoader
       replaced_string = replaceForUTF replaced_string
       replaced_string = replaceForCode replaced_string, emojis_data
       $(@).replaceWith replaced_string
+
+class EmojisLoaderAPI extends EmojisLoader
+  constructor: (@json_url) ->
+    super
+
+  load: (callback)->
+    onLoadEmojisData = (emojis_data) =>
+      for emoji in emojis_data
+        emoji.img_url = "http://assets.emojidex.com/emoji/" + emoji.code + "/px32.png"
+
+      @emojis_data = @getCategorizedData emojis_data
+      callback @
+      # @emoji_regexps = @setEmojiCSS_getEmojiRegexps @emojis_data
+      # @setEmojiIcon @emojis_data
+
+    @getEmojiDataFromAPI onLoadEmojisData
+    @
+
+  getEmojiDataFromAPI: (callback) ->
+    $.ajax
+      url: "https://www.emojidex.com/api/v1/emoji"
+      dataType: "jsonp"
+      jsonpCallback: "callback"
+      type: "get"
+      success: (emojis_data) ->
+        # console.log "success: load jsonp"
+        # console.log emojis_data
+        callback emojis_data.emoji
+        return
+      error: (emojis_data) ->
+        # console.log "error: load jsonp"
+        # console.log data
+        return
+class EmojisLoaderPOE extends EmojisLoader
+  constructor: (@element, @options) ->
+    super
+
+  load: (callback) ->
+    onLoadEmojisData = (emojis_data) =>
+      for emoji in emojis_data
+        emoji.img_url = @options.path_img + emoji.code + ".svg"
+
+      @emojis_data = @getCategorizedData emojis_data
+      @emoji_regexps = @setEmojiCSS_getEmojiRegexps @emojis_data
+      @setEmojiIcon @emojis_data
+      callback @
+      
+    # start main --------
+    $.getJSON @options.path_json, onLoadEmojisData
+    @
 
 ###
 emojiarea.poe

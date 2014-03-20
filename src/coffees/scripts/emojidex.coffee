@@ -29,7 +29,8 @@ do ($ = jQuery, window, document) ->
 
   class Plugin
     constructor: (@element, options) ->
-      # start main --------
+      @emojis_data_array = []
+
       @options = $.extend {}, defaults, options
       @_defaults = defaults
       @_name = pluginName
@@ -38,13 +39,33 @@ do ($ = jQuery, window, document) ->
       $.emojiarea.path = options.path_img
       
       @poe_emojis = new EmojisLoaderPOE @element, @options
-      @poe_emojis.load (backed_obj)->
-        # console.log loaded.emojis_data
+      @poe_emojis.load =>
+        @emojis_data_array.push @poe_emojis.emojis_data
+        @setAutoComplete @options
 
       @api_emojis = new EmojisLoaderAPI
-      @api_emojis.load (backed_obj)=>
-        # console.log 333
-        # console.log @api_emojis
+      @api_emojis.load =>
+        @emojis_data_array.push @api_emojis.emojis_data
+        @setAutoComplete @options
+
+    setAutoComplete: (options) ->
+      if @emojis_data_array.length is 2  
+        emojis = []
+        for emojis_data in @emojis_data_array
+          for category of emojis_data
+            for emoji in emojis_data[category]
+              emojis.push
+                key: emoji.code
+                name: emoji.code
+                img_url: emoji.img_url
+        
+        emoji_config =
+          at: ":"
+          data: emojis
+          tpl: "<li data-value=':${key}:'><img src='${img_url}' height='20' width='20' /> ${name}</li>"
+          insert_tpl: "<img src='${img_url}' height='20' width='20' />"
+        options.emojiarea["plaintext"].atwho(emoji_config)
+        options.emojiarea["wysiwyg"].atwho(emoji_config)
 
     setEmojiarea: (options) ->
       options.emojiarea["plaintext"].emojiarea wysiwyg: false
@@ -52,20 +73,3 @@ do ($ = jQuery, window, document) ->
       options.emojiarea["wysiwyg"].on "change", ->
         options.emojiarea["value_output"].text $(this).val()
       options.emojiarea["wysiwyg"].trigger "change"
-
-    prepareAutoComplete: (emojis_data, options) ->
-      emojis = []
-      for category of emojis_data
-        for emoji in emojis_data[category]
-          emojis.push emoji.code
-      emojis = $.map emojis, (value) ->
-        key: value
-        name: value
-
-      emoji_config =
-        at: ":"
-        data: emojis
-        tpl: "<li data-value=':${key}:'><img src='../src/assets/img/utf/${name}.svg'  height='20' width='20' /> ${name}</li>"
-        insert_tpl: "<img src='../src/assets/img/utf/${name}.svg' height='20' width='20' />"
-      options.emojiarea["plaintext"].atwho(emoji_config)
-      options.emojiarea["wysiwyg"].atwho(emoji_config)
