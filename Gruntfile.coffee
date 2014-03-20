@@ -2,63 +2,73 @@ module.exports = (grunt) ->
   grunt.initConfig
     
     # Import package manifest
-    pkg: grunt.file.readJSON("emojidex.jquery.json")
+    pkg: grunt.file.readJSON('emojidex.jquery.json')
     
     # Banner definitions
     meta:
       banner:
-        "/*\n" +
-        " *  <%= pkg.title || pkg.name %> - v<%= pkg.version %>\n" +
-        " *  <%= pkg.description %>\n" +
-        " *  <%= pkg.homepage %>\n" +
-        " *\n" +
-        " *  Made by <%= pkg.author.name %>\n" +
-        " *  Under <%= pkg.licenses[0].type %> License\n" +
-        " */\n"
+        '/*\n' +
+        ' *  <%= pkg.title || pkg.name %> - v<%= pkg.version %>\n' +
+        ' *  <%= pkg.description %>\n' +
+        ' *  <%= pkg.homepage %>\n' +
+        ' *\n' +
+        ' *  Made by <%= pkg.author.name %>\n' +
+        ' *  Under <%= pkg.licenses[0].type %> License\n' +
+        ' */\n'
     
     # CoffeeScript compilation
     coffee:
       glob_to_multiple:
         expand: true
         cwd: 'src/coffees/'
-        src: ['**/*.coffee']
-        dest: 'src/javascripts/'
+        src: ['all.coffee']
+        dest: 'src/compiled_js/'
         rename: (dest, src) ->
           return dest + '/' + src.replace(/\.coffee$/, '.js')
 
     # Concat definitions
     concat:
-      dist:
-        src: ["src/javascripts/**/*.js", "src/assets/libs/At.js/js/jquery.atwho.min.js", "src/assets/libs/Caret.js/src/jquery.caret.js"]
-        dest: "dist/emojidex.js"
+      src_coffee:
+        src:[
+          'src/coffees/scripts/emojidex.coffee'
+          'src/coffees/scripts/**/*.coffee'
+        ]
+        dest: 'src/coffees/all.coffee'
 
-      options:
-        banner: "<%= meta.banner %>"
+      src_js:
+        options:
+          banner: '<%= meta.banner %>'
+        src: [
+          'src/compiled_js/**/*.js'
+          'src/assets/libs/At.js/js/jquery.atwho.min.js'
+          'src/assets/libs/Caret.js/src/jquery.caret.js'
+        ]
+        dest: 'dist/emojidex.js'
     
     # Minify definitions
     uglify:
       my_target:
-        src: ["dist/emojidex.js"]
-        dest: "dist/emojidex.min.js"
+        src: ['dist/emojidex.js']
+        dest: 'dist/emojidex.min.js'
 
       options:
-        banner: "<%= meta.banner %>"
+        banner: '<%= meta.banner %>'
     
     # Watch definitions
     watch:
-      files: ["src/coffees/**/*.coffee"]
-      tasks: ["coffee", "concat", "uglify"]
+      files: ['src/coffees/**/*.coffee']
+      tasks: ['concat:src_coffee', 'coffee', 'concat:src_js', 'uglify']
 
     # Lint definitions
     # jshint:
-    #   files: ["src/jquery.emojidex.js"]
+    #   files: ['src/jquery.emojidex.js']
     #   options:
-    #     jshintrc: ".jshintrc"
+    #     jshintrc: '.jshintrc'
 
-  grunt.loadNpmTasks "grunt-contrib-coffee"
-  grunt.loadNpmTasks "grunt-contrib-concat"
-  grunt.loadNpmTasks "grunt-contrib-uglify"
-  grunt.loadNpmTasks "grunt-contrib-watch"
-  # grunt.loadNpmTasks "grunt-contrib-jshint"
-  grunt.registerTask "default", ["coffee", "concat", "uglify"]
-  grunt.registerTask "travis", ["jshint"]
+  grunt.loadNpmTasks 'grunt-contrib-coffee'
+  grunt.loadNpmTasks 'grunt-contrib-concat'
+  grunt.loadNpmTasks 'grunt-contrib-uglify'
+  grunt.loadNpmTasks 'grunt-contrib-watch'
+  grunt.registerTask 'default', ['concat:src_coffee', 'coffee', 'concat:src_js', 'uglify']
+  # grunt.loadNpmTasks 'grunt-contrib-jshint'
+  # grunt.registerTask 'travis', ['jshint']

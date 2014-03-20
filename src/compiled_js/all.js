@@ -1,24 +1,295 @@
 /*
-emojiarea.poe
-@author Yusuke Matsui
+emojidex coffee plugin for jQuery/Zepto and compatible
 
-emojiarea - A rich textarea control that supports emojis, WYSIWYG-style.
-Copyright (c) 2012 DIY Co
+=LICENSE=
+When used with the emojidex service enabled this library is
+  licensed under:
+  * LGPL[https://www.gnu.org/licenses/lgpl.html].
+When modified to not use the emojidex service this library is
+  dual licensed under:
+  * GPL v3[https://www.gnu.org/licenses/gpl.html]
+  * AGPL v3[https://www.gnu.org/licenses/agpl.html]
 
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
-file except in compliance with the License. You may obtain a copy of the License at:
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
-ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-
-@author Brian Reavis <brian@diy.org>
+The
+Copyright 2013 Genshin Souzou Kabushiki Kaisha
 */
 
 
 (function() {
+  var EmojisLoader, EmojisLoaderAPI, EmojisLoaderPOE,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  (function($, window, document) {
+    var Plugin, defaults, pluginName;
+    pluginName = "emojidex";
+    defaults = {
+      emojiarea: {
+        plaintext: "emojidex-plaintext",
+        wysiwyg: "emojidex-wysiwyg",
+        value_output: "emojidex-rawtext"
+      }
+    };
+    $.fn[pluginName] = function(options) {
+      return this.each(function() {
+        if (!$.data(this, "plugin_" + pluginName)) {
+          return $.data(this, "plugin_" + pluginName, new Plugin(this, options));
+        }
+      });
+    };
+    return Plugin = (function() {
+      function Plugin(element, options) {
+        var _this = this;
+        this.element = element;
+        this.emojis_data_array = [];
+        this.options = $.extend({}, defaults, options);
+        this._defaults = defaults;
+        this._name = pluginName;
+        this.setEmojiarea(this.options);
+        $.emojiarea.path = options.path_img;
+        this.poe_emojis = new EmojisLoaderPOE(this.element, this.options);
+        this.poe_emojis.load(function() {
+          _this.emojis_data_array.push(_this.poe_emojis.emojis_data);
+          return _this.setAutoComplete(_this.options);
+        });
+        this.api_emojis = new EmojisLoaderAPI;
+        this.api_emojis.load(function() {
+          _this.emojis_data_array.push(_this.api_emojis.emojis_data);
+          return _this.setAutoComplete(_this.options);
+        });
+      }
+
+      Plugin.prototype.setAutoComplete = function(options) {
+        var category, emoji, emoji_config, emojis, emojis_data, _i, _j, _len, _len1, _ref, _ref1;
+        if (this.emojis_data_array.length === 2) {
+          emojis = [];
+          _ref = this.emojis_data_array;
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            emojis_data = _ref[_i];
+            for (category in emojis_data) {
+              _ref1 = emojis_data[category];
+              for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+                emoji = _ref1[_j];
+                emojis.push({
+                  key: emoji.code,
+                  name: emoji.code,
+                  img_url: emoji.img_url
+                });
+              }
+            }
+          }
+          emoji_config = {
+            at: ":",
+            data: emojis,
+            tpl: "<li data-value=':${key}:'><img src='${img_url}' height='20' width='20' /> ${name}</li>",
+            insert_tpl: "<img src='${img_url}' height='20' width='20' />"
+          };
+          options.emojiarea["plaintext"].atwho(emoji_config);
+          return options.emojiarea["wysiwyg"].atwho(emoji_config);
+        }
+      };
+
+      Plugin.prototype.setEmojiarea = function(options) {
+        options.emojiarea["plaintext"].emojiarea({
+          wysiwyg: false
+        });
+        options.emojiarea["wysiwyg"].on("change", function() {
+          return options.emojiarea["value_output"].text($(this).val());
+        });
+        return options.emojiarea["wysiwyg"].trigger("change");
+      };
+
+      return Plugin;
+
+    })();
+  })(jQuery, window, document);
+
+  EmojisLoader = (function() {
+    function EmojisLoader() {}
+
+    EmojisLoader.prototype.emojis_data = null;
+
+    EmojisLoader.prototype.element = null;
+
+    EmojisLoader.prototype.options = null;
+
+    EmojisLoader.prototype.loadedEmojisData = function(emojis_data) {
+      return console.log(emojis_data);
+    };
+
+    EmojisLoader.prototype.getCategorizedData = function(emojis_data) {
+      var emoji, new_emojis_data, _i, _len;
+      new_emojis_data = {};
+      for (_i = 0, _len = emojis_data.length; _i < _len; _i++) {
+        emoji = emojis_data[_i];
+        if (emoji.category === null) {
+          if (new_emojis_data.uncategorized == null) {
+            new_emojis_data.uncategorized = [emoji];
+          } else {
+            new_emojis_data.uncategorized.push(emoji);
+          }
+        } else {
+          if (new_emojis_data[emoji.category] == null) {
+            new_emojis_data[emoji.category] = [emoji];
+          } else {
+            new_emojis_data[emoji.category].push(emoji);
+          }
+        }
+      }
+      return new_emojis_data;
+    };
+
+    EmojisLoader.prototype.setEmojiCSS_getEmojiRegexps = function(emojis_data) {
+      var category, emoji, emojis_css, emojis_in_category, regexp_for_code, regexp_for_utf, _i, _len;
+      regexp_for_utf = "";
+      regexp_for_code = ":(";
+      emojis_css = $('<style type="text/css" />');
+      for (category in emojis_data) {
+        emojis_in_category = emojis_data[category];
+        for (_i = 0, _len = emojis_in_category.length; _i < _len; _i++) {
+          emoji = emojis_in_category[_i];
+          regexp_for_utf += emoji.moji + "|";
+          regexp_for_code += emoji.code + "|";
+          emojis_css.append("i.emojidex-" + emoji.moji + " {background-image: url('" + emoji.img_url + "')}");
+        }
+      }
+      $("head").append(emojis_css);
+      return [regexp_for_utf.slice(0, -1), regexp_for_code.slice(0, -1) + "):"];
+    };
+
+    EmojisLoader.prototype.setEmojiIcon = function(emojis_data) {
+      var getEmojiTag, replaceForCode, replaceForUTF,
+        _this = this;
+      getEmojiTag = function(emoji_utf) {
+        return '<i class="emojidex-' + emoji_utf + '"></i>';
+      };
+      replaceForUTF = function(replaced_string) {
+        return replaced_string = replaced_string.replace(new RegExp(_this.emoji_regexps[0], "g"), function(matched_string) {
+          return getEmojiTag(matched_string);
+        });
+      };
+      replaceForCode = function(replaced_string, emojis_data) {
+        return replaced_string = replaced_string.replace(new RegExp(_this.emoji_regexps[1], "g"), function(matched_string) {
+          var category, emoji, _i, _len, _ref;
+          matched_string = matched_string.replace(/:/g, "");
+          for (category in emojis_data) {
+            _ref = emojis_data[category];
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              emoji = _ref[_i];
+              if (emoji.code === matched_string) {
+                return getEmojiTag(emoji.moji);
+              }
+            }
+          }
+        });
+      };
+      return $(this.element).find(":not(iframe,textarea,script)").andSelf().contents().filter(function() {
+        return this.nodeType === Node.TEXT_NODE;
+      }).each(function() {
+        var replaced_string;
+        replaced_string = this.textContent;
+        replaced_string = replaceForUTF(replaced_string);
+        replaced_string = replaceForCode(replaced_string, emojis_data);
+        return $(this).replaceWith(replaced_string);
+      });
+    };
+
+    return EmojisLoader;
+
+  })();
+
+  EmojisLoaderAPI = (function(_super) {
+    __extends(EmojisLoaderAPI, _super);
+
+    function EmojisLoaderAPI(json_url) {
+      this.json_url = json_url;
+      EmojisLoaderAPI.__super__.constructor.apply(this, arguments);
+    }
+
+    EmojisLoaderAPI.prototype.load = function(callback) {
+      var onLoadEmojisData,
+        _this = this;
+      onLoadEmojisData = function(emojis_data) {
+        var emoji, _i, _len;
+        for (_i = 0, _len = emojis_data.length; _i < _len; _i++) {
+          emoji = emojis_data[_i];
+          emoji.img_url = "http://assets.emojidex.com/emoji/" + emoji.code + "/px32.png";
+        }
+        _this.emojis_data = _this.getCategorizedData(emojis_data);
+        return callback(_this);
+      };
+      this.getEmojiDataFromAPI(onLoadEmojisData);
+      return this;
+    };
+
+    EmojisLoaderAPI.prototype.getEmojiDataFromAPI = function(callback) {
+      return $.ajax({
+        url: "https://www.emojidex.com/api/v1/emoji",
+        dataType: "jsonp",
+        jsonpCallback: "callback",
+        type: "get",
+        success: function(emojis_data) {
+          callback(emojis_data.emoji);
+        },
+        error: function(emojis_data) {}
+      });
+    };
+
+    return EmojisLoaderAPI;
+
+  })(EmojisLoader);
+
+  EmojisLoaderPOE = (function(_super) {
+    __extends(EmojisLoaderPOE, _super);
+
+    function EmojisLoaderPOE(element, options) {
+      this.element = element;
+      this.options = options;
+      EmojisLoaderPOE.__super__.constructor.apply(this, arguments);
+    }
+
+    EmojisLoaderPOE.prototype.load = function(callback) {
+      var onLoadEmojisData,
+        _this = this;
+      onLoadEmojisData = function(emojis_data) {
+        var emoji, _i, _len;
+        for (_i = 0, _len = emojis_data.length; _i < _len; _i++) {
+          emoji = emojis_data[_i];
+          emoji.img_url = _this.options.path_img + emoji.code + ".svg";
+        }
+        _this.emojis_data = _this.getCategorizedData(emojis_data);
+        _this.emoji_regexps = _this.setEmojiCSS_getEmojiRegexps(_this.emojis_data);
+        _this.setEmojiIcon(_this.emojis_data);
+        return callback(_this);
+      };
+      $.getJSON(this.options.path_json, onLoadEmojisData);
+      return this;
+    };
+
+    return EmojisLoaderPOE;
+
+  })(EmojisLoader);
+
+  /*
+  emojiarea.poe
+  @author Yusuke Matsui
+  
+  emojiarea - A rich textarea control that supports emojis, WYSIWYG-style.
+  Copyright (c) 2012 DIY Co
+  
+  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+  file except in compliance with the License. You may obtain a copy of the License at:
+  http://www.apache.org/licenses/LICENSE-2.0
+  
+  Unless required by applicable law or agreed to in writing, software distributed under
+  the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+  ANY KIND, either express or implied. See the License for the specific language
+  governing permissions and limitations under the License.
+  
+  @author Brian Reavis <brian@diy.org>
+  */
+
+
   (function($, window, document) {
     var ELEMENT_NODE, EmojiArea, EmojiArea_Plain, EmojiArea_WYSIWYG, EmojiMenu, KEY_ESC, KEY_TAB, TAGS_BLOCK, TEXT_NODE, util;
     ELEMENT_NODE = 1;
