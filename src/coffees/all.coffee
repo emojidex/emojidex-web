@@ -84,10 +84,8 @@ class EmojisLoaderAPI extends EmojisLoader
 
   load: (callback)->
     onLoadEmojisData = (emojis_data) =>
-      console.log 111
       @emojis_data = @getCategorizedData emojis_data
       console.log @emojis_data
-
       # @emoji_regexps = @setEmojiCSS_getEmojiRegexps @emojis_data
       # @setEmojiIcon @emojis_data
 

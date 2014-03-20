@@ -123,7 +123,6 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
       var onLoadEmojisData,
         _this = this;
       onLoadEmojisData = function(emojis_data) {
-        console.log(111);
         _this.emojis_data = _this.getCategorizedData(emojis_data);
         return console.log(_this.emojis_data);
       };
