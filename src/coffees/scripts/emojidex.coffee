@@ -38,26 +38,13 @@ do ($ = jQuery, window, document) ->
       $.emojiarea.path = options.path_img
       
       @poe_emojis = new EmojisLoaderPOE @element, @options
-      @poe_emojis.load (loaded)->
+      @poe_emojis.load (backed_obj)->
         # console.log loaded.emojis_data
 
       @api_emojis = new EmojisLoaderAPI
-
-    getEmojiDataFromAPI: (callback) ->
-      $.ajax
-        url: "https://www.emojidex.com/api/v1/emoji"
-        dataType: "jsonp"
-        jsonpCallback: "callback"
-        type: "get"
-        success: (emojis_data) ->
-          console.log "success: load jsonp"
-          console.log emojis_data
-          # callback emojis_data
-          return
-        error: (data) ->
-          console.log "error: load jsonp"
-          console.log data
-          return
+      @api_emojis.load (backed_obj)=>
+        # console.log 333
+        # console.log @api_emojis
 
     setEmojiarea: (options) ->
       options.emojiarea["plaintext"].emojiarea wysiwyg: false

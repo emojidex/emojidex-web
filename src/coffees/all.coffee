@@ -38,26 +38,13 @@ do ($ = jQuery, window, document) ->
       $.emojiarea.path = options.path_img
       
       @poe_emojis = new EmojisLoaderPOE @element, @options
-      @poe_emojis.load (loaded)->
+      @poe_emojis.load (backed_obj)->
         # console.log loaded.emojis_data
 
       @api_emojis = new EmojisLoaderAPI
-
-    getEmojiDataFromAPI: (callback) ->
-      $.ajax
-        url: "https://www.emojidex.com/api/v1/emoji"
-        dataType: "jsonp"
-        jsonpCallback: "callback"
-        type: "get"
-        success: (emojis_data) ->
-          console.log "success: load jsonp"
-          console.log emojis_data
-          # callback emojis_data
-          return
-        error: (data) ->
-          console.log "error: load jsonp"
-          console.log data
-          return
+      @api_emojis.load (backed_obj)=>
+        # console.log 333
+        # console.log @api_emojis
 
     setEmojiarea: (options) ->
       options.emojiarea["plaintext"].emojiarea wysiwyg: false
@@ -88,11 +75,58 @@ class EmojisLoader
   element: null
   options: null
 
+  loadedEmojisData: (emojis_data)->
+    console.log emojis_data
 class EmojisLoaderAPI extends EmojisLoader
   constructor: (@json_url) ->
     super
     console.log "EmojisLoaderAPI --- start ---"
 
+  load: (callback)->
+    onLoadEmojisData = (emojis_data) =>
+      console.log 111
+      @emojis_data = @getCategorizedData emojis_data
+      console.log @emojis_data
+
+      # @emoji_regexps = @setEmojiCSS_getEmojiRegexps @emojis_data
+      # @setEmojiIcon @emojis_data
+
+    @getEmojiDataFromAPI onLoadEmojisData
+    @
+
+  getCategorizedData: (emojis_data) ->
+    new_emojis_data = {}
+    for emoji in emojis_data
+
+      if emoji.category is null
+        unless new_emojis_data.uncategorized? 
+          new_emojis_data.uncategorized = [emoji]
+        else
+          new_emojis_data.uncategorized.push emoji
+
+      else
+        unless new_emojis_data[emoji.category]? 
+          new_emojis_data[emoji.category] = [emoji]
+        else
+          new_emojis_data[emoji.category].push emoji
+
+    return new_emojis_data
+
+  getEmojiDataFromAPI: (callback) ->
+    $.ajax
+      url: "https://www.emojidex.com/api/v1/emoji"
+      dataType: "jsonp"
+      jsonpCallback: "callback"
+      type: "get"
+      success: (emojis_data) ->
+        console.log "success: load jsonp"
+        console.log emojis_data
+        callback emojis_data.emoji
+        return
+      error: (emojis_data) ->
+        console.log "error: load jsonp"
+        console.log data
+        return
 class EmojisLoaderPOE extends EmojisLoader
   constructor: (@element, @options) ->
     super

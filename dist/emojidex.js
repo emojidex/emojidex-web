@@ -47,6 +47,7 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
     };
     return Plugin = (function() {
       function Plugin(element, options) {
+        var _this = this;
         this.element = element;
         this.options = $.extend({}, defaults, options);
         this._defaults = defaults;
@@ -54,26 +55,10 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
         this.setEmojiarea(this.options);
         $.emojiarea.path = options.path_img;
         this.poe_emojis = new EmojisLoaderPOE(this.element, this.options);
-        this.poe_emojis.load(function(loaded) {});
+        this.poe_emojis.load(function(backed_obj) {});
         this.api_emojis = new EmojisLoaderAPI;
+        this.api_emojis.load(function(backed_obj) {});
       }
-
-      Plugin.prototype.getEmojiDataFromAPI = function(callback) {
-        return $.ajax({
-          url: "https://www.emojidex.com/api/v1/emoji",
-          dataType: "jsonp",
-          jsonpCallback: "callback",
-          type: "get",
-          success: function(emojis_data) {
-            console.log("success: load jsonp");
-            console.log(emojis_data);
-          },
-          error: function(data) {
-            console.log("error: load jsonp");
-            console.log(data);
-          }
-        });
-      };
 
       Plugin.prototype.setEmojiarea = function(options) {
         options.emojiarea["plaintext"].emojiarea({
@@ -125,6 +110,10 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
 
     EmojisLoader.prototype.options = null;
 
+    EmojisLoader.prototype.loadedEmojisData = function(emojis_data) {
+      return console.log(emojis_data);
+    };
+
     return EmojisLoader;
 
   })();
@@ -137,6 +126,58 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
       EmojisLoaderAPI.__super__.constructor.apply(this, arguments);
       console.log("EmojisLoaderAPI --- start ---");
     }
+
+    EmojisLoaderAPI.prototype.load = function(callback) {
+      var onLoadEmojisData,
+        _this = this;
+      onLoadEmojisData = function(emojis_data) {
+        console.log(111);
+        _this.emojis_data = _this.getCategorizedData(emojis_data);
+        return console.log(_this.emojis_data);
+      };
+      this.getEmojiDataFromAPI(onLoadEmojisData);
+      return this;
+    };
+
+    EmojisLoaderAPI.prototype.getCategorizedData = function(emojis_data) {
+      var emoji, new_emojis_data, _i, _len;
+      new_emojis_data = {};
+      for (_i = 0, _len = emojis_data.length; _i < _len; _i++) {
+        emoji = emojis_data[_i];
+        if (emoji.category === null) {
+          if (new_emojis_data.uncategorized == null) {
+            new_emojis_data.uncategorized = [emoji];
+          } else {
+            new_emojis_data.uncategorized.push(emoji);
+          }
+        } else {
+          if (new_emojis_data[emoji.category] == null) {
+            new_emojis_data[emoji.category] = [emoji];
+          } else {
+            new_emojis_data[emoji.category].push(emoji);
+          }
+        }
+      }
+      return new_emojis_data;
+    };
+
+    EmojisLoaderAPI.prototype.getEmojiDataFromAPI = function(callback) {
+      return $.ajax({
+        url: "https://www.emojidex.com/api/v1/emoji",
+        dataType: "jsonp",
+        jsonpCallback: "callback",
+        type: "get",
+        success: function(emojis_data) {
+          console.log("success: load jsonp");
+          console.log(emojis_data);
+          callback(emojis_data.emoji);
+        },
+        error: function(emojis_data) {
+          console.log("error: load jsonp");
+          console.log(data);
+        }
+      });
+    };
 
     return EmojisLoaderAPI;
 
