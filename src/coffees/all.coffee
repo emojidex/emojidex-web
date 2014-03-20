@@ -14,24 +14,100 @@ The
 Copyright 2013 Genshin Souzou Kabushiki Kaisha
 ###
 
+do ($ = jQuery, window, document) ->
+  pluginName = "emojidex"
+  defaults =
+    emojiarea:
+      plaintext: "emojidex-plaintext"
+      wysiwyg: "emojidex-wysiwyg"
+      value_output: "emojidex-rawtext"
+
+  $.fn[pluginName] = (options) ->
+    @each ->
+      if !$.data(@, "plugin_#{pluginName}")
+        $.data(@, "plugin_#{pluginName}", new Plugin(@, options))
+
+  class Plugin
+    constructor: (@element, options) ->
+      # start main --------
+      @options = $.extend {}, defaults, options
+      @_defaults = defaults
+      @_name = pluginName
+
+      @setEmojiarea @options
+      $.emojiarea.path = options.path_img
+      
+      @poe_emojis = new EmojisLoaderPOE @element, @options
+      @poe_emojis.load (loaded)->
+        # console.log loaded.emojis_data
+
+      @api_emojis = new EmojisLoaderAPI
+
+    getEmojiDataFromAPI: (callback) ->
+      $.ajax
+        url: "https://www.emojidex.com/api/v1/emoji"
+        dataType: "jsonp"
+        jsonpCallback: "callback"
+        type: "get"
+        success: (emojis_data) ->
+          console.log "success: load jsonp"
+          console.log emojis_data
+          # callback emojis_data
+          return
+        error: (data) ->
+          console.log "error: load jsonp"
+          console.log data
+          return
+
+    setEmojiarea: (options) ->
+      options.emojiarea["plaintext"].emojiarea wysiwyg: false
+      # options.emojiarea["wysiwyg"].emojiarea wysiwyg: true
+      options.emojiarea["wysiwyg"].on "change", ->
+        options.emojiarea["value_output"].text $(this).val()
+      options.emojiarea["wysiwyg"].trigger "change"
+
+    prepareAutoComplete: (emojis_data, options) ->
+      emojis = []
+      for category of emojis_data
+        for emoji in emojis_data[category]
+          emojis.push emoji.code
+      emojis = $.map emojis, (value) ->
+        key: value
+        name: value
+
+      emoji_config =
+        at: ":"
+        data: emojis
+        tpl: "<li data-value=':${key}:'><img src='../src/assets/img/utf/${name}.svg'  height='20' width='20' /> ${name}</li>"
+        insert_tpl: "<img src='../src/assets/img/utf/${name}.svg' height='20' width='20' />"
+      options.emojiarea["plaintext"].atwho(emoji_config)
+      options.emojiarea["wysiwyg"].atwho(emoji_config)
+
 class EmojisLoader
   emojis_data: null
   element: null
   options: null
 
+class EmojisLoaderAPI extends EmojisLoader
+  constructor: (@json_url) ->
+    super
+    console.log "EmojisLoaderAPI --- start ---"
+
 class EmojisLoaderPOE extends EmojisLoader
   constructor: (@element, @options) ->
     super
 
-  load: ->
+  load: (callback) ->
     onLoadEmojisData = (emojis_data) =>
       @emojis_data = @getCategorizedData emojis_data
       @emoji_regexps = @setEmojiCSS_getEmojiRegexps @emojis_data
       @setEmojiIcon @emojis_data
+      callback @
       # Plugin::prepareAutoComplete emojis_data, options
       
     # start main --------
     $.getJSON @options.path_json, onLoadEmojisData
+    @
 
   getCategorizedData: (emojis_data) ->
     new_emojis_data = {}
@@ -81,80 +157,6 @@ class EmojisLoaderPOE extends EmojisLoader
       replaced_string = replaceForUTF replaced_string
       replaced_string = replaceForCode replaced_string, emojis_data
       $(@).replaceWith replaced_string
-
-
-class EmojisLoaderAPI extends EmojisLoader
-  constructor: (@json_url) ->
-    super
-    console.log "EmojisLoaderAPI --- start ---"
-
-do ($ = jQuery, window, document) ->
-  pluginName = "emojidex"
-  defaults =
-    emojiarea:
-      plaintext: "emojidex-plaintext"
-      wysiwyg: "emojidex-wysiwyg"
-      value_output: "emojidex-rawtext"
-
-  $.fn[pluginName] = (options) ->
-    @each ->
-      if !$.data(@, "plugin_#{pluginName}")
-        $.data(@, "plugin_#{pluginName}", new Plugin(@, options))
-
-  class Plugin
-    constructor: (@element, options) ->
-      # start main --------
-      @options = $.extend {}, defaults, options
-      @_defaults = defaults
-      @_name = pluginName
-
-      @setEmojiarea @options
-      $.emojiarea.path = options.path_img
-      
-      @poe_emojis = new EmojisLoaderPOE @element, @options
-      @poe_emojis.load()
-
-      @api_emojis = new EmojisLoaderAPI
-
-    getEmojiDataFromAPI: (callback) ->
-      $.ajax
-        url: "https://www.emojidex.com/api/v1/emoji"
-        dataType: "jsonp"
-        jsonpCallback: "callback"
-        type: "get"
-        success: (emojis_data) ->
-          console.log "success: load jsonp"
-          console.log emojis_data
-          # callback emojis_data
-          return
-        error: (data) ->
-          console.log "error: load jsonp"
-          console.log data
-          return
-
-    setEmojiarea: (options) ->
-      options.emojiarea["plaintext"].emojiarea wysiwyg: false
-      # options.emojiarea["wysiwyg"].emojiarea wysiwyg: true
-      options.emojiarea["wysiwyg"].on "change", ->
-        options.emojiarea["value_output"].text $(this).val()
-      options.emojiarea["wysiwyg"].trigger "change"
-
-    prepareAutoComplete: (emojis_data, options) ->
-      emojis = []
-      for category of emojis_data
-        for emoji in emojis_data[category]
-          emojis.push emoji.code
-      emojis = $.map emojis, (value) ->
-        key: value
-        name: value
-
-      emoji_config =
-        at: ":"
-        data: emojis
-        tpl: "<li data-value=':${key}:'><img src='../src/assets/img/utf/${name}.svg'  height='20' width='20' /> ${name}</li>"
-        insert_tpl: "<img src='../src/assets/img/utf/${name}.svg' height='20' width='20' />"
-      options.emojiarea["plaintext"].atwho(emoji_config)
-      options.emojiarea["wysiwyg"].atwho(emoji_config)
 
 ###
 emojiarea.poe
