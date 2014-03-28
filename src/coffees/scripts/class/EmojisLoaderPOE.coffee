@@ -8,8 +8,9 @@ class EmojisLoaderPOE extends EmojisLoader
         emoji.img_url = @options.path_img + emoji.code + ".svg"
 
       @emojis_data = @getCategorizedData emojis_data
+      
       @emoji_regexps = @setEmojiCSS_getEmojiRegexps @emojis_data
-      @setEmojiIcon @emojis_data
+      @setEmojiIcon @
       callback @
       
     # start main --------

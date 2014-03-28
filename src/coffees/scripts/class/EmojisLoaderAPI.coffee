@@ -1,5 +1,5 @@
 class EmojisLoaderAPI extends EmojisLoader
-  constructor: (@json_url) ->
+  constructor: (@element, @options) ->
     super
 
   load: (callback)->
@@ -8,10 +8,12 @@ class EmojisLoaderAPI extends EmojisLoader
         emoji.img_url = "http://assets.emojidex.com/emoji/" + emoji.code + "/px32.png"
 
       @emojis_data = @getCategorizedData emojis_data
+      @emoji_regexps = @setEmojiCSS_getEmojiRegexps @emojis_data
+      @emoji_regexps.utf = null
+      @setEmojiIcon @
       callback @
-      # @emoji_regexps = @setEmojiCSS_getEmojiRegexps @emojis_data
-      # @setEmojiIcon @emojis_data
 
+    # start main --------
     @getEmojiDataFromAPI onLoadEmojisData
     @
 
