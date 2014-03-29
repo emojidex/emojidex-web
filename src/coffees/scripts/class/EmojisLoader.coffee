@@ -4,9 +4,6 @@ class EmojisLoader
   options: null
   emoji_regexps: null
 
-  loadedEmojisData: (emojis_data)->
-    console.log emojis_data
-
   getCategorizedData: (emojis_data) ->
     new_emojis_data = {}
     for emoji in emojis_data

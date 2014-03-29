@@ -123,10 +123,6 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
 
     EmojisLoader.prototype.emoji_regexps = null;
 
-    EmojisLoader.prototype.loadedEmojisData = function(emojis_data) {
-      return console.log(emojis_data);
-    };
-
     EmojisLoader.prototype.getCategorizedData = function(emojis_data) {
       var emoji, new_emojis_data, _i, _len;
       new_emojis_data = {};
@@ -255,7 +251,6 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
         }
         _this.emojis_data = _this.getCategorizedData(emojis_data);
         _this.emoji_regexps = _this.setEmojiCSS_getEmojiRegexps(_this.emojis_data);
-        _this.emoji_regexps.utf = null;
         _this.setEmojiIcon(_this);
         return callback(_this);
       };

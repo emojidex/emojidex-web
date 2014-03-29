@@ -9,7 +9,7 @@ class EmojisLoaderAPI extends EmojisLoader
 
       @emojis_data = @getCategorizedData emojis_data
       @emoji_regexps = @setEmojiCSS_getEmojiRegexps @emojis_data
-      @emoji_regexps.utf = null
+      # @emoji_regexps.utf = null
       @setEmojiIcon @
       callback @
 
