@@ -43,7 +43,7 @@ do ($ = jQuery, window, document) ->
         @emojis_data_array.push @poe_emojis.emojis_data
         @setAutoComplete @options
 
-      @api_emojis = new EmojisLoaderAPI
+      @api_emojis = new EmojisLoaderAPI @element, @options
       @api_emojis.load =>
         @emojis_data_array.push @api_emojis.emojis_data
         @setAutoComplete @options

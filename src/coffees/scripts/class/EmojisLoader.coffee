@@ -2,9 +2,7 @@ class EmojisLoader
   emojis_data: null
   element: null
   options: null
-
-  loadedEmojisData: (emojis_data)->
-    console.log emojis_data
+  emoji_regexps: null
 
   getCategorizedData: (emojis_data) ->
     new_emojis_data = {}
@@ -34,32 +32,34 @@ class EmojisLoader
       for emoji in emojis_in_category
         regexp_for_utf += emoji.moji + "|"
         regexp_for_code += emoji.code + "|"
-        emojis_css.append "i.emojidex-" + emoji.moji + " {background-image: url('" + emoji.img_url + "')}"
+        emojis_css.append "i.emojidex-" + emoji.code + " {background-image: url('" + emoji.img_url + "')}"
     $("head").append emojis_css
     
-    return [regexp_for_utf.slice(0, -1), regexp_for_code.slice(0, -1) + "):"]
+    return utf: regexp_for_utf.slice(0, -1), code: regexp_for_code.slice(0, -1) + "):"
 
-  setEmojiIcon: (emojis_data) ->
-    getEmojiTag = (emoji_utf) ->
-      return '<i class="emojidex-' + emoji_utf + '"></i>'
-    
-    replaceForUTF = (replaced_string) =>
-      replaced_string = replaced_string.replace new RegExp(@emoji_regexps[0], "g"), (matched_string) ->
-        return getEmojiTag matched_string
-    
-    replaceForCode = (replaced_string, emojis_data) =>
-      replaced_string = replaced_string.replace new RegExp(@emoji_regexps[1], "g"), (matched_string) ->
-        matched_string = matched_string.replace /:/g, ""
-        for category of emojis_data
-          for emoji in emojis_data[category]
-            if emoji.code is matched_string
-              return getEmojiTag emoji.moji
+  getEmojiTag: (emoji_code) ->
+    return '<i class="emojidex-' + emoji_code + '"></i>'
+  
+  replaceForUTF: (options) ->
+    replaced_string = options.s_replace.replace new RegExp(options.regexp, "g"), (matched_string) ->
+      for category of options.emojis_data
+        for emoji in options.emojis_data[category]
+          if emoji.moji is matched_string
+            return EmojisLoader::getEmojiTag emoji.code
+  
+  replaceForCode: (options) ->
+    replaced_string = options.s_replace.replace new RegExp(options.regexp, "g"), (matched_string) ->
+      matched_string = matched_string.replace /:/g, ""
+      for category of options.emojis_data
+        for emoji in options.emojis_data[category]
+          if emoji.code is matched_string
+            return EmojisLoader::getEmojiTag emoji.code
 
-    # start main --------
+  setEmojiIcon: (loader) ->
     $(@element).find(":not(iframe,textarea,script)").andSelf().contents().filter(->
       @nodeType is Node.TEXT_NODE
     ).each ->
       replaced_string = @textContent
-      replaced_string = replaceForUTF replaced_string
-      replaced_string = replaceForCode replaced_string, emojis_data
+      replaced_string = EmojisLoader::replaceForUTF s_replace: replaced_string, regexp: loader.emoji_regexps.utf, emojis_data: loader.emojis_data if loader.emoji_regexps.utf?
+      replaced_string = EmojisLoader::replaceForCode s_replace: replaced_string, regexp: loader.emoji_regexps.code, emojis_data: loader.emojis_data if loader.emoji_regexps.code?
       $(@).replaceWith replaced_string
