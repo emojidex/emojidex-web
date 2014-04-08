@@ -4,7 +4,7 @@ class EmojisPallet
     @KEY_TAB = 9
 
   setPallet: ->
-    console.log @options
+    # console.log @options
 
     # @element.click ->
     #   showPallet()

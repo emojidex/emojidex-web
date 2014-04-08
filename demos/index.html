@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width">
     
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="../src/assets/libs/ckeditor/ckeditor.js"></script>
     <script src="../src/assets/libs/bootstrap-3.0.0/js/bootstrap.min.js"></script>
     
     <script src="../dist/emojidex.min.js"></script> 
@@ -25,7 +26,7 @@
           emojiarea: {
             plaintext: $('.emojidex-plaintext'), //emojidex_plaintext
             wysiwyg: $('.emojidex-wysiwyg'), //emojidex_wysiwyg
-            value_output: $('.emojidex-rawtext') //emojidex_rawtext
+            rawtext: $('.emojidex-rawtext') //emojidex_rawtext
             //emojidex #all on (wysiwyg + controls)
             //emojidex_controls #button and controls are added
             //emojidex_wysiwyg #wysiwyg editor mode (controls not enabled by default, :->search enabled)
@@ -52,16 +53,28 @@
       <form>
         <textarea rows="5" class="emojidex-plaintext">Hello :neckbeard:</textarea>
       </form>
-      <button id="ep">EmojisPallet</button>
     </div>
 
     <div class="example">
-      <!--
+      <h2>WYSIWYG</h2>
+      <form>
+        <textarea name="editor1" id="editor1" rows="10" cols="80">
+          This is my textarea to be replaced with CKEditor.
+        </textarea>
+        <script>
+          // Replace the <textarea id="editor1"> with a CKEditor
+          // instance, using default configuration.
+          CKEDITOR.replace( 'editor1' );
+        </script>
+      </form>
+    </div>
+
+    <!--
+    <div class="example">
       <h2>WYSIWYG</h2>
       <form>
         <textarea rows="5" class="emojidex-all">Hello :neckbeard:</textarea>
       </form>
-      -->
       <h2>Show Emoji Icon</h2>
       <div class="emojidex-wysiwyg" contentEditable="true">
         Hello :neckbeard:
@@ -71,6 +84,7 @@
         <pre class="emojidex-rawtext"></pre>
       </div>
     </div>
+    -->
 
   </body>
 </html>

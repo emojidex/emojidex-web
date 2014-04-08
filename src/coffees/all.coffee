@@ -22,7 +22,7 @@ do ($ = jQuery, window, document) ->
     emojiarea:
       plaintext: "emojidex-plaintext"
       wysiwyg: "emojidex-wysiwyg"
-      value_output: "emojidex-rawtext"
+      rawtext: "emojidex-rawtext"
 
   $.fn[pluginName] = (options) ->
     @each ->
@@ -49,7 +49,7 @@ do ($ = jQuery, window, document) ->
 
       # console.log $.parseJSON emojis_json
       # @setEmojiarea @options
-      # $.emojiarea.path = options.path_img
+      # $.emojiarea.path = @options.path_img
 
     checkLoadedEmojisData: ->
       if @emojis_data_array.length is 2  
@@ -77,10 +77,12 @@ do ($ = jQuery, window, document) ->
       options.emojiarea["wysiwyg"].atwho(emoji_config)
 
     setEmojiarea: (options) ->
-      # options.emojiarea["plaintext"].emojiarea wysiwyg: false
+      options.emojiarea["plaintext"].emojiarea wysiwyg: false
       # options.emojiarea["wysiwyg"].emojiarea wysiwyg: true
       options.emojiarea["wysiwyg"].on "change", ->
-        options.emojiarea["value_output"].text $(this).val()
+        console.dir @
+        # console.dir options.emojiarea["rawtext"].text
+        options.emojiarea["rawtext"].text $(this).val()
       options.emojiarea["wysiwyg"].trigger "change"
 
 class EmojisLoader
@@ -212,7 +214,7 @@ class EmojisPallet
     @KEY_TAB = 9
 
   setPallet: ->
-    console.log @options
+    # console.log @options
 
     # @element.click ->
     #   showPallet()
