@@ -16,13 +16,12 @@
     <link rel="stylesheet" href="../src/assets/libs/jquery-emojiarea/jquery.emojiarea.css">
     <link rel="stylesheet" href="../src/assets/libs/At.js/css/jquery.atwho.css" />
     <link href="../src/assets/libs/bootstrap-3.0.0/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../src/assets/css/emojidex.css" rel="stylesheet">
+    <link href="../dist/css/emojidex.css" rel="stylesheet">
 
     <script>
       $(document).ready(function(){
         $('.emojidex_replace').emojidex({
-        	path_json: "../src/assets/json/utf-emoji_non_anime.json",
-        	path_img: "../src/assets/img/utf/",
+          path_img: "../dist/img/utf",
           emojiarea: {
             plaintext: $('.emojidex-plaintext'), //emojidex_plaintext
             wysiwyg: $('.emojidex-all'), //emojidex_wysiwyg
@@ -53,6 +52,7 @@
       <form>
         <textarea rows="5" class="emojidex-plaintext">Hello :neckbeard:</textarea>
       </form>
+      <button id="ep">EmojisPallet</button>
     </div>
 
     <div class="example">

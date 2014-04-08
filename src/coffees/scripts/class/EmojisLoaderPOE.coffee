@@ -5,7 +5,7 @@ class EmojisLoaderPOE extends EmojisLoader
   load: (callback) ->
     onLoadEmojisData = (emojis_data) =>
       for emoji in emojis_data
-        emoji.img_url = @options.path_img + emoji.code + ".svg"
+        emoji.img_url = @options.path_img + "/" + emoji.code + ".svg"
 
       @emojis_data = @getCategorizedData emojis_data
       
@@ -14,5 +14,9 @@ class EmojisLoaderPOE extends EmojisLoader
       callback @
       
     # start main --------
-    $.getJSON @options.path_json, onLoadEmojisData
-    @
+    if @options.path_json
+      $.getJSON(@options.path_json, onLoadEmojisData)
+      @
+    else
+      onLoadEmojisData $.parseJSON(emojis_json)
+      @

@@ -17,6 +17,8 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
 do ($ = jQuery, window, document) ->
   pluginName = "emojidex"
   defaults =
+    path_json: null
+    path_img: "img/utf"
     emojiarea:
       plaintext: "emojidex-plaintext"
       wysiwyg: "emojidex-wysiwyg"
@@ -34,38 +36,45 @@ do ($ = jQuery, window, document) ->
       @options = $.extend {}, defaults, options
       @_defaults = defaults
       @_name = pluginName
-
-      # @setEmojiarea @options
-      # $.emojiarea.path = options.path_img
       
       @poe_emojis = new EmojisLoaderPOE @element, @options
       @poe_emojis.load =>
         @emojis_data_array.push @poe_emojis.emojis_data
-        @setAutoComplete @options
+        @checkLoadedEmojisData()
 
       @api_emojis = new EmojisLoaderAPI @element, @options
       @api_emojis.load =>
         @emojis_data_array.push @api_emojis.emojis_data
+        @checkLoadedEmojisData()
+
+      # console.log $.parseJSON emojis_json
+      # @setEmojiarea @options
+      # $.emojiarea.path = options.path_img
+
+    checkLoadedEmojisData: ->
+      if @emojis_data_array.length is 2  
         @setAutoComplete @options
+        
+        @emojis_pallet = new EmojisPallet @emojis_data_array, $("#ep"), @options
+        @emojis_pallet.setPallet()
 
     setAutoComplete: (options) ->
-      if @emojis_data_array.length is 2  
-        emojis = []
-        for emojis_data in @emojis_data_array
-          for category of emojis_data
-            for emoji in emojis_data[category]
-              emojis.push
-                key: emoji.code
-                name: emoji.code
-                img_url: emoji.img_url
-        
-        emoji_config =
-          at: ":"
-          data: emojis
-          tpl: "<li data-value=':${key}:'><img src='${img_url}' height='20' width='20' /> ${name}</li>"
-          insert_tpl: "<img src='${img_url}' height='20' width='20' />"
-        options.emojiarea["plaintext"].atwho(emoji_config)
-        options.emojiarea["wysiwyg"].atwho(emoji_config)
+      emojis = []
+      for emojis_data in @emojis_data_array
+        for category of emojis_data
+          for emoji in emojis_data[category]
+            emojis.push
+              key: emoji.code
+              name: emoji.code
+              img_url: emoji.img_url
+      
+      emoji_config =
+        at: ":"
+        data: emojis
+        tpl: "<li data-value=':${key}:'><img src='${img_url}' height='20' width='20' /> ${name}</li>"
+        insert_tpl: "<img src='${img_url}' height='20' width='20' />"
+      options.emojiarea["plaintext"].atwho(emoji_config)
+      options.emojiarea["wysiwyg"].atwho(emoji_config)
 
     setEmojiarea: (options) ->
       # options.emojiarea["plaintext"].emojiarea wysiwyg: false
