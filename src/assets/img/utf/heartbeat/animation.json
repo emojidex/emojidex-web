@@ -1,7 +1,0 @@
-{
-	"name": "heartbeat",
-  "loops": 0,
-  "skip_first": false,
-  "default_delay": "100/1000",
-	"frames": ["0", "1", "2", "3", "4", "5", "6", "7"]
-}
