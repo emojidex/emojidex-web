@@ -57,17 +57,21 @@
 
     <div class="example">
       <h2>WYSIWYG</h2>
-      <form>
+      <form id="wysiwyg" name="wysiwyg" method="post">
         <textarea name="editor1" id="editor1" rows="10" cols="80">
           This is my textarea to be replaced with CKEditor.
         </textarea>
         <script>
-          // Replace the <textarea id="editor1"> with a CKEditor
-          // instance, using default configuration.
+          function CKupdate(){
+            for ( instance in CKEDITOR.instances )
+              CKEDITOR.instances[instance].updateElement();
+          }
+
           CKEDITOR.replace( 'editor1' ).on('instanceReady', function(event) {
             window.cke = $(this.document.getBody().$)
           });
         </script>
+        <a onClick='CKupdate();console.dir($("#wysiwyg"));'>Submit</a>
       </form>
     </div>
 
