@@ -35,8 +35,8 @@ do ($ = jQuery, window, document) ->
       @_defaults = defaults
       @_name = pluginName
 
-      @setEmojiarea @options
-      $.emojiarea.path = options.path_img
+      # @setEmojiarea @options
+      # $.emojiarea.path = options.path_img
       
       @poe_emojis = new EmojisLoaderPOE @element, @options
       @poe_emojis.load =>
@@ -68,7 +68,7 @@ do ($ = jQuery, window, document) ->
         options.emojiarea["wysiwyg"].atwho(emoji_config)
 
     setEmojiarea: (options) ->
-      options.emojiarea["plaintext"].emojiarea wysiwyg: false
+      # options.emojiarea["plaintext"].emojiarea wysiwyg: false
       # options.emojiarea["wysiwyg"].emojiarea wysiwyg: true
       options.emojiarea["wysiwyg"].on "change", ->
         options.emojiarea["value_output"].text $(this).val()

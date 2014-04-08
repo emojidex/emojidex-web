@@ -53,8 +53,6 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
         this.options = $.extend({}, defaults, options);
         this._defaults = defaults;
         this._name = pluginName;
-        this.setEmojiarea(this.options);
-        $.emojiarea.path = options.path_img;
         this.poe_emojis = new EmojisLoaderPOE(this.element, this.options);
         this.poe_emojis.load(function() {
           _this.emojis_data_array.push(_this.poe_emojis.emojis_data);
@@ -98,9 +96,6 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
       };
 
       Plugin.prototype.setEmojiarea = function(options) {
-        options.emojiarea["plaintext"].emojiarea({
-          wysiwyg: false
-        });
         options.emojiarea["wysiwyg"].on("change", function() {
           return options.emojiarea["value_output"].text($(this).val());
         });
