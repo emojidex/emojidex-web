@@ -41,7 +41,7 @@ i[class*="emojidex-"] {
   overflow: auto;
 }
 
-.emojidex-all {
+.emojidex-wysiwyg {
   height: 100px;
   width: 100%;
   border: 1px solid #cccccc;

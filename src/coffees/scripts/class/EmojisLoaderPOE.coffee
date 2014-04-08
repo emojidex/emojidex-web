@@ -18,5 +18,5 @@ class EmojisLoaderPOE extends EmojisLoader
       $.getJSON(@options.path_json, onLoadEmojisData)
       @
     else
-      onLoadEmojisData $.parseJSON(emojis_json)
+      onLoadEmojisData new EmojisData().parsed_json
       @

@@ -24,8 +24,8 @@
           path_img: "../dist/img/utf",
           emojiarea: {
             plaintext: $('.emojidex-plaintext'), //emojidex_plaintext
-            wysiwyg: $('.emojidex-all'), //emojidex_wysiwyg
-            value_output: $('.emojidex-value_output') //emojidex_rawtext
+            wysiwyg: $('.emojidex-wysiwyg'), //emojidex_wysiwyg
+            value_output: $('.emojidex-rawtext') //emojidex_rawtext
             //emojidex #all on (wysiwyg + controls)
             //emojidex_controls #button and controls are added
             //emojidex_wysiwyg #wysiwyg editor mode (controls not enabled by default, :->search enabled)
@@ -63,12 +63,12 @@
       </form>
       -->
       <h2>Show Emoji Icon</h2>
-      <div class="emojidex-all" contentEditable="true">
+      <div class="emojidex-wysiwyg" contentEditable="true">
         Hello :neckbeard:
       </div>
       <h3>Value:</h3>
       <div class="value">
-        <pre class="emojidex-value_output"></pre>
+        <pre class="emojidex-rawtext"></pre>
       </div>
     </div>
 
