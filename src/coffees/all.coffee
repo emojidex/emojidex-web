@@ -193,6 +193,10 @@ class EmojisLoaderPOE extends EmojisLoader
     $.getJSON @options.path_json, onLoadEmojisData
     @
 
+class EmojisPallet
+  element: null
+  options: null
+
 ###
 emojiarea.poe
 @author Yusuke Matsui

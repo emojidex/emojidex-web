@@ -24,7 +24,7 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
 
 
 (function() {
-  var EmojisLoader, EmojisLoaderAPI, EmojisLoaderPOE,
+  var EmojisLoader, EmojisLoaderAPI, EmojisLoaderPOE, EmojisPallet,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -300,6 +300,17 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
     return EmojisLoaderPOE;
 
   })(EmojisLoader);
+
+  EmojisPallet = (function() {
+    function EmojisPallet() {}
+
+    EmojisPallet.prototype.element = null;
+
+    EmojisPallet.prototype.options = null;
+
+    return EmojisPallet;
+
+  })();
 
   /*
   emojiarea.poe
