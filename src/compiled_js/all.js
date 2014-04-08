@@ -68,7 +68,7 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
       };
 
       Plugin.prototype.setAutoComplete = function(options) {
-        var category, emoji, emoji_config, emojis, emojis_data, _i, _j, _len, _len1, _ref, _ref1;
+        var at_config, category, emoji, emojis, emojis_data, _i, _j, _len, _len1, _ref, _ref1;
         emojis = [];
         _ref = this.emojis_data_array;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -85,14 +85,15 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
             }
           }
         }
-        emoji_config = {
+        at_config = {
           at: ":",
           data: emojis,
           tpl: "<li data-value=':${key}:'><img src='${img_url}' height='20' width='20' /> ${name}</li>",
           insert_tpl: "<img src='${img_url}' height='20' width='20' />"
         };
-        options.emojiarea["plaintext"].atwho(emoji_config);
-        return options.emojiarea["wysiwyg"].atwho(emoji_config);
+        options.emojiarea["plaintext"].atwho(at_config);
+        options.emojiarea["wysiwyg"].atwho(at_config);
+        return cke.atwho(at_config);
       };
 
       Plugin.prototype.setEmojiarea = function(options) {

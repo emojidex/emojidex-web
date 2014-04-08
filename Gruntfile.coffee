@@ -40,7 +40,8 @@ module.exports = (grunt) ->
           banner: '<%= meta.banner %>'
         src: [
           'src/compiled_js/**/*.js'
-          'src/assets/libs/At.js/js/jquery.atwho.min.js'
+          # 'src/assets/libs/At.js/dist/js/jquery.atwho.min.js'
+          'src/assets/libs/At.js_bak/js/jquery.atwho.min.js'
           'src/assets/libs/Caret.js/src/jquery.caret.js'
         ]
         dest: 'dist/emojidex.js'

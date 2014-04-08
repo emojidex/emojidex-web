@@ -68,13 +68,15 @@ do ($ = jQuery, window, document) ->
               name: emoji.code
               img_url: emoji.img_url
       
-      emoji_config =
+      at_config =
         at: ":"
         data: emojis
         tpl: "<li data-value=':${key}:'><img src='${img_url}' height='20' width='20' /> ${name}</li>"
         insert_tpl: "<img src='${img_url}' height='20' width='20' />"
-      options.emojiarea["plaintext"].atwho(emoji_config)
-      options.emojiarea["wysiwyg"].atwho(emoji_config)
+      options.emojiarea["plaintext"].atwho(at_config)
+      options.emojiarea["wysiwyg"].atwho(at_config)
+      cke.atwho at_config
+
 
     setEmojiarea: (options) ->
       options.emojiarea["plaintext"].emojiarea wysiwyg: false

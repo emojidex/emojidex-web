@@ -15,7 +15,7 @@
     
     <link rel="stylesheet" href="stylesheet.css">
     <link rel="stylesheet" href="../src/assets/libs/jquery-emojiarea/jquery.emojiarea.css">
-    <link rel="stylesheet" href="../src/assets/libs/At.js/css/jquery.atwho.css" />
+    <link rel="stylesheet" href="../src/assets/libs/At.js/dist/css/jquery.atwho.css" />
     <link href="../src/assets/libs/bootstrap-3.0.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="../dist/css/emojidex.css" rel="stylesheet">
 
@@ -64,27 +64,19 @@
         <script>
           // Replace the <textarea id="editor1"> with a CKEditor
           // instance, using default configuration.
-          CKEDITOR.replace( 'editor1' );
+          CKEDITOR.replace( 'editor1' ).on('instanceReady', function(event) {
+            window.cke = $(this.document.getBody().$)
+          });
         </script>
       </form>
     </div>
 
-    <!--
     <div class="example">
-      <h2>WYSIWYG</h2>
-      <form>
-        <textarea rows="5" class="emojidex-all">Hello :neckbeard:</textarea>
-      </form>
-      <h2>Show Emoji Icon</h2>
+      <h2>ContentEditable</h2>
       <div class="emojidex-wysiwyg" contentEditable="true">
         Hello :neckbeard:
       </div>
-      <h3>Value:</h3>
-      <div class="value">
-        <pre class="emojidex-rawtext"></pre>
-      </div>
     </div>
-    -->
 
   </body>
 </html>
