@@ -226,7 +226,10 @@
 
   methods =
     pos: (pos) ->
-      if pos then this.setPos pos else this.getPos()
+      if pos or pos == 0
+        this.setPos pos 
+      else 
+        this.getPos()
 
     position: (pos) ->
       if oDocument.selection then this.getIEPosition pos else this.getPosition pos
@@ -242,16 +245,36 @@
   oDocument = null
   oWindow = null
   oFrame = null
+  setContextBy = (iframe) ->
+    oFrame = iframe
+    oWindow = iframe.contentWindow
+    oDocument = iframe.contentDocument || oWindow.document
+  configure = ($dom, settings) ->
+    if $.isPlainObject(settings) and iframe = settings.iframe
+      $dom.data('caret-iframe', iframe) 
+      setContextBy iframe
+    else if iframe = $dom.data('caret-iframe') 
+      setContextBy iframe
+    else
+      oDocument = $dom[0].ownerDocument
+      oWindow = oDocument.defaultView || oDocument.parentWindow
+      try
+        oFrame = oWindow.frameElement
+      catch error
+        # throws error in cross-domain iframes
   $.fn.caret = (method) ->
     # http://stackoverflow.com/questions/16010204/get-reference-of-window-object-from-a-dom-element
-    oDocument = this[0].ownerDocument
-    oWindow = oDocument.defaultView || oDocument.parentWindow
-    oFrame = oWindow.frameElement
-    caret = if Utils.contentEditable(this) then new EditableCaret(this) else new InputCaret(this)
-    if methods[method]
+    if typeof method is 'object'
+      configure this, method
+      this
+    else if methods[method]
+      configure this
+      caret = if Utils.contentEditable(this) then new EditableCaret(this) else new InputCaret(this)
       methods[method].apply caret, Array::slice.call(arguments, 1)
     else
       $.error "Method #{method} does not exist on jQuery.caret"
+
+
 
   $.fn.caret.EditableCaret = EditableCaret
   $.fn.caret.InputCaret = InputCaret
