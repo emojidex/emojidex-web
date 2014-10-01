@@ -63,7 +63,7 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
       }
 
       Plugin.prototype.checkLoadedEmojisData = function() {
-        if (this.emojis_data_array.length === 2) {
+        if (this.emojis_data_array.length === 1) {
           this.setAutoComplete(this.options);
           this.emojis_pallet = new EmojisPallet(this.emojis_data_array, $("#ep"), this.options);
           return this.emojis_pallet.setPallet();

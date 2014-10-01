@@ -52,7 +52,7 @@ do ($ = jQuery, window, document) ->
       # $.emojiarea.path = @options.path_img
 
     checkLoadedEmojisData: ->
-      if @emojis_data_array.length is 2
+      if @emojis_data_array.length is 1
         @setAutoComplete @options
 
         @emojis_pallet = new EmojisPallet @emojis_data_array, $("#ep"), @options
