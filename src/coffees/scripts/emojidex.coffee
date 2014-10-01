@@ -36,25 +36,25 @@ do ($ = jQuery, window, document) ->
       @options = $.extend {}, defaults, options
       @_defaults = defaults
       @_name = pluginName
-      
+
       @poe_emojis = new EmojisLoaderPOE @element, @options
       @poe_emojis.load =>
         @emojis_data_array.push @poe_emojis.emojis_data
         @checkLoadedEmojisData()
 
-      @api_emojis = new EmojisLoaderAPI @element, @options
-      @api_emojis.load =>
-        @emojis_data_array.push @api_emojis.emojis_data
-        @checkLoadedEmojisData()
+      # @api_emojis = new EmojisLoaderAPI @element, @options
+      # @api_emojis.load =>
+      #   @emojis_data_array.push @api_emojis.emojis_data
+      #   @checkLoadedEmojisData()
 
       # console.log $.parseJSON emojis_json
       # @setEmojiarea @options
       # $.emojiarea.path = @options.path_img
 
     checkLoadedEmojisData: ->
-      if @emojis_data_array.length is 2  
+      if @emojis_data_array.length is 2
         @setAutoComplete @options
-        
+
         @emojis_pallet = new EmojisPallet @emojis_data_array, $("#ep"), @options
         @emojis_pallet.setPallet()
 
@@ -67,7 +67,7 @@ do ($ = jQuery, window, document) ->
               key: emoji.code
               name: emoji.code
               img_url: emoji.img_url
-      
+
       at_config =
         at: ":"
         data: emojis
