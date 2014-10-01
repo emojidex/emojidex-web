@@ -6,13 +6,13 @@
     <title></title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
-    
+
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="../src/assets/libs/ckeditor/ckeditor.js"></script>
     <script src="../src/assets/libs/bootstrap-3.0.0/js/bootstrap.min.js"></script>
-    
-    <script src="../dist/emojidex.min.js"></script> 
-    
+
+    <script src="../dist/emojidex.min.js"></script>
+
     <link rel="stylesheet" href="stylesheet.css">
     <link rel="stylesheet" href="../src/assets/libs/jquery-emojiarea/jquery.emojiarea.css">
     <link rel="stylesheet" href="../src/assets/libs/At.js/dist/css/jquery.atwho.css" />
@@ -20,26 +20,37 @@
     <link href="../dist/css/emojidex.css" rel="stylesheet">
 
     <script>
+      function CKupdate(){
+        for ( instance in CKEDITOR.instances )
+          CKEDITOR.instances[instance].updateElement();
+      }
       $(document).ready(function(){
-        $('.emojidex_replace').emojidex({
-          path_img: "../dist/img/utf",
-          emojiarea: {
-            plaintext: $('.emojidex-plaintext'), //emojidex_plaintext
-            wysiwyg: $('.emojidex-wysiwyg'), //emojidex_wysiwyg
-            rawtext: $('.emojidex-rawtext') //emojidex_rawtext
-            //emojidex #all on (wysiwyg + controls)
-            //emojidex_controls #button and controls are added
-            //emojidex_wysiwyg #wysiwyg editor mode (controls not enabled by default, :->search enabled)
-            //emojidex_plaintext #raw text, no graphics
-          }
+
+        CKEDITOR.replace( 'editor1' ).on('instanceReady', function(event) {
+
+          window.cke = $(this.document.getBody().$)
+
+          $('.emojidex_replace').emojidex({
+            path_img: "../dist/img/utf",
+            emojiarea: {
+              plaintext: $('.emojidex-plaintext'), //emojidex_plaintext
+              wysiwyg: $('.emojidex-wysiwyg'), //emojidex_wysiwyg
+              rawtext: $('.emojidex-rawtext') //emojidex_rawtext
+              //emojidex #all on (wysiwyg + controls)
+              //emojidex_controls #button and controls are added
+              //emojidex_wysiwyg #wysiwyg editor mode (controls not enabled by default, :->search enabled)
+              //emojidex_plaintext #raw text, no graphics
+            }
+          });
+
         });
       });
     </script>
   </head>
   <body>
-  
+
     <h1>emojidex-coffee Example</h1>
-    
+
     <div class="example">
       <h2>Emojidex replace</h2>
       <div class="emojidex_replace">
@@ -61,16 +72,6 @@
         <textarea name="editor1" id="editor1" rows="10" cols="80">
           This is my textarea to be replaced with CKEditor.
         </textarea>
-        <script>
-          function CKupdate(){
-            for ( instance in CKEDITOR.instances )
-              CKEDITOR.instances[instance].updateElement();
-          }
-
-          CKEDITOR.replace( 'editor1' ).on('instanceReady', function(event) {
-            window.cke = $(this.document.getBody().$)
-          });
-        </script>
         <a onClick='CKupdate();console.dir($("#wysiwyg"));'>Submit</a>
       </form>
     </div>

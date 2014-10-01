@@ -52,15 +52,10 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
           _this.emojis_data_array.push(_this.poe_emojis.emojis_data);
           return _this.checkLoadedEmojisData();
         });
-        this.api_emojis = new EmojisLoaderAPI(this.element, this.options);
-        this.api_emojis.load(function() {
-          _this.emojis_data_array.push(_this.api_emojis.emojis_data);
-          return _this.checkLoadedEmojisData();
-        });
       }
 
       Plugin.prototype.checkLoadedEmojisData = function() {
-        if (this.emojis_data_array.length === 2) {
+        if (this.emojis_data_array.length === 1) {
           this.setAutoComplete(this.options);
           this.emojis_pallet = new EmojisPallet(this.emojis_data_array, $("#ep"), this.options);
           return this.emojis_pallet.setPallet();

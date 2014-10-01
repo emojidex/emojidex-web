@@ -1,9 +1,9 @@
 module.exports = (grunt) ->
   grunt.initConfig
-    
+
     # Import package manifest
     pkg: grunt.file.readJSON('emojidex.jquery.json')
-    
+
     # Banner definitions
     meta:
       banner:
@@ -15,14 +15,14 @@ module.exports = (grunt) ->
         ' *  Made by <%= pkg.author.name %>\n' +
         ' *  Under <%= pkg.licenses[0].type %> License\n' +
         ' */\n'
-    
+
     # CoffeeScript compilation
     coffee:
       glob_to_multiple:
         expand: true
         cwd: 'src/coffees/'
         src: ['all.coffee']
-        dest: 'src/compiled_js/'
+        dest: 'src/compiled_js'
         rename: (dest, src) ->
           return dest + '/' + src.replace(/\.coffee$/, '.js')
 
@@ -44,7 +44,7 @@ module.exports = (grunt) ->
           'src/assets/libs/Caret.js/dist/jquery.caret.min.js'
         ]
         dest: 'dist/emojidex.js'
-    
+
     # Minify definitions
     uglify:
       my_target:
@@ -53,7 +53,7 @@ module.exports = (grunt) ->
 
       options:
         banner: '<%= meta.banner %>'
-    
+
     # Watch definitions
     watch:
       files: ['src/coffees/**/*.coffee']
