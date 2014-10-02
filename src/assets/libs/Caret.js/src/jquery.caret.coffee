@@ -35,8 +35,13 @@
 
     # NOTE: Duck type
     setPos: (pos) -> @domInputor
-    getIEPosition: -> $.noop()
-    getPosition: -> $.noop()
+    getIEPosition: -> this.getPosition()
+    getPosition: ->
+      offset = this.getOffset()
+      inputor_offset = @$inputor.offset()
+      offset.left -= inputor_offset.left
+      offset.top -= inputor_offset.top
+      offset
 
     getOldIEPos: ->
       textRange = oDocument.selection.createRange()
@@ -75,7 +80,7 @@
       else if oDocument.selection # ie < 9
         offset = this.getOldIEOffset()
 
-      if offset and !oFrame
+      if offset
         offset.top += $(oWindow).scrollTop()
         offset.left += $(oWindow).scrollLeft()
 
@@ -152,17 +157,14 @@
 
     getPosition: (pos)->
       $inputor = @$inputor
-      format = (value) ->
-        value.replace(/</g, '&lt')
-        .replace(/>/g, '&gt')
-        .replace(/`/g,'&#96')
-        .replace(/"/g,'&quot')
-        .replace(/\r\n|\r|\n/g,"<br />")
+      format = (value) -> $('<div></div>').text(value).html()
 
       pos = this.getPos() if pos is undefined
       start_range = $inputor.val().slice(0, pos)
-      html = "<span>"+format(start_range)+"</span>"
-      html += "<span id='caret'>|</span>"
+      end_range = $inputor.val().slice(pos)
+      html = "<span style='position: relative; display: inline;'>"+format(start_range)+"</span>"
+      html += "<span id='caret' style='position: relative; display: inline;'>|</span>"
+      html += "<span style='position: relative; display: inline;'>"+format(end_range)+"</span>"
 
       mirror = new Mirror($inputor)
       at_rect = mirror.create(html).rect()
@@ -182,11 +184,39 @@
   #   mirror.create(html).rect()
   class Mirror
     css_attr: [
-      "overflowY", "height", "width", "paddingTop", "paddingLeft",
-      "paddingRight", "paddingBottom", "marginTop", "marginLeft",
-      "marginRight", "marginBottom","fontFamily", "borderStyle",
-      "borderWidth","wordWrap", "fontSize", "lineHeight", "overflowX",
-      "text-align",
+      "borderBottomWidth",
+      "borderLeftWidth",
+      "borderRightWidth",
+      "borderTopStyle",
+      "borderRightStyle",
+      "borderBottomStyle",
+      "borderLeftStyle",
+      "borderTopWidth",
+      "boxSizing",
+      "fontFamily",
+      "fontSize",
+      "fontWeight",
+      "height",
+      "letterSpacing",
+      "lineHeight",
+      "marginBottom",
+      "marginLeft",
+      "marginRight",
+      "marginTop",
+      "outlineWidth",
+      "overflow",
+      "overflowX",
+      "overflowY",
+      "paddingBottom",
+      "paddingLeft",
+      "paddingRight",
+      "paddingTop",
+      "textAlign",
+      "textOverflow",
+      "textTransform",
+      "whiteSpace",
+      "wordBreak",
+      "wordWrap",
     ]
 
     constructor: (@$inputor) ->
@@ -195,9 +225,10 @@
       css =
         position: 'absolute'
         left: -9999
-        top:0
+        top: 0
         zIndex: -20000
-        'white-space': 'pre-wrap'
+      if @$inputor.prop( 'tagName' ) == 'TEXTAREA'
+        @css_attr.push( 'width' )
       $.each @css_attr, (i,p) =>
         css[p] = @$inputor.css p
       css
@@ -227,8 +258,8 @@
   methods =
     pos: (pos) ->
       if pos or pos == 0
-        this.setPos pos 
-      else 
+        this.setPos pos
+      else
         this.getPos()
 
     position: (pos) ->
@@ -236,41 +267,38 @@
 
     offset: (pos) ->
       offset = this.getOffset(pos)
-      if oFrame
-        iOffset = $(oFrame).offset()
-        offset.top += iOffset.top
-        offset.left += iOffset.left
       offset
 
   oDocument = null
   oWindow = null
   oFrame = null
-  setContextBy = (iframe) ->
-    oFrame = iframe
-    oWindow = iframe.contentWindow
-    oDocument = iframe.contentDocument || oWindow.document
-  configure = ($dom, settings) ->
-    if $.isPlainObject(settings) and iframe = settings.iframe
-      $dom.data('caret-iframe', iframe) 
-      setContextBy iframe
-    else if iframe = $dom.data('caret-iframe') 
-      setContextBy iframe
+  setContextBy = (settings) ->
+    if iframe = settings?.iframe
+      oFrame = iframe
+      oWindow = iframe.contentWindow
+      oDocument = iframe.contentDocument || oWindow.document
     else
-      oDocument = $dom[0].ownerDocument
-      oWindow = oDocument.defaultView || oDocument.parentWindow
-      try
-        oFrame = oWindow.frameElement
-      catch error
-        # throws error in cross-domain iframes
-  $.fn.caret = (method) ->
+      oFrame = undefined
+      oWindow = window
+      oDocument = document
+  discoveryIframeOf = ($dom) ->
+    oDocument = $dom[0].ownerDocument
+    oWindow = oDocument.defaultView || oDocument.parentWindow
+    try
+      oFrame = oWindow.frameElement
+    catch error
+      # throws error in cross-domain iframes
+
+  $.fn.caret = (method, value, settings) ->
     # http://stackoverflow.com/questions/16010204/get-reference-of-window-object-from-a-dom-element
-    if typeof method is 'object'
-      configure this, method
-      this
-    else if methods[method]
-      configure this
+    if methods[method]
+      if $.isPlainObject(value)
+        setContextBy value
+        value = undefined
+      else
+        setContextBy settings
       caret = if Utils.contentEditable(this) then new EditableCaret(this) else new InputCaret(this)
-      methods[method].apply caret, Array::slice.call(arguments, 1)
+      methods[method].apply caret, [value]
     else
       $.error "Method #{method} does not exist on jQuery.caret"
 

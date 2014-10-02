@@ -1,6 +1,6 @@
 
 module.exports = (grunt) ->
-  
+
   # Project configuration.
   grunt.initConfig
     pkg: grunt.file.readJSON 'package.json'
@@ -47,16 +47,18 @@ module.exports = (grunt) ->
     uglify:
       dist:
         src: 'dist/js/<%= pkg.name %>.js', dest: 'dist/js/<%= pkg.name %>.min.js'
+    cssmin:
+      minify: {src: 'src/jquery.atwho.css', dest: 'dist/css/jquery.atwho.min.css'}
 
     watch:
       coffee:
         files: ['src/*.coffee', 'spec/javascripts/*.spec.coffee', 'spec/spec_helper.coffee']
-        tasks: ['compile', 'notify']
+        tasks: ['compile', 'uglify']
       test:
         options:
           debounceDelay: 250
         files: ['spec/javascripts/*.spec.coffee', 'spec/spec_helper.coffee']
-        tasks: ['test', 'notify']
+        tasks: ['test']
 
     jasmine:
       dist:
@@ -66,7 +68,7 @@ module.exports = (grunt) ->
           styles: 'dist/css/<%= pkg.name %>.css',
           specs: 'spec/build/javascripts/*.spec.js',
           vendor: [
-            'bower_components/jquery/jquery.min.js',
+            'bower_components/jquery/dist/jquery.js',
             'bower_components/Caret.js/src/*.js'
           ],
           helpers: [
@@ -93,11 +95,6 @@ module.exports = (grunt) ->
           {src: 'component.json', dest: 'component.json'}
         ]
 
-    notify:
-      success:
-        options:
-          message: 'Build Successfully'
-
 
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-uglify'
@@ -105,14 +102,14 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-contrib-connect'
   grunt.loadNpmTasks 'grunt-json-replace'
-  grunt.loadNpmTasks 'grunt-notify'
   grunt.loadNpmTasks 'grunt-contrib-copy'
   grunt.loadNpmTasks 'grunt-contrib-concat'
+  grunt.loadNpmTasks 'grunt-contrib-cssmin'
 
   # alias
   grunt.registerTask 'update-version', 'json-replace'
-  grunt.registerTask 'compile', ['coffee', 'concat', 'copy']
+  grunt.registerTask 'compile', ['coffee', 'concat', 'copy', 'cssmin']
 
   grunt.registerTask "server", ["compile", "jasmine:dist:build", "connect"]
   grunt.registerTask "test", ["compile", "jasmine"]
-  grunt.registerTask "default", ['compile', 'uglify', 'update-version']
+  grunt.registerTask "default", ['test', 'uglify', 'update-version']

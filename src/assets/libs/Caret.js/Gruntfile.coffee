@@ -7,7 +7,7 @@ module.exports = (grunt) ->
       src: 'src/*.js'
       options:
         vendor: [
-          '<%= bower_path %>/jquery/jquery.min.js',
+          '<%= bower_path %>/jquery/dist/jquery.min.js',
           '<%= bower_path %>/jasmine-jquery/lib/jasmine-jquery.js'
           ]
         specs: 'spec/javascripts/*.js'
@@ -21,11 +21,16 @@ module.exports = (grunt) ->
           'dist/<%= pkg.name %>.min.js': ['src/<%= pkg.name %>.js']
 
     coffee:
-      compileWithMaps:
+      withMaps:
         options:
           sourceMap: true
         files:
           'src/<%= pkg.name %>.js': 'src/<%= pkg.name %>.coffee'
+      withoutMaps:
+        options:
+          sourceMap: false
+        files:
+          'dist/<%= pkg.name %>.js': 'src/<%= pkg.name %>.coffee'
 
     'json-replace':
       options:
