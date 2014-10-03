@@ -64,14 +64,17 @@ do ($ = jQuery, window, document) ->
         for category of emojis_data
           for emoji in emojis_data[category]
             emojis.push
-              key: emoji.code
-              name: emoji.code
+              code: emoji.code
               img_url: emoji.img_url
+
+      console.log emojis
 
       at_config =
         at: ":"
+        limit: 8
+        search_key: "code"
         data: emojis
-        tpl: "<li data-value=':${key}:'><img src='${img_url}' height='20' width='20' /> ${name}</li>"
+        tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20' /> ${code}</li>"
         insert_tpl: "<img src='${img_url}' height='20' width='20' />"
       options.emojiarea["plaintext"].atwho(at_config)
       options.emojiarea["wysiwyg"].atwho(at_config)

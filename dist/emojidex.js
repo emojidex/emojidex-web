@@ -81,17 +81,19 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
             for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
               emoji = _ref1[_j];
               emojis.push({
-                key: emoji.code,
-                name: emoji.code,
+                code: emoji.code,
                 img_url: emoji.img_url
               });
             }
           }
         }
+        console.log(emojis);
         at_config = {
           at: ":",
+          limit: 8,
+          search_key: "code",
           data: emojis,
-          tpl: "<li data-value=':${key}:'><img src='${img_url}' height='20' width='20' /> ${name}</li>",
+          tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20' /> ${code}</li>",
           insert_tpl: "<img src='${img_url}' height='20' width='20' />"
         };
         options.emojiarea["plaintext"].atwho(at_config);
