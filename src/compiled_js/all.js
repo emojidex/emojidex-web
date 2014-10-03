@@ -88,7 +88,7 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
         };
         options.emojiarea["plaintext"].atwho(at_config);
         options.emojiarea["wysiwyg"].atwho(at_config);
-        return cke.atwho(at_config);
+        return $(cke.document.getBody().$).atwho('setIframe', cke.window.getFrame().$).atwho(at_config);
       };
 
       Plugin.prototype.setEmojiarea = function(options) {

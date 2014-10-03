@@ -21,9 +21,7 @@ Usage
 ```javascript
 
 // Get caret position
-// not working in `contentEditable` mode
 $('#inputor').caret('position'); // => {left: 15, top: 30, height: 20}
-$('#inputor').caret('iframe', iframe1).caret('position')
 
 // Get caret offset
 $('#inputor').caret('offset'); // => {left: 300, top: 400, height: 20}
@@ -39,7 +37,7 @@ $('#inputor').caret('offset', fixPos);
 
 // more
 
-// Get caret position from first char in inputor.
+// Get caret position from the first char in the inputor.
 $('#inputor').caret('pos'); // => 15
 
 // Set caret position in the inputor
@@ -47,11 +45,10 @@ $('#inputor').caret('pos'); // => 15
 $('#inputor').caret('pos', 15);
 
 // set iframe context
-// oftenly you don't need to set iframe context because caret.js will find the iframe object automatically
-// but some iframe editor will prevent caret.js to finding for security reasons, 
-// so you may have to set the iframe manually
-$('#inputor').caret({iframe: theIframe});
-$('#inputor').caret('offset');
-$('#inputor').caret('pos', 15);
+// NOTE: Related to the iframe's cooridinate.
+//       You might want to get the iframe's offset/position on your own
+$('#inputor').caret('offset', {iframe: theIframe});
+$('#inputor').caret('position', {iframe: theIframe});
+$('#inputor').caret('pos', 15, {iframe: theIframe});
 
 ```

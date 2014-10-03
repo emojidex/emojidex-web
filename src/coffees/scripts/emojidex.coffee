@@ -75,8 +75,7 @@ do ($ = jQuery, window, document) ->
         insert_tpl: "<img src='${img_url}' height='20' width='20' />"
       options.emojiarea["plaintext"].atwho(at_config)
       options.emojiarea["wysiwyg"].atwho(at_config)
-      cke.atwho at_config
-
+      $(cke.document.getBody().$).atwho('setIframe', cke.window.getFrame().$).atwho(at_config)
 
     setEmojiarea: (options) ->
       options.emojiarea["plaintext"].emojiarea wysiwyg: false
