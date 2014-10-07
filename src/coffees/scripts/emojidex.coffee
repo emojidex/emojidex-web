@@ -67,8 +67,6 @@ do ($ = jQuery, window, document) ->
               code: emoji.code
               img_url: emoji.img_url
 
-      console.log emojis
-
       at_config =
         at: ":"
         limit: 8

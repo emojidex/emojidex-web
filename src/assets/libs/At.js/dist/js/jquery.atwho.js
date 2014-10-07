@@ -771,17 +771,17 @@ DEFAULT_CALLBACKS = {
     var new_suffix, wrapped_content;
     new_suffix = suffix === "" ? suffix : suffix || " ";
     if ($inputor.is('textarea, input')) {
-      return '' + content + new_suffix;
+      return content + new_suffix;
     } else if ($inputor.attr('contentEditable') === 'true') {
       new_suffix = suffix === "" ? suffix : suffix || "&nbsp;";
       if (/firefox/i.test(navigator.userAgent)) {
-        wrapped_content = "<span>" + content + new_suffix + "</span>";
+        wrapped_content = content + new_suffix;
       } else {
-        suffix = "<span contenteditable='false'>" + new_suffix + "<span>";
-        wrapped_content = "<span contenteditable='false'>" + content + suffix + "</span>";
+        suffix = new_suffix;
+        wrapped_content = content + suffix;
       }
       if (this.app.document.selection) {
-        wrapped_content = "<span contenteditable='true'>" + content + "</span>";
+        wrapped_content = content;
       }
       return wrapped_content;
     }

@@ -79,7 +79,6 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
             }
           }
         }
-        console.log(emojis);
         at_config = {
           at: ":",
           limit: 8,
