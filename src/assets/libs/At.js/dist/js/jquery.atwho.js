@@ -1,6 +1,6 @@
 /*! jquery.atwho - v0.5.1 - 2014-09-14
-* Copyright (c) 2014 chord.luo <chord.luo@gmail.com>; 
-* homepage: http://ichord.github.com/At.js 
+* Copyright (c) 2014 chord.luo <chord.luo@gmail.com>;
+* homepage: http://ichord.github.com/At.js
 * Licensed MIT
 */
 
