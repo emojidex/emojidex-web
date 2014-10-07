@@ -44,7 +44,6 @@ do ($ = jQuery, window, document) ->
 
       @api_emojis = new EmojisLoaderAPI @element, @options
       @api_emojis.load =>
-        console.log @api_emojis.emojis_data
         @emojis_data_array.push @api_emojis.emojis_data
         @checkLoadedEmojisData()
 
@@ -161,9 +160,8 @@ class EmojisLoaderAPI extends EmojisLoader
   load: (callback)->
     onLoadEmojisData = (emojis_data) =>
       for emoji in emojis_data
-        console.log emoji.image
-        emoji.img_url = emoji.image.replace 'emojidex.com/emoji/original', 'emojidex.com/emoji/px16'
-        # emoji.img_url = "http://assets.emojidex.com/utf/px16/" + emoji.id + ".png"
+        emoji.code = emoji.id
+        emoji.img_url = emoji.image.replace('emoji/original', 'emoji/px16').replace('.svg', '.png')
 
       @emojis_data = @getCategorizedData emojis_data
       @emoji_regexps = @setEmojiCSS_getEmojiRegexps @emojis_data

@@ -44,7 +44,6 @@ do ($ = jQuery, window, document) ->
 
       @api_emojis = new EmojisLoaderAPI @element, @options
       @api_emojis.load =>
-        console.log @api_emojis.emojis_data
         @emojis_data_array.push @api_emojis.emojis_data
         @checkLoadedEmojisData()
 
