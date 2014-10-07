@@ -42,17 +42,18 @@ do ($ = jQuery, window, document) ->
         @emojis_data_array.push @poe_emojis.emojis_data
         @checkLoadedEmojisData()
 
-      # @api_emojis = new EmojisLoaderAPI @element, @options
-      # @api_emojis.load =>
-      #   @emojis_data_array.push @api_emojis.emojis_data
-      #   @checkLoadedEmojisData()
+      @api_emojis = new EmojisLoaderAPI @element, @options
+      @api_emojis.load =>
+        console.log @api_emojis.emojis_data
+        @emojis_data_array.push @api_emojis.emojis_data
+        @checkLoadedEmojisData()
 
       # console.log $.parseJSON emojis_json
       # @setEmojiarea @options
       # $.emojiarea.path = @options.path_img
 
     checkLoadedEmojisData: ->
-      if @emojis_data_array.length is 1
+      if @emojis_data_array.length is 2
         @setAutoComplete @options
 
         @emojis_pallet = new EmojisPallet @emojis_data_array, $("#ep"), @options
@@ -160,7 +161,9 @@ class EmojisLoaderAPI extends EmojisLoader
   load: (callback)->
     onLoadEmojisData = (emojis_data) =>
       for emoji in emojis_data
-        emoji.img_url = "http://assets.emojidex.com/emoji/" + emoji.code + "/px32.png"
+        console.log emoji.image
+        emoji.img_url = emoji.image.replace 'emojidex.com/emoji/original', 'emojidex.com/emoji/px16'
+        # emoji.img_url = "http://assets.emojidex.com/utf/px16/" + emoji.id + ".png"
 
       @emojis_data = @getCategorizedData emojis_data
       @emoji_regexps = @setEmojiCSS_getEmojiRegexps @emojis_data
@@ -175,8 +178,7 @@ class EmojisLoaderAPI extends EmojisLoader
   getEmojiDataFromAPI: (callback) ->
     $.ajax
       url: "https://www.emojidex.com/api/v1/emoji"
-      dataType: "jsonp"
-      jsonpCallback: "callback"
+      dataType: "json"
       type: "get"
       success: (emojis_data) ->
         # console.log "success: load jsonp"
