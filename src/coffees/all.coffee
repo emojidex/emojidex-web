@@ -159,13 +159,13 @@ class EmojisLoaderAPI extends EmojisLoader
 
   load: (callback)->
     onLoadEmojisData = (emojis_data) =>
+      # fix data for At.js
       for emoji in emojis_data
         emoji.code = emoji.id
-        emoji.img_url = emoji.image.replace('emoji/original', 'emoji/px16').replace('.svg', '.png')
+        emoji.img_url = emoji.image.replace('emoji/original', 'emoji/px16').replace('.svg?', '.png?')
 
       @emojis_data = @getCategorizedData emojis_data
       @emoji_regexps = @setEmojiCSS_getEmojiRegexps @emojis_data
-      # @emoji_regexps.utf = null
       @setEmojiIcon @
       callback @
 

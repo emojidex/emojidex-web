@@ -257,7 +257,7 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
         for (_i = 0, _len = emojis_data.length; _i < _len; _i++) {
           emoji = emojis_data[_i];
           emoji.code = emoji.id;
-          emoji.img_url = emoji.image.replace('emoji/original', 'emoji/px16').replace('.svg', '.png');
+          emoji.img_url = emoji.image.replace('emoji/original', 'emoji/px16').replace('.svg?', '.png?');
         }
         _this.emojis_data = _this.getCategorizedData(emojis_data);
         _this.emoji_regexps = _this.setEmojiCSS_getEmojiRegexps(_this.emojis_data);
