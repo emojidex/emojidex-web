@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Emoji Catalog</title>
+  <script src="js/jquery-2.1.1.min.js"></script>
+  <script src="js/emoji-data.js"></script>
+</head>
+<body>
+
+<div id="emojidex_catalog">
+		<!--<li><img id="emoji" src=""><span id="code"></span></li>-->
+</div>
+
+<script src="js/emoji_loop.js"></script>
+
+<!--
+<script>
+var emoji_h = "";
+$(document).ready(function(){
+	emojis = window.emojis_json //jsonぽいjavascriptを変数に代入
+
+  $.each(emojis, function(i, emoji){ //iはループ回数
+    emoji_h += '<li><img src="http://assets.emojidex.com/utf/px8/'+ emoji.full_name +'.png"><span>'+ emoji.code +'</span></li>';
+  	        // 'html記述'+ プロパティ名 + 'html記述'
+   	//$("#emoji").attr('src', 'http://assets.emojidex.com/utf/px8/'+ emoji.full_name +'.png');
+  	//$("#code").text(emoji.code);
+
+    console.log(emoji)
+    console.log(emoji.code)
+  });
+  $('#emojidex_catalog').html(emoji_h);
+  //$('#emojidex_catalog').text(emoji_h);
+  console.log(emoji_h);
+});
+</script>
+-->
+
+</body>
+</html>
