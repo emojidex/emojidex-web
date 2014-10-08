@@ -60,10 +60,15 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
           _this.emojis_data_array.push(_this.poe_emojis.emojis_data);
           return _this.checkLoadedEmojisData();
         });
+        this.api_emojis = new EmojisLoaderAPI(this.element, this.options);
+        this.api_emojis.load(function() {
+          _this.emojis_data_array.push(_this.api_emojis.emojis_data);
+          return _this.checkLoadedEmojisData();
+        });
       }
 
       Plugin.prototype.checkLoadedEmojisData = function() {
-        if (this.emojis_data_array.length === 1) {
+        if (this.emojis_data_array.length === 2) {
           this.setAutoComplete(this.options);
           this.emojis_pallet = new EmojisPallet(this.emojis_data_array, $("#ep"), this.options);
           return this.emojis_pallet.setPallet();
@@ -71,7 +76,7 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
       };
 
       Plugin.prototype.setAutoComplete = function(options) {
-        var at_config, category, emoji, emojis, emojis_data, _i, _j, _len, _len1, _ref, _ref1;
+        var at_config, category, emoji, emojis, emojis_data, testCallback, _i, _j, _len, _len1, _ref, _ref1;
         emojis = [];
         _ref = this.emojis_data_array;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -87,7 +92,11 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
             }
           }
         }
+        testCallback = function(data) {
+          return console.log(111);
+        };
         at_config = {
+          callback: testCallback,
           at: ":",
           limit: 8,
           search_key: "code",
@@ -251,7 +260,8 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
         var emoji, _i, _len;
         for (_i = 0, _len = emojis_data.length; _i < _len; _i++) {
           emoji = emojis_data[_i];
-          emoji.img_url = "http://assets.emojidex.com/emoji/" + emoji.code + "/px32.png";
+          emoji.code = emoji.id;
+          emoji.img_url = emoji.image.replace('emoji/original', 'emoji/px16').replace('.svg?', '.png?');
         }
         _this.emojis_data = _this.getCategorizedData(emojis_data);
         _this.emoji_regexps = _this.setEmojiCSS_getEmojiRegexps(_this.emojis_data);
@@ -265,8 +275,7 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
     EmojisLoaderAPI.prototype.getEmojiDataFromAPI = function(callback) {
       return $.ajax({
         url: "https://www.emojidex.com/api/v1/emoji",
-        dataType: "jsonp",
-        jsonpCallback: "callback",
+        dataType: "json",
         type: "get",
         success: function(emojis_data) {
           callback(emojis_data.emoji);

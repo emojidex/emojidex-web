@@ -4,12 +4,13 @@ class EmojisLoaderAPI extends EmojisLoader
 
   load: (callback)->
     onLoadEmojisData = (emojis_data) =>
+      # fix data for At.js
       for emoji in emojis_data
-        emoji.img_url = "http://assets.emojidex.com/emoji/" + emoji.code + "/px32.png"
+        emoji.code = emoji.id
+        emoji.img_url = emoji.image.replace('emoji/original', 'emoji/px16').replace('.svg?', '.png?')
 
       @emojis_data = @getCategorizedData emojis_data
       @emoji_regexps = @setEmojiCSS_getEmojiRegexps @emojis_data
-      # @emoji_regexps.utf = null
       @setEmojiIcon @
       callback @
 
@@ -20,8 +21,7 @@ class EmojisLoaderAPI extends EmojisLoader
   getEmojiDataFromAPI: (callback) ->
     $.ajax
       url: "https://www.emojidex.com/api/v1/emoji"
-      dataType: "jsonp"
-      jsonpCallback: "callback"
+      dataType: "json"
       type: "get"
       success: (emojis_data) ->
         # console.log "success: load jsonp"

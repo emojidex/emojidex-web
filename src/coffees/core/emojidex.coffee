@@ -42,17 +42,17 @@ do ($ = jQuery, window, document) ->
         @emojis_data_array.push @poe_emojis.emojis_data
         @checkLoadedEmojisData()
 
-      # @api_emojis = new EmojisLoaderAPI @element, @options
-      # @api_emojis.load =>
-      #   @emojis_data_array.push @api_emojis.emojis_data
-      #   @checkLoadedEmojisData()
+      @api_emojis = new EmojisLoaderAPI @element, @options
+      @api_emojis.load =>
+        @emojis_data_array.push @api_emojis.emojis_data
+        @checkLoadedEmojisData()
 
       # console.log $.parseJSON emojis_json
       # @setEmojiarea @options
       # $.emojiarea.path = @options.path_img
 
     checkLoadedEmojisData: ->
-      if @emojis_data_array.length is 1
+      if @emojis_data_array.length is 2
         @setAutoComplete @options
 
         @emojis_pallet = new EmojisPallet @emojis_data_array, $("#ep"), @options
@@ -67,7 +67,11 @@ do ($ = jQuery, window, document) ->
               code: emoji.code
               img_url: emoji.img_url
 
+      testCallback = (data)->
+        console.log 111
+
       at_config =
+        callback: testCallback
         at: ":"
         limit: 8
         search_key: "code"
