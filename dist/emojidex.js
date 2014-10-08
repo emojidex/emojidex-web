@@ -76,7 +76,7 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
       };
 
       Plugin.prototype.setAutoComplete = function(options) {
-        var at_config, category, emoji, emojis, emojis_data, _i, _j, _len, _len1, _ref, _ref1;
+        var at_config, category, emoji, emojis, emojis_data, testCallback, _i, _j, _len, _len1, _ref, _ref1;
         emojis = [];
         _ref = this.emojis_data_array;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -92,7 +92,11 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
             }
           }
         }
+        testCallback = function(data) {
+          return console.log(111);
+        };
         at_config = {
+          callback: testCallback,
           at: ":",
           limit: 8,
           search_key: "code",

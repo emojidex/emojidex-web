@@ -54,10 +54,16 @@ module.exports = (grunt) ->
       options:
         banner: '<%= meta.banner %>'
 
+    # connect definitions
+    connect:
+      site: {}
+
     # Watch definitions
     watch:
       files: ['src/coffees/**/*.coffee']
       tasks: ['concat:src_coffee', 'coffee', 'concat:src_js', 'uglify']
+      options: 
+        livereload: true
 
     # Lint definitions
     # jshint:
@@ -68,6 +74,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-concat'
   grunt.loadNpmTasks 'grunt-contrib-uglify'
+  grunt.loadNpmTasks 'grunt-contrib-connect'
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.registerTask 'default', ['concat:src_coffee', 'coffee', 'concat:src_js', 'uglify']
   # grunt.loadNpmTasks 'grunt-contrib-jshint'

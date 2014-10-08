@@ -67,7 +67,11 @@ do ($ = jQuery, window, document) ->
               code: emoji.code
               img_url: emoji.img_url
 
+      testCallback = (data)->
+        console.log 111
+
       at_config =
+        callback: testCallback
         at: ":"
         limit: 8
         search_key: "code"
