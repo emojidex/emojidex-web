@@ -224,7 +224,6 @@ class EmojisPallet
 
     # @element.click ->
     #   showPallet()
-emoji_catalog.coffee
 ###
 emojiarea.poe
 @author Yusuke Matsui
