@@ -1,0 +1,13 @@
+$main_color: green;
+
+.test1 {
+  h1 {
+    font-size: 20pt;
+    color: $main_color;
+  }
+  .test2 {
+    h1{
+      color: $main_color;
+    }
+  }
+}

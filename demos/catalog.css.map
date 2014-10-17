@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAGE,SAAG;EACD,SAAS,EAAE,IAAI;EACf,KAAK,EALI,KAAK;AAQd,gBAAE;EACA,KAAK,EATE,KAAK",
+"sources": ["../src/sass/catalog.scss"],
+"names": [],
+"file": "catalog.css"
+}
