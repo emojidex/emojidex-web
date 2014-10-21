@@ -67,11 +67,23 @@ module.exports = (grunt) ->
     connect:
       site: {}
 
+    # sass definitions
+    sass:
+     dist:
+       files: [
+        expand: true
+        cwd: 'src/sass/'
+        src: '*.scss'
+        dest: 'demos/'
+        ext: '.css'
+       ]
+
+
     # Watch definitions
     watch:
-      files: ['src/coffees/**/*.coffee']
-      tasks: ['concat:src_coffee', 'coffee', 'concat:src_js', 'uglify']
-      options: 
+      files: ['src/coffees/**/*.coffee', 'src/sass/*']
+      tasks: ['concat:src_coffee', 'coffee', 'concat:src_js', 'uglify','sass']
+      options:
         livereload: true
 
     # Lint definitions
@@ -84,7 +96,8 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-concat'
   grunt.loadNpmTasks 'grunt-contrib-uglify'
   grunt.loadNpmTasks 'grunt-contrib-connect'
+  grunt.loadNpmTasks 'grunt-contrib-sass'
   grunt.loadNpmTasks 'grunt-contrib-watch'
-  grunt.registerTask 'default', ['concat:src_coffee', 'coffee', 'concat:src_js', 'uglify']
+  grunt.registerTask 'default', ['concat:src_coffee', 'coffee', 'concat:src_js', 'uglify','sass']
   # grunt.loadNpmTasks 'grunt-contrib-jshint'
   # grunt.registerTask 'travis', ['jshint']
