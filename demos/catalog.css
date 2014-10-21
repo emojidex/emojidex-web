@@ -1,7 +1,10 @@
-.test1 h1 {
-  font-size: 20pt;
-  color: green; }
-.test1 .test2 h1 {
-  color: green; }
+.mt-s {
+  margin-top: 5px; }
+
+.mt-m {
+  margin-top: 10px; }
+
+.mt-l {
+  margin-top: 15px; }
 
 /*# sourceMappingURL=catalog.css.map */

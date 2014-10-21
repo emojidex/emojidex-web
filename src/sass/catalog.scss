@@ -1,13 +1,11 @@
-$main_color: green;
+$size: 5px;
 
-.test1 {
-  h1 {
-    font-size: 20pt;
-    color: $main_color;
-  }
-  .test2 {
-    h1{
-      color: $main_color;
-    }
-  }
+.mt-s{
+  margin-top: $size * 1
+}
+.mt-m{
+  margin-top: $size * 2
+}
+.mt-l{
+  margin-top: $size * 3
 }
