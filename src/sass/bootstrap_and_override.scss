@@ -1,1 +1,19 @@
-@import "../lib/bootstrap-sass/assets/stylesheets/bootstrap"
+$navbar-logo-margin: 20px;
+$navbar-height: 60px;
+
+@import "../lib/bootstrap-sass/assets/stylesheets/bootstrap";
+@import "fix-space";
+
+body {
+  padding-top: $navbar-height;
+}
+
+.navbar-header {
+  a {
+    img {
+      margin-right: $navbar-logo-margin;
+      margin-top: $navbar-logo-margin / 2;
+      height: $navbar-height - $navbar-logo-margin;
+    }
+  }
+}
