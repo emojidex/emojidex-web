@@ -10,7 +10,6 @@ $(document).ready ->
       dataType: "json"
       type: "get"
       success: (emojis_data) ->
-        console.dir emojis_data
 
         $.each emojis_data.emoji, (j, emoji) ->
 
@@ -21,14 +20,16 @@ $(document).ready ->
 
           $("#catalog_" + set_name).append list_elm
 
-          if (j+1) % 3 is 0
-            $("#catalog_" + set_name).append '<div class="visible-xs clearfix"></div>'
+          clearfix_data_array = [
+            {split_num: 3, visible_size: "visible-xs"}
+            {split_num: 4, visible_size: "visible-sm"}
+            {split_num: 6, visible_size: "visible-md visible-lg"}
+          ]
 
-          if (j+1) % 4 is 0
-            $("#catalog_" + set_name).append '<div class="visible-sm clearfix"></div>'
+          $.each clearfix_data_array, (k, data) ->
 
-          if (j+1) % 6 is 0
-            $("#catalog_" + set_name).append '<div class="visible-md visible-lg clearfix"></div>'
+            if (j+1) % data.split_num is 0
+              $("#catalog_" + set_name).append '<div class="' + data.visible_size + ' clearfix"></div>'
 
       error: (emojis_data) ->
         console.log "error: load json"
