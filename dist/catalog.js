@@ -8,7 +8,6 @@
         dataType: "json",
         type: "get",
         success: function(emojis_data) {
-          console.dir(emojis_data);
           return $.each(emojis_data.emoji, function(j, emoji) {
             var clearfix_data_array, emoji_name, list_elm;
             emoji_name = emoji.code.replace(RegExp(" ", "g"), "_");
