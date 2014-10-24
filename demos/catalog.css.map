@@ -1,7 +1,0 @@
-{
-"version": 3,
-"mappings": "AAEA,KAAK;EACH,UAAU,EAAE,GACd;;AACA,KAAK;EACH,UAAU,EAAE,IACd;;AACA,KAAK;EACH,UAAU,EAAE,IACd",
-"sources": ["../src/sass/catalog.scss"],
-"names": [],
-"file": "catalog.css"
-}

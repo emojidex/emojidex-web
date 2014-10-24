@@ -49,8 +49,8 @@ module.exports = (grunt) ->
           banner: '<%= meta.banner %>'
         src: [
           'src/compiled_js/**/*.js'
-          'src/assets/libs/At.js/dist/js/jquery.atwho.js'
-          'src/assets/libs/Caret.js/dist/jquery.caret.min.js'
+          'src/lib/At.js/dist/js/jquery.atwho.js'
+          'src/lib/Caret.js/dist/jquery.caret.min.js'
         ]
         dest: 'dist/emojidex.js'
 
@@ -81,8 +81,15 @@ module.exports = (grunt) ->
 
     # Watch definitions
     watch:
-      files: ['src/coffees/**/*.coffee', 'src/sass/*']
-      tasks: ['concat:src_coffee', 'coffee', 'concat:src_js', 'uglify','sass']
+      html:
+        files:['demos/*.html']
+      coffee:
+       files: ['src/coffees/**/*.coffee']
+       tasks: ['concat:src_coffee', 'coffee', 'concat:src_js', 'uglify']
+      sass:
+       files: ['src/sass/*.scss']
+       tasks: ['sass']
+
       options:
         livereload: true
 
@@ -99,5 +106,6 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-sass'
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.registerTask 'default', ['concat:src_coffee', 'coffee', 'concat:src_js', 'uglify','sass']
+  grunt.registerTask 'dev', ['connect', 'watch']
   # grunt.loadNpmTasks 'grunt-contrib-jshint'
   # grunt.registerTask 'travis', ['jshint']
