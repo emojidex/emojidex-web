@@ -40,12 +40,10 @@
       }
     ];
     categorized_emojis_data = get_categrized_emojis_data(emojis_data);
-    console.dir(categorized_emojis_data);
     tab_list = $('<ul class="nav nav-tabs"></ul>');
     tab_content = $("<div class='tab-content'></div>");
     $.each(categorized_emojis_data, function(category_name, category_emojis) {
       var emoji_list, tab_pane;
-      console.log(category_name);
       tab_pane = $("<div class='tab-pane" + (tab_list[0].children.length === 0 ? " active" : "") + "' id='" + category_name + "'></div>");
       tab_list.append(("<li class='" + (tab_list[0].children.length === 0 ? " active" : "") + "'><a href='#" + category_name + "' data-toggle='tab'>") + category_name + "</a></li>");
       emoji_list = $("<ul class='list-unstyled'></ul>");
