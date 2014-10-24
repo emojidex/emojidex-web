@@ -48,10 +48,10 @@
       tab_list.append(("<li class='" + (tab_list[0].children.length === 0 ? " active" : "") + "'><a href='#" + category_name + "' data-toggle='tab'>") + category_name + "</a></li>");
       emoji_list = $("<ul class='list-unstyled'></ul>");
       $.each(category_emojis, function(j, emoji) {
-        var emoji_name, list_elm;
-        emoji_name = emoji.code.replace(RegExp(" ", "g"), "_");
+        var fixed_emoji_code, list_elm;
+        fixed_emoji_code = emoji.code.replace(RegExp(" ", "g"), "_");
         list_elm = $('<li class="mt-l col-xs-4 col-sm-3 col-md-2 text-center"></li>');
-        list_elm.append('<img class="img-responsive" src="http://s3-us-west-2.amazonaws.com/assets.emojidex.com/emoji/px128/' + emoji_name + '.png">');
+        list_elm.append('<img class="img-responsive" src="http://s3-us-west-2.amazonaws.com/assets.emojidex.com/emoji/px128/' + fixed_emoji_code + '.png">');
         list_elm.append('<div>:' + emoji.code + ':</div>');
         emoji_list.append(list_elm);
         return $.each(clearfix_data_array, function(k, data) {

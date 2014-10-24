@@ -33,9 +33,9 @@ set_emoji_list = (emojis_data) ->
 
     emoji_list = $("<ul class='list-unstyled'></ul>")
     $.each category_emojis, (j, emoji) ->
-      emoji_name = emoji.code.replace RegExp(" ", "g"), "_"
+      fixed_emoji_code = emoji.code.replace RegExp(" ", "g"), "_"
       list_elm = $('<li class="mt-l col-xs-4 col-sm-3 col-md-2 text-center"></li>')
-      list_elm.append '<img class="img-responsive" src="http://s3-us-west-2.amazonaws.com/assets.emojidex.com/emoji/px128/' + emoji_name + '.png">'
+      list_elm.append '<img class="img-responsive" src="http://s3-us-west-2.amazonaws.com/assets.emojidex.com/emoji/px128/' + fixed_emoji_code + '.png">'
       list_elm.append '<div>:' + emoji.code + ':</div>'
       emoji_list.append list_elm
 
