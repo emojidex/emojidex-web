@@ -1,4 +1,4 @@
-$navbar-logo-margin: 20px;
+$navbar-logo-space: 15px;
 $navbar-height: 60px;
 
 @import "../lib/bootstrap-sass/assets/stylesheets/bootstrap";
@@ -10,10 +10,24 @@ body {
 
 .navbar-header {
   a {
+    margin-right: $navbar-logo-space;
     img {
-      margin-right: $navbar-logo-margin;
-      margin-top: $navbar-logo-margin / 2;
-      height: $navbar-height - $navbar-logo-margin;
+      margin-top: $navbar-logo-space / 2;
+      height: $navbar-height - $navbar-logo-space;
     }
   }
+}
+
+@media (max-width: $screen-xs-max) {
+  .navbar-header {
+    a:first-child {
+      margin-left: $navbar-logo-space;
+    }
+  }
+}
+@media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
+}
+@media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
+}
+@media (min-width: $screen-lg-min) {
 }

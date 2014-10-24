@@ -39,13 +39,15 @@
         visible_size: "visible-md visible-lg"
       }
     ];
-    categorized_emojis_data = get_categrized_emojis_data(emojis_data.emoji);
+    categorized_emojis_data = get_categrized_emojis_data(emojis_data);
+    console.dir(categorized_emojis_data);
     tab_list = $('<ul class="nav nav-tabs"></ul>');
     tab_content = $("<div class='tab-content'></div>");
     $.each(categorized_emojis_data, function(category_name, category_emojis) {
       var emoji_list, tab_pane;
-      tab_pane = $("<div class='tab-pane" + (tab_list[0].children.length === 0 ? " active" : "") + "' id='" + catalog_name + "-" + category_name + "'></div>");
-      tab_list.append(("<li class='" + (tab_list[0].children.length === 0 ? " active" : "") + "'><a href='#" + catalog_name + "-" + category_name + "' data-toggle='tab'>") + category_name + "</a></li>");
+      console.log(category_name);
+      tab_pane = $("<div class='tab-pane" + (tab_list[0].children.length === 0 ? " active" : "") + "' id='" + category_name + "'></div>");
+      tab_list.append(("<li class='" + (tab_list[0].children.length === 0 ? " active" : "") + "'><a href='#" + category_name + "' data-toggle='tab'>") + category_name + "</a></li>");
       emoji_list = $("<ul class='list-unstyled'></ul>");
       $.each(category_emojis, function(j, emoji) {
         var emoji_name, list_elm;
@@ -63,24 +65,31 @@
       tab_pane.append(emoji_list);
       return tab_content.append(tab_pane);
     });
-    $("#" + catalog_name + "-category-tabs").append(tab_list);
-    return $("#" + catalog_name + "-category-tabs").append(tab_content);
+    $("#emoji-category-tabs").append(tab_list);
+    return $("#emoji-category-tabs").append(tab_content);
   };
 
   $(document).ready(function() {
-    var usernames, _i, _len, _results;
-    usernames = ["emoji", "emojidex"];
+    var emojis_data, loaded_num, user_name, user_names, _i, _len, _results;
+    loaded_num = 0;
+    user_names = ["emoji", "emojidex"];
+    emojis_data = [];
     _results = [];
-    for (_i = 0, _len = user.length; _i < _len; _i++) {
-      usernames = user[_i];
+    for (_i = 0, _len = user_names.length; _i < _len; _i++) {
+      user_name = user_names[_i];
       _results.push($.ajax({
-        url: "https://www.emojidex.com/api/v1/users/" + user + "/emoji",
+        url: "https://www.emojidex.com/api/v1/users/" + user_name + "/emoji",
         dataType: "json",
         type: "get",
-        success: function(emojis_data) {},
-        error: function(emojis_data) {
+        success: function(user_emojis_json) {
+          emojis_data = emojis_data.concat(user_emojis_json.emoji);
+          if (++loaded_num === user_names.length) {
+            return set_emoji_list(emojis_data);
+          }
+        },
+        error: function(user_emojis_json) {
           console.log("error: load json");
-          return console.log(data);
+          return console.log(user_emojis_json);
         }
       }));
     }
