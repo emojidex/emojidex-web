@@ -1,5 +1,6 @@
 $navbar-logo-space: 15px;
 $navbar-height: 60px;
+$navbar-logo-fix: 10px;
 
 @import '../lib/bootstrap-sass/assets/stylesheets/bootstrap';
 @import "fix-space";
@@ -25,6 +26,14 @@ img.img-responsive {
   .navbar-header {
     a:first-child {
       margin-left: $navbar-logo-space;
+    }
+  }
+  .navbar-header {
+    a {
+      img {
+        margin-top: ($navbar-logo-space + $navbar-logo-fix) / 2;
+        height: $navbar-height - ($navbar-logo-space + $navbar-logo-fix);
+      }
     }
   }
 }

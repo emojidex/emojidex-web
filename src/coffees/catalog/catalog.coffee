@@ -20,7 +20,8 @@ set_emoji_list = (emojis_data) ->
   clearfix_data_array = [
     {split_num: 3, visible_size: "visible-xs"}
     {split_num: 4, visible_size: "visible-sm"}
-    {split_num: 6, visible_size: "visible-md visible-lg"}
+    {split_num: 6, visible_size: "visible-md"}
+    {split_num: 12, visible_size: "visible-lg"}
   ]
 
   categorized_emojis_data = get_categrized_emojis_data emojis_data
@@ -31,10 +32,10 @@ set_emoji_list = (emojis_data) ->
     tab_pane = $("<div class='tab-pane#{if tab_list[0].children.length is 0 then " active" else ""}' id='#{category_name}'></div>")
     tab_list.append "<li class='#{if tab_list[0].children.length is 0 then " active" else ""}'><a href='##{category_name}' data-toggle='tab'>#{category_name}</a></li>"
 
-    emoji_list = $("<ul class='list-unstyled mt-l'></ul>")
+    emoji_list = $("<ul class='emoji-list list-unstyled mt-l'></ul>")
     $.each category_emojis, (j, emoji) ->
       fixed_emoji_code = emoji.code.replace RegExp(" ", "g"), "_"
-      list_elm = $('<li class="mb-l col-xs-4 col-sm-3 col-md-2 text-center"></li>')
+      list_elm = $('<li class="mb-l col-xs-4 col-sm-3 col-md-2 col-lg-1 text-center"></li>')
       list_elm.append "<img class='img-responsive lazy' src='../img/loading.png' data-original='http://s3-us-west-2.amazonaws.com/assets.emojidex.com/emoji/px128/#{fixed_emoji_code}.png'>"
       list_elm.append '<div>:' + emoji.code + ':</div>'
       emoji_list.append list_elm
@@ -49,9 +50,17 @@ set_emoji_list = (emojis_data) ->
   $("#emoji-category-tabs").append tab_list
   $("#emoji-category-tabs").append tab_content
 
+  # for lazyload --------
   $("img.img-responsive.lazy").lazyload
     effect : "fadeIn"
-  $("img.img-responsive.lazy").show()
+    skip_invisible: true
+
+  $('a[data-toggle="tab"]').on 'shown.bs.tab', (e) ->
+    $(window).resize()
+
+  setTimeout (->
+    $(window).resize()
+  ), 1000
 
 $(document).ready ->
 

@@ -5557,4 +5557,8 @@ img.img-responsive {
 
 @media (max-width: 767px) {
   .navbar-header a:first-child {
-    margin-left: 15px; } }
+    margin-left: 15px; }
+
+  .navbar-header a img {
+    margin-top: 12.5px;
+    height: 35px; } }
