@@ -45,18 +45,18 @@
     $.each(categorized_emojis_data, function(category_name, category_emojis) {
       var emoji_list, tab_pane;
       tab_pane = $("<div class='tab-pane" + (tab_list[0].children.length === 0 ? " active" : "") + "' id='" + category_name + "'></div>");
-      tab_list.append(("<li class='" + (tab_list[0].children.length === 0 ? " active" : "") + "'><a href='#" + category_name + "' data-toggle='tab'>") + category_name + "</a></li>");
-      emoji_list = $("<ul class='list-unstyled'></ul>");
+      tab_list.append("<li class='" + (tab_list[0].children.length === 0 ? " active" : "") + "'><a href='#" + category_name + "' data-toggle='tab'>" + category_name + "</a></li>");
+      emoji_list = $("<ul class='list-unstyled mt-l'></ul>");
       $.each(category_emojis, function(j, emoji) {
         var fixed_emoji_code, list_elm;
         fixed_emoji_code = emoji.code.replace(RegExp(" ", "g"), "_");
-        list_elm = $('<li class="mt-l col-xs-4 col-sm-3 col-md-2 text-center"></li>');
-        list_elm.append('<img class="img-responsive" src="http://s3-us-west-2.amazonaws.com/assets.emojidex.com/emoji/px128/' + fixed_emoji_code + '.png">');
+        list_elm = $('<li class="mb-l col-xs-4 col-sm-3 col-md-2 text-center"></li>');
+        list_elm.append("<img class='img-responsive lazy' src='../img/loading.png' data-original='http://s3-us-west-2.amazonaws.com/assets.emojidex.com/emoji/px128/" + fixed_emoji_code + ".png'>");
         list_elm.append('<div>:' + emoji.code + ':</div>');
         emoji_list.append(list_elm);
         return $.each(clearfix_data_array, function(k, data) {
           if ((j + 1) % data.split_num === 0) {
-            return emoji_list.append('<div class="' + data.visible_size + ' clearfix"></div>');
+            return emoji_list.append("<div class='" + data.visible_size + " clearfix'></div>");
           }
         });
       });
@@ -64,13 +64,17 @@
       return tab_content.append(tab_pane);
     });
     $("#emoji-category-tabs").append(tab_list);
-    return $("#emoji-category-tabs").append(tab_content);
+    $("#emoji-category-tabs").append(tab_content);
+    $("img.img-responsive.lazy").lazyload({
+      effect: "fadeIn"
+    });
+    return $("img.img-responsive.lazy").show();
   };
 
   $(document).ready(function() {
     var emojis_data, loaded_num, user_name, user_names, _i, _len, _results;
     loaded_num = 0;
-    user_names = ["emojidex", "emoji"];
+    user_names = ["emojidex"];
     emojis_data = [];
     _results = [];
     for (_i = 0, _len = user_names.length; _i < _len; _i++) {
