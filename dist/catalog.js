@@ -83,7 +83,7 @@
   $(document).ready(function() {
     var emojis_data, loaded_num, user_name, user_names, _i, _len, _results;
     loaded_num = 0;
-    user_names = ["emojidex"];
+    user_names = ["emojidex", "emoji"];
     emojis_data = [];
     _results = [];
     for (_i = 0, _len = user_names.length; _i < _len; _i++) {

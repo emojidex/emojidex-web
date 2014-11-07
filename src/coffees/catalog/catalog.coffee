@@ -65,8 +65,7 @@ set_emoji_list = (emojis_data) ->
 $(document).ready ->
 
   loaded_num = 0
-  user_names = ["emojidex"]
-  # user_names = ["emojidex", "emoji"]
+  user_names = ["emojidex", "emoji"]
   emojis_data = []
 
   for user_name in user_names
