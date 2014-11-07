@@ -70,16 +70,21 @@
   $(document).ready(function() {
     var emojis_data, loaded_num, user_name, user_names, _i, _len, _results;
     loaded_num = 0;
-    user_names = ["emoji", "emojidex"];
+    user_names = ["emojidex", "emoji"];
     emojis_data = [];
     _results = [];
     for (_i = 0, _len = user_names.length; _i < _len; _i++) {
       user_name = user_names[_i];
+      $.ajaxSetup({
+        beforeSend: function(jqXHR, settings) {
+          return jqXHR.user_name = user_name;
+        }
+      });
       _results.push($.ajax({
         url: "https://www.emojidex.com/api/v1/users/" + user_name + "/emoji",
         dataType: "json",
         type: "get",
-        success: function(user_emojis_json) {
+        success: function(user_emojis_json, status, xhr) {
           emojis_data = emojis_data.concat(user_emojis_json.emoji);
           if (++loaded_num === user_names.length) {
             return set_emoji_list(emojis_data);

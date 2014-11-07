@@ -52,16 +52,20 @@ set_emoji_list = (emojis_data) ->
 $(document).ready ->
 
   loaded_num = 0
-  user_names = ["emoji", "emojidex"]
+  # user_names = ["emojidex"]
+  user_names = ["emojidex", "emoji"]
   emojis_data = []
 
   for user_name in user_names
+    $.ajaxSetup beforeSend: (jqXHR, settings) ->
+      jqXHR.user_name = user_name
+
     $.ajax
       url: "https://www.emojidex.com/api/v1/users/" + user_name + "/emoji"
       dataType: "json"
       type: "get"
 
-      success: (user_emojis_json) ->
+      success: (user_emojis_json, status, xhr) ->
         emojis_data = emojis_data.concat user_emojis_json.emoji
         if ++loaded_num is user_names.length
           set_emoji_list emojis_data

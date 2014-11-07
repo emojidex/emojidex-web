@@ -1,11 +1,14 @@
 $navbar-logo-space: 15px;
 $navbar-height: 60px;
 
-@import "../lib/bootstrap-sass/assets/stylesheets/bootstrap";
+@import '../lib/bootstrap-sass/assets/stylesheets/bootstrap';
 @import "fix-space";
 
 body {
   padding-top: $navbar-height;
+}
+img.img-responsive {
+  display: inline-block;
 }
 
 .navbar-header {
