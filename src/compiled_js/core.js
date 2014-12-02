@@ -47,11 +47,6 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
         this.options = $.extend({}, defaults, options);
         this._defaults = defaults;
         this._name = pluginName;
-        this.poe_emojis = new EmojisLoaderPOE(this.element, this.options);
-        this.poe_emojis.load(function() {
-          _this.emojis_data_array.push(_this.poe_emojis.emojis_data);
-          return _this.checkLoadedEmojisData();
-        });
         this.api_emojis = new EmojisLoaderAPI(this.element, this.options);
         this.api_emojis.load(function() {
           _this.emojis_data_array.push(_this.api_emojis.emojis_data);
@@ -250,10 +245,11 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
         _this = this;
       onLoadEmojisData = function(emojis_data) {
         var emoji, _i, _len;
+        console.dir(emojis_data);
         for (_i = 0, _len = emojis_data.length; _i < _len; _i++) {
           emoji = emojis_data[_i];
           emoji.code = emoji.id;
-          emoji.img_url = emoji.image.replace('emoji/original', 'emoji/px16').replace('.svg?', '.png?');
+          emoji.img_url = "http://s3-us-west-2.amazonaws.com/assets.emojidex.com/emoji/px16/" + emoji.cod + ".png";
         }
         _this.emojis_data = _this.getCategorizedData(emojis_data);
         _this.emoji_regexps = _this.setEmojiCSS_getEmojiRegexps(_this.emojis_data);

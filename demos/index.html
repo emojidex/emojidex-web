@@ -9,43 +9,32 @@
 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 
+    <!--
     <script src="../src/assets/libs/ckeditor-releases/ckeditor.js"></script>
+    -->
 
     <script src="../dist/emojidex.js"></script>
 
     <link rel="stylesheet" href="stylesheet.css">
-    <link rel="stylesheet" href="../src/assets/libs/At.js/dist/css/jquery.atwho.css" />
-    <link href="../src/assets/libs/bootstrap-3.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../src/lib/At.js/dist/css/jquery.atwho.css" />
+    <link href="../demos/bootstrap_and_override.css" rel="stylesheet" />
     <link href="../dist/css/emojidex.css" rel="stylesheet">
 
 <script>
 
 $(document).ready(function(){
 
-  var at_config = {
-    at: "@",
-    data: ["one", "two", "three"],
-    tpl: "<li data-value='@${name}'>${name} <small>${email}</small></li>"
-  }
-
-  CKEDITOR.replace('editor').on('instanceReady', function(event) {
-
-    this.document.getBody().$.contentEditable = true;
-    window.cke = this;
-
-    $('.emojidex_replace').emojidex({
-      path_img: "../dist/img/utf",
-      emojiarea: {
-        plaintext: $('.emojidex-plaintext'), //emojidex_plaintext
-        wysiwyg: $('.emojidex-wysiwyg'), //emojidex_wysiwyg
-        // rawtext: $('.emojidex-rawtext') //emojidex_rawtext
-        //emojidex #all on (wysiwyg + controls)
-        //emojidex_controls #button and controls are added
-        //emojidex_wysiwyg #wysiwyg editor mode (controls not enabled by default, :->search enabled)
-        //emojidex_plaintext #raw text, no graphics
-      }
-    });
-
+  $('.emojidex_replace').emojidex({
+    path_img: "../dist/img/utf",
+    emojiarea: {
+      plaintext: $('.emojidex-plaintext'), //emojidex_plaintext
+      wysiwyg: $('.emojidex-wysiwyg'), //emojidex_wysiwyg
+      // rawtext: $('.emojidex-rawtext') //emojidex_rawtext
+      //emojidex #all on (wysiwyg + controls)
+      //emojidex_controls #button and controls are added
+      //emojidex_wysiwyg #wysiwyg editor mode (controls not enabled by default, :->search enabled)
+      //emojidex_plaintext #raw text, no graphics
+    }
   });
 
 });
@@ -77,16 +66,6 @@ $(document).ready(function(){
       <div class="emojidex-wysiwyg" contentEditable="true">
         Hello :neckbeard:
       </div>
-    </div>
-
-    <div class="example">
-      <h2>WYSIWYG CKEditor</h2>
-      <form id="wysiwyg" name="wysiwyg" method="post">
-        <textarea name="editor" id="editor" rows="10" cols="80">
-          This is my textarea to be replaced with CKEditor.
-        </textarea>
-        <a onClick='CKupdate();console.dir($("#wysiwyg"));'>Submit</a>
-      </form>
     </div>
 
   </body>

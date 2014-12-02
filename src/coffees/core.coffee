@@ -37,10 +37,10 @@ do ($ = jQuery, window, document) ->
       @_defaults = defaults
       @_name = pluginName
 
-      @poe_emojis = new EmojisLoaderPOE @element, @options
-      @poe_emojis.load =>
-        @emojis_data_array.push @poe_emojis.emojis_data
-        @checkLoadedEmojisData()
+      # @poe_emojis = new EmojisLoaderPOE @element, @options
+      # @poe_emojis.load =>
+      #   @emojis_data_array.push @poe_emojis.emojis_data
+      #   @checkLoadedEmojisData()
 
       @api_emojis = new EmojisLoaderAPI @element, @options
       @api_emojis.load =>
@@ -163,10 +163,11 @@ class EmojisLoaderAPI extends EmojisLoader
 
   load: (callback)->
     onLoadEmojisData = (emojis_data) =>
-      # fix data for At.js
+      console.dir emojis_data
+      # fix data for At.js --------
       for emoji in emojis_data
         emoji.code = emoji.id
-        emoji.img_url = emoji.image.replace('emoji/original', 'emoji/px16').replace('.svg?', '.png?')
+        emoji.img_url = "http://s3-us-west-2.amazonaws.com/assets.emojidex.com/emoji/px16/#{emoji.cod}.png"
 
       @emojis_data = @getCategorizedData emojis_data
       @emoji_regexps = @setEmojiCSS_getEmojiRegexps @emojis_data

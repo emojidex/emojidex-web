@@ -37,10 +37,10 @@ do ($ = jQuery, window, document) ->
       @_defaults = defaults
       @_name = pluginName
 
-      @poe_emojis = new EmojisLoaderPOE @element, @options
-      @poe_emojis.load =>
-        @emojis_data_array.push @poe_emojis.emojis_data
-        @checkLoadedEmojisData()
+      # @poe_emojis = new EmojisLoaderPOE @element, @options
+      # @poe_emojis.load =>
+      #   @emojis_data_array.push @poe_emojis.emojis_data
+      #   @checkLoadedEmojisData()
 
       @api_emojis = new EmojisLoaderAPI @element, @options
       @api_emojis.load =>
