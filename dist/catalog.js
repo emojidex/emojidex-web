@@ -54,7 +54,7 @@
         var fixed_emoji_code, list_elm;
         fixed_emoji_code = emoji.code.replace(RegExp(" ", "g"), "_");
         list_elm = $('<li class="mb-l col-xs-4 col-sm-3 col-md-2 col-lg-1 text-center"></li>');
-        list_elm.append("<img class='img-responsive lazy' src='../img/loading.png' data-original='http://s3-us-west-2.amazonaws.com/assets.emojidex.com/emoji/px128/" + fixed_emoji_code + ".png'>");
+        list_elm.append("<img class='img-responsive lazy' src='../img/loading.png' data-original='http://assets.emojidex.com/emoji/px128/" + fixed_emoji_code + ".png'>");
         list_elm.append('<div>:' + emoji.code + ':</div>');
         emoji_list.append(list_elm);
         return $.each(clearfix_data_array, function(k, data) {

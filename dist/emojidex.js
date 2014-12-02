@@ -257,7 +257,7 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
         for (_i = 0, _len = emojis_data.length; _i < _len; _i++) {
           emoji = emojis_data[_i];
           emoji.code = emoji.id;
-          emoji.img_url = "http://s3-us-west-2.amazonaws.com/assets.emojidex.com/emoji/px16/" + emoji.cod + ".png";
+          emoji.img_url = "http://assets.emojidex.com/emoji/px16/" + emoji.cod + ".png";
         }
         _this.emojis_data = _this.getCategorizedData(emojis_data);
         _this.emoji_regexps = _this.setEmojiCSS_getEmojiRegexps(_this.emojis_data);
@@ -269,15 +269,36 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
     };
 
     EmojisLoaderAPI.prototype.getEmojiDataFromAPI = function(callback) {
-      return $.ajax({
-        url: "https://www.emojidex.com/api/v1/emoji",
-        dataType: "json",
-        type: "get",
-        success: function(emojis_data) {
-          callback(emojis_data.emoji);
-        },
-        error: function(emojis_data) {}
-      });
+      var emojis_data, loaded_num, user_name, user_names, _i, _len, _results;
+      loaded_num = 0;
+      user_names = ["emojidex", "emoji"];
+      emojis_data = [];
+      _results = [];
+      for (_i = 0, _len = user_names.length; _i < _len; _i++) {
+        user_name = user_names[_i];
+        $.ajaxSetup({
+          beforeSend: function(jqXHR, settings) {
+            return jqXHR.user_name = user_name;
+          }
+        });
+        _results.push($.ajax({
+          url: "https://www.emojidex.com/api/v1/users/" + user_name + "/emoji",
+          dataType: "json",
+          type: "get",
+          success: function(user_emojis_json, status, xhr) {
+            emojis_data = emojis_data.concat(user_emojis_json.emoji);
+            if (++loaded_num === user_names.length) {
+              set_emoji_list(emojis_data);
+            }
+            callback(emojis_data);
+          },
+          error: function(data) {
+            console.log("error: load json");
+            console.log(data);
+          }
+        }));
+      }
+      return _results;
     };
 
     return EmojisLoaderAPI;
