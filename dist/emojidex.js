@@ -253,12 +253,12 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
         _this = this;
       onLoadEmojisData = function(emojis_data) {
         var emoji, _i, _len;
-        console.dir(emojis_data);
         for (_i = 0, _len = emojis_data.length; _i < _len; _i++) {
           emoji = emojis_data[_i];
-          emoji.code = emoji.id;
-          emoji.img_url = "http://assets.emojidex.com/emoji/px16/" + emoji.cod + ".png";
+          emoji.code = emoji.code.replace(RegExp(" ", "g"), "_");
+          emoji.img_url = "http://assets.emojidex.com/emoji/px32/" + emoji.code + ".png";
         }
+        console.dir(emojis_data);
         _this.emojis_data = _this.getCategorizedData(emojis_data);
         _this.emoji_regexps = _this.setEmojiCSS_getEmojiRegexps(_this.emojis_data);
         _this.setEmojiIcon(_this);
@@ -288,13 +288,12 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
           success: function(user_emojis_json, status, xhr) {
             emojis_data = emojis_data.concat(user_emojis_json.emoji);
             if (++loaded_num === user_names.length) {
-              set_emoji_list(emojis_data);
+              return callback(emojis_data);
             }
-            callback(emojis_data);
           },
           error: function(data) {
             console.log("error: load json");
-            console.log(data);
+            return console.log(data);
           }
         }));
       }

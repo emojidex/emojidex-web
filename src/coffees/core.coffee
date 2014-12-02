@@ -163,12 +163,12 @@ class EmojisLoaderAPI extends EmojisLoader
 
   load: (callback)->
     onLoadEmojisData = (emojis_data) =>
-      console.dir emojis_data
       # fix data for At.js --------
       for emoji in emojis_data
-        emoji.code = emoji.id
-        emoji.img_url = "http://assets.emojidex.com/emoji/px16/#{emoji.cod}.png"
+        emoji.code = emoji.code.replace RegExp(" ", "g"), "_"
+        emoji.img_url = "http://assets.emojidex.com/emoji/px32/#{emoji.code}.png"
 
+      console.dir emojis_data
       @emojis_data = @getCategorizedData emojis_data
       @emoji_regexps = @setEmojiCSS_getEmojiRegexps @emojis_data
       @setEmojiIcon @
@@ -197,14 +197,12 @@ class EmojisLoaderAPI extends EmojisLoader
           # console.log "success: load json"
           emojis_data = emojis_data.concat user_emojis_json.emoji
           if ++loaded_num is user_names.length
-            set_emoji_list emojis_data
+            callback emojis_data
 
-          callback emojis_data
-          return
         error: (data) ->
           console.log "error: load json"
           console.log data
-          return
+
 class EmojisLoaderPOE extends EmojisLoader
   constructor: (@element, @options) ->
     super
