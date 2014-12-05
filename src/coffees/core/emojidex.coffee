@@ -17,12 +17,9 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
 do ($ = jQuery, window, document) ->
   pluginName = "emojidex"
   defaults =
-    path_json: null
-    path_img: "img/utf"
     emojiarea:
-      plaintext: "emojidex-plaintext"
-      wysiwyg: "emojidex-wysiwyg"
-      rawtext: "emojidex-rawtext"
+      plain_text: ".emojidex-plain_text"
+      content_editable: ".emojidex-content_editable"
 
   $.fn[pluginName] = (options) ->
     @each ->
@@ -37,26 +34,17 @@ do ($ = jQuery, window, document) ->
       @_defaults = defaults
       @_name = pluginName
 
-      # @poe_emojis = new EmojisLoaderPOE @element, @options
-      # @poe_emojis.load =>
-      #   @emojis_data_array.push @poe_emojis.emojis_data
-      #   @checkLoadedEmojisData()
-
       @api_emojis = new EmojisLoaderAPI @element, @options
       @api_emojis.load =>
         @emojis_data_array.push @api_emojis.emojis_data
         @checkLoadedEmojisData()
 
-      # console.log $.parseJSON emojis_json
-      # @setEmojiarea @options
-      # $.emojiarea.path = @options.path_img
-
     checkLoadedEmojisData: ->
-      if @emojis_data_array.length is 2
+      if @emojis_data_array
         @setAutoComplete @options
 
-        @emojis_pallet = new EmojisPallet @emojis_data_array, $("#ep"), @options
-        @emojis_pallet.setPallet()
+        # @emojis_pallet = new EmojisPallet @emojis_data_array, $("#ep"), @options
+        # @emojis_pallet.setPallet()
 
     setAutoComplete: (options) ->
       emojis = []
@@ -78,9 +66,8 @@ do ($ = jQuery, window, document) ->
         data: emojis
         tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20' /> ${code}</li>"
         insert_tpl: "<img src='${img_url}' height='20' width='20' />"
-      options.emojiarea["plaintext"].atwho(at_config)
-      options.emojiarea["wysiwyg"].atwho(at_config)
-      $(cke.document.getBody().$).atwho('setIframe', cke.window.getFrame().$).atwho(at_config)
+      $(options.emojiarea["plain_text"]).atwho(at_config)
+      $(options.emojiarea["content_editable"]).atwho(at_config)
 
     setEmojiarea: (options) ->
       options.emojiarea["plaintext"].emojiarea wysiwyg: false

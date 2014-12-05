@@ -5493,6 +5493,13 @@ button.close {
 .pl-xl {
   padding-left: 20px; }
 
+@media (max-width: 767px) {
+  .navbar-header a:first-child {
+    margin-left: 15px; }
+
+  .navbar-header a img {
+    margin-top: 12.5px;
+    height: 35px; } }
 body {
   padding-top: 60px; }
 
@@ -5510,10 +5517,13 @@ i[class*="emojidex-"] {
   background-size: 100%;
   background-repeat: no-repeat; }
 
-@media (max-width: 767px) {
-  .navbar-header a:first-child {
-    margin-left: 15px; }
-
-  .navbar-header a img {
-    margin-top: 12.5px;
-    height: 35px; } }
+.inputor {
+  height: 160px;
+  border: 1px solid #dadada;
+  border-radius: 4px;
+  padding: 5px 8px;
+  outline: 0 none;
+  margin: 10px 0;
+  background: white;
+  font-size: inherit;
+  overflow-y: scroll; }

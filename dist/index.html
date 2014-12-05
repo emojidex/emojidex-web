@@ -6,18 +6,19 @@
     <title>emojidex-coffee</title>
     <meta content="" name="description" />
     <meta content="width=device-width" name="viewport" />
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/emojidex.js"></script>
     <link href="css/jquery.atwho.min.css" rel="stylesheet" />
     <link href="css/bootstrap_and_override.css" rel="stylesheet" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="js/jquery.caret.min.js"></script>
+    <script src="js/jquery.atwho.min.js"></script>
+    <script src="js/emojidex.js"></script>
     <script type="text/javascript">
       (function() {
         $(document).ready(function() {
           return $(".emojidex_replace").emojidex({
             emojiarea: {
-              plain_text: $("#emojidex-plain_text"),
-              content_editable: $("#emojidex-content_editable")
+              plain_text: $(".emojidex-plain_text"),
+              content_editable: $(".emojidex-content_editable")
             }
           });
         });
@@ -103,11 +104,11 @@
       <div class="row">
         <div class="col-md-12">
           <h3>
-            Plain-Text
+            Plain Text
           </h3>
           <form role="form">
             <div class="form-group">
-              <textarea class="form-control" id="emojidex-plain_text" rows="5"> Hello :neckbeard:</textarea>
+              <textarea class="emojidex-plain_text form-control" rows="5"> Hello :neckbeard:</textarea>
             </div>
           </form>
           <hr />
@@ -116,9 +117,9 @@
       <div class="row">
         <div class="col-md-12">
           <h3>
-            ContentEditable
+            Content Editable
           </h3>
-          <div class="emojidex-content_editable" contenteditable="true">
+          <div class="emojidex-content_editable inputor" contenteditable="true">
             Hello :neckbeard:
           </div>
         </div>

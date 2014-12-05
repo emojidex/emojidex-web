@@ -40,9 +40,9 @@ module.exports = (grunt) ->
         options:
           banner: '<%= meta.banner %>'
         src: [
+          # 'bower_components/Caret.js/dist/jquery.caret.min.js'
+          # 'bower_components/At.js/dist/js/jquery.atwho.min.js'
           'src/compiled_js/**/*.js'
-          'bower_components/Caret.js/dist/jquery.caret.min.js'
-          'bower_components/At.js/dist/js/jquery.atwho.js'
         ]
         dest: 'dist/js/emojidex.js'
 
@@ -94,10 +94,26 @@ module.exports = (grunt) ->
         src: '**/*'
         dest: 'dist/img/'
       atwho:
-        expand: true,
-        cwd: 'bower_components/jquery.atwho/dist/css'
-        src: 'jquery.atwho.min.css'
-        dest: 'dist/css/'
+        files: [
+          {
+            expand: true,
+            cwd: 'bower_components/Caret.js/dist/'
+            src: 'jquery.caret.min.js'
+            dest: 'dist/js/'
+          }
+          {
+            expand: true,
+            cwd: 'bower_components/jquery.atwho/dist/css'
+            src: 'jquery.atwho.min.css'
+            dest: 'dist/css/'
+          }
+          {
+            expand: true,
+            cwd: 'bower_components/jquery.atwho/dist/js'
+            src: 'jquery.atwho.min.js'
+            dest: 'dist/js/'
+          }
+        ]
 
     # Watch definitions
     watch:

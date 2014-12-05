@@ -5,6 +5,28 @@ $navbar-logo-fix: 10px;
 @import 'node_modules/bootstrap-sass/assets/stylesheets/bootstrap';
 @import "fix-space";
 
+@media (max-width: $screen-xs-max) {
+  .navbar-header {
+    a:first-child {
+      margin-left: $navbar-logo-space;
+    }
+  }
+  .navbar-header {
+    a {
+      img {
+        margin-top: ($navbar-logo-space + $navbar-logo-fix) / 2;
+        height: $navbar-height - ($navbar-logo-space + $navbar-logo-fix);
+      }
+    }
+  }
+}
+@media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
+}
+@media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
+}
+@media (min-width: $screen-lg-min) {
+}
+
 body {
   padding-top: $navbar-height;
 }
@@ -28,24 +50,14 @@ i[class*="emojidex-"] {
   background-repeat: no-repeat;
 }
 
-@media (max-width: $screen-xs-max) {
-  .navbar-header {
-    a:first-child {
-      margin-left: $navbar-logo-space;
-    }
-  }
-  .navbar-header {
-    a {
-      img {
-        margin-top: ($navbar-logo-space + $navbar-logo-fix) / 2;
-        height: $navbar-height - ($navbar-logo-space + $navbar-logo-fix);
-      }
-    }
-  }
-}
-@media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
-}
-@media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
-}
-@media (min-width: $screen-lg-min) {
+.inputor {
+  height: 160px;
+  border: 1px solid #dadada;
+  border-radius: 4px;
+  padding: 5px 8px;
+  outline: 0 none;
+  margin: 10px 0;
+  background: white;
+  font-size: inherit;
+  overflow-y: scroll;
 }

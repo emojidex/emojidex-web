@@ -9,7 +9,7 @@ class EmojisLoaderAPI extends EmojisLoader
         emoji.code = emoji.code.replace RegExp(" ", "g"), "_"
         emoji.img_url = "http://assets.emojidex.com/emoji/px32/#{emoji.code}.png"
 
-      console.dir emojis_data
+      # console.dir emojis_data
       @emojis_data = @getCategorizedData emojis_data
       @emoji_regexps = @setEmojiCSS_getEmojiRegexps @emojis_data
       @setEmojiIcon @
