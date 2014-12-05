@@ -15,10 +15,9 @@
       (function() {
         $(document).ready(function() {
           return $(".emojidex_replace").emojidex({
-            path_img: "../dist/img/utf",
             emojiarea: {
-              plaintext: $(".emojidex-plaintext"),
-              wysiwyg: $(".emojidex-wysiwyg")
+              plain_text: $("#emojidex-plain_text"),
+              content_editable: $("#emojidex-content_editable")
             }
           });
         });
@@ -108,7 +107,7 @@
           </h3>
           <form role="form">
             <div class="form-group">
-              <textarea class="form-control" id="emojidex-plaintext" rows="5"> Hello :neckbeard:</textarea>
+              <textarea class="form-control" id="emojidex-plain_text" rows="5"> Hello :neckbeard:</textarea>
             </div>
           </form>
           <hr />
@@ -119,7 +118,7 @@
           <h3>
             ContentEditable
           </h3>
-          <div class="emojidex-wysiwyg" contenteditable="true">
+          <div class="emojidex-content_editable" contenteditable="true">
             Hello :neckbeard:
           </div>
         </div>

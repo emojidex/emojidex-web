@@ -17,15 +17,15 @@ html
     coffee:
       $(document).ready ->
         $(".emojidex_replace").emojidex
-          path_img: "../dist/img/utf"
+          # path_img: "../dist/img/utf"
           emojiarea:
-            plaintext: $(".emojidex-plaintext") #emojidex_plaintext
-            wysiwyg: $(".emojidex-wysiwyg") #emojidex_wysiwyg
-            #rawtext: $('.emojidex-rawtext') //emojidex_rawtext
-            #emojidex #all on (wysiwyg + controls)
-            #emojidex_controls #button and controls are added
-            #emojidex_wysiwyg #wysiwyg editor mode (controls not enabled by default, :->search enabled)
-            #emojidex_plaintext #raw text, no graphics
+            plain_text: $("#emojidex-plain_text")
+            content_editable: $("#emojidex-content_editable")
+            # rawtext: $('.emojidex-rawtext') //emojidex_rawtext
+            # emojidex #all on (wysiwyg + controls)
+            # emojidex_controls #button and controls are added
+            # emojidex_wysiwyg #wysiwyg editor mode (controls not enabled by default, :->search enabled)
+            # emojidex_plaintext #raw text, no graphics
 
   body
     .container
@@ -97,11 +97,11 @@ html
           h3 Plain-Text
           form role="form"
             .form-group
-              textarea#emojidex-plaintext.form-control rows="5"  Hello :neckbeard:
+              textarea#emojidex-plain_text.form-control rows="5"  Hello :neckbeard:
           hr
 
       .row
         .col-md-12
           h3 ContentEditable
-          .emojidex-wysiwyg contenteditable="true"
+          .emojidex-content_editable contenteditable="true"
             | Hello :neckbeard:
