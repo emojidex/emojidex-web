@@ -9,8 +9,9 @@ conversion from emoji codes, and various types of emoji input tools and widgets.
 
 Building
 --------
-You will need node with a usable npm and grunt. In general grunt should be installed globally 
-or should be present and usable in your path.  
+You will need node with a usable npm, grunt, bower. In general grunt and bower should be 
+installed globally or should be present and usable in your path. We'll assume you have a 
+working node/npm that you either installed using your package manager or built yourself.
 
 ### Get the source
 First off we need the actual source to build. Clone this repository if you haven't already.
@@ -26,12 +27,12 @@ bower install
 ```
 
 ### Build
-For a regular build (usable for deployment):
+For a regular one-off build:
 ```shell
 grunt
 ```
 
-For a development build:
+For development mode with dynamic compilation:
 ```shell
 grunt dev
 ```
