@@ -21,19 +21,10 @@ module.exports = (grunt) ->
       glob_to_multiple:
         expand: true
         cwd: 'src/coffees/'
-        src: ['core.coffee']
+        src: ['concatenated_core.coffee']
         dest: 'src/compiled_js'
         rename: (dest, src) ->
           return dest + '/' + src.replace(/\.coffee$/, '.js')
-
-      catalog:
-        expand: true
-        cwd: 'src/coffees/catalog'
-        src: ['catalog.coffee']
-        dest: 'dist'
-        rename: (dest, src) ->
-          return dest + '/' + src.replace(/\.coffee$/, '.js')
-
 
     # Concat definitions
     concat:
@@ -42,7 +33,7 @@ module.exports = (grunt) ->
           'src/coffees/core/emojidex.coffee'
           'src/coffees/core/**/*.coffee'
         ]
-        dest: 'src/coffees/core.coffee'
+        dest: 'src/coffees/concatenated_core.coffee'
 
       src_js:
         options:

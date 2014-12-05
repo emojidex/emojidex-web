@@ -26,7 +26,7 @@ class EmojisLoaderAPI extends EmojisLoader
 
     for user_name in user_names
       $.ajaxSetup beforeSend: (jqXHR, settings) ->
-        # set user_name for loaded flag --------
+        # set user_name for loaded flag
         jqXHR.user_name = user_name
 
       $.ajax

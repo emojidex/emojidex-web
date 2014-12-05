@@ -1,0 +1,6 @@
+{
+  "name": "emojidex-coffee",
+  "devDependencies": {
+    "jquery.atwho": "~0.5.1"
+  }
+}

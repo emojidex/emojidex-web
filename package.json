@@ -5,11 +5,12 @@
   "author": "Genshin",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Genshin/emojidex-coffee.git"
+    "url": "https://github.com/emojidex/emojidex-coffee.git"
   },
-  "homepage": "https://github.com/Genshin/emojidex-coffee#emojidex-coffee",
+  "homepage": "https://github.com/emojidex/emojidex-coffee#emojidex-coffee",
   "version": "0.1.0",
   "devDependencies": {
+    "bootstrap-sass": "^3.3.1",
     "grunt": "~0.4.1",
     "grunt-cli": "~0.1.7",
     "grunt-contrib-coffee": "~0.7.0",
