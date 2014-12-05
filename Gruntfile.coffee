@@ -43,13 +43,16 @@ module.exports = (grunt) ->
           'bower_components/Caret.js/dist/jquery.caret.min.js'
           'bower_components/At.js/dist/js/jquery.atwho.js'
         ]
-        dest: 'dist/emojidex.js'
+        dest: 'dist/js/emojidex.js'
 
     # Minify definitions
     uglify:
-      my_target:
-        src: ['dist/emojidex.js']
-        dest: 'dist/emojidex.min.js'
+      emojidex:
+        src: ['dist/js/emojidex.js']
+        dest: 'dist/js/emojidex.min.js'
+      bootstrap:
+        src: ['node_modules/bootstrap-sass/assets/javascripts/bootstrap.js']
+        dest: 'dist/js/bootstrap.min.js'
 
       options:
         banner: '<%= meta.banner %>'
@@ -65,7 +68,7 @@ module.exports = (grunt) ->
         expand: true
         cwd: 'src/sass/'
         src: '*.scss'
-        dest: 'demos/'
+        dest: 'dist/css/'
         ext: '.css'
        ]
 
@@ -73,14 +76,22 @@ module.exports = (grunt) ->
     slim:
       options:
         pretty: true;
-      demos:
+      dsit:
         files: [
           expand: true
           cwd: 'src/slim/'
           src: '*.slim'
-          dest: 'demos/'
+          dest: 'dist/'
           ext: '.html'
         ]
+
+    # copy definitions
+    copy:
+      atwho:
+        expand: true,
+        cwd: 'bower_components/jquery.atwho/dist/css'
+        src: 'jquery.atwho.min.css'
+        dest: 'dist/css/'
 
     # Watch definitions
     watch:
@@ -110,7 +121,9 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-sass'
   grunt.loadNpmTasks 'grunt-slim'
   grunt.loadNpmTasks 'grunt-contrib-watch'
-  grunt.registerTask 'default', ['concat:src_coffee', 'coffee', 'concat:src_js', 'uglify','sass']
-  grunt.registerTask 'dev', ['connect', 'watch']
+  grunt.loadNpmTasks 'grunt-contrib-copy'
   # grunt.loadNpmTasks 'grunt-contrib-jshint'
+
+  grunt.registerTask 'default', ['concat:src_coffee', 'coffee', 'concat:src_js', 'uglify', 'sass', 'slim', 'copy']
+  grunt.registerTask 'dev', ['connect', 'watch']
   # grunt.registerTask 'travis', ['jshint']

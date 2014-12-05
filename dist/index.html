@@ -1,68 +1,58 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title></title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width">
-
+    <meta charset="utf-8" />
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" />
+    <title>emojidex-coffee</title>
+    <meta content="" name="description" />
+    <meta content="width=device-width" name="viewport" />
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-
-    <script src="../dist/emojidex.js"></script>
-
-    <link rel="stylesheet" href="stylesheet.css">
-    <link rel="stylesheet" href="../src/lib/At.js/dist/css/jquery.atwho.css" />
-    <link href="../demos/bootstrap_and_override.css" rel="stylesheet" />
-    <link href="../dist/css/emojidex.css" rel="stylesheet">
-
-<script>
-
-$(document).ready(function(){
-
-  $('.emojidex_replace').emojidex({
-    path_img: "../dist/img/utf",
-    emojiarea: {
-      plaintext: $('.emojidex-plaintext'), //emojidex_plaintext
-      wysiwyg: $('.emojidex-wysiwyg'), //emojidex_wysiwyg
-      // rawtext: $('.emojidex-rawtext') //emojidex_rawtext
-      //emojidex #all on (wysiwyg + controls)
-      //emojidex_controls #button and controls are added
-      //emojidex_wysiwyg #wysiwyg editor mode (controls not enabled by default, :->search enabled)
-      //emojidex_plaintext #raw text, no graphics
-    }
-  });
-
-});
-
-</script>
-
+    <script src="js/emojidex.js"></script>
+    <link href="../src/lib/At.js/dist/css/jquery.atwho.css" rel="stylesheet" />
+    <link href="css/bootstrap_and_override.css" rel="stylesheet" />
+    <link href="css/emojidex.css" rel="stylesheet" />
+    <script type="text/javascript">
+      (function() {
+        $(document).ready(function() {
+          return $(".emojidex_replace").emojidex({
+            path_img: "../dist/img/utf",
+            emojiarea: {
+              plaintext: $(".emojidex-plaintext")
+            }
+          });
+        });
+      
+      }).call(this);
+      
+    </script>
   </head>
   <body>
-
-    <h1>emojidex-coffee Example</h1>
-
+    <h1>
+      emojidex-coffee Example
+    </h1>
     <div class="example">
-      <h2>Emojidex replace</h2>
+      <h2>
+        Emojidex replace
+      </h2>
       <div class="emojidex_replace">
-        🛅😄❤😡💌❤😈👍❤
-        :octopus::boar::frog::hand_salute::tes :virgo:
+        🛅😄❤😡💌❤😈👍❤\:octopus::boar::frog::hand_salute::tes :virgo:
       </div>
     </div>
-
     <div class="example">
-      <h2>Plain-Text</h2>
+      <h2>
+        Plain-Text
+      </h2>
       <form>
-        <textarea rows="5" class="emojidex-plaintext">Hello :neckbeard:</textarea>
+        <textarea class="emojidex-plaintext" rows="5"> Hello :neckbeard:</textarea>
       </form>
     </div>
-
     <div class="example">
-      <h2>ContentEditable</h2>
-      <div class="emojidex-wysiwyg" contentEditable="true">
+      <h2>
+        ContentEditable
+      </h2>
+      <div class="emojidex-wysiwyg" contenteditable="true">
         Hello :neckbeard:
       </div>
     </div>
-
   </body>
 </html>
