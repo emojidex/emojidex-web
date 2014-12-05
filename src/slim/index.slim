@@ -8,11 +8,11 @@ html
     meta content="width=device-width" name="viewport"
 
     script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
+    script src="js/bootstrap.min.js"
     script src="js/emojidex.js"
 
-    link href="../src/lib/At.js/dist/css/jquery.atwho.css" rel="stylesheet"
+    link href="css/jquery.atwho.min.css" rel="stylesheet"
     link href="css/bootstrap_and_override.css" rel="stylesheet"
-    link href="css/emojidex.css" rel="stylesheet"
 
     coffee:
       $(document).ready ->
@@ -20,7 +20,7 @@ html
           path_img: "../dist/img/utf"
           emojiarea:
             plaintext: $(".emojidex-plaintext") #emojidex_plaintext
-            #wysiwyg: $(".emojidex-wysiwyg") #emojidex_wysiwyg
+            wysiwyg: $(".emojidex-wysiwyg") #emojidex_wysiwyg
             #rawtext: $('.emojidex-rawtext') //emojidex_rawtext
             #emojidex #all on (wysiwyg + controls)
             #emojidex_controls #button and controls are added
@@ -28,17 +28,80 @@ html
             #emojidex_plaintext #raw text, no graphics
 
   body
-    h1 emojidex-coffee Example
-    .example
-      h2 Emojidex replace
-      .emojidex_replace
-        | 🛅😄❤😡💌❤😈👍❤
-        | \:octopus::boar::frog::hand_salute::tes :virgo:
-    .example
-      h2 Plain-Text
-      form
-        textarea.emojidex-plaintext rows="5"  Hello :neckbeard:
-    .example
-      h2 ContentEditable
-      .emojidex-wysiwyg contenteditable="true"
-        | Hello :neckbeard:
+    .container
+      nav.navbar.navbar-default.navbar-fixed-top role="navigation"
+        .container
+          .navbar-header
+            a href="#"
+              img src="img/emoji-company-logo.png"
+            a href="#"
+              img src="img/logo.png"
+            button.navbar-toggle.collapsed data-target="#navbar-top" data-toggle="collapse" type="button"
+              span.sr-only Toggle navigation
+              span.icon-bar
+              span.icon-bar
+              span.icon-bar
+          #navbar-top.collapse.navbar-collapse
+            a.btn.btn-primary.navbar-btn.pull-right data-toggle="modal" href="#modal-licensing_info"  Licensing Info
+
+      #modal-licensing_info.modal.fade
+        .modal-dialog
+          .modal-content
+            .modal-header
+              button.close data-dismiss="modal"  &times;
+              h4.modal-title Licensing Info
+            .modal-body
+              p
+                | All emoji © 2013 emojidex.
+                br Exclusive Licensing Rights @ emoji company.
+              p For licenses please contact:
+              h2 Print and Physical Works and Media
+              p
+                | emoji company GmbH
+                br Berlin, Germany
+              p
+                | headquartered in:
+                | Eschenweg 1a
+                br
+                  | 40667 Meerbusch
+                  br Germany
+              p
+                a href="mailto:licensing@emoji-company.com"  licensing@emoji-company.com
+                br
+                  a href="http://www.emoji-company.com" target="_blank"  www.emoji-company.com
+              h2 Virtual Works / Software / Virtual Media
+              p
+                | emojidex™ / Genshin Souzou K.K. [Phantom Creation Inc]
+                br Aichi, Japan
+              p
+                a href="mailto:info@emojidex.com"  info@emojidex.com
+                br
+                  a href="http://www.emojidex.com" target="_blank"  www.emojidex.com
+
+    .container
+      .row
+        .col-md-12
+          h1 emojidex-coffee examples
+          hr
+
+      .row
+        .col-md-12
+          h3 Emojidex replace
+          .emojidex_replace
+            | 🛅😄❤😡💌❤😈👍❤
+            | :octopus::boar::frog::hand_salute::tes :virgo:
+          hr
+
+      .row
+        .col-md-12
+          h3 Plain-Text
+          form role="form"
+            .form-group
+              textarea#emojidex-plaintext.form-control rows="5"  Hello :neckbeard:
+          hr
+
+      .row
+        .col-md-12
+          h3 ContentEditable
+          .emojidex-wysiwyg contenteditable="true"
+            | Hello :neckbeard:

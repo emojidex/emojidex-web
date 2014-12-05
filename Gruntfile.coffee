@@ -105,11 +105,11 @@ module.exports = (grunt) ->
         files:['src/slim/*.slim']
         tasks:['slim']
       coffee:
-       files: ['src/coffees/**/*.coffee']
-       tasks: ['concat:src_coffee', 'coffee', 'concat:src_js', 'uglify']
+        files: ['src/coffees/**/*.coffee']
+        tasks: ['concat:src_coffee', 'coffee', 'concat:src_js', 'uglify']
       sass:
-       files: ['src/sass/*.scss']
-       tasks: ['sass']
+        files: ['src/sass/*.scss']
+        tasks: ['sass']
 
       options:
         livereload: true
