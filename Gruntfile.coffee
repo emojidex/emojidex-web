@@ -2,7 +2,7 @@ module.exports = (grunt) ->
   grunt.initConfig
 
     # Import package manifest
-    pkg: grunt.file.readJSON('emojidex.jquery.json')
+    pkg: grunt.file.readJSON('package.json')
 
     # Banner definitions
     meta:
@@ -12,8 +12,9 @@ module.exports = (grunt) ->
         ' *  <%= pkg.description %>\n' +
         ' *  <%= pkg.homepage %>\n' +
         ' *\n' +
-        ' *  Made by <%= pkg.author.name %>\n' +
+        ' *  Made by <%= pkg.author %>\n' +
         ' *  Under <%= pkg.licenses[0].type %> License\n' +
+        ' *  <%= pkg.licenses[0].url %> License\n' +
         ' */\n'
 
     # CoffeeScript compilation
