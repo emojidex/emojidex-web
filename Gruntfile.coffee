@@ -87,6 +87,11 @@ module.exports = (grunt) ->
 
     # copy definitions
     copy:
+      img:
+        expand: true,
+        cwd: 'src/img/'
+        src: '**/*'
+        dest: 'dist/img/'
       atwho:
         expand: true,
         cwd: 'bower_components/jquery.atwho/dist/css'
