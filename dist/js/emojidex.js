@@ -89,7 +89,7 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
         at_config = {
           callback: testCallback,
           at: ":",
-          limit: 8,
+          limit: 10,
           search_key: "code",
           data: emojis,
           tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20' /> ${code}</li>",
