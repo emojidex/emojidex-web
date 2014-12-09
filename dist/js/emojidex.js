@@ -25,7 +25,7 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
 
 
 (function() {
-  var EmojisLoader, EmojisLoaderAPI, EmojisPallet,
+  var EmojidexClient, EmojisLoader, EmojisLoaderAPI, EmojisPallet,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -310,6 +310,81 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
     EmojisPallet.prototype.setPallet = function() {};
 
     return EmojisPallet;
+
+  })();
+
+  /*
+  emojidex coffee client
+  * Provides search, index caching and combining and asset URI resolution
+  
+  =LICENSE=
+  Licensed under the emojidex Open License
+  https://www.emojidex.com/emojidex/emojidex_open_license
+  
+  Copyright 2013 Genshin Souzou Kabushiki Kaisha
+  */
+
+
+  EmojidexClient = (function() {
+    function EmojidexClient(pre_cache_utf, locale, api_uri, cdn_uri) {
+      if (pre_cache_utf == null) {
+        pre_cache_utf = false;
+      }
+      if (locale == null) {
+        locale = 'en';
+      }
+      if (api_uri == null) {
+        api_uri = 'https://www.emojidex.com/api/v1/';
+      }
+      if (cdn_uri == null) {
+        cdn_uri = 'http://cdn.emojidex.com';
+      }
+      this.api_uri = api_uri;
+      this.cdn_uri = cdn_uri;
+      this.emoji = [];
+      if (pre_cache_utf) {
+        switch (locale) {
+          case 'en':
+            user_emoji('emoji');
+            break;
+          case 'ja':
+            user_emoji('絵文字');
+        }
+      }
+    }
+
+    EmojidexClient.prototype.search_by_string = function(search_string, page, limit) {
+      var keys, tags;
+      if (page == null) {
+        page = 1;
+      }
+      if (limit == null) {
+        limit = 20;
+      }
+      keys = [];
+      tags = [];
+      return search(keys, tags, page, limit);
+    };
+
+    EmojidexClient.prototype.search = function(keys, tags, page, limit) {
+      if (page == null) {
+        page = 1;
+      }
+      if (limit == null) {
+        limit = 20;
+      }
+    };
+
+    EmojidexClient.prototype.user_emoji = function(username, page, limit) {
+      if (page == null) {
+        page = 1;
+      }
+      if (limit == null) {
+        limit = 20;
+      }
+    };
+
+    return EmojidexClient;
 
   })();
 
