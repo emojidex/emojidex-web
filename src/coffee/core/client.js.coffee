@@ -41,8 +41,11 @@ class EmojidexClient
     
 
   # Obtains a collection
-  user_emoji: (username, page = 1, limit = 20) ->
-    $.getJSON((@api_uri +  'users/' + username + '/emoji'
+  user_emoji: (callback, username, page = 1, limit = 20) ->
+    $.getJSON((@api_uri +  'users/' + username + '/emoji?' + $.param({page: page, limit: limit})),
+      (data) ->
+        _cc(data, callback)
+    )
 
   # Checks for local saved login data, and if present sets the username and api_key
   auto_login: () ->
@@ -56,19 +59,23 @@ class EmojidexClient
     # TODO 絶対にapi_keyを保存する時に暗号化すること!
 
   get_history: (page = 1, limit = 50) ->
-    if @api_key != nil
-      # TODO get history
+   # if @api_key != nil
+   #   # TODO get history
 
   set_history: (emoji_code) ->
-    if @api_key != nil
-      # TODO ユーザー履歴に追加
-    else
-      # TODO グローバル履歴に追加
+   # if @api_key != nil
+   #   # TODO ユーザー履歴に追加
+   # else
+   #   # TODO グローバル履歴に追加
 
   get_favorites: (page = 1, limit = 50) ->
-    if @api_key != nil
-      # TODO get favorites
+   # if @api_key != nil
+   #   # TODO get favorites
 
   set_favorites: (emoji_code) ->
-    if @api_key != nil
-      # TODO お気に入りに追加
+   # if @api_key != nil
+   #   # TODO お気に入りに追加
+
+  # Collects data and runs Callback
+  _cc: (data, callback) ->
+    alert data

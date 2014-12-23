@@ -22,32 +22,32 @@ do ($ = jQuery, window, document) ->
 
   class Plugin
     constructor: (@element, options) ->
-      @emojis_data_array = []
+      @emoji_data_array = []
 
       @options = $.extend {}, defaults, options
       @_defaults = defaults
       @_name = pluginName
 
-      @api_emojis = new EmojisLoaderAPI @element, @options
-      @api_emojis.load =>
-        @emojis_data_array.push @api_emojis.emojis_data
-        @checkLoadedEmojisData()
+      @api_emoji = new EmojiLoaderService @element, @options
+      @api_emoji.load =>
+        @emoji_data_array.push @api_emoji.emoji_data
+        @checkLoadedEmojiData()
 
-    checkLoadedEmojisData: ->
-      if @emojis_data_array
+    checkLoadedEmojiData: ->
+      if @emoji_data_array
         @setAutoComplete @options
 
-        # @emojis_pallet = new EmojisPallet @emojis_data_array, $("#ep"), @options
-        # @emojis_pallet.setPallet()
+        # @emoji_pallet = new EmojiPallet @emoji_data_array, $("#ep"), @options
+        # @emoji_pallet.setPallet()
 
     setAutoComplete: (options) ->
-      emojis = []
-      for emojis_data in @emojis_data_array
-        for category of emojis_data
-          for emoji in emojis_data[category]
-            emojis.push
-              code: emoji.code
-              img_url: emoji.img_url
+      emoji = []
+      for emoji_data in @emoji_data_array
+        for category of emoji_data
+          for moji in emoji_data[category]
+            emoji.push
+              code: moji.code
+              img_url: moji.img_url
 
       testCallback = (data)->
         console.log 111
@@ -57,7 +57,7 @@ do ($ = jQuery, window, document) ->
         at: ":"
         limit: 10
         search_key: "code"
-        data: emojis
+        data: emoji
         tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20' /> ${code}</li>"
         insert_tpl: "<img src='${img_url}' height='20' width='20' />"
       $(options.emojiarea["plain_text"]).atwho(at_config)

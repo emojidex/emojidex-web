@@ -21,7 +21,7 @@ module.exports = (grunt) ->
     coffee:
       glob_to_multiple:
         expand: true
-        cwd: 'src/coffees/'
+        cwd: 'src/coffee/'
         src: ['concatenated_core.coffee']
         dest: 'src/compiled_js'
         rename: (dest, src) ->
@@ -31,10 +31,10 @@ module.exports = (grunt) ->
     concat:
       src_coffee:
         src:[
-          'src/coffees/core/emojidex.coffee'
-          'src/coffees/core/**/*.coffee'
+          'src/coffee/core/emojidex.coffee'
+          'src/coffee/core/**/*.coffee'
         ]
-        dest: 'src/coffees/concatenated_core.coffee'
+        dest: 'src/coffee/concatenated_core.coffee'
 
       src_js:
         options:
@@ -76,7 +76,7 @@ module.exports = (grunt) ->
     # slim definitions
     slim:
       options:
-        pretty: true;
+        pretty: true
       dsit:
         files: [
           expand: true
@@ -121,7 +121,7 @@ module.exports = (grunt) ->
         files:['src/slim/*.slim']
         tasks:['slim']
       coffee:
-        files: ['src/coffees/**/*.coffee']
+        files: ['src/coffee/**/*.coffee']
         tasks: ['concat:src_coffee', 'coffee', 'concat:src_js', 'uglify']
       sass:
         files: ['src/sass/*.scss']

@@ -1,28 +1,28 @@
-class EmojisLoaderAPI extends EmojisLoader
+class EmojiLoaderService extends EmojiLoader
   constructor: (@element, @options) ->
     super
 
   load: (callback)->
-    onLoadEmojisData = (emojis_data) =>
+    onLoadEmojiData = (emoji_data) =>
       # fix data for At.js --------
-      for emoji in emojis_data
+      for emoji in emoji_data
         emoji.code = emoji.code.replace RegExp(" ", "g"), "_"
         emoji.img_url = "http://assets.emojidex.com/emoji/px32/#{emoji.code}.png"
 
-      # console.dir emojis_data
-      @emojis_data = @getCategorizedData emojis_data
-      @emoji_regexps = @setEmojiCSS_getEmojiRegexps @emojis_data
+      # console.dir emoji_data
+      @emoji_data = @getCategorizedData emoji_data
+      @emoji_regexps = @setEmojiCSS_getEmojiRegexps @emoji_data
       @setEmojiIcon @
       callback @
 
     # start main --------
-    @getEmojiDataFromAPI onLoadEmojisData
+    @getEmojiDataFromAPI onLoadEmojiData
     @
 
   getEmojiDataFromAPI: (callback) ->
     loaded_num = 0
     user_names = ["emojidex", "emoji"]
-    emojis_data = []
+    emoji_data = []
 
     for user_name in user_names
       $.ajaxSetup beforeSend: (jqXHR, settings) ->
@@ -34,11 +34,11 @@ class EmojisLoaderAPI extends EmojisLoader
         dataType: "json"
         type: "get"
 
-        success: (user_emojis_json, status, xhr) ->
+        success: (user_emoji_json, status, xhr) ->
           # console.log "success: load json"
-          emojis_data = emojis_data.concat user_emojis_json.emoji
+          emoji_data = emoji_data.concat user_emoji_json.emoji
           if ++loaded_num is user_names.length
-            callback emojis_data
+            callback emoji_data
 
         error: (data) ->
           console.log "error: load json"

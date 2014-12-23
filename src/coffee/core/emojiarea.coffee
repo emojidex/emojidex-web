@@ -1,291 +1,15 @@
 ###
-emojidex coffee plugin for jQuery/Zepto and compatible
+emojiarea
+
+emojiarea - A rich textarea control that supports emoji
+
+based partially emojiarea by Brian Reavis (Apache License)
 
 =LICENSE=
 Licensed under the emojidex Open License
 https://www.emojidex.com/emojidex/emojidex_open_license
 
 Copyright 2013 Genshin Souzou Kabushiki Kaisha
-###
-
-do ($ = jQuery, window, document) ->
-  pluginName = "emojidex"
-  defaults =
-    emojiarea:
-      plain_text: ".emojidex-plain_text"
-      content_editable: ".emojidex-content_editable"
-
-  $.fn[pluginName] = (options) ->
-    @each ->
-      if !$.data(@, "plugin_#{pluginName}")
-        $.data(@, "plugin_#{pluginName}", new Plugin(@, options))
-
-  class Plugin
-    constructor: (@element, options) ->
-      @emojis_data_array = []
-
-      @options = $.extend {}, defaults, options
-      @_defaults = defaults
-      @_name = pluginName
-
-      @api_emojis = new EmojisLoaderAPI @element, @options
-      @api_emojis.load =>
-        @emojis_data_array.push @api_emojis.emojis_data
-        @checkLoadedEmojisData()
-
-    checkLoadedEmojisData: ->
-      if @emojis_data_array
-        @setAutoComplete @options
-
-        # @emojis_pallet = new EmojisPallet @emojis_data_array, $("#ep"), @options
-        # @emojis_pallet.setPallet()
-
-    setAutoComplete: (options) ->
-      emojis = []
-      for emojis_data in @emojis_data_array
-        for category of emojis_data
-          for emoji in emojis_data[category]
-            emojis.push
-              code: emoji.code
-              img_url: emoji.img_url
-
-      testCallback = (data)->
-        console.log 111
-
-      at_config =
-        callback: testCallback
-        at: ":"
-        limit: 10
-        search_key: "code"
-        data: emojis
-        tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20' /> ${code}</li>"
-        insert_tpl: "<img src='${img_url}' height='20' width='20' />"
-      $(options.emojiarea["plain_text"]).atwho(at_config)
-      $(options.emojiarea["content_editable"]).atwho(at_config)
-
-    setEmojiarea: (options) ->
-      options.emojiarea["plaintext"].emojiarea wysiwyg: false
-      # options.emojiarea["wysiwyg"].emojiarea wysiwyg: true
-      options.emojiarea["wysiwyg"].on "change", ->
-        console.dir @
-        # console.dir options.emojiarea["rawtext"].text
-        options.emojiarea["rawtext"].text $(this).val()
-      options.emojiarea["wysiwyg"].trigger "change"
-
-class EmojisLoader
-  emojis_data: null
-  element: null
-  options: null
-  emoji_regexps: null
-
-  getCategorizedData: (emojis_data) ->
-    new_emojis_data = {}
-    for emoji in emojis_data
-
-      if emoji.category is null
-        unless new_emojis_data.uncategorized? 
-          new_emojis_data.uncategorized = [emoji]
-        else
-          new_emojis_data.uncategorized.push emoji
-
-      else
-        unless new_emojis_data[emoji.category]? 
-          new_emojis_data[emoji.category] = [emoji]
-        else
-          new_emojis_data[emoji.category].push emoji
-
-    return new_emojis_data
-
-  setEmojiCSS_getEmojiRegexps: (emojis_data) ->
-    regexp_for_utf = ""
-    regexp_for_code = ":("
-
-    emojis_css = $('<style type="text/css" />')
-    for category of emojis_data
-      emojis_in_category = emojis_data[category]
-      for emoji in emojis_in_category
-        regexp_for_utf += emoji.moji + "|"
-        regexp_for_code += emoji.code + "|"
-        emojis_css.append "i.emojidex-" + emoji.code + " {background-image: url('" + emoji.img_url + "')}"
-    $("head").append emojis_css
-    
-    return utf: regexp_for_utf.slice(0, -1), code: regexp_for_code.slice(0, -1) + "):"
-
-  getEmojiTag: (emoji_code) ->
-    return '<i class="emojidex-' + emoji_code + '"></i>'
-  
-  replaceForUTF: (options) ->
-    replaced_string = options.s_replace.replace new RegExp(options.regexp, "g"), (matched_string) ->
-      for category of options.emojis_data
-        for emoji in options.emojis_data[category]
-          if emoji.moji is matched_string
-            return EmojisLoader::getEmojiTag emoji.code
-  
-  replaceForCode: (options) ->
-    replaced_string = options.s_replace.replace new RegExp(options.regexp, "g"), (matched_string) ->
-      matched_string = matched_string.replace /:/g, ""
-      for category of options.emojis_data
-        for emoji in options.emojis_data[category]
-          if emoji.code is matched_string
-            return EmojisLoader::getEmojiTag emoji.code
-
-  setEmojiIcon: (loader) ->
-    $(@element).find(":not(iframe,textarea,script)").andSelf().contents().filter(->
-      @nodeType is Node.TEXT_NODE
-    ).each ->
-      replaced_string = @textContent
-      replaced_string = EmojisLoader::replaceForUTF s_replace: replaced_string, regexp: loader.emoji_regexps.utf, emojis_data: loader.emojis_data if loader.emoji_regexps.utf?
-      replaced_string = EmojisLoader::replaceForCode s_replace: replaced_string, regexp: loader.emoji_regexps.code, emojis_data: loader.emojis_data if loader.emoji_regexps.code?
-      $(@).replaceWith replaced_string
-
-class EmojisLoaderAPI extends EmojisLoader
-  constructor: (@element, @options) ->
-    super
-
-  load: (callback)->
-    onLoadEmojisData = (emojis_data) =>
-      # fix data for At.js --------
-      for emoji in emojis_data
-        emoji.code = emoji.code.replace RegExp(" ", "g"), "_"
-        emoji.img_url = "http://assets.emojidex.com/emoji/px32/#{emoji.code}.png"
-
-      # console.dir emojis_data
-      @emojis_data = @getCategorizedData emojis_data
-      @emoji_regexps = @setEmojiCSS_getEmojiRegexps @emojis_data
-      @setEmojiIcon @
-      callback @
-
-    # start main --------
-    @getEmojiDataFromAPI onLoadEmojisData
-    @
-
-  getEmojiDataFromAPI: (callback) ->
-    loaded_num = 0
-    user_names = ["emojidex", "emoji"]
-    emojis_data = []
-
-    for user_name in user_names
-      $.ajaxSetup beforeSend: (jqXHR, settings) ->
-        # set user_name for loaded flag
-        jqXHR.user_name = user_name
-
-      $.ajax
-        url: "https://www.emojidex.com/api/v1/users/" + user_name + "/emoji"
-        dataType: "json"
-        type: "get"
-
-        success: (user_emojis_json, status, xhr) ->
-          # console.log "success: load json"
-          emojis_data = emojis_data.concat user_emojis_json.emoji
-          if ++loaded_num is user_names.length
-            callback emojis_data
-
-        error: (data) ->
-          console.log "error: load json"
-          console.log data
-
-class EmojisPallet
-  constructor: (@emojis_data_array, @element, @options) ->
-    @KEY_ESC = 27
-    @KEY_TAB = 9
-
-  setPallet: ->
-    # console.log @options
-
-    # @element.click ->
-    #   showPallet()
-###
-emojidex coffee client
-* Provides search, index caching and combining and asset URI resolution
-
-=LICENSE=
-Licensed under the emojidex Open License
-https://www.emojidex.com/emojidex/emojidex_open_license
-
-Copyright 2013 Genshin Souzou Kabushiki Kaisha
-###
-
-class EmojidexClient
-  constructor: (pre_cache_utf = false,
-                  locale = 'en',
-                  api_uri = 'https://www.emojidex.com/api/v1/',
-                  cdn_uri = 'http://cdn.emojidex.com') ->
-    @api_uri = api_uri
-    @cdn_uri = cdn_uri
-    @emoji = []
-    @history = []
-    @favorites = []
-
-    if auto_login
-      get_history
-      get_favorites
-
-    if pre_cache_utf
-      switch locale
-        when 'en' then user_emoji('emoji')
-        when 'ja' then user_emoji('絵文字')
-
-  # Breaks down a search string into arrays of search keys and tags and performs a search
-  search_by_string: (search_string, page = 1, limit = 20) ->
-    keys = []
-    tags = []
-    # TODO ストリングを分解する
-    search(keys, tags, page, limit)
-
-  # Searches using an array of keys and an array of tags
-  search: (keys, tags, page = 1, limit = 20) ->
-    
-
-  # Obtains a collection
-  user_emoji: (username, page = 1, limit = 20) ->
-    $.getJSON((@api_uri +  'users/' + username + '/emoji'
-
-  # Checks for local saved login data, and if present sets the username and api_key
-  auto_login: () ->
-    @username = nil
-    @api_key = nil
-    # TODO ローカルを確認してクッキー度にログイン情報(usernameとapi_key)があれば使う
-    # TODO api_keyの暗号を解かすことを忘れなく
-
-  login: (username = nil, password = nil) ->
-    # TODO usernameとpasswordでログインし、成功したら@usernameと@api_keyを設定する. passwordを保存しないこと
-    # TODO 絶対にapi_keyを保存する時に暗号化すること!
-
-  get_history: (page = 1, limit = 50) ->
-    if @api_key != nil
-      # TODO get history
-
-  set_history: (emoji_code) ->
-    if @api_key != nil
-      # TODO ユーザー履歴に追加
-    else
-      # TODO グローバル履歴に追加
-
-  get_favorites: (page = 1, limit = 50) ->
-    if @api_key != nil
-      # TODO get favorites
-
-  set_favorites: (emoji_code) ->
-    if @api_key != nil
-      # TODO お気に入りに追加
-
-###
-emojiarea.poe
-@author Yusuke Matsui
-
-emojiarea - A rich textarea control that supports emojis, WYSIWYG-style.
-Copyright (c) 2012 DIY Co
-
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
-file except in compliance with the License. You may obtain a copy of the License at:
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
-ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-
-@author Brian Reavis <brian@diy.org>
 ###
 (($, window, document) ->
   ELEMENT_NODE = 1
@@ -305,7 +29,7 @@ governing permissions and limitations under the License.
     icons: {}
     defaults:
       button: null
-      buttonLabel: "Emojis"
+      buttonLabel: "emoji"
       buttonPosition: "after"
 
   $.fn.emojiarea = (options) ->
@@ -524,9 +248,9 @@ governing permissions and limitations under the License.
       return
 
     html = @$editor.text()
-    emojis = $.emojiarea.icons
-    for key of emojis
-      html = html.replace(new RegExp(util.escapeRegex(key), "g"), EmojiArea.createIcon(key))  if emojis.hasOwnProperty(key)
+    emoji = $.emojiarea.icons
+    for moji of emoji
+      html = html.replace(new RegExp(util.escapeRegex(moji), "g"), EmojiArea.createIcon(moji))  if emoji.hasOwnProperty(moji)
     @$editor.html html
     $textarea.hide().after @$editor
     @setup()
