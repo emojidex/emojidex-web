@@ -19,7 +19,7 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
 
 
 (function() {
-  var EmojiLoader, EmojiLoaderService, EmojiPallet, EmojidexClient,
+  var EmojiLoader, EmojiLoaderService, EmojiPallet,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -121,7 +121,7 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
   */
 
 
-  EmojidexClient = (function() {
+  this.EmojidexClient = (function() {
     function EmojidexClient(pre_cache_utf, locale, api_uri, cdn_uri) {
       if (pre_cache_utf == null) {
         pre_cache_utf = false;
@@ -140,7 +140,8 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
       this.emoji = [];
       this.history = [];
       this.favorites = [];
-      if (auto_login) {
+      this.search_result = [];
+      if (this.auto_login()) {
         get_history;
         get_favorites;
       }
@@ -193,13 +194,13 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
     };
 
     EmojidexClient.prototype.auto_login = function() {
-      this.username = nil;
-      return this.api_key = nil;
+      this.username = null;
+      return this.api_key = null;
     };
 
     EmojidexClient.prototype.login = function(username, password) {
       if (username == null) {
-        username = nil;
+        username = null;
       }
       if (password == null) {
         password = nil;

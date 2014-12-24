@@ -83,7 +83,7 @@ https://www.emojidex.com/emojidex/emojidex_open_license
 Copyright 2013 Genshin Souzou Kabushiki Kaisha
 ###
 
-class EmojidexClient
+class @EmojidexClient
   constructor: (pre_cache_utf = false,
                   locale = 'en',
                   api_uri = 'https://www.emojidex.com/api/v1/',
@@ -93,8 +93,9 @@ class EmojidexClient
     @emoji = []
     @history = []
     @favorites = []
+    @search_result = []
 
-    if auto_login
+    if @auto_login()
       get_history
       get_favorites
 
@@ -123,31 +124,31 @@ class EmojidexClient
 
   # Checks for local saved login data, and if present sets the username and api_key
   auto_login: () ->
-    @username = nil
-    @api_key = nil
+    @username = null
+    @api_key = null
     # TODO ローカルを確認してクッキー度にログイン情報(usernameとapi_key)があれば使う
     # TODO api_keyの暗号を解かすことを忘れなく
 
-  login: (username = nil, password = nil) ->
+  login: (username = null, password = nil) ->
     # TODO usernameとpasswordでログインし、成功したら@usernameと@api_keyを設定する. passwordを保存しないこと
     # TODO 絶対にapi_keyを保存する時に暗号化すること!
 
   get_history: (page = 1, limit = 50) ->
-   # if @api_key != nil
+   # if @api_key != null
    #   # TODO get history
 
   set_history: (emoji_code) ->
-   # if @api_key != nil
+   # if @api_key != null
    #   # TODO ユーザー履歴に追加
    # else
    #   # TODO グローバル履歴に追加
 
   get_favorites: (page = 1, limit = 50) ->
-   # if @api_key != nil
+   # if @api_key != null
    #   # TODO get favorites
 
   set_favorites: (emoji_code) ->
-   # if @api_key != nil
+   # if @api_key != null
    #   # TODO お気に入りに追加
 
   # Collects data and runs Callback
