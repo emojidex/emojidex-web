@@ -161,12 +161,26 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
     };
 
     EmojidexClient.prototype.search = function(keys, tags, page, limit) {
+      var codes, key, _i, _len;
+      if (tags == null) {
+        tags = [];
+      }
       if (page == null) {
         page = 1;
       }
       if (limit == null) {
         limit = 20;
       }
+      codes = {};
+      for (_i = 0, _len = keys.length; _i < _len; _i++) {
+        key = keys[_i];
+        alert(typeof key);
+      }
+      return $.getJSON(this.api_uri + 'search/emoji?' + $.param({
+        code_cont: "face",
+        page: page,
+        limit: limit
+      }), this._cc);
     };
 
     EmojidexClient.prototype.user_emoji = function(callback, username, page, limit) {
@@ -179,9 +193,7 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
       return $.getJSON(this.api_uri + 'users/' + username + '/emoji?' + $.param({
         page: page,
         limit: limit
-      }), function(data) {
-        return _cc(data, callback);
-      });
+      }), this._cc);
     };
 
     EmojidexClient.prototype.auto_login = function() {
@@ -220,7 +232,7 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
 
     EmojidexClient.prototype.set_favorites = function(emoji_code) {};
 
-    EmojidexClient.prototype._cc = function(data, callback) {
+    EmojidexClient.prototype._cc = function(data) {
       return alert(data);
     };
 

@@ -112,15 +112,22 @@ class @EmojidexClient
     search(keys, tags, page, limit)
 
   # Searches using an array of keys and an array of tags
-  search: (keys, tags, page = 1, limit = 20) ->
-    
+  search: (keys, tags = [], page = 1, limit = 20) ->
+    codes = {}
+    for key in keys
+      alert (typeof key)
+
+    $.getJSON((@api_uri +  'search/emoji?' + $.param({code_cont: "face", page: page, limit: limit})),
+        @_cc)
+
+  # Executes a search query
+  #query: (query_hash)
+    # TODO fill in query stuff
 
   # Obtains a collection
   user_emoji: (callback, username, page = 1, limit = 20) ->
     $.getJSON((@api_uri +  'users/' + username + '/emoji?' + $.param({page: page, limit: limit})),
-      (data) ->
-        _cc(data, callback)
-    )
+      @_cc)
 
   # Checks for local saved login data, and if present sets the username and api_key
   auto_login: () ->
@@ -152,7 +159,7 @@ class @EmojidexClient
    #   # TODO お気に入りに追加
 
   # Collects data and runs Callback
-  _cc: (data, callback) ->
+  _cc: (data) ->
     alert data
 
 class EmojiLoader
