@@ -104,30 +104,42 @@ class @EmojidexClient
         when 'en' then user_emoji('emoji')
         when 'ja' then user_emoji('絵文字')
 
+  # Executes a general search (code_cont)
+  search: (term, callback = null, page = 1, limit = 20, detailed = false) ->
+    $.getJSON((@api_uri +  'search/emoji?' + $.param({code_cont: term, page: page, limit: limit, detailed: detailed})))
+      .error (response) ->
+        @search_result = []
+      .success (response) ->
+        @search_result = response.emoji
+        _combine_emoji(response.emoji)
+        callback(response.emoji) if callback
+
   # Breaks down a search string into arrays of search keys and tags and performs a search
   search_by_string: (search_string, page = 1, limit = 20) ->
     keys = []
     tags = []
     # TODO ストリングを分解する
-    search(keys, tags, page, limit)
+    advanced_search(keys, tags, page, limit)
 
   # Searches using an array of keys and an array of tags
-  search: (keys, tags = [], page = 1, limit = 20) ->
+  advanced_search: (keys, tags = [], page = 1, limit = 20) ->
     codes = {}
     for key in keys
       alert (typeof key)
-
-    $.getJSON((@api_uri +  'search/emoji?' + $.param({code_cont: "face", page: page, limit: limit})),
-        @_cc)
 
   # Executes a search query
   #query: (query_hash)
     # TODO fill in query stuff
 
   # Obtains a collection
-  user_emoji: (callback, username, page = 1, limit = 20) ->
-    $.getJSON((@api_uri +  'users/' + username + '/emoji?' + $.param({page: page, limit: limit})),
-      @_cc)
+  user_emoji: (username, callback = null, page = 1, limit = 20, detailed = false) ->
+    $.getJSON((@api_uri +  'users/' + username + '/emoji?' + $.param({page: page, limit: limit, detailed: detailed})))
+      .error (response) ->
+        @search_result = []
+      .success (response) ->
+        @search_result = response.emoji
+        _combine_emoji(response.emoji)
+        callback(response.emoji) if callback
 
   # Checks for local saved login data, and if present sets the username and api_key
   auto_login: () ->
@@ -158,9 +170,10 @@ class @EmojidexClient
    # if @api_key != null
    #   # TODO お気に入りに追加
 
-  # Collects data and runs Callback
-  _cc: (data) ->
-    alert data
+  # Adds the given emoji array into the @emoji array and removes collisions/dupes
+  _combine_emoji: (emoji) ->
+    @emoji.push emoji...
+    # TODO flatten array
 
 class EmojiLoader
   emoji_data: null
