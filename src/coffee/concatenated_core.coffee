@@ -84,33 +84,43 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
 ###
 
 class @EmojidexClient
-  constructor: (pre_cache_utf = false,
-                  locale = 'en',
-                  api_uri = 'https://www.emojidex.com/api/v1/',
-                  cdn_uri = 'http://cdn.emojidex.com') ->
-    @api_uri = api_uri
-    @cdn_uri = cdn_uri
-    @emoji = []
-    @history = []
-    @favorites = []
-    @search_result = []
+  @defaults: { locale: 'en', pre_cache_utf: false, \
+              api_uri: 'https://www.emojidex.com/api/v1/', cdn_uri: 'http://cdn.emojidex.com', \
+              detailed: false, limit: 32 }
+  constructor: (opts = {}) ->
+    opts = $.extend {}, @defaults, opts
+
+    # set end points
+    @api_uri = opts.api_uri
+    @cdn_uri = opts.cdn_uri
+
+    # common opts
+    @detailed = opts.detailed
+    @limit = opts.limit
+
+    # init arrays
+    @emoji = opts.emoji || []
+    @history = opts.history || []
+    @favorites = opts.favorites || []
+    @search_results = opts.search_results || []
 
     if @auto_login()
       get_history
       get_favorites
 
-    if pre_cache_utf
-      switch locale
+    if opts.pre_cache_utf
+      switch opts.locale
         when 'en' then user_emoji('emoji')
         when 'ja' then user_emoji('絵文字')
 
   # Executes a general search (code_cont)
-  search: (term, callback = null, page = 1, limit = 20, detailed = false) ->
-    $.getJSON((@api_uri +  'search/emoji?' + $.param({code_cont: term, page: page, limit: limit, detailed: detailed})))
+  search: (term, callback = null, opts) ->
+    opts = @_combine_opts(opts)
+    $.getJSON((@api_uri +  'search/emoji?' + $.param({code_cont: term} + opts)))
       .error (response) ->
-        @search_result = []
+        @search_results = []
       .success (response) ->
-        @search_result = response.emoji
+        @search_results = response.emoji
         _combine_emoji(response.emoji)
         callback(response.emoji) if callback
 
@@ -135,9 +145,9 @@ class @EmojidexClient
   user_emoji: (username, callback = null, page = 1, limit = 20, detailed = false) ->
     $.getJSON((@api_uri +  'users/' + username + '/emoji?' + $.param({page: page, limit: limit, detailed: detailed})))
       .error (response) ->
-        @search_result = []
+        @search_results = []
       .success (response) ->
-        @search_result = response.emoji
+        @search_results = response.emoji
         _combine_emoji(response.emoji)
         callback(response.emoji) if callback
 
@@ -169,6 +179,10 @@ class @EmojidexClient
   set_favorites: (emoji_code) ->
    # if @api_key != null
    #   # TODO お気に入りに追加
+
+  # Combines opts against common defaults
+  _combine_opts: (opts) ->
+    $.extend {}, { page: 1, limit: @limit, detailed: @detailed }, opts
 
   # Adds the given emoji array into the @emoji array and removes collisions/dupes
   _combine_emoji: (emoji) ->
