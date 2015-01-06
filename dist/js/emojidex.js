@@ -122,20 +122,21 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
 
 
   this.EmojidexClient = (function() {
-    EmojidexClient.defaults = {
-      locale: 'en',
-      pre_cache_utf: false,
-      api_uri: 'https://www.emojidex.com/api/v1/',
-      cdn_uri: 'http://cdn.emojidex.com',
-      detailed: false,
-      limit: 32
-    };
-
     function EmojidexClient(opts) {
       if (opts == null) {
         opts = {};
       }
+      this.defaults = {
+        locale: 'en',
+        pre_cache_utf: false,
+        api_uri: 'https://www.emojidex.com/api/v1/',
+        cdn_uri: 'http://cdn.emojidex.com',
+        detailed: false,
+        limit: 32
+      };
       opts = $.extend({}, this.defaults, opts);
+      console.dir(this.defaults);
+      console.dir(opts);
       this.api_uri = opts.api_uri;
       this.cdn_uri = opts.cdn_uri;
       this.detailed = opts.detailed;

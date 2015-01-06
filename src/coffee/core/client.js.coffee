@@ -10,11 +10,19 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
 ###
 
 class @EmojidexClient
-  @defaults: { locale: 'en', pre_cache_utf: false, \
-              api_uri: 'https://www.emojidex.com/api/v1/', cdn_uri: 'http://cdn.emojidex.com', \
-              detailed: false, limit: 32 }
   constructor: (opts = {}) ->
+    @defaults =
+      locale: 'en'
+      pre_cache_utf: false
+      api_uri: 'https://www.emojidex.com/api/v1/'
+      cdn_uri: 'http://cdn.emojidex.com'
+      detailed: false
+      limit: 32
+
     opts = $.extend {}, @defaults, opts
+
+    console.dir @defaults
+    console.dir opts
 
     # set end points
     @api_uri = opts.api_uri
