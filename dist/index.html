@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" />
+    <title>emojidex-coffee</title>
+    <meta content="" name="description" />
+    <meta content="width=device-width" name="viewport" />
+    <link href="css/jquery.atwho.min.css" rel="stylesheet" />
+    <link href="css/bootstrap_and_override.css" rel="stylesheet" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="js/jquery.caret.min.js"></script>
+    <script src="js/jquery.atwho.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/emojidex.js"></script>
+    <script type="text/javascript">
+      (function() {
+        $(document).ready(function() {
+          return $(".emojidex_replace").emojidex({
+            emojiarea: {
+              plain_text: $(".emojidex-plain_text"),
+              content_editable: $(".emojidex-content_editable")
+            }
+          });
+        });
+      
+      }).call(this);
+      
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container">
+          <div class="navbar-header">
+            <a href="#"><img src="img/logo.png" /></a><button class="navbar-toggle collapsed" data-target="#navbar-top" data-toggle="collapse" type="button"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+          </div>
+          <div class="collapse navbar-collapse" id="navbar-top">
+            <a class="btn btn-primary navbar-btn pull-right" data-toggle="modal" href="#modal-licensing_info"> Licensing Info</a>
+          </div>
+        </div>
+      </nav>
+      <div class="modal fade" id="modal-licensing_info">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button class="close" data-dismiss="modal"> &times;</button>
+              <h4 class="modal-title">
+                Licensing Info
+              </h4>
+            </div>
+            <div class="modal-body">
+              <p>
+                All emoji © 2013 emojidex.<br>Exclusive Licensing Rights @ emoji company.</br>
+              </p>
+              <p>
+                For licenses please contact:
+              </p>
+              <h2>
+                Print and Physical Works and Media
+              </h2>
+              <a href="http://www.emoji-company.com"><img class="mt-l mb-xl" src="img/emoji-company-logo.png" /></a>
+              <p>
+                emoji company GmbH
+              </p>
+              <p>
+                <a href="mailto:licensing@emoji-company.com"> licensing@emoji-company.com</a><br><a href="http://www.emoji-company.com" target="_blank"> www.emoji-company.com</a></br>
+              </p>
+              <h2>
+                Virtual Works / Software / Virtual Media
+              </h2>
+              <a href="https://www.emojidex.com"><img class="mt-l mb-xl" src="img/logo.png" /></a>
+              <p>
+                emojidex™ / Genshin Souzou K.K. [Phantom Creation Inc]
+                br Aichi, Japan
+              </p>
+              <p>
+                <a href="mailto:info@emojidex.com"> info@emojidex.com</a><br><a href="http://www.emojidex.com" target="_blank"> www.emojidex.com</a></br>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h1>
+            emojidex-coffee examples
+          </h1>
+          <hr />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <h3>
+            emojidex replace
+          </h3>
+          <div class="emojidex_replace">
+            Examples of auto replacement:<br />(Check the HTML or SLIM sources)<br /><br />UTF moji codes to emoji:<br />❤🛅😄😡💌😈👍<br /><br />:code: to emoji:<br />:octopus::boar: :frog:\:hand_salute: no_match::no_match:
+          </div>
+          <hr />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <h3>
+            Plain Text
+          </h3>
+          <form role="form">
+            <div class="form-group">
+              <textarea class="emojidex-plain_text form-control" rows="5">Hello, Let's type ":".&nbsp;</textarea>
+            </div>
+          </form>
+          <hr />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <h3>
+            Content Editable
+          </h3>
+          <div class="emojidex-content_editable inputor" contenteditable="true">
+            Hello, Let's type ":".&nbsp;
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
