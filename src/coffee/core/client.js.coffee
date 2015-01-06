@@ -14,15 +14,13 @@ class @EmojidexClient
     @defaults =
       locale: 'en'
       pre_cache_utf: false
+      pre_cache_extended: false
       api_uri: 'https://www.emojidex.com/api/v1/'
       cdn_uri: 'http://cdn.emojidex.com'
       detailed: false
       limit: 32
 
     opts = $.extend {}, @defaults, opts
-
-    console.dir @defaults
-    console.dir opts
 
     # set end points
     @api_uri = opts.api_uri
@@ -44,18 +42,23 @@ class @EmojidexClient
 
     if opts.pre_cache_utf
       switch opts.locale
-        when 'en' then user_emoji('emoji')
-        when 'ja' then user_emoji('絵文字')
+        when 'en' then @user_emoji('emoji')
+        when 'ja' then @user_emoji('絵文字')
+
+    if opts.pre_cache_extended
+      switch opts.locale
+        when 'en' then @user_emoji('emojidex')
+        when 'ja' then @user_emoji('絵文字デックス')
 
   # Executes a general search (code_cont)
   search: (term, callback = null, opts) ->
     opts = @_combine_opts(opts)
-    $.getJSON((@api_uri +  'search/emoji?' + $.param({code_cont: term} + opts)))
-      .error (response) ->
+    $.getJSON((@api_uri +  'search/emoji?' + $.param(($.extend {}, {code_cont: term}, opts))))
+      .error (response) =>
         @search_results = []
-      .success (response) ->
+      .success (response) =>
         @search_results = response.emoji
-        _combine_emoji(response.emoji)
+        @combine_emoji(response.emoji)
         callback(response.emoji) if callback
 
   # Breaks down a search string into arrays of search keys and tags and performs a search
@@ -75,14 +78,15 @@ class @EmojidexClient
   #query: (query_hash)
     # TODO fill in query stuff
 
-  # Obtains a collection
-  user_emoji: (username, callback = null, page = 1, limit = 20, detailed = false) ->
-    $.getJSON((@api_uri +  'users/' + username + '/emoji?' + $.param({page: page, limit: limit, detailed: detailed})))
-      .error (response) ->
+  # Obtains a user emoji collection
+  user_emoji: (username, callback = null, opts) ->
+    opts = @_combine_opts(opts)
+    $.getJSON((@api_uri +  'users/' + username + '/emoji?' + $.param(opts)))
+      .error (response) =>
         @search_results = []
-      .success (response) ->
+      .success (response) =>
         @search_results = response.emoji
-        _combine_emoji(response.emoji)
+        @combine_emoji(response.emoji)
         callback(response.emoji) if callback
 
   # Checks for local saved login data, and if present sets the username and api_key
@@ -114,11 +118,10 @@ class @EmojidexClient
    # if @api_key != null
    #   # TODO お気に入りに追加
 
+  # Concatenates and flattens the given emoji array into the @emoji array
+  combine_emoji: (emoji) ->
+    $.extend @emoji, emoji
+
   # Combines opts against common defaults
   _combine_opts: (opts) ->
     $.extend {}, { page: 1, limit: @limit, detailed: @detailed }, opts
-
-  # Adds the given emoji array into the @emoji array and removes collisions/dupes
-  _combine_emoji: (emoji) ->
-    @emoji.push emoji...
-    # TODO flatten array
