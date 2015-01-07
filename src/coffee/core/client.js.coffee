@@ -15,6 +15,7 @@ class @EmojidexClient
       locale: 'en'
       pre_cache_utf: false
       pre_cache_extended: false
+      pre_cache_categories: true
       api_uri: 'https://www.emojidex.com/api/v1/'
       cdn_uri: 'http://cdn.emojidex.com'
       detailed: false
@@ -35,6 +36,11 @@ class @EmojidexClient
     @history = opts.history || []
     @favorites = opts.favorites || []
     @search_results = opts.search_results || []
+    @categories = []
+    @get_categories(null, {locale: opts.locale}) if opts.pre_cache_categories
+
+    @last_op = null # used to call next
+    @last_page = 1
 
     if @auto_login()
       get_history
@@ -53,7 +59,8 @@ class @EmojidexClient
   # Executes a general search (code_cont)
   search: (term, callback = null, opts) ->
     opts = @_combine_opts(opts)
-    $.getJSON((@api_uri +  'search/emoji?' + $.param(($.extend {}, {code_cont: term}, opts))))
+    $.getJSON((@api_uri +  'search/emoji?' + $.param(($.extend {}, \
+        {code_cont: @_escape_term(term)}, opts))))
       .error (response) =>
         @search_results = []
       .success (response) =>
@@ -61,23 +68,33 @@ class @EmojidexClient
         @combine_emoji(response.emoji)
         callback(response.emoji) if callback
 
-  # Breaks down a search string into arrays of search keys and tags and performs a search
-  search_by_string: (search_string, page = 1, limit = 20) ->
-    keys = []
-    tags = []
-    # TODO ストリングを分解する
-    advanced_search(keys, tags, page, limit)
+  # Searches by a tag
+  tag_search: (tags, callback = null, opts) ->
+    opts = @_combine_opts(opts)
+    $.getJSON((@api_uri +  'search/emoji?' + $.param(($.extend {}, \
+        {"tags[]": @_breakout(tags)}, opts))))
+      .error (response) =>
+        @search_results = []
+      .success (response) =>
+        @search_results = response.emoji
+        @combine_emoji(response.emoji)
+        callback(response.emoji) if callback
 
   # Searches using an array of keys and an array of tags
-  advanced_search: (keys, tags = [], page = 1, limit = 20) ->
-    codes = {}
-    for key in keys
-      alert (typeof key)
+  advanced_search: (term, tags = [], categories = [], callback = null, opts) ->
+    opts = @_combine_opts(opts)
+    params = {code_cont: @_escape_term(term)}
+    params = $.extend(params, {"tags[]": @_breakout(tags)}) if tags.length > 0
+    params = $.extend(params, {"categories[]": @_breakout(categories)}) if categories.length > 0
+    $.getJSON((@api_uri +  'search/emoji?' + $.param(($.extend params, opts))))
+      .error (response) =>
+        @search_results = []
+      .success (response) =>
+        @search_results = response.emoji
+        @combine_emoji(response.emoji)
+        callback(response.emoji) if callback
 
-  # Executes a search query
-  #query: (query_hash)
-    # TODO fill in query stuff
-
+  
   # Obtains a user emoji collection
   user_emoji: (username, callback = null, opts) ->
     opts = @_combine_opts(opts)
@@ -88,6 +105,17 @@ class @EmojidexClient
         @search_results = response.emoji
         @combine_emoji(response.emoji)
         callback(response.emoji) if callback
+
+  # Gets the full list of caetgories available
+  get_categories: (callback = null, opts) ->
+    opts = @_combine_opts(opts)
+    $.getJSON((@api_uri +  'categories?' + $.param(opts)))
+      .error (response) =>
+        @categories = []
+        return []
+      .success (response) =>
+        @categories = response.categories
+        callback(response.categories) if callback
 
   # Checks for local saved login data, and if present sets the username and api_key
   auto_login: () ->
@@ -125,3 +153,19 @@ class @EmojidexClient
   # Combines opts against common defaults
   _combine_opts: (opts) ->
     $.extend {}, { page: 1, limit: @limit, detailed: @detailed }, opts
+
+  # Breakout into an array
+  _breakout: (items) ->
+    items = [items] unless items instanceof Array
+    items
+
+  # Escapes spaces to underscore
+  _escape_term: (term) ->
+    term.split(' ').join('_')
+
+  # De-Escapes underscores to spaces
+  _de_escape_term: (term) ->
+    term.split('_').join(' ')
+
+  # Sets last_op so next/back can be used
+  _last_op: (op, args, opts) ->
