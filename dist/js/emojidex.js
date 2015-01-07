@@ -335,6 +335,9 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
     };
 
     EmojidexClient.prototype._breakout = function(items) {
+      if (items === null) {
+        return [];
+      }
       if (!(items instanceof Array)) {
         items = [items];
       }

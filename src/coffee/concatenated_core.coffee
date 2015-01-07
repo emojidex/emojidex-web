@@ -230,6 +230,7 @@ class @EmojidexClient
 
   # Breakout into an array
   _breakout: (items) ->
+    return [] if items == null
     items = [items] unless items instanceof Array
     items
 
