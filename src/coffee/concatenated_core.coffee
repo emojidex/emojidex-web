@@ -89,16 +89,11 @@ do ($ = jQuery, window, document) ->
         at: ":"
         limit: 10
         search_key: "code"
-        data: test1
+        # data: test1
         tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20' /> ${code}</li>"
         insert_tpl: "<img src='${img_url}' height='20' width='20' />"
 
-      $(options.emojiarea["plain_text"]).atwho(at_config).atwho(
-        search_key: "code"
-        at: "@"
-        tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20' /> ${code}</li>"
-        data: test2
-      )
+      $(options.emojiarea["plain_text"]).atwho(at_config)
       $(options.emojiarea["content_editable"]).atwho(at_config)
 
     setEmojiarea: (options) ->
@@ -129,7 +124,8 @@ class @EmojidexClient
       pre_cache_extended: false
       pre_cache_categories: true
       api_uri: 'https://www.emojidex.com/api/v1/'
-      cdn_uri: 'http://cdn.emojidex.com'
+      cdn_uri: 'http://cdn.emojidex.com/emoji'
+      size_code: 'px32'
       detailed: false
       limit: 32
 
@@ -138,6 +134,7 @@ class @EmojidexClient
     # set end points
     @api_uri = opts.api_uri
     @cdn_uri = opts.cdn_uri
+    @size_code = opts.size_code
 
     # common opts
     @detailed = opts.detailed
@@ -150,9 +147,6 @@ class @EmojidexClient
     @search_results = opts.search_results || []
     @categories = []
     @get_categories(null, {locale: opts.locale}) if opts.pre_cache_categories
-
-    @last_op = null # used to call next
-    @last_page = 1
 
     if @auto_login()
       get_history
@@ -170,6 +164,8 @@ class @EmojidexClient
 
   # Executes a general search (code_cont)
   search: (term, callback = null, opts) ->
+    @next = () ->
+      @search(term, callback, $.extend(opts, {page: opts.page + 1}))
     opts = @_combine_opts(opts)
     $.getJSON((@api_uri +  'search/emoji?' + $.param(($.extend {}, \
         {code_cont: @_escape_term(term)}, opts))))
@@ -262,6 +258,11 @@ class @EmojidexClient
   combine_emoji: (emoji) ->
     $.extend @emoji, emoji
 
+  # Converts an emoji array to [{code: "moji_code", img_url: "http://cdn...moji_code.png}] format
+  simplify: (emoji = @emoji, size_code = @size_code) ->
+    ({code: moji.code, img_url: "#{@cdn_uri}/#{size_code}/#{moji.code}.png"} for moji in emoji)
+
+
   # Combines opts against common defaults
   _combine_opts: (opts) ->
     $.extend {}, { page: 1, limit: @limit, detailed: @detailed }, opts
@@ -281,7 +282,9 @@ class @EmojidexClient
     term.split('_').join(' ')
 
   # Sets last_op so next/back can be used
-  _last_op: (op, args, opts) ->
+  #_set_next_op: (op_signature) ->
+  #  @last_op = {op: op, args: args, opts: opts}
+  #  @last_page = opts.page
 
 class EmojiLoader
   emoji_data: null

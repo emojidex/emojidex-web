@@ -89,16 +89,11 @@ do ($ = jQuery, window, document) ->
         at: ":"
         limit: 10
         search_key: "code"
-        data: test1
+        # data: test1
         tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20' /> ${code}</li>"
         insert_tpl: "<img src='${img_url}' height='20' width='20' />"
 
-      $(options.emojiarea["plain_text"]).atwho(at_config).atwho(
-        search_key: "code"
-        at: "@"
-        tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20' /> ${code}</li>"
-        data: test2
-      )
+      $(options.emojiarea["plain_text"]).atwho(at_config)
       $(options.emojiarea["content_editable"]).atwho(at_config)
 
     setEmojiarea: (options) ->
