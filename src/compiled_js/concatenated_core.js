@@ -52,7 +52,7 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
       };
 
       Plugin.prototype.setAutoComplete = function(options) {
-        var at_config, category, emoji, emoji_data, moji, testCallback, _i, _j, _len, _len1, _ref, _ref1;
+        var at_config, category, emoji, emoji_data, moji, test1, test2, testCallback, _i, _j, _len, _len1, _ref, _ref1;
         emoji = [];
         _ref = this.emoji_data_array;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -68,19 +68,70 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
             }
           }
         }
+        test1 = [
+          {
+            code: "aaa",
+            img_url: "https://diuxa3neisbs9.cloudfront.net/emoji/px128/%E5%AD%A6%E5%90%9B.png?1420689357"
+          }
+        ];
+        test2 = [
+          {
+            code: "bbb",
+            img_url: "https://diuxa3neisbs9.cloudfront.net/emoji/px128/%E5%AD%A6%E5%90%9B.png?1420689357"
+          }
+        ];
+        console.log("emoji --------");
+        console.dir(emoji);
         testCallback = function(data) {
-          return console.log(111);
+          console.log(111);
+          return console.log(data);
         };
         at_config = {
-          callback: testCallback,
+          callbacks: {
+            matcher: function(flag, subtext, should_startWithSpace) {
+              var match, regexp, _a, _y;
+              console.log("matcher --------");
+              flag = flag.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+              if (should_startWithSpace) {
+                flag = '(?:^|\\s)' + flag;
+              }
+              _a = decodeURI("%C3%80");
+              _y = decodeURI("%C3%BF");
+              regexp = new RegExp("" + flag + "([A-Za-z" + _a + "-" + _y + "0-9_\+\-]*)$|" + flag + "([^\\x00-\\xff]*)$", 'gi');
+              match = regexp.exec(subtext);
+              console.log(match ? match[2] || match[1] : null);
+              if (match) {
+                return match[2] || match[1];
+              } else {
+                return null;
+              }
+            },
+            filter: function(query, data, searchKey) {
+              var item, _k, _len2, _results;
+              console.log("filter --------");
+              _results = [];
+              for (_k = 0, _len2 = data.length; _k < _len2; _k++) {
+                item = data[_k];
+                if (~new String(item[searchKey]).toLowerCase().indexOf(query.toLowerCase())) {
+                  _results.push(item);
+                }
+              }
+              return _results;
+            }
+          },
           at: ":",
           limit: 10,
           search_key: "code",
-          data: emoji,
+          data: test1,
           tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20' /> ${code}</li>",
           insert_tpl: "<img src='${img_url}' height='20' width='20' />"
         };
-        $(options.emojiarea["plain_text"]).atwho(at_config);
+        $(options.emojiarea["plain_text"]).atwho(at_config).atwho({
+          search_key: "code",
+          at: "@",
+          tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20' /> ${code}</li>",
+          data: test2
+        });
         return $(options.emojiarea["content_editable"]).atwho(at_config);
       };
 
