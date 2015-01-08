@@ -115,9 +115,6 @@ class @EmojidexClient
     @categories = []
     @get_categories(null, {locale: opts.locale}) if opts.pre_cache_categories
 
-    @last_op = null # used to call next
-    @last_page = 1
-
     if @auto_login()
       get_history
       get_favorites
@@ -134,6 +131,8 @@ class @EmojidexClient
 
   # Executes a general search (code_cont)
   search: (term, callback = null, opts) ->
+    @next = () ->
+      @search(term, callback, $.extend(opts, {page: opts.page + 1}))
     opts = @_combine_opts(opts)
     $.getJSON((@api_uri +  'search/emoji?' + $.param(($.extend {}, \
         {code_cont: @_escape_term(term)}, opts))))
@@ -250,7 +249,9 @@ class @EmojidexClient
     term.split('_').join(' ')
 
   # Sets last_op so next/back can be used
-  _last_op: (op, args, opts) ->
+  #_set_next_op: (op_signature) ->
+  #  @last_op = {op: op, args: args, opts: opts}
+  #  @last_page = opts.page
 
 class EmojiLoader
   emoji_data: null

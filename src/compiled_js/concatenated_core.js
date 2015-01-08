@@ -144,8 +144,6 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
           locale: opts.locale
         });
       }
-      this.last_op = null;
-      this.last_page = 1;
       if (this.auto_login()) {
         get_history;
         get_favorites;
@@ -175,6 +173,11 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
       if (callback == null) {
         callback = null;
       }
+      this.next = function() {
+        return this.search(term, callback, $.extend(opts, {
+          page: opts.page + 1
+        }));
+      };
       opts = this._combine_opts(opts);
       return $.getJSON(this.api_uri + 'search/emoji?' + $.param($.extend({}, {
         code_cont: this._escape_term(term)
@@ -363,8 +366,6 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
     EmojidexClient.prototype._de_escape_term = function(term) {
       return term.split('_').join(' ');
     };
-
-    EmojidexClient.prototype._last_op = function(op, args, opts) {};
 
     return EmojidexClient;
 
