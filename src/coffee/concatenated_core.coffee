@@ -91,7 +91,8 @@ class @EmojidexClient
       pre_cache_extended: false
       pre_cache_categories: true
       api_uri: 'https://www.emojidex.com/api/v1/'
-      cdn_uri: 'http://cdn.emojidex.com'
+      cdn_uri: 'http://cdn.emojidex.com/emoji'
+      size_code: 'px32'
       detailed: false
       limit: 32
 
@@ -100,6 +101,7 @@ class @EmojidexClient
     # set end points
     @api_uri = opts.api_uri
     @cdn_uri = opts.cdn_uri
+    @size_code = opts.size_code
 
     # common opts
     @detailed = opts.detailed
@@ -223,6 +225,11 @@ class @EmojidexClient
   # Concatenates and flattens the given emoji array into the @emoji array
   combine_emoji: (emoji) ->
     $.extend @emoji, emoji
+
+  # Converts an emoji array to [{code: "moji_code", img_url: "http://cdn...moji_code.png}] format
+  simplify: (emoji = @emoji, size_code = @size_code) ->
+    ({code: moji.code, img_url: "#{@cdn_uri}/#{size_code}/#{moji.code}.png"} for moji in emoji)
+
 
   # Combines opts against common defaults
   _combine_opts: (opts) ->
