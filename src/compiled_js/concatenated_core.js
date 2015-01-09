@@ -182,13 +182,18 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
       this.emoji = opts.emoji || [];
       this.history = opts.history || [];
       this.favorites = opts.favorites || [];
-      this.search_results = opts.search_results || [];
+      this.results = opts.results || [];
+      this.page = 1;
+      this.count = 0;
       this.categories = [];
       if (opts.pre_cache_categories) {
         this.get_categories(null, {
           locale: opts.locale
         });
       }
+      this.next = function() {
+        return null;
+      };
       if (this.auto_login()) {
         get_history;
         get_favorites;
@@ -227,13 +232,9 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
       return $.getJSON(this.api_uri + 'search/emoji?' + $.param($.extend({}, {
         code_cont: this._escape_term(term)
       }, opts))).error(function(response) {
-        return _this.search_results = [];
+        return _this.results = [];
       }).success(function(response) {
-        _this.search_results = response.emoji;
-        _this.combine_emoji(response.emoji);
-        if (callback) {
-          return callback(response.emoji);
-        }
+        return _this._succeed(response, callback);
       });
     };
 
@@ -242,17 +243,18 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
       if (callback == null) {
         callback = null;
       }
+      this.next = function() {
+        return this.tag_search(term, callback, $.extend(opts, {
+          page: opts.page + 1
+        }));
+      };
       opts = this._combine_opts(opts);
       return $.getJSON(this.api_uri + 'search/emoji?' + $.param($.extend({}, {
         "tags[]": this._breakout(tags)
       }, opts))).error(function(response) {
-        return _this.search_results = [];
+        return _this.results = [];
       }).success(function(response) {
-        _this.search_results = response.emoji;
-        _this.combine_emoji(response.emoji);
-        if (callback) {
-          return callback(response.emoji);
-        }
+        return _this._succeed(response, callback);
       });
     };
 
@@ -268,6 +270,11 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
       if (callback == null) {
         callback = null;
       }
+      this.next = function() {
+        return this.advanced_search(term, tags, categories, callback, $.extend(opts, {
+          page: opts.page + 1
+        }));
+      };
       opts = this._combine_opts(opts);
       params = {
         code_cont: this._escape_term(term)
@@ -283,13 +290,9 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
         });
       }
       return $.getJSON(this.api_uri + 'search/emoji?' + $.param($.extend(params, opts))).error(function(response) {
-        return _this.search_results = [];
+        return _this.results = [];
       }).success(function(response) {
-        _this.search_results = response.emoji;
-        _this.combine_emoji(response.emoji);
-        if (callback) {
-          return callback(response.emoji);
-        }
+        return _this._succeed(response, callback);
       });
     };
 
@@ -300,13 +303,9 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
       }
       opts = this._combine_opts(opts);
       return $.getJSON(this.api_uri + 'users/' + username + '/emoji?' + $.param(opts)).error(function(response) {
-        return _this.search_results = [];
+        return _this.results = [];
       }).success(function(response) {
-        _this.search_results = response.emoji;
-        _this.combine_emoji(response.emoji);
-        if (callback) {
-          return callback(response.emoji);
-        }
+        return _this._succeed(response, callback);
       });
     };
 
@@ -392,6 +391,16 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
         limit: this.limit,
         detailed: this.detailed
       }, opts);
+    };
+
+    EmojidexClient.prototype._succeed = function(response, callback) {
+      this.results = response.emoji;
+      this.page = response.meta.page;
+      this.count = response.meta.count;
+      this.combine_emoji(response.emoji);
+      if (callback) {
+        return callback(response.emoji);
+      }
     };
 
     EmojidexClient.prototype._breakout = function(items) {

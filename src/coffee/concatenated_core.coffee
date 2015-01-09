@@ -144,9 +144,15 @@ class @EmojidexClient
     @emoji = opts.emoji || []
     @history = opts.history || []
     @favorites = opts.favorites || []
-    @search_results = opts.search_results || []
+    @results = opts.results || []
+    @page = 1
+    @count = 0
     @categories = []
     @get_categories(null, {locale: opts.locale}) if opts.pre_cache_categories
+
+    # short-circuit next()
+    @next = () ->
+      null
 
     if @auto_login()
       get_history
@@ -170,37 +176,35 @@ class @EmojidexClient
     $.getJSON((@api_uri +  'search/emoji?' + $.param(($.extend {}, \
         {code_cont: @_escape_term(term)}, opts))))
       .error (response) =>
-        @search_results = []
+        @results = []
       .success (response) =>
-        @search_results = response.emoji
-        @combine_emoji(response.emoji)
-        callback(response.emoji) if callback
+        @_succeed(response, callback)
 
   # Searches by a tag
   tag_search: (tags, callback = null, opts) ->
+    @next = () ->
+      @tag_search(term, callback, $.extend(opts, {page: opts.page + 1}))
     opts = @_combine_opts(opts)
     $.getJSON((@api_uri +  'search/emoji?' + $.param(($.extend {}, \
         {"tags[]": @_breakout(tags)}, opts))))
       .error (response) =>
-        @search_results = []
+        @results = []
       .success (response) =>
-        @search_results = response.emoji
-        @combine_emoji(response.emoji)
-        callback(response.emoji) if callback
+        @_succeed(response, callback)
 
   # Searches using an array of keys and an array of tags
   advanced_search: (term, tags = [], categories = [], callback = null, opts) ->
+    @next = () ->
+      @advanced_search(term, tags, categories, callback, $.extend(opts, {page: opts.page + 1}))
     opts = @_combine_opts(opts)
     params = {code_cont: @_escape_term(term)}
     params = $.extend(params, {"tags[]": @_breakout(tags)}) if tags.length > 0
     params = $.extend(params, {"categories[]": @_breakout(categories)}) if categories.length > 0
     $.getJSON((@api_uri +  'search/emoji?' + $.param(($.extend params, opts))))
       .error (response) =>
-        @search_results = []
+        @results = []
       .success (response) =>
-        @search_results = response.emoji
-        @combine_emoji(response.emoji)
-        callback(response.emoji) if callback
+        @_succeed(response, callback)
 
   
   # Obtains a user emoji collection
@@ -208,11 +212,9 @@ class @EmojidexClient
     opts = @_combine_opts(opts)
     $.getJSON((@api_uri +  'users/' + username + '/emoji?' + $.param(opts)))
       .error (response) =>
-        @search_results = []
+        @results = []
       .success (response) =>
-        @search_results = response.emoji
-        @combine_emoji(response.emoji)
-        callback(response.emoji) if callback
+        @_succeed(response, callback)
 
   # Gets the full list of caetgories available
   get_categories: (callback = null, opts) ->
@@ -262,10 +264,17 @@ class @EmojidexClient
   simplify: (emoji = @emoji, size_code = @size_code) ->
     ({code: moji.code, img_url: "#{@cdn_uri}/#{size_code}/#{moji.code}.png"} for moji in emoji)
 
-
   # Combines opts against common defaults
   _combine_opts: (opts) ->
     $.extend {}, { page: 1, limit: @limit, detailed: @detailed }, opts
+
+  # fills in @results, @page, and @count and calls callback
+  _succeed: (response, callback) ->
+    @results = response.emoji
+    @page = response.meta.page
+    @count = response.meta.count
+    @combine_emoji(response.emoji)
+    callback(response.emoji) if callback
 
   # Breakout into an array
   _breakout: (items) ->
@@ -280,11 +289,6 @@ class @EmojidexClient
   # De-Escapes underscores to spaces
   _de_escape_term: (term) ->
     term.split('_').join(' ')
-
-  # Sets last_op so next/back can be used
-  #_set_next_op: (op_signature) ->
-  #  @last_op = {op: op, args: args, opts: opts}
-  #  @last_page = opts.page
 
 class EmojiLoader
   emoji_data: null
