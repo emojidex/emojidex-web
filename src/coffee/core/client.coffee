@@ -43,6 +43,10 @@ class @EmojidexClient
     @categories = []
     @get_categories(null, {locale: opts.locale}) if opts.pre_cache_categories
 
+    @auth_token = null
+    @user = ''
+    @auth_status = 'none'
+
     # short-circuit next()
     @next = () ->
       null
@@ -99,7 +103,6 @@ class @EmojidexClient
       .success (response) =>
         @_succeed(response, callback)
 
-  
   # Obtains a user emoji collection
   user_emoji: (username, callback = null, opts) ->
     opts = @_combine_opts(opts)
@@ -127,13 +130,46 @@ class @EmojidexClient
     # TODO ローカルを確認してクッキー度にログイン情報(usernameとapi_key)があれば使う
     # TODO api_keyの暗号を解かすことを忘れなく
 
-  login: (username = null, password = nil) ->
-    # TODO usernameとpasswordでログインし、成功したら@usernameと@api_keyを設定する. passwordを保存しないこと
-    # TODO 絶対にapi_keyを保存する時に暗号化すること!
+  login: (params = {username: null, authtype: 'none'}) ->
+    switch params.authtype
+      when "none"
+        # TODO check for user auth
+        return
+      when "plain"
+        @_plain_login(params.username, params.password, params.callback)
+      when "google"
+        @_google_login(params.callback)
+      else
+        return
 
-  get_history: (page = 1, limit = 50) ->
-   # if @api_key != null
-   #   # TODO get history
+  _plain_login: (username, password, callback = null) ->
+    $.getJSON((@api_uri +  'users/authenticate?' + \
+      $.param({username: username, password: password})))
+      .error (response) =>
+        @auth_status = response.auth_status
+        @api_token = null
+        @user = ''
+      .success (response) =>
+        @auth_status = response.auth_status
+        @auth_token = response.auth_token
+        @user = response.auth_user
+        @get_user_data()
+        callback(response.auth_token) if callback
+
+  _google_login: (callback = null) ->
+    return false
+
+  get_user_data: () ->
+    @get_favorites()
+    @get_history()
+
+  get_history: (opts) ->
+    if @auth_token != null
+      $.getJSON((@api_uri +  'users/history?' + $.param({auth_token: @auth_token})))
+        .error (response) =>
+          @history = []
+        .success (response) =>
+          @history = response
 
   set_history: (emoji_code) ->
    # if @api_key != null
@@ -141,9 +177,13 @@ class @EmojidexClient
    # else
    #   # TODO グローバル履歴に追加
 
-  get_favorites: (page = 1, limit = 50) ->
-   # if @api_key != null
-   #   # TODO get favorites
+  get_favorites: () ->
+    if @auth_token != null
+      $.getJSON((@api_uri +  'users/favorites?' + $.param({auth_token: @auth_token})))
+        .error (response) =>
+          @favorites = []
+        .success (response) =>
+          @favorites = response
 
   set_favorites: (emoji_code) ->
    # if @api_key != null
@@ -155,7 +195,8 @@ class @EmojidexClient
 
   # Converts an emoji array to [{code: "moji_code", img_url: "http://cdn...moji_code.png}] format
   simplify: (emoji = @emoji, size_code = @size_code) ->
-    ({code: moji.code, img_url: "#{@cdn_uri}/#{size_code}/#{moji.code}.png"} for moji in emoji)
+    ({code: @_de_escape_term(moji.code), img_url: "#{@cdn_uri}/#{size_code}/#{moji.code}.png"} \
+      for moji in emoji)
 
   # Combines opts against common defaults
   _combine_opts: (opts) ->
