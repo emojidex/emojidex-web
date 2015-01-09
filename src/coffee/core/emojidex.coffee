@@ -41,6 +41,11 @@ do ($ = jQuery, window, document) ->
         # @emoji_pallet.setPallet()
 
     setAutoComplete: (options) ->
+      search_term = (data) ->
+        # test--
+
+      ec = new EmojiClient
+
       emoji = []
       for emoji_data in @emoji_data_array
         for category of emoji_data
@@ -55,9 +60,6 @@ do ($ = jQuery, window, document) ->
       test2 = [
         {code: "bbb", img_url: "https://diuxa3neisbs9.cloudfront.net/emoji/px128/%E5%AD%A6%E5%90%9B.png?1420689357"}
       ]
-
-      console.log "emoji --------"
-      console.dir emoji
 
       testCallback = (data)->
         console.log 111
@@ -75,16 +77,15 @@ do ($ = jQuery, window, document) ->
             _y = decodeURI("%C3%BF")
             regexp = new RegExp "#{flag}([A-Za-z#{_a}-#{_y}0-9_\+\-]*)$|#{flag}([^\\x00-\\xff]*)$",'gi'
             match = regexp.exec subtext
-            # console.log if match then match[2] || match[1] else null
-            # $(options.emojiarea["plain_text"]).atwho
-            #   at: ":"
-            #   data: emoji
+            $(options.emojiarea["plain_text"]).atwho
+              at: ":"
+              data: emoji
             if match then match[2] || match[1] else null
 
         at: ":"
         limit: 10
         search_key: "code"
-        data: emoji
+        # data: emoji
         tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20' /> ${code}</li>"
         insert_tpl: "<img src='${img_url}' height='20' width='20' />"
 

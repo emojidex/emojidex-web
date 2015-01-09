@@ -61,7 +61,9 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
       };
 
       Plugin.prototype.setAutoComplete = function(options) {
-        var at_config, category, emoji, emoji_data, moji, test1, test2, testCallback, _i, _j, _len, _len1, _ref, _ref1;
+        var at_config, category, ec, emoji, emoji_data, moji, search_term, test1, test2, testCallback, _i, _j, _len, _len1, _ref, _ref1;
+        search_term = function(data) {};
+        ec = new EmojiClient;
         emoji = [];
         _ref = this.emoji_data_array;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -89,8 +91,6 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
             img_url: "https://diuxa3neisbs9.cloudfront.net/emoji/px128/%E5%AD%A6%E5%90%9B.png?1420689357"
           }
         ];
-        console.log("emoji --------");
-        console.dir(emoji);
         testCallback = function(data) {
           console.log(111);
           return console.log(data);
@@ -108,6 +108,10 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
               _y = decodeURI("%C3%BF");
               regexp = new RegExp("" + flag + "([A-Za-z" + _a + "-" + _y + "0-9_\+\-]*)$|" + flag + "([^\\x00-\\xff]*)$", 'gi');
               match = regexp.exec(subtext);
+              $(options.emojiarea["plain_text"]).atwho({
+                at: ":",
+                data: emoji
+              });
               if (match) {
                 return match[2] || match[1];
               } else {
@@ -118,7 +122,6 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
           at: ":",
           limit: 10,
           search_key: "code",
-          data: emoji,
           tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20' /> ${code}</li>",
           insert_tpl: "<img src='${img_url}' height='20' width='20' />"
         };
