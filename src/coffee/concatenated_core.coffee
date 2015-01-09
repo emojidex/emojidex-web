@@ -76,15 +76,15 @@ do ($ = jQuery, window, document) ->
             regexp = new RegExp "#{flag}([A-Za-z#{_a}-#{_y}0-9_\+\-]*)$|#{flag}([^\\x00-\\xff]*)$",'gi'
             match = regexp.exec subtext
             # console.log if match then match[2] || match[1] else null
-            $(options.emojiarea["plain_text"]).atwho
-              at: ":"
-              data: emoji
+            # $(options.emojiarea["plain_text"]).atwho
+            #   at: ":"
+            #   data: emoji
             if match then match[2] || match[1] else null
 
         at: ":"
         limit: 10
         search_key: "code"
-        # data: test1
+        data: emoji
         tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20' /> ${code}</li>"
         insert_tpl: "<img src='${img_url}' height='20' width='20' />"
 

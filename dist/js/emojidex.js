@@ -108,10 +108,6 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
               _y = decodeURI("%C3%BF");
               regexp = new RegExp("" + flag + "([A-Za-z" + _a + "-" + _y + "0-9_\+\-]*)$|" + flag + "([^\\x00-\\xff]*)$", 'gi');
               match = regexp.exec(subtext);
-              $(options.emojiarea["plain_text"]).atwho({
-                at: ":",
-                data: emoji
-              });
               if (match) {
                 return match[2] || match[1];
               } else {
@@ -122,6 +118,7 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
           at: ":",
           limit: 10,
           search_key: "code",
+          data: emoji,
           tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20' /> ${code}</li>",
           insert_tpl: "<img src='${img_url}' height='20' width='20' />"
         };

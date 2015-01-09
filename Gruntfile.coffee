@@ -103,13 +103,13 @@ module.exports = (grunt) ->
           }
           {
             expand: true,
-            cwd: 'bower_components/jquery.atwho/dist/css'
+            cwd: 'bower_components/At.js/dist/css'
             src: 'jquery.atwho.min.css'
             dest: 'dist/css/'
           }
           {
             expand: true,
-            cwd: 'bower_components/jquery.atwho/dist/js'
+            cwd: 'bower_components/At.js/dist/js'
             src: 'jquery.atwho.min.js'
             dest: 'dist/js/'
           }
