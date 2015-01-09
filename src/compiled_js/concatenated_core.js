@@ -99,24 +99,15 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
               _y = decodeURI("%C3%BF");
               regexp = new RegExp("" + flag + "([A-Za-z" + _a + "-" + _y + "0-9_\+\-]*)$|" + flag + "([^\\x00-\\xff]*)$", 'gi');
               match = regexp.exec(subtext);
-              console.log(match ? match[2] || match[1] : null);
+              $(options.emojiarea["plain_text"]).atwho({
+                at: ":",
+                data: emoji
+              });
               if (match) {
                 return match[2] || match[1];
               } else {
                 return null;
               }
-            },
-            filter: function(query, data, searchKey) {
-              var item, _k, _len2, _results;
-              console.log("filter --------");
-              _results = [];
-              for (_k = 0, _len2 = data.length; _k < _len2; _k++) {
-                item = data[_k];
-                if (~new String(item[searchKey]).toLowerCase().indexOf(query.toLowerCase())) {
-                  _results.push(item);
-                }
-              }
-              return _results;
             }
           },
           at: ":",

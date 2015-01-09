@@ -75,16 +75,11 @@ do ($ = jQuery, window, document) ->
             _y = decodeURI("%C3%BF")
             regexp = new RegExp "#{flag}([A-Za-z#{_a}-#{_y}0-9_\+\-]*)$|#{flag}([^\\x00-\\xff]*)$",'gi'
             match = regexp.exec subtext
-            console.log if match then match[2] || match[1] else null
+            # console.log if match then match[2] || match[1] else null
+            $(options.emojiarea["plain_text"]).atwho
+              at: ":"
+              data: emoji
             if match then match[2] || match[1] else null
-
-          filter: (query, data, searchKey) ->
-            console.log "filter --------"
-            # !!null #=> false; !!undefined #=> false; !!'' #=> false;
-            _results = []
-            for item in data
-              _results.push item if ~new String(item[searchKey]).toLowerCase().indexOf query.toLowerCase()
-            _results
 
         at: ":"
         limit: 10
