@@ -1,6 +1,7 @@
 {
   "name": "emojidex-coffee",
   "devDependencies": {
-    "jquery.atwho": "~0.5.1"
+    "jquery.atwho": "~0.5.1",
+    "jquery.storageapi": "git@github.com:julien-maurel/jQuery-Storage-API.git"
   }
 }

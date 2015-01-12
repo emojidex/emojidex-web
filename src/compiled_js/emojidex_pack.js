@@ -135,19 +135,15 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
       this.size_code = opts.size_code;
       this.detailed = opts.detailed;
       this.limit = opts.limit;
-      alert(this.storage.get("emojidex.emoji"));
-      this.emoji = opts.emoji || [];
-      this.history = opts.history || [];
-      this.favorites = opts.favorites || [];
+      this.emoji = opts.emoji || this.storage.get("emojidex.emoji") || [];
+      this.history = opts.history || this.storage.get("emojidex.history") || [];
+      this.favorites = opts.favorites || this.storage.get("emojidex.favorites") || [];
       this.results = opts.results || [];
       this.page = 1;
       this.count = 0;
-      this.categories = [];
-      if (opts.pre_cache_categories) {
-        this.get_categories(null, {
-          locale: opts.locale
-        });
-      }
+      this.categories = opts.categories || (opts.pre_cache_categories ? this.get_categories(null, {
+        locale: opts.locale
+      }) : void 0) || this.storage.get("emojidex.categories") || [];
       this.auth_token = null;
       this.user = '';
       this.auth_status = 'none';
@@ -280,6 +276,7 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
         return [];
       }).success(function(response) {
         _this.categories = response.categories;
+        _this.storage.set("emojidex.categories", _this.categories);
         if (callback) {
           return callback(response.categories);
         }
@@ -287,7 +284,6 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
     };
 
     EmojidexClient.prototype.auto_login = function() {
-      this.username = this.storage.get("emojidex.username") || null;
       return this.api_key = null;
     };
 

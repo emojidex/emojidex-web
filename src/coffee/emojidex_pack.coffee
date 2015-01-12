@@ -109,16 +109,17 @@ class @EmojidexClient
     @detailed = opts.detailed
     @limit = opts.limit
 
-    alert @storage.get("emojidex.emoji")
     # init arrays
-    @emoji = opts.emoji || []
-    @history = opts.history || []
-    @favorites = opts.favorites || []
+    @emoji = opts.emoji || @storage.get("emojidex.emoji") || []
+    @history = opts.history || @storage.get("emojidex.history") || []
+    @favorites = opts.favorites || @storage.get("emojidex.favorites") || []
     @results = opts.results || []
     @page = 1
     @count = 0
-    @categories = []
-    @get_categories(null, {locale: opts.locale}) if opts.pre_cache_categories
+    @categories = opts.categories || \
+      (@get_categories(null, {locale: opts.locale}) if opts.pre_cache_categories) || \
+      @storage.get("emojidex.categories") || []
+    
 
     @auth_token = null
     @user = ''
@@ -198,11 +199,12 @@ class @EmojidexClient
         return []
       .success (response) =>
         @categories = response.categories
+        @storage.set("emojidex.categories", @categories)
         callback(response.categories) if callback
 
   # Checks for local saved login data, and if present sets the username and api_key
   auto_login: () ->
-    @username = @storage.get("emojidex.username") || null
+    #@username = @storage.get("emojidex.username") || null
     @api_key = null
     # TODO ローカルを確認してクッキー度にログイン情報(usernameとapi_key)があれば使う
     # TODO api_keyの暗号を解かすことを忘れなく
