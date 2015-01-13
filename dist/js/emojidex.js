@@ -68,14 +68,32 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
           _results = [];
           for (_i = 0, _len = targets.length; _i < _len; _i++) {
             target = targets[_i];
-            _results.push(target.atwho(at_options));
+            _results.push(target.atwho(at_options).on('shown.atwho', function(e) {
+              return console.dir(e);
+            }));
           }
           return _results;
         };
         setEmojiData = function(match) {
-          console.log('ec test ----');
-          ec.search('test');
-          console.log(ec.simplify());
+          var flag_refresh;
+          flag_refresh = 0;
+          ec.search(match, function(response) {
+            var ecs, emoji, _i, _len;
+            ecs = ec.simplify();
+            for (_i = 0, _len = ecs.length; _i < _len; _i++) {
+              emoji = ecs[_i];
+              emoji.code = emoji.code.replace(RegExp(" ", "g"), "_");
+              emoji.img_url = emoji.img_url.replace(RegExp(" ", "g"), "_");
+            }
+            console.log(ecs);
+            setAtwho({
+              at: ":",
+              data: ecs
+            });
+            return flag_refresh = 1;
+          });
+          console.log("flag ----");
+          console.log(flag_refresh);
           return match;
         };
         ec = new EmojidexClient;
@@ -100,7 +118,6 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
           search_key: "code",
           tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20' /> ${code}</li>",
           insert_tpl: "<img src='${img_url}' height='20' width='20' />",
-          data: atwho_emoji_data,
           callbacks: {
             matcher: function(flag, subtext, should_startWithSpace) {
               var match, regexp, _a, _y;
@@ -360,7 +377,7 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
     EmojidexClient.prototype.simplify = function(emoji, size_code) {
       var moji, _i, _len, _results;
       if (emoji == null) {
-        emoji = this.emoji;
+        emoji = this.results;
       }
       if (size_code == null) {
         size_code = this.size_code;
@@ -552,7 +569,7 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
         for (_i = 0, _len = emoji_data.length; _i < _len; _i++) {
           emoji = emoji_data[_i];
           emoji.code = emoji.code.replace(RegExp(" ", "g"), "_");
-          emoji.img_url = "http://assets.emojidex.com/emoji/px32/" + emoji.code + ".png";
+          emoji.img_url = "http://cdn.emojidex.com/emoji/px32/" + emoji.code + ".png";
         }
         _this.emoji_data = _this.getCategorizedData(emoji_data);
         _this.emoji_regexps = _this.setEmojiCSS_getEmojiRegexps(_this.emoji_data);

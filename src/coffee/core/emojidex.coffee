@@ -42,19 +42,35 @@ do ($ = jQuery, window, document) ->
 
     setAutoComplete: (options) ->
 
-      setAtwho = (at_options)->
+      setAtwho = (at_options) ->
         targets = [
           options.emojiarea["plain_text"]
           options.emojiarea["content_editable"]
         ]
 
         for target in targets
-          target.atwho(at_options)
+          target.atwho(at_options).on('shown.atwho', (e)->
+            console.dir e
+          )
 
-      setEmojiData = (match)->
-        console.log 'ec test ----'
-        ec.search('test')
-        console.log ec.simplify()
+      setEmojiData = (match) ->
+        flag_refresh = 0
+        ec.search(match, (response) ->
+          ecs = ec.simplify()
+          for emoji in ecs
+            emoji.code = emoji.code.replace RegExp(" ", "g"), "_"
+            emoji.img_url = emoji.img_url.replace RegExp(" ", "g"), "_"
+
+          console.log ecs
+          setAtwho
+            at: ":"
+            data: ecs
+          flag_refresh = 1
+        )
+
+        console.log "flag ----"
+        console.log flag_refresh
+
         return match
 
       ec = new EmojidexClient
@@ -73,7 +89,7 @@ do ($ = jQuery, window, document) ->
         search_key: "code"
         tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20' /> ${code}</li>"
         insert_tpl: "<img src='${img_url}' height='20' width='20' />"
-        data: atwho_emoji_data
+        # data: atwho_emoji_data
         callbacks:
           matcher: (flag, subtext, should_startWithSpace) ->
             flag = flag.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")

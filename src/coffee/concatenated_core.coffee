@@ -42,19 +42,35 @@ do ($ = jQuery, window, document) ->
 
     setAutoComplete: (options) ->
 
-      setAtwho = (at_options)->
+      setAtwho = (at_options) ->
         targets = [
           options.emojiarea["plain_text"]
           options.emojiarea["content_editable"]
         ]
 
         for target in targets
-          target.atwho(at_options)
+          target.atwho(at_options).on('shown.atwho', (e)->
+            console.dir e
+          )
 
-      setEmojiData = (match)->
-        console.log 'ec test ----'
-        ec.search('test')
-        console.log ec.simplify()
+      setEmojiData = (match) ->
+        flag_refresh = 0
+        ec.search(match, (response) ->
+          ecs = ec.simplify()
+          for emoji in ecs
+            emoji.code = emoji.code.replace RegExp(" ", "g"), "_"
+            emoji.img_url = emoji.img_url.replace RegExp(" ", "g"), "_"
+
+          console.log ecs
+          setAtwho
+            at: ":"
+            data: ecs
+          flag_refresh = 1
+        )
+
+        console.log "flag ----"
+        console.log flag_refresh
+
         return match
 
       ec = new EmojidexClient
@@ -73,7 +89,7 @@ do ($ = jQuery, window, document) ->
         search_key: "code"
         tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20' /> ${code}</li>"
         insert_tpl: "<img src='${img_url}' height='20' width='20' />"
-        data: atwho_emoji_data
+        # data: atwho_emoji_data
         callbacks:
           matcher: (flag, subtext, should_startWithSpace) ->
             flag = flag.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")
@@ -199,7 +215,7 @@ class @EmojidexClient
       .success (response) =>
         @_succeed(response, callback)
 
-  
+
   # Obtains a user emoji collection
   user_emoji: (username, callback = null, opts) ->
     opts = @_combine_opts(opts)
@@ -254,7 +270,7 @@ class @EmojidexClient
     $.extend @emoji, emoji
 
   # Converts an emoji array to [{code: "moji_code", img_url: "http://cdn...moji_code.png}] format
-  simplify: (emoji = @emoji, size_code = @size_code) ->
+  simplify: (emoji = @results, size_code = @size_code) ->
     ({code: moji.code, img_url: "#{@cdn_uri}/#{size_code}/#{moji.code}.png"} for moji in emoji)
 
   # Combines opts against common defaults
@@ -358,7 +374,7 @@ class EmojiLoaderService extends EmojiLoader
       # fix data for At.js --------
       for emoji in emoji_data
         emoji.code = emoji.code.replace RegExp(" ", "g"), "_"
-        emoji.img_url = "http://assets.emojidex.com/emoji/px32/#{emoji.code}.png"
+        emoji.img_url = "http://cdn.emojidex.com/emoji/px32/#{emoji.code}.png"
 
       # console.dir emoji_data
       @emoji_data = @getCategorizedData emoji_data

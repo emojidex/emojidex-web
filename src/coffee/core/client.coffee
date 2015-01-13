@@ -99,7 +99,7 @@ class @EmojidexClient
       .success (response) =>
         @_succeed(response, callback)
 
-  
+
   # Obtains a user emoji collection
   user_emoji: (username, callback = null, opts) ->
     opts = @_combine_opts(opts)
@@ -154,7 +154,7 @@ class @EmojidexClient
     $.extend @emoji, emoji
 
   # Converts an emoji array to [{code: "moji_code", img_url: "http://cdn...moji_code.png}] format
-  simplify: (emoji = @emoji, size_code = @size_code) ->
+  simplify: (emoji = @results, size_code = @size_code) ->
     ({code: moji.code, img_url: "#{@cdn_uri}/#{size_code}/#{moji.code}.png"} for moji in emoji)
 
   # Combines opts against common defaults
