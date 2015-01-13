@@ -61,18 +61,12 @@ do ($ = jQuery, window, document) ->
             emoji.code = emoji.code.replace RegExp(" ", "g"), "_"
             emoji.img_url = emoji.img_url.replace RegExp(" ", "g"), "_"
 
-          # at_obj.$inputor.atwho('load', ":", ecs)
-          # at_obj.view.context.query =
-          #   text: match_string
-
-          console.log ("setSearchedEmojiData -----")
           if searching_num == num
-            at_obj.app.shutdown()
-
-            console.dir at_obj
-            options.emojiarea["plain_text"].atwho(at_init)
-            # at_obj.$inputor.atwho(at_init)
-            # at_obj.view.render ecs
+            at_obj.$inputor.atwho('load', ":", ecs)
+            at_obj.view.context.query =
+              text: match_string
+            at_obj.$inputor.atwho(at_init)
+            at_obj.view.render ecs
         )
 
       ec = new EmojidexClient
@@ -109,7 +103,7 @@ do ($ = jQuery, window, document) ->
             match = if match then match[2] || match[1] else null
 
             setSearchedEmojiData(@, match)
-            return match
+            return null
 
       setAtwho(at_init)
 

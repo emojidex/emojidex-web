@@ -85,11 +85,13 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
               emoji.code = emoji.code.replace(RegExp(" ", "g"), "_");
               emoji.img_url = emoji.img_url.replace(RegExp(" ", "g"), "_");
             }
-            console.log("setSearchedEmojiData -----");
             if (searching_num === num) {
-              at_obj.app.shutdown();
-              console.dir(at_obj);
-              return options.emojiarea["plain_text"].atwho(at_init);
+              at_obj.$inputor.atwho('load', ":", ecs);
+              at_obj.view.context.query = {
+                text: match_string
+              };
+              at_obj.$inputor.atwho(at_init);
+              return at_obj.view.render(ecs);
             }
           });
         };
@@ -130,7 +132,7 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
               match = regexp.exec(subtext);
               match = match ? match[2] || match[1] : null;
               setSearchedEmojiData(this, match);
-              return match;
+              return null;
             }
           }
         };
