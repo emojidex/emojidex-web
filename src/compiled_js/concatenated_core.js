@@ -59,8 +59,9 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
           _results = [];
           for (_i = 0, _len = targets.length; _i < _len; _i++) {
             target = targets[_i];
-            _results.push(target.atwho(at_options).on("matched.atwho", function() {
-              return console.log("matched !!");
+            _results.push(target.atwho(at_options).on('reposition.atwho', function(e) {
+              console.log('reposition.atwho ----');
+              return $(e.currentTarget).atwho(at_options);
             }));
           }
           return _results;
@@ -68,8 +69,8 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
         setSearchedEmojiData = function(at_obj, match_string) {
           var num;
           num = ++searching_num;
-          return ec.search(match_string, function(response) {
-            var ecs, emoji, _i, _len;
+          ec.search(match_string, function(response) {
+            var at, ecs, emoji, _i, _len;
             ecs = ec.simplify();
             for (_i = 0, _len = ecs.length; _i < _len; _i++) {
               emoji = ecs[_i];
@@ -77,14 +78,34 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
               emoji.img_url = emoji.img_url.replace(RegExp(" ", "g"), "_");
             }
             if (searching_num === num) {
-              at_obj.$inputor.atwho('load', ":", ecs);
-              at_obj.view.context.query = {
-                text: match_string
+              console.log("setSearchedEmojiData -----");
+              at_obj.$inputor.atwho('destroy');
+              at = {
+                at: ":",
+                limit: 10,
+                search_key: "code",
+                tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20' /> ${code}</li>",
+                insert_tpl: "<img src='${img_url}' height='20' width='20' />",
+                data: ecs,
+                callbacks: {
+                  matcher: function(flag, subtext, should_startWithSpace) {
+                    var match, regexp, _a, _y;
+                    flag = flag.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+                    if (should_startWithSpace) {
+                      flag = '(?:^|\\s)' + flag;
+                    }
+                    _a = decodeURI("%C3%80");
+                    _y = decodeURI("%C3%BF");
+                    regexp = new RegExp("" + flag + "([A-Za-z" + _a + "-" + _y + "0-9_\+\-]*)$|" + flag + "([^\\x00-\\xff]*)$", 'gi');
+                    match = regexp.exec(subtext);
+                    return match = match ? match[2] || match[1] : null;
+                  }
+                }
               };
-              at_obj.$inputor.atwho(at_init);
-              return at_obj.view.render(ecs);
+              return at_obj.$inputor.atwho(at).atwho('run');
             }
           });
+          return match_string;
         };
         ec = new EmojidexClient;
         searching_num = 0;
@@ -122,8 +143,9 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
               window.a = this;
               match = regexp.exec(subtext);
               match = match ? match[2] || match[1] : null;
-              setSearchedEmojiData(this, match);
-              return null;
+              if (match) {
+                return setSearchedEmojiData(this, match);
+              }
             }
           }
         };

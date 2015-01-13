@@ -49,8 +49,9 @@ do ($ = jQuery, window, document) ->
         ]
 
         for target in targets
-          target.atwho(at_options).on("matched.atwho", ()->
-            console.log "matched !!"
+          target.atwho(at_options).on('reposition.atwho', (e) ->
+            console.log 'reposition.atwho ----'
+            $(e.currentTarget).atwho(at_options)
           )
 
       setSearchedEmojiData = (at_obj, match_string) ->
@@ -61,13 +62,34 @@ do ($ = jQuery, window, document) ->
             emoji.code = emoji.code.replace RegExp(" ", "g"), "_"
             emoji.img_url = emoji.img_url.replace RegExp(" ", "g"), "_"
 
+
           if searching_num == num
-            at_obj.$inputor.atwho('load', ":", ecs)
-            at_obj.view.context.query =
-              text: match_string
-            at_obj.$inputor.atwho(at_init)
-            at_obj.view.render ecs
+            console.log ("setSearchedEmojiData -----")
+            at_obj.$inputor.atwho('destroy')
+
+            at =
+              at: ":"
+              limit: 10
+              search_key: "code"
+              tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20' /> ${code}</li>"
+              insert_tpl: "<img src='${img_url}' height='20' width='20' />"
+              data: ecs
+              callbacks:
+                matcher: (flag, subtext, should_startWithSpace) ->
+                  flag = flag.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")
+                  flag = '(?:^|\\s)' + flag if should_startWithSpace
+                  # À
+                  _a = decodeURI("%C3%80")
+                  # ÿ
+                  _y = decodeURI("%C3%BF")
+                  regexp = new RegExp "#{flag}([A-Za-z#{_a}-#{_y}0-9_\+\-]*)$|#{flag}([^\\x00-\\xff]*)$",'gi'
+                  match = regexp.exec subtext
+                  match = if match then match[2] || match[1] else null
+
+            at_obj.$inputor.atwho(at).atwho('run')
+            # at_obj.$inputor.atwho(at)
         )
+        return match_string
 
       ec = new EmojidexClient
       searching_num = 0
@@ -102,8 +124,7 @@ do ($ = jQuery, window, document) ->
             match = regexp.exec subtext
             match = if match then match[2] || match[1] else null
 
-            setSearchedEmojiData(@, match)
-            return null
+            setSearchedEmojiData(@, match) if match
 
       setAtwho(at_init)
 
