@@ -49,11 +49,12 @@ do ($ = jQuery, window, document) ->
         ]
 
         for target in targets
-          target.atwho(at_options).on('shown.atwho', (e)->
+          target.atwho(at_options).on('matched.atwho', (e)->
+            console.log "matched ------"
             console.dir e
           )
 
-      setEmojiData = (match) ->
+      setSearchedEmojiData = (match) ->
         flag_refresh = 0
         ec.search(match, (response) ->
           ecs = ec.simplify()
@@ -62,16 +63,16 @@ do ($ = jQuery, window, document) ->
             emoji.img_url = emoji.img_url.replace RegExp(" ", "g"), "_"
 
           console.log ecs
+          flag_refresh = 1
           setAtwho
             at: ":"
             data: ecs
-          flag_refresh = 1
         )
-
+        console.dir @
         console.log "flag ----"
         console.log flag_refresh
 
-        return match
+        return null
 
       ec = new EmojidexClient
 
@@ -92,6 +93,7 @@ do ($ = jQuery, window, document) ->
         # data: atwho_emoji_data
         callbacks:
           matcher: (flag, subtext, should_startWithSpace) ->
+            console.dir @
             flag = flag.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")
             flag = '(?:^|\\s)' + flag if should_startWithSpace
             # À
@@ -101,7 +103,7 @@ do ($ = jQuery, window, document) ->
             regexp = new RegExp "#{flag}([A-Za-z#{_a}-#{_y}0-9_\+\-]*)$|#{flag}([^\\x00-\\xff]*)$",'gi'
             match = regexp.exec subtext
             match = if match then match[2] || match[1] else null
-            setEmojiData(match)
+            setSearchedEmojiData(match)
 
       setAtwho(at_init)
 

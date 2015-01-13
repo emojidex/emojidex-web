@@ -61,20 +61,21 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
       };
 
       Plugin.prototype.setAutoComplete = function(options) {
-        var at_init, atwho_emoji_data, category, ec, emoji_data, moji, setAtwho, setEmojiData, _i, _j, _len, _len1, _ref, _ref1;
+        var at_init, atwho_emoji_data, category, ec, emoji_data, moji, setAtwho, setSearchedEmojiData, _i, _j, _len, _len1, _ref, _ref1;
         setAtwho = function(at_options) {
           var target, targets, _i, _len, _results;
           targets = [options.emojiarea["plain_text"], options.emojiarea["content_editable"]];
           _results = [];
           for (_i = 0, _len = targets.length; _i < _len; _i++) {
             target = targets[_i];
-            _results.push(target.atwho(at_options).on('shown.atwho', function(e) {
+            _results.push(target.atwho(at_options).on('matched.atwho', function(e) {
+              console.log("matched ------");
               return console.dir(e);
             }));
           }
           return _results;
         };
-        setEmojiData = function(match) {
+        setSearchedEmojiData = function(match) {
           var flag_refresh;
           flag_refresh = 0;
           ec.search(match, function(response) {
@@ -86,15 +87,16 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
               emoji.img_url = emoji.img_url.replace(RegExp(" ", "g"), "_");
             }
             console.log(ecs);
-            setAtwho({
+            flag_refresh = 1;
+            return setAtwho({
               at: ":",
               data: ecs
             });
-            return flag_refresh = 1;
           });
+          console.dir(this);
           console.log("flag ----");
           console.log(flag_refresh);
-          return match;
+          return null;
         };
         ec = new EmojidexClient;
         atwho_emoji_data = [];
@@ -121,6 +123,7 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
           callbacks: {
             matcher: function(flag, subtext, should_startWithSpace) {
               var match, regexp, _a, _y;
+              console.dir(this);
               flag = flag.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
               if (should_startWithSpace) {
                 flag = '(?:^|\\s)' + flag;
@@ -130,7 +133,7 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
               regexp = new RegExp("" + flag + "([A-Za-z" + _a + "-" + _y + "0-9_\+\-]*)$|" + flag + "([^\\x00-\\xff]*)$", 'gi');
               match = regexp.exec(subtext);
               match = match ? match[2] || match[1] : null;
-              return setEmojiData(match);
+              return setSearchedEmojiData(match);
             }
           }
         };
