@@ -98,7 +98,6 @@ class @EmojidexClient
 
     opts = $.extend {}, @defaults, opts
     
-    @storage = $.localStorage
 
     # set end points
     @api_uri = opts.api_uri
@@ -112,8 +111,8 @@ class @EmojidexClient
     # init storage and state instances
     @_init_storages(opts)
     @results = opts.results || []
-    @page = 1
-    @count = 0
+    @page = opts.page || 1
+    @count = opts.count || 0
 
     # short-circuit next()
     @next = () ->
@@ -121,6 +120,26 @@ class @EmojidexClient
 
     @auto_login()
 
+  _init_storages: (opts) ->
+    @storage = $.localStorage
+
+    @storage.set("emojidex", {}) if @storage.get("emojidex") == null
+
+    @storage.set("emojidex.emoji", []) if @storage.get("emojidex.emoji") == null
+    @emoji = opts.emoji || @storage.get("emojidex.emoji")
+
+    @storage.set("emojidex.history", []) if @storage.get("emojidex.history") == null
+    @history = opts.history || @storage.get("emojidex.history")
+
+    @storage.set("emojidex.favorites", []) if @storage.get("emojidex.favorites") == null
+    @favorites = opts.favorites || @storage.get("emojidex.favorites")
+
+    @storage.set("emojidex.categories", []) if @storage.get("emojidex.categories") == null
+    @categories = opts.categories || @storage.get("emojidex.categories")
+
+    @_pre_cache(opts)
+
+  _pre_cache: (opts) ->
     if opts.pre_cache_utf
       switch opts.locale
         when 'en' then @user_emoji('emoji')
@@ -131,20 +150,8 @@ class @EmojidexClient
         when 'en' then @user_emoji('emojidex')
         when 'ja' then @user_emoji('絵文字デックス')
 
-  _init_storages: (opts) ->
-    @storage.set("emojidex", {}) if @storage.get("emojidex") == null
-
-    @storage.set("emojidex.emoji", []) if @storage.get("emojidex.emoji") == null
-    @emoji = opts.emoji || @storage.get("emojidex.emoji")
-
-    @storage.set("emojidex.history", []) if @storage.get("emojidex.history") == null
-    @history = opts.history || @storage.get("emojidex.history")
-
-    @favorites.set("emojidex.favorites", []) if @storage.get("emojidex.favorites") == null
-    @favorites = opts.favorites || @storage.get("emojidex.favorites")
-
-    @categories = opts.categories || \
-      (@get_categories(null, {locale: opts.locale}) if opts.pre_cache_categories)
+    if opts.pre_cache_categories
+      @get_categories(null, {locale: opts.locale})
 
   # Executes a general search (code_cont)
   search: (term, callback = null, opts) ->

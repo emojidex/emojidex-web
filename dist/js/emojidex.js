@@ -776,7 +776,6 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
         limit: 32
       };
       opts = $.extend({}, this.defaults, opts);
-      this.storage = $.localStorage;
       this.api_uri = opts.api_uri;
       this.cdn_uri = opts.cdn_uri;
       this.size_code = opts.size_code;
@@ -784,12 +783,39 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
       this.limit = opts.limit;
       this._init_storages(opts);
       this.results = opts.results || [];
-      this.page = 1;
-      this.count = 0;
+      this.page = opts.page || 1;
+      this.count = opts.count || 0;
       this.next = function() {
         return null;
       };
       this.auto_login();
+    }
+
+    EmojidexClient.prototype._init_storages = function(opts) {
+      this.storage = $.localStorage;
+      if (this.storage.get("emojidex") === null) {
+        this.storage.set("emojidex", {});
+      }
+      if (this.storage.get("emojidex.emoji") === null) {
+        this.storage.set("emojidex.emoji", []);
+      }
+      this.emoji = opts.emoji || this.storage.get("emojidex.emoji");
+      if (this.storage.get("emojidex.history") === null) {
+        this.storage.set("emojidex.history", []);
+      }
+      this.history = opts.history || this.storage.get("emojidex.history");
+      if (this.storage.get("emojidex.favorites") === null) {
+        this.storage.set("emojidex.favorites", []);
+      }
+      this.favorites = opts.favorites || this.storage.get("emojidex.favorites");
+      if (this.storage.get("emojidex.categories") === null) {
+        this.storage.set("emojidex.categories", []);
+      }
+      this.categories = opts.categories || this.storage.get("emojidex.categories");
+      return this._pre_cache(opts);
+    };
+
+    EmojidexClient.prototype._pre_cache = function(opts) {
       if (opts.pre_cache_utf) {
         switch (opts.locale) {
           case 'en':
@@ -808,27 +834,11 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
             this.user_emoji('絵文字デックス');
         }
       }
-    }
-
-    EmojidexClient.prototype._init_storages = function(opts) {
-      if (this.storage.get("emojidex") === null) {
-        this.storage.set("emojidex", {});
+      if (opts.pre_cache_categories) {
+        return this.get_categories(null, {
+          locale: opts.locale
+        });
       }
-      if (this.storage.get("emojidex.emoji") === null) {
-        this.storage.set("emojidex.emoji", []);
-      }
-      this.emoji = opts.emoji || this.storage.get("emojidex.emoji");
-      if (this.storage.get("emojidex.history") === null) {
-        this.storage.set("emojidex.history", []);
-      }
-      this.history = opts.history || this.storage.get("emojidex.history");
-      if (this.storage.get("emojidex.favorites") === null) {
-        this.favorites.set("emojidex.favorites", []);
-      }
-      this.favorites = opts.favorites || this.storage.get("emojidex.favorites");
-      return this.categories = opts.categories || (opts.pre_cache_categories ? this.get_categories(null, {
-        locale: opts.locale
-      }) : void 0);
     };
 
     EmojidexClient.prototype.search = function(term, callback, opts) {
