@@ -766,9 +766,6 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
       }
       this.defaults = {
         locale: 'en',
-        pre_cache_utf: false,
-        pre_cache_extended: false,
-        pre_cache_categories: true,
         api_uri: 'https://www.emojidex.com/api/v1/',
         cdn_uri: 'http://cdn.emojidex.com/emoji',
         size_code: 'px32',
@@ -785,59 +782,63 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
       this.results = opts.results || [];
       this.page = opts.page || 1;
       this.count = opts.count || 0;
+      this._auto_login();
       this.next = function() {
         return null;
       };
-      this.auto_login();
     }
 
     EmojidexClient.prototype._init_storages = function(opts) {
       this.storage = $.localStorage;
-      if (this.storage.get("emojidex") === null) {
+      if (!this.storage.isSet("emojidex")) {
         this.storage.set("emojidex", {});
       }
-      if (this.storage.get("emojidex.emoji") === null) {
-        this.storage.set("emojidex.emoji", []);
+      if (!this.storage.isSet("emojidex.emoji")) {
+        this.storage.set("emojidex.emoji", opts.emoji || []);
       }
-      this.emoji = opts.emoji || this.storage.get("emojidex.emoji");
-      if (this.storage.get("emojidex.history") === null) {
-        this.storage.set("emojidex.history", []);
+      this.emoji = this.storage.get("emojidex.emoji");
+      if (!this.storage.isSet("emojidex.history")) {
+        this.storage.set("emojidex.history", opts.history || []);
       }
-      this.history = opts.history || this.storage.get("emojidex.history");
-      if (this.storage.get("emojidex.favorites") === null) {
-        this.storage.set("emojidex.favorites", []);
+      this.history = this.storage.get("emojidex.history");
+      if (!this.storage.isSet("emojidex.favorites")) {
+        this.storage.set("emojidex.favorites", opts.favorites || []);
       }
-      this.favorites = opts.favorites || this.storage.get("emojidex.favorites");
-      if (this.storage.get("emojidex.categories") === null) {
-        this.storage.set("emojidex.categories", []);
+      this.favorites = this.storage.get("emojidex.favorites");
+      if (!this.storage.isSet("emojidex.categories")) {
+        this.storage.set("emojidex.categories", opts.categories || []);
       }
-      this.categories = opts.categories || this.storage.get("emojidex.categories");
+      this.categories = this.storage.get("emojidex.categories");
       return this._pre_cache(opts);
     };
 
     EmojidexClient.prototype._pre_cache = function(opts) {
-      if (opts.pre_cache_utf) {
+      if (this.emoji.length === 0) {
         switch (opts.locale) {
           case 'en':
             this.user_emoji('emoji');
-            break;
-          case 'ja':
-            this.user_emoji('絵文字');
-        }
-      }
-      if (opts.pre_cache_extended) {
-        switch (opts.locale) {
-          case 'en':
             this.user_emoji('emojidex');
             break;
           case 'ja':
+            this.user_emoji('絵文字');
             this.user_emoji('絵文字デックス');
         }
       }
-      if (opts.pre_cache_categories) {
+      if (this.categories.length === 0) {
         return this.get_categories(null, {
           locale: opts.locale
         });
+      }
+    };
+
+    EmojidexClient.prototype._auto_login = function() {
+      if (this.storage.get("emojidex.auth_token") !== null) {
+        this.auth_status = this.storage.get("emojidex.auth_status");
+        this.auth_token = this.storage.get("emojidex.auth_token");
+        this.user = this.storage.get("emojidex.user");
+        return this.get_user_data();
+      } else {
+        return this.logout();
       }
     };
 
@@ -950,27 +951,24 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
       });
     };
 
-    EmojidexClient.prototype.auto_login = function() {
-      this.auth_token = null;
-      this.user = '';
-      return this.auth_status = 'none';
+    EmojidexClient.prototype.login = function(params) {
+      switch (params.authtype) {
+        case 'plain':
+          return this._plain_login(params.username, params.password, params.callback);
+        case 'google':
+          return this._google_login(params.callback);
+        default:
+          return this._auto_login();
+      }
     };
 
-    EmojidexClient.prototype.login = function(params) {
-      if (params == null) {
-        params = {
-          username: null,
-          authtype: 'none'
-        };
-      }
-      switch (params.authtype) {
-        case "none":
-          break;
-        case "plain":
-          return this._plain_login(params.username, params.password, params.callback);
-        case "google":
-          return this._google_login(params.callback);
-      }
+    EmojidexClient.prototype.logout = function() {
+      this.auth_status = 'none';
+      this.storage.set("emojidex.auth_status", this.auth_status);
+      this.user = '';
+      this.storage.set("emojidex.user", this.user);
+      this.auth_token = null;
+      return this.storage.set("emojidex.auth_token", this.auth_token);
     };
 
     EmojidexClient.prototype._plain_login = function(username, password, callback) {
@@ -983,13 +981,10 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
         password: password
       })).error(function(response) {
         _this.auth_status = response.auth_status;
-        _this.api_token = null;
+        _this.auth_token = null;
         return _this.user = '';
       }).success(function(response) {
-        _this.auth_status = response.auth_status;
-        _this.auth_token = response.auth_token;
-        _this.user = response.auth_user;
-        _this.get_user_data();
+        _this._set_auth_from_response(response);
         if (callback) {
           return callback(response.auth_token);
         }
@@ -1001,6 +996,16 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
         callback = null;
       }
       return false;
+    };
+
+    EmojidexClient.prototype._set_auth_from_response = function(response) {
+      this.auth_status = response.auth_status;
+      this.storage.set("emojidex.auth_status", this.auth_status);
+      this.auth_token = response.auth_token;
+      this.storage.set("emojidex.auth_token", this.auth_token);
+      this.user = response.auth_user;
+      this.storage.set("emojidex.user", this.user);
+      return this.get_user_data();
     };
 
     EmojidexClient.prototype.get_user_data = function() {

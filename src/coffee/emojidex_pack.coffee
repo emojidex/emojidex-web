@@ -87,17 +87,12 @@ class @EmojidexClient
   constructor: (opts = {}) ->
     @defaults =
       locale: 'en'
-      pre_cache_utf: false
-      pre_cache_extended: false
-      pre_cache_categories: true
       api_uri: 'https://www.emojidex.com/api/v1/'
       cdn_uri: 'http://cdn.emojidex.com/emoji'
       size_code: 'px32'
       detailed: false
       limit: 32
-
     opts = $.extend {}, @defaults, opts
-    
 
     # set end points
     @api_uri = opts.api_uri
@@ -114,44 +109,53 @@ class @EmojidexClient
     @page = opts.page || 1
     @count = opts.count || 0
 
+    @_auto_login()
+
     # short-circuit next()
     @next = () ->
       null
 
-    @auto_login()
-
   _init_storages: (opts) ->
     @storage = $.localStorage
 
-    @storage.set("emojidex", {}) if @storage.get("emojidex") == null
+    @storage.set("emojidex", {}) unless @storage.isSet("emojidex")
 
-    @storage.set("emojidex.emoji", []) if @storage.get("emojidex.emoji") == null
-    @emoji = opts.emoji || @storage.get("emojidex.emoji")
+    @storage.set("emojidex.emoji", opts.emoji || []) unless @storage.isSet("emojidex.emoji")
+    @emoji = @storage.get("emojidex.emoji")
 
-    @storage.set("emojidex.history", []) if @storage.get("emojidex.history") == null
-    @history = opts.history || @storage.get("emojidex.history")
+    @storage.set("emojidex.history", opts.history || []) unless @storage.isSet("emojidex.history")
+    @history = @storage.get("emojidex.history")
 
-    @storage.set("emojidex.favorites", []) if @storage.get("emojidex.favorites") == null
-    @favorites = opts.favorites || @storage.get("emojidex.favorites")
+    @storage.set("emojidex.favorites", opts.favorites || []) unless @storage.isSet("emojidex.favorites")
+    @favorites = @storage.get("emojidex.favorites")
 
-    @storage.set("emojidex.categories", []) if @storage.get("emojidex.categories") == null
-    @categories = opts.categories || @storage.get("emojidex.categories")
+    @storage.set("emojidex.categories", opts.categories || []) unless @storage.isSet("emojidex.categories")
+    @categories = @storage.get("emojidex.categories")
 
     @_pre_cache(opts)
 
   _pre_cache: (opts) ->
-    if opts.pre_cache_utf
+    if @emoji.length == 0
       switch opts.locale
-        when 'en' then @user_emoji('emoji')
-        when 'ja' then @user_emoji('絵文字')
+        when 'en'
+          @user_emoji('emoji')
+          @user_emoji('emojidex')
+        when 'ja'
+          @user_emoji('絵文字')
+          @user_emoji('絵文字デックス')
 
-    if opts.pre_cache_extended
-      switch opts.locale
-        when 'en' then @user_emoji('emojidex')
-        when 'ja' then @user_emoji('絵文字デックス')
-
-    if opts.pre_cache_categories
+    if @categories.length == 0
       @get_categories(null, {locale: opts.locale})
+
+  # Checks for local saved login data, and if present sets the username and api_key
+  _auto_login: () ->
+    if @storage.get("emojidex.auth_token") != null
+      @auth_status = @storage.get("emojidex.auth_status")
+      @auth_token = @storage.get("emojidex.auth_token")
+      @user = @storage.get("emojidex.user")
+      @get_user_data()
+    else
+      @logout()
 
   # Executes a general search (code_cont)
   search: (term, callback = null, opts) ->
@@ -212,44 +216,52 @@ class @EmojidexClient
         @storage.set("emojidex.categories", @categories)
         callback(response.categories) if callback
 
-  # Checks for local saved login data, and if present sets the username and api_key
-  auto_login: () ->
-    @auth_token = null
-    @user = ''
-    @auth_status = 'none'
-    #@username = @storage.get("emojidex.username") || null
-    # TODO ローカルを確認してクッキー度にログイン情報(usernameとapi_key)があれば使う
-    # TODO api_keyの暗号を解かすことを忘れなく
-
-
-  login: (params = {username: null, authtype: 'none'}) ->
+  # login
+  # takes a hash with one of the following combinations:
+  # 1. { authtype: 'plain', user: 'username-or-email', password: '****'}
+  # 2. { authtype: 'google', #TODO
+  # * if no hash is given auto login is attempted
+  login: (params) ->
     switch params.authtype
-      when "none"
-        # TODO check for user auth
-        return
-      when "plain"
+      when 'plain'
         @_plain_login(params.username, params.password, params.callback)
-      when "google"
+      when 'google'
         @_google_login(params.callback)
       else
-        return
+        @_auto_login()
+
+  # logout:
+  # 'logs out' by clearing user data
+  logout: () ->
+    @auth_status = 'none'
+    @storage.set("emojidex.auth_status", @auth_status)
+    @user = ''
+    @storage.set("emojidex.user", @user)
+    @auth_token = null
+    @storage.set("emojidex.auth_token", @auth_token)
 
   _plain_login: (username, password, callback = null) ->
     $.getJSON((@api_uri +  'users/authenticate?' + \
       $.param({username: username, password: password})))
       .error (response) =>
         @auth_status = response.auth_status
-        @api_token = null
+        @auth_token = null
         @user = ''
       .success (response) =>
-        @auth_status = response.auth_status
-        @auth_token = response.auth_token
-        @user = response.auth_user
-        @get_user_data()
+        @_set_auth_from_response(response)
         callback(response.auth_token) if callback
 
   _google_login: (callback = null) ->
     return false
+
+  _set_auth_from_response: (response) ->
+    @auth_status = response.auth_status
+    @storage.set("emojidex.auth_status", @auth_status)
+    @auth_token = response.auth_token
+    @storage.set("emojidex.auth_token", @auth_token)
+    @user = response.auth_user
+    @storage.set("emojidex.user", @user)
+    @get_user_data()
 
   get_user_data: () ->
     @get_favorites()
