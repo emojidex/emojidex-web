@@ -60,70 +60,56 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
           for (_i = 0, _len = targets.length; _i < _len; _i++) {
             target = targets[_i];
             _results.push(target.atwho(at_options).on('reposition.atwho', function(e) {
-              console.log('reposition.atwho ----');
+              return $(e.currentTarget).atwho(at_options);
+            }).on('hidden.atwho', function(e) {
               return $(e.currentTarget).atwho(at_options);
             }));
           }
           return _results;
         };
         setSearchedEmojiData = function(at_obj, match_string) {
-          var num;
+          var num, updateAtwho;
+          updateAtwho = function(searched_data) {
+            var at_options;
+            at_options = {
+              data: searched_data,
+              callbacks: {
+                matcher: function(flag, subtext, should_startWithSpace) {
+                  var match, regexp, _a, _y;
+                  flag = flag.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+                  if (should_startWithSpace) {
+                    flag = '(?:^|\\s)' + flag;
+                  }
+                  _a = decodeURI("%C3%80");
+                  _y = decodeURI("%C3%BF");
+                  regexp = new RegExp("" + flag + "([A-Za-z" + _a + "-" + _y + "0-9_\+\-]*)$|" + flag + "([^\\x00-\\xff]*)$", 'gi');
+                  match = regexp.exec(subtext);
+                  return match = match ? match[2] || match[1] : null;
+                }
+              }
+            };
+            at_obj.$inputor.atwho('destroy');
+            return at_obj.$inputor.atwho($.extend({}, at_obj.setting, at_options)).atwho('run');
+          };
           num = ++searching_num;
           ec.search(match_string, function(response) {
-            var at, ecs, emoji, _i, _len;
-            ecs = ec.simplify();
-            for (_i = 0, _len = ecs.length; _i < _len; _i++) {
-              emoji = ecs[_i];
+            var emoji, searched_data, _i, _len;
+            searched_data = ec.simplify();
+            for (_i = 0, _len = searched_data.length; _i < _len; _i++) {
+              emoji = searched_data[_i];
               emoji.code = emoji.code.replace(RegExp(" ", "g"), "_");
               emoji.img_url = emoji.img_url.replace(RegExp(" ", "g"), "_");
             }
             if (searching_num === num) {
-              console.log("setSearchedEmojiData -----");
-              at_obj.$inputor.atwho('destroy');
-              at = {
-                at: ":",
-                limit: 10,
-                search_key: "code",
-                tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20' /> ${code}</li>",
-                insert_tpl: "<img src='${img_url}' height='20' width='20' />",
-                data: ecs,
-                callbacks: {
-                  matcher: function(flag, subtext, should_startWithSpace) {
-                    var match, regexp, _a, _y;
-                    flag = flag.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
-                    if (should_startWithSpace) {
-                      flag = '(?:^|\\s)' + flag;
-                    }
-                    _a = decodeURI("%C3%80");
-                    _y = decodeURI("%C3%BF");
-                    regexp = new RegExp("" + flag + "([A-Za-z" + _a + "-" + _y + "0-9_\+\-]*)$|" + flag + "([^\\x00-\\xff]*)$", 'gi');
-                    match = regexp.exec(subtext);
-                    return match = match ? match[2] || match[1] : null;
-                  }
-                }
-              };
-              return at_obj.$inputor.atwho(at).atwho('run');
+              if (searched_data.length) {
+                return updateAtwho(searched_data);
+              }
             }
           });
           return match_string;
         };
         ec = new EmojidexClient;
         searching_num = 0;
-        atwho_emoji_data = [];
-        _ref = this.emoji_data_array;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          emoji_data = _ref[_i];
-          for (category in emoji_data) {
-            _ref1 = emoji_data[category];
-            for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-              moji = _ref1[_j];
-              atwho_emoji_data.push({
-                code: moji.code,
-                img_url: moji.img_url
-              });
-            }
-          }
-        }
         at_init = {
           at: ":",
           limit: 10,
@@ -140,7 +126,6 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
               _a = decodeURI("%C3%80");
               _y = decodeURI("%C3%BF");
               regexp = new RegExp("" + flag + "([A-Za-z" + _a + "-" + _y + "0-9_\+\-]*)$|" + flag + "([^\\x00-\\xff]*)$", 'gi');
-              window.a = this;
               match = regexp.exec(subtext);
               match = match ? match[2] || match[1] : null;
               if (match) {
@@ -149,6 +134,21 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
             }
           }
         };
+        atwho_emoji_data = [];
+        _ref = this.emoji_data_array;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          emoji_data = _ref[_i];
+          for (category in emoji_data) {
+            _ref1 = emoji_data[category];
+            for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+              moji = _ref1[_j];
+              atwho_emoji_data.push({
+                code: moji.code,
+                img_url: moji.img_url
+              });
+            }
+          }
+        }
         return setAtwho(at_init);
       };
 
@@ -157,7 +157,6 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
           wysiwyg: false
         });
         options.emojiarea["wysiwyg"].on("change", function() {
-          console.dir(this);
           return options.emojiarea["rawtext"].text($(this).val());
         });
         return options.emojiarea["wysiwyg"].trigger("change");
