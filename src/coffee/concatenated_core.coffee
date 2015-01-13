@@ -41,34 +41,41 @@ do ($ = jQuery, window, document) ->
         # @emoji_pallet.setPallet()
 
     setAutoComplete: (options) ->
-      search_term = (data) ->
-        # test--
 
-      ec = new EmojiClient
+      setAtwho = (at_options)->
+        targets = [
+          options.emojiarea["plain_text"]
+          options.emojiarea["content_editable"]
+        ]
 
-      emoji = []
+        for target in targets
+          target.atwho(at_options)
+
+      setEmojiData = (match)->
+        console.log 'ec test ----'
+        ec.search('test')
+        console.log ec.simplify()
+        return match
+
+      ec = new EmojidexClient
+
+      atwho_emoji_data = []
       for emoji_data in @emoji_data_array
         for category of emoji_data
           for moji in emoji_data[category]
-            emoji.push
+            atwho_emoji_data.push
               code: moji.code
               img_url: moji.img_url
 
-      test1 = [
-        {code: "aaa", img_url: "https://diuxa3neisbs9.cloudfront.net/emoji/px128/%E5%AD%A6%E5%90%9B.png?1420689357"}
-      ]
-      test2 = [
-        {code: "bbb", img_url: "https://diuxa3neisbs9.cloudfront.net/emoji/px128/%E5%AD%A6%E5%90%9B.png?1420689357"}
-      ]
-
-      testCallback = (data)->
-        console.log 111
-        console.log data
-
-      at_config =
+      at_init =
+        at: ":"
+        limit: 10
+        search_key: "code"
+        tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20' /> ${code}</li>"
+        insert_tpl: "<img src='${img_url}' height='20' width='20' />"
+        data: atwho_emoji_data
         callbacks:
           matcher: (flag, subtext, should_startWithSpace) ->
-            console.log "matcher --------"
             flag = flag.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")
             flag = '(?:^|\\s)' + flag if should_startWithSpace
             # À
@@ -77,20 +84,10 @@ do ($ = jQuery, window, document) ->
             _y = decodeURI("%C3%BF")
             regexp = new RegExp "#{flag}([A-Za-z#{_a}-#{_y}0-9_\+\-]*)$|#{flag}([^\\x00-\\xff]*)$",'gi'
             match = regexp.exec subtext
-            $(options.emojiarea["plain_text"]).atwho
-              at: ":"
-              data: emoji
-            if match then match[2] || match[1] else null
+            match = if match then match[2] || match[1] else null
+            setEmojiData(match)
 
-        at: ":"
-        limit: 10
-        search_key: "code"
-        # data: emoji
-        tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20' /> ${code}</li>"
-        insert_tpl: "<img src='${img_url}' height='20' width='20' />"
-
-      $(options.emojiarea["plain_text"]).atwho(at_config)
-      $(options.emojiarea["content_editable"]).atwho(at_config)
+      setAtwho(at_init)
 
     setEmojiarea: (options) ->
       options.emojiarea["plaintext"].emojiarea wysiwyg: false

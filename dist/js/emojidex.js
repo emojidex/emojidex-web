@@ -61,10 +61,25 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
       };
 
       Plugin.prototype.setAutoComplete = function(options) {
-        var at_config, category, ec, emoji, emoji_data, moji, search_term, test1, test2, testCallback, _i, _j, _len, _len1, _ref, _ref1;
-        search_term = function(data) {};
-        ec = new EmojiClient;
-        emoji = [];
+        var at_init, atwho_emoji_data, category, ec, emoji_data, moji, setAtwho, setEmojiData, _i, _j, _len, _len1, _ref, _ref1;
+        setAtwho = function(at_options) {
+          var target, targets, _i, _len, _results;
+          targets = [options.emojiarea["plain_text"], options.emojiarea["content_editable"]];
+          _results = [];
+          for (_i = 0, _len = targets.length; _i < _len; _i++) {
+            target = targets[_i];
+            _results.push(target.atwho(at_options));
+          }
+          return _results;
+        };
+        setEmojiData = function(match) {
+          console.log('ec test ----');
+          ec.search('test');
+          console.log(ec.simplify());
+          return match;
+        };
+        ec = new EmojidexClient;
+        atwho_emoji_data = [];
         _ref = this.emoji_data_array;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           emoji_data = _ref[_i];
@@ -72,34 +87,23 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
             _ref1 = emoji_data[category];
             for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
               moji = _ref1[_j];
-              emoji.push({
+              atwho_emoji_data.push({
                 code: moji.code,
                 img_url: moji.img_url
               });
             }
           }
         }
-        test1 = [
-          {
-            code: "aaa",
-            img_url: "https://diuxa3neisbs9.cloudfront.net/emoji/px128/%E5%AD%A6%E5%90%9B.png?1420689357"
-          }
-        ];
-        test2 = [
-          {
-            code: "bbb",
-            img_url: "https://diuxa3neisbs9.cloudfront.net/emoji/px128/%E5%AD%A6%E5%90%9B.png?1420689357"
-          }
-        ];
-        testCallback = function(data) {
-          console.log(111);
-          return console.log(data);
-        };
-        at_config = {
+        at_init = {
+          at: ":",
+          limit: 10,
+          search_key: "code",
+          tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20' /> ${code}</li>",
+          insert_tpl: "<img src='${img_url}' height='20' width='20' />",
+          data: atwho_emoji_data,
           callbacks: {
             matcher: function(flag, subtext, should_startWithSpace) {
               var match, regexp, _a, _y;
-              console.log("matcher --------");
               flag = flag.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
               if (should_startWithSpace) {
                 flag = '(?:^|\\s)' + flag;
@@ -108,25 +112,12 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
               _y = decodeURI("%C3%BF");
               regexp = new RegExp("" + flag + "([A-Za-z" + _a + "-" + _y + "0-9_\+\-]*)$|" + flag + "([^\\x00-\\xff]*)$", 'gi');
               match = regexp.exec(subtext);
-              $(options.emojiarea["plain_text"]).atwho({
-                at: ":",
-                data: emoji
-              });
-              if (match) {
-                return match[2] || match[1];
-              } else {
-                return null;
-              }
+              match = match ? match[2] || match[1] : null;
+              return setEmojiData(match);
             }
-          },
-          at: ":",
-          limit: 10,
-          search_key: "code",
-          tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20' /> ${code}</li>",
-          insert_tpl: "<img src='${img_url}' height='20' width='20' />"
+          }
         };
-        $(options.emojiarea["plain_text"]).atwho(at_config);
-        return $(options.emojiarea["content_editable"]).atwho(at_config);
+        return setAtwho(at_init);
       };
 
       Plugin.prototype.setEmojiarea = function(options) {
