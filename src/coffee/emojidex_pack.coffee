@@ -109,29 +109,17 @@ class @EmojidexClient
     @detailed = opts.detailed
     @limit = opts.limit
 
-    # init arrays
-    @emoji = opts.emoji || @storage.get("emojidex.emoji") || []
-    @history = opts.history || @storage.get("emojidex.history") || []
-    @favorites = opts.favorites || @storage.get("emojidex.favorites") || []
+    # init storage and state instances
+    @_init_storages(opts)
     @results = opts.results || []
     @page = 1
     @count = 0
-    @categories = opts.categories || \
-      (@get_categories(null, {locale: opts.locale}) if opts.pre_cache_categories) || \
-      @storage.get("emojidex.categories") || []
-    
-
-    @auth_token = null
-    @user = ''
-    @auth_status = 'none'
 
     # short-circuit next()
     @next = () ->
       null
 
-    if @auto_login()
-      get_history
-      get_favorites
+    @auto_login()
 
     if opts.pre_cache_utf
       switch opts.locale
@@ -142,6 +130,21 @@ class @EmojidexClient
       switch opts.locale
         when 'en' then @user_emoji('emojidex')
         when 'ja' then @user_emoji('絵文字デックス')
+
+  _init_storages: (opts) ->
+    @storage.set("emojidex", {}) if @storage.get("emojidex") == null
+
+    @storage.set("emojidex.emoji", []) if @storage.get("emojidex.emoji") == null
+    @emoji = opts.emoji || @storage.get("emojidex.emoji")
+
+    @storage.set("emojidex.history", []) if @storage.get("emojidex.history") == null
+    @history = opts.history || @storage.get("emojidex.history")
+
+    @favorites.set("emojidex.favorites", []) if @storage.get("emojidex.favorites") == null
+    @favorites = opts.favorites || @storage.get("emojidex.favorites")
+
+    @categories = opts.categories || \
+      (@get_categories(null, {locale: opts.locale}) if opts.pre_cache_categories)
 
   # Executes a general search (code_cont)
   search: (term, callback = null, opts) ->
@@ -196,7 +199,7 @@ class @EmojidexClient
     $.getJSON((@api_uri +  'categories?' + $.param(opts)))
       .error (response) =>
         @categories = []
-        return []
+        @storage.set("emojidex.categories", @categories)
       .success (response) =>
         @categories = response.categories
         @storage.set("emojidex.categories", @categories)
@@ -204,10 +207,13 @@ class @EmojidexClient
 
   # Checks for local saved login data, and if present sets the username and api_key
   auto_login: () ->
+    @auth_token = null
+    @user = ''
+    @auth_status = 'none'
     #@username = @storage.get("emojidex.username") || null
-    @api_key = null
     # TODO ローカルを確認してクッキー度にログイン情報(usernameとapi_key)があれば使う
     # TODO api_keyの暗号を解かすことを忘れなく
+
 
   login: (params = {username: null, authtype: 'none'}) ->
     switch params.authtype
