@@ -32,7 +32,8 @@ class @EmojidexClient
     # init storage and state instances
     @_init_storages(opts)
     @results = opts.results || []
-    @page = opts.page || 1
+    @cur_page = opts.page || 1
+    @cur_limit = @limit
     @count = opts.count || 0
 
     @_auto_login()
@@ -232,10 +233,10 @@ class @EmojidexClient
   _combine_opts: (opts) ->
     $.extend {}, { page: 1, limit: @limit, detailed: @detailed }, opts
 
-  # fills in @results, @page, and @count and calls callback
+  # fills in @results, @cur_page, and @count and calls callback
   _succeed: (response, callback) ->
     @results = response.emoji
-    @page = response.meta.page
+    @cur_page = response.meta.page
     @count = response.meta.count
     @combine_emoji(response.emoji)
     callback(response.emoji) if callback

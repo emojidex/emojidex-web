@@ -780,7 +780,8 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
       this.limit = opts.limit;
       this._init_storages(opts);
       this.results = opts.results || [];
-      this.page = opts.page || 1;
+      this.cur_page = opts.page || 1;
+      this.cur_limit = this.limit;
       this.count = opts.count || 0;
       this._auto_login();
       this.next = function() {
@@ -1076,7 +1077,7 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
 
     EmojidexClient.prototype._succeed = function(response, callback) {
       this.results = response.emoji;
-      this.page = response.meta.page;
+      this.cur_page = response.meta.page;
       this.count = response.meta.count;
       this.combine_emoji(response.emoji);
       if (callback) {
