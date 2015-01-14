@@ -29,9 +29,6 @@ class EmojiAutoComplete
         num = ++searching_num
         ec.search(match_string, (response) ->
           searched_data = ec.simplify()
-          # for emoji in searched_data
-          #   emoji.code = emoji.code.replace RegExp(" ", "g"), "_"
-          #   emoji.img_url = emoji.img_url.replace RegExp(" ", "g"), "_"
 
           if searching_num == num
             updateAtwho(searched_data) if searched_data.length
@@ -53,19 +50,8 @@ class EmojiAutoComplete
         match = if match then match[2] || match[1] else null
 
       # start: setAutoComplete --------
-
-      # atwho data of user emoji: [emoji, emojidex]
-      # atwho_emoji_data = []
-      # for emoji_data in @plugin.emoji_data_array
-      #   for category of emoji_data
-      #     for moji in emoji_data[category]
-      #       atwho_emoji_data.push
-      #         code: moji.code
-      #         img_url: moji.img_url
-
       searching_num = 0
       ec = new EmojidexClient
-
       at_init =
         at: ":"
         limit: 10
