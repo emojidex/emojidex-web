@@ -2,6 +2,7 @@
   "name": "emojidex-coffee",
   "devDependencies": {
     "At.js": "0.5.1",
-    "Caret.js": "0.2.0"
+    "Caret.js": "0.2.0",
+    "jquery.storageapi": "git@github.com:julien-maurel/jQuery-Storage-API.git"
   }
 }

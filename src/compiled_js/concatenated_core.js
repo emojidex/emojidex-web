@@ -200,11 +200,13 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
         limit: 32
       };
       opts = $.extend({}, this.defaults, opts);
+      this.storage = $.localStorage;
       this.api_uri = opts.api_uri;
       this.cdn_uri = opts.cdn_uri;
       this.size_code = opts.size_code;
       this.detailed = opts.detailed;
       this.limit = opts.limit;
+      alert(this.storage.get("emojidex.emoji"));
       this.emoji = opts.emoji || [];
       this.history = opts.history || [];
       this.favorites = opts.favorites || [];
@@ -217,6 +219,9 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
           locale: opts.locale
         });
       }
+      this.auth_token = null;
+      this.user = '';
+      this.auth_status = 'none';
       this.next = function() {
         return null;
       };
@@ -353,36 +358,87 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
     };
 
     EmojidexClient.prototype.auto_login = function() {
-      this.username = null;
+      this.username = this.storage.get("emojidex.username") || null;
       return this.api_key = null;
     };
 
-    EmojidexClient.prototype.login = function(username, password) {
-      if (username == null) {
-        username = null;
+    EmojidexClient.prototype.login = function(params) {
+      if (params == null) {
+        params = {
+          username: null,
+          authtype: 'none'
+        };
       }
-      if (password == null) {
-        password = nil;
+      switch (params.authtype) {
+        case "none":
+          break;
+        case "plain":
+          return this._plain_login(params.username, params.password, params.callback);
+        case "google":
+          return this._google_login(params.callback);
       }
     };
 
-    EmojidexClient.prototype.get_history = function(page, limit) {
-      if (page == null) {
-        page = 1;
+    EmojidexClient.prototype._plain_login = function(username, password, callback) {
+      var _this = this;
+      if (callback == null) {
+        callback = null;
       }
-      if (limit == null) {
-        limit = 50;
+      return $.getJSON(this.api_uri + 'users/authenticate?' + $.param({
+        username: username,
+        password: password
+      })).error(function(response) {
+        _this.auth_status = response.auth_status;
+        _this.api_token = null;
+        return _this.user = '';
+      }).success(function(response) {
+        _this.auth_status = response.auth_status;
+        _this.auth_token = response.auth_token;
+        _this.user = response.auth_user;
+        _this.get_user_data();
+        if (callback) {
+          return callback(response.auth_token);
+        }
+      });
+    };
+
+    EmojidexClient.prototype._google_login = function(callback) {
+      if (callback == null) {
+        callback = null;
+      }
+      return false;
+    };
+
+    EmojidexClient.prototype.get_user_data = function() {
+      this.get_favorites();
+      return this.get_history();
+    };
+
+    EmojidexClient.prototype.get_history = function(opts) {
+      var _this = this;
+      if (this.auth_token !== null) {
+        return $.getJSON(this.api_uri + 'users/history?' + $.param({
+          auth_token: this.auth_token
+        })).error(function(response) {
+          return _this.history = [];
+        }).success(function(response) {
+          return _this.history = response;
+        });
       }
     };
 
     EmojidexClient.prototype.set_history = function(emoji_code) {};
 
-    EmojidexClient.prototype.get_favorites = function(page, limit) {
-      if (page == null) {
-        page = 1;
-      }
-      if (limit == null) {
-        limit = 50;
+    EmojidexClient.prototype.get_favorites = function() {
+      var _this = this;
+      if (this.auth_token !== null) {
+        return $.getJSON(this.api_uri + 'users/favorites?' + $.param({
+          auth_token: this.auth_token
+        })).error(function(response) {
+          return _this.favorites = [];
+        }).success(function(response) {
+          return _this.favorites = response;
+        });
       }
     };
 
@@ -404,7 +460,7 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
       for (_i = 0, _len = emoji.length; _i < _len; _i++) {
         moji = emoji[_i];
         _results.push({
-          code: moji.code,
+          code: this._de_escape_term(moji.code),
           img_url: "" + this.cdn_uri + "/" + size_code + "/" + moji.code + ".png"
         });
       }

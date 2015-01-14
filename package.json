@@ -1,18 +1,18 @@
 {
   "name": "emojidex",
   "version": "0.1.0",
-  "title": "jQuery Emojidex",
+  "title": "jQuery emojidex",
   "description": "emojidex coffee plugin for jQuery/Zepto and compatible",
   "author": "emojidex",
-  "homepage": "https://github.com/emojidex/emojidex-coffee#emojidex-coffee",
+  "homepage": "https://github.com/emojidex/emojidex-coffee",
   "repository": {
     "type": "git",
     "url": "https://github.com/emojidex/emojidex-coffee.git"
   },
   "licenses": [
     {
-      "type": "LGPL",
-      "url": "https://www.gnu.org/licenses/lgpl.html"
+      "type": "emojiOL",
+      "url": "https://www.emojidex.com/emojidex/emojidex_open_license"
     }
   ],
   "devDependencies": {

@@ -22,7 +22,7 @@ module.exports = (grunt) ->
       glob_to_multiple:
         expand: true
         cwd: 'src/coffee/'
-        src: ['concatenated_core.coffee']
+        src: ['emojidex_pack.coffee']
         dest: 'src/compiled_js'
         rename: (dest, src) ->
           return dest + '/' + src.replace(/\.coffee$/, '.js')
@@ -34,7 +34,7 @@ module.exports = (grunt) ->
           'src/coffee/core/emojidex.coffee'
           'src/coffee/core/**/*.coffee'
         ]
-        dest: 'src/coffee/concatenated_core.coffee'
+        dest: 'src/coffee/emojidex_pack.coffee'
 
       src_js:
         options:
@@ -93,7 +93,7 @@ module.exports = (grunt) ->
         cwd: 'src/img/'
         src: '**/*'
         dest: 'dist/img/'
-      atwho:
+      lib:
         files: [
           {
             expand: true,
@@ -111,6 +111,12 @@ module.exports = (grunt) ->
             expand: true,
             cwd: 'bower_components/At.js/dist/js'
             src: 'jquery.atwho.min.js'
+            dest: 'dist/js/'
+          }
+          {
+            expand: true,
+            cwd: 'bower_components/jquery.storageapi/'
+            src: 'jquery.storageapi.min.js'
             dest: 'dist/js/'
           }
         ]
