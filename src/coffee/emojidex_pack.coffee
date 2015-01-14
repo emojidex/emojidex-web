@@ -315,20 +315,12 @@ class EmojiAutoComplete
           )
 
       setSearchedEmojiData = (at_obj, match_string) ->
-        updateAtwho = (searched_data)->
+        updateAtwho = (searched_data) ->
           at_options =
             data: searched_data
             callbacks:
               matcher: (flag, subtext, should_startWithSpace) ->
-                flag = flag.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")
-                flag = '(?:^|\\s)' + flag if should_startWithSpace
-                # À
-                _a = decodeURI("%C3%80")
-                # ÿ
-                _y = decodeURI("%C3%BF")
-                regexp = new RegExp "#{flag}([A-Za-z#{_a}-#{_y}0-9_\+\-]*)$|#{flag}([^\\x00-\\xff]*)$",'gi'
-                match = regexp.exec subtext
-                if match then match[2] || match[1] else null
+                match = getMatchString subtext, getRegexp(flag, should_startWithSpace)
 
           at_obj.$inputor.atwho('destroy')
           at_obj.$inputor.atwho($.extend {}, at_obj.setting, at_options).atwho('run')
@@ -346,6 +338,19 @@ class EmojiAutoComplete
         )
         return match_string
 
+      getRegexp = (flag, should_startWithSpace) ->
+        # À & ÿ
+        _a = decodeURI("%C3%80")
+        _y = decodeURI("%C3%BF")
+
+        flag = flag.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")
+        flag = '(?:^|\\s)' + flag if should_startWithSpace
+
+        regexp = new RegExp "#{flag}([A-Za-z#{_a}-#{_y}0-9_\+\-]*)$|#{flag}([^\\x00-\\xff]*)$",'gi'
+
+      getMatchString = (subtext, regexp) ->
+        match = regexp.exec subtext
+        match = if match then match[2] || match[1] else null
 
       # start: setAutoComplete --------
 
@@ -369,15 +374,7 @@ class EmojiAutoComplete
         insert_tpl: "<img src='${img_url}' height='20' width='20' />"
         callbacks:
           matcher: (flag, subtext, should_startWithSpace) ->
-            flag = flag.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")
-            flag = '(?:^|\\s)' + flag if should_startWithSpace
-            # À
-            _a = decodeURI("%C3%80")
-            # ÿ
-            _y = decodeURI("%C3%BF")
-            regexp = new RegExp "#{flag}([A-Za-z#{_a}-#{_y}0-9_\+\-]*)$|#{flag}([^\\x00-\\xff]*)$",'gi'
-            match = regexp.exec subtext
-            match = if match then match[2] || match[1] else null
+            match = getMatchString subtext, getRegexp(flag, should_startWithSpace)
             setSearchedEmojiData(@, match) if match
 
       setAtwho(at_init)
