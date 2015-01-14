@@ -22,8 +22,7 @@ class EmojiAutoComplete
               matcher: (flag, subtext, should_startWithSpace) ->
                 match = getMatchString subtext, getRegexp(flag, should_startWithSpace)
 
-          at_obj.$inputor.atwho('destroy')
-          at_obj.$inputor.atwho($.extend {}, at_obj.setting, at_options).atwho('run')
+          at_obj.$inputor.atwho('destroy').atwho($.extend {}, at_obj.setting, at_options).atwho('run')
 
         # start: setSearchedEmojiData --------
         num = ++searching_num

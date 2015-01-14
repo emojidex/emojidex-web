@@ -452,8 +452,7 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
               }
             }
           };
-          at_obj.$inputor.atwho('destroy');
-          return at_obj.$inputor.atwho($.extend({}, at_obj.setting, at_options)).atwho('run');
+          return at_obj.$inputor.atwho('destroy').atwho($.extend({}, at_obj.setting, at_options)).atwho('run');
         };
         num = ++searching_num;
         ec.search(match_string, function(response) {
