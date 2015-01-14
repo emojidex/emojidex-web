@@ -224,8 +224,8 @@ class @EmojidexClient
     $.extend @emoji, emoji
 
   # Converts an emoji array to [{code: "moji_code", img_url: "http://cdn...moji_code.png}] format
-  simplify: (emoji = @emoji, size_code = @size_code) ->
-    ({code: @_de_escape_term(moji.code), img_url: "#{@cdn_uri}/#{size_code}/#{moji.code}.png"} \
+  simplify: (emoji = @results, size_code = @size_code) ->
+    ({code: @_escape_term(moji.code), img_url: "#{@cdn_uri}/#{size_code}/#{@_escape_term(moji.code)}.png"} \
       for moji in emoji)
 
   # Combines opts against common defaults
