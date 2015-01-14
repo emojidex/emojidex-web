@@ -67,7 +67,7 @@ do ($ = jQuery, window, document) ->
                 _y = decodeURI("%C3%BF")
                 regexp = new RegExp "#{flag}([A-Za-z#{_a}-#{_y}0-9_\+\-]*)$|#{flag}([^\\x00-\\xff]*)$",'gi'
                 match = regexp.exec subtext
-                match = if match then match[2] || match[1] else null
+                if match then match[2] || match[1] else null
 
           at_obj.$inputor.atwho('destroy')
           at_obj.$inputor.atwho($.extend {}, at_obj.setting, at_options).atwho('run')

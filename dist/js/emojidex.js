@@ -93,7 +93,11 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
                   _y = decodeURI("%C3%BF");
                   regexp = new RegExp("" + flag + "([A-Za-z" + _a + "-" + _y + "0-9_\+\-]*)$|" + flag + "([^\\x00-\\xff]*)$", 'gi');
                   match = regexp.exec(subtext);
-                  return match = match ? match[2] || match[1] : null;
+                  if (match) {
+                    return match[2] || match[1];
+                  } else {
+                    return null;
+                  }
                 }
               }
             };
