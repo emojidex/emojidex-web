@@ -35,42 +35,12 @@ do ($ = jQuery, window, document) ->
 
     checkLoadedEmojiData: ->
       if @emoji_data_array
-        @setAutoComplete @options
+
+        ac = new EmojiAutoComplete @
+        ac.setAutoComplete()
 
         # @emoji_pallet = new EmojiPallet @emoji_data_array, $("#ep"), @options
         # @emoji_pallet.setPallet()
-
-    setAutoComplete: (options) ->
-      emoji = []
-      for emoji_data in @emoji_data_array
-        for category of emoji_data
-          for moji in emoji_data[category]
-            emoji.push
-              code: moji.code
-              img_url: moji.img_url
-
-      testCallback = (data)->
-        console.log 111
-
-      at_config =
-        callback: testCallback
-        at: ":"
-        limit: 10
-        search_key: "code"
-        data: emoji
-        tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20' /> ${code}</li>"
-        insert_tpl: "<img src='${img_url}' height='20' width='20' />"
-      $(options.emojiarea["plain_text"]).atwho(at_config)
-      $(options.emojiarea["content_editable"]).atwho(at_config)
-
-    setEmojiarea: (options) ->
-      options.emojiarea["plaintext"].emojiarea wysiwyg: false
-      # options.emojiarea["wysiwyg"].emojiarea wysiwyg: true
-      options.emojiarea["wysiwyg"].on "change", ->
-        console.dir @
-        # console.dir options.emojiarea["rawtext"].text
-        options.emojiarea["rawtext"].text $(this).val()
-      options.emojiarea["wysiwyg"].trigger "change"
 
 ###
 emojidex coffee client
@@ -241,6 +211,7 @@ class @EmojidexClient
     @auth_token = null
     @storage.set("emojidex.auth_token", @auth_token)
 
+  # regular login with username/email and password
   _plain_login: (username, password, callback = null) ->
     $.getJSON((@api_uri +  'users/authenticate?' + \
       $.param({username: username, password: password})))
@@ -252,9 +223,11 @@ class @EmojidexClient
         @_set_auth_from_response(response)
         callback(response.auth_token) if callback
 
+  # auth with google oauth2
   _google_login: (callback = null) ->
     return false
 
+  # sets auth parameters from a successful auth request [login]
   _set_auth_from_response: (response) ->
     @auth_status = response.auth_status
     @storage.set("emojidex.auth_status", @auth_status)
@@ -277,10 +250,9 @@ class @EmojidexClient
           @history = response
 
   set_history: (emoji_code) ->
-   # if @api_key != null
-   #   # TODO ユーザー履歴に追加
-   # else
-   #   # TODO グローバル履歴に追加
+    if @auth_token != null
+      $.post(@api_uri + 'users/history?' + \
+        $.param({auth_token: @auth_token, emoji_code: emoji_code}))
 
   get_favorites: () ->
     if @auth_token != null
@@ -291,16 +263,28 @@ class @EmojidexClient
           @favorites = response
 
   set_favorites: (emoji_code) ->
-   # if @api_key != null
-   #   # TODO お気に入りに追加
+    if @auth_token != null
+      $.post(@api_uri + 'users/favorites?' + \
+        $.param({auth_token: @auth_token, emoji_code: emoji_code}))
+          .success (response) =>
+            @get_favorites() # re-obtain favorites
+
+  unset_favorites: (emoji_code) ->
+    if @auth_token != null
+      $.ajax({type: 'DELETE', dataType: 'jsonp', \
+        url: @api_uri + 'users/favorites', \
+        data: {auth_token: @auth_token, emoji_code: emoji_code}
+        success: (response) ->
+          alert response
+      })
 
   # Concatenates and flattens the given emoji array into the @emoji array
   combine_emoji: (emoji) ->
     $.extend @emoji, emoji
 
   # Converts an emoji array to [{code: "moji_code", img_url: "http://cdn...moji_code.png}] format
-  simplify: (emoji = @emoji, size_code = @size_code) ->
-    ({code: @_de_escape_term(moji.code), img_url: "#{@cdn_uri}/#{size_code}/#{moji.code}.png"} \
+  simplify: (emoji = @results, size_code = @size_code) ->
+    ({code: @_escape_term(moji.code), img_url: "#{@cdn_uri}/#{size_code}/#{@_escape_term(moji.code)}.png"} \
       for moji in emoji)
 
   # Combines opts against common defaults
@@ -328,6 +312,90 @@ class @EmojidexClient
   # De-Escapes underscores to spaces
   _de_escape_term: (term) ->
     term.split('_').join(' ')
+
+class EmojiAutoComplete
+    constructor: (@plugin) ->
+
+    setAutoComplete: ->
+      setAtwho = (at_options) =>
+        targets = [
+          @plugin.options.emojiarea["plain_text"]
+          @plugin.options.emojiarea["content_editable"]
+        ]
+        for target in targets
+          target.atwho(at_options).on('reposition.atwho', (e) ->
+            $(e.currentTarget).atwho(at_options)
+          ).on('hidden.atwho', (e) ->
+            $(e.currentTarget).atwho(at_options)
+          )
+
+      setSearchedEmojiData = (at_obj, match_string) ->
+        updateAtwho = (searched_data)->
+          at_options =
+            data: searched_data
+            callbacks:
+              matcher: (flag, subtext, should_startWithSpace) ->
+                flag = flag.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")
+                flag = '(?:^|\\s)' + flag if should_startWithSpace
+                # À
+                _a = decodeURI("%C3%80")
+                # ÿ
+                _y = decodeURI("%C3%BF")
+                regexp = new RegExp "#{flag}([A-Za-z#{_a}-#{_y}0-9_\+\-]*)$|#{flag}([^\\x00-\\xff]*)$",'gi'
+                match = regexp.exec subtext
+                if match then match[2] || match[1] else null
+
+          at_obj.$inputor.atwho('destroy')
+          at_obj.$inputor.atwho($.extend {}, at_obj.setting, at_options).atwho('run')
+
+        # start: setSearchedEmojiData --------
+        num = ++searching_num
+        ec.search(match_string, (response) ->
+          searched_data = ec.simplify()
+          # for emoji in searched_data
+          #   emoji.code = emoji.code.replace RegExp(" ", "g"), "_"
+          #   emoji.img_url = emoji.img_url.replace RegExp(" ", "g"), "_"
+
+          if searching_num == num
+            updateAtwho(searched_data) if searched_data.length
+        )
+        return match_string
+
+
+      # start: setAutoComplete --------
+
+      # atwho data of user emoji: [emoji, emojidex]
+      # atwho_emoji_data = []
+      # for emoji_data in @plugin.emoji_data_array
+      #   for category of emoji_data
+      #     for moji in emoji_data[category]
+      #       atwho_emoji_data.push
+      #         code: moji.code
+      #         img_url: moji.img_url
+
+      searching_num = 0
+      ec = new EmojidexClient
+
+      at_init =
+        at: ":"
+        limit: 10
+        search_key: "code"
+        tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20' /> ${code}</li>"
+        insert_tpl: "<img src='${img_url}' height='20' width='20' />"
+        callbacks:
+          matcher: (flag, subtext, should_startWithSpace) ->
+            flag = flag.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")
+            flag = '(?:^|\\s)' + flag if should_startWithSpace
+            # À
+            _a = decodeURI("%C3%80")
+            # ÿ
+            _y = decodeURI("%C3%BF")
+            regexp = new RegExp "#{flag}([A-Za-z#{_a}-#{_y}0-9_\+\-]*)$|#{flag}([^\\x00-\\xff]*)$",'gi'
+            match = regexp.exec subtext
+            match = if match then match[2] || match[1] else null
+            setSearchedEmojiData(@, match) if match
+
+      setAtwho(at_init)
 
 class EmojiLoader
   emoji_data: null
@@ -404,7 +472,7 @@ class EmojiLoaderService extends EmojiLoader
       # fix data for At.js --------
       for emoji in emoji_data
         emoji.code = emoji.code.replace RegExp(" ", "g"), "_"
-        emoji.img_url = "http://assets.emojidex.com/emoji/px32/#{emoji.code}.png"
+        emoji.img_url = "http://cdn.emojidex.com/emoji/px32/#{emoji.code}.png"
 
       # console.dir emoji_data
       @emoji_data = @getCategorizedData emoji_data

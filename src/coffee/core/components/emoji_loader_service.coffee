@@ -7,7 +7,7 @@ class EmojiLoaderService extends EmojiLoader
       # fix data for At.js --------
       for emoji in emoji_data
         emoji.code = emoji.code.replace RegExp(" ", "g"), "_"
-        emoji.img_url = "http://assets.emojidex.com/emoji/px32/#{emoji.code}.png"
+        emoji.img_url = "http://cdn.emojidex.com/emoji/px32/#{emoji.code}.png"
 
       # console.dir emoji_data
       @emoji_data = @getCategorizedData emoji_data

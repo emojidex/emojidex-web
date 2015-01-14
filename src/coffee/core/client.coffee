@@ -167,6 +167,7 @@ class @EmojidexClient
     @auth_token = null
     @storage.set("emojidex.auth_token", @auth_token)
 
+  # regular login with username/email and password
   _plain_login: (username, password, callback = null) ->
     $.getJSON((@api_uri +  'users/authenticate?' + \
       $.param({username: username, password: password})))
@@ -178,9 +179,11 @@ class @EmojidexClient
         @_set_auth_from_response(response)
         callback(response.auth_token) if callback
 
+  # auth with google oauth2
   _google_login: (callback = null) ->
     return false
 
+  # sets auth parameters from a successful auth request [login]
   _set_auth_from_response: (response) ->
     @auth_status = response.auth_status
     @storage.set("emojidex.auth_status", @auth_status)
@@ -203,10 +206,9 @@ class @EmojidexClient
           @history = response
 
   set_history: (emoji_code) ->
-   # if @api_key != null
-   #   # TODO ユーザー履歴に追加
-   # else
-   #   # TODO グローバル履歴に追加
+    if @auth_token != null
+      $.post(@api_uri + 'users/history?' + \
+        $.param({auth_token: @auth_token, emoji_code: emoji_code}))
 
   get_favorites: () ->
     if @auth_token != null
@@ -217,16 +219,28 @@ class @EmojidexClient
           @favorites = response
 
   set_favorites: (emoji_code) ->
-   # if @api_key != null
-   #   # TODO お気に入りに追加
+    if @auth_token != null
+      $.post(@api_uri + 'users/favorites?' + \
+        $.param({auth_token: @auth_token, emoji_code: emoji_code}))
+          .success (response) =>
+            @get_favorites() # re-obtain favorites
+
+  unset_favorites: (emoji_code) ->
+    if @auth_token != null
+      $.ajax({type: 'DELETE', dataType: 'jsonp', \
+        url: @api_uri + 'users/favorites', \
+        data: {auth_token: @auth_token, emoji_code: emoji_code}
+        success: (response) ->
+          alert response
+      })
 
   # Concatenates and flattens the given emoji array into the @emoji array
   combine_emoji: (emoji) ->
     $.extend @emoji, emoji
 
   # Converts an emoji array to [{code: "moji_code", img_url: "http://cdn...moji_code.png}] format
-  simplify: (emoji = @emoji, size_code = @size_code) ->
-    ({code: @_de_escape_term(moji.code), img_url: "#{@cdn_uri}/#{size_code}/#{moji.code}.png"} \
+  simplify: (emoji = @results, size_code = @size_code) ->
+    ({code: @_escape_term(moji.code), img_url: "#{@cdn_uri}/#{size_code}/#{@_escape_term(moji.code)}.png"} \
       for moji in emoji)
 
   # Combines opts against common defaults
