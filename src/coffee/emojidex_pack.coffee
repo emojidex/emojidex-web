@@ -267,16 +267,15 @@ class @EmojidexClient
       $.post(@api_uri + 'users/favorites?' + \
         $.param({auth_token: @auth_token, emoji_code: emoji_code}))
           .success (response) =>
-            @get_favorites() # re-obtain favorites
+            # @get_favorites() # re-obtain favorites
 
   unset_favorites: (emoji_code) ->
     if @auth_token != null
-      $.ajax({type: 'DELETE', dataType: 'jsonp', \
+      $.ajax({type: 'DELETE', dataType: 'json', \
         url: @api_uri + 'users/favorites', \
         data: {auth_token: @auth_token, emoji_code: emoji_code}
-        success: (response) ->
-          alert response
-      })
+      }).success (response) =>
+        # @get_favorites()
 
   # Concatenates and flattens the given emoji array into the @emoji array
   combine_emoji: (emoji) ->

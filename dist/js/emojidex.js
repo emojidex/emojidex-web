@@ -375,26 +375,22 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
         return $.post(this.api_uri + 'users/favorites?' + $.param({
           auth_token: this.auth_token,
           emoji_code: emoji_code
-        })).success(function(response) {
-          return _this.get_favorites();
-        });
+        })).success(function(response) {});
       }
     };
 
     EmojidexClient.prototype.unset_favorites = function(emoji_code) {
+      var _this = this;
       if (this.auth_token !== null) {
         return $.ajax({
           type: 'DELETE',
-          dataType: 'jsonp',
+          dataType: 'json',
           url: this.api_uri + 'users/favorites',
           data: {
             auth_token: this.auth_token,
             emoji_code: emoji_code
-          },
-          success: function(response) {
-            return alert(response);
           }
-        });
+        }).success(function(response) {});
       }
     };
 
