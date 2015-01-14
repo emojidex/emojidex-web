@@ -456,8 +456,7 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
             data: searched_data,
             callbacks: {
               matcher: function(flag, subtext, should_startWithSpace) {
-                var match;
-                return match = getMatchString(subtext, getRegexp(flag, should_startWithSpace));
+                return getMatchString(subtext, getRegexp(flag, should_startWithSpace));
               }
             }
           };

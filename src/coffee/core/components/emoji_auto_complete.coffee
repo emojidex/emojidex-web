@@ -20,7 +20,7 @@ class EmojiAutoComplete
             data: searched_data
             callbacks:
               matcher: (flag, subtext, should_startWithSpace) ->
-                match = getMatchString subtext, getRegexp(flag, should_startWithSpace)
+                getMatchString subtext, getRegexp(flag, should_startWithSpace)
 
           at_obj.$inputor.atwho('destroy').atwho($.extend {}, at_obj.setting, at_options).atwho('run')
 
