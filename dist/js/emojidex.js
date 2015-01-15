@@ -86,7 +86,7 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
       }
       this.defaults = {
         locale: 'en',
-        api_uri: 'https://www.emojidex.com/api/v1/',
+        api_uri: 'http://localhost:3000/api/v1/',
         cdn_uri: 'http://cdn.emojidex.com/emoji',
         size_code: 'px32',
         detailed: false,
@@ -359,25 +359,33 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
     };
 
     EmojidexClient.prototype.get_favorites = function() {
-      var _this = this;
       if (this.auth_token !== null) {
-        return $.getJSON(this.api_uri + 'users/favorites?' + $.param({
-          auth_token: this.auth_token
-        })).error(function(response) {
-          return _this.favorites = [];
-        }).success(function(response) {
-          return _this.favorites = response;
+        return $.ajax({
+          url: this.api_uri + 'users/favorites',
+          data: {
+            auth_token: this.auth_token
+          },
+          success: function(response) {
+            return this.favorites = response;
+          },
+          error: function(response) {
+            return this.favorites = [];
+          }
         });
       }
     };
 
     EmojidexClient.prototype.set_favorites = function(emoji_code) {
-      var _this = this;
       if (this.auth_token !== null) {
-        return $.post(this.api_uri + 'users/favorites?' + $.param({
-          auth_token: this.auth_token,
-          emoji_code: emoji_code
-        })).success(function(response) {});
+        return $.ajax({
+          type: 'POST',
+          url: this.api_uri + 'users/favorites',
+          data: {
+            auth_token: this.auth_token,
+            emoji_code: emoji_code
+          },
+          success: function(response) {}
+        });
       }
     };
 
@@ -385,15 +393,12 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
       if (this.auth_token !== null) {
         return $.ajax({
           type: 'DELETE',
-          dataType: 'json',
           url: this.api_uri + 'users/favorites',
           data: {
             auth_token: this.auth_token,
             emoji_code: emoji_code
           },
-          success: function(response) {
-            return this.get_favorites();
-          }
+          success: function(response) {}
         });
       }
     };
@@ -705,9 +710,7 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
       for (_i = 0, _len = user_names.length; _i < _len; _i++) {
         user_name = user_names[_i];
         $.ajaxSetup({
-          beforeSend: function(jqXHR, settings) {
-            return jqXHR.user_name = user_name;
-          }
+          beforeSend: function(jqXHR, settings) {}
         });
         _results.push($.ajax({
           url: "https://www.emojidex.com/api/v1/users/" + user_name + "/emoji",

@@ -27,7 +27,7 @@ class EmojiLoaderService extends EmojiLoader
     for user_name in user_names
       $.ajaxSetup beforeSend: (jqXHR, settings) ->
         # set user_name for loaded flag
-        jqXHR.user_name = user_name
+        # jqXHR.user_name = user_name
 
       $.ajax
         url: "https://www.emojidex.com/api/v1/users/" + user_name + "/emoji"

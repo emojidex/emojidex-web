@@ -13,7 +13,8 @@ class @EmojidexClient
   constructor: (opts = {}) ->
     @defaults =
       locale: 'en'
-      api_uri: 'https://www.emojidex.com/api/v1/'
+      # api_uri: 'https://www.emojidex.com/api/v1/'
+      api_uri: 'http://localhost:3000/api/v1/'
       cdn_uri: 'http://cdn.emojidex.com/emoji'
       size_code: 'px32'
       detailed: false
@@ -169,7 +170,7 @@ class @EmojidexClient
 
   # regular login with username/email and password
   _plain_login: (username, password, callback = null) ->
-    url = @api_uri + 'users/authenticate?' + $.param {username: username, password: password}
+    url = @api_uri + 'users/authenticate?' + $.param(username: username, password: password)
     $.getJSON(url)
       .error (response) =>
         @auth_status = response.auth_status
@@ -212,31 +213,40 @@ class @EmojidexClient
 
   get_favorites: () ->
     if @auth_token != null
-      $.getJSON((@api_uri +  'users/favorites?' + $.param({auth_token: @auth_token})))
-        .error (response) =>
-          @favorites = []
-        .success (response) =>
+      $.ajax
+        url: @api_uri + 'users/favorites'
+        data:
+          auth_token: @auth_token
+
+        success: (response) ->
           @favorites = response
+
+        error: (response) ->
+          @favorites = []
 
   set_favorites: (emoji_code) ->
     if @auth_token != null
-      $.post(@api_uri + 'users/favorites?' + \
-        $.param({auth_token: @auth_token, emoji_code: emoji_code}))
-          .success (response) =>
-            # @get_favorites() # re-obtain favorites
-
-  unset_favorites: (emoji_code) ->
-    if @auth_token != null
       $.ajax
-        type: 'DELETE'
-        dataType: 'json'
+        type: 'POST'
         url: @api_uri + 'users/favorites'
         data:
           auth_token: @auth_token
           emoji_code: emoji_code
 
         success: (response) ->
-          @get_favorites()
+          # @get_favorites() # re-obtain favorites
+
+  unset_favorites: (emoji_code) ->
+    if @auth_token != null
+      $.ajax
+        type: 'DELETE'
+        url: @api_uri + 'users/favorites'
+        data:
+          auth_token: @auth_token
+          emoji_code: emoji_code
+
+        success: (response) ->
+          # @get_favorites()
 
   # Concatenates and flattens the given emoji array into the @emoji array
   combine_emoji: (emoji) ->
