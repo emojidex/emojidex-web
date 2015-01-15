@@ -91,7 +91,8 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
       this.limit = opts.limit;
       this._init_storages(opts);
       this.results = opts.results || [];
-      this.page = opts.page || 1;
+      this.cur_page = opts.page || 1;
+      this.cur_limit = this.limit;
       this.count = opts.count || 0;
       this._auto_login();
       this.next = function() {
@@ -337,7 +338,14 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
       }
     };
 
-    EmojidexClient.prototype.set_history = function(emoji_code) {};
+    EmojidexClient.prototype.set_history = function(emoji_code) {
+      if (this.auth_token !== null) {
+        return $.post(this.api_uri + 'users/history?' + $.param({
+          auth_token: this.auth_token,
+          emoji_code: emoji_code
+        }));
+      }
+    };
 
     EmojidexClient.prototype.get_favorites = function() {
       var _this = this;
@@ -352,7 +360,30 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
       }
     };
 
-    EmojidexClient.prototype.set_favorites = function(emoji_code) {};
+    EmojidexClient.prototype.set_favorites = function(emoji_code) {
+      var _this = this;
+      if (this.auth_token !== null) {
+        return $.post(this.api_uri + 'users/favorites?' + $.param({
+          auth_token: this.auth_token,
+          emoji_code: emoji_code
+        })).success(function(response) {});
+      }
+    };
+
+    EmojidexClient.prototype.unset_favorites = function(emoji_code) {
+      var _this = this;
+      if (this.auth_token !== null) {
+        return $.ajax({
+          type: 'DELETE',
+          dataType: 'json',
+          url: this.api_uri + 'users/favorites',
+          data: {
+            auth_token: this.auth_token,
+            emoji_code: emoji_code
+          }
+        }).success(function(response) {});
+      }
+    };
 
     EmojidexClient.prototype.combine_emoji = function(emoji) {
       return $.extend(this.emoji, emoji);
@@ -387,7 +418,7 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
 
     EmojidexClient.prototype._succeed = function(response, callback) {
       this.results = response.emoji;
-      this.page = response.meta.page;
+      this.cur_page = response.meta.page;
       this.count = response.meta.count;
       this.combine_emoji(response.emoji);
       if (callback) {

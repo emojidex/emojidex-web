@@ -76,7 +76,8 @@ class @EmojidexClient
     # init storage and state instances
     @_init_storages(opts)
     @results = opts.results || []
-    @page = opts.page || 1
+    @cur_page = opts.page || 1
+    @cur_limit = @limit
     @count = opts.count || 0
 
     @_auto_login()
@@ -210,6 +211,7 @@ class @EmojidexClient
     @auth_token = null
     @storage.set("emojidex.auth_token", @auth_token)
 
+  # regular login with username/email and password
   _plain_login: (username, password, callback = null) ->
     $.getJSON((@api_uri +  'users/authenticate?' + \
       $.param({username: username, password: password})))
@@ -221,9 +223,11 @@ class @EmojidexClient
         @_set_auth_from_response(response)
         callback(response.auth_token) if callback
 
+  # auth with google oauth2
   _google_login: (callback = null) ->
     return false
 
+  # sets auth parameters from a successful auth request [login]
   _set_auth_from_response: (response) ->
     @auth_status = response.auth_status
     @storage.set("emojidex.auth_status", @auth_status)
@@ -246,10 +250,9 @@ class @EmojidexClient
           @history = response
 
   set_history: (emoji_code) ->
-   # if @api_key != null
-   #   # TODO ユーザー履歴に追加
-   # else
-   #   # TODO グローバル履歴に追加
+    if @auth_token != null
+      $.post(@api_uri + 'users/history?' + \
+        $.param({auth_token: @auth_token, emoji_code: emoji_code}))
 
   get_favorites: () ->
     if @auth_token != null
@@ -260,8 +263,19 @@ class @EmojidexClient
           @favorites = response
 
   set_favorites: (emoji_code) ->
-   # if @api_key != null
-   #   # TODO お気に入りに追加
+    if @auth_token != null
+      $.post(@api_uri + 'users/favorites?' + \
+        $.param({auth_token: @auth_token, emoji_code: emoji_code}))
+          .success (response) =>
+            # @get_favorites() # re-obtain favorites
+
+  unset_favorites: (emoji_code) ->
+    if @auth_token != null
+      $.ajax({type: 'DELETE', dataType: 'json', \
+        url: @api_uri + 'users/favorites', \
+        data: {auth_token: @auth_token, emoji_code: emoji_code}
+      }).success (response) =>
+        # @get_favorites()
 
   # Concatenates and flattens the given emoji array into the @emoji array
   combine_emoji: (emoji) ->
@@ -276,10 +290,10 @@ class @EmojidexClient
   _combine_opts: (opts) ->
     $.extend {}, { page: 1, limit: @limit, detailed: @detailed }, opts
 
-  # fills in @results, @page, and @count and calls callback
+  # fills in @results, @cur_page, and @count and calls callback
   _succeed: (response, callback) ->
     @results = response.emoji
-    @page = response.meta.page
+    @cur_page = response.meta.page
     @count = response.meta.count
     @combine_emoji(response.emoji)
     callback(response.emoji) if callback
