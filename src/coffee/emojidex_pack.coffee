@@ -189,7 +189,7 @@ class @EmojidexClient
 
   # login
   # takes a hash with one of the following combinations:
-  # 1. { authtype: 'plain', user: 'username-or-email', password: '****'}
+  # 1. { authtype: 'plain', username: 'username-or-email', password: '****'}
   # 2. { authtype: 'google', #TODO
   # * if no hash is given auto login is attempted
   login: (params) ->
@@ -213,8 +213,8 @@ class @EmojidexClient
 
   # regular login with username/email and password
   _plain_login: (username, password, callback = null) ->
-    $.getJSON((@api_uri +  'users/authenticate?' + \
-      $.param({username: username, password: password})))
+    url = @api_uri + 'users/authenticate?' + $.param {username: username, password: password}
+    $.getJSON(url)
       .error (response) =>
         @auth_status = response.auth_status
         @auth_token = null
@@ -271,11 +271,16 @@ class @EmojidexClient
 
   unset_favorites: (emoji_code) ->
     if @auth_token != null
-      $.ajax({type: 'DELETE', dataType: 'json', \
-        url: @api_uri + 'users/favorites', \
-        data: {auth_token: @auth_token, emoji_code: emoji_code}
-      }).success (response) =>
-        # @get_favorites()
+      $.ajax
+        type: 'DELETE'
+        dataType: 'json'
+        url: @api_uri + 'users/favorites'
+        data:
+          auth_token: @auth_token
+          emoji_code: emoji_code
+
+        success: (response) ->
+          @get_favorites()
 
   # Concatenates and flattens the given emoji array into the @emoji array
   combine_emoji: (emoji) ->
