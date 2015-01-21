@@ -19,22 +19,20 @@ module.exports = (grunt) ->
 
     # CoffeeScript compilation
     coffee:
-      glob_to_multiple:
-        expand: true
-        cwd: 'src/coffee/'
-        src: ['emojidex_pack.coffee']
-        dest: 'src/compiled_js'
-        rename: (dest, src) ->
-          return dest + '/' + src.replace(/\.coffee$/, '.js')
+      emojidex:
+        options:
+          join: true
+        files:
+          'compiled_js/emojidex_pack.js': ['src/coffee/**/*.coffee']
 
     # Concat definitions
     concat:
-      src_coffee:
-        src:[
-          'src/coffee/core/emojidex.coffee'
-          'src/coffee/core/**/*.coffee'
-        ]
-        dest: 'src/coffee/emojidex_pack.coffee'
+      # src_coffee:
+      #   src:[
+      #     'src/coffee/core/emojidex.coffee'
+      #     'src/coffee/core/**/*.coffee'
+      #   ]
+      #   dest: 'src/coffee/emojidex_pack.coffee'
 
       src_js:
         options:
@@ -128,7 +126,7 @@ module.exports = (grunt) ->
         tasks:['slim']
       coffee:
         files: ['src/coffee/**/*.coffee']
-        tasks: ['concat:src_coffee', 'coffee', 'concat:src_js', 'uglify']
+        tasks: ['coffee', 'concat:src_js', 'uglify']
       sass:
         files: ['src/sass/*.scss']
         tasks: ['sass']
@@ -152,6 +150,6 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-copy'
   # grunt.loadNpmTasks 'grunt-contrib-jshint'
 
-  grunt.registerTask 'default', ['concat:src_coffee', 'coffee', 'concat:src_js', 'uglify', 'sass', 'slim', 'copy']
+  grunt.registerTask 'default', ['coffee', 'concat:src_js', 'uglify', 'sass', 'slim', 'copy']
   grunt.registerTask 'dev', ['connect', 'watch']
   # grunt.registerTask 'travis', ['jshint']
