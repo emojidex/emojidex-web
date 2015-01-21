@@ -178,6 +178,6 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-jasmine'
   # grunt.loadNpmTasks 'grunt-contrib-jshint'
 
-  grunt.registerTask 'default', ['coffee', 'concat:src_js', 'uglify', 'sass', 'slim', 'copy']
+  grunt.registerTask 'default', ['coffee', 'concat:src_js', 'uglify', 'sass', 'slim', 'copy', 'jasmine']
   grunt.registerTask 'dev', ['connect', 'watch']
   # grunt.registerTask 'travis', ['jshint']
