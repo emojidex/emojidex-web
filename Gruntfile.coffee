@@ -12,9 +12,11 @@ module.exports = (grunt) ->
         ' *  <%= pkg.description %>\n' +
         ' *  <%= pkg.homepage %>\n' +
         ' *\n' +
-        ' *  Made by <%= pkg.author %>\n' +
-        ' *  Under <%= pkg.licenses[0].type %> License\n' +
-        ' *  <%= pkg.licenses[0].url %> License\n' +
+        ' *  =LICENSE=\n' +
+        ' *  <%= pkg.licenses.description %>\n' +
+        ' *  <%= pkg.licenses.url %>\n' +
+        ' *\n' +
+        ' *  <%= pkg.licenses.copyright %>\n' +
         ' */\n'
 
     # CoffeeScript compilation
@@ -23,19 +25,13 @@ module.exports = (grunt) ->
         options:
           join: true
         files:
-          'compiled_js/emojidex_pack.js': ['src/coffee/**/*.coffee']
+          'src/compiled_js/emojidex_pack.js': ['src/coffee/**/*.coffee']
 
     # Concat definitions
     concat:
-      # src_coffee:
-      #   src:[
-      #     'src/coffee/core/emojidex.coffee'
-      #     'src/coffee/core/**/*.coffee'
-      #   ]
-      #   dest: 'src/coffee/emojidex_pack.coffee'
-
       src_js:
         options:
+          stripBanners: true
           banner: '<%= meta.banner %>'
         src: [
           # 'bower_components/Caret.js/dist/jquery.caret.min.js'
@@ -47,6 +43,8 @@ module.exports = (grunt) ->
     # Minify definitions
     uglify:
       emojidex:
+        options:
+          manglet: true
         src: ['dist/js/emojidex.js']
         dest: 'dist/js/emojidex.min.js'
       bootstrap:
@@ -54,7 +52,7 @@ module.exports = (grunt) ->
         dest: 'dist/js/bootstrap.min.js'
 
       options:
-        banner: '<%= meta.banner %>'
+        preserveComments: 'all'
 
     # connect definitions
     connect:
@@ -119,7 +117,7 @@ module.exports = (grunt) ->
           }
         ]
 
-    # Watch definitions
+    # watch definitions
     watch:
       html:
         files:['src/slim/*.slim']
@@ -133,6 +131,20 @@ module.exports = (grunt) ->
 
       options:
         livereload: true
+
+    # jasmine definitions
+    jasmine:
+      src: [
+        'dist/**/*.js'
+      ]
+      options:
+        keepRunner: true
+        outfile: 'build/_SpecRunner.html'
+        specs: 'build/spec/*.js'
+        vendor:[
+          'https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js'
+          'node_modules/jasmine-jquery/lib/jasmine-jquery.js'
+        ]
 
     # Lint definitions
     # jshint:
@@ -148,6 +160,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-slim'
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-contrib-copy'
+  grunt.loadNpmTasks 'grunt-contrib-jasmine'
   # grunt.loadNpmTasks 'grunt-contrib-jshint'
 
   grunt.registerTask 'default', ['coffee', 'concat:src_js', 'uglify', 'sass', 'slim', 'copy']

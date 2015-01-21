@@ -3,81 +3,16 @@
  *  emojidex coffee plugin for jQuery/Zepto and compatible
  *  https://github.com/emojidex/emojidex-coffee
  *
- *  Made by emojidex
- *  Under emojiOL License
- *  https://www.emojidex.com/emojidex/emojidex_open_license License
+ *  =LICENSE=
+ *  Licensed under the emojidex Open License
+ *  https://www.emojidex.com/emojidex/emojidex_open_license
+ *
+ *  Copyright 2013 Genshin Souzou Kabushiki Kaisha
  */
-/*
-emojidex coffee plugin for jQuery/Zepto and compatible
-
-=LICENSE=
-Licensed under the emojidex Open License
-https://www.emojidex.com/emojidex/emojidex_open_license
-
-Copyright 2013 Genshin Souzou Kabushiki Kaisha
-*/
-
-
 (function() {
   var EmojiAutoComplete, EmojiLoader, EmojiLoaderService, EmojiPallet,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  (function($, window, document) {
-    var Plugin, defaults, pluginName;
-    pluginName = "emojidex";
-    defaults = {
-      emojiarea: {
-        plain_text: ".emojidex-plain_text",
-        content_editable: ".emojidex-content_editable"
-      }
-    };
-    $.fn[pluginName] = function(options) {
-      return this.each(function() {
-        if (!$.data(this, "plugin_" + pluginName)) {
-          return $.data(this, "plugin_" + pluginName, new Plugin(this, options));
-        }
-      });
-    };
-    return Plugin = (function() {
-      function Plugin(element, options) {
-        var _this = this;
-        this.element = element;
-        this.emoji_data_array = [];
-        this.options = $.extend({}, defaults, options);
-        this._defaults = defaults;
-        this._name = pluginName;
-        this.api_emoji = new EmojiLoaderService(this.element, this.options);
-        this.api_emoji.load(function() {
-          _this.emoji_data_array.push(_this.api_emoji.emoji_data);
-          return _this.checkLoadedEmojiData();
-        });
-      }
-
-      Plugin.prototype.checkLoadedEmojiData = function() {
-        var ac;
-        if (this.emoji_data_array) {
-          ac = new EmojiAutoComplete(this);
-          return ac.setAutoComplete();
-        }
-      };
-
-      return Plugin;
-
-    })();
-  })(jQuery, window, document);
-
-  /*
-  emojidex coffee client
-  * Provides search, index caching and combining and asset URI resolution
-  
-  =LICENSE=
-  Licensed under the emojidex Open License
-  https://www.emojidex.com/emojidex/emojidex_open_license
-  
-  Copyright 2013 Genshin Souzou Kabushiki Kaisha
-  */
-
 
   this.EmojidexClient = (function() {
     function EmojidexClient(opts) {
@@ -86,7 +21,7 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
       }
       this.defaults = {
         locale: 'en',
-        api_uri: 'http://localhost:3000/api/v1/',
+        api_uri: 'https://www.emojidex.com/api/v1/',
         cdn_uri: 'http://cdn.emojidex.com/emoji',
         size_code: 'px32',
         detailed: false,
@@ -709,9 +644,6 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
       _results = [];
       for (_i = 0, _len = user_names.length; _i < _len; _i++) {
         user_name = user_names[_i];
-        $.ajaxSetup({
-          beforeSend: function(jqXHR, settings) {}
-        });
         _results.push($.ajax({
           url: "https://www.emojidex.com/api/v1/users/" + user_name + "/emoji",
           dataType: "json",
@@ -749,5 +681,49 @@ Copyright 2013 Genshin Souzou Kabushiki Kaisha
     return EmojiPallet;
 
   })();
+
+  (function($, window, document) {
+    var Plugin, defaults, pluginName;
+    pluginName = "emojidex";
+    defaults = {
+      emojiarea: {
+        plain_text: ".emojidex-plain_text",
+        content_editable: ".emojidex-content_editable"
+      }
+    };
+    $.fn[pluginName] = function(options) {
+      return this.each(function() {
+        if (!$.data(this, "plugin_" + pluginName)) {
+          return $.data(this, "plugin_" + pluginName, new Plugin(this, options));
+        }
+      });
+    };
+    return Plugin = (function() {
+      function Plugin(element, options) {
+        var _this = this;
+        this.element = element;
+        this.emoji_data_array = [];
+        this.options = $.extend({}, defaults, options);
+        this._defaults = defaults;
+        this._name = pluginName;
+        this.api_emoji = new EmojiLoaderService(this.element, this.options);
+        this.api_emoji.load(function() {
+          _this.emoji_data_array.push(_this.api_emoji.emoji_data);
+          return _this.checkLoadedEmojiData();
+        });
+      }
+
+      Plugin.prototype.checkLoadedEmojiData = function() {
+        var ac;
+        if (this.emoji_data_array) {
+          ac = new EmojiAutoComplete(this);
+          return ac.setAutoComplete();
+        }
+      };
+
+      return Plugin;
+
+    })();
+  })(jQuery, window, document);
 
 }).call(this);
