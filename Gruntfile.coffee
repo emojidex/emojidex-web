@@ -26,6 +26,13 @@ module.exports = (grunt) ->
           join: true
         files:
           'src/compiled_js/emojidex_pack.js': ['src/coffee/**/*.coffee']
+      spec:
+        expand: true
+        flatten: true
+        cwd: 'spec/'
+        src: ['*.coffee']
+        dest: 'build/spec/'
+        ext: '.js'
 
     # Concat definitions
     concat:
@@ -128,6 +135,9 @@ module.exports = (grunt) ->
       sass:
         files: ['src/sass/*.scss']
         tasks: ['sass']
+      spec:
+        files: ['spec/**/*.coffee']
+        tasks: ['coffee:spec', 'jasmine']
 
       options:
         livereload: true
@@ -135,7 +145,7 @@ module.exports = (grunt) ->
     # jasmine definitions
     jasmine:
       src: [
-        'dist/**/*.js'
+        'dist/js/*.js'
       ]
       options:
         keepRunner: true
