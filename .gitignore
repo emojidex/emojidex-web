@@ -6,4 +6,5 @@ node_modules
 bower_components
 npm_debug.log
 npm-debug.log
-build/
+build
+.grunt

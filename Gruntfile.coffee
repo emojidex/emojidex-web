@@ -131,7 +131,7 @@ module.exports = (grunt) ->
         tasks:['slim']
       coffee:
         files: ['src/coffee/**/*.coffee']
-        tasks: ['coffee', 'concat:src_js', 'uglify', 'jasmine']
+        tasks: ['coffee:emojidex', 'concat:src_js', 'uglify:emojidex', 'jasmine']
       sass:
         files: ['src/sass/*.scss']
         tasks: ['sass']
@@ -144,21 +144,22 @@ module.exports = (grunt) ->
 
     # jasmine definitions
     jasmine:
-      src: [
-        'dist/js/*.js'
-      ]
-      options:
-        keepRunner: true
-        outfile: 'build/_SpecRunner.html'
-        specs: [
-          'build/spec/*.js'
+      all:
+        src: [
+          'dist/js/*.min.js'
         ]
-        vendor:[
-          'https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js'
-        ]
-        helpers:[
-          'node_modules/jasmine-jquery/lib/jasmine-jquery.js'
-        ]
+        options:
+          keepRunner: true
+          outfile: 'build/_SpecRunner.html'
+          specs: [
+            'build/spec/*.js'
+          ]
+          vendor:[
+            'https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js'
+          ]
+          helpers:[
+            'node_modules/jasmine-jquery/lib/jasmine-jquery.js'
+          ]
 
     # Lint definitions
     # jshint:
