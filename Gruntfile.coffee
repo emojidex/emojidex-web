@@ -131,7 +131,7 @@ module.exports = (grunt) ->
         tasks:['slim']
       coffee:
         files: ['src/coffee/**/*.coffee']
-        tasks: ['coffee', 'concat:src_js', 'uglify']
+        tasks: ['coffee', 'concat:src_js', 'uglify', 'jasmine']
       sass:
         files: ['src/sass/*.scss']
         tasks: ['sass']
@@ -150,9 +150,13 @@ module.exports = (grunt) ->
       options:
         keepRunner: true
         outfile: 'build/_SpecRunner.html'
-        specs: 'build/spec/*.js'
+        specs: [
+          'build/spec/*.js'
+        ]
         vendor:[
           'https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js'
+        ]
+        helpers:[
           'node_modules/jasmine-jquery/lib/jasmine-jquery.js'
         ]
 
