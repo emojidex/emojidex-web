@@ -1,12 +1,10 @@
-###
-emojidex coffee plugin for jQuery/Zepto and compatible
-
-=LICENSE=
-Licensed under the emojidex Open License
-https://www.emojidex.com/emojidex/emojidex_open_license
-
-Copyright 2013 Genshin Souzou Kabushiki Kaisha
-###
+# emojidex coffee plugin for jQuery/Zepto and compatible
+#
+# =LICENSE=
+# Licensed under the emojidex Open License
+# https://www.emojidex.com/emojidex/emojidex_open_license
+#
+# Copyright 2013 Genshin Souzou Kabushiki Kaisha
 
 do ($ = jQuery, window, document) ->
   pluginName = "emojidex"
