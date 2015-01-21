@@ -13,8 +13,7 @@ class @EmojidexClient
   constructor: (opts = {}) ->
     @defaults =
       locale: 'en'
-      # api_uri: 'https://www.emojidex.com/api/v1/'
-      api_uri: 'http://localhost:3000/api/v1/'
+      api_uri: 'https://www.emojidex.com/api/v1/'
       cdn_uri: 'http://cdn.emojidex.com/emoji'
       size_code: 'px32'
       detailed: false
