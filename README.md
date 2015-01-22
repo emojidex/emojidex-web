@@ -32,10 +32,11 @@ For a regular one-off build:
 grunt
 ```
 
-For development mode with dynamic compilation:
+For development mode with dynamic compilation and dev server:
 ```shell
 grunt dev
 ```
+A live version of the latest build will be availble at http://localhost:8000/dist/
 
 License
 =======

@@ -1,18 +1,19 @@
-# emojidex coffee client
-# * Provides search, index caching and combining and asset URI resolution
-#
-# =LICENSE=
-# Licensed under the emojidex Open License
-# https://www.emojidex.com/emojidex/emojidex_open_license
-#
-# Copyright 2013 Genshin Souzou Kabushiki Kaisha
+###
+emojidex coffee client
+* Provides search, index caching and combining and asset URI resolution
+
+=LICENSE=
+Licensed under the emojidex Open License
+https://www.emojidex.com/emojidex/emojidex_open_license
+
+Copyright 2013 Genshin Souzou Kabushiki Kaisha
+###
 
 class @EmojidexClient
   constructor: (opts = {}) ->
     @defaults =
       locale: 'en'
       api_uri: 'https://www.emojidex.com/api/v1/'
-      # api_uri: 'http://localhost:3000/api/v1/'
       cdn_uri: 'http://cdn.emojidex.com/emoji'
       size_code: 'px32'
       detailed: false
