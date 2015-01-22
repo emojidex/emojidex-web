@@ -88,7 +88,7 @@
     };
 
     EmojidexClient.prototype._auto_login = function() {
-      if (this.storage.get("emojidex.auth_token") !== null) {
+      if (this.storage.get("emojidex.auth_token") != null) {
         this.auth_status = this.storage.get("emojidex.auth_status");
         this.auth_token = this.storage.get("emojidex.auth_token");
         this.user = this.storage.get("emojidex.user");
@@ -273,7 +273,7 @@
 
     EmojidexClient.prototype.get_history = function(opts) {
       var _this = this;
-      if (this.auth_token !== null) {
+      if (this.auth_token != null) {
         return $.getJSON(this.api_uri + 'users/history?' + $.param({
           auth_token: this.auth_token
         })).error(function(response) {
@@ -285,7 +285,7 @@
     };
 
     EmojidexClient.prototype.set_history = function(emoji_code) {
-      if (this.auth_token !== null) {
+      if (this.auth_token != null) {
         return $.post(this.api_uri + 'users/history?' + $.param({
           auth_token: this.auth_token,
           emoji_code: emoji_code
@@ -294,7 +294,7 @@
     };
 
     EmojidexClient.prototype.get_favorites = function() {
-      if (this.auth_token !== null) {
+      if (this.auth_token != null) {
         return $.ajax({
           url: this.api_uri + 'users/favorites',
           data: {
@@ -311,7 +311,7 @@
     };
 
     EmojidexClient.prototype.set_favorites = function(emoji_code) {
-      if (this.auth_token !== null) {
+      if (this.auth_token != null) {
         return $.ajax({
           type: 'POST',
           url: this.api_uri + 'users/favorites',
@@ -325,7 +325,7 @@
     };
 
     EmojidexClient.prototype.unset_favorites = function(emoji_code) {
-      if (this.auth_token !== null) {
+      if (this.auth_token != null) {
         return $.ajax({
           type: 'DELETE',
           url: this.api_uri + 'users/favorites',

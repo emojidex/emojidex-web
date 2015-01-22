@@ -1,13 +1,11 @@
-###
-emojidex coffee client
-* Provides search, index caching and combining and asset URI resolution
-
-=LICENSE=
-Licensed under the emojidex Open License
-https://www.emojidex.com/emojidex/emojidex_open_license
-
-Copyright 2013 Genshin Souzou Kabushiki Kaisha
-###
+# emojidex coffee client
+# * Provides search, index caching and combining and asset URI resolution
+#
+# =LICENSE=
+# Licensed under the emojidex Open License
+# https://www.emojidex.com/emojidex/emojidex_open_license
+#
+# Copyright 2013 Genshin Souzou Kabushiki Kaisha
 
 class @EmojidexClient
   constructor: (opts = {}) ->
@@ -76,7 +74,7 @@ class @EmojidexClient
 
   # Checks for local saved login data, and if present sets the username and api_key
   _auto_login: () ->
-    if @storage.get("emojidex.auth_token") != null
+    if @storage.get("emojidex.auth_token")?
       @auth_status = @storage.get("emojidex.auth_status")
       @auth_token = @storage.get("emojidex.auth_token")
       @user = @storage.get("emojidex.user")
@@ -198,7 +196,7 @@ class @EmojidexClient
     @get_history()
 
   get_history: (opts) ->
-    if @auth_token != null
+    if @auth_token?
       $.getJSON((@api_uri +  'users/history?' + $.param({auth_token: @auth_token})))
         .error (response) =>
           @history = []
@@ -206,12 +204,12 @@ class @EmojidexClient
           @history = response
 
   set_history: (emoji_code) ->
-    if @auth_token != null
+    if @auth_token?
       $.post(@api_uri + 'users/history?' + \
         $.param({auth_token: @auth_token, emoji_code: emoji_code}))
 
   get_favorites: () ->
-    if @auth_token != null
+    if @auth_token?
       $.ajax
         url: @api_uri + 'users/favorites'
         data:
@@ -224,7 +222,7 @@ class @EmojidexClient
           @favorites = []
 
   set_favorites: (emoji_code) ->
-    if @auth_token != null
+    if @auth_token?
       $.ajax
         type: 'POST'
         url: @api_uri + 'users/favorites'
@@ -236,7 +234,7 @@ class @EmojidexClient
           # @get_favorites() # re-obtain favorites
 
   unset_favorites: (emoji_code) ->
-    if @auth_token != null
+    if @auth_token?
       $.ajax
         type: 'DELETE'
         url: @api_uri + 'users/favorites'
