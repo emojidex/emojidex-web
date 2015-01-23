@@ -1,6 +1,6 @@
-emojidex-coffee
-===============
-emojidex-coffee contains coffeescript sources which compile into a set of javascript jQuery 
+emojidex-web
+============
+emojidex-web contains coffeescript and SLIM sources which compile into a set of javascript jQuery 
 modules. Anyone can use these modules on their site to enable emoji without any complex 
 bundling or dealing with image assets or server-side processing. A variety of tools are 
 included which allow emojidex to be used for display in a variety of ways, automatic 
@@ -16,8 +16,8 @@ working node/npm that you either installed using your package manager or built y
 ### Get the source
 First off we need the actual source to build. Clone this repository if you haven't already.
 ```shell
-git clone git@github.com:emojidex/emojidex-coffee.git
-cd emojidex-coffee
+git clone git@github.com:emojidex/emojidex-web.git
+cd emojidex-web
 ```
 
 ### Install Packages and Obtain Required Sources
