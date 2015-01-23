@@ -43,6 +43,7 @@ module.exports = (grunt) ->
         src: [
           # 'bower_components/Caret.js/dist/jquery.caret.min.js'
           # 'bower_components/At.js/dist/js/jquery.atwho.min.js'
+          'node_modules/emojidex-client/dist/js/*.min.js'
           'src/compiled_js/**/*.js'
         ]
         dest: 'dist/js/emojidex.js'
@@ -114,12 +115,6 @@ module.exports = (grunt) ->
             expand: true,
             cwd: 'bower_components/At.js/dist/js'
             src: 'jquery.atwho.min.js'
-            dest: 'dist/js/'
-          }
-          {
-            expand: true,
-            cwd: 'bower_components/jquery.storageapi/'
-            src: 'jquery.storageapi.min.js'
             dest: 'dist/js/'
           }
         ]
