@@ -2,7 +2,7 @@
   "name": "emojidex",
   "version": "0.1.0",
   "title": "jQuery emojidex",
-  "description": "emojidex coffee plugin for jQuery/Zepto and compatible",
+  "description": "emojidex plugin for jQuery/Zepto and compatible",
   "author": "emojidex",
   "homepage": "https://github.com/emojidex/emojidex-web",
   "repository": {
@@ -33,6 +33,6 @@
     "jasmine-jquery": "^2.0.5"
   },
   "scripts": {
-    "test": "grunt travis --verbose"
+    "test": "grunt && grunt jasmine"
   }
 }
