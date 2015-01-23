@@ -38,7 +38,7 @@ module.exports = (grunt) ->
     concat:
       src_js:
         options:
-          stripBanners: true
+          stripBanners: false
           banner: '<%= meta.banner %>'
         src: [
           # 'bower_components/Caret.js/dist/jquery.caret.min.js'
