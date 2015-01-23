@@ -4,10 +4,10 @@
   "title": "jQuery emojidex",
   "description": "emojidex coffee plugin for jQuery/Zepto and compatible",
   "author": "emojidex",
-  "homepage": "https://github.com/emojidex/emojidex-coffee",
+  "homepage": "https://github.com/emojidex/emojidex-web",
   "repository": {
     "type": "git",
-    "url": "https://github.com/emojidex/emojidex-coffee.git"
+    "url": "https://github.com/emojidex/emojidex-web.git"
   },
   "licenses": {
     "description": "Licensed under the emojidex Open License",
@@ -17,18 +17,19 @@
   },
   "devDependencies": {
     "bootstrap-sass": "^3.3.1",
+    "emojidex-client": "^0.1.0",
     "grunt": "~0.4.1",
     "grunt-cli": "~0.1.7",
     "grunt-contrib-coffee": "~0.7.0",
     "grunt-contrib-concat": "~0.3.0",
     "grunt-contrib-connect": "^0.8.0",
     "grunt-contrib-copy": "^0.7.0",
+    "grunt-contrib-jasmine": "^0.8.2",
     "grunt-contrib-jshint": "~0.4.3",
     "grunt-contrib-sass": "^0.8.1",
     "grunt-contrib-uglify": "~0.2.0",
     "grunt-contrib-watch": "~0.5.3",
     "grunt-slim": "^0.1.0",
-    "grunt-contrib-jasmine": "^0.8.2",
     "jasmine-jquery": "^2.0.5"
   },
   "scripts": {
