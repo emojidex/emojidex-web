@@ -1,10 +1,7 @@
 module.exports = (grunt) ->
   grunt.initConfig
-
-    # Import package manifest
     pkg: grunt.file.readJSON('package.json')
 
-    # Banner definitions
     meta:
       banner:
         '/*\n' +
@@ -19,7 +16,6 @@ module.exports = (grunt) ->
         ' *  <%= pkg.licenses.copyright %>\n' +
         ' */\n'
 
-    # CoffeeScript compilation
     coffee:
       emojidexReplace:
         options:
@@ -48,7 +44,6 @@ module.exports = (grunt) ->
         dest: 'build/spec/'
         ext: '.js'
 
-    # Concat definitions
     concat:
       emojidexAutocomplete:
         # options:
@@ -71,7 +66,6 @@ module.exports = (grunt) ->
         ]
         dest: 'dist/js/emojidex.js'
 
-    # Minify definitions
     uglify:
       options:
         preserveComments: 'all'
@@ -86,11 +80,9 @@ module.exports = (grunt) ->
         src: ['node_modules/bootstrap-sass/assets/javascripts/bootstrap.js']
         dest: 'dist/js/bootstrap.min.js'
 
-    # connect definitions
     connect:
       site: {}
 
-    # sass definitions
     sass:
      dist:
        files: [
@@ -101,7 +93,6 @@ module.exports = (grunt) ->
         ext: '.css'
        ]
 
-    # slim definitions
     slim:
       options:
         pretty: true
@@ -115,7 +106,6 @@ module.exports = (grunt) ->
           ext: '.html'
         ]
 
-    # copy definitions
     copy:
       img:
         expand: true,
@@ -145,7 +135,6 @@ module.exports = (grunt) ->
           }
         ]
 
-    # watch definitions
     watch:
       options:
         livereload: true
@@ -166,7 +155,6 @@ module.exports = (grunt) ->
         files: ['spec/**/*.coffee']
         tasks: ['coffee:spec', 'jasmine']
 
-    # jasmine definitions
     jasmine:
       all:
         src: [
