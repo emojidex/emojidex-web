@@ -5,15 +5,17 @@ module.exports = (grunt) ->
     meta:
       banner:
         '/*\n' +
-        ' *  <%= pkg.title || pkg.name %> - v<%= pkg.version %>\n' +
-        ' *  <%= pkg.description %>\n' +
-        ' *  <%= pkg.homepage %>\n' +
+        ' * <%= pkg.title || pkg.name %> - v<%= pkg.version %>\n' +
+        ' * <%= pkg.description %>\n' +
+        ' * <%= pkg.homepage %>\n' +
         ' *\n' +
-        ' *  =LICENSE=\n' +
-        ' *  <%= pkg.licenses.description %>\n' +
-        ' *  <%= pkg.licenses.url %>\n' +
+        ' * Includes: emojidex-client, emojidexReplace, emojidexAutocomplete\n' +
         ' *\n' +
-        ' *  <%= pkg.licenses.copyright %>\n' +
+        ' * =LICENSE=\n' +
+        ' * <%= pkg.licenses.description %>\n' +
+        ' * <%= pkg.licenses.url %>\n' +
+        ' *\n' +
+        ' * <%= pkg.licenses.copyright %>\n' +
         ' */\n'
 
     coffee:
@@ -45,13 +47,6 @@ module.exports = (grunt) ->
         ext: '.js'
 
     concat:
-      emojidexAutocomplete:
-        src: [
-          'src/compiled_js/emojidexAutocomplete.js'
-          'node_modules/emojidex-client/dist/js/*.min.js'
-        ]
-        dest: 'src/compiled_js/emojidexAutocomplete.js'
-
       emojidex:
         options:
           stripBanners: false
@@ -59,16 +54,15 @@ module.exports = (grunt) ->
         src: [
           # 'bower_components/Caret.js/dist/jquery.caret.min.js'
           # 'bower_components/At.js/dist/js/jquery.atwho.min.js'
+          'node_modules/emojidex-client/dist/js/*.min.js'
           'src/compiled_js/**/*.js'
         ]
         dest: 'dist/js/emojidex.js'
 
     uglify:
-      options:
-        preserveComments: 'all'
-
       emojidex:
         options:
+          banner: '<%= meta.banner %>'
           manglet: true
         src: ['dist/js/emojidex.js']
         dest: 'dist/js/emojidex.min.js'
