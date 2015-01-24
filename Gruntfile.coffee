@@ -59,6 +59,7 @@ module.exports = (grunt) ->
           'src/compiled_js/emojidexAutocomplete.js'
         ]
         dest: 'src/compiled_js/emojidexAutocomplete.js'
+
       emojidex:
         options:
           stripBanners: false
@@ -72,17 +73,18 @@ module.exports = (grunt) ->
 
     # Minify definitions
     uglify:
+      options:
+        preserveComments: 'all'
+
       emojidex:
         options:
           manglet: true
         src: ['dist/js/emojidex.js']
         dest: 'dist/js/emojidex.min.js'
+
       bootstrap:
         src: ['node_modules/bootstrap-sass/assets/javascripts/bootstrap.js']
         dest: 'dist/js/bootstrap.min.js'
-
-      options:
-        preserveComments: 'all'
 
     # connect definitions
     connect:
@@ -103,6 +105,7 @@ module.exports = (grunt) ->
     slim:
       options:
         pretty: true
+
       dsit:
         files: [
           expand: true
@@ -119,6 +122,7 @@ module.exports = (grunt) ->
         cwd: 'src/img/'
         src: '**/*'
         dest: 'dist/img/'
+
       lib:
         files: [
           {
@@ -143,21 +147,24 @@ module.exports = (grunt) ->
 
     # watch definitions
     watch:
+      options:
+        livereload: true
+
       html:
         files:['src/slim/*.slim']
         tasks:['slim']
+
       coffee:
         files: ['src/coffee/**/*.coffee']
-        tasks: ['coffee:emojidex', 'concat:emojidex', 'uglify:emojidex', 'jasmine']
+        tasks: ['coffee:emojidex', 'concat', 'uglify:emojidex', 'jasmine']
+
       sass:
         files: ['src/sass/*.scss']
         tasks: ['sass']
+
       spec:
         files: ['spec/**/*.coffee']
         tasks: ['coffee:spec', 'jasmine']
-
-      options:
-        livereload: true
 
     # jasmine definitions
     jasmine:
@@ -188,5 +195,5 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-copy'
   grunt.loadNpmTasks 'grunt-contrib-jasmine'
 
-  grunt.registerTask 'default', ['coffee', 'concat:emojidexAutocomplete', 'concat:emojidex', 'uglify', 'sass', 'slim', 'copy', 'jasmine']
+  grunt.registerTask 'default', ['coffee', 'concat', 'uglify', 'sass', 'slim', 'copy', 'jasmine']
   grunt.registerTask 'dev', ['connect', 'watch']
