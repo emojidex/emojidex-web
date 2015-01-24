@@ -1,4 +1,4 @@
-# emojidex coffee plugin for jQuery/Zepto and compatible
+# emojidex replace
 #
 # =LICENSE=
 # Licensed under the emojidex Open License
@@ -7,11 +7,12 @@
 # Copyright 2013 Genshin Souzou Kabushiki Kaisha
 
 do ($ = jQuery, window, document) ->
-  pluginName = "emojidex"
+  pluginName = "emojidex-replacer"
   defaults =
-    emojiarea:
-      plain_text: ".emojidex-plain_text"
-      content_editable: ".emojidex-content_editable"
+    user: [
+      'emoji'
+      'emojidex'
+    ]
 
   $.fn[pluginName] = (options) ->
     @each ->
@@ -26,16 +27,5 @@ do ($ = jQuery, window, document) ->
       @_defaults = defaults
       @_name = pluginName
 
-      @api_emoji = new EmojiLoaderService @element, @options
-      @api_emoji.load =>
-        @emoji_data_array.push @api_emoji.emoji_data
-        @checkLoadedEmojiData()
-
-    checkLoadedEmojiData: ->
-      if @emoji_data_array
-
-        ac = new EmojiAutoComplete @
-        ac.setAutoComplete()
-
-        # @emoji_pallet = new EmojiPallet @emoji_data_array, $("#ep"), @options
-        # @emoji_pallet.setPallet()
+      @api_emoji = new EmojiReplacerService @element, @options
+      @api_emoji.replace()

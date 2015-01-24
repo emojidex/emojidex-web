@@ -1,4 +1,4 @@
-class EmojiLoaderService extends EmojiLoader
+class EmojiReplacerService extends EmojiReplacer
   constructor: (@element, @options) ->
     super
 

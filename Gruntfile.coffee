@@ -40,6 +40,7 @@ module.exports = (grunt) ->
         options:
           stripBanners: false
           banner: '<%= meta.banner %>'
+          footer: '/* test footer */'
         src: [
           # 'bower_components/Caret.js/dist/jquery.caret.min.js'
           # 'bower_components/At.js/dist/js/jquery.atwho.min.js'
