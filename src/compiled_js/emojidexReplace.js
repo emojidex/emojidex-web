@@ -1,7 +1,46 @@
+/*
+* emojidexReplace
+*
+* =LICENSE=
+* Licensed under the emojidex Open License
+* https://www.emojidex.com/emojidex/emojidex_open_license
+*
+* Copyright 2013 Genshin Souzou Kabushiki Kaisha
+*/
+
+
 (function() {
   var Replacer, ReplacerService,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  (function($, window, document) {
+    var Plugin, defaults, pluginName;
+    pluginName = "emojidexReplace";
+    defaults = {
+      userNames: ['emoji', 'emojidex']
+    };
+    Plugin = (function() {
+      function Plugin(element, options) {
+        this.element = element;
+        this.options = $.extend({}, defaults, options);
+        this._defaults = defaults;
+        this._name = pluginName;
+        this.api_emoji_replacer = new ReplacerService(this.element, this.options);
+        this.api_emoji_replacer.replace();
+      }
+
+      return Plugin;
+
+    })();
+    return $.fn[pluginName] = function(options) {
+      return this.each(function() {
+        if (!$.data(this, "plugin_" + pluginName)) {
+          return $.data(this, "plugin_" + pluginName, new Plugin(this, options));
+        }
+      });
+    };
+  })(jQuery, window, document);
 
   Replacer = (function() {
     function Replacer() {}
@@ -182,33 +221,5 @@
     return ReplacerService;
 
   })(Replacer);
-
-  (function($, window, document) {
-    var Plugin, defaults, pluginName;
-    pluginName = "emojidexReplace";
-    defaults = {
-      userNames: ['emoji', 'emojidex']
-    };
-    Plugin = (function() {
-      function Plugin(element, options) {
-        this.element = element;
-        this.options = $.extend({}, defaults, options);
-        this._defaults = defaults;
-        this._name = pluginName;
-        this.api_emoji_replacer = new ReplacerService(this.element, this.options);
-        this.api_emoji_replacer.replace();
-      }
-
-      return Plugin;
-
-    })();
-    return $.fn[pluginName] = function(options) {
-      return this.each(function() {
-        if (!$.data(this, "plugin_" + pluginName)) {
-          return $.data(this, "plugin_" + pluginName, new Plugin(this, options));
-        }
-      });
-    };
-  })(jQuery, window, document);
 
 }).call(this);

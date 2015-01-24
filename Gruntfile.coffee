@@ -22,9 +22,9 @@ module.exports = (grunt) ->
           join: true
         files:
           'src/compiled_js/emojidexReplace.js': [
+            'src/coffee/emojidex_replace.coffee'
             'src/coffee/components/replacer.coffee'
             'src/coffee/components/replacer_service.coffee'
-            'src/coffee/emojidex_replace.coffee'
           ]
 
       emojidexAutocomplete:
@@ -32,8 +32,8 @@ module.exports = (grunt) ->
           join: true
         files:
           'src/compiled_js/emojidexAutocomplete.js': [
-            'src/coffee/components/autocomplete.coffee'
             'src/coffee/emojidex_autocomplete.coffee'
+            'src/coffee/components/autocomplete.coffee'
           ]
 
       spec:
@@ -46,12 +46,9 @@ module.exports = (grunt) ->
 
     concat:
       emojidexAutocomplete:
-        # options:
-        #   stripBanners: false
-        #   banner: '<%= meta.banner %>'
         src: [
-          'node_modules/emojidex-client/dist/js/*.min.js'
           'src/compiled_js/emojidexAutocomplete.js'
+          'node_modules/emojidex-client/dist/js/*.min.js'
         ]
         dest: 'src/compiled_js/emojidexAutocomplete.js'
 
