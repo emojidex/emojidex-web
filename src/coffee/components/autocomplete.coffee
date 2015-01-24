@@ -1,18 +1,13 @@
-class EmojiAutoComplete
+class AutoComplete
     constructor: (@plugin) ->
 
     setAutoComplete: ->
       setAtwho = (at_options) =>
-        targets = [
-          @plugin.options.emojiarea["plain_text"]
-          @plugin.options.emojiarea["content_editable"]
-        ]
-        for target in targets
-          target.atwho(at_options).on('reposition.atwho', (e) ->
-            $(e.currentTarget).atwho(at_options)
-          ).on('hidden.atwho', (e) ->
-            $(e.currentTarget).atwho(at_options)
-          )
+        $(@plugin.element).atwho(at_options).on('reposition.atwho', (e) ->
+          $(e.currentTarget).atwho(at_options)
+        ).on('hidden.atwho', (e) ->
+          $(e.currentTarget).atwho(at_options)
+        )
 
       setSearchedEmojiData = (at_obj, match_string) ->
         updateAtwho = (searched_data) ->
@@ -53,7 +48,7 @@ class EmojiAutoComplete
       ec = new EmojidexClient
       at_init =
         at: ":"
-        limit: 10
+        limit: @plugin.options.limit
         search_key: "code"
         tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20' /> ${code}</li>"
         insert_tpl: "<img src='${img_url}' height='20' width='20' />"

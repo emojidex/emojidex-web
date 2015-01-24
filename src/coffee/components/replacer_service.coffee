@@ -1,8 +1,8 @@
-class EmojiReplacerService extends EmojiReplacer
+class ReplacerService extends Replacer
   constructor: (@element, @options) ->
     super
 
-  load: (callback)->
+  replace: (callback)->
     onLoadEmojiData = (emoji_data) =>
       # fix data for At.js --------
       for emoji in emoji_data
@@ -13,7 +13,7 @@ class EmojiReplacerService extends EmojiReplacer
       @emoji_data = @getCategorizedData emoji_data
       @emoji_regexps = @setEmojiCSS_getEmojiRegexps @emoji_data
       @setEmojiIcon @
-      callback @
+      callback @ if callback
 
     # start main --------
     @getEmojiDataFromAPI onLoadEmojiData
@@ -21,14 +21,10 @@ class EmojiReplacerService extends EmojiReplacer
 
   getEmojiDataFromAPI: (callback) ->
     loaded_num = 0
-    user_names = ["emojidex", "emoji"]
+    user_names = @options.userNames
     emoji_data = []
 
     for user_name in user_names
-      # $.ajaxSetup beforeSend: (jqXHR, settings) ->
-      #   set user_name for loaded flag
-      #   jqXHR.user_name = user_name
-
       $.ajax
         url: "https://www.emojidex.com/api/v1/users/" + user_name + "/emoji"
         dataType: "json"

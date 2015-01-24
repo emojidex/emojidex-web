@@ -18,10 +18,10 @@ html
 
     coffee:
       $(document).ready ->
-        $(".emojidex_replace").emojidex
-          emojiarea:
-            plain_text: $(".emojidex-plain_text")
-            content_editable: $(".emojidex-content_editable")
+        $(".emojidex_replace").emojidexReplace()
+
+        $(".emojidex-plain_text").emojidexAutocomplete()
+        $(".emojidex-content_editable").emojidexAutocomplete()
 
   body
     .container

@@ -1,4 +1,4 @@
-# emojidex replace
+# emojidexReplace
 #
 # =LICENSE=
 # Licensed under the emojidex Open License
@@ -7,25 +7,24 @@
 # Copyright 2013 Genshin Souzou Kabushiki Kaisha
 
 do ($ = jQuery, window, document) ->
-  pluginName = "emojidex-replacer"
+  pluginName = "emojidexReplace"
   defaults =
-    user: [
+    userNames: [
       'emoji'
       'emojidex'
     ]
 
-  $.fn[pluginName] = (options) ->
-    @each ->
-      if !$.data(@, "plugin_#{pluginName}")
-        $.data(@, "plugin_#{pluginName}", new Plugin(@, options))
-
   class Plugin
     constructor: (@element, options) ->
-      @emoji_data_array = []
-
       @options = $.extend {}, defaults, options
       @_defaults = defaults
       @_name = pluginName
 
-      @api_emoji = new EmojiReplacerService @element, @options
-      @api_emoji.replace()
+      # start: Plugin --------
+      @api_emoji_replacer = new ReplacerService @element, @options
+      @api_emoji_replacer.replace()
+
+  $.fn[pluginName] = (options) ->
+    @each ->
+      unless $.data(this, "plugin_" + pluginName)
+        $.data this, "plugin_" + pluginName, new Plugin(this, options)

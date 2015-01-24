@@ -21,11 +21,25 @@ module.exports = (grunt) ->
 
     # CoffeeScript compilation
     coffee:
-      emojidex:
+      emojidexReplace:
         options:
           join: true
         files:
-          'src/compiled_js/emojidex_pack.js': ['src/coffee/**/*.coffee']
+          'src/compiled_js/emojidexReplace.js': [
+            'src/coffee/components/replacer.coffee'
+            'src/coffee/components/replacer_service.coffee'
+            'src/coffee/emojidex_replace.coffee'
+          ]
+
+      emojidexAutocomplete:
+        options:
+          join: true
+        files:
+          'src/compiled_js/emojidexAutocomplete.js': [
+            'src/coffee/components/autocomplete.coffee'
+            'src/coffee/emojidex_autocomplete.coffee'
+          ]
+
       spec:
         expand: true
         flatten: true
@@ -36,15 +50,22 @@ module.exports = (grunt) ->
 
     # Concat definitions
     concat:
-      src_js:
+      emojidexAutocomplete:
+        # options:
+        #   stripBanners: false
+        #   banner: '<%= meta.banner %>'
+        src: [
+          'node_modules/emojidex-client/dist/js/*.min.js'
+          'src/compiled_js/emojidexAutocomplete.js'
+        ]
+        dest: 'src/compiled_js/emojidexAutocomplete.js'
+      emojidex:
         options:
           stripBanners: false
           banner: '<%= meta.banner %>'
-          footer: '/* test footer */'
         src: [
           # 'bower_components/Caret.js/dist/jquery.caret.min.js'
           # 'bower_components/At.js/dist/js/jquery.atwho.min.js'
-          'node_modules/emojidex-client/dist/js/*.min.js'
           'src/compiled_js/**/*.js'
         ]
         dest: 'dist/js/emojidex.js'
@@ -127,7 +148,7 @@ module.exports = (grunt) ->
         tasks:['slim']
       coffee:
         files: ['src/coffee/**/*.coffee']
-        tasks: ['coffee:emojidex', 'concat:src_js', 'uglify:emojidex', 'jasmine']
+        tasks: ['coffee:emojidex', 'concat:emojidex', 'uglify:emojidex', 'jasmine']
       sass:
         files: ['src/sass/*.scss']
         tasks: ['sass']
@@ -157,12 +178,6 @@ module.exports = (grunt) ->
             'node_modules/jasmine-jquery/lib/jasmine-jquery.js'
           ]
 
-    # Lint definitions
-    # jshint:
-    #   files: ['src/jquery.emojidex.js']
-    #   options:
-    #     jshintrc: '.jshintrc'
-
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-concat'
   grunt.loadNpmTasks 'grunt-contrib-uglify'
@@ -172,8 +187,6 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-contrib-copy'
   grunt.loadNpmTasks 'grunt-contrib-jasmine'
-  # grunt.loadNpmTasks 'grunt-contrib-jshint'
 
-  grunt.registerTask 'default', ['coffee', 'concat:src_js', 'uglify', 'sass', 'slim', 'copy', 'jasmine']
+  grunt.registerTask 'default', ['coffee', 'concat:emojidexAutocomplete', 'concat:emojidex', 'uglify', 'sass', 'slim', 'copy', 'jasmine']
   grunt.registerTask 'dev', ['connect', 'watch']
-  # grunt.registerTask 'travis', ['jshint']

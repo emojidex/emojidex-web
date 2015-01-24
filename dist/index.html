@@ -16,12 +16,9 @@
     <script type="text/javascript">
       (function() {
         $(document).ready(function() {
-          return $(".emojidex_replace").emojidex({
-            emojiarea: {
-              plain_text: $(".emojidex-plain_text"),
-              content_editable: $(".emojidex-content_editable")
-            }
-          });
+          $(".emojidex_replace").emojidexReplace();
+          $(".emojidex-plain_text").emojidexAutocomplete();
+          return $(".emojidex-content_editable").emojidexAutocomplete();
         });
       
       }).call(this);
