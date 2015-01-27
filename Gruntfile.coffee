@@ -1,4 +1,27 @@
 module.exports = (grunt) ->
+  getVender = ->
+    info = ''
+    spaceer = ' *     '
+    vendors = [
+      {
+        name: 'jQuery Storage API Plugin'
+        version: '1.7.3'
+        homepage: 'https://github.com/julien-maurel/jQuery-Storage-API'
+      }
+      grunt.file.readJSON('bower_components/At.js/package.json')
+      grunt.file.readJSON('bower_components/Caret.js/package.json')
+    ]
+    for vendor in vendors
+      info += spaceer + vendor.name + ':\n' if vendor.name
+      info += spaceer + '  Version: ' + vendor.version + '\n' if vendor.version
+      info += spaceer + '  Description: ' + vendor.description + '\n' if vendor.description
+      info += spaceer + '  Copyright: ' + vendor.copyright + '\n' if vendor.copyright
+      info += spaceer + '  Homepage: ' + vendor.homepage + '\n' if vendor.homepage
+      info += spaceer + '  License: ' + vendor.license + '\n' if vendor.license
+      info += ' *\n'
+
+    info
+
   grunt.initConfig
     pkg: grunt.file.readJSON('package.json')
 
@@ -9,8 +32,10 @@ module.exports = (grunt) ->
         ' * <%= pkg.description %>\n' +
         ' * <%= pkg.homepage %>\n' +
         ' *\n' +
-        ' * Includes: emojidex-client, emojidexReplace, emojidexAutocomplete\n' +
+        ' * Includes:\n' +
+        ' *   emojidex-client, emojidexReplace, emojidexAutocomplete\n' +
         ' *\n' +
+        ' *   Vender:\n' + getVender() +
         ' * =LICENSE=\n' +
         ' * <%= pkg.licenses.description %>\n' +
         ' * <%= pkg.licenses.url %>\n' +
@@ -49,7 +74,7 @@ module.exports = (grunt) ->
     concat:
       emojidex:
         options:
-          stripBanners: false
+          stripBanners: true
           banner: '<%= meta.banner %>'
         src: [
           # 'bower_components/Caret.js/dist/jquery.caret.min.js'
