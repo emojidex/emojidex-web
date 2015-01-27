@@ -145,13 +145,21 @@ module.exports = (grunt) ->
         files:['src/slim/*.slim']
         tasks:['slim']
 
-      coffee:
-        files: ['src/coffee/**/*.coffee']
-        tasks: ['coffee:emojidex', 'concat', 'uglify:emojidex', 'jasmine']
-
       sass:
         files: ['src/sass/*.scss']
         tasks: ['sass']
+
+      emojidexReplace:
+        files: ['src/coffee/**/*.coffee']
+        tasks: ['coffee', 'concat', 'uglify:emojidex', 'jasmine']
+
+      emojidexAutocomplete:
+        files: ['src/coffee/**/*.coffee']
+        tasks: ['coffee', 'concat', 'uglify:emojidex', 'jasmine']
+
+      emojidexPallet:
+        files: ['src/coffee/**/*.coffee']
+        tasks: ['coffee', 'concat', 'uglify:emojidex', 'jasmine']
 
       spec:
         files: ['spec/**/*.coffee']
