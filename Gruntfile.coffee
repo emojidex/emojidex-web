@@ -147,15 +147,15 @@ module.exports = (grunt) ->
 
       emojidexReplace:
         files: ['src/coffee/emojidex_replace/**/*.coffee']
-        tasks: ['coffee:emojidexReplace', 'concat', 'uglify:emojidex', 'jasmine']
+        tasks: ['coffee:emojidexReplace', 'concat', 'uglify:emojidex', 'jasmine:emojidexReplace']
 
       emojidexAutocomplete:
         files: ['src/coffee/emojidex_autocomplete/**/*coffee']
-        tasks: ['coffee:emojidexAutocomplete', 'concat', 'uglify:emojidex', 'jasmine']
+        tasks: ['coffee:emojidexAutocomplete', 'concat', 'uglify:emojidex', 'jasmine:emojidexAutocomplete']
 
       emojidexPallet:
         files: ['src/coffee/emojidex_pallet/**/*.coffee']
-        tasks: ['coffee:emojidexPallet', 'concat', 'uglify:emojidex', 'jasmine']
+        tasks: ['coffee:emojidexPallet', 'concat', 'uglify:emojidex', 'jasmine:emojidexPallet']
 
       spec:
         files: ['spec/**/*.coffee']
@@ -167,17 +167,47 @@ module.exports = (grunt) ->
           'dist/js/*.min.js'
         ]
         options:
-          keepRunner: true
-          outfile: 'build/_SpecRunner.html'
           specs: [
-            'build/spec/*.js'
+            'build/spec/**/*.js'
           ]
-          vendor:[
-            'https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js'
+
+      emojidexReplace:
+        src: [
+          'dist/js/*.min.js'
+        ]
+        options:
+          specs: [
+            'build/spec/emojidex_replace.js'
           ]
-          helpers:[
-            'node_modules/jasmine-jquery/lib/jasmine-jquery.js'
+
+      emojidexAutocomplete:
+        src: [
+          'dist/js/*.min.js'
+        ]
+        options:
+          specs: [
+            'build/spec/emojidex_autocomplete.js'
           ]
+
+      emojidexPallet:
+        src: [
+          'dist/js/*.min.js'
+        ]
+        options:
+          specs: [
+            'build/spec/emojidex_pallet.js'
+          ]
+
+      options:
+        keepRunner: true
+        outfile: 'build/_SpecRunner.html'
+        vendor:[
+          'https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js'
+        ]
+        helpers:[
+          'node_modules/jasmine-jquery/lib/jasmine-jquery.js'
+        ]
+
 
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-concat'
@@ -189,5 +219,5 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-copy'
   grunt.loadNpmTasks 'grunt-contrib-jasmine'
 
-  grunt.registerTask 'default', ['coffee', 'concat', 'uglify', 'sass', 'slim', 'copy', 'jasmine']
+  grunt.registerTask 'default', ['coffee', 'concat', 'uglify', 'sass', 'slim', 'copy', 'jasmine:all']
   grunt.registerTask 'dev', ['connect', 'watch']
