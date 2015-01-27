@@ -6,21 +6,6 @@
  * Includes:
  *   emojidex-client, emojidexReplace, emojidexAutocomplete
  *
- *   Vender:
- *     jQuery Storage API Plugin:
- *       Version: 1.7.3
- *       Homepage: https://github.com/julien-maurel/jQuery-Storage-API
- *
- *     jquery.atwho:
- *       Version: 0.5.1
- *       Homepage: http://ichord.github.com/At.js
- *       License: MIT
- *
- *     jquery.caret:
- *       Version: 0.2.0
- *       Description: Get caret position and offset from inputor
- *       License: MIT
- *
  * =LICENSE=
  * Licensed under the emojidex Open License
  * https://www.emojidex.com/emojidex/emojidex_open_license
