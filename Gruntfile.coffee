@@ -25,9 +25,7 @@ module.exports = (grunt) ->
           join: true
         files:
           'src/compiled_js/emojidexReplace.js': [
-            'src/coffee/emojidex_replace.coffee'
-            'src/coffee/components/replacer.coffee'
-            'src/coffee/components/replacer_service.coffee'
+            'src/coffee/emojidex_replace/**/*.coffee'
           ]
 
       emojidexAutocomplete:
@@ -35,8 +33,7 @@ module.exports = (grunt) ->
           join: true
         files:
           'src/compiled_js/emojidexAutocomplete.js': [
-            'src/coffee/emojidex_autocomplete.coffee'
-            'src/coffee/components/autocomplete.coffee'
+            'src/coffee/emojidex_autocomplete/**/*coffee'
           ]
 
       spec:
@@ -135,13 +132,17 @@ module.exports = (grunt) ->
         files:['src/slim/*.slim']
         tasks:['slim']
 
-      coffee:
-        files: ['src/coffee/**/*.coffee']
-        tasks: ['coffee:emojidex', 'concat', 'uglify:emojidex', 'jasmine']
-
       sass:
         files: ['src/sass/*.scss']
         tasks: ['sass']
+
+      emojidexReplace:
+        files: ['src/coffee/emojidex_replace/**/*.coffee']
+        tasks: ['coffee:emojidexReplace', 'concat', 'uglify:emojidex', 'jasmine']
+
+      emojidexAutocomplete:
+        files: ['src/coffee/emojidex_autocomplete/**/*coffee']
+        tasks: ['coffee:emojidexAutocomplete', 'concat', 'uglify:emojidex', 'jasmine']
 
       spec:
         files: ['spec/**/*.coffee']

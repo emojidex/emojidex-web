@@ -17,34 +17,6 @@
 (function() {
   var AutoComplete;
 
-  (function($, window, document) {
-    var Plugin, defaults, pluginName;
-    pluginName = "emojidexAutocomplete";
-    defaults = {
-      limit: 10
-    };
-    Plugin = (function() {
-      function Plugin(element, options) {
-        this.element = element;
-        this.options = $.extend({}, defaults, options);
-        this._defaults = defaults;
-        this._name = pluginName;
-        this.autocomplete = new AutoComplete(this);
-        this.autocomplete.setAutoComplete();
-      }
-
-      return Plugin;
-
-    })();
-    return $.fn[pluginName] = function(options) {
-      return this.each(function() {
-        if (!$.data(this, "plugin_" + pluginName)) {
-          return $.data(this, "plugin_" + pluginName, new Plugin(this, options));
-        }
-      });
-    };
-  })(jQuery, window, document);
-
   AutoComplete = (function() {
     function AutoComplete(plugin) {
       this.plugin = plugin;
@@ -126,10 +98,51 @@
 
   })();
 
+  /*
+  * emojidexAutocomplete
+  *
+  * require: emojidex-client
+  *
+  * =LICENSE=
+  * Licensed under the emojidex Open License
+  * https://www.emojidex.com/emojidex/emojidex_open_license
+  *
+  * Copyright 2013 Genshin Souzou Kabushiki Kaisha
+  */
+
+
+  (function($, window, document) {
+    var Plugin, defaults, pluginName;
+    pluginName = "emojidexAutocomplete";
+    defaults = {
+      limit: 10
+    };
+    Plugin = (function() {
+      function Plugin(element, options) {
+        this.element = element;
+        this.options = $.extend({}, defaults, options);
+        this._defaults = defaults;
+        this._name = pluginName;
+        this.autocomplete = new AutoComplete(this);
+        this.autocomplete.setAutoComplete();
+      }
+
+      return Plugin;
+
+    })();
+    return $.fn[pluginName] = function(options) {
+      return this.each(function() {
+        if (!$.data(this, "plugin_" + pluginName)) {
+          return $.data(this, "plugin_" + pluginName, new Plugin(this, options));
+        }
+      });
+    };
+  })(jQuery, window, document);
+
 }).call(this);
 
 (function() {
-  var Replacer, ReplacerService,
+  var Pallet, Replacer, ReplacerService,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -160,6 +173,21 @@
       });
     };
   })(jQuery, window, document);
+
+  Pallet = (function() {
+    function Pallet(emoji_data_array, element, options) {
+      this.emoji_data_array = emoji_data_array;
+      this.element = element;
+      this.options = options;
+      this.KEY_ESC = 27;
+      this.KEY_TAB = 9;
+    }
+
+    Pallet.prototype.setPallet = function() {};
+
+    return Pallet;
+
+  })();
 
   Replacer = (function() {
     function Replacer() {}
