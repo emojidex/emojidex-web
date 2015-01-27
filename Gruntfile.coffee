@@ -39,6 +39,15 @@ module.exports = (grunt) ->
             'src/coffee/components/autocomplete.coffee'
           ]
 
+      emojidexPallet:
+        options:
+          join: true
+        files:
+          'src/compiled_js/emojidexPallet.js': [
+            'src/coffee/emojidex_pallet.coffee'
+            'src/coffee/components/pallet.coffee'
+          ]
+
       spec:
         expand: true
         flatten: true
@@ -55,6 +64,7 @@ module.exports = (grunt) ->
         src: [
           # 'bower_components/Caret.js/dist/jquery.caret.min.js'
           # 'bower_components/At.js/dist/js/jquery.atwho.min.js'
+          'bower_components/bootstrap-window/dist/js/bootstrap-window.min.js'
           'node_modules/emojidex-client/dist/js/*.min.js'
           'src/compiled_js/**/*.js'
         ]
