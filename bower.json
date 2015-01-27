@@ -3,6 +3,7 @@
   "devDependencies": {
     "At.js": "0.5.1",
     "Caret.js": "0.2.0",
-    "jquery.storageapi": "git@github.com:julien-maurel/jQuery-Storage-API.git"
+    "jquery.storageapi": "git@github.com:julien-maurel/jQuery-Storage-API.git",
+    "bootstrap-window": "~0.2.2"
   }
 }
