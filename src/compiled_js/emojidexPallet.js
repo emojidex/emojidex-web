@@ -42,9 +42,12 @@
   })(jQuery, window, document);
 
   Pallet = (function() {
-    function Pallet() {
-      var ec;
-      ec = new EmojidexClient;
+    function Pallet(emoji_data_array, element, options) {
+      this.emoji_data_array = emoji_data_array;
+      this.element = element;
+      this.options = options;
+      this.KEY_ESC = 27;
+      this.KEY_TAB = 9;
     }
 
     Pallet.prototype.setPallet = function() {};
