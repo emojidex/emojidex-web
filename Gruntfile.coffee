@@ -157,9 +157,17 @@ module.exports = (grunt) ->
         files: ['src/coffee/emojidex_pallet/**/*.coffee']
         tasks: ['coffee:emojidexPallet', 'concat', 'uglify:emojidex', 'jasmine:emojidexPallet']
 
-      spec:
-        files: ['spec/**/*.coffee']
-        tasks: ['coffee:spec', 'jasmine']
+      spec_emojidexReplace:
+        files: ['spec/emojidex_replace.coffee']
+        tasks: ['coffee:spec', 'jasmine:emojidexReplace']
+
+      spec_emojidexAutocomplete:
+        files: ['spec/emojidex_autocomplete.coffee']
+        tasks: ['coffee:spec', 'jasmine:emojidexAutocomplete']
+
+      spec_emojidexPallet:
+        files: ['spec/emojidex_pallet.coffee']
+        tasks: ['coffee:spec', 'jasmine:emojidexPallet']
 
     jasmine:
       all:
