@@ -1,7 +1,25 @@
 module.exports = (grunt) ->
+  path = require('path')
+
+  getDefineUsePattern = (filepath, define_list) ->
+    for define_name in Object.keys define_list
+      path_patterns = define_list[define_name].pattern
+      path_patterns = [path_patterns] unless Array.isArray path_patterns
+      for path_pattern in path_patterns
+        if grunt.file.minimatch filepath, path_pattern
+          return define_list[define_name]
+          break
+
+  setGruntConfigAndGetTask = (define) ->
+    define.config = [define.config] unless Array.isArray define.config
+    for config in define.config
+      grunt.config(
+        config.prop, config.value
+      )
+    return define.task
+
   grunt.initConfig
     pkg: grunt.file.readJSON('package.json')
-
     meta:
       banner:
         '/*\n' +
@@ -18,39 +36,6 @@ module.exports = (grunt) ->
         ' *\n' +
         ' * <%= pkg.licenses.copyright %>\n' +
         ' */\n'
-
-    coffee:
-      emojidexReplace:
-        options:
-          join: true
-        files:
-          'src/compiled_js/emojidexReplace.js': [
-            'src/coffee/emojidex_replace/**/*.coffee'
-          ]
-
-      emojidexAutocomplete:
-        options:
-          join: true
-        files:
-          'src/compiled_js/emojidexAutocomplete.js': [
-            'src/coffee/emojidex_autocomplete/**/*coffee'
-          ]
-
-      emojidexPallet:
-        options:
-          join: true
-        files:
-          'src/compiled_js/emojidexPallet.js': [
-            'src/coffee/emojidex_pallet/**/*.coffee'
-          ]
-
-      spec:
-        expand: true
-        flatten: true
-        cwd: 'spec/'
-        src: ['*.coffee']
-        dest: 'build/spec/'
-        ext: '.js'
 
     concat:
       emojidex:
@@ -133,42 +118,6 @@ module.exports = (grunt) ->
           }
         ]
 
-    watch:
-      options:
-        livereload: true
-
-      html:
-        files:['src/slim/*.slim']
-        tasks:['slim']
-
-      sass:
-        files: ['src/sass/*.scss']
-        tasks: ['sass']
-
-      emojidexReplace:
-        files: ['src/coffee/emojidex_replace/**/*.coffee']
-        tasks: ['coffee:emojidexReplace', 'concat', 'uglify:emojidex', 'jasmine:emojidexReplace']
-
-      emojidexAutocomplete:
-        files: ['src/coffee/emojidex_autocomplete/**/*coffee']
-        tasks: ['coffee:emojidexAutocomplete', 'concat', 'uglify:emojidex', 'jasmine:emojidexAutocomplete']
-
-      emojidexPallet:
-        files: ['src/coffee/emojidex_pallet/**/*.coffee']
-        tasks: ['coffee:emojidexPallet', 'concat', 'uglify:emojidex', 'jasmine:emojidexPallet']
-
-      spec_emojidexReplace:
-        files: ['spec/emojidex_replace.coffee']
-        tasks: ['coffee:spec', 'jasmine:emojidexReplace']
-
-      spec_emojidexAutocomplete:
-        files: ['spec/emojidex_autocomplete.coffee']
-        tasks: ['coffee:spec', 'jasmine:emojidexAutocomplete']
-
-      spec_emojidexPallet:
-        files: ['spec/emojidex_pallet.coffee']
-        tasks: ['coffee:spec', 'jasmine:emojidexPallet']
-
     jasmine:
       all:
         src: [
@@ -177,33 +126,6 @@ module.exports = (grunt) ->
         options:
           specs: [
             'build/spec/**/*.js'
-          ]
-
-      emojidexReplace:
-        src: [
-          'dist/js/*.min.js'
-        ]
-        options:
-          specs: [
-            'build/spec/emojidex_replace.js'
-          ]
-
-      emojidexAutocomplete:
-        src: [
-          'dist/js/*.min.js'
-        ]
-        options:
-          specs: [
-            'build/spec/emojidex_autocomplete.js'
-          ]
-
-      emojidexPallet:
-        src: [
-          'dist/js/*.min.js'
-        ]
-        options:
-          specs: [
-            'build/spec/emojidex_pallet.js'
           ]
 
       options:
@@ -217,15 +139,99 @@ module.exports = (grunt) ->
         ]
 
 
+    esteWatch:
+      options:
+        dirs: [
+          'src/coffee/**/'
+          'spec/**/'
+        ]
+
+      'coffee': (filepath) ->
+        defaults =
+          coffee:
+            prop: ['coffee', 'esteWatch']
+            options:
+              join: true
+
+          jasmine:
+            prop: ['jasmine', 'esteWatch']
+            value:
+              src: ['dist/js/*.min.js']
+
+          task: ['coffee:esteWatch']
+
+
+        define_list =
+          emojidexReplace:
+            pattern: 'src/coffee/emojidex_replace/**/*'
+            config:
+              prop: defaults.coffee.prop
+              value:
+                options: defaults.coffee.options
+                files:
+                  'src/compiled_js/emojidexReplace.js': [
+                    'src/coffee/emojidex_replace/**/*.coffee'
+                  ]
+
+          emojidexAutocomplete:
+            pattern: 'src/coffee/emojidex_autocomplete/**/*'
+            config:
+              prop: defaults.coffee.prop
+              value:
+                options: defaults.coffee.options
+                files:
+                  'src/compiled_js/emojidexAutocomplete.js': [
+                    'src/coffee/emojidex_autocomplete/**/*.coffee'
+                  ]
+
+          emojidexPallet:
+            pattern: 'src/coffee/emojidex_pallet/**/*'
+            config:
+              prop: defaults.coffee.prop
+              value:
+                options: defaults.coffee.options
+                files:
+                  'src/compiled_js/emojidexPallet.js': [
+                    'src/coffee/emojidex_pallet/**/*.coffee'
+                  ]
+
+          spec:
+            pattern: 'spec/**/*'
+            config: [
+              {
+                prop: defaults.coffee.prop
+                value:
+                  expand: true
+                  src: filepath
+                  dest: "build#{path.dirname filepath}/#{path.basename filepath, '.coffee'}.js"
+              }
+              {
+                prop: defaults.jasmine.prop
+                value:
+                  src: defaults.jasmine.value.src
+                  options:
+                    specs: [
+                      "build/#{path.dirname filepath}/#{path.basename filepath, '.coffee'}.js"
+                    ]
+              }
+            ]
+
+            task: ['coffee:esteWatch', 'jasmine:esteWatch']
+
+        grunt.log.ok "build/#{path.dirname filepath}/#{path.basename filepath, '.coffee'}.js"
+        setGruntConfigAndGetTask(getDefineUsePattern filepath, define_list) || defaults.task
+
+
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-concat'
   grunt.loadNpmTasks 'grunt-contrib-uglify'
   grunt.loadNpmTasks 'grunt-contrib-connect'
   grunt.loadNpmTasks 'grunt-contrib-sass'
   grunt.loadNpmTasks 'grunt-slim'
-  grunt.loadNpmTasks 'grunt-contrib-watch'
+  # grunt.loadNpmTasks 'grunt-contrib-watch'
+  grunt.loadNpmTasks 'grunt-este-watch'
   grunt.loadNpmTasks 'grunt-contrib-copy'
   grunt.loadNpmTasks 'grunt-contrib-jasmine'
 
   grunt.registerTask 'default', ['coffee', 'concat', 'uglify', 'sass', 'slim', 'copy', 'jasmine:all']
-  grunt.registerTask 'dev', ['connect', 'watch']
+  grunt.registerTask 'dev', ['connect', 'esteWatch']
