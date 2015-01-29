@@ -13,9 +13,7 @@ module.exports = (grunt) ->
   setGruntConfigAndGetTask = (define) ->
     define.config = [define.config] unless Array.isArray define.config
     for config in define.config
-      grunt.config(
-        config.prop, config.value
-      )
+      grunt.config config.prop, config.value
     return define.task
 
   grunt.initConfig
