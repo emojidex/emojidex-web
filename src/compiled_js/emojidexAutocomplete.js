@@ -1,5 +1,46 @@
+/*
+* emojidexAutocomplete
+*
+* require: emojidex-client
+*
+* =LICENSE=
+* Licensed under the emojidex Open License
+* https://www.emojidex.com/emojidex/emojidex_open_license
+*
+* Copyright 2013 Genshin Souzou Kabushiki Kaisha
+*/
+
+
 (function() {
   var AutoComplete;
+
+  (function($, window, document) {
+    var Plugin, defaults, pluginName;
+    pluginName = "emojidexAutocomplete";
+    defaults = {
+      limit: 10
+    };
+    Plugin = (function() {
+      function Plugin(element, options) {
+        this.element = element;
+        this.options = $.extend({}, defaults, options);
+        this._defaults = defaults;
+        this._name = pluginName;
+        this.autocomplete = new AutoComplete(this);
+        this.autocomplete.setAutoComplete();
+      }
+
+      return Plugin;
+
+    })();
+    return $.fn[pluginName] = function(options) {
+      return this.each(function() {
+        if (!$.data(this, "plugin_" + pluginName)) {
+          return $.data(this, "plugin_" + pluginName, new Plugin(this, options));
+        }
+      });
+    };
+  })(jQuery, window, document);
 
   AutoComplete = (function() {
     function AutoComplete(plugin) {
@@ -81,46 +122,5 @@
     return AutoComplete;
 
   })();
-
-  /*
-  * emojidexAutocomplete
-  *
-  * require: emojidex-client
-  *
-  * =LICENSE=
-  * Licensed under the emojidex Open License
-  * https://www.emojidex.com/emojidex/emojidex_open_license
-  *
-  * Copyright 2013 Genshin Souzou Kabushiki Kaisha
-  */
-
-
-  (function($, window, document) {
-    var Plugin, defaults, pluginName;
-    pluginName = "emojidexAutocomplete";
-    defaults = {
-      limit: 10
-    };
-    Plugin = (function() {
-      function Plugin(element, options) {
-        this.element = element;
-        this.options = $.extend({}, defaults, options);
-        this._defaults = defaults;
-        this._name = pluginName;
-        this.autocomplete = new AutoComplete(this);
-        this.autocomplete.setAutoComplete();
-      }
-
-      return Plugin;
-
-    })();
-    return $.fn[pluginName] = function(options) {
-      return this.each(function() {
-        if (!$.data(this, "plugin_" + pluginName)) {
-          return $.data(this, "plugin_" + pluginName, new Plugin(this, options));
-        }
-      });
-    };
-  })(jQuery, window, document);
 
 }).call(this);

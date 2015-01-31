@@ -46,8 +46,8 @@
       this.emoji_data_array = emoji_data_array;
       this.element = element;
       this.options = options;
-      this.KEY_TAB = 9;
       this.KEY_ESC = 27;
+      this.KEY_TAB = 9;
     }
 
     Pallet.prototype.setPallet = function() {};
