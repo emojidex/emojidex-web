@@ -1,6 +1,14 @@
 module.exports = (grunt) ->
   path = require('path')
 
+  grunt.getLicense = (licenses_json) ->
+    licenses = grunt.file.readJSON licenses_json
+    info = ''
+    for license in licenses
+      info += license.replace /[ \n\*]+(.+) +\n/gi , "\n * $1"
+      info += '* --------------------------------'
+    return info
+
   getDefineUsePattern = (filepath, define_list) ->
     for define_name in Object.keys define_list
       path_patterns = define_list[define_name].pattern
