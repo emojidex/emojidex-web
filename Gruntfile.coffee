@@ -5,6 +5,7 @@ module.exports = (grunt) ->
     licenses = grunt.file.readJSON licenses_json
     info = ''
     for license in licenses
+      license = '\n' + license unless license.slice(0, 1) is '\n'
       info += license.replace /[ \n\*]+(.+) +\n/gi , "\n * $1"
       info += '* --------------------------------'
     return info
@@ -35,14 +36,17 @@ module.exports = (grunt) ->
         ' * <%= pkg.homepage %>\n' +
         ' *\n' +
         ' * Includes:\n' +
-        ' *   emojidex-client, emojidexReplace, emojidexAutocomplete\n' +
+        ' *   emojidexReplace, emojidexAutocomplete\n' +
         ' *\n' +
         ' * =LICENSE=\n' +
         ' * <%= pkg.licenses.description %>\n' +
         ' * <%= pkg.licenses.url %>\n' +
         ' *\n' +
         ' * <%= pkg.licenses.copyright %>\n' +
-        ' */\n'
+        ' *\n' +
+        ' *\n' +
+        ' * Includes:\n' +
+        ' * --------------------------------'
 
     # grunt dev --------------------------------
     connect:
@@ -233,18 +237,6 @@ module.exports = (grunt) ->
         files: [
           {
             expand: true,
-            cwd: 'bower_components/Caret.js/dist/'
-            src: 'jquery.caret.min.js'
-            dest: 'dist/js/'
-          }
-          {
-            expand: true,
-            cwd: 'bower_components/At.js/dist/js'
-            src: 'jquery.atwho.min.js'
-            dest: 'dist/js/'
-          }
-          {
-            expand: true,
             cwd: 'bower_components/At.js/dist/css'
             src: 'jquery.atwho.min.css'
             dest: 'dist/css/'
@@ -255,11 +247,11 @@ module.exports = (grunt) ->
       emojidex:
         options:
           stripBanners: true
-          banner: '<%= meta.banner %>'
+          banner: '<%= meta.banner %><%= grunt.getLicense("build/licenses.json") %>\n */\n'
         src: [
-          # 'bower_components/Caret.js/dist/jquery.caret.min.js'
-          # 'bower_components/At.js/dist/js/jquery.atwho.min.js'
-          'bower_components/bootstrap-window/dist/js/bootstrap-window.min.js'
+          # 'bower_components/bootstrap-window/dist/js/bootstrap-window.min.js'
+          'bower_components/Caret.js/dist/jquery.caret.min.js'
+          'bower_components/At.js/dist/js/jquery.atwho.min.js'
           'node_modules/emojidex-client/dist/js/*.min.js'
           'src/compiled_js/**/*.js'
         ]
@@ -268,7 +260,7 @@ module.exports = (grunt) ->
     uglify:
       emojidex:
         options:
-          banner: '<%= meta.banner %>'
+          banner: '<%= meta.banner %><%= grunt.getLicense("build/licenses.json") %>\n */\n'
           manglet: true
         src: ['dist/js/emojidex.js']
         dest: 'dist/js/emojidex.min.js'
@@ -277,6 +269,14 @@ module.exports = (grunt) ->
         src: ['node_modules/bootstrap-sass/assets/javascripts/bootstrap.js']
         dest: 'dist/js/bootstrap.min.js'
 
+    save_license:
+      dist:
+        src: [
+          'node_modules/emojidex-client/dist/js/emojidex-client.js'
+          'bower_components/Caret.js/dist/jquery.caret.js'
+          'bower_components/At.js/dist/js/jquery.atwho.js'
+        ]
+        dest: 'build/licenses.json'
 
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-concat'
@@ -287,6 +287,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-este-watch'
   grunt.loadNpmTasks 'grunt-contrib-copy'
   grunt.loadNpmTasks 'grunt-contrib-jasmine'
+  grunt.loadNpmTasks 'grunt-license-saver'
 
-  grunt.registerTask 'default', ['coffee', 'concat', 'uglify', 'sass', 'slim', 'copy', 'jasmine']
+  grunt.registerTask 'default', ['save_license', 'coffee', 'concat', 'uglify', 'sass', 'slim', 'copy', 'jasmine']
   grunt.registerTask 'dev', ['connect', 'esteWatch']
