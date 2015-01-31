@@ -52,8 +52,9 @@ module.exports = (grunt) ->
     esteWatch:
       options:
         dirs: [
-          'src/coffee/**/'
           'src/slim/**/'
+          'src/sass/**/'
+          'src/coffee/**/'
           'spec/**/'
         ]
 
@@ -94,7 +95,8 @@ module.exports = (grunt) ->
                 value:
                   expand: true
                   src: filepath
-                  dest: "build/#{path.dirname filepath}/#{path.basename filepath, '.coffee'}.js"
+                  dest: 'build/'
+                  ext: '.js'
               }
               {
                 prop: defaults.jasmine.prop
@@ -111,18 +113,36 @@ module.exports = (grunt) ->
         setGruntConfig_getTask(getDefineUsePattern filepath, define_list)
 
       'slim': (filepath) ->
-        slims:
+        define_slim =
           config:
-            prop: ['slim']
+            prop: ['slim', 'esteWatch']
             value:
-              options:
-                pretty: true
-              dist:
-                files: [
-                  expand: true
-                  src: filepath
-                  dest: "dist/#{path.basename filepath, '.slim'}.html"
-                ]
+              files: [
+                expand: true
+                flatten: true
+                src: filepath
+                dest: 'dist/'
+                ext: '.html'
+              ]
+          task: ['slim:esteWatch']
+
+        setGruntConfig_getTask define_slim
+
+      'scss': (filepath) ->
+        define_sass =
+          config:
+            prop: ['sass', 'esteWatch']
+            value:
+              files: [
+                expand: true
+                flatten: true
+                src: filepath
+                dest: 'dist/css/'
+                ext: '.css'
+              ]
+          task: ['sass:esteWatch']
+
+        setGruntConfig_getTask define_sass
 
     # grunt --------------------------------
     jasmine:
