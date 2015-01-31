@@ -1,15 +1,6 @@
 module.exports = (grunt) ->
   path = require('path')
 
-  getDefineNameUsePattern = (filepath, define_list) ->
-    for define_name in Object.keys define_list
-      path_patterns = define_list[define_name].pattern
-      path_patterns = [path_patterns] unless Array.isArray path_patterns
-      for path_pattern in path_patterns
-        if grunt.file.minimatch filepath, path_pattern
-          return define_name
-          break
-
   getDefineUsePattern = (filepath, define_list) ->
     for define_name in Object.keys define_list
       path_patterns = define_list[define_name].pattern
