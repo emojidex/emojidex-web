@@ -60,6 +60,10 @@ module.exports = (grunt) ->
           'src/coffee/**/'
           'spec/**/'
         ]
+        livereload:
+          enabled: true
+          port: 35729,
+          extensions: ['slim', 'coffee', 'scss']
 
       'coffee': (filepath) ->
         defaults =
