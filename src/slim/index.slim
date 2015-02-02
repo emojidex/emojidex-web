@@ -11,8 +11,6 @@ html
     link href="css/bootstrap_and_override.css" rel="stylesheet"
 
     script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"
-    script src="js/jquery.caret.min.js"
-    script src="js/jquery.atwho.min.js"
     script src="js/bootstrap.min.js"
     script src="js/emojidex.js"
 
@@ -99,10 +97,18 @@ html
             .form-group
               textarea.emojidex-plain_text.form-control rows="5"
                 | Hello, Let's type ":".&nbsp;
-          hr
+
+      hr
 
       .row
         .col-md-12
           h3 Content Editable
           .emojidex-content_editable.inputor contenteditable="true"
             | Hello, Let's type ":".&nbsp;
+
+      hr
+
+      .row
+        .col-md-12
+          #pallet-btn.btn.btn-primary
+            | Pallet Button
