@@ -16,7 +16,7 @@ html
 
     coffee:
       $(document).ready ->
-        $(".emojidex_replace").emojidexReplace()
+        $("body").emojidexReplace()
 
         $(".emojidex-plain_text").emojidexAutocomplete()
         $(".emojidex-content_editable").emojidexAutocomplete()
@@ -34,7 +34,8 @@ html
               span.icon-bar
               span.icon-bar
           #navbar-top.collapse.navbar-collapse
-            a.btn.btn-primary.navbar-btn.pull-right data-toggle="modal" href="#modal-licensing_info"  Licensing Info
+            a.btn.btn-primary.navbar-btn.pull-right data-toggle="modal" href="#modal-licensing_info"
+              | :spiral_note_pad: Licensing Info
 
       #modal-licensing_info.modal.fade
         .modal-dialog
@@ -73,7 +74,7 @@ html
 
       .row
         .col-md-12
-          h3 emojidex replace
+          h3 emojidex replace :smiley_kissing_heart:
           .emojidex_replace
             | Examples of auto replacement:
             br

@@ -13,15 +13,15 @@ class ReplacerService extends Replacer
       emoji.code = emoji.code.replace RegExp(" ", "g"), "_"
       emoji.img_url = "http://cdn.emojidex.com/emoji/px32/#{emoji.code}.png"
 
-    @emoji_data = @getCategorizedData emoji_data
-    @emoji_regexps = @setEmojiCSS_getEmojiRegexps @emoji_data
+    @emoji_data = emoji_data
+    @emoji_regexps = @setEmojiCSS_getEmojiRegexps emoji_data
     @setEmojiIcon @
     callback @ if callback?
 
   setLoadingIcon: ->
     setLoadingTag = (text) ->
       text = text.replace /:([^:]+):/g, (matched_string, pattern1) ->
-        '<img style="width: 1.5em; height: 1.5em" src="img/loading1.gif"></img>'
+        '<img class="emojidex-loading-icon" style="width: 1.5em; height: 1.5em" src="img/loading1.gif"></img>'
 
     @element_clone = @element.clone()
 
@@ -46,7 +46,6 @@ class ReplacerService extends Replacer
         type: "get"
 
         success: (user_emoji_json, status, xhr) ->
-          # console.log "success: load json"
           emoji_data = emoji_data.concat user_emoji_json.emoji
           if ++loaded_num is user_names.length
             callback emoji_data
