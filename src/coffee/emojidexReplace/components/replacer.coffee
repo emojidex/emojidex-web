@@ -41,25 +41,25 @@ class Replacer
     return '<i class="emojidex-' + emoji_code + '"></i>'
 
   replaceForUTF: (options) ->
-    replaced_string = options.s_replace.replace new RegExp(options.regexp, "g"), (matched_string) ->
+    replaced_string = options.s_replace.replace new RegExp(options.regexp, "g"), (matched_string) =>
       for category of options.emoji_data
         for emoji in options.emoji_data[category]
           if emoji.moji is matched_string
-            return Replacer::getEmojiTag emoji.code
+            return @getEmojiTag emoji.code
 
   replaceForCode: (options) ->
-    replaced_string = options.s_replace.replace new RegExp(options.regexp, "g"), (matched_string) ->
+    replaced_string = options.s_replace.replace new RegExp(options.regexp, "g"), (matched_string) =>
       matched_string = matched_string.replace /:/g, ""
       for category of options.emoji_data
         for emoji in options.emoji_data[category]
           if emoji.code is matched_string
-            return Replacer::getEmojiTag emoji.code
+            return @getEmojiTag emoji.code
 
   setEmojiIcon: (loader) ->
-    $(@element).find(":not(iframe,textarea,script)").andSelf().contents().filter(->
+    text_nodes = $(@element).find(":not(iframe,textarea,script)").andSelf().contents().filter ->
       @nodeType is Node.TEXT_NODE
-    ).each ->
-      replaced_string = @textContent
-      replaced_string = Replacer::replaceForUTF s_replace: replaced_string, regexp: loader.emoji_regexps.utf, emoji_data: loader.emoji_data if loader.emoji_regexps.utf?
-      replaced_string = Replacer::replaceForCode s_replace: replaced_string, regexp: loader.emoji_regexps.code, emoji_data: loader.emoji_data if loader.emoji_regexps.code?
-      $(@).replaceWith replaced_string
+    for text_node in text_nodes
+      replaced_string = text_node.textContent
+      replaced_string = @replaceForUTF s_replace: replaced_string, regexp: loader.emoji_regexps.utf, emoji_data: loader.emoji_data if loader.emoji_regexps.utf?
+      replaced_string = @replaceForCode s_replace: replaced_string, regexp: loader.emoji_regexps.code, emoji_data: loader.emoji_data if loader.emoji_regexps.code?
+      $(text_node).replaceWith replaced_string

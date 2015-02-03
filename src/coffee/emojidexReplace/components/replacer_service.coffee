@@ -16,8 +16,16 @@ class ReplacerService extends Replacer
       callback @ if callback?
 
     # start main --------
+    # @setLoadingIcon()
     @getEmojiDataFromAPI onLoadEmojiData
     @
+
+  setLoadingIcon: () ->
+    console.log 111
+    text_nodes = $(@element).find(":not(iframe,textarea,script)").andSelf().contents().filter ->
+      @nodeType is Node.TEXT_NODE
+    console.dir text_nodes
+
 
   getEmojiDataFromAPI: (callback) ->
     loaded_num = 0

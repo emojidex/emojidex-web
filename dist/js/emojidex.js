@@ -309,7 +309,8 @@
     };
 
     Replacer.prototype.replaceForUTF = function(options) {
-      var replaced_string;
+      var replaced_string,
+        _this = this;
       return replaced_string = options.s_replace.replace(new RegExp(options.regexp, "g"), function(matched_string) {
         var category, emoji, _i, _len, _ref;
         for (category in options.emoji_data) {
@@ -317,7 +318,7 @@
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             emoji = _ref[_i];
             if (emoji.moji === matched_string) {
-              return Replacer.prototype.getEmojiTag(emoji.code);
+              return _this.getEmojiTag(emoji.code);
             }
           }
         }
@@ -325,7 +326,8 @@
     };
 
     Replacer.prototype.replaceForCode = function(options) {
-      var replaced_string;
+      var replaced_string,
+        _this = this;
       return replaced_string = options.s_replace.replace(new RegExp(options.regexp, "g"), function(matched_string) {
         var category, emoji, _i, _len, _ref;
         matched_string = matched_string.replace(/:/g, "");
@@ -334,7 +336,7 @@
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             emoji = _ref[_i];
             if (emoji.code === matched_string) {
-              return Replacer.prototype.getEmojiTag(emoji.code);
+              return _this.getEmojiTag(emoji.code);
             }
           }
         }
@@ -342,27 +344,31 @@
     };
 
     Replacer.prototype.setEmojiIcon = function(loader) {
-      return $(this.element).find(":not(iframe,textarea,script)").andSelf().contents().filter(function() {
+      var replaced_string, text_node, text_nodes, _i, _len, _results;
+      text_nodes = $(this.element).find(":not(iframe,textarea,script)").andSelf().contents().filter(function() {
         return this.nodeType === Node.TEXT_NODE;
-      }).each(function() {
-        var replaced_string;
-        replaced_string = this.textContent;
+      });
+      _results = [];
+      for (_i = 0, _len = text_nodes.length; _i < _len; _i++) {
+        text_node = text_nodes[_i];
+        replaced_string = text_node.textContent;
         if (loader.emoji_regexps.utf != null) {
-          replaced_string = Replacer.prototype.replaceForUTF({
+          replaced_string = this.replaceForUTF({
             s_replace: replaced_string,
             regexp: loader.emoji_regexps.utf,
             emoji_data: loader.emoji_data
           });
         }
         if (loader.emoji_regexps.code != null) {
-          replaced_string = Replacer.prototype.replaceForCode({
+          replaced_string = this.replaceForCode({
             s_replace: replaced_string,
             regexp: loader.emoji_regexps.code,
             emoji_data: loader.emoji_data
           });
         }
-        return $(this).replaceWith(replaced_string);
-      });
+        _results.push($(text_node).replaceWith(replaced_string));
+      }
+      return _results;
     };
 
     return Replacer;
@@ -397,6 +403,15 @@
       };
       this.getEmojiDataFromAPI(onLoadEmojiData);
       return this;
+    };
+
+    ReplacerService.prototype.setLoadingIcon = function() {
+      var text_nodes;
+      console.log(111);
+      text_nodes = $(this.element).find(":not(iframe,textarea,script)").andSelf().contents().filter(function() {
+        return this.nodeType === Node.TEXT_NODE;
+      });
+      return console.dir(text_nodes);
     };
 
     ReplacerService.prototype.getEmojiDataFromAPI = function(callback) {
