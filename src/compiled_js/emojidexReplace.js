@@ -11,6 +11,7 @@
 
 (function() {
   var Replacer, ReplacerService,
+    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -84,8 +85,12 @@
         emoji_in_category = emoji_data[category];
         for (_i = 0, _len = emoji_in_category.length; _i < _len; _i++) {
           emoji = emoji_in_category[_i];
-          regexp_for_utf += emoji.moji + "|";
-          regexp_for_code += emoji.code + "|";
+          if (emoji.moji != null) {
+            regexp_for_utf += emoji.moji + "|";
+          }
+          if (emoji.code != null) {
+            regexp_for_code += emoji.code + "|";
+          }
           emoji_css.append("i.emojidex-" + emoji.code + " {background-image: url('" + emoji.img_url + "')}");
         }
       }
@@ -120,9 +125,9 @@
     Replacer.prototype.replaceForCode = function(options) {
       var replaced_string,
         _this = this;
-      return replaced_string = options.s_replace.replace(new RegExp(options.regexp, "g"), function(matched_string) {
+      return replaced_string = options.s_replace.replace(new RegExp(options.regexp, "g"), function(matched_string, pattern1) {
         var category, emoji, _i, _len, _ref;
-        matched_string = matched_string.replace(/:/g, "");
+        matched_string = pattern1;
         for (category in options.emoji_data) {
           _ref = options.emoji_data[category];
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -136,11 +141,10 @@
     };
 
     Replacer.prototype.setEmojiIcon = function(loader) {
-      var replaced_string, text_node, text_nodes, _i, _len, _results;
-      text_nodes = $(this.element).find(":not(iframe,textarea,script)").andSelf().contents().filter(function() {
+      var replaced_string, text_node, text_nodes, _i, _len;
+      text_nodes = $(this.element_clone).find(":not(iframe,textarea,script)").andSelf().contents().filter(function() {
         return this.nodeType === Node.TEXT_NODE;
       });
-      _results = [];
       for (_i = 0, _len = text_nodes.length; _i < _len; _i++) {
         text_node = text_nodes[_i];
         replaced_string = text_node.textContent;
@@ -158,9 +162,10 @@
             emoji_data: loader.emoji_data
           });
         }
-        _results.push($(text_node).replaceWith(replaced_string));
+        $(text_node).replaceWith(replaced_string);
       }
-      return _results;
+      this.element.replaceWith(this.element_clone);
+      return this.element = this.element_clone;
     };
 
     return Replacer;
@@ -173,37 +178,49 @@
     function ReplacerService(element, options) {
       this.element = element;
       this.options = options;
+      this.onLoadEmojiData = __bind(this.onLoadEmojiData, this);
       ReplacerService.__super__.constructor.apply(this, arguments);
+      this.element = $(this.element);
     }
 
     ReplacerService.prototype.replace = function(callback) {
-      var onLoadEmojiData,
-        _this = this;
-      onLoadEmojiData = function(emoji_data) {
-        var emoji, _i, _len;
-        for (_i = 0, _len = emoji_data.length; _i < _len; _i++) {
-          emoji = emoji_data[_i];
-          emoji.code = emoji.code.replace(RegExp(" ", "g"), "_");
-          emoji.img_url = "http://cdn.emojidex.com/emoji/px32/" + emoji.code + ".png";
-        }
-        _this.emoji_data = _this.getCategorizedData(emoji_data);
-        _this.emoji_regexps = _this.setEmojiCSS_getEmojiRegexps(_this.emoji_data);
-        _this.setEmojiIcon(_this);
-        if (callback != null) {
-          return callback(_this);
-        }
-      };
-      this.getEmojiDataFromAPI(onLoadEmojiData);
+      this.setLoadingIcon();
       return this;
     };
 
+    ReplacerService.prototype.onLoadEmojiData = function(emoji_data) {
+      var emoji, _i, _len;
+      for (_i = 0, _len = emoji_data.length; _i < _len; _i++) {
+        emoji = emoji_data[_i];
+        emoji.code = emoji.code.replace(RegExp(" ", "g"), "_");
+        emoji.img_url = "http://cdn.emojidex.com/emoji/px32/" + emoji.code + ".png";
+      }
+      this.emoji_data = this.getCategorizedData(emoji_data);
+      this.emoji_regexps = this.setEmojiCSS_getEmojiRegexps(this.emoji_data);
+      this.setEmojiIcon(this);
+      if (typeof callback !== "undefined" && callback !== null) {
+        return callback(this);
+      }
+    };
+
     ReplacerService.prototype.setLoadingIcon = function() {
-      var text_nodes;
-      console.log(111);
-      text_nodes = $(this.element).find(":not(iframe,textarea,script)").andSelf().contents().filter(function() {
+      var setLoadingTag, text, text_node, text_nodes, _i, _len;
+      setLoadingTag = function(text) {
+        return text = text.replace(/:([^:]+):/g, function(matched_string, pattern1) {
+          return '<img style="width: 1.5em; height: 1.5em" src="img/loading1.gif"></img>';
+        });
+      };
+      this.element_clone = this.element.clone();
+      text_nodes = this.element.find(":not(iframe,textarea,script)").andSelf().contents().filter(function() {
         return this.nodeType === Node.TEXT_NODE;
       });
-      return console.dir(text_nodes);
+      for (_i = 0, _len = text_nodes.length; _i < _len; _i++) {
+        text_node = text_nodes[_i];
+        text = text_node.textContent;
+        text = setLoadingTag(text);
+        $(text_node).replaceWith(text);
+      }
+      return this.getEmojiDataFromAPI(this.onLoadEmojiData);
     };
 
     ReplacerService.prototype.getEmojiDataFromAPI = function(callback) {

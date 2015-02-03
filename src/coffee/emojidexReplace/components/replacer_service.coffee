@@ -1,31 +1,38 @@
 class ReplacerService extends Replacer
   constructor: (@element, @options) ->
     super
+    @element = $(@element)
 
   replace: (callback)->
-    onLoadEmojiData = (emoji_data) =>
-      # fix data for At.js --------
-      for emoji in emoji_data
-        emoji.code = emoji.code.replace RegExp(" ", "g"), "_"
-        emoji.img_url = "http://cdn.emojidex.com/emoji/px32/#{emoji.code}.png"
-
-      # console.dir emoji_data
-      @emoji_data = @getCategorizedData emoji_data
-      @emoji_regexps = @setEmojiCSS_getEmojiRegexps @emoji_data
-      @setEmojiIcon @
-      callback @ if callback?
-
-    # start main --------
-    # @setLoadingIcon()
-    @getEmojiDataFromAPI onLoadEmojiData
+    @setLoadingIcon()
     @
 
-  setLoadingIcon: () ->
-    console.log 111
-    text_nodes = $(@element).find(":not(iframe,textarea,script)").andSelf().contents().filter ->
-      @nodeType is Node.TEXT_NODE
-    console.dir text_nodes
+  onLoadEmojiData: (emoji_data) =>
+    # fix data for At.js --------
+    for emoji in emoji_data
+      emoji.code = emoji.code.replace RegExp(" ", "g"), "_"
+      emoji.img_url = "http://cdn.emojidex.com/emoji/px32/#{emoji.code}.png"
 
+    @emoji_data = @getCategorizedData emoji_data
+    @emoji_regexps = @setEmojiCSS_getEmojiRegexps @emoji_data
+    @setEmojiIcon @
+    callback @ if callback?
+
+  setLoadingIcon: ->
+    setLoadingTag = (text) ->
+      text = text.replace /:([^:]+):/g, (matched_string, pattern1) ->
+        '<img style="width: 1.5em; height: 1.5em" src="img/loading1.gif"></img>'
+
+    @element_clone = @element.clone()
+
+    text_nodes = @element.find(":not(iframe,textarea,script)").andSelf().contents().filter ->
+      @nodeType is Node.TEXT_NODE
+    for text_node in text_nodes
+      text = text_node.textContent
+      text = setLoadingTag text
+      $(text_node).replaceWith text
+
+    @getEmojiDataFromAPI @onLoadEmojiData
 
   getEmojiDataFromAPI: (callback) ->
     loaded_num = 0
