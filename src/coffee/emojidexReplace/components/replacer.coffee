@@ -47,8 +47,9 @@ class Replacer
       if num is @element.find(".emojidex-loading-icon").length - 1
         @element_clone.find('i[class*="emojidex-"]').hide()
         @element.replaceWith @element_clone
-        @element = @element_clone
         @element_clone.find('i[class*="emojidex-"]').fadeIn "fast"
+
+        @element = @element_clone
       else
         num++
 

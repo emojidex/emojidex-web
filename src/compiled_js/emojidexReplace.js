@@ -140,8 +140,8 @@
         if (num === _this.element.find(".emojidex-loading-icon").length - 1) {
           _this.element_clone.find('i[class*="emojidex-"]').hide();
           _this.element.replaceWith(_this.element_clone);
-          _this.element = _this.element_clone;
-          return _this.element_clone.find('i[class*="emojidex-"]').fadeIn("fast");
+          _this.element_clone.find('i[class*="emojidex-"]').fadeIn("fast");
+          return _this.element = _this.element_clone;
         } else {
           return num++;
         }
