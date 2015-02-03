@@ -7,8 +7,10 @@ html
     meta content="" name="description"
     meta content="width=device-width" name="viewport"
 
-    link href="css/jquery.atwho.min.css" rel="stylesheet"
     link href="css/bootstrap_and_override.css" rel="stylesheet"
+    link href="css/jquery.atwho.min.css" rel="stylesheet"
+    link href="css/bootstrap-window.css" rel="stylesheet"
+    link href="css/emoji_pallet.css" rel="stylesheet"
 
     script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"
     script src="js/bootstrap.min.js"
@@ -20,6 +22,8 @@ html
 
         $(".emojidex-plain_text").emojidexAutocomplete()
         $(".emojidex-content_editable").emojidexAutocomplete()
+
+        $("#pallet-btn").emojidexPallet()
 
   body
     .container

@@ -245,6 +245,12 @@ module.exports = (grunt) ->
             src: 'jquery.atwho.min.css'
             dest: 'dist/css/'
           }
+          {
+            expand: true,
+            cwd: 'bower_components/bootstrap-window/dist/css'
+            src: 'bootstrap-window.css'
+            dest: 'dist/css/'
+          }
         ]
 
     concat:
@@ -253,7 +259,7 @@ module.exports = (grunt) ->
           stripBanners: true
           banner: '<%= meta.banner %><%= grunt.getLicense("build/licenses.json") %>\n */\n'
         src: [
-          # 'bower_components/bootstrap-window/dist/js/bootstrap-window.min.js'
+          'bower_components/bootstrap-window/dist/js/bootstrap-window.min.js'
           'bower_components/Caret.js/dist/jquery.caret.min.js'
           'bower_components/At.js/dist/js/jquery.atwho.min.js'
           'node_modules/emojidex-client/dist/js/*.min.js'

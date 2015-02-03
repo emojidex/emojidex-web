@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,oBAAoB;EAClB,gBAAgB,EAAE,KAAK;EACvB,iCAAa;IACX,MAAM,EAAE,KAAK;IACb,QAAQ,EAAE,MAAM",
+"sources": ["../../src/sass/emoji_pallet.scss"],
+"names": [],
+"file": "emoji_pallet.css"
+}
