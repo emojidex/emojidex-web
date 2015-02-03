@@ -42,7 +42,13 @@ class Replacer
       replaced_string = @replaceForCode s_replace: replaced_string, regexp: loader.emoji_regexps.code, emoji_data: loader.emoji_data if loader.emoji_regexps.code?
       $(text_node).replaceWith replaced_string
 
+    num = 0
     @element.find(".emojidex-loading-icon").fadeOut "normal", =>
-      @element.replaceWith @element_clone
-      @element = @element_clone
+      if num is @element.find(".emojidex-loading-icon").length - 1
+        @element_clone.find('i[class*="emojidex-"]').hide()
+        @element.replaceWith @element_clone
+        @element = @element_clone
+        @element_clone.find('i[class*="emojidex-"]').fadeIn "fast"
+      else
+        num++
 
