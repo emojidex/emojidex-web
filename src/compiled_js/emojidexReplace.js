@@ -183,7 +183,7 @@
         _this.emoji_data = _this.getCategorizedData(emoji_data);
         _this.emoji_regexps = _this.setEmojiCSS_getEmojiRegexps(_this.emoji_data);
         _this.setEmojiIcon(_this);
-        if (callback) {
+        if (callback != null) {
           return callback(_this);
         }
       };

@@ -13,7 +13,7 @@ class ReplacerService extends Replacer
       @emoji_data = @getCategorizedData emoji_data
       @emoji_regexps = @setEmojiCSS_getEmojiRegexps @emoji_data
       @setEmojiIcon @
-      callback @ if callback
+      callback @ if callback?
 
     # start main --------
     @getEmojiDataFromAPI onLoadEmojiData
