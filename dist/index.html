@@ -16,7 +16,8 @@
           return $("body").emojidexReplace({
             loadingIcon: true,
             onComplete: function(element) {
-              return $(".emojidex-plain_text").emojidexAutocomplete();
+              $(".emojidex-plain_text").emojidexAutocomplete();
+              return $(".emojidex-content_editable").emojidexAutocomplete();
             }
           });
         });
