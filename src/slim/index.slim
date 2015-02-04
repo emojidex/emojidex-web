@@ -16,10 +16,10 @@ html
 
     coffee:
       $(document).ready ->
-        $("body").emojidexReplace()
-
-        $(".emojidex-plain_text").emojidexAutocomplete()
-        $(".emojidex-content_editable").emojidexAutocomplete()
+        $("body").emojidexReplace
+          onComplete: (element) ->
+            $(".emojidex-plain_text").emojidexAutocomplete()
+            $(".emojidex-content_editable").emojidexAutocomplete()
 
   body
     .container

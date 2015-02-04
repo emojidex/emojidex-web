@@ -33,7 +33,7 @@ class Replacer
         if emoji.code is pattern1
           return @getEmojiTag emoji.code
 
-  setEmojiIcon: (loader) ->
+  setEmojiIcon: (loader, options) ->
     text_nodes = $(@element_clone).find(":not(iframe,textarea,script)").andSelf().contents().filter ->
       @nodeType is Node.TEXT_NODE
     for text_node in text_nodes
@@ -50,6 +50,8 @@ class Replacer
         @element_clone.find('i[class*="emojidex-"]').fadeIn "fast"
 
         @element = @element_clone
+
+        options.onComplete @element if options.onComplete?
       else
         num++
 

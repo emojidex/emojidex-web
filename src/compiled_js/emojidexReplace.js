@@ -110,7 +110,7 @@
       });
     };
 
-    Replacer.prototype.setEmojiIcon = function(loader) {
+    Replacer.prototype.setEmojiIcon = function(loader, options) {
       var num, replaced_string, text_node, text_nodes, _i, _len,
         _this = this;
       text_nodes = $(this.element_clone).find(":not(iframe,textarea,script)").andSelf().contents().filter(function() {
@@ -141,7 +141,10 @@
           _this.element_clone.find('i[class*="emojidex-"]').hide();
           _this.element.replaceWith(_this.element_clone);
           _this.element_clone.find('i[class*="emojidex-"]').fadeIn("fast");
-          return _this.element = _this.element_clone;
+          _this.element = _this.element_clone;
+          if (options.onComplete != null) {
+            return options.onComplete(_this.element);
+          }
         } else {
           return num++;
         }
@@ -177,7 +180,7 @@
       }
       this.emoji_data = emoji_data;
       this.emoji_regexps = this.setEmojiCSS_getEmojiRegexps(emoji_data);
-      this.setEmojiIcon(this);
+      this.setEmojiIcon(this, this.options);
       if (typeof callback !== "undefined" && callback !== null) {
         return callback(this);
       }

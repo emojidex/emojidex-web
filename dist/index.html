@@ -13,9 +13,12 @@
     <script type="text/javascript">
       (function() {
         $(document).ready(function() {
-          $("body").emojidexReplace();
-          $(".emojidex-plain_text").emojidexAutocomplete();
-          return $(".emojidex-content_editable").emojidexAutocomplete();
+          return $("body").emojidexReplace({
+            onComplete: function(element) {
+              $(".emojidex-plain_text").emojidexAutocomplete();
+              return $(".emojidex-content_editable").emojidexAutocomplete();
+            }
+          });
         });
       
       }).call(this);

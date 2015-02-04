@@ -15,7 +15,7 @@ class ReplacerService extends Replacer
 
     @emoji_data = emoji_data
     @emoji_regexps = @setEmojiCSS_getEmojiRegexps emoji_data
-    @setEmojiIcon @
+    @setEmojiIcon @, @options
     callback @ if callback?
 
   setLoadingIcon: ->
