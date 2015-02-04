@@ -72,9 +72,21 @@
           return at_obj.$inputor.atwho('destroy').atwho($.extend({}, at_obj.setting, at_options)).atwho('run');
         };
         num = ++searching_num;
-        ec.search(match_string, function(response) {
-          var searched_data;
-          searched_data = ec.simplify();
+        ec.Search.search(match_string, function(response) {
+          var emoji, searched_data;
+          searched_data = (function() {
+            var _i, _len, _ref, _results;
+            _ref = ec.Search.results;
+            _results = [];
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              emoji = _ref[_i];
+              _results.push({
+                code: emoji.code.replace(/[ ]/g, "_"),
+                img_url: "http://cdn.emojidex.com/emoji/px32/" + (emoji.code.replace(/[ ]/g, '_')) + ".png"
+              });
+            }
+            return _results;
+          })();
           if (searching_num === num) {
             if (searched_data.length) {
               return updateAtwho(searched_data);
