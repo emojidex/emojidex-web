@@ -34,24 +34,29 @@ class Replacer
           return @getEmojiTag emoji.code
 
   setEmojiIcon: (loader, options) ->
-    text_nodes = $(@element_clone).find(":not(iframe,textarea,script)").andSelf().contents().filter ->
-      @nodeType is Node.TEXT_NODE
-    for text_node in text_nodes
-      replaced_string = text_node.textContent
-      replaced_string = @replaceForUTF s_replace: replaced_string, regexp: loader.emoji_regexps.utf, emoji_data: loader.emoji_data if loader.emoji_regexps.utf?
-      replaced_string = @replaceForCode s_replace: replaced_string, regexp: loader.emoji_regexps.code, emoji_data: loader.emoji_data if loader.emoji_regexps.code?
-      $(text_node).replaceWith replaced_string
+    replaceTextNode = (element) =>
+      text_nodes = $(element).find(":not(iframe,textarea,script)").andSelf().contents().filter ->
+        @nodeType is Node.TEXT_NODE
+      for text_node in text_nodes
+        replaced_string = text_node.textContent
+        replaced_string = @replaceForUTF s_replace: replaced_string, regexp: loader.emoji_regexps.utf, emoji_data: loader.emoji_data if loader.emoji_regexps.utf?
+        replaced_string = @replaceForCode s_replace: replaced_string, regexp: loader.emoji_regexps.code, emoji_data: loader.emoji_data if loader.emoji_regexps.code?
+        $(text_node).replaceWith replaced_string
 
-    num = 0
-    @element.find(".emojidex-loading-icon").fadeOut "normal", =>
-      if num is @element.find(".emojidex-loading-icon").length - 1
-        @element_clone.find('i[class*="emojidex-"]').hide()
-        @element.replaceWith @element_clone
-        @element_clone.find('i[class*="emojidex-"]').fadeIn "fast"
+    if options.loadingIcon?
+      replaceTextNode @element_clone
 
-        @element = @element_clone
+      num = 0
+      @element.find(".emojidex-loading-icon").fadeOut "normal", =>
+        if num is @element.find(".emojidex-loading-icon").length - 1
+          @element_clone.find('i[class*="emojidex-"]').hide()
+          @element.replaceWith @element_clone
+          @element_clone.find('i[class*="emojidex-"]').fadeIn "fast"
 
-        options.onComplete @element if options.onComplete?
-      else
-        num++
+          @element = @element_clone
 
+          options.onComplete @element if options.onComplete?
+        else
+          num++
+    else
+      replaceTextNode @element

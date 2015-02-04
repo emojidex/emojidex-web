@@ -3,8 +3,11 @@ class ReplacerService extends Replacer
     super
     @element = $(@element)
 
-  replace: (callback)->
-    @setLoadingIcon()
+  replace: (callback) ->
+    if @options.loadingIcon?
+      @setLoadingIcon()
+    else
+      @getEmojiDataFromAPI @onLoadEmojiData
     @
 
   onLoadEmojiData: (emoji_data) =>

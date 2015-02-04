@@ -111,44 +111,54 @@
     };
 
     Replacer.prototype.setEmojiIcon = function(loader, options) {
-      var num, replaced_string, text_node, text_nodes, _i, _len,
+      var num, replaceTextNode,
         _this = this;
-      text_nodes = $(this.element_clone).find(":not(iframe,textarea,script)").andSelf().contents().filter(function() {
-        return this.nodeType === Node.TEXT_NODE;
-      });
-      for (_i = 0, _len = text_nodes.length; _i < _len; _i++) {
-        text_node = text_nodes[_i];
-        replaced_string = text_node.textContent;
-        if (loader.emoji_regexps.utf != null) {
-          replaced_string = this.replaceForUTF({
-            s_replace: replaced_string,
-            regexp: loader.emoji_regexps.utf,
-            emoji_data: loader.emoji_data
-          });
-        }
-        if (loader.emoji_regexps.code != null) {
-          replaced_string = this.replaceForCode({
-            s_replace: replaced_string,
-            regexp: loader.emoji_regexps.code,
-            emoji_data: loader.emoji_data
-          });
-        }
-        $(text_node).replaceWith(replaced_string);
-      }
-      num = 0;
-      return this.element.find(".emojidex-loading-icon").fadeOut("normal", function() {
-        if (num === _this.element.find(".emojidex-loading-icon").length - 1) {
-          _this.element_clone.find('i[class*="emojidex-"]').hide();
-          _this.element.replaceWith(_this.element_clone);
-          _this.element_clone.find('i[class*="emojidex-"]').fadeIn("fast");
-          _this.element = _this.element_clone;
-          if (options.onComplete != null) {
-            return options.onComplete(_this.element);
+      replaceTextNode = function(element) {
+        var replaced_string, text_node, text_nodes, _i, _len, _results;
+        text_nodes = $(element).find(":not(iframe,textarea,script)").andSelf().contents().filter(function() {
+          return this.nodeType === Node.TEXT_NODE;
+        });
+        _results = [];
+        for (_i = 0, _len = text_nodes.length; _i < _len; _i++) {
+          text_node = text_nodes[_i];
+          replaced_string = text_node.textContent;
+          if (loader.emoji_regexps.utf != null) {
+            replaced_string = _this.replaceForUTF({
+              s_replace: replaced_string,
+              regexp: loader.emoji_regexps.utf,
+              emoji_data: loader.emoji_data
+            });
           }
-        } else {
-          return num++;
+          if (loader.emoji_regexps.code != null) {
+            replaced_string = _this.replaceForCode({
+              s_replace: replaced_string,
+              regexp: loader.emoji_regexps.code,
+              emoji_data: loader.emoji_data
+            });
+          }
+          _results.push($(text_node).replaceWith(replaced_string));
         }
-      });
+        return _results;
+      };
+      if (options.loadingIcon != null) {
+        replaceTextNode(this.element_clone);
+        num = 0;
+        return this.element.find(".emojidex-loading-icon").fadeOut("normal", function() {
+          if (num === _this.element.find(".emojidex-loading-icon").length - 1) {
+            _this.element_clone.find('i[class*="emojidex-"]').hide();
+            _this.element.replaceWith(_this.element_clone);
+            _this.element_clone.find('i[class*="emojidex-"]').fadeIn("fast");
+            _this.element = _this.element_clone;
+            if (options.onComplete != null) {
+              return options.onComplete(_this.element);
+            }
+          } else {
+            return num++;
+          }
+        });
+      } else {
+        return replaceTextNode(this.element);
+      }
     };
 
     return Replacer;
@@ -167,7 +177,11 @@
     }
 
     ReplacerService.prototype.replace = function(callback) {
-      this.setLoadingIcon();
+      if (this.options.loadingIcon != null) {
+        this.setLoadingIcon();
+      } else {
+        this.getEmojiDataFromAPI(this.onLoadEmojiData);
+      }
       return this;
     };
 

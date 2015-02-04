@@ -17,6 +17,7 @@ html
     coffee:
       $(document).ready ->
         $("body").emojidexReplace
+          loadingIcon: true
           onComplete: (element) ->
             $(".emojidex-plain_text").emojidexAutocomplete()
             $(".emojidex-content_editable").emojidexAutocomplete()
