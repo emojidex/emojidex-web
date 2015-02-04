@@ -21,12 +21,16 @@ class AutoComplete
 
         # start: setSearchedEmojiData --------
         num = ++searching_num
-        ec.search(match_string, (response) ->
-          searched_data = ec.simplify()
+        ec.Search.search(match_string, (response) ->
+
+          searched_data = for emoji in ec.Search.results
+            code: emoji.code.replace /[ ]/g, "_"
+            img_url: "http://cdn.emojidex.com/emoji/px32/#{emoji.code.replace /[ ]/g, '_'}.png"
 
           if searching_num == num
             updateAtwho(searched_data) if searched_data.length
         )
+
         return match_string
 
       getRegexp = (flag, should_startWithSpace) ->
