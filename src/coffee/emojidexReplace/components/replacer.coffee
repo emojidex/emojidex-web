@@ -10,9 +10,12 @@ class Replacer
     emoji_css = $('<style type="text/css" />')
 
     for emoji in emoji_data
-      regexp_for_utf += emoji.moji + "|" if emoji.moji?
-      regexp_for_code += emoji.code + "|"  if emoji.code?
-      emoji_css.append "i.emojidex-" + emoji.code + " {background-image: url('" + emoji.img_url + "')}"
+      if emoji.moji?
+        regexp_for_utf += emoji.moji + "|"
+        emoji_css.append "i.emojidex-" + emoji.moji + " {background-image: url('" + emoji.img_url + "')}"
+      if emoji.code?
+        regexp_for_code += emoji.code + "|"
+        emoji_css.append "i.emojidex-" + emoji.code + " {background-image: url('" + emoji.img_url + "')}"
 
     $("head").append emoji_css
 
@@ -22,41 +25,70 @@ class Replacer
     return '<i class="emojidex-' + emoji_code + '"></i>'
 
   replaceForUTF: (options) ->
-    replaced_string = options.s_replace.replace new RegExp(options.regexp, "g"), (matched_string) =>
+    replaced_string = options.text.replace RegExp(options.regexp, "g"), (matched_string) =>
       for emoji in options.emoji_data
         if emoji.moji is matched_string
           return @getEmojiTag emoji.code
 
   replaceForCode: (options) ->
-    replaced_string = options.s_replace.replace new RegExp(options.regexp, "g"), (matched_string, pattern1) =>
+    replaced_string = options.text.replace RegExp(options.regexp, "g"), (matched_string, pattern1) =>
       for emoji in options.emoji_data
         if emoji.code is pattern1
           return @getEmojiTag emoji.code
 
-  setEmojiIcon: (loader, options) ->
+
+  setEmojiIcon: (loader) ->
+    replaceLoadingIcon = (options) =>
+      replaceUseFade = (element, new_element) ->
+        element.after new_element.hide()
+        element.fadeOut "normal", ->
+          new_element.fadeIn "fast"
+
+      for element in options.loading_elements
+        new_element = ""
+        switch element.dataset.type
+          when 'utf'
+            new_element = element.dataset.emoji.replace RegExp(options.regexp_utf), (matched_string) =>
+              @getEmojiTag matched_string
+          when 'code'
+            new_element = element.dataset.emoji.replace RegExp(options.regexp_code), (matched_string, pattern1) =>
+              @getEmojiTag pattern1
+
+        if new_element.indexOf("<i class=") isnt -1
+          replaceUseFade $(element), $(new_element)
+        else
+          $(element).replaceWith new_element
+
+      loader.options.onComplete? @element
+
     replaceTextNode = (element) =>
       text_nodes = $(element).find(":not(iframe,textarea,script)").andSelf().contents().filter ->
         @nodeType is Node.TEXT_NODE
       for text_node in text_nodes
         replaced_string = text_node.textContent
-        replaced_string = @replaceForUTF s_replace: replaced_string, regexp: loader.emoji_regexps.utf, emoji_data: loader.emoji_data if loader.emoji_regexps.utf?
-        replaced_string = @replaceForCode s_replace: replaced_string, regexp: loader.emoji_regexps.code, emoji_data: loader.emoji_data if loader.emoji_regexps.code?
+
+        if loader.emoji_regexps.utf?
+          replaced_string = @replaceForUTF
+            text: replaced_string
+            regexp: loader.emoji_regexps.utf
+            emoji_data: loader.emoji_data
+
+        if loader.emoji_regexps.code?
+          replaced_string = @replaceForCode
+            text: replaced_string
+            regexp: loader.emoji_regexps.code
+            emoji_data: loader.emoji_data
+
         $(text_node).replaceWith replaced_string
 
-    if options.loadingIcon?
-      replaceTextNode @element_clone
+      loader.options.onComplete? @element
 
-      num = 0
-      @element.find(".emojidex-loading-icon").fadeOut "normal", =>
-        if num is @element.find(".emojidex-loading-icon").length - 1
-          @element_clone.find('i[class*="emojidex-"]').hide()
-          @element.replaceWith @element_clone
-          @element_clone.find('i[class*="emojidex-"]').fadeIn "fast"
-
-          @element = @element_clone
-
-          options.onComplete @element if options.onComplete?
-        else
-          num++
+    # start setEmojiIcon --------
+    if loader.options.loadingIcon
+      loading_elements = @element.find ".emojidex-loading-icon"
+      replaceLoadingIcon
+        loading_elements: loading_elements
+        regexp_utf: loader.emoji_regexps.utf
+        regexp_code: loader.emoji_regexps.code
     else
       replaceTextNode @element

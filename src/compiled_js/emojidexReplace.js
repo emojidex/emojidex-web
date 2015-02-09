@@ -63,11 +63,12 @@
         emoji = emoji_data[_i];
         if (emoji.moji != null) {
           regexp_for_utf += emoji.moji + "|";
+          emoji_css.append("i.emojidex-" + emoji.moji + " {background-image: url('" + emoji.img_url + "')}");
         }
         if (emoji.code != null) {
           regexp_for_code += emoji.code + "|";
+          emoji_css.append("i.emojidex-" + emoji.code + " {background-image: url('" + emoji.img_url + "')}");
         }
-        emoji_css.append("i.emojidex-" + emoji.code + " {background-image: url('" + emoji.img_url + "')}");
       }
       $("head").append(emoji_css);
       return {
@@ -83,7 +84,7 @@
     Replacer.prototype.replaceForUTF = function(options) {
       var replaced_string,
         _this = this;
-      return replaced_string = options.s_replace.replace(new RegExp(options.regexp, "g"), function(matched_string) {
+      return replaced_string = options.text.replace(RegExp(options.regexp, "g"), function(matched_string) {
         var emoji, _i, _len, _ref;
         _ref = options.emoji_data;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -98,7 +99,7 @@
     Replacer.prototype.replaceForCode = function(options) {
       var replaced_string,
         _this = this;
-      return replaced_string = options.s_replace.replace(new RegExp(options.regexp, "g"), function(matched_string, pattern1) {
+      return replaced_string = options.text.replace(RegExp(options.regexp, "g"), function(matched_string, pattern1) {
         var emoji, _i, _len, _ref;
         _ref = options.emoji_data;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -110,51 +111,72 @@
       });
     };
 
-    Replacer.prototype.setEmojiIcon = function(loader, options) {
-      var num, replaceTextNode,
+    Replacer.prototype.setEmojiIcon = function(loader) {
+      var loading_elements, replaceLoadingIcon, replaceTextNode,
         _this = this;
+      replaceLoadingIcon = function(options) {
+        var element, new_element, replaceUseFade, _base, _i, _len, _ref;
+        replaceUseFade = function(element, new_element) {
+          element.after(new_element.hide());
+          return element.fadeOut("normal", function() {
+            return new_element.fadeIn("fast");
+          });
+        };
+        _ref = options.loading_elements;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          element = _ref[_i];
+          new_element = "";
+          switch (element.dataset.type) {
+            case 'utf':
+              new_element = element.dataset.emoji.replace(RegExp(options.regexp_utf), function(matched_string) {
+                return _this.getEmojiTag(matched_string);
+              });
+              break;
+            case 'code':
+              new_element = element.dataset.emoji.replace(RegExp(options.regexp_code), function(matched_string, pattern1) {
+                return _this.getEmojiTag(pattern1);
+              });
+          }
+          if (new_element.indexOf("<i class=") !== -1) {
+            replaceUseFade($(element), $(new_element));
+          } else {
+            $(element).replaceWith(new_element);
+          }
+        }
+        return typeof (_base = loader.options).onComplete === "function" ? _base.onComplete(_this.element) : void 0;
+      };
       replaceTextNode = function(element) {
-        var replaced_string, text_node, text_nodes, _i, _len, _results;
+        var replaced_string, text_node, text_nodes, _base, _i, _len;
         text_nodes = $(element).find(":not(iframe,textarea,script)").andSelf().contents().filter(function() {
           return this.nodeType === Node.TEXT_NODE;
         });
-        _results = [];
         for (_i = 0, _len = text_nodes.length; _i < _len; _i++) {
           text_node = text_nodes[_i];
           replaced_string = text_node.textContent;
           if (loader.emoji_regexps.utf != null) {
             replaced_string = _this.replaceForUTF({
-              s_replace: replaced_string,
+              text: replaced_string,
               regexp: loader.emoji_regexps.utf,
               emoji_data: loader.emoji_data
             });
           }
           if (loader.emoji_regexps.code != null) {
             replaced_string = _this.replaceForCode({
-              s_replace: replaced_string,
+              text: replaced_string,
               regexp: loader.emoji_regexps.code,
               emoji_data: loader.emoji_data
             });
           }
-          _results.push($(text_node).replaceWith(replaced_string));
+          $(text_node).replaceWith(replaced_string);
         }
-        return _results;
+        return typeof (_base = loader.options).onComplete === "function" ? _base.onComplete(_this.element) : void 0;
       };
-      if (options.loadingIcon != null) {
-        replaceTextNode(this.element_clone);
-        num = 0;
-        return this.element.find(".emojidex-loading-icon").fadeOut("normal", function() {
-          if (num === _this.element.find(".emojidex-loading-icon").length - 1) {
-            _this.element_clone.find('i[class*="emojidex-"]').hide();
-            _this.element.replaceWith(_this.element_clone);
-            _this.element_clone.find('i[class*="emojidex-"]').fadeIn("fast");
-            _this.element = _this.element_clone;
-            if (options.onComplete != null) {
-              return options.onComplete(_this.element);
-            }
-          } else {
-            return num++;
-          }
+      if (loader.options.loadingIcon) {
+        loading_elements = this.element.find(".emojidex-loading-icon");
+        return replaceLoadingIcon({
+          loading_elements: loading_elements,
+          regexp_utf: loader.emoji_regexps.utf,
+          regexp_code: loader.emoji_regexps.code
         });
       } else {
         return replaceTextNode(this.element);
@@ -177,7 +199,7 @@
     }
 
     ReplacerService.prototype.replace = function(callback) {
-      if (this.options.loadingIcon != null) {
+      if (this.options.loadingIcon) {
         this.setLoadingIcon();
       } else {
         this.getEmojiDataFromAPI(this.onLoadEmojiData);
@@ -194,28 +216,28 @@
       }
       this.emoji_data = emoji_data;
       this.emoji_regexps = this.setEmojiCSS_getEmojiRegexps(emoji_data);
-      this.setEmojiIcon(this, this.options);
-      if (typeof callback !== "undefined" && callback !== null) {
-        return callback(this);
-      }
+      this.setEmojiIcon(this);
+      return typeof callback === "function" ? callback(this) : void 0;
     };
 
     ReplacerService.prototype.setLoadingIcon = function() {
       var setLoadingTag, text, text_node, text_nodes, _i, _len;
       setLoadingTag = function(text) {
-        var loading_icon, regexp_utf;
-        loading_icon = '<img class="emojidex-loading-icon"></img>';
+        var getImgTagWithEmojiData, regexp_utf;
+        getImgTagWithEmojiData = function(emoji_data, type) {
+          return "<img class='emojidex-loading-icon' data-emoji='" + emoji_data + "' data-type='" + type + "'></img>";
+        };
         regexp_utf = '\
         ✅|🎭|🎵|🎶|💘|💡|💢|💤|💥|💧|💨|💩|💪|💫|💯|💲|💹|📈|📧|📩|🔀|🔁|🔄|🔇|🔉|🔖|🔗|🔙|🔚|🔛|🔜|🔝|🔡|🔢|🔣|🔤|🔥|🔲|🔳|🔵|🔶|🔷|🔸|🔹|🔺|🔻|🔽|🗤|🗥|🗧|🗨|🗩|🗪|🗫|🗬|🗭|🗯|🗯|🗱|🗵|🗶|🗷|🗸|🗹|↔|↖|↗|↘|↙|↪|⏬|▪|▫|◻|◼|☑|✔|✖|✳|✴|❌|➖|➗|⤴|⤵|⬛|⬜|⭐|⭕|💒|💓|💔|💕|💖|💗|💙|💚|💛|💜|💝|💞|💟|💦|💬|💭|💮|💱|📉|📊|📤|📥|📶|🔂|🔃|🔅|🔆|🔊|🔕|🔘|🔞|🔠|🔴|🔼|🔾|🔿|🗠|🗦|🗰|🗲|🗴|🚫|‼|⁉|↕|⏩|⏪|⏫|▶|◀|⚪|⚫|⛔|✨|❇|❎|❓|❔|❕|❗|❤|➕|➡|➰|⬅|⬆|⬇|〰|↩|◽|◾|☙|⛋|〽️|㊙|🅿|🆒|🆓|🆔|🆕|🆖|🆗|🆘|🆙|🆚|🇴|🇵|🇶|🇷|🇸|🇹|🇺|🇻|🇼|🇽|🇾|🇿|🇨🇳|🇩🇪|🇪🇸|🇫🇷|🇬🇧|🇮🇹|🇯🇵|🇰🇷|🇷🇺|🇺🇸|🈁|🈂|🈚|🈯|🈲|🈳|🈴|🈵|🈶|🈷|🈸|🈹|🈺|🉐|🉑|📲|🕅|🗕|🗖|🗗|🗙|🗚|🗛|🗜|🗝|🗞|🗟|🗳|🗺|🚩|🚬|🚮|🚱|🚹|🚺|🚻|🚾|#️⃣|️1️⃣|️2️⃣|️3️⃣|️4️⃣|️5️⃣|️6️⃣|️7️⃣|️8️⃣|️9️⃣|️0️⃣|™|Ⓜ️|♈|♉|♊|♋|♌|♍|♎|♓|♠|♣|♥|⚠|➿|🅰|🅱|🅾|🆎|🆑|🇦|🇧|🇨|🇩|🇪|🇫|🇬|🇭|🇮|🇯|🇰|🇱|🇲|🇳|📳|📴|📵|🔟|🕉|🕲|🗘|🚭|🚯|🚰|🚳|🚷|🚸|🚼|🛂|🛃|🛄|🛅|©|®|ℹ|♏|♐|♑|♒|♦|♻|♿|⛎|✡|㊗|🕀|🕁|🕂|🕃|🕄|☊|☋|☌|☍|☠|☡|☢|☣|☤|☥|☦|☧|☨|☩|☪|☫|☬|☭|☮|☯|☰|☱|☲|☳|☴|☵|☶|☷|☸|☿|♀|♁|♂|♃|♄|♅|♆|♇|♔|♕|♖|♗|♘|♙|♚|♛|♜|♝|♞|♟|♩|♬|♭|♮|♯|♰|♱|♳|♴|♵|♶|♷|♸|♹|♺|♼|♽|⚆|⚇|⚈|⚉|⚊|⚋|⚌|⚍|⚎|⚏|⚒|⚔|⚕|⚖|⚗|⚘|⚙|⚛|⚜|⚝|⚞|⚟|⚢|⚣|⚤|⚥|⚦|⚧|⚨|⚩|⚭|⚮|⚯|⚱|⚲|⚳|⚴|⚵|⚶|⚷|⚸|⚹|⚺|⚻|⚼|⛇|⛌|⛍|⛏|⛐|⛑|⛒|⛓|⛕|⛖|⛗|⛘|⛙|⛚|⛛|⛜|⛝|⛞|⛟|⛠|⛡|⛣|⛤|⛧|⛭|⛮|⛯|⛶|⛼|⛿|🌬|🎅|🏂|🏃|🏄|🏇|🏊|🏋|🏌|🏍|🏎|👀|👁|👂|👃|🗢|👅|👣|👦|👧|👨|👩|👪|👫|👬|👭|👮|👯|👱|👲|👴|👵|👶|👸|👻|👼|👽|👾|👿|💀|💁|💂|💃|💆|💇|💏|🗣|🚴|🚶|👤|👥|👰|👳|👷|👹|👺|💑|🕴|🕵|🚵|⛸|⛹|😂🏾|😋🏾|😙🏾|😚🏾|😛🏾|😠🏾|😢🏾|😥🏾|😩🏾|😪🏾|😭🏾|😯🏾|😱🏾|😳🏾|😷🏾|😂🏿|😃🏿|😉🏿|😉🏾|😊🏿|😋🏿|😓🏿|😔🏿|😗🏿|😙🏿|😚🏿|😛🏿|😟🏿|😠🏿|😢🏿|😤🏿|😥🏿|😨🏿|😩🏿|😪🏿|😬🏿|😭🏿|😯🏿|😱🏿|😳🏿|😴🏿|😷🏿|😒🏾|😒🏿|☺🏾|☺🏿|😌🏾|😌🏿|😁🏾|😁🏿|😏🏾|😏🏿|😄🏾|😄🏿|😆🏾|😆🏿|😃🏾|😇🏾|😊🏾|😎🏾|😐🏾|😑🏾|😓🏾|😔🏾|😕🏾|😖🏾|😗🏾|😞🏾|😟🏾|😣🏾|😤🏾|😦🏾|😧🏾|😨🏾|😫🏾|😬🏾|😮🏾|😰🏾|😲🏾|😴🏾|😵🏾|😶🏾|😇🏿|😎🏿|😐🏿|😑🏿|😕🏿|😖🏿|😞🏿|😣🏿|😦🏿|😧🏿|😫🏿|😮🏿|😰🏿|😲🏿|😵🏿|😶🏿|😅🏾|😅🏿|😘🏾|😘🏿|😝🏾|😝🏿|😜🏾|😜🏿|😍🏾|😍🏿|😁🏽|😀|😁|😂|😃|😄|😅|😆|😇|😈|😉|😊|😋|😌|😍|😎|😏|😑|😒|😓|😔|😕|😖|😗|😜|😝|😞|😟|😠|😡|😢|😣|😤|😦|😧|😨|😩|😪|😫|😬|😭|😯|😰|😱|😲|😳|😴|😵|😶|😷|😹|😼|☺|😐|😘|😙|😚|😛|😥|😮|😸|😺|😻|😽|😾|😿|🙀|☹|☻|🌀|🌁|🌂|🌃|🌄|🌅|🌆|🌇|🌈|🌉|🌊|🌋|🌍|🌎|🌏|🌐|☽|☾|🌡|🌢|🌣|🌤|🌥|🌦|🌧|🌨|🌩|🌪|🌫|🌰|🌱|🌲|🌳|🌴|🌵|🌶|🌷|🌸|🌹|🌺|🌻|🌼|🌾|🌿|🍀|🍁|🍂|🍃|🏔|🐀|🐁|🐂|🐃|🐄|🐅|🐆|🐇|🐈|🐉|🐊|🐋|🐌|🐍|🐎|🐏|🐐|🐑|🐒|🐓|🐔|🐕|🐖|🐗|🐘|🐙|🐚|🐛|🐜|🐝|🐞|🐟|🐠|🐡|🐢|🐣|🐤|🐥|🐦|🐧|🐨|🐩|🐪|🐫|🐬|🐭|🐮|🐯|🐰|🐱|🐲|🐳|🐴|🐵|🐶|🐷|🐸|🐹|🐺|🐻|🐼|🐽|🐾|🐿|🕷|🗻|🗾|☀|☁|⚡|⛄|🕊|🕸|☔|⛅|❄|☄|★|☈|☼|⛳|⛺|✉|🃏|🎀|🎁|🎃|🎄|🎆|🎇|🎈|🎉|🎊|🎋|🎌|🎍|🎎|🎏|🎐|🎑|🎒|🎓|🎔|🎕|🎖|🎗|🎘|🎙|🎚|🎛|🎜|🎝|🎞|🎟|🎠|🎡|🎢|🎣|🎤|🎥|🎦|🎧|🎨|🎩|🎪|🎫|🎬|🎮|🎯|🎰|🎱|🎲|🎳|🎴|🎷|🎸|🎹|🎺|🎻|🎼|🎽|🎾|🎿|🏀|🏁|🏅|🏆|🏈|🏉|🏕|🏖|🏗|🏘|🏙|🏚|🏛|🏱|🏲|🏳|🏴|🏵|🏶|🏷|👑|👒|👓|👔|👕|👖|👗|👘|👙|👚|👛|👜|👝|👞|👟|👠|👡|👢|💄|💅|💈|💉|💊|💋|💍|💎|💐|💰|💳|💴|💵|💶|💷|💺|💻|💼|💽|💾|💿|📀|📁|📅|📆|📇|📋|📌|📎|📒|📓|📔|📖|📘|📙|📚|📛|📜|📝|📟|📠|📡|📢|📣|📦|📫|📭|📮|📯|📰|📱|📷|📹|📺|📻|📼|🔈|🔋|🔌|🔍|🔎|🔐|🔑|🔒|🔓|🔔|🔰|🔱|🕐|🕑|🕒|🕓|🕔|🕕|🕖|🕗|🕘|🕙|🕚|🕛|🕜|🕝|🕞|🕟|🕠|🕡|🕢|🕣|🕤|🕫|🕬|🕯|🕱|🕳|🕹|🕻|🕼|🕽|🕾|🕿|🖀|🖁|🖄|🖆|🖊|🖋|🖧|🖨|🖪|🖫|🖬|🖲|🖴|🖵|🖶|🖷|🖺|🖿|🗀|🗀|🗃|🗄|🗅|🗈|🗉|🗊|🗌|🗍|🗎|🗏|🗐|🗑|🗼|🗿|🚧|🚪|🚽|🚿|🛀|🛁|⌚️|⌛|⏳|☎|☕|⚽|⚾|✂|✏|✒|🀄|💌|💸|📂|📃|📄|📍|📏|📐|📑|📕|📗|📞|📨|📪|📬|📸|📽|📾|🔏|🔮|🔯|🕄|🕆|🕇|🕈|🕥|🕦|🕧|🕨|🕩|🕪|🕭|🕰|🕶|🖂|🖃|🖅|🖇|🖈|🖉|🖌|🖍|🖥|🖦|🖩|🖭|🖮|🖯|🖰|🖱|🖳|🖸|🖹|🖻|🖼|🖽|🖾|🗂|🗆|🗇|🗋|🗒|🗓|🗔|🗽|🚥|🚦|🚨|⏰|☖|☗|⚀|⚁|⚂|⚃|⚄|⚅|⚰|⛀|⛁|⛂|⛃|⛉|⛊|💣|🔦|🔧|🔨|🔪|🔫|🔭|🔩|🔬|🗡|✌|👆|👇|👈|👉|👊|👋|👌|👍|👎|👏|🖎|🖏|🖒|🖔|🙊|👐|🖐|🖑|🖓|🖗|🖘|🖙|🖚|🖛|🖜|🖝|🖞|🖟|🖠|🖡|🖢|🖣|🙅|🙆|🙇|🙈|🙉|🙋|🙌|🙍|🙎|🙏|☝|✊|✋|🖖|☚|☛|🚂|🚄|🚅|🚔|🚕|🚘|🚛|🚞|🚟|🚠|🚡|🚀|🚁|🚃|🚆|🚇|🚈|🚉|🚊|🚋|🚌|🚍|🚎|🚏|🚐|🚑|🚒|🚓|🚖|🚗|🚙|🚚|🚜|🚝|🚢|🚣|🚤|🚲|⚓|⛵|✈|🌽|🍄|🍅|🍆|🍇|🍈|🍉|🍊|🍋|🍌|🍍|🍎|🍏|🍐|🍑|🍒|🍓|🍔|🍕|🍖|🍗|🍘|🍙|🍚|🍛|🍜|🍝|🍞|🍟|🍠|🍡|🍢|🍣|🍤|🍥|🍦|🍧|🍨|🍩|🍪|🍫|🍬|🍭|🍮|🍯|🍰|🍱|🍲|🍳|🍴|🍵|🍶|🍷|🍸|🍹|🍺|🍻|🍼|🍽|🎂|⛲|⛽|🏜|🏝|🏞|🏟|🏠|🏡|🏢|🏣|🏤|🏥|🏦|🏧|🏨|🏩|🏪|🏫|🏬|🏭|🏮|🏯|🏰|⛪|♨|⛩|⛬|⛱|🌌|🌒|🌔|🌖|🌘|🌙|🌚|🌛|🌜|🌝|🌞|🌟|🌠|🌕|🌑\
       ';
         text = text.replace(new RegExp(regexp_utf, "g"), function(matched_string) {
-          return loading_icon;
+          return getImgTagWithEmojiData(matched_string, "utf");
         });
         return text = text.replace(/:([^:]+):/g, function(matched_string, pattern1) {
-          return loading_icon;
+          return getImgTagWithEmojiData(matched_string, "code");
         });
       };
-      this.element_clone = this.element.clone(true);
+      this.element_clone = this.element.clone();
       text_nodes = this.element.find(":not(iframe,textarea,script)").andSelf().contents().filter(function() {
         return this.nodeType === Node.TEXT_NODE;
       });

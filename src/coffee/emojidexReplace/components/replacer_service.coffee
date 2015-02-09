@@ -4,7 +4,7 @@ class ReplacerService extends Replacer
     @element = $(@element)
 
   replace: (callback) ->
-    if @options.loadingIcon?
+    if @options.loadingIcon
       @setLoadingIcon()
     else
       @getEmojiDataFromAPI @onLoadEmojiData
@@ -18,12 +18,13 @@ class ReplacerService extends Replacer
 
     @emoji_data = emoji_data
     @emoji_regexps = @setEmojiCSS_getEmojiRegexps emoji_data
-    @setEmojiIcon @, @options
-    callback @ if callback?
+    @setEmojiIcon @
+    callback? @
 
   setLoadingIcon: ->
     setLoadingTag = (text) ->
-      loading_icon = '<img class="emojidex-loading-icon"></img>'
+      getImgTagWithEmojiData = (emoji_data, type) ->
+        "<img class='emojidex-loading-icon' data-emoji='#{emoji_data}' data-type='#{type}'></img>"
 
       # need update --------
       regexp_utf = '
@@ -31,11 +32,12 @@ class ReplacerService extends Replacer
       '
 
       text = text.replace new RegExp(regexp_utf, "g"), (matched_string) ->
-        loading_icon
+        getImgTagWithEmojiData matched_string, "utf"
       text = text.replace /:([^:]+):/g, (matched_string, pattern1) ->
-        loading_icon
+        getImgTagWithEmojiData matched_string, "code"
 
-    @element_clone = @element.clone true
+    # start setLoadingIcon --------
+    @element_clone = @element.clone()
 
     text_nodes = @element.find(":not(iframe,textarea,script)").andSelf().contents().filter ->
       @nodeType is Node.TEXT_NODE

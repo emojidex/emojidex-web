@@ -16,11 +16,13 @@ html
 
     coffee:
       $(document).ready ->
+        $(".emojidex-plain_text").emojidexAutocomplete()
+        $(".emojidex-content_editable").emojidexAutocomplete()
+
         $("body").emojidexReplace
           loadingIcon: true
           onComplete: (element) ->
-            $(".emojidex-plain_text").emojidexAutocomplete()
-            $(".emojidex-content_editable").emojidexAutocomplete()
+            console.log 'Replace Complete!!'
 
   body
     .container
