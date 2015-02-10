@@ -15,7 +15,7 @@
  *
  * Includes:
  * --------------------------------
- * emojidex client - v0.2.1
+ * emojidex client - v0.2.2
  * * Provides search, index caching and combining and asset URI resolution
  * https://github.com/emojidex/emojidex-web-client
  *
@@ -519,12 +519,12 @@
       this.limit = this.options.limit;
       this.locale = this.options.locale;
       this.Data = new EmojidexData(this);
-      this.Emoji = new EmojidexEmoji(this);
       this.Categories = new EmojidexCategories(this);
       this.User = new EmojidexUser(this);
       this.Indexes = new EmojidexIndexes(this);
       this.Util = new EmojidexUtil(this);
       this.Search = new EmojidexSearch(this);
+      this.Emoji = new EmojidexEmoji(this);
     }
 
     return EmojidexClient;
@@ -653,6 +653,8 @@
       }
       switch (locale) {
         case 'en':
+          console.log(this);
+          console.log(111);
           this.EC.Indexes.user('emoji', this.combine);
           return this.EC.Indexes.user('emojidex', this.combine);
         case 'ja':
@@ -1473,7 +1475,8 @@
     var Plugin, defaults, pluginName;
     pluginName = "emojidexReplace";
     defaults = {
-      userNames: ['emoji', 'emojidex']
+      userNames: ['emoji', 'emojidex'],
+      loadingIcon: true
     };
     Plugin = (function() {
       function Plugin(element, options) {

@@ -19,7 +19,8 @@
     var Plugin, defaults, pluginName;
     pluginName = "emojidexReplace";
     defaults = {
-      userNames: ['emoji', 'emojidex']
+      userNames: ['emoji', 'emojidex'],
+      loadingIcon: true
     };
     Plugin = (function() {
       function Plugin(element, options) {
