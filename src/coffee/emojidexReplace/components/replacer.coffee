@@ -21,8 +21,8 @@ class Replacer
 
     return utf: regexp_for_utf.slice(0, -1), code: regexp_for_code.slice(0, -1) + "):"
 
-  getEmojiTag: (emoji_code) ->
-    return '<i class="emojidex-' + emoji_code + '"></i>'
+  getEmojiTag: (emoji_code, style) ->
+    "<i class='emojidex-#{emoji_code}' style='#{style}'></i>"
 
   replaceForUTF: (options) ->
     replaced_string = options.text.replace RegExp(options.regexp, "g"), (matched_string) =>

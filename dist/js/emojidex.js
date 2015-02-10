@@ -1534,8 +1534,8 @@
       };
     };
 
-    Replacer.prototype.getEmojiTag = function(emoji_code) {
-      return '<i class="emojidex-' + emoji_code + '"></i>';
+    Replacer.prototype.getEmojiTag = function(emoji_code, style) {
+      return "<i class='emojidex-" + emoji_code + "' style='" + style + "'></i>";
     };
 
     Replacer.prototype.replaceForUTF = function(options) {
@@ -1678,7 +1678,39 @@
     };
 
     ReplacerService.prototype.setLoadingIcon = function() {
-      var setLoadingTag, text, text_node, text_nodes, _i, _len;
+      var searchEmoji, setLoadingTag, text, text_node, text_nodes, _i, _len,
+        _this = this;
+      searchEmoji = function(element) {
+        var ec, loading_element, loading_elements, setEmojiIcon, _i, _len, _results;
+        setEmojiIcon = function(loading_element, term) {
+          return ec.Search.search(term, function(emoji_data) {
+            var emoji, _i, _len, _results;
+            _results = [];
+            for (_i = 0, _len = emoji_data.length; _i < _len; _i++) {
+              emoji = emoji_data[_i];
+              if (emoji.code.replace(/\s/g, "_") === term) {
+                console.log(emoji);
+                _results.push(loading_element.replaceWith(_this.getEmojiTag(term, "background-image: url(http://cdn.emojidex.com/emoji/px32/" + term + ".png)")));
+              } else {
+                _results.push(void 0);
+              }
+            }
+            return _results;
+          });
+        };
+        ec = new EmojidexClient;
+        loading_elements = element.find(".emojidex-loading-icon");
+        _results = [];
+        for (_i = 0, _len = loading_elements.length; _i < _len; _i++) {
+          loading_element = loading_elements[_i];
+          if (loading_element.dataset.type === 'code') {
+            _results.push(setEmojiIcon($(loading_element), loading_element.dataset.emoji.replace(/:/g, '')));
+          } else {
+            _results.push(void 0);
+          }
+        }
+        return _results;
+      };
       setLoadingTag = function(text) {
         var getImgTagWithEmojiData, regexp_utf;
         getImgTagWithEmojiData = function(emoji_data, type) {
@@ -1702,7 +1734,7 @@
         text = setLoadingTag(text);
         $(text_node).replaceWith(text);
       }
-      return this.getEmojiDataFromAPI(this.onLoadEmojiData);
+      return searchEmoji($(this.element));
     };
 
     ReplacerService.prototype.getEmojiDataFromAPI = function(callback) {
