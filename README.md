@@ -1,13 +1,11 @@
 emojidex-web
 ============
-demo: http://emojidex.github.io/emojidex-web<br>
-<br>
 emojidex-web contains coffeescript and SLIM sources which compile into a set of javascript jQuery
 modules. Anyone can use these modules on their site to enable emoji without any complex
 bundling or dealing with image assets or server-side processing. A variety of tools are
 included which allow emojidex to be used for display in a variety of ways, automatic
 conversion from emoji codes, and various types of emoji input tools and widgets.
-
+demo: http://emojidex.github.io/emojidex-web
 
 Building
 --------
