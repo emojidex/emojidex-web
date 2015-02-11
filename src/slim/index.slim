@@ -71,12 +71,12 @@ html
     .container
       .row
         .col-md-12
-          h1 emojidex-coffee examples
-          hr
+          h1 emojidex-web examples
 
       .row
         .col-md-12
-          h3 emojidex replace :smiley_kissing_heart:
+          h3 emojidexReplace :smiley_kissing_heart:
+          hr
           .emojidex_replace
             | Examples of auto replacement:
             br
@@ -91,19 +91,20 @@ html
             | :code: to emoji:
             br
             | :octopus::boar: :frog:\:hand_salute: no_match::no_match:
-          hr
 
-      .row
+      .row.mt-xl
         .col-md-12
-          h3 Plain Text
-          form role="form"
-            .form-group
-              textarea.emojidex-plain_text.form-control rows="5"
+          h3 emojidexAutocomplete :smiley_laughing:
+          hr
+          .row
+            .col-md-12
+              h4 Plain Text
+              form role="form"
+                .form-group
+                  textarea.emojidex-plain_text.form-control rows="5"
+                    | Hello, Let's type ":".&nbsp;
+          .row
+            .col-md-12
+              h4 Content Editable
+              .emojidex-content_editable.inputor contenteditable="true"
                 | Hello, Let's type ":".&nbsp;
-          hr
-
-      .row
-        .col-md-12
-          h3 Content Editable
-          .emojidex-content_editable.inputor contenteditable="true"
-            | Hello, Let's type ":".&nbsp;
