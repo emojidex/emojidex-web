@@ -13,9 +13,13 @@
     <script type="text/javascript">
       (function() {
         $(document).ready(function() {
-          $(".emojidex_replace").emojidexReplace();
           $(".emojidex-plain_text").emojidexAutocomplete();
-          return $(".emojidex-content_editable").emojidexAutocomplete();
+          $(".emojidex-content_editable").emojidexAutocomplete();
+          return $("body").emojidexReplace({
+            onComplete: function(element) {
+              return console.log('Completed emojidexReplace!!');
+            }
+          });
         });
       
       }).call(this);
@@ -30,7 +34,7 @@
             <a href="#"><img src="img/logo.png" /></a><button class="navbar-toggle collapsed" data-target="#navbar-top" data-toggle="collapse" type="button"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
           </div>
           <div class="collapse navbar-collapse" id="navbar-top">
-            <a class="btn btn-primary navbar-btn pull-right" data-toggle="modal" href="#modal-licensing_info"> Licensing Info</a>
+            <a class="btn btn-primary navbar-btn pull-right" data-toggle="modal" href="#modal-licensing_info">:spiral_note_pad: Licensing Info</a>
           </div>
         </div>
       </nav>
@@ -88,7 +92,7 @@
       <div class="row">
         <div class="col-md-12">
           <h3>
-            emojidex replace
+            emojidex replace :smiley_kissing_heart:
           </h3>
           <div class="emojidex_replace">
             Examples of auto replacement:<br />(Check the HTML or SLIM sources)<br /><br />UTF moji codes to emoji:<br />❤🛅😄😡💌😈👍<br /><br />:code: to emoji:<br />:octopus::boar: :frog:\:hand_salute: no_match::no_match:

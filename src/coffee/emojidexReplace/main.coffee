@@ -15,6 +15,7 @@ do ($ = jQuery, window, document) ->
       'emoji'
       'emojidex'
     ]
+    loadingIcon: true
 
   class Plugin
     constructor: (@element, options) ->

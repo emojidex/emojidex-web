@@ -41,11 +41,21 @@ body {
   }
 }
 
+.emojidex-loading-icon {
+  display: inline-block;
+  vertical-align: bottom;
+  width: 1.35em;
+  height: 1.35em;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-image: url('../img/loading1.gif');
+}
+
 i[class*="emojidex-"] {
   display: inline-block;
   vertical-align: bottom;
-  width: 1.5em;
-  height: 1.5em;
+  width: 1.35em;
+  height: 1.35em;
   background-size: 100%;
   background-repeat: no-repeat;
 }
