@@ -1,16 +1,18 @@
 emojidex-web
 ============
-emojidex-web contains coffeescript and SLIM sources which compile into a set of javascript jQuery 
-modules. Anyone can use these modules on their site to enable emoji without any complex 
-bundling or dealing with image assets or server-side processing. A variety of tools are 
-included which allow emojidex to be used for display in a variety of ways, automatic 
+demo: http://emojidex.github.io/emojidex-web<br>
+<br>
+emojidex-web contains coffeescript and SLIM sources which compile into a set of javascript jQuery
+modules. Anyone can use these modules on their site to enable emoji without any complex
+bundling or dealing with image assets or server-side processing. A variety of tools are
+included which allow emojidex to be used for display in a variety of ways, automatic
 conversion from emoji codes, and various types of emoji input tools and widgets.
 
 
 Building
 --------
-You will need node with a usable npm, grunt, bower. In general grunt and bower should be 
-installed globally or should be present and usable in your path. We'll assume you have a 
+You will need node with a usable npm, grunt, bower. In general grunt and bower should be
+installed globally or should be present and usable in your path. We'll assume you have a
 working node/npm that you either installed using your package manager or built yourself.
 
 ### Get the source
