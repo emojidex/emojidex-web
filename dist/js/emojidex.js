@@ -1685,17 +1685,20 @@
         setEmojiIcon = function(loading_element, term) {
           return ec.Search.search(term, function(emoji_data) {
             var emoji, _i, _len, _results;
-            _results = [];
-            for (_i = 0, _len = emoji_data.length; _i < _len; _i++) {
-              emoji = emoji_data[_i];
-              if (emoji.code.replace(/\s/g, "_") === term) {
-                console.log(emoji);
-                _results.push(loading_element.replaceWith(_this.getEmojiTag(term, "background-image: url(http://cdn.emojidex.com/emoji/px32/" + term + ".png)")));
-              } else {
-                _results.push(void 0);
+            if (emoji_data.length !== 0) {
+              _results = [];
+              for (_i = 0, _len = emoji_data.length; _i < _len; _i++) {
+                emoji = emoji_data[_i];
+                if (emoji.code.replace(/\s/g, "_") === term) {
+                  _results.push(loading_element.replaceWith(_this.getEmojiTag(term, "background-image: url(http://cdn.emojidex.com/emoji/px32/" + term + ".png)")));
+                } else {
+                  _results.push(void 0);
+                }
               }
+              return _results;
+            } else {
+              return loading_element.replaceWith(":" + term + ":");
             }
-            return _results;
           });
         };
         ec = new EmojidexClient;

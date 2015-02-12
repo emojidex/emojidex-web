@@ -25,10 +25,12 @@ class ReplacerService extends Replacer
     searchEmoji = (element) =>
       setEmojiIcon = (loading_element, term) =>
         ec.Search.search term, (emoji_data) =>
-          for emoji in emoji_data
-            if emoji.code.replace(/\s/g, "_") is term
-              console.log emoji
-              loading_element.replaceWith @getEmojiTag term, "background-image: url(http://cdn.emojidex.com/emoji/px32/#{term}.png)"
+          unless emoji_data.length is 0
+            for emoji in emoji_data
+              if emoji.code.replace(/\s/g, "_") is term
+                loading_element.replaceWith @getEmojiTag term, "background-image: url(http://cdn.emojidex.com/emoji/px32/#{term}.png)"
+          else
+            loading_element.replaceWith ":#{term}:"
 
       ec = new EmojidexClient
       loading_elements = element.find ".emojidex-loading-icon"
