@@ -2,10 +2,10 @@ class ReplacerSearch extends Replacer
   constructor: (@plugin) ->
     super
 
-  setLoadingIcon: ->
+  loadEmoji: ->
     searchEmoji = (element) =>
       setEmojiIcon = (loading_element, term) =>
-        ec.Search.search term, (emoji_data) =>
+        @plugin.EC.Search.search term, (emoji_data) =>
           unless emoji_data.length is 0
             for emoji in emoji_data
               if emoji.code.replace(/\s/g, "_") is term
@@ -14,7 +14,6 @@ class ReplacerSearch extends Replacer
           else
             loading_element.replaceWith ":#{term}:"
 
-      ec = new EmojidexClient
       loading_elements = element.find ".emojidex-loading-icon"
       for loading_element in loading_elements
         if loading_element.dataset.type is 'code'
@@ -29,7 +28,7 @@ class ReplacerSearch extends Replacer
       text = text.replace /:([^:]+):/g, (matched_string, pattern1) ->
         getImgTagWithEmojiData matched_string, "code"
 
-    # start setLoadingIcon --------
+    # start: loadEmoji --------
     text_nodes = @plugin.element.find(":not(iframe,textarea,script)").andSelf().contents().filter ->
       @nodeType is Node.TEXT_NODE
     for text_node in text_nodes

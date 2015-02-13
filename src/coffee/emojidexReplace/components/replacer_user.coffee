@@ -1,4 +1,7 @@
-class ReplacerUser
+class ReplacerUser extends Replacer
+  constructor: (@plugin) ->
+    super
+
   getEmojiRegexps: (emoji_data) ->
     regexp_for_utf = ""
     regexp_for_code = ":("
