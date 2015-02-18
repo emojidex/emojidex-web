@@ -4,35 +4,49 @@ class ReplacerSearch extends Replacer
 
   loadEmoji: ->
     searchEmoji = (element) =>
-      setEmojiIcon = (loading_element, term) =>
+      replaceToEmojiIcon = (type, loading_element, term) =>
         @plugin.EC.Search.search term, (emoji_data) =>
           unless emoji_data.length is 0
             for emoji in emoji_data
-              if emoji.code.replace(/\s/g, "_") is term
-                style = "background-image: url(#{@plugin.options.cdnURL}/#{@plugin.options.sizeCode}/#{term}.png)"
-                loading_element.replaceWith @getEmojiTag term, style
+              switch type
+                when 'code'
+                  if emoji.code.replace(/\s/g, "_") is term
+                    @fadeOutLoadingTag_fadeInEmojiTag loading_element, term
+                when 'utf'
+                  if emoji.moji is term
+                    @fadeOutLoadingTag_fadeInEmojiTag loading_element, emoji.code.replace /\s/g, "_"
           else
-            loading_element.replaceWith ":#{term}:"
+            switch type
+              when 'code'
+                @fadeOutLoadingTag_fadeInEmojiTag loading_element, "<span>:#{term}:</span>", false
+              when 'utf'
+                @fadeOutLoadingTag_fadeInEmojiTag loading_element, "<span>#{term}</span>", false
 
-      loading_elements = element.find ".emojidex-loading-icon"
+      # start: searchEmoji --------
+      loading_elements = $ element.find ".emojidex-loading-icon"
       for loading_element in loading_elements
-        if loading_element.dataset.type is 'code'
-          setEmojiIcon $(loading_element), loading_element.dataset.emoji.replace /:/g, ''
+        switch loading_element.dataset.type
+          when 'code'
+            replaceToEmojiIcon(
+              loading_element.dataset.type
+              $ loading_element
+              loading_element.dataset.emoji.replace /:/g, ''
+            )
+          when 'utf'
+            replaceToEmojiIcon(
+              loading_element.dataset.type
+              $ loading_element
+              loading_element.dataset.emoji
+            )
 
-    setLoadingTag = (text) =>
-      getImgTagWithEmojiData = (emoji_data, type) ->
-        "<img class='emojidex-loading-icon' data-emoji='#{emoji_data}' data-type='#{type}'></img>"
-
-      text = text.replace RegExp(@plugin.options.regexpUTF, "g"), (matched_string) ->
-        getImgTagWithEmojiData matched_string, "utf"
-      text = text.replace /:([^:]+):/g, (matched_string, pattern1) ->
-        getImgTagWithEmojiData matched_string, "code"
+    replaceTextToLoadingTag = (text) =>
+      text = text.replace RegExp(@plugin.options.regexpUTF, "g"), (matched_string) =>
+        @getLoadingTag matched_string, 'utf'
+      text = text.replace /:([^:]+):/g, (matched_string, pattern1) =>
+        @getLoadingTag matched_string, 'code'
 
     # start: loadEmoji --------
-    text_nodes = @plugin.element.find(":not(iframe,textarea,script)").andSelf().contents().filter ->
-      @nodeType is Node.TEXT_NODE
-    for text_node in text_nodes
-      new_text = setLoadingTag text_node.textContent
-      $(text_node).replaceWith new_text
+    @plugin.element.find(":not(iframe,textarea,script)").andSelf().contents().filter ->
+      $(@).replaceWith replaceTextToLoadingTag @.textContent if @nodeType is Node.TEXT_NODE
 
     searchEmoji @plugin.element

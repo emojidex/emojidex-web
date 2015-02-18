@@ -41,25 +41,6 @@ body {
   }
 }
 
-.emojidex-loading-icon {
-  display: inline-block;
-  vertical-align: bottom;
-  width: 1.35em;
-  height: 1.35em;
-  background-size: 100%;
-  background-repeat: no-repeat;
-  background-image: url('../img/loading1.gif');
-}
-
-i[class*="emojidex-"] {
-  display: inline-block;
-  vertical-align: bottom;
-  width: 1.35em;
-  height: 1.35em;
-  background-size: 100%;
-  background-repeat: no-repeat;
-}
-
 .inputor {
   height: 160px;
   border: 1px solid #dadada;
@@ -70,4 +51,22 @@ i[class*="emojidex-"] {
   background: white;
   font-size: inherit;
   overflow-y: scroll;
+}
+
+@mixin emoji {
+  display: inline-block;
+  vertical-align: bottom;
+  width: 1.35em;
+  height: 1.35em;
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
+
+.emojidex-loading-icon {
+  @include emoji;
+  background-image: url('../img/loading1.gif');
+}
+
+img[class*="emojidex-"] {
+  @include emoji;
 }
