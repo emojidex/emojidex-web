@@ -13,6 +13,19 @@ class Replacer
       data-type='#{type}'
     ></img>"
 
+  getLoadingElement: (element) ->
+    $ element.find '.emojidex-loading-icon'
+
+  setLoadingTag: (plugin) ->
+    plugin.element.find(":not(iframe,textarea,script)").andSelf().contents().filter (index, element) =>
+      $(element).replaceWith @getTextWithLoadingTag element.textContent if element.nodeType is Node.TEXT_NODE
+
+  getTextWithLoadingTag: (text) ->
+    text = text.replace RegExp(@plugin.options.regexpUTF, "g"), (matched_string) =>
+      @getLoadingTag matched_string, 'utf'
+    text = text.replace /:([^:]+):/g, (matched_string, pattern1) =>
+      @getLoadingTag matched_string, 'code'
+
   fadeOutLoadingTag_fadeInEmojiTag: (element, emoji_code, matched = true) ->
     if matched
       emoji_tag = $(@getEmojiTag emoji_code).hide()
@@ -21,3 +34,6 @@ class Replacer
 
     element.after(emoji_tag).fadeOut "normal", ->
       emoji_tag.fadeIn "fast"
+
+  replaceSpaceToUnder: (string) ->
+    string.replace /\s/g, '_'
