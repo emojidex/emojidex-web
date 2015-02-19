@@ -236,16 +236,13 @@
     };
 
     ReplacerUser.prototype.getEmojiRegexps = function(emoji_data) {
-      var continuous_list, continuous_utf_emoji, emoji, index, list_hash, matched_index, pattern, pattern_code, pattern_utf, utf, utfs, _i, _j, _k, _len, _len1, _len2;
+      var continuous_list, continuous_utf_emoji, emoji, index, list_hash, matched_index, pattern, pattern_code, pattern_utf, utf, _i, _j, _k, _len, _len1, _len2;
       pattern_utf = '';
-      utfs = '';
       pattern_code = ':(';
       continuous_utf_emoji = [];
       for (_i = 0, _len = emoji_data.length; _i < _len; _i++) {
         emoji = emoji_data[_i];
         if (emoji.moji != null) {
-          console.count();
-          utfs += emoji.moji;
           if (this.utfCharAt(emoji.moji, 1) !== '') {
             continuous_utf_emoji.push({
               emoji: emoji,
@@ -270,8 +267,6 @@
           } else {
             continuous_list[utf.first].push(utf.second);
           }
-        } else {
-          pattern_utf += utf.emoji.moji + '|';
         }
       }
       for (list_hash in continuous_list) {

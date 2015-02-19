@@ -34,14 +34,11 @@ class ReplacerUser extends Replacer
 
   getEmojiRegexps: (emoji_data) ->
     pattern_utf = ''
-    utfs = ''
     pattern_code = ':('
-
     continuous_utf_emoji = []
+
     for emoji in emoji_data
       if emoji.moji?
-        console.count()
-        utfs += emoji.moji
         if @utfCharAt(emoji.moji, 1) isnt ''
           continuous_utf_emoji.push
             emoji: emoji
@@ -59,8 +56,6 @@ class ReplacerUser extends Replacer
           continuous_list[utf.first] = [utf.second]
         else
           continuous_list[utf.first].push utf.second
-      else
-        pattern_utf += utf.emoji.moji + '|'
 
     for list_hash of continuous_list
       pattern = "(?!#{continuous_list[list_hash].join '|'})"
@@ -69,8 +64,6 @@ class ReplacerUser extends Replacer
 
     for utf in continuous_utf_emoji
       pattern_utf += utf.emoji.moji + '|'
-
-    # console.log utfs
 
     utf: RegExp(pattern_utf.slice(0, -1), 'g')
     code: RegExp(pattern_code.slice(0, -1) + "):", 'g')
