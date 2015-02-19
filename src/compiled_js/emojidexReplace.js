@@ -236,7 +236,7 @@
     };
 
     ReplacerUser.prototype.getEmojiRegexps = function(emoji_data) {
-      var continuous_list, continuous_utf_emoji, emoji, index, list_hash, matched_index, pattern, pattern_code, pattern_utf, utf, _i, _j, _k, _len, _len1, _len2;
+      var continuous_list, continuous_utf_emoji, emoji, index_after, index_before, list_hash, pattern_code, pattern_utf, utf, _i, _j, _k, _len, _len1, _len2;
       pattern_utf = '';
       pattern_code = ':(';
       continuous_utf_emoji = [];
@@ -246,8 +246,7 @@
           if (this.utfCharAt(emoji.moji, 1) !== '') {
             continuous_utf_emoji.push({
               emoji: emoji,
-              first: this.utfCharAt(emoji.moji, 0),
-              second: this.utfCharAt(emoji.moji, 1)
+              first: this.utfCharAt(emoji.moji, 0)
             });
           } else {
             pattern_utf += emoji.moji + '|';
@@ -261,22 +260,24 @@
       for (_j = 0, _len1 = continuous_utf_emoji.length; _j < _len1; _j++) {
         utf = continuous_utf_emoji[_j];
         if (-1 !== pattern_utf.indexOf(utf.first)) {
-          matched_index = pattern_utf.indexOf(utf.first);
           if (continuous_list[utf.first] == null) {
-            continuous_list[utf.first] = [utf.second];
+            continuous_list[utf.first] = [utf];
           } else {
-            continuous_list[utf.first].push(utf.second);
+            continuous_list[utf.first].push(utf);
           }
         }
       }
       for (list_hash in continuous_list) {
-        pattern = "(?!" + (continuous_list[list_hash].join('|')) + ")";
-        index = pattern_utf.indexOf('|', pattern_utf.indexOf(list_hash));
-        pattern_utf = pattern_utf.slice(0, index) + pattern + pattern_utf.slice(index);
+        index_before = pattern_utf.indexOf(list_hash);
+        index_after = pattern_utf.indexOf('|', pattern_utf.indexOf(list_hash));
+        pattern_utf = pattern_utf.slice(0, index_before) + pattern_utf.slice(index_after + 1);
       }
       for (_k = 0, _len2 = continuous_utf_emoji.length; _k < _len2; _k++) {
         utf = continuous_utf_emoji[_k];
         pattern_utf += utf.emoji.moji + '|';
+      }
+      for (list_hash in continuous_list) {
+        pattern_utf += list_hash + '|';
       }
       return {
         utf: RegExp(pattern_utf.slice(0, -1), 'g'),
@@ -335,5 +336,7 @@
     return ReplacerUser;
 
   })(Replacer);
+
+  window.eutf = "😙🏾😚🏾😛🏾😠🏾😢🏾😥🏾😩🏾😯🏾😂🏿😃🏿😉🏿😉🏾😊🏿😋🏿😓🏿";
 
 }).call(this);

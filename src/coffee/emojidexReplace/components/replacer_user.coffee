@@ -43,7 +43,6 @@ class ReplacerUser extends Replacer
           continuous_utf_emoji.push
             emoji: emoji
             first: @utfCharAt emoji.moji, 0
-            second: @utfCharAt emoji.moji, 1
         else
           pattern_utf += emoji.moji + '|'
       pattern_code += @replaceSpaceToUnder(emoji.code) + '|' if emoji.code?
@@ -51,19 +50,20 @@ class ReplacerUser extends Replacer
     continuous_list = {}
     for utf in continuous_utf_emoji
       if -1 isnt pattern_utf.indexOf utf.first
-        matched_index = pattern_utf.indexOf utf.first
         unless continuous_list[utf.first]?
-          continuous_list[utf.first] = [utf.second]
+          continuous_list[utf.first] = [utf]
         else
-          continuous_list[utf.first].push utf.second
+          continuous_list[utf.first].push utf
 
     for list_hash of continuous_list
-      pattern = "(?!#{continuous_list[list_hash].join '|'})"
-      index = pattern_utf.indexOf '|', pattern_utf.indexOf(list_hash)
-      pattern_utf = pattern_utf.slice(0, index) + pattern + pattern_utf.slice(index)
+      index_before = pattern_utf.indexOf list_hash
+      index_after = pattern_utf.indexOf '|', pattern_utf.indexOf(list_hash)
+      pattern_utf = pattern_utf.slice(0, index_before) + pattern_utf.slice(index_after + 1)
 
     for utf in continuous_utf_emoji
       pattern_utf += utf.emoji.moji + '|'
+    for list_hash of continuous_list
+      pattern_utf += list_hash + '|'
 
     utf: RegExp(pattern_utf.slice(0, -1), 'g')
     code: RegExp(pattern_code.slice(0, -1) + "):", 'g')
@@ -96,3 +96,5 @@ class ReplacerUser extends Replacer
     if /[\uD800-\uDBFF]/.test(re) and /[\uDC00-\uDFFF]/.test(string.charAt(index + 1))
       re += string.charAt(index + 1)
     re
+
+window.eutf ="😙🏾😚🏾😛🏾😠🏾😢🏾😥🏾😩🏾😯🏾😂🏿😃🏿😉🏿😉🏾😊🏿😋🏿😓🏿"
