@@ -1490,7 +1490,6 @@
         this._defaults = defaults;
         this._name = pluginName;
         this.EC = new EmojidexClient;
-        this.replacer = this.options.useUserEmoji ? new ReplacerUser(this) : new ReplacerSearch(this);
         this.replacer = new ReplacerUser(this);
         this.replacer.loadEmoji();
       }
@@ -1662,8 +1661,8 @@
         name = names[_i];
         _results.push($.ajax({
           url: "https://www.emojidex.com/api/v1/users/" + name + "/emoji",
-          dataType: "json",
-          type: "get",
+          dataType: 'json',
+          type: 'get',
           success: function(user_emoji_json, status, xhr) {
             emoji_data = emoji_data.concat(user_emoji_json.emoji);
             if (++loaded_num === names.length) {
@@ -1671,7 +1670,7 @@
             }
           },
           error: function(data) {
-            console.log("error: load json");
+            console.log('error: load json');
             return console.log(data);
           }
         }));
@@ -1683,7 +1682,7 @@
       var _this = this;
       this.emoji_data = emoji_data;
       this.emoji_regexps = this.getEmojiRegexps(emoji_data);
-      return this.plugin.element.find(":not(iframe,textarea,script)").andSelf().contents().filter(function(index, element) {
+      return this.plugin.element.find(':not(iframe,textarea,script)').andSelf().contents().filter(function(index, element) {
         if (element.nodeType === Node.TEXT_NODE) {
           return $(element).replaceWith(_this.getTextWithEomojiTag(element.textContent));
         }
@@ -1691,17 +1690,52 @@
     };
 
     ReplacerUser.prototype.getEmojiRegexps = function(emoji_data) {
-      var emoji, pattern_code, pattern_utf, _i, _len;
-      pattern_utf = "";
-      pattern_code = ":(";
+      var continuous_list, continuous_utf_emoji, emoji, index, list_hash, matched_index, pattern, pattern_code, pattern_utf, utf, utfs, _i, _j, _k, _len, _len1, _len2;
+      pattern_utf = '';
+      utfs = '';
+      pattern_code = ':(';
+      continuous_utf_emoji = [];
       for (_i = 0, _len = emoji_data.length; _i < _len; _i++) {
         emoji = emoji_data[_i];
         if (emoji.moji != null) {
-          pattern_utf += emoji.moji + "|";
+          console.count();
+          utfs += emoji.moji;
+          if (this.utfCharAt(emoji.moji, 1) !== '') {
+            continuous_utf_emoji.push({
+              emoji: emoji,
+              first: this.utfCharAt(emoji.moji, 0),
+              second: this.utfCharAt(emoji.moji, 1)
+            });
+          } else {
+            pattern_utf += emoji.moji + '|';
+          }
         }
         if (emoji.code != null) {
-          pattern_code += this.replaceSpaceToUnder(emoji.code) + "|";
+          pattern_code += this.replaceSpaceToUnder(emoji.code) + '|';
         }
+      }
+      continuous_list = {};
+      for (_j = 0, _len1 = continuous_utf_emoji.length; _j < _len1; _j++) {
+        utf = continuous_utf_emoji[_j];
+        if (-1 !== pattern_utf.indexOf(utf.first)) {
+          matched_index = pattern_utf.indexOf(utf.first);
+          if (continuous_list[utf.first] == null) {
+            continuous_list[utf.first] = [utf.second];
+          } else {
+            continuous_list[utf.first].push(utf.second);
+          }
+        } else {
+          pattern_utf += utf.emoji.moji + '|';
+        }
+      }
+      for (list_hash in continuous_list) {
+        pattern = "(?!" + (continuous_list[list_hash].join('|')) + ")";
+        index = pattern_utf.indexOf('|', pattern_utf.indexOf(list_hash));
+        pattern_utf = pattern_utf.slice(0, index) + pattern + pattern_utf.slice(index);
+      }
+      for (_k = 0, _len2 = continuous_utf_emoji.length; _k < _len2; _k++) {
+        utf = continuous_utf_emoji[_k];
+        pattern_utf += utf.emoji.moji + '|';
       }
       return {
         utf: RegExp(pattern_utf.slice(0, -1), 'g'),
@@ -1731,6 +1765,30 @@
           }
         }
       });
+    };
+
+    ReplacerUser.prototype.utfCharAt = function(string, index) {
+      var end, li, re, surrogatePairs;
+      re = '';
+      string += '';
+      end = string.length;
+      surrogatePairs = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
+      while (surrogatePairs.exec(string) !== null) {
+        li = surrogatePairs.lastIndex;
+        if (li - 2 < index) {
+          index++;
+        } else {
+          break;
+        }
+      }
+      if (index >= end || index < 0) {
+        return '';
+      }
+      re += string.charAt(index);
+      if (/[\uD800-\uDBFF]/.test(re) && /[\uDC00-\uDFFF]/.test(string.charAt(index + 1))) {
+        re += string.charAt(index + 1);
+      }
+      return re;
     };
 
     return ReplacerUser;
