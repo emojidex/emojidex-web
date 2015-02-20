@@ -36,7 +36,7 @@ class Replacer
 
     element.after(emoji_tag).fadeOut "normal", =>
       emoji_tag.fadeIn "fast"
-      if --@loadingNum is 0
+      if --@loadingNum is 0 && @plugin.options.onComplete?
         @plugin.options.onComplete @plugin.element
 
   replaceSpaceToUnder: (string) ->

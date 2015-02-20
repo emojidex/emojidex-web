@@ -5648,7 +5648,7 @@
       }
       return element.after(emoji_tag).fadeOut("normal", function() {
         emoji_tag.fadeIn("fast");
-        if (--_this.loadingNum === 0) {
+        if (--_this.loadingNum === 0 && (_this.plugin.options.onComplete != null)) {
           return _this.plugin.options.onComplete(_this.plugin.element);
         }
       });
@@ -5839,7 +5839,7 @@
         if (element.nodeType === Node.TEXT_NODE) {
           $(element).replaceWith(_this.getTextWithEomojiTag(element.textContent));
         }
-        if (_this.targetElementNum - index === 0) {
+        if (_this.targetElementNum - index === 0 && (_this.plugin.options.onComplete != null)) {
           return _this.plugin.options.onComplete(_this.plugin.element);
         }
       });

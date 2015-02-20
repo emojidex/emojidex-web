@@ -58,7 +58,7 @@ class ReplacerUser extends Replacer
 
     @plugin.element.find(':not(iframe,textarea,script)').andSelf().contents().filter (index, element) =>
       $(element).replaceWith @getTextWithEomojiTag element.textContent if element.nodeType is Node.TEXT_NODE
-      if @targetElementNum - index is 0
+      if @targetElementNum - index is 0 && @plugin.options.onComplete?
         @plugin.options.onComplete @plugin.element
 
   getEmojiRegexps: (emoji_data) ->
