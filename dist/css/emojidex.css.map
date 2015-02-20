@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AASA,sBAAuB;EARrB,OAAO,EAAE,YAAY;EACrB,cAAc,EAAE,MAAM;EACtB,KAAK,EAAE,MAAM;EACb,MAAM,EAAE,MAAM;EACd,eAAe,EAAE,IAAI;EACrB,iBAAiB,EAAE,SAAS;EAK5B,gBAAgB,EAAE,0BAA0B;;AAG9C,uBAAwB;EAbtB,OAAO,EAAE,YAAY;EACrB,cAAc,EAAE,MAAM;EACtB,KAAK,EAAE,MAAM;EACb,MAAM,EAAE,MAAM;EACd,eAAe,EAAE,IAAI;EACrB,iBAAiB,EAAE,SAAS",
+"sources": ["../../src/sass/emojidex.scss"],
+"names": [],
+"file": "emojidex.css"
+}

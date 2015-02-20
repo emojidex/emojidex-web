@@ -1,0 +1,18 @@
+.emojidex-loading-icon {
+  display: inline-block;
+  vertical-align: bottom;
+  width: 1.35em;
+  height: 1.35em;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-image: url("../img/loading1.gif"); }
+
+img[class*="emojidex-"] {
+  display: inline-block;
+  vertical-align: bottom;
+  width: 1.35em;
+  height: 1.35em;
+  background-size: 100%;
+  background-repeat: no-repeat; }
+
+/*# sourceMappingURL=emojidex.css.map */
