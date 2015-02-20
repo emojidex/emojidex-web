@@ -33,11 +33,15 @@ class ReplacerSearch extends Replacer
               loading_element.dataset.emoji.replace /:/g, ''
             )
           when 'utf'
-            replaceToEmojiIcon(
-              loading_element.dataset.type
-              $ loading_element
-              loading_element.dataset.emoji
-            )
+            # Need Update!!: Search API --------
+            # replaceToEmojiIcon(
+            #   loading_element.dataset.type
+            #   $ loading_element
+            #   loading_element.dataset.emoji
+            # )
+            for emoji in @plugin.options.utfEmojiData
+              if emoji.utf is loading_element.dataset.emoji
+                @fadeOutLoadingTag_fadeInEmojiTag $(loading_element), emoji.code
 
     # start: loadEmoji --------
     @setLoadingTag @plugin

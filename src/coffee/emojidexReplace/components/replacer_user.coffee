@@ -26,6 +26,31 @@ class ReplacerUser extends Replacer
           console.log data
 
   onLoadEmojiData: (emoji_data) =>
+    _logUtfEmoji = (emoji_data) ->
+      utf_emoji = ''
+      for emoji in emoji_data
+        if emoji.moji?
+          utf_emoji += emoji.moji
+      console.log utf_emoji
+
+    _logUtfRegexpPattern = (emoji_data) ->
+      utf_emoji = []
+      for emoji in emoji_data
+        if emoji.moji?
+          utf_emoji.push emoji.moji
+      console.log utf_emoji.join '|'
+
+    _logUtfEmojiDataList = (emoji_data) =>
+      data_list = []
+      for emoji in emoji_data
+        if emoji.moji?
+          data_list.push "{utf:'#{emoji.moji}',code:'#{@replaceSpaceToUnder emoji.code}'}"
+      console.log "[#{data_list.join ','}]"
+
+    # for update data --------
+    # _logUtfRegexpPattern emoji_data
+    # _logUtfEmojiDataList emoji_data
+
     @emoji_data = emoji_data
     @emoji_regexps = @getEmojiRegexps emoji_data
 
