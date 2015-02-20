@@ -33,40 +33,19 @@ class ReplacerUser extends Replacer
       $(element).replaceWith @getTextWithEomojiTag element.textContent if element.nodeType is Node.TEXT_NODE
 
   getEmojiRegexps: (emoji_data) ->
-    pattern_utf = ''
+    utf_emoji = []
     pattern_code = ':('
-    continuous_utf_emoji = []
 
     for emoji in emoji_data
       if emoji.moji?
-        if @utfCharAt(emoji.moji, 1) isnt ''
-          continuous_utf_emoji.push
-            emoji: emoji
-            first: @utfCharAt emoji.moji, 0
-        else
-          pattern_utf += emoji.moji + '|'
+        utf_emoji.push emoji.moji
       pattern_code += @replaceSpaceToUnder(emoji.code) + '|' if emoji.code?
 
-    continuous_list = {}
-    for utf in continuous_utf_emoji
-      if -1 isnt pattern_utf.indexOf utf.first
-        unless continuous_list[utf.first]?
-          continuous_list[utf.first] = [utf]
-        else
-          continuous_list[utf.first].push utf
+    utf_emoji.sort (v1, v2) ->
+      v2.length - v1.length
 
-    for list_hash of continuous_list
-      index_before = pattern_utf.indexOf list_hash
-      index_after = pattern_utf.indexOf '|', pattern_utf.indexOf(list_hash)
-      pattern_utf = pattern_utf.slice(0, index_before) + pattern_utf.slice(index_after + 1)
-
-    for utf in continuous_utf_emoji
-      pattern_utf += utf.emoji.moji + '|'
-    for list_hash of continuous_list
-      pattern_utf += list_hash + '|'
-
-    utf: RegExp(pattern_utf.slice(0, -1), 'g')
-    code: RegExp(pattern_code.slice(0, -1) + "):", 'g')
+    utf: RegExp utf_emoji.join('|'), 'g'
+    code: RegExp pattern_code.slice(0, -1) + "):", 'g'
 
   getTextWithEomojiTag: (text) ->
     text = text.replace @emoji_regexps.utf, (matched_string) =>
@@ -78,23 +57,3 @@ class ReplacerUser extends Replacer
       for emoji in @emoji_data
         if @replaceSpaceToUnder(emoji.code) is pattern1
           return @getEmojiTag pattern1
-
-  utfCharAt: (string, index) ->
-    re = ''
-    string += ''
-    end = string.length
-    surrogatePairs = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g
-    while surrogatePairs.exec(string) != null
-      li = surrogatePairs.lastIndex
-      if li - 2 < index
-        index++
-      else
-        break
-    if index >= end or index < 0
-      return ''
-    re += string.charAt(index)
-    if /[\uD800-\uDBFF]/.test(re) and /[\uDC00-\uDFFF]/.test(string.charAt(index + 1))
-      re += string.charAt(index + 1)
-    re
-
-window.eutf ="😙🏾😚🏾😛🏾😠🏾😢🏾😥🏾😩🏾😯🏾😂🏿😃🏿😉🏿😉🏾😊🏿😋🏿😓🏿"

@@ -236,51 +236,23 @@
     };
 
     ReplacerUser.prototype.getEmojiRegexps = function(emoji_data) {
-      var continuous_list, continuous_utf_emoji, emoji, index_after, index_before, list_hash, pattern_code, pattern_utf, utf, _i, _j, _k, _len, _len1, _len2;
-      pattern_utf = '';
+      var emoji, pattern_code, utf_emoji, _i, _len;
+      utf_emoji = [];
       pattern_code = ':(';
-      continuous_utf_emoji = [];
       for (_i = 0, _len = emoji_data.length; _i < _len; _i++) {
         emoji = emoji_data[_i];
         if (emoji.moji != null) {
-          if (this.utfCharAt(emoji.moji, 1) !== '') {
-            continuous_utf_emoji.push({
-              emoji: emoji,
-              first: this.utfCharAt(emoji.moji, 0)
-            });
-          } else {
-            pattern_utf += emoji.moji + '|';
-          }
+          utf_emoji.push(emoji.moji);
         }
         if (emoji.code != null) {
           pattern_code += this.replaceSpaceToUnder(emoji.code) + '|';
         }
       }
-      continuous_list = {};
-      for (_j = 0, _len1 = continuous_utf_emoji.length; _j < _len1; _j++) {
-        utf = continuous_utf_emoji[_j];
-        if (-1 !== pattern_utf.indexOf(utf.first)) {
-          if (continuous_list[utf.first] == null) {
-            continuous_list[utf.first] = [utf];
-          } else {
-            continuous_list[utf.first].push(utf);
-          }
-        }
-      }
-      for (list_hash in continuous_list) {
-        index_before = pattern_utf.indexOf(list_hash);
-        index_after = pattern_utf.indexOf('|', pattern_utf.indexOf(list_hash));
-        pattern_utf = pattern_utf.slice(0, index_before) + pattern_utf.slice(index_after + 1);
-      }
-      for (_k = 0, _len2 = continuous_utf_emoji.length; _k < _len2; _k++) {
-        utf = continuous_utf_emoji[_k];
-        pattern_utf += utf.emoji.moji + '|';
-      }
-      for (list_hash in continuous_list) {
-        pattern_utf += list_hash + '|';
-      }
+      utf_emoji.sort(function(v1, v2) {
+        return v2.length - v1.length;
+      });
       return {
-        utf: RegExp(pattern_utf.slice(0, -1), 'g'),
+        utf: RegExp(utf_emoji.join('|'), 'g'),
         code: RegExp(pattern_code.slice(0, -1) + "):", 'g')
       };
     };
@@ -309,34 +281,8 @@
       });
     };
 
-    ReplacerUser.prototype.utfCharAt = function(string, index) {
-      var end, li, re, surrogatePairs;
-      re = '';
-      string += '';
-      end = string.length;
-      surrogatePairs = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
-      while (surrogatePairs.exec(string) !== null) {
-        li = surrogatePairs.lastIndex;
-        if (li - 2 < index) {
-          index++;
-        } else {
-          break;
-        }
-      }
-      if (index >= end || index < 0) {
-        return '';
-      }
-      re += string.charAt(index);
-      if (/[\uD800-\uDBFF]/.test(re) && /[\uDC00-\uDFFF]/.test(string.charAt(index + 1))) {
-        re += string.charAt(index + 1);
-      }
-      return re;
-    };
-
     return ReplacerUser;
 
   })(Replacer);
-
-  window.eutf = "😙🏾😚🏾😛🏾😠🏾😢🏾😥🏾😩🏾😯🏾😂🏿😃🏿😉🏿😉🏾😊🏿😋🏿😓🏿";
 
 }).call(this);
