@@ -20,13 +20,15 @@ class Replacer
 
   setLoadingTag: (plugin) ->
     plugin.element.find(":not(iframe,textarea,script)").andSelf().contents().filter (index, element) =>
-      $(element).replaceWith @getTextWithLoadingTag element.textContent if element.nodeType is Node.TEXT_NODE
+      if element.nodeType is Node.TEXT_NODE and element.textContent.match /\S/
+        $(element).replaceWith @getTextWithLoadingTag element.textContent
 
   getTextWithLoadingTag: (text) ->
-    text = text.replace RegExp(@plugin.options.regexpUTF, "g"), (matched_string) =>
-      @getLoadingTag matched_string, 'utf'
-    text = text.replace /:([^:]+):/g, (matched_string, pattern1) =>
+    text = text.replace /:([^,:;\f\n\r]+):/g, (matched_string, pattern1) =>
       @getLoadingTag matched_string, 'code'
+    text = text.replace @plugin.regexpUTF, (matched_string) =>
+      @getLoadingTag matched_string, 'utf'
+    return text
 
   fadeOutLoadingTag_fadeInEmojiTag: (element, emoji_code, match = true) ->
     if match
