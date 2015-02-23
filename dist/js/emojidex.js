@@ -1322,7 +1322,8 @@
     var Plugin, defaults, pluginName;
     pluginName = "emojidexAutocomplete";
     defaults = {
-      limit: 10
+      limit: 10,
+      contentEditablePlaneText: false
     };
     Plugin = (function() {
       function Plugin(element, options) {
@@ -1386,7 +1387,7 @@
               emoji = _ref[_i];
               _results.push({
                 code: emoji.code.replace(/[ ]/g, "_"),
-                img_url: "http://cdn.emojidex.com/emoji/px32/" + (emoji.code.replace(/[ ]/g, '_')) + ".png"
+                img_url: "http://cdn.emojidex.com/emoji/px32/" + (emoji.code.replace(/\s/g, '_')) + ".png"
               });
             }
             return _results;
@@ -1421,7 +1422,7 @@
         limit: this.plugin.options.limit,
         search_key: "code",
         tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20' /> ${code}</li>",
-        insert_tpl: ":${code}:",
+        insert_tpl: this.plugin.options.contentEditablePlaneText ? ":${code}:" : "<img src='${img_url}' height='20' width='20' />",
         callbacks: {
           matcher: function(flag, subtext, should_startWithSpace) {
             var match;
@@ -5650,10 +5651,10 @@
 
     Replacer.prototype.getTextWithLoadingTag = function(text) {
       var _this = this;
-      text = text.replace(/:([^,:;\f\n\r]+):/g, function(matched_string, pattern1) {
+      text = text.replace(/:([^:;@$&!?#%~=+*\f\n\r\\\/]+):/g, function(matched_string, pattern1) {
         return _this.getLoadingTag(matched_string, 'code');
       });
-      text = text.replace(this.plugin.regexpUTF, function(matched_string) {
+      text = text.replace(this.plugin.options.regexpUTF, function(matched_string) {
         return _this.getLoadingTag(matched_string, 'utf');
       });
       return text;
@@ -5671,10 +5672,11 @@
         emoji_tag = $(emoji_code).hide();
       }
       return element.after(emoji_tag).fadeOut("normal", function() {
-        emoji_tag.fadeIn("fast");
-        if (--_this.loadingNum === 0 && (_this.plugin.options.onComplete != null)) {
-          return _this.plugin.options.onComplete(_this.plugin.element);
-        }
+        return emoji_tag.fadeIn("fast", function() {
+          if (--_this.loadingNum === 0 && (_this.plugin.options.onComplete != null)) {
+            return _this.plugin.options.onComplete(_this.plugin.element);
+          }
+        });
       });
     };
 

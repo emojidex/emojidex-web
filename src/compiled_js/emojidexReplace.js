@@ -4173,10 +4173,10 @@
 
     Replacer.prototype.getTextWithLoadingTag = function(text) {
       var _this = this;
-      text = text.replace(/:([^,:;\f\n\r]+):/g, function(matched_string, pattern1) {
+      text = text.replace(/:([^:;@$&!?#%~=+*\f\n\r\\\/]+):/g, function(matched_string, pattern1) {
         return _this.getLoadingTag(matched_string, 'code');
       });
-      text = text.replace(this.plugin.regexpUTF, function(matched_string) {
+      text = text.replace(this.plugin.options.regexpUTF, function(matched_string) {
         return _this.getLoadingTag(matched_string, 'utf');
       });
       return text;
@@ -4194,10 +4194,11 @@
         emoji_tag = $(emoji_code).hide();
       }
       return element.after(emoji_tag).fadeOut("normal", function() {
-        emoji_tag.fadeIn("fast");
-        if (--_this.loadingNum === 0 && (_this.plugin.options.onComplete != null)) {
-          return _this.plugin.options.onComplete(_this.plugin.element);
-        }
+        return emoji_tag.fadeIn("fast", function() {
+          if (--_this.loadingNum === 0 && (_this.plugin.options.onComplete != null)) {
+            return _this.plugin.options.onComplete(_this.plugin.element);
+          }
+        });
       });
     };
 

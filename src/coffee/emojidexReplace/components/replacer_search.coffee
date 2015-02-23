@@ -51,5 +51,4 @@ class ReplacerSearch extends Replacer
 
     # start: loadEmoji --------
     @setLoadingTag @plugin
-
     searchEmoji_setEmojiTag @plugin.element

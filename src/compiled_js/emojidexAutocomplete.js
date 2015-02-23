@@ -18,7 +18,8 @@
     var Plugin, defaults, pluginName;
     pluginName = "emojidexAutocomplete";
     defaults = {
-      limit: 10
+      limit: 10,
+      contentEditablePlaneText: false
     };
     Plugin = (function() {
       function Plugin(element, options) {
@@ -82,7 +83,7 @@
               emoji = _ref[_i];
               _results.push({
                 code: emoji.code.replace(/[ ]/g, "_"),
-                img_url: "http://cdn.emojidex.com/emoji/px32/" + (emoji.code.replace(/[ ]/g, '_')) + ".png"
+                img_url: "http://cdn.emojidex.com/emoji/px32/" + (emoji.code.replace(/\s/g, '_')) + ".png"
               });
             }
             return _results;
@@ -117,7 +118,7 @@
         limit: this.plugin.options.limit,
         search_key: "code",
         tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20' /> ${code}</li>",
-        insert_tpl: ":${code}:",
+        insert_tpl: this.plugin.options.contentEditablePlaneText ? ":${code}:" : "<img src='${img_url}' height='20' width='20' />",
         callbacks: {
           matcher: function(flag, subtext, should_startWithSpace) {
             var match;

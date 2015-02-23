@@ -14,6 +14,7 @@ do ($ = jQuery, window, document) ->
   pluginName = "emojidexAutocomplete"
   defaults =
     limit: 10
+    contentEditablePlaneText: false
 
   class Plugin
     constructor: (@element, options) ->
