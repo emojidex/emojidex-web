@@ -15,7 +15,7 @@
  *
  * Includes:
  * --------------------------------
- * emojidex client - v0.3.0
+ * emojidex client - v0.3.1
  * * Provides search, index caching and combining and asset URI resolution
  * https://github.com/emojidex/emojidex-web-client
  *
@@ -641,7 +641,6 @@
       this.EC = EC;
       this.combine = __bind(this.combine, this);
       this._emoji = this.EC.Data.emoji();
-      this.util = new EmojidexUtil;
       if (this.EC.Data.emoji().length === 0) {
         this.seed();
       }
@@ -653,8 +652,6 @@
       }
       switch (locale) {
         case 'en':
-          console.log(this);
-          console.log(111);
           this.EC.Indexes.user('emoji', this.combine);
           return this.EC.Indexes.user('emojidex', this.combine);
         case 'ja':
@@ -729,7 +726,7 @@
 
     EmojidexEmoji.prototype.tags = function(tags, opts) {
       var collect, moji, selection, tag, _i, _len;
-      tags = this.util.breakout(tags);
+      tags = this.EC.Util.breakout(tags);
       selection = opts.selection || this._emoji;
       collect = [];
       for (_i = 0, _len = tags.length; _i < _len; _i++) {
@@ -751,7 +748,7 @@
 
     EmojidexEmoji.prototype.categories = function(categories, opts) {
       var category, collect, moji, source, _i, _len;
-      categories = this.util.breakout(categories);
+      categories = this.EC.Util.breakout(categories);
       source = opts.selection || this._emoji;
       collect = [];
       for (_i = 0, _len = categories.length; _i < _len; _i++) {
@@ -849,6 +846,10 @@
       return this._indexesAPI("users/" + username + "/emoji", callback, opts);
     };
 
+    EmojidexIndexes.prototype.select = function(code, callback, opts) {
+      return this.EC.Search.find(code, callback, opts);
+    };
+
     EmojidexIndexes.prototype.next = function() {
       if (this.count === this.indexed.param.limit) {
         this.indexed.param.page++;
@@ -876,7 +877,7 @@
       this.count = 0;
     }
 
-    EmojidexSearch.prototype._searchAPI = function(search_data, callback, opts, func) {
+    EmojidexSearch.prototype._searchAPI = function(search_data, callback, opts, call_func) {
       var param,
         _this = this;
       param = {
@@ -885,7 +886,7 @@
         detailed: this.EC.detailed
       };
       $.extend(param, opts);
-      this.searched_func = func.ajax;
+      this.searched_func = call_func.ajax;
       this.searched = {
         data: search_data,
         callback: callback,
@@ -908,7 +909,7 @@
           }
         });
       } else {
-        return typeof func.storage === "function" ? func.storage(search_data, callback) : void 0;
+        return typeof call_func.storage === "function" ? call_func.storage(search_data, callback) : void 0;
       }
     };
 
@@ -952,18 +953,40 @@
       });
     };
 
-    EmojidexSearch.prototype.advanced = function(searchs, callback, opts) {
+    EmojidexSearch.prototype.advanced = function(search_details, callback, opts) {
       var param;
       param = {
-        code_cont: this.Util.escape_term(searchs.term),
-        "tags[]": this.Util.breakout(searchs.tags),
-        "categories[]": this.Util.breakout(searchs.categories)
+        code_cont: this.Util.escape_term(search_details.term),
+        "tags[]": this.Util.breakout(search_details.tags),
+        "categories[]": this.Util.breakout(search_details.categories)
       };
       $.extend(param, opts);
-      return this._searchAPI(searchs, callback, param, {
+      return this._searchAPI(search_details, callback, param, {
         ajax: this.advanced,
         storage: this.EC.Emoji.advanced
       });
+    };
+
+    EmojidexSearch.prototype.find = function(code, callback, opts) {
+      var param,
+        _this = this;
+      param = {
+        detailed: this.EC.detailed
+      };
+      $.extend(param, opts);
+      if (this.EC.closed_net) {
+
+      } else {
+        return $.ajax({
+          url: this.EC.api_url + ("/emoji/" + code),
+          dataType: 'json',
+          data: param,
+          success: function(response) {
+            _this.EC.Emoji.combine([response]);
+            return typeof callback === "function" ? callback(response) : void 0;
+          }
+        });
+      }
     };
 
     EmojidexSearch.prototype.next = function() {
@@ -5749,7 +5772,6 @@
         }
         return _results;
       };
-      console.log("replace!!");
       this.setLoadingTag(this.plugin);
       return searchEmoji_setEmojiTag(this.plugin.element);
     };

@@ -4295,7 +4295,6 @@
         }
         return _results;
       };
-      console.log("replace!!");
       this.setLoadingTag(this.plugin);
       return searchEmoji_setEmojiTag(this.plugin.element);
     };

@@ -50,8 +50,6 @@ class ReplacerSearch extends Replacer
                 break
 
     # start: loadEmoji --------
-
-    console.log "replace!!"
     @setLoadingTag @plugin
 
     searchEmoji_setEmojiTag @plugin.element
