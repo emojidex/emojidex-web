@@ -55,7 +55,8 @@ class AutoComplete
         limit: @plugin.options.limit
         search_key: "code"
         tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20' /> ${code}</li>"
-        insert_tpl: "<img src='${img_url}' height='20' width='20' />"
+        insert_tpl: ":${code}:"
+        # insert_tpl: "<img src='${img_url}' height='20' width='20' />"
         callbacks:
           matcher: (flag, subtext, should_startWithSpace) ->
             match = getMatchString subtext, getRegexp(flag, should_startWithSpace)
