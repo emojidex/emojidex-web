@@ -5719,7 +5719,7 @@
                     break;
                   case 'utf':
                     if (emoji.moji === term) {
-                      _this.fadeOutLoadingTag_fadeInEmojiTag(loading_element, emoji.code.replace(/\s/g, "_"));
+                      _this.fadeOutLoadingTag_fadeInEmojiTag(loading_element, _this.replaceSpaceToUnder(emoji.code));
                       break;
                     } else {
                       _results.push(void 0);
@@ -5747,7 +5747,7 @@
           loading_element = loading_elements[_i];
           switch (loading_element.dataset.type) {
             case 'code':
-              _results.push(replaceToEmojiIcon(loading_element.dataset.type, $(loading_element), loading_element.dataset.emoji.replace(/:/g, '')));
+              _results.push(replaceToEmojiIcon(loading_element.dataset.type, $(loading_element), _this.replaceSpaceToUnder(loading_element.dataset.emoji.replace(/:/g, ''))));
               break;
             case 'utf':
               num = 0;

@@ -15,7 +15,7 @@ class ReplacerSearch extends Replacer
                     break
                 when 'utf'
                   if emoji.moji is term
-                    @fadeOutLoadingTag_fadeInEmojiTag loading_element, emoji.code.replace /\s/g, "_"
+                    @fadeOutLoadingTag_fadeInEmojiTag loading_element, @replaceSpaceToUnder(emoji.code)
                     break
           else
             switch type
@@ -33,7 +33,7 @@ class ReplacerSearch extends Replacer
             replaceToEmojiIcon(
               loading_element.dataset.type
               $ loading_element
-              loading_element.dataset.emoji.replace /:/g, ''
+              @replaceSpaceToUnder loading_element.dataset.emoji.replace /:/g, ''
             )
           when 'utf'
             # Need Update!!: Search API --------
