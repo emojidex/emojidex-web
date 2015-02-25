@@ -19,7 +19,7 @@
     pluginName = "emojidexAutocomplete";
     defaults = {
       limit: 10,
-      contentEditablePlaneText: false
+      insertImg: true
     };
     Plugin = (function() {
       function Plugin(element, options) {
@@ -49,7 +49,7 @@
     }
 
     AutoComplete.prototype.setAutoComplete = function() {
-      var at_init, ec, getMatchString, getRegexp, searching_num, setAtwho, setSearchedEmojiData,
+      var at_init, ec, getMatchString, getRegexp, onHighlighter, searching_num, setAtwho, setSearchedEmojiData,
         _this = this;
       setAtwho = function(at_options) {
         return $(_this.plugin.element).atwho(at_options).on('reposition.atwho', function(e) {
@@ -65,6 +65,7 @@
           at_options = {
             data: searched_data,
             callbacks: {
+              highlighter: onHighlighter,
               matcher: function(flag, subtext, should_startWithSpace) {
                 var match;
                 return match = getMatchString(subtext, getRegexp(flag, should_startWithSpace));
@@ -83,13 +84,12 @@
             for (_i = 0, _len = _ref.length; _i < _len; _i++) {
               emoji = _ref[_i];
               _results.push({
-                code: emoji.code.replace(/\s/g, '_').replace(/(\(|\))/g, ''),
+                code: emoji.code.replace(/\s/g, '_'),
                 img_url: "http://cdn.emojidex.com/emoji/px32/" + (emoji.code.replace(/\s/g, '_')) + ".png"
               });
             }
             return _results;
           })();
-          console.log("" + searching_num + " == " + num);
           if (searching_num === num) {
             if (searched_data.length) {
               return updateAtwho(searched_data, at_obj);
@@ -102,7 +102,11 @@
         var regexp, _a, _y;
         _a = decodeURI("%C3%80");
         _y = decodeURI("%C3%BF");
-        return regexp = new RegExp("" + flag + "([^:;@&#~\!\$\+\?\%\*\f\n\r\\\/]+)", 'g');
+        flag = flag.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+        if (should_startWithSpace) {
+          flag = '(?:^|\\s)' + flag;
+        }
+        return regexp = new RegExp("" + flag + "([^:;@&#~\!\$\+\?\%\*\f\n\r\\\/?]+)$", 'gi');
       };
       getMatchString = function(subtext, regexp) {
         var match;
@@ -110,15 +114,26 @@
         match = match ? match[2] || match[1] : null;
         return match;
       };
+      onHighlighter = function(li, query) {
+        var regexp;
+        if (!query) {
+          return li;
+        }
+        regexp = new RegExp(">\\s*([^:;@&#~\!\$\+\?\%\*\f\n\r\\\/]*?)(" + query.replace(/(\(|\))/g, '\\$1') + ")([^:;@&#~\!\$\+\?\%\*\f\n\r\\\/]*)\\s*<", 'ig');
+        return li.replace(regexp, function(str, $1, $2, $3) {
+          return '> ' + $1 + '<strong>' + $2 + '</strong>' + $3 + ' <';
+        });
+      };
       searching_num = 0;
       ec = new EmojidexClient;
       at_init = {
         at: ":",
         limit: this.plugin.options.limit,
         search_key: "code",
-        tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20' /> ${code}</li>",
-        insert_tpl: this.plugin.options.contentEditablePlaneText ? ":${code}:" : "<img src='${img_url}' height='20' width='20' />",
+        tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20'></img> ${code}</li>",
+        insert_tpl: this.plugin.options.insertImg ? "<img src='${img_url}' height='20' width='20' />" : ":${code}:",
         callbacks: {
+          highlighter: onHighlighter,
           matcher: function(flag, subtext, should_startWithSpace) {
             var match;
             match = getMatchString(subtext, getRegexp(flag, should_startWithSpace));
