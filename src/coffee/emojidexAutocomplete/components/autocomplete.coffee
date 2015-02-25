@@ -21,7 +21,9 @@ class AutoComplete
 
         # start: setSearchedEmojiData --------
         num = ++searching_num
-        ec.Search.search(match_string, (response) ->
+        ec.Search.search(escape(match_string), (response) ->
+          console.dir @
+          console.dir response
 
           searched_data = for emoji in ec.Search.results
             code: emoji.code.replace /[ ]/g, "_"
@@ -39,9 +41,7 @@ class AutoComplete
         _y = decodeURI("%C3%BF")
 
         flag = flag.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")
-        flag = '(?:^|\\s)' + flag if should_startWithSpace
-
-        regexp = new RegExp "#{flag}([A-Za-z#{_a}-#{_y}0-9_\+\-]*)$|#{flag}([^\\x00-\\xff]*)$",'gi'
+        regexp = new RegExp "#{flag}([^:;@$&!?#%~=+*\f\n\r\\\/]+)",'gi'
 
       getMatchString = (subtext, regexp) ->
         match = regexp.exec subtext

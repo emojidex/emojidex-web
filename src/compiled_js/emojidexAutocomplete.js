@@ -73,8 +73,12 @@
           return at_obj.$inputor.atwho('destroy').atwho($.extend({}, at_obj.setting, at_options)).atwho('run');
         };
         num = ++searching_num;
-        ec.Search.search(match_string, function(response) {
+        ec.Search.search(escape(match_string), function(response) {
           var emoji, searched_data;
+          console.dir(this);
+          console.dir(response);
+          console.log(111);
+          console.log(ec.Search.results);
           searched_data = (function() {
             var _i, _len, _ref, _results;
             _ref = ec.Search.results;
@@ -101,10 +105,7 @@
         _a = decodeURI("%C3%80");
         _y = decodeURI("%C3%BF");
         flag = flag.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
-        if (should_startWithSpace) {
-          flag = '(?:^|\\s)' + flag;
-        }
-        return regexp = new RegExp("" + flag + "([A-Za-z" + _a + "-" + _y + "0-9_\+\-]*)$|" + flag + "([^\\x00-\\xff]*)$", 'gi');
+        return regexp = new RegExp("" + flag + "([^:;@$&!?#%~=+*\f\n\r\\\/]+)", 'gi');
       };
       getMatchString = function(subtext, regexp) {
         var match;
