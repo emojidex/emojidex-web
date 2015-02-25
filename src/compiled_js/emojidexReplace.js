@@ -4172,7 +4172,7 @@
 
     Replacer.prototype.getTextWithLoadingTag = function(text) {
       var _this = this;
-      text = text.replace(/:([^:;@$&!?#%~=+*\f\n\r\\\/]+):/g, function(matched_string, pattern1) {
+      text = text.replace(/:([^:;@&#~\!\$\+\?\%\*\f\n\r\\\/]+):/g, function(matched_string, pattern1) {
         return _this.getLoadingTag(matched_string, 'code');
       });
       text = text.replace(this.plugin.options.regexpUTF, function(matched_string) {

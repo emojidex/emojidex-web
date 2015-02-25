@@ -10,27 +10,28 @@ class AutoComplete
         )
 
       setSearchedEmojiData = (at_obj, match_string) ->
-        updateAtwho = (searched_data) ->
+        updateAtwho = (searched_data, at_bak) ->
           at_options =
             data: searched_data
             callbacks:
               matcher: (flag, subtext, should_startWithSpace) ->
-                getMatchString subtext, getRegexp(flag, should_startWithSpace)
+                # console.log 222
+                # console.log searched_data
+                match = getMatchString subtext, getRegexp(flag, should_startWithSpace)
 
-          at_obj.$inputor.atwho('destroy').atwho($.extend {}, at_obj.setting, at_options).atwho('run')
+          at_bak.$inputor.atwho('destroy').atwho($.extend {}, at_bak.setting, at_options).atwho('run')
 
         # start: setSearchedEmojiData --------
         num = ++searching_num
-        ec.Search.search(escape(match_string), (response) ->
-          console.dir @
-          console.dir response
+        ec.Search.search(match_string, (response) ->
 
           searched_data = for emoji in ec.Search.results
-            code: emoji.code.replace /[ ]/g, "_"
+            code: emoji.code.replace(/\s/g, '_').replace(/(\(|\))/g, '')
             img_url: "http://cdn.emojidex.com/emoji/px32/#{emoji.code.replace /\s/g, '_'}.png"
 
+          console.log "#{searching_num} == #{num}"
           if searching_num == num
-            updateAtwho(searched_data) if searched_data.length
+            updateAtwho(searched_data, at_obj) if searched_data.length
         )
 
         return match_string
@@ -40,12 +41,13 @@ class AutoComplete
         _a = decodeURI("%C3%80")
         _y = decodeURI("%C3%BF")
 
-        flag = flag.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")
-        regexp = new RegExp "#{flag}([^:;@$&!?#%~=+*\f\n\r\\\/]+)",'gi'
+        # regexp = new RegExp "#{flag}([^:;@$&!#%~=\?\+\*\f\n\r\\\/]+)",'g'
+        regexp = new RegExp "#{flag}([^:;@&#~\!\$\+\?\%\*\f\n\r\\\/]+)",'g'
 
       getMatchString = (subtext, regexp) ->
         match = regexp.exec subtext
         match = if match then match[2] || match[1] else null
+        return match
 
       # start: setAutoComplete --------
       searching_num = 0
