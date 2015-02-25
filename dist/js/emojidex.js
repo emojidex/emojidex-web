@@ -5606,7 +5606,6 @@
         this.options = $.extend({}, defaults, options);
         this._defaults = defaults;
         this._name = pluginName;
-        this.EC = new EmojidexClient;
         this.replacer = this.options.useUserEmoji ? new ReplacerUser(this) : new ReplacerSearch(this);
         this.replacer.loadEmoji();
       }
@@ -5629,7 +5628,7 @@
     Replacer.prototype.loadingNum = void 0;
 
     Replacer.prototype.getEmojiTag = function(emoji_code) {
-      return "<img      class='emojidex-emoji'      src='" + this.plugin.options.cdnURL + "/" + this.plugin.options.sizeCode + "/" + emoji_code + ".png'      title='" + (emoji_code.replace(/_/g, ' ')) + "'    ></img>";
+      return "<img      class='emojidex-emoji'      src='" + this.plugin.options.cdnURL + "/" + this.plugin.options.sizeCode + "/" + emoji_code + ".png'      title='" + (this.replaceUnderToSpace(emoji_code)) + "'    ></img>";
     };
 
     Replacer.prototype.getLoadingTag = function(emoji_data, type) {
@@ -5684,6 +5683,10 @@
       return string.replace(/\s/g, '_');
     };
 
+    Replacer.prototype.replaceUnderToSpace = function(string) {
+      return string.replace(/_/g, ' ');
+    };
+
     return Replacer;
 
   })();
@@ -5700,44 +5703,15 @@
       var searchEmoji_setEmojiTag,
         _this = this;
       searchEmoji_setEmojiTag = function(element) {
-        var emoji, loading_element, loading_elements, num, replaceToEmojiIcon, _i, _len, _results;
-        replaceToEmojiIcon = function(type, loading_element, term) {
-          return _this.plugin.EC.Search.search(term, function(emoji_data) {
-            var emoji, _i, _len, _results;
-            if (emoji_data.length !== 0) {
-              _results = [];
-              for (_i = 0, _len = emoji_data.length; _i < _len; _i++) {
-                emoji = emoji_data[_i];
-                switch (type) {
-                  case 'code':
-                    if (_this.replaceSpaceToUnder(emoji.code) === term) {
-                      _this.fadeOutLoadingTag_fadeInEmojiTag(loading_element, term);
-                      break;
-                    } else {
-                      _results.push(void 0);
-                    }
-                    break;
-                  case 'utf':
-                    if (emoji.moji === term) {
-                      _this.fadeOutLoadingTag_fadeInEmojiTag(loading_element, _this.replaceSpaceToUnder(emoji.code));
-                      break;
-                    } else {
-                      _results.push(void 0);
-                    }
-                    break;
-                  default:
-                    _results.push(void 0);
-                }
-              }
-              return _results;
-            } else {
-              switch (type) {
-                case 'code':
-                  return _this.fadeOutLoadingTag_fadeInEmojiTag(loading_element, "<span>:" + term + ":</span>", false);
-                case 'utf':
-                  return _this.fadeOutLoadingTag_fadeInEmojiTag(loading_element, "<span>" + term + "</span>", false);
-              }
-            }
+        var emoji, loading_element, loading_elements, replaceToEmojiIcon, _i, _len, _results;
+        replaceToEmojiIcon = function(type, loading_element, emoji_code) {
+          var emoji_image;
+          emoji_image = $("<img src='" + _this.plugin.options.cdnURL + "/" + _this.plugin.options.sizeCode + "/" + emoji_code + ".png'></img>");
+          emoji_image.load(function(e) {
+            return _this.fadeOutLoadingTag_fadeInEmojiTag(loading_element, emoji_code);
+          });
+          return emoji_image.error(function(e) {
+            return _this.fadeOutLoadingTag_fadeInEmojiTag(loading_element, "<span>:" + emoji_code + ":</span>", false);
           });
         };
         loading_elements = _this.getLoadingElement(element);
@@ -5750,14 +5724,12 @@
               _results.push(replaceToEmojiIcon(loading_element.dataset.type, $(loading_element), _this.replaceSpaceToUnder(loading_element.dataset.emoji.replace(/:/g, ''))));
               break;
             case 'utf':
-              num = 0;
               _results.push((function() {
                 var _j, _len1, _ref, _results1;
                 _ref = this.plugin.options.utfEmojiData;
                 _results1 = [];
                 for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
                   emoji = _ref[_j];
-                  ++num;
                   if (emoji.utf === loading_element.dataset.emoji) {
                     this.fadeOutLoadingTag_fadeInEmojiTag($(loading_element), emoji.code);
                     break;

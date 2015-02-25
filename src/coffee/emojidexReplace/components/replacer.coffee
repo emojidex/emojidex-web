@@ -5,7 +5,7 @@ class Replacer
     "<img
       class='emojidex-emoji'
       src='#{@plugin.options.cdnURL}/#{@plugin.options.sizeCode}/#{emoji_code}.png'
-      title='#{emoji_code.replace /_/g, ' '}'
+      title='#{@replaceUnderToSpace emoji_code}'
     ></img>"
 
   getLoadingTag: (emoji_data, type) ->
@@ -43,3 +43,6 @@ class Replacer
 
   replaceSpaceToUnder: (string) ->
     string.replace /\s/g, '_'
+
+  replaceUnderToSpace: (string) ->
+    string.replace /_/g, ' '

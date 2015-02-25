@@ -36,7 +36,6 @@ do ($ = jQuery, window, document) ->
       @_defaults = defaults
       @_name = pluginName
 
-      @EC = new EmojidexClient
       @replacer = if @options.useUserEmoji then new ReplacerUser @ else new ReplacerSearch @
       @replacer.loadEmoji()
 
