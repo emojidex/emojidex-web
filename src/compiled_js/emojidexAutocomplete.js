@@ -119,7 +119,7 @@
         }
         regexp = new RegExp(">\\s*([^:;@&#~\!\$\+\?\%\*\f\n\r\\\/]*?)(" + (query.replace(/(\(|\))/g, '\\$1')) + ")([^:;@&#~\!\$\+\?\%\*\f\n\r\\\/]*)\\s*<", 'ig');
         return li.replace(regexp, function(str, $1, $2, $3) {
-          return ">" + $1 + "<strong>" + $2 + "</strong>" + $3 + "<";
+          return "> " + $1 + "<strong>" + $2 + "</strong>" + $3 + " <";
         });
       };
       ec = new EmojidexClient;
@@ -128,7 +128,7 @@
         suffix: '',
         limit: this.plugin.options.limit,
         search_key: "code",
-        tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20'></img>&nbsp;${code}</li>",
+        tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20'></img>${code}</li>",
         insert_tpl: this.plugin.options.insertImg ? "<img src='${img_url}' height='20' width='20' />" : ":${code}:",
         callbacks: {
           highlighter: onHighlighter,

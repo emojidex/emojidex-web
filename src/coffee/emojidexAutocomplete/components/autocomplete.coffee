@@ -53,7 +53,7 @@ class AutoComplete
       onHighlighter = (li, query) ->
         return li if not query
         regexp = new RegExp(">\\s*([^:;@&#~\!\$\+\?\%\*\f\n\r\\\/]*?)(#{query.replace(/(\(|\))/g, '\\$1')})([^:;@&#~\!\$\+\?\%\*\f\n\r\\\/]*)\\s*<", 'ig')
-        li.replace regexp, (str, $1, $2, $3) -> ">#{$1}<strong>#{$2}</strong>#{$3}<"
+        li.replace regexp, (str, $1, $2, $3) -> "> #{$1}<strong>#{$2}</strong>#{$3} <"
 
       # start: setAutoComplete --------
       ec = new EmojidexClient
@@ -62,7 +62,7 @@ class AutoComplete
         suffix: ''
         limit: @plugin.options.limit
         search_key: "code"
-        tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20'></img>&nbsp;${code}</li>"
+        tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20'></img>${code}</li>"
         insert_tpl: if @plugin.options.insertImg then "<img src='${img_url}' height='20' width='20' />" else ":${code}:"
         callbacks:
           highlighter: onHighlighter

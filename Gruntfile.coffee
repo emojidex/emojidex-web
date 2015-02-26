@@ -232,7 +232,7 @@ module.exports = (grunt) ->
 
     copy:
       img:
-        expand: true,
+        expand: true
         cwd: 'src/img/'
         src: '**/*'
         dest: 'dist/img/'
@@ -240,7 +240,7 @@ module.exports = (grunt) ->
       lib:
         files: [
           {
-            expand: true,
+            expand: true
             cwd: 'bower_components/At.js/dist/css'
             src: 'jquery.atwho.min.css'
             dest: 'dist/css/'
