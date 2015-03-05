@@ -4,7 +4,7 @@ class Replacer
   getEmojiTag: (emoji_code) ->
     "<img
       class='emojidex-emoji'
-      src='#{@plugin.options.cdnURL}/#{@plugin.options.sizeCode}/#{emoji_code}.png'
+      src='#{@plugin.ec.cdn_url}#{@plugin.ec.size_code}/#{emoji_code}.png'
       title='#{@replaceUnderToSpace emoji_code}'
     ></img>"
 
@@ -31,12 +31,14 @@ class Replacer
     return text
 
   fadeOutLoadingTag_fadeInEmojiTag: (element, emoji_code, match = true) ->
+    emoji_tag = undefined
     if match
       emoji_tag = $(@getEmojiTag emoji_code).hide()
     else
-      emoji_tag = $(emoji_code).hide()
+      emoji_tag = $(emoji_code)
 
-    element.after(emoji_tag).fadeOut "normal", =>
+    element.fadeOut "normal", =>
+      element.after emoji_tag
       emoji_tag.fadeIn "fast", =>
         if --@loadingNum is 0 && @plugin.options.onComplete?
           @plugin.options.onComplete @plugin.element

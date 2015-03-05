@@ -5,7 +5,7 @@ class ReplacerSearch extends Replacer
   loadEmoji: ->
     searchEmoji_setEmojiTag = (element) =>
       replaceToEmojiIcon = (type, loading_element, emoji_code) =>
-        emoji_image = $("<img src='#{@plugin.options.cdnURL}/#{@plugin.options.sizeCode}/#{emoji_code}.png'></img>")
+        emoji_image = $("<img src='#{@plugin.ec.cdn_url}#{@plugin.ec.size_code}/#{emoji_code}.png'></img>")
         emoji_image.load (e) =>
           @fadeOutLoadingTag_fadeInEmojiTag loading_element, emoji_code
 
@@ -27,7 +27,7 @@ class ReplacerSearch extends Replacer
             for emoji in @plugin.options.utfEmojiData
               if emoji.utf is loading_element.dataset.emoji
                 @fadeOutLoadingTag_fadeInEmojiTag $(loading_element), emoji.code
-                break
+                # break
 
     # start: loadEmoji --------
     @setLoadingTag @plugin

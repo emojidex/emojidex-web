@@ -13,10 +13,6 @@
 do ($ = jQuery, window, document) ->
   pluginName = "emojidexReplace"
   defaults =
-    apiURL: 'https://www.emojidex.com/api/v1'
-    cdnURL: 'http://cdn.emojidex.com/emoji'
-    sizeCode: 'px32'
-
     onComplete: undefined
 
     useUserEmoji: false
@@ -35,6 +31,9 @@ do ($ = jQuery, window, document) ->
       @options = $.extend {}, defaults, options
       @_defaults = defaults
       @_name = pluginName
+
+      @ec = new EmojidexClient
+      window.ec = @ec
 
       @replacer = if @options.useUserEmoji then new ReplacerUser @ else new ReplacerSearch @
       @replacer.loadEmoji()

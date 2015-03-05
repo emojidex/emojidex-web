@@ -15,7 +15,7 @@
  *
  * Includes:
  * --------------------------------
- * emojidex client - v0.3.3
+ * emojidex client - v0.3.5
  * * Provides search, index caching and combining and asset URI resolution
  * https://github.com/emojidex/emojidex-web-client
  *
@@ -1706,10 +1706,17 @@ $.fn.atwho["default"] = {
   this.EmojidexClient = (function() {
     function EmojidexClient(options) {
       this.options = options;
+      this.env = {
+        api_ver: 1,
+        cdn_addr: 'cdn.emojidex.com',
+        s_cdn_addr: '',
+        asset_addr: 'assets.emojidex.com',
+        s_asset_addr: ''
+      };
       this.defaults = {
         locale: 'en',
         api_url: 'https://www.emojidex.com/api/v1/',
-        cdn_url: 'http://cdn.emojidex.com/emoji',
+        cdn_url: "http://" + this.env.cdn_addr + "/emoji/",
         closed_net: false,
         min_query_len: 4,
         size_code: 'px32',
@@ -1776,6 +1783,7 @@ $.fn.atwho["default"] = {
 
   EmojidexData = (function() {
     function EmojidexData(EC) {
+      var _this = this;
       this.EC = EC;
       this._def_auth_info = {
         status: 'none',
@@ -1800,6 +1808,21 @@ $.fn.atwho["default"] = {
       }
       if (!this.storage.isSet("emojidex.auth_info")) {
         this.storage.set("emojidex.auth_info", this.EC.options.auth_info || this._def_auth_info);
+      }
+      if (this.storage.get('emojidex.cdn_url')) {
+        this.EC.cdn_url = this.storage.get('emojidex.cdn_url');
+      } else {
+        if (this.EC.cdn_url === this.EC.defaults.cdn_url && this.EC.closed_net === false) {
+          $.ajax({
+            url: this.EC.api_url + "/env",
+            dataType: 'json',
+            success: function(response) {
+              _this.EC.env = response;
+              _this.EC.cdn_url = "https://" + _this.EC.env.s_cdn_addr + "/emoji/";
+              return _this.EC.Data.storage.set('emojidex.cdn_url', _this.EC.cdn_url);
+            }
+          });
+        }
       }
     }
 
@@ -2477,7 +2500,9 @@ $.fn.atwho["default"] = {
   })();
 
   EmojidexUtil = (function() {
-    function EmojidexUtil() {}
+    function EmojidexUtil(EC) {
+      this.EC = EC;
+    }
 
     EmojidexUtil.prototype.escape_term = function(term) {
       return term.replace(/\s/g, '_').replace(/(\(|\))/g, '\\$1');
@@ -2502,14 +2527,14 @@ $.fn.atwho["default"] = {
         emoji = this.results;
       }
       if (size_code == null) {
-        size_code = this.size_code;
+        size_code = this.EC.size_code;
       }
       _results = [];
       for (_i = 0, _len = emoji.length; _i < _len; _i++) {
         moji = emoji[_i];
         _results.push({
           code: this.escape_term(moji.code),
-          img_url: "" + this.cdn_url + "/" + size_code + "/" + (this.escape_term(moji.code)) + ".png"
+          img_url: "" + this.EC.cdn_url + "/" + size_code + "/" + (this.escape_term(moji.code)) + ".png"
         });
       }
       return _results;
@@ -2717,9 +2742,6 @@ $.fn.atwho["default"] = {
     var Plugin, defaults, pluginName;
     pluginName = "emojidexReplace";
     defaults = {
-      apiURL: 'https://www.emojidex.com/api/v1',
-      cdnURL: 'http://cdn.emojidex.com/emoji',
-      sizeCode: 'px32',
       onComplete: void 0,
       useUserEmoji: false,
       userNames: ['emoji', 'emojidex'],
@@ -6824,6 +6846,8 @@ $.fn.atwho["default"] = {
         this.options = $.extend({}, defaults, options);
         this._defaults = defaults;
         this._name = pluginName;
+        this.ec = new EmojidexClient;
+        window.ec = this.ec;
         this.replacer = this.options.useUserEmoji ? new ReplacerUser(this) : new ReplacerSearch(this);
         this.replacer.loadEmoji();
       }
@@ -6846,7 +6870,8 @@ $.fn.atwho["default"] = {
     Replacer.prototype.loadingNum = void 0;
 
     Replacer.prototype.getEmojiTag = function(emoji_code) {
-      return "<img      class='emojidex-emoji'      src='" + this.plugin.options.cdnURL + "/" + this.plugin.options.sizeCode + "/" + emoji_code + ".png'      title='" + (this.replaceUnderToSpace(emoji_code)) + "'    ></img>";
+      console.dir(this.plugin.ec.Data.storage.get('emojidex.cdn_url'));
+      return "<img      class='emojidex-emoji'      src='" + this.plugin.ec.cdn_url + this.plugin.ec.size_code + "/" + emoji_code + ".png'      title='" + (this.replaceUnderToSpace(emoji_code)) + "'    ></img>";
     };
 
     Replacer.prototype.getLoadingTag = function(emoji_data, type) {
@@ -6883,12 +6908,14 @@ $.fn.atwho["default"] = {
       if (match == null) {
         match = true;
       }
+      emoji_tag = void 0;
       if (match) {
         emoji_tag = $(this.getEmojiTag(emoji_code)).hide();
       } else {
-        emoji_tag = $(emoji_code).hide();
+        emoji_tag = $(emoji_code);
       }
-      return element.after(emoji_tag).fadeOut("normal", function() {
+      return element.fadeOut("normal", function() {
+        element.after(emoji_tag);
         return emoji_tag.fadeIn("fast", function() {
           if (--_this.loadingNum === 0 && (_this.plugin.options.onComplete != null)) {
             return _this.plugin.options.onComplete(_this.plugin.element);
@@ -6924,7 +6951,7 @@ $.fn.atwho["default"] = {
         var emoji, loading_element, loading_elements, replaceToEmojiIcon, _i, _len, _results;
         replaceToEmojiIcon = function(type, loading_element, emoji_code) {
           var emoji_image;
-          emoji_image = $("<img src='" + _this.plugin.options.cdnURL + "/" + _this.plugin.options.sizeCode + "/" + emoji_code + ".png'></img>");
+          emoji_image = $("<img src='" + _this.plugin.ec.cdn_url + _this.plugin.ec.size_code + "/" + emoji_code + ".png'></img>");
           emoji_image.load(function(e) {
             return _this.fadeOutLoadingTag_fadeInEmojiTag(loading_element, emoji_code);
           });
@@ -6949,8 +6976,7 @@ $.fn.atwho["default"] = {
                 for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
                   emoji = _ref[_j];
                   if (emoji.utf === loading_element.dataset.emoji) {
-                    this.fadeOutLoadingTag_fadeInEmojiTag($(loading_element), emoji.code);
-                    break;
+                    _results1.push(this.fadeOutLoadingTag_fadeInEmojiTag($(loading_element), emoji.code));
                   } else {
                     _results1.push(void 0);
                   }
