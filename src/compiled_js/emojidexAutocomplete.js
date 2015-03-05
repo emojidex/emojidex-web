@@ -86,7 +86,7 @@
               emoji = _ref[_i];
               _results.push({
                 code: emoji.code.replace(/\s/g, '_'),
-                img_url: "http://cdn.emojidex.com/emoji/px32/" + (emoji.code.replace(/\s/g, '_')) + ".png"
+                img_url: "" + ec.cdn_url + ec.size_code + "/" + (emoji.code.replace(/\s/g, '_')) + ".png"
               });
             }
             return _results;

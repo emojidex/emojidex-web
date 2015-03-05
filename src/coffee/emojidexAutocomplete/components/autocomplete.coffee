@@ -27,7 +27,7 @@ class AutoComplete
 
           searched_data = for emoji in ec.Search.results
             code: emoji.code.replace(/\s/g, '_')
-            img_url: "http://cdn.emojidex.com/emoji/px32/#{emoji.code.replace /\s/g, '_'}.png"
+            img_url: "#{ec.cdn_url}#{ec.size_code}/#{emoji.code.replace /\s/g, '_'}.png"
 
           if @searching_num == num
             updateAtwho(searched_data, at_obj) if searched_data.length
