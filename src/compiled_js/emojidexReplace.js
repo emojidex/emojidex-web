@@ -4149,7 +4149,6 @@
     Replacer.prototype.loadingNum = void 0;
 
     Replacer.prototype.getEmojiTag = function(emoji_code) {
-      console.dir(this.plugin.ec.Data.storage.get('emojidex.cdn_url'));
       return "<img      class='emojidex-emoji'      src='" + this.plugin.ec.cdn_url + this.plugin.ec.size_code + "/" + emoji_code + ".png'      title='" + (this.replaceUnderToSpace(emoji_code)) + "'    ></img>";
     };
 
