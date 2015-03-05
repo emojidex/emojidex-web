@@ -24,6 +24,7 @@ class Replacer
         $(element).replaceWith @getTextWithLoadingTag element.textContent
 
   getTextWithLoadingTag: (text) ->
+    # console.log @plugin.options.regexpUTF
     text = text.replace /:([^:;@&#~\!\$\+\?\%\*\f\n\r\\\/]+):/g, (matched_string, pattern1) =>
       @getLoadingTag matched_string, 'code'
     text = text.replace @plugin.options.regexpUTF, (matched_string) =>

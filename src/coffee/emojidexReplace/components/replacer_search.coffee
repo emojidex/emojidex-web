@@ -24,10 +24,10 @@ class ReplacerSearch extends Replacer
               @replaceSpaceToUnder loading_element.dataset.emoji.replace /:/g, ''
             )
           when 'utf'
-            for emoji in @plugin.options.utfEmojiData
-              if emoji.utf is loading_element.dataset.emoji
-                @fadeOutLoadingTag_fadeInEmojiTag $(loading_element), emoji.code
-                # break
+            for emoji of @plugin.options.utfEmojiData
+              if emoji is loading_element.dataset.emoji
+                @fadeOutLoadingTag_fadeInEmojiTag $(loading_element), @plugin.options.utfEmojiData[emoji]
+                break
 
     # start: loadEmoji --------
     @setLoadingTag @plugin
