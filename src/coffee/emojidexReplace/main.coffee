@@ -29,8 +29,8 @@ do ($ = jQuery, window, document) ->
 
       @ec = new EmojidexClient
 
-      if @ec.Data.storage.get('emojidex.regexpUTF') and @ec.Data.storage.get('emojidex.utfEmojiData')
-        @options.regexpUTF = RegExp @ec.Data.storage.get('emojidex.regexpUTF'), 'g'
+      if @checkUpdate()
+        @options.regexpUtf = RegExp @ec.Data.storage.get('emojidex.regexpUtf'), 'g'
         @options.utfEmojiData = @ec.Data.storage.get 'emojidex.utfEmojiData'
         @replace()
       else
@@ -38,13 +38,27 @@ do ($ = jQuery, window, document) ->
           url: @ec.api_url + 'moji_codes'
           dataType: 'json'
           success: (response) =>
+            @ec.Data.storage.set 'emojidex.utfInfoUpdated', new Date().toString()
+
+            regexp = response.moji_array.join('|')
+            @ec.Data.storage.set 'emojidex.regexpUtf', regexp
+            @options.regexpUtf = RegExp regexp, 'g'
+
             @ec.Data.storage.set 'emojidex.utfEmojiData', response.moji_index
             @options.utfEmojiData = response.moji_index
 
-            regexp = response.moji_array.join('|')
-            @ec.Data.storage.set 'emojidex.regexpUTF', regexp
-            @options.regexpUTF = RegExp regexp, 'g'
             @replace()
+
+    checkUpdate: ->
+      if @ec.Data.storage.isSet 'emojidex.utfInfoUpdated'
+        current = new Date
+        updated = new Date @ec.Data.storage.get 'emojidex.utfInfoUpdated'
+        if current - updated <= 3600000 * 48
+          return true
+        else
+          return false
+      else
+        return false
 
     replace: ->
       @replacer = if @options.useUserEmoji then new ReplacerUser @ else new ReplacerSearch @

@@ -34,8 +34,8 @@
         this._defaults = defaults;
         this._name = pluginName;
         this.ec = new EmojidexClient;
-        if (this.ec.Data.storage.get('emojidex.regexpUTF') && this.ec.Data.storage.get('emojidex.utfEmojiData')) {
-          this.options.regexpUTF = RegExp(this.ec.Data.storage.get('emojidex.regexpUTF'), 'g');
+        if (this.checkUpdate()) {
+          this.options.regexpUtf = RegExp(this.ec.Data.storage.get('emojidex.regexpUtf'), 'g');
           this.options.utfEmojiData = this.ec.Data.storage.get('emojidex.utfEmojiData');
           this.replace();
         } else {
@@ -44,16 +44,32 @@
             dataType: 'json',
             success: function(response) {
               var regexp;
+              _this.ec.Data.storage.set('emojidex.utfInfoUpdated', new Date().toString());
+              regexp = response.moji_array.join('|');
+              _this.ec.Data.storage.set('emojidex.regexpUtf', regexp);
+              _this.options.regexpUtf = RegExp(regexp, 'g');
               _this.ec.Data.storage.set('emojidex.utfEmojiData', response.moji_index);
               _this.options.utfEmojiData = response.moji_index;
-              regexp = response.moji_array.join('|');
-              _this.ec.Data.storage.set('emojidex.regexpUTF', regexp);
-              _this.options.regexpUTF = RegExp(regexp, 'g');
               return _this.replace();
             }
           });
         }
       }
+
+      Plugin.prototype.checkUpdate = function() {
+        var current, updated;
+        if (this.ec.Data.storage.isSet('emojidex.utfInfoUpdated')) {
+          current = new Date;
+          updated = new Date(this.ec.Data.storage.get('emojidex.utfInfoUpdated'));
+          if (current - updated <= 3600000 * 48) {
+            return true;
+          } else {
+            return false;
+          }
+        } else {
+          return false;
+        }
+      };
 
       Plugin.prototype.replace = function() {
         this.replacer = this.options.useUserEmoji ? new ReplacerUser(this) : new ReplacerSearch(this);
@@ -103,7 +119,7 @@
       text = text.replace(/:([^:;@&#~\!\$\+\?\%\*\f\n\r\\\/]+):/g, function(matched_string, pattern1) {
         return _this.getLoadingTag(matched_string, 'code');
       });
-      text = text.replace(this.plugin.options.regexpUTF, function(matched_string) {
+      text = text.replace(this.plugin.options.regexpUtf, function(matched_string) {
         return _this.getLoadingTag(matched_string, 'utf');
       });
       return text;
