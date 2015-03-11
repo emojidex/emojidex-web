@@ -135,15 +135,18 @@
       if (match) {
         emoji_tag = $(this.getEmojiTag(emoji_code)).hide();
       } else {
-        emoji_tag = $(emoji_code);
+        emoji_tag = emoji_code;
       }
       return element.fadeOut("normal", function() {
         element.after(emoji_tag);
-        return emoji_tag.fadeIn("fast", function() {
-          if (--_this.loadingNum === 0 && (_this.plugin.options.onComplete != null)) {
-            return _this.plugin.options.onComplete(_this.plugin.element);
-          }
-        });
+        element.remove();
+        if (match) {
+          return emoji_tag.fadeIn("fast", function() {
+            if (--_this.loadingNum === 0 && (_this.plugin.options.onComplete != null)) {
+              return _this.plugin.options.onComplete(_this.plugin.element);
+            }
+          });
+        }
       });
     };
 
@@ -179,7 +182,7 @@
             return _this.fadeOutLoadingTag_fadeInEmojiTag(loading_element, emoji_code);
           });
           return emoji_image.error(function(e) {
-            return _this.fadeOutLoadingTag_fadeInEmojiTag(loading_element, "<span>:" + emoji_code + ":</span>", false);
+            return _this.fadeOutLoadingTag_fadeInEmojiTag(loading_element, "" + loading_element[0].dataset.emoji, false);
           });
         };
         loading_elements = _this.getLoadingElement(element);

@@ -10,7 +10,7 @@ class ReplacerSearch extends Replacer
           @fadeOutLoadingTag_fadeInEmojiTag loading_element, emoji_code
 
         emoji_image.error (e) =>
-          @fadeOutLoadingTag_fadeInEmojiTag loading_element, "<span>:#{emoji_code}:</span>", false
+          @fadeOutLoadingTag_fadeInEmojiTag loading_element, "#{loading_element[0].dataset.emoji}", false
 
       # start: searchEmoji_setEmojiTag --------
       loading_elements = @getLoadingElement element

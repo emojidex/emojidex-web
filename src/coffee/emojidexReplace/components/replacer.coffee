@@ -35,13 +35,15 @@ class Replacer
     if match
       emoji_tag = $(@getEmojiTag emoji_code).hide()
     else
-      emoji_tag = $(emoji_code)
+      emoji_tag = emoji_code
 
     element.fadeOut "normal", =>
       element.after emoji_tag
-      emoji_tag.fadeIn "fast", =>
-        if --@loadingNum is 0 && @plugin.options.onComplete?
-          @plugin.options.onComplete @plugin.element
+      element.remove()
+      if match
+        emoji_tag.fadeIn "fast", =>
+          if --@loadingNum is 0 && @plugin.options.onComplete?
+            @plugin.options.onComplete @plugin.element
 
   replaceSpaceToUnder: (string) ->
     string.replace /\s/g, '_'
