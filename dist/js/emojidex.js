@@ -2743,6 +2743,7 @@ $.fn.atwho["default"] = {
     pluginName = "emojidexReplace";
     defaults = {
       onComplete: void 0,
+      useLoadingImg: true,
       useUserEmoji: false,
       userNames: ['emoji', 'emojidex']
     };
@@ -2814,6 +2815,8 @@ $.fn.atwho["default"] = {
 
     Replacer.prototype.loadingNum = void 0;
 
+    Replacer.prototype.regexpCode = /:([^:;@&#~\!\$\+\?\%\*\f\n\r\\\/]+):/g;
+
     Replacer.prototype.getEmojiTag = function(emoji_code) {
       return "<img      class='emojidex-emoji'      src='" + this.plugin.ec.cdn_url + this.plugin.ec.size_code + "/" + emoji_code + ".png'      title='" + (this.replaceUnderToSpace(emoji_code)) + "'    ></img>";
     };
@@ -2837,7 +2840,7 @@ $.fn.atwho["default"] = {
 
     Replacer.prototype.getTextWithLoadingTag = function(text) {
       var _this = this;
-      text = text.replace(/:([^:;@&#~\!\$\+\?\%\*\f\n\r\\\/]+):/g, function(matched_string, pattern1) {
+      text = text.replace(this.regexpCode, function(matched_string, pattern1) {
         return _this.getLoadingTag(matched_string, 'code');
       });
       text = text.replace(this.plugin.options.regexpUtf, function(matched_string) {
@@ -2892,7 +2895,7 @@ $.fn.atwho["default"] = {
     }
 
     ReplacerSearch.prototype.loadEmoji = function() {
-      var searchEmoji_setEmojiTag,
+      var checkComplete, checkSearchEnd, replaceCodeToEmojTag_replaceElement, searchEmoji_setEmojiTag, setEomojiTag, target_num,
         _this = this;
       searchEmoji_setEmojiTag = function(element) {
         var emoji, loading_element, loading_elements, replaceToEmojiIcon, _i, _len, _results;
@@ -2936,8 +2939,81 @@ $.fn.atwho["default"] = {
         }
         return _results;
       };
-      this.setLoadingTag(this.plugin);
-      return searchEmoji_setEmojiTag(this.plugin.element);
+      checkComplete = function() {
+        if (--target_num === 0 && (_this.plugin.options.onComplete != null)) {
+          return _this.plugin.options.onComplete(_this.plugin.element);
+        }
+      };
+      checkSearchEnd = function(searches, element, code_emoji) {
+        if (searches === 0) {
+          return replaceCodeToEmojTag_replaceElement(element, code_emoji);
+        }
+      };
+      replaceCodeToEmojTag_replaceElement = function(element, code_emoji) {
+        var code, replaced_text, _i, _len;
+        replaced_text = element.textContent;
+        for (_i = 0, _len = code_emoji.length; _i < _len; _i++) {
+          code = code_emoji[_i];
+          replaced_text = replaced_text.replace(code.matched, function() {
+            return _this.getEmojiTag(_this.replaceSpaceToUnder(code.code));
+          });
+        }
+        $(element).replaceWith(replaced_text);
+        return checkComplete();
+      };
+      setEomojiTag = function(element) {
+        var code_emoji, searches, text;
+        code_emoji = [];
+        text = element.textContent.replace(_this.plugin.options.regexpUtf, function(matched_string) {
+          var emoji;
+          for (emoji in _this.plugin.options.utfEmojiData) {
+            if (emoji === matched_string) {
+              return _this.getEmojiTag(_this.plugin.options.utfEmojiData[emoji]);
+            }
+          }
+        });
+        if (text.match(_this.regexpCode)) {
+          searches = 0;
+          text.replace(_this.regexpCode, function() {
+            return searches++;
+          });
+          return text.replace(_this.regexpCode, function(matched_string, pattarn1, offset, string) {
+            var emoji_image;
+            emoji_image = $("<img src='" + _this.plugin.ec.cdn_url + _this.plugin.ec.size_code + "/" + (_this.replaceSpaceToUnder(pattarn1)) + ".png'></img>");
+            emoji_image.load(function(e) {
+              searches--;
+              code_emoji.push({
+                matched: matched_string,
+                code: pattarn1
+              });
+              return checkSearchEnd(searches, element, code_emoji);
+            });
+            return emoji_image.error(function(e) {
+              searches--;
+              return checkSearchEnd(searches, element, code_emoji);
+            });
+          });
+        } else {
+          $(element).replaceWith(text);
+          return checkComplete();
+        }
+      };
+      if (this.plugin.options.useLoadingImg) {
+        this.setLoadingTag(this.plugin);
+        return searchEmoji_setEmojiTag(this.plugin.element);
+      } else {
+        target_num = 0;
+        this.plugin.element.find(':not(iframe,textarea,script)').andSelf().contents().filter(function(index, element) {
+          if (element.nodeType === Node.TEXT_NODE && element.textContent.match(/\S/)) {
+            return target_num++;
+          }
+        });
+        return this.plugin.element.find(':not(iframe,textarea,script)').andSelf().contents().filter(function(index, element) {
+          if (element.nodeType === Node.TEXT_NODE && element.textContent.match(/\S/)) {
+            return setEomojiTag(element);
+          }
+        });
+      }
     };
 
     return ReplacerSearch;
@@ -3024,7 +3100,7 @@ $.fn.atwho["default"] = {
       this.emoji_regexps = this.getEmojiRegexps(emoji_data);
       this.targetElementNum = this.plugin.element.find(':not(iframe,textarea,script)').andSelf().contents().length - 1;
       return this.plugin.element.find(':not(iframe,textarea,script)').andSelf().contents().filter(function(index, element) {
-        if (element.nodeType === Node.TEXT_NODE) {
+        if (element.nodeType === Node.TEXT_NODE && element.textContent.match(/\S/)) {
           $(element).replaceWith(_this.getTextWithEomojiTag(element.textContent));
         }
         if (_this.targetElementNum - index === 0 && (_this.plugin.options.onComplete != null)) {

@@ -14,6 +14,7 @@ do ($ = jQuery, window, document) ->
   pluginName = "emojidexReplace"
   defaults =
     onComplete: undefined
+    useLoadingImg: true
     useUserEmoji: false
     userNames: [
       'emoji'

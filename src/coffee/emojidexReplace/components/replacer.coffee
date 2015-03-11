@@ -1,5 +1,6 @@
 class Replacer
   loadingNum: undefined
+  regexpCode: /:([^:;@&#~\!\$\+\?\%\*\f\n\r\\\/]+):/g
 
   getEmojiTag: (emoji_code) ->
     "<img
@@ -24,7 +25,7 @@ class Replacer
         $(element).replaceWith @getTextWithLoadingTag element.textContent
 
   getTextWithLoadingTag: (text) ->
-    text = text.replace /:([^:;@&#~\!\$\+\?\%\*\f\n\r\\\/]+):/g, (matched_string, pattern1) =>
+    text = text.replace @regexpCode, (matched_string, pattern1) =>
       @getLoadingTag matched_string, 'code'
     text = text.replace @plugin.options.regexpUtf, (matched_string) =>
       @getLoadingTag matched_string, 'utf'

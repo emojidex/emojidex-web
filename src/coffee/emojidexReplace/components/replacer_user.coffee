@@ -57,7 +57,7 @@ class ReplacerUser extends Replacer
     @targetElementNum = @plugin.element.find(':not(iframe,textarea,script)').andSelf().contents().length - 1
 
     @plugin.element.find(':not(iframe,textarea,script)').andSelf().contents().filter (index, element) =>
-      $(element).replaceWith @getTextWithEomojiTag element.textContent if element.nodeType is Node.TEXT_NODE
+      $(element).replaceWith @getTextWithEomojiTag element.textContent if element.nodeType is Node.TEXT_NODE and element.textContent.match /\S/
       if @targetElementNum - index is 0 && @plugin.options.onComplete?
         @plugin.options.onComplete @plugin.element
 
