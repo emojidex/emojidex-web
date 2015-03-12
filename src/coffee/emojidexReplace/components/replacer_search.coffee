@@ -53,8 +53,6 @@ class ReplacerSearch extends Replacer
           if emoji is matched_string
             return @getEmojiTag @plugin.options.utfEmojiData[emoji]
 
-      console.log text
-
       if text.match @regexpCode
         searches = 0
         text.replace @regexpCode, ->

@@ -251,7 +251,6 @@
             }
           }
         });
-        console.log(text);
         if (text.match(_this.regexpCode)) {
           searches = 0;
           text.replace(_this.regexpCode, function() {
