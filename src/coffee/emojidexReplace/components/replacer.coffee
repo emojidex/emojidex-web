@@ -3,18 +3,10 @@ class Replacer
   regexpCode: /:([^:;@&#~\!\$\+\?\%\*\f\n\r\\\/]+):/g
 
   getEmojiTag: (emoji_code) ->
-    "<img
-      class='emojidex-emoji'
-      src='#{@plugin.ec.cdn_url}#{@plugin.ec.size_code}/#{emoji_code}.png'
-      title='#{@replaceUnderToSpace emoji_code}'
-    ></img>"
+    "<img class='emojidex-emoji' src='#{@plugin.ec.cdn_url}#{@plugin.ec.size_code}/#{emoji_code}.png' title='#{@replaceUnderToSpace emoji_code}'></img>"
 
   getLoadingTag: (emoji_data, type) ->
-    "<img
-      class='emojidex-loading-icon'
-      data-emoji='#{emoji_data}'
-      data-type='#{type}'
-    ></img>"
+    "<img class='emojidex-loading-icon' data-emoji='#{emoji_data}' data-type='#{type}'></img>"
 
   getLoadingElement: (element) ->
     $ element.find '.emojidex-loading-icon'
@@ -25,10 +17,10 @@ class Replacer
         $(element).replaceWith @getTextWithLoadingTag element.textContent
 
   getTextWithLoadingTag: (text) ->
-    text = text.replace @regexpCode, (matched_string, pattern1) =>
-      @getLoadingTag matched_string, 'code'
     text = text.replace @plugin.options.regexpUtf, (matched_string) =>
       @getLoadingTag matched_string, 'utf'
+    text = text.replace @regexpCode, (matched_string, pattern1) =>
+      @getLoadingTag matched_string, 'code'
     return text
 
   fadeOutLoadingTag_fadeInEmojiTag: (element, emoji_code, match = true) ->

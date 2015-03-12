@@ -97,11 +97,11 @@
     Replacer.prototype.regexpCode = /:([^:;@&#~\!\$\+\?\%\*\f\n\r\\\/]+):/g;
 
     Replacer.prototype.getEmojiTag = function(emoji_code) {
-      return "<img      class='emojidex-emoji'      src='" + this.plugin.ec.cdn_url + this.plugin.ec.size_code + "/" + emoji_code + ".png'      title='" + (this.replaceUnderToSpace(emoji_code)) + "'    ></img>";
+      return "<img class='emojidex-emoji' src='" + this.plugin.ec.cdn_url + this.plugin.ec.size_code + "/" + emoji_code + ".png' title='" + (this.replaceUnderToSpace(emoji_code)) + "'></img>";
     };
 
     Replacer.prototype.getLoadingTag = function(emoji_data, type) {
-      return "<img      class='emojidex-loading-icon'      data-emoji='" + emoji_data + "'      data-type='" + type + "'    ></img>";
+      return "<img class='emojidex-loading-icon' data-emoji='" + emoji_data + "' data-type='" + type + "'></img>";
     };
 
     Replacer.prototype.getLoadingElement = function(element) {
@@ -119,11 +119,11 @@
 
     Replacer.prototype.getTextWithLoadingTag = function(text) {
       var _this = this;
-      text = text.replace(this.regexpCode, function(matched_string, pattern1) {
-        return _this.getLoadingTag(matched_string, 'code');
-      });
       text = text.replace(this.plugin.options.regexpUtf, function(matched_string) {
         return _this.getLoadingTag(matched_string, 'utf');
+      });
+      text = text.replace(this.regexpCode, function(matched_string, pattern1) {
+        return _this.getLoadingTag(matched_string, 'code');
       });
       return text;
     };

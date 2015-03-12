@@ -18,7 +18,6 @@
           $(".emojidex-plain_text").emojidexAutocomplete();
           $(".emojidex-content_editable").emojidexAutocomplete();
           return $("body").emojidexReplace({
-            useLoadingImg: false,
             onComplete: function(element) {
               return console.log('Completed emojidexReplace!!');
             }
@@ -98,7 +97,7 @@
           </h3>
           <hr />
           <div class="emojidex_replace">
-            Examples of auto replacement:<br />(Check the HTML or SLIM sources)<br /><br />UTF moji codes to emoji:<br />❤🛅😄😡💌😈👍#️⃣<br />:code: to emoji:<br />❤:octopus::boar::frog:\:hand_salute: no_match:😄:no match::heart eyes(bk):
+            Examples of auto replacement:<br />(Check the HTML or SLIM sources)<br /><br />UTF moji codes to emoji:<br />❤🛅😄😡💌😈👍#️⃣<br />:code: to emoji:<br />❤:octopus::boar::frog:\:hand_salute: no_match:😄::no match::heart eyes(bk):
           </div>
         </div>
       </div>
