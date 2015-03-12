@@ -94,7 +94,7 @@
 
     Replacer.prototype.loadingNum = void 0;
 
-    Replacer.prototype.regexpCode = /:([^:;@&#~\!\$\+\?\%\*\f\n\r\\\/]+):/g;
+    Replacer.prototype.regexpCode = /:([^:;@&#~{}<>\[\]\!\$\+\?\%\*\f\n\r\\\/]+):/g;
 
     Replacer.prototype.getEmojiTag = function(emoji_code) {
       return "<img class='emojidex-emoji' src='" + this.plugin.ec.cdn_url + this.plugin.ec.size_code + "/" + emoji_code + ".png' title='" + (this.replaceUnderToSpace(emoji_code)) + "'></img>";
