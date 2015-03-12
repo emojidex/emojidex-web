@@ -2944,14 +2944,14 @@ $.fn.atwho["default"] = {
           return _this.plugin.options.onComplete(_this.plugin.element);
         }
       };
-      checkSearchEnd = function(searches, element, code_emoji) {
+      checkSearchEnd = function(searches, element, text, code_emoji) {
         if (searches === 0) {
-          return replaceCodeToEmojTag_replaceElement(element, code_emoji);
+          return replaceCodeToEmojTag_replaceElement(element, text, code_emoji);
         }
       };
-      replaceCodeToEmojTag_replaceElement = function(element, code_emoji) {
+      replaceCodeToEmojTag_replaceElement = function(element, text, code_emoji) {
         var code, replaced_text, _i, _len;
-        replaced_text = element.textContent;
+        replaced_text = text;
         for (_i = 0, _len = code_emoji.length; _i < _len; _i++) {
           code = code_emoji[_i];
           replaced_text = replaced_text.replace(code.matched, function() {
@@ -2972,6 +2972,7 @@ $.fn.atwho["default"] = {
             }
           }
         });
+        console.log(text);
         if (text.match(_this.regexpCode)) {
           searches = 0;
           text.replace(_this.regexpCode, function() {
@@ -2986,11 +2987,11 @@ $.fn.atwho["default"] = {
                 matched: matched_string,
                 code: pattarn1
               });
-              return checkSearchEnd(searches, element, code_emoji);
+              return checkSearchEnd(searches, element, text, code_emoji);
             });
             return emoji_image.error(function(e) {
               searches--;
-              return checkSearchEnd(searches, element, code_emoji);
+              return checkSearchEnd(searches, element, text, code_emoji);
             });
           });
         } else {

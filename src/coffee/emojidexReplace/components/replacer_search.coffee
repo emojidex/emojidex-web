@@ -34,12 +34,12 @@ class ReplacerSearch extends Replacer
       if --target_num is 0 and @plugin.options.onComplete?
         @plugin.options.onComplete @plugin.element
 
-    checkSearchEnd = (searches, element, code_emoji)=>
+    checkSearchEnd = (searches, element, text, code_emoji)=>
       if searches is 0
-        replaceCodeToEmojTag_replaceElement element, code_emoji
+        replaceCodeToEmojTag_replaceElement element, text, code_emoji
 
-    replaceCodeToEmojTag_replaceElement = (element, code_emoji) =>
-      replaced_text = element.textContent
+    replaceCodeToEmojTag_replaceElement = (element, text, code_emoji) =>
+      replaced_text = text
       for code in code_emoji
         replaced_text = replaced_text.replace code.matched, =>
           @getEmojiTag @replaceSpaceToUnder code.code
@@ -53,6 +53,8 @@ class ReplacerSearch extends Replacer
           if emoji is matched_string
             return @getEmojiTag @plugin.options.utfEmojiData[emoji]
 
+      console.log text
+
       if text.match @regexpCode
         searches = 0
         text.replace @regexpCode, ->
@@ -64,10 +66,10 @@ class ReplacerSearch extends Replacer
             code_emoji.push
               matched: matched_string
               code: pattarn1
-            checkSearchEnd searches, element, code_emoji
+            checkSearchEnd searches, element, text, code_emoji
           emoji_image.error (e) =>
             searches--
-            checkSearchEnd searches, element, code_emoji
+            checkSearchEnd searches, element, text, code_emoji
       else
         $(element).replaceWith text
         checkComplete()
