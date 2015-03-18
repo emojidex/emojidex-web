@@ -1,6 +1,6 @@
 class Replacer
   loadingNum: undefined
-  regexpCode: /:([^:;@&#~{}<>\r\n\[\]\!\$\+\?\%\*\\\/]+):/g
+  regexpCode: /:(\b[^'":;@&#~{}<>\r\n\[\]\!\$\+\?\%\*\/\\]+\b):/g
 
   getEmojiTag: (emoji_code) ->
     "<img class='emojidex-emoji' src='#{@plugin.ec.cdn_url}#{@plugin.ec.size_code}/#{emoji_code}.png' title='#{@replaceUnderToSpace emoji_code}'></img>"
@@ -13,10 +13,12 @@ class Replacer
 
   setLoadingTag: (plugin) ->
     plugin.element.find(":not(iframe,textarea,script)").andSelf().contents().filter (index, element) =>
-      if element.nodeType is Node.TEXT_NODE and element.textContent.match /\S/
-        $(element).replaceWith @getTextWithLoadingTag element.textContent
+      if element.parentElement.tagName isnt 'STYLE' and element.nodeType is Node.TEXT_NODE and element.textContent.match /\S/
+        replaced_text = @getTextWithLoadingTag element.textContent
+        $(element).replaceWith replaced_text if replaced_text isnt element.textContent
 
   getTextWithLoadingTag: (text) ->
+    text_bak = text
     text = text.replace @plugin.options.regexpUtf, (matched_string) =>
       @getLoadingTag matched_string, 'utf'
     text = text.replace @regexpCode, (matched_string, pattern1) =>

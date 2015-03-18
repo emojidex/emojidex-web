@@ -1,5 +1,5 @@
 /*
- * jQuery emojidex - v0.4.2
+ * jQuery emojidex - v0.4.3
  * emojidex plugin for jQuery/Zepto and compatible
  * https://github.com/emojidex/emojidex-web
  *
@@ -2815,7 +2815,7 @@ $.fn.atwho["default"] = {
 
     Replacer.prototype.loadingNum = void 0;
 
-    Replacer.prototype.regexpCode = /:([^:;@&#~{}<>\r\n\[\]\!\$\+\?\%\*\\\/]+):/g;
+    Replacer.prototype.regexpCode = /:(\b[^'":;@&#~{}<>\r\n\[\]\!\$\+\?\%\*\/\\]+\b):/g;
 
     Replacer.prototype.getEmojiTag = function(emoji_code) {
       return "<img class='emojidex-emoji' src='" + this.plugin.ec.cdn_url + this.plugin.ec.size_code + "/" + emoji_code + ".png' title='" + (this.replaceUnderToSpace(emoji_code)) + "'></img>";
@@ -2832,14 +2832,20 @@ $.fn.atwho["default"] = {
     Replacer.prototype.setLoadingTag = function(plugin) {
       var _this = this;
       return plugin.element.find(":not(iframe,textarea,script)").andSelf().contents().filter(function(index, element) {
-        if (element.nodeType === Node.TEXT_NODE && element.textContent.match(/\S/)) {
-          return $(element).replaceWith(_this.getTextWithLoadingTag(element.textContent));
+        var replaced_text;
+        if (element.parentElement.tagName !== 'STYLE' && element.nodeType === Node.TEXT_NODE && element.textContent.match(/\S/)) {
+          replaced_text = _this.getTextWithLoadingTag(element.textContent);
+          if (replaced_text !== element.textContent) {
+            return $(element).replaceWith(replaced_text);
+          }
         }
       });
     };
 
     Replacer.prototype.getTextWithLoadingTag = function(text) {
-      var _this = this;
+      var text_bak,
+        _this = this;
+      text_bak = text;
       text = text.replace(this.plugin.options.regexpUtf, function(matched_string) {
         return _this.getLoadingTag(matched_string, 'utf');
       });
