@@ -1,5 +1,5 @@
 /*
- * jQuery emojidex - v0.4.1
+ * jQuery emojidex - v0.4.2
  * emojidex plugin for jQuery/Zepto and compatible
  * https://github.com/emojidex/emojidex-web
  *
@@ -2815,7 +2815,7 @@ $.fn.atwho["default"] = {
 
     Replacer.prototype.loadingNum = void 0;
 
-    Replacer.prototype.regexpCode = /:([^:;@&#~{}<>\[\]\!\$\+\?\%\*\f\n\r\\\/]+):/g;
+    Replacer.prototype.regexpCode = /:([^:;@&#~{}<>\r\n\[\]\!\$\+\?\%\*\\\/]+):/g;
 
     Replacer.prototype.getEmojiTag = function(emoji_code) {
       return "<img class='emojidex-emoji' src='" + this.plugin.ec.cdn_url + this.plugin.ec.size_code + "/" + emoji_code + ".png' title='" + (this.replaceUnderToSpace(emoji_code)) + "'></img>";
@@ -2963,39 +2963,41 @@ $.fn.atwho["default"] = {
       };
       setEomojiTag = function(element) {
         var code_emoji, searches, text;
-        code_emoji = [];
-        text = element.textContent.replace(_this.plugin.options.regexpUtf, function(matched_string) {
-          var emoji;
-          for (emoji in _this.plugin.options.utfEmojiData) {
-            if (emoji === matched_string) {
-              return _this.getEmojiTag(_this.plugin.options.utfEmojiData[emoji]);
+        if (element.parentElement.tagName !== 'STYLE') {
+          code_emoji = [];
+          text = element.textContent.replace(_this.plugin.options.regexpUtf, function(matched_string) {
+            var emoji;
+            for (emoji in _this.plugin.options.utfEmojiData) {
+              if (emoji === matched_string) {
+                return _this.getEmojiTag(_this.plugin.options.utfEmojiData[emoji]);
+              }
             }
-          }
-        });
-        if (text.match(_this.regexpCode)) {
-          searches = 0;
-          text.replace(_this.regexpCode, function() {
-            return searches++;
           });
-          return text.replace(_this.regexpCode, function(matched_string, pattarn1, offset, string) {
-            var emoji_image;
-            emoji_image = $("<img src='" + _this.plugin.ec.cdn_url + _this.plugin.ec.size_code + "/" + (_this.replaceSpaceToUnder(pattarn1)) + ".png'></img>");
-            emoji_image.load(function(e) {
-              searches--;
-              code_emoji.push({
-                matched: matched_string,
-                code: pattarn1
+          if (text.match(_this.regexpCode)) {
+            searches = 0;
+            text.replace(_this.regexpCode, function() {
+              return searches++;
+            });
+            return text.replace(_this.regexpCode, function(matched_string, pattarn1, offset, string) {
+              var emoji_image;
+              emoji_image = $("<img src='" + _this.plugin.ec.cdn_url + _this.plugin.ec.size_code + "/" + (_this.replaceSpaceToUnder(pattarn1)) + ".png'></img>");
+              emoji_image.load(function(e) {
+                searches--;
+                code_emoji.push({
+                  matched: matched_string,
+                  code: pattarn1
+                });
+                return checkSearchEnd(searches, element, text, code_emoji);
               });
-              return checkSearchEnd(searches, element, text, code_emoji);
+              return emoji_image.error(function(e) {
+                searches--;
+                return checkSearchEnd(searches, element, text, code_emoji);
+              });
             });
-            return emoji_image.error(function(e) {
-              searches--;
-              return checkSearchEnd(searches, element, text, code_emoji);
-            });
-          });
-        } else {
-          $(element).replaceWith(text);
-          return checkComplete();
+          } else {
+            $(element).replaceWith(text);
+            return checkComplete();
+          }
         }
       };
       if (this.plugin.options.useLoadingImg) {
