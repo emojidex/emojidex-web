@@ -1,6 +1,8 @@
 class Replacer
-  loadingNum: undefined
-  regexpCode: /:(\b[^'":;@&#~{}<>\r\n\[\]\!\$\+\?\%\*\/\\]+\b):/g
+  constructor: ->
+    @loadingNum = undefined
+    ignore = '\'":;@&#~{}<>\\r\\n\\[\\]\\!\\$\\+\\?\\%\\*\\/\\\\'
+    @regexpCode = RegExp ":[^\s#{ignore}]([^#{ignore}]*)[^\s#{ignore}]:|:([^\s#{ignore}]):", 'g'
 
   getEmojiTag: (emoji_code) ->
     "<img class='emojidex-emoji' src='#{@plugin.ec.cdn_url}#{@plugin.ec.size_code}/#{emoji_code}.png' title='#{@replaceUnderToSpace emoji_code}'></img>"

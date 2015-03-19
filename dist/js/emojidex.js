@@ -2811,11 +2811,12 @@ $.fn.atwho["default"] = {
   })(jQuery, window, document);
 
   Replacer = (function() {
-    function Replacer() {}
-
-    Replacer.prototype.loadingNum = void 0;
-
-    Replacer.prototype.regexpCode = /:(\b[^'":;@&#~{}<>\r\n\[\]\!\$\+\?\%\*\/\\]+\b):/g;
+    function Replacer() {
+      var ignore;
+      this.loadingNum = void 0;
+      ignore = '\'":;@&#~{}<>\\r\\n\\[\\]\\!\\$\\+\\?\\%\\*\\/\\\\';
+      this.regexpCode = RegExp(":[^\s" + ignore + "]([^" + ignore + "]*)[^\s" + ignore + "]:|:([^\s" + ignore + "]):", 'g');
+    }
 
     Replacer.prototype.getEmojiTag = function(emoji_code) {
       return "<img class='emojidex-emoji' src='" + this.plugin.ec.cdn_url + this.plugin.ec.size_code + "/" + emoji_code + ".png' title='" + (this.replaceUnderToSpace(emoji_code)) + "'></img>";
