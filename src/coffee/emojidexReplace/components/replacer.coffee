@@ -1,6 +1,7 @@
 class Replacer
   constructor: ->
     @loadingNum = undefined
+
     ignore = '\'":;@&#~{}<>\\r\\n\\[\\]\\!\\$\\+\\?\\%\\*\\/\\\\'
     @regexpCode = RegExp ":[^\s#{ignore}]([^#{ignore}]*)[^\s#{ignore}]:|:([^\s#{ignore}]):", 'g'
 
