@@ -94,7 +94,7 @@
       var ignore;
       this.loadingNum = void 0;
       ignore = '\'":;@&#~{}<>\\r\\n\\[\\]\\!\\$\\+\\?\\%\\*\\/\\\\';
-      this.regexpCode = RegExp(":[^\s" + ignore + "]([^" + ignore + "]*)[^\s" + ignore + "]:|:([^\s" + ignore + "]):", 'g');
+      this.regexpCode = RegExp(":([^\\s" + ignore + "][^" + ignore + "]*[^\\s" + ignore + "]):|:([^\\s" + ignore + "]):", 'g');
     }
 
     Replacer.prototype.getEmojiTag = function(emoji_code) {
@@ -156,6 +156,8 @@
               return _this.plugin.options.onComplete(_this.plugin.element);
             }
           });
+        } else {
+          return _this.loadingNum--;
         }
       });
     };
