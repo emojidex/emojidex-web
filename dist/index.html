@@ -95,9 +95,17 @@
           <h3>
             emojidexReplace :kissing_heart:
           </h3>
-          <hr />
+          <hr class="mt-s mb-m" />
           <div class="emojidex_replace">
-            Examples of auto replacement:<br />(Check the HTML or SLIM sources)<br /><br />UTF moji codes to emoji:<br />❤🛅😄😡💌😈👍#️⃣<br />:code: to emoji:<br />❤:octopus::boar::frog:\:hand_salute: no_match:😄::no match::heart eyes(wh):
+            Auto Replace examples.<br />(Check the <a href="https://github.com/emojidex/emojidex-web/blob/master/dist/index.html" target="_blank">HTML</a> or <a href="https://github.com/emojidex/emojidex-web/blob/master/src/slim/index.slim" target="_blank">SLIM</a> sources)<br /><br />
+            <h5>
+              UTF moji codes to emoji:
+            </h5>
+            ❤🛅😄😡💌😈👍#️⃣
+            <h5 class="mt-xl">
+              :code: to emoji:
+            </h5>
+            ❤:octopus::boar::frog:\:hand_salute: no_match:😄::no match::heart eyes(wh):
           </div>
         </div>
       </div>
@@ -106,15 +114,16 @@
           <h3>
             emojidexAutocomplete :laughing:
           </h3>
-          <hr />
-          <div class="row">
+          <hr class="mt-s mb-m" />
+          Try typing a colon and the start of a word to start a code search, like ":tes".
+          <div class="row mt-m">
             <div class="col-md-12">
               <h4>
                 Plain Text
               </h4>
               <form role="form">
                 <div class="form-group">
-                  <textarea class="emojidex-plain_text form-control" rows="5">Hello, Let's type ":***".&nbsp;</textarea>
+                  <textarea class="emojidex-plain_text form-control" rows="5">Hello, Try Typing :</textarea>
                 </div>
               </form>
             </div>
@@ -125,7 +134,7 @@
                 Content Editable
               </h4>
               <div class="emojidex-content_editable inputor" contenteditable="true">
-                Hello, Let's type ":***".&nbsp;
+                Hello, Try Typing :
               </div>
             </div>
           </div>
