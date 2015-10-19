@@ -9,7 +9,18 @@ demo: http://emojidex.github.io/emojidex-web
 
 使い方
 --------
-java
+使い方は簡単です。
+
+１：下記を参考に必要なjavascriptとcssを読み込んでください。
+```html
+<head>
+  ...
+  <link href="css/emojidex.css" rel="stylesheet" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="js/emojidex.js"></script>
+  ...
+</head>
+```
 
 Building
 --------
