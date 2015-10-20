@@ -31,9 +31,11 @@ emojidex-webはウェブサイトやJavaScriptベースのアプリ等で、emoj
 #### via JavaScript
 ```js
 $(document).ready(function() {
+  ...
   $("body").emojidexReplace();
   $(".emojidex-plain_text").emojidexAutocomplete();
   $(".emojidex-content_editable").emojidexAutocomplete();
+  ...
 });
 ```
 以上で終了です。
