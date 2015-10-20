@@ -16,10 +16,11 @@ do ($ = jQuery, window, document) ->
     onComplete: undefined
     useLoadingImg: true
     useUserEmoji: false
-    userNames: [
-      'emoji'
-      'emojidex'
-    ]
+    # eg: useUserEmoji --------
+    # useUserEmoji: [
+    #   'emoji'
+    #   'emojidex'
+    # ]
 
   class Plugin
     constructor: (@element, options) ->

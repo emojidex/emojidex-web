@@ -22,6 +22,8 @@ demo: http://emojidex.github.io/emojidex-web
 </head>
 ```
 
+２：emojidex-webのスクリプトを実行して下さい。
+
 Building
 --------
 You will need node with a usable npm, grunt, bower. In general grunt and bower should be

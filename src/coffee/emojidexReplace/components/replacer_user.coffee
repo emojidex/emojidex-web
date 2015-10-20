@@ -3,7 +3,7 @@ class ReplacerUser extends Replacer
     super
 
   loadEmoji: ->
-    @getUserEmojiData @plugin.options.userNames, @onLoadEmojiData
+    @getUserEmojiData @plugin.options.useUserEmoji, @onLoadEmojiData
 
   getUserEmojiData: (user_names, callback) ->
     loaded_num = 0

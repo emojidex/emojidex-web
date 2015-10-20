@@ -2810,8 +2810,7 @@ $.fn.atwho["default"] = {
     defaults = {
       onComplete: void 0,
       useLoadingImg: true,
-      useUserEmoji: false,
-      userNames: ['emoji', 'emojidex']
+      useUserEmoji: false
     };
     Plugin = (function() {
       function Plugin(element, options) {
@@ -3107,7 +3106,7 @@ $.fn.atwho["default"] = {
     }
 
     ReplacerUser.prototype.loadEmoji = function() {
-      return this.getUserEmojiData(this.plugin.options.userNames, this.onLoadEmojiData);
+      return this.getUserEmojiData(this.plugin.options.useUserEmoji, this.onLoadEmojiData);
     };
 
     ReplacerUser.prototype.getUserEmojiData = function(user_names, callback) {
