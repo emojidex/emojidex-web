@@ -54,7 +54,9 @@ UTF moji codes to emoji:
 :code: to emoji:
 ❤:octopus::boar::frog:\:hand_salute: no_match:😄::no match::heart eyes(wh):
 ```
+
 ↓
+
 ![emojidex replace image](http://emojidex.github.io/emojidex-web/img/emojidex_replace.png)
 
 ### Options
