@@ -54,7 +54,8 @@ $('*').emojidexReplace({
 });
 ```
 #### options.onComplete
-Type: `Function(jQueryエレメント)` Dfault: `undefined`
+Type: `Function(jQueryエレメント)` Default: `undefined`
+
 絵文字が置き換わった後に実行する関数を指定する事が出来ます。引数に置換が完了した、ターゲットエレメントのjQueryエレメントが入ります。
 
 例：
@@ -67,7 +68,8 @@ $("body").emojidexReplace({
 ```
 
 #### options.useLoadingImg
-Type: `Boolean` Dfault: `true`
+Type: `Boolean` Default: `true`
+
 置換実行中にローディング画像を表示するか、しないかを設定出来ます。
 
 
