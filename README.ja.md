@@ -45,7 +45,17 @@ $(document).ready(function() {
 指定されたエレメントのテキスト要素を全文検索し、「:」で囲まれた絵文字コード（例：「`:smile:`」）と、UTF絵文字（例：「😄」）を対応したemojidexの絵文字画像に置き換えます。
 emojidexに対応した絵文字が無い場合は、元のテキストがそのまま使用されます。
 
-=画像
+```
+emojidexReplace :kissing_heart:
+
+UTF moji codes to emoji:
+❤🛅😄😡💌😈👍#️⃣
+
+:code: to emoji:
+❤:octopus::boar::frog:\:hand_salute: no_match:😄::no match::heart eyes(wh):
+```
+↓
+![emojidex replace image](http://emojidex.github.io/emojidex-web/img/emojidex_replace.png)
 
 ### Options
 #### Default options
