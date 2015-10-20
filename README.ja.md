@@ -75,7 +75,7 @@ Type: `Boolean` Default: `true`
 置換実行中にローディング画像を表示するか、しないかを設定出来ます。
 
 ### .emojidexAutocomplete()
-input, textarea, [contenteditable=true]で「:」から始まる文字列でemojidexの対応絵文字検索し、候補をリスト表示します。
+input, textarea, [contenteditable=true]で「:」から始まる文字列を使ってemojidexの対応絵文字検索し、候補をリスト表示します。
 
 input, textareaでは候補を選択すると「:【対応する絵文字コード】:」がプレーンテキストで挿入されます。
 [contenteditable="true"]では、候補に表示される絵文字の画像が挿入されます。
