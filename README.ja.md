@@ -50,7 +50,7 @@ emojidexに対応した絵文字が無い場合は、元のテキストがその
 ### Options
 #### Default options
 ```js
-$('*').emojidexReplace({
+emojidexReplace({
   onComplete: undefined,
   useLoadingImg: true,
 });
@@ -83,7 +83,7 @@ input, textareaでは候補を選択すると「:【対応する絵文字コー�
 ### Options
 #### Default options
 ```js
-$('input, textarea, [contenteditable=true]').emojidexAutocomplete({
+emojidexAutocomplete({
   listLimit: 10,
   insertImg: true
 });
