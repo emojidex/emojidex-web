@@ -1,17 +1,21 @@
 emojidex-web
 ============
-emojidex-web contains coffeescript and SLIM sources which compile into a set of javascript jQuery
-modules. Anyone can use these modules on their site to enable emoji without any complex
-bundling or dealing with image assets or server-side processing. A variety of tools are
-included which allow emojidex to be used for display in a variety of ways, automatic
-conversion from emoji codes, and various types of emoji input tools and widgets.<br>
-demo: http://emojidex.github.io/emojidex-web
+emojidex-webにはウェブサイトやJavaScriptベースのアプリに様々なemojidexが使えるツールや
+ウィジェットが含まれています。CoffeeScriptとSLIMのソースが簡単に使えるJavaScript
+モジュールにコンパイルされます。  
+
+普通の使い方では全ての絵文字が絵文字デックスのCDNから動的に取得されてクライアント側に
+キャッシュつれます。自分のサーバーへのアップロードやアプリにパッケージする必要が
+ありません。本モジュールが自己完結型でサイトやアプリ内の他の部分に影響しないはずです。  
+
+仕様デモと機能解説:
+[http://emojidex.github.io/emojidex-web](http://emojidex.github.io/emojidex-web)
 
 使い方
 --------
 使い方は簡単です。
 
-１：下記を参考に必要なjavascriptとcssを読み込んでください。
+1. 下記を参考に必要なjavascriptとcssを読み込んでください。
 ```html
 <head>
   ...
@@ -21,42 +25,43 @@ demo: http://emojidex.github.io/emojidex-web
   ...
 </head>
 ```
+2. *coming soon*
 
-２：emojidex-webのスクリプトを実行して下さい。
+ビルドの仕方
+------------
+nodeにnpmとgruntとbowerが必要です。
 
-Building
---------
-You will need node with a usable npm, grunt, bower. In general grunt and bower should be
-installed globally or should be present and usable in your path. We'll assume you have a
-working node/npm that you either installed using your package manager or built yourself.
-
-### Get the source
-First off we need the actual source to build. Clone this repository if you haven't already.
+### ソースの取得
+まだクローンしてなければ、以下の通りでクローンが出来ます。
 ```shell
 git clone git@github.com:emojidex/emojidex-web.git
 cd emojidex-web
 ```
 
-### Install Packages and Obtain Required Sources
+### パッケージの取得
 ```shell
 npm install
 bower install
 ```
 
-### Build
-For a regular one-off build:
+### ビルド
+一発ビルド:
 ```shell
 grunt
 ```
+distの下に出力されます。
 
-For development mode with dynamic compilation and dev server:
+開発用の動的ビルド:
 ```shell
 grunt dev
 ```
-A live version of the latest build will be availble at http://localhost:8000/dist/
+編集の際に再コンパイルされ、
+[http://localhost:8000/dist/](http://localhost:8000/dist/)から見れます。
 
-License
-=======
-emojidex and emojidex tools are licensed under the [emojidex Open License](https://www.emojidex.com/emojidex/emojidex_open_license).
+ライセンス
+==========
+emojidexとemojidex関連のツールが全て
+[emojidex Open License](https://www.emojidex.com/emojidex/emojidex_open_license)
+にてライセンスされています。
 
-©2013 the emojidex project / Genshin Souzou K.K. [Phantom Creation Inc.]
+©2013emojidex / 幻信創造株式会社
