@@ -18,7 +18,7 @@
     var Plugin, defaults, pluginName;
     pluginName = "emojidexAutocomplete";
     defaults = {
-      limit: 10,
+      listLimit: 10,
       insertImg: true
     };
     Plugin = (function() {
@@ -126,7 +126,7 @@
       at_init = {
         at: ':',
         suffix: '',
-        limit: this.plugin.options.limit,
+        limit: this.plugin.options.listLimit,
         search_key: "code",
         tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20'></img>${code}</li>",
         insert_tpl: this.plugin.options.insertImg ? "<img src='${img_url}' height='20' width='20' />" : ":${code}:",

@@ -60,7 +60,7 @@ class AutoComplete
       at_init =
         at: ':'
         suffix: ''
-        limit: @plugin.options.limit
+        limit: @plugin.options.listLimit
         search_key: "code"
         tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20'></img>${code}</li>"
         insert_tpl: if @plugin.options.insertImg then "<img src='${img_url}' height='20' width='20' />" else ":${code}:"
