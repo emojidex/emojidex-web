@@ -1,21 +1,22 @@
 emojidex-web
 ============
-emojidex-webにはウェブサイトやJavaScriptベースのアプリに様々なemojidexが使えるツールや
-ウィジェットが含まれています。CoffeeScriptとSLIMのソースが簡単に使えるJavaScript
-モジュールにコンパイルされます。  
+emojidex-webはウェブサイトやJavaScriptベースのアプリ等で、emojidexの様々なサービスが使えるツールや、
+ウィジェットが含まれたjQuery向けのライブラリです。
 
-普通の使い方では全ての絵文字が絵文字デックスのCDNから動的に取得されてクライアント側に
-キャッシュつれます。自分のサーバーへのアップロードやアプリにパッケージする必要が
-ありません。本モジュールが自己完結型でサイトやアプリ内の他の部分に影響しないはずです。  
+開発にはCoffeeScriptとSlimを使用しています。そこから簡単に使えるJavaScriptモジュールにコンパイルされます。  
 
-仕様デモと機能解説:
+このライブラリを使用してemojidexのサービスを利用する際には、使用される全ての絵文字はemojidexのCDNから自動的に取得され、クライアント側にキャッシュされます。
+それにより、絵文字を自身のサーバーへアップロードしたり、アプリに追加する必要はありません。
+
+
+デモと機能解説:
 [http://emojidex.github.io/emojidex-web](http://emojidex.github.io/emojidex-web)
 
 使い方
 --------
 使い方は簡単です。
 
-1. 下記を参考に必要なjavascriptとcssを読み込んでください。
+1\. 下記を参考に必要なjavascriptとcssを読み込んでください。
 ```html
 <head>
   ...
@@ -25,7 +26,10 @@ emojidex-webにはウェブサイトやJavaScriptベースのアプリに様々�
   ...
 </head>
 ```
-2. *coming soon*
+2\. emojidex-webの設定
+
+クラスを指定する方法：
+
 
 ビルドの仕方
 ------------
