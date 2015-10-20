@@ -73,16 +73,22 @@ class ReplacerUser extends Replacer
     utf_emoji.sort (v1, v2) ->
       v2.length - v1.length
 
-    utf: RegExp utf_emoji.join('|'), 'g'
-    code: RegExp pattern_code.slice(0, -1) + "):", 'g'
+    regexps =
+      utf: RegExp utf_emoji.join('|'), 'g'
+      code: RegExp pattern_code.slice(0, -1) + "):", 'g'
+    regexps.utf = false unless utf_emoji.length
+
+    return regexps
 
   getTextWithEomojiTag: (text) ->
-    text = text.replace @emoji_regexps.utf, (matched_string) =>
-      for emoji in @emoji_data
-        if emoji.moji is matched_string
-          return @getEmojiTag @replaceSpaceToUnder emoji.code
+    if @emoji_regexps.utf
+      text = text.replace @emoji_regexps.utf, (matched_string) =>
+        for emoji in @emoji_data
+          if emoji.moji is matched_string
+            return @getEmojiTag @replaceSpaceToUnder emoji.code
 
-    text = text.replace @emoji_regexps.code, (matched_string, pattern1) =>
-      for emoji in @emoji_data
-        if @replaceSpaceToUnder(emoji.code) is pattern1
-          return @getEmojiTag pattern1
+    if @emoji_regexps.code
+      text = text.replace @emoji_regexps.code, (matched_string, pattern1) =>
+        for emoji in @emoji_data
+          if @replaceSpaceToUnder(emoji.code) is pattern1
+            return @getEmojiTag pattern1

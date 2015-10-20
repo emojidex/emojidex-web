@@ -3186,7 +3186,7 @@ $.fn.atwho["default"] = {
     };
 
     ReplacerUser.prototype.getEmojiRegexps = function(emoji_data) {
-      var emoji, pattern_code, utf_emoji, _i, _len;
+      var emoji, pattern_code, regexps, utf_emoji, _i, _len;
       utf_emoji = [];
       pattern_code = ':(';
       for (_i = 0, _len = emoji_data.length; _i < _len; _i++) {
@@ -3201,34 +3201,42 @@ $.fn.atwho["default"] = {
       utf_emoji.sort(function(v1, v2) {
         return v2.length - v1.length;
       });
-      return {
+      regexps = {
         utf: RegExp(utf_emoji.join('|'), 'g'),
         code: RegExp(pattern_code.slice(0, -1) + "):", 'g')
       };
+      if (!utf_emoji.length) {
+        regexps.utf = false;
+      }
+      return regexps;
     };
 
     ReplacerUser.prototype.getTextWithEomojiTag = function(text) {
       var _this = this;
-      text = text.replace(this.emoji_regexps.utf, function(matched_string) {
-        var emoji, _i, _len, _ref;
-        _ref = _this.emoji_data;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          emoji = _ref[_i];
-          if (emoji.moji === matched_string) {
-            return _this.getEmojiTag(_this.replaceSpaceToUnder(emoji.code));
+      if (this.emoji_regexps.utf) {
+        text = text.replace(this.emoji_regexps.utf, function(matched_string) {
+          var emoji, _i, _len, _ref;
+          _ref = _this.emoji_data;
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            emoji = _ref[_i];
+            if (emoji.moji === matched_string) {
+              return _this.getEmojiTag(_this.replaceSpaceToUnder(emoji.code));
+            }
           }
-        }
-      });
-      return text = text.replace(this.emoji_regexps.code, function(matched_string, pattern1) {
-        var emoji, _i, _len, _ref;
-        _ref = _this.emoji_data;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          emoji = _ref[_i];
-          if (_this.replaceSpaceToUnder(emoji.code) === pattern1) {
-            return _this.getEmojiTag(pattern1);
+        });
+      }
+      if (this.emoji_regexps.code) {
+        return text = text.replace(this.emoji_regexps.code, function(matched_string, pattern1) {
+          var emoji, _i, _len, _ref;
+          _ref = _this.emoji_data;
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            emoji = _ref[_i];
+            if (_this.replaceSpaceToUnder(emoji.code) === pattern1) {
+              return _this.getEmojiTag(pattern1);
+            }
           }
-        }
-      });
+        });
+      }
     };
 
     return ReplacerUser;
