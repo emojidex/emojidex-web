@@ -26,7 +26,95 @@ Basic usage is simple.
   ...
 </head>
 ```
-2. *coming soon*
+2. Set emojidex-web  
+In JavaScript / in a script tag
+```js
+$(document).ready(function() {
+  ...
+  $("body").emojidexReplace();
+  $(".emojidex-plain_text").emojidexAutocomplete();
+  $(".emojidex-content_editable").emojidexAutocomplete();
+  ...
+});
+```
+And you're all set!
+
+Features
+--------
+### .emojidexReplace()
+Scans text in the specified element and replaces any colon ":" encased short codes 
+(eg: `:smile:`) or any UTF emoji (eg: `😄`) with emojidex emoji images.  
+No conversion occurs when no emoji on emojidex is found that corresponds to the short code or 
+UTF code and the text remains unchanged.
+
+```
+emojidexReplace :kissing_heart:
+
+UTF moji codes to emoji:
+❤🛅😄😡💌😈👍#️⃣
+
+:code: to emoji:
+❤:octopus::boar::frog:\:hand_salute: no_match:😄::no match::heart eyes(wh):
+```
+
+↓
+
+![emojidex replace image](http://emojidex.github.io/emojidex-web/img/emojidex_replace.png)
+
+### Options
+#### Defaults
+```js
+emojidexReplace({
+  onComplete: undefined,
+  useLoadingImg: true,
+});
+```
+
+#### options.onComplete
+Type: `Function(jQuery element)` Default: `undefined`
+
+Specifies a method to be run after a code has been converted into an emoji.  
+A jQuery element reference is passed as an argument to the assigned method.  
+  
+Example:
+```js
+$("body").emojidexReplace({
+  onComplete: function(element) {
+    console.log('Completed emojidexReplace!!');
+  }
+});
+```
+
+#### options.useLoadingImg
+Type: `Boolean` Default: `true`
+
+Specifies weather or not to show the loading image [specified in the CSS] while downloading emoji.
+
+### .emojidexAutocomplete()
+Enables the autocomplete pop when a `:` colon is entered for `input`, `textarea`, 
+and elements where `contenteditable="true"`.  
+
+For `input`s and , `textarea`s colon enclosed shortcodes are shown as plain text.  
+For `contenteditable="true"` elements the codes are converted immediately into emoji images.
+
+### Options
+#### Default options
+```js
+emojidexAutocomplete({
+  listLimit: 10,
+  insertImg: true
+});
+```
+#### options.listLimit
+Type: `Int` Default: `10`
+
+The maximum number of items displayed in a pop list.
+
+#### options.insertImg
+Type: `Boolean` Default: `true`
+
+Defines the behavior of `contenteditable="true"` elements. When true, codes are automatically 
+converted to images. When false they remain as plain text.
 
 Building
 --------
@@ -50,13 +138,13 @@ For a regular one-off build:
 ```shell
 grunt
 ```
-Modules will be built in the dist dierctory.
+Modules will be built in the dist directory.
 
 For development mode with dynamic compilation and dev server:
 ```shell
 grunt dev
 ```
-A live version of the latest build will be availble at
+A live version of the latest build will be available at
 [http://localhost:8000/dist/](http://localhost:8000/dist/).
 
 License
