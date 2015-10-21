@@ -1,15 +1,15 @@
 emojidex-web
 ============
-emojidex-web provides a variety of tools and widgets to quickly incorporate emojidex 
-into any website or JavaScript based app. It's written in CoffeeScript and SLIM which 
+emojidex-web provides a variety of tools and widgets to quickly incorporate emojidex
+into any website or JavaScript based app. It's written in CoffeeScript and SLIM which
 compiles into a JavaScript module that can be easily included into your project.  
-  
-By default all emoji assets are dynamically loaded from the emojidex CDN and dynamically 
-cached by the client. There is no need to store any assets on your own server or bundle 
-them with your app. The module is self contained and enclosed and should not interfere 
+
+By default all emoji assets are dynamically loaded from the emojidex CDN and dynamically
+cached by the client. There is no need to store any assets on your own server or bundle
+them with your app. The module is self contained and enclosed and should not interfere
 with other components of your site or app.  
-  
-Check out the demo at: 
+
+Check out the demo at:
 [http://emojidex.github.io/emojidex-web](http://emojidex.github.io/emojidex-web)
 
 Usage
@@ -20,9 +20,9 @@ Basic usage is simple.
 ```html
 <head>
   ...
-  <link href="css/emojidex.css" rel="stylesheet" />
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-  <script src="js/emojidex.js"></script>
+  <link href="http://assets.emojidex.com/scripts/css/emojidex-web.min.css" rel="stylesheet" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script src="http://assets.emojidex.com/scripts/javascript/emojidex-web.min.js"></script>
   ...
 </head>
 ```
@@ -56,7 +56,7 @@ For development mode with dynamic compilation and dev server:
 ```shell
 grunt dev
 ```
-A live version of the latest build will be availble at 
+A live version of the latest build will be availble at
 [http://localhost:8000/dist/](http://localhost:8000/dist/).
 
 License

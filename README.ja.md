@@ -20,9 +20,9 @@ emojidex-webはウェブサイトやJavaScriptベースのアプリ等で、emoj
 ```html
 <head>
   ...
-  <link href="css/emojidex.css" rel="stylesheet" />
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-  <script src="js/emojidex.js"></script>
+  <link href="http://assets.emojidex.com/scripts/css/emojidex-web.min.css" rel="stylesheet" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script src="http://assets.emojidex.com/scripts/javascript/emojidex-web.min.js"></script>
   ...
 </head>
 ```
