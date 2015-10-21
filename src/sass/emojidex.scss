@@ -1,5 +1,3 @@
-@import '../../bower_components/At.js/dist/css/jquery.atwho.min.css';
-
 @mixin emoji {
   display: inline-block;
   vertical-align: bottom;
@@ -11,7 +9,7 @@
 
 .emojidex-loading-icon {
   @include emoji;
-  background-image: url('../img/loading1.gif');
+  background-image: url('../img/emojidex-web_loading1.gif');
 }
 
 img[class*="emojidex-"] {
