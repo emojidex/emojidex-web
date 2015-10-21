@@ -9,7 +9,7 @@
 
 .emojidex-loading-icon {
   @include emoji;
-  background-image: url('../img/loading1.gif');
+  background-image: url('http://assets.emojidex.com/scripts/image/emojidex-web_loading1.gif');
 }
 
 img[class*="emojidex-"] {
