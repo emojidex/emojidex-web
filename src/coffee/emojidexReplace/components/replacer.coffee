@@ -9,7 +9,7 @@ class Replacer
     "<img class='emojidex-emoji' src='#{@plugin.ec.cdn_url}#{@plugin.ec.size_code}/#{emoji_code}.png' title='#{@replaceUnderToSpace emoji_code}'></img>"
 
   getLoadingTag: (emoji_data, type) ->
-    "<img class='emojidex-loading-icon' data-emoji='#{emoji_data}' data-type='#{type}'></img>"
+    "<div class='emojidex-loading-icon' data-emoji='#{emoji_data}' data-type='#{type}'></div>"
 
   getLoadingElement: (element) ->
     $ element.find '.emojidex-loading-icon'

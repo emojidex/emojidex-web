@@ -2888,7 +2888,7 @@ $.fn.atwho["default"] = {
     };
 
     Replacer.prototype.getLoadingTag = function(emoji_data, type) {
-      return "<img class='emojidex-loading-icon' data-emoji='" + emoji_data + "' data-type='" + type + "'></img>";
+      return "<div class='emojidex-loading-icon' data-emoji='" + emoji_data + "' data-type='" + type + "'></div>";
     };
 
     Replacer.prototype.getLoadingElement = function(element) {
