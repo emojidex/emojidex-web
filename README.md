@@ -16,7 +16,7 @@ Usage
 -----
 Basic usage is simple.
 
-1. First off load up the stylesheets and scripts:
+1\. First off load up the stylesheets and scripts:
 ```html
 <head>
   ...
@@ -26,7 +26,7 @@ Basic usage is simple.
   ...
 </head>
 ```
-2. Set emojidex-web  
+2\. Set emojidex-web  
 In JavaScript / in a script tag
 ```js
 $(document).ready(function() {
@@ -42,9 +42,9 @@ And you're all set!
 Features
 --------
 ### .emojidexReplace()
-Scans text in the specified element and replaces any colon ":" encased short codes 
+Scans text in the specified element and replaces any colon ":" encased short codes
 (eg: `:smile:`) or any UTF emoji (eg: `😄`) with emojidex emoji images.  
-No conversion occurs when no emoji on emojidex is found that corresponds to the short code or 
+No conversion occurs when no emoji on emojidex is found that corresponds to the short code or
 UTF code and the text remains unchanged.
 
 ```
@@ -75,7 +75,7 @@ Type: `Function(jQuery element)` Default: `undefined`
 
 Specifies a method to be run after a code has been converted into an emoji.  
 A jQuery element reference is passed as an argument to the assigned method.  
-  
+
 Example:
 ```js
 $("body").emojidexReplace({
@@ -91,7 +91,7 @@ Type: `Boolean` Default: `true`
 Specifies weather or not to show the loading image [specified in the CSS] while downloading emoji.
 
 ### .emojidexAutocomplete()
-Enables the autocomplete pop when a `:` colon is entered for `input`, `textarea`, 
+Enables the autocomplete pop when a `:` colon is entered for `input`, `textarea`,
 and elements where `contenteditable="true"`.  
 
 For `input`s and , `textarea`s colon enclosed shortcodes are shown as plain text.  
@@ -113,7 +113,7 @@ The maximum number of items displayed in a pop list.
 #### options.insertImg
 Type: `Boolean` Default: `true`
 
-Defines the behavior of `contenteditable="true"` elements. When true, codes are automatically 
+Defines the behavior of `contenteditable="true"` elements. When true, codes are automatically
 converted to images. When false they remain as plain text.
 
 Building

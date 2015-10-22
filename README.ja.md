@@ -18,7 +18,7 @@ CDNから自動的に取得され、クライアント側にキャッシュさ�
 ------
 使い方は簡単です。
 
-1. 下記を参考に必要なjavascriptとcssを読み込んでください。
+1\. 下記を参考に必要なjavascriptとcssを読み込んでください。
 ```html
 <head>
   ...
@@ -28,8 +28,8 @@ CDNから自動的に取得され、クライアント側にキャッシュさ�
   ...
 </head>
 ```
-2. emojidex-webの設定  
-JavaScriptで
+2\. emojidex-webの設定  
+JavaScriptで使う場合
 ```js
 $(document).ready(function() {
   ...
