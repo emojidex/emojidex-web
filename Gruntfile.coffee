@@ -166,7 +166,7 @@ module.exports = (grunt) ->
         keepRunner: true
         outfile: 'build/_SpecRunner.html'
         vendor:[
-          'https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js'
+          'node_modules/jquery/dist/jquery.min.js'
         ]
         helpers:[
           'node_modules/jasmine-jquery/lib/jasmine-jquery.js'
