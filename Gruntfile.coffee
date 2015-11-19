@@ -152,6 +152,21 @@ module.exports = (grunt) ->
         setGruntConfig_getTask define_sass
 
     # grunt --------------------------------
+    md2html:
+      readme:
+        files: [
+          {
+            src: 'README.md'
+            dest: 'dist/index.html'
+          }
+        ]
+        options:
+          layout: 'dist/index.html'
+          highlightjs:
+            enabled: true
+            compressStyle: true
+            options: {}
+
     jasmine:
       all:
         src: [
@@ -299,6 +314,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-jasmine'
   grunt.loadNpmTasks 'grunt-license-saver'
   grunt.loadNpmTasks 'grunt-contrib-cssmin'
+  grunt.loadNpmTasks 'grunt-md2html'
 
-  grunt.registerTask 'default', ['save_license', 'coffee', 'sass', 'concat', 'uglify', 'cssmin', 'slim', 'copy', 'jasmine']
+  grunt.registerTask 'default', ['save_license', 'coffee', 'sass', 'concat', 'uglify', 'cssmin', 'slim', 'copy', 'jasmine', 'md2html']
   grunt.registerTask 'dev', ['connect', 'esteWatch']

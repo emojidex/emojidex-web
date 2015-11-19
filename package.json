@@ -31,6 +31,8 @@
     "grunt-contrib-uglify": "~0.2.0",
     "grunt-este-watch": "^0.1.18",
     "grunt-license-saver": "0.0.0",
+    "grunt-markdown": "^0.7.0",
+    "grunt-md2html": "^0.3.0",
     "grunt-slim": "^0.1.0",
     "jasmine-jquery": "^2.0.5",
     "jquery": "^2.1.4"
