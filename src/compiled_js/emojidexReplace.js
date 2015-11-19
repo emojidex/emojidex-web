@@ -12,18 +12,16 @@
 
 
 (function() {
-  var Replacer, ReplacerSearch, ReplacerUser,
+  var Replacer, ReplacerSearch,
     __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   (function($, window, document) {
     var Plugin, defaults, pluginName;
     pluginName = "emojidexReplace";
     defaults = {
       onComplete: void 0,
-      useLoadingImg: true,
-      useUserEmoji: false
+      useLoadingImg: true
     };
     Plugin = (function() {
       function Plugin(element, options) {
@@ -72,7 +70,7 @@
       };
 
       Plugin.prototype.replace = function() {
-        this.replacer = this.options.useUserEmoji ? new ReplacerUser(this) : new ReplacerSearch(this);
+        this.replacer = new ReplacerSearch(this);
         return this.replacer.loadEmoji();
       };
 
@@ -306,153 +304,6 @@
     };
 
     return ReplacerSearch;
-
-  })(Replacer);
-
-  ReplacerUser = (function(_super) {
-    __extends(ReplacerUser, _super);
-
-    function ReplacerUser(plugin) {
-      this.plugin = plugin;
-      this.onLoadEmojiData = __bind(this.onLoadEmojiData, this);
-      ReplacerUser.__super__.constructor.apply(this, arguments);
-    }
-
-    ReplacerUser.prototype.loadEmoji = function() {
-      return this.getUserEmojiData(this.plugin.options.useUserEmoji, this.onLoadEmojiData);
-    };
-
-    ReplacerUser.prototype.getUserEmojiData = function(user_names, callback) {
-      var emoji_data, loaded_num, name, names, _i, _len, _results;
-      loaded_num = 0;
-      names = user_names;
-      emoji_data = [];
-      _results = [];
-      for (_i = 0, _len = names.length; _i < _len; _i++) {
-        name = names[_i];
-        _results.push($.ajax({
-          url: "https://www.emojidex.com/api/v1/users/" + name + "/emoji",
-          dataType: 'json',
-          type: 'get',
-          success: function(user_emoji_json, status, xhr) {
-            emoji_data = emoji_data.concat(user_emoji_json.emoji);
-            if (++loaded_num === names.length) {
-              return callback(emoji_data);
-            }
-          },
-          error: function(data) {
-            console.log('error: load json');
-            return console.log(data);
-          }
-        }));
-      }
-      return _results;
-    };
-
-    ReplacerUser.prototype.onLoadEmojiData = function(emoji_data) {
-      var _logUtfEmoji, _logUtfEmojiDataList, _logUtfRegexpPattern,
-        _this = this;
-      _logUtfEmoji = function(emoji_data) {
-        var emoji, utf_emoji, _i, _len;
-        utf_emoji = '';
-        for (_i = 0, _len = emoji_data.length; _i < _len; _i++) {
-          emoji = emoji_data[_i];
-          if (emoji.moji != null) {
-            utf_emoji += emoji.moji;
-          }
-        }
-        return console.log(utf_emoji);
-      };
-      _logUtfRegexpPattern = function(emoji_data) {
-        var emoji, utf_emoji, _i, _len;
-        utf_emoji = [];
-        for (_i = 0, _len = emoji_data.length; _i < _len; _i++) {
-          emoji = emoji_data[_i];
-          if (emoji.moji != null) {
-            utf_emoji.push(emoji.moji);
-          }
-        }
-        return console.log(utf_emoji.join('|'));
-      };
-      _logUtfEmojiDataList = function(emoji_data) {
-        var data_list, emoji, _i, _len;
-        data_list = [];
-        for (_i = 0, _len = emoji_data.length; _i < _len; _i++) {
-          emoji = emoji_data[_i];
-          if (emoji.moji != null) {
-            data_list.push("{utf:'" + emoji.moji + "',code:'" + (_this.replaceSpaceToUnder(emoji.code)) + "'}");
-          }
-        }
-        return console.log("[" + (data_list.join(',')) + "]");
-      };
-      this.emoji_data = emoji_data;
-      this.emoji_regexps = this.getEmojiRegexps(emoji_data);
-      this.targetElementNum = this.plugin.element.find(':not(iframe,textarea,script)').andSelf().contents().length - 1;
-      return this.plugin.element.find(':not(iframe,textarea,script)').andSelf().contents().filter(function(index, element) {
-        if (element.nodeType === Node.TEXT_NODE && element.textContent.match(/\S/)) {
-          $(element).replaceWith(_this.getTextWithEomojiTag(element.textContent));
-        }
-        if (_this.targetElementNum - index === 0 && (_this.plugin.options.onComplete != null)) {
-          return _this.plugin.options.onComplete(_this.plugin.element);
-        }
-      });
-    };
-
-    ReplacerUser.prototype.getEmojiRegexps = function(emoji_data) {
-      var emoji, pattern_code, regexps, utf_emoji, _i, _len;
-      utf_emoji = [];
-      pattern_code = ':(';
-      for (_i = 0, _len = emoji_data.length; _i < _len; _i++) {
-        emoji = emoji_data[_i];
-        if (emoji.moji != null) {
-          utf_emoji.push(emoji.moji);
-        }
-        if (emoji.code != null) {
-          pattern_code += this.replaceSpaceToUnder(emoji.code) + '|';
-        }
-      }
-      utf_emoji.sort(function(v1, v2) {
-        return v2.length - v1.length;
-      });
-      regexps = {
-        utf: RegExp(utf_emoji.join('|'), 'g'),
-        code: RegExp(pattern_code.slice(0, -1) + "):", 'g')
-      };
-      if (!utf_emoji.length) {
-        regexps.utf = false;
-      }
-      return regexps;
-    };
-
-    ReplacerUser.prototype.getTextWithEomojiTag = function(text) {
-      var _this = this;
-      if (this.emoji_regexps.utf) {
-        text = text.replace(this.emoji_regexps.utf, function(matched_string) {
-          var emoji, _i, _len, _ref;
-          _ref = _this.emoji_data;
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            emoji = _ref[_i];
-            if (emoji.moji === matched_string) {
-              return _this.getEmojiTag(_this.replaceSpaceToUnder(emoji.code));
-            }
-          }
-        });
-      }
-      if (this.emoji_regexps.code) {
-        return text = text.replace(this.emoji_regexps.code, function(matched_string, pattern1) {
-          var emoji, _i, _len, _ref;
-          _ref = _this.emoji_data;
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            emoji = _ref[_i];
-            if (_this.replaceSpaceToUnder(emoji.code) === pattern1) {
-              return _this.getEmojiTag(pattern1);
-            }
-          }
-        });
-      }
-    };
-
-    return ReplacerUser;
 
   })(Replacer);
 

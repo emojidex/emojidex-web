@@ -15,12 +15,6 @@ do ($ = jQuery, window, document) ->
   defaults =
     onComplete: undefined
     useLoadingImg: true
-    useUserEmoji: false
-    # eg: useUserEmoji --------
-    # useUserEmoji: [
-    #   'emoji'
-    #   'emojidex'
-    # ]
 
   class Plugin
     constructor: (@element, options) ->
@@ -63,7 +57,7 @@ do ($ = jQuery, window, document) ->
         return false
 
     replace: ->
-      @replacer = if @options.useUserEmoji then new ReplacerUser @ else new ReplacerSearch @
+      @replacer = new ReplacerSearch @
       @replacer.loadEmoji()
 
   $.fn[pluginName] = (options) ->
