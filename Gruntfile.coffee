@@ -131,7 +131,7 @@ module.exports = (grunt) ->
                 dest: 'dist/'
                 ext: '.html'
               ]
-          task: ['slim:esteWatch']
+          task: ['slim:esteWatch', 'md2html']
 
         setGruntConfig_getTask define_slim
 

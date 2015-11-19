@@ -79,9 +79,9 @@ class ReplacerSearch extends Replacer
       searchEmoji_setEmojiTag @plugin.element
     else
       target_num = 0
-      @plugin.element.find(':not(iframe,textarea,script)').andSelf().contents().filter (index, element) =>
-        if element.nodeType is Node.TEXT_NODE and element.textContent.match /\S/
+      @plugin.element.find(":not(#{@plugin.options.ignore})").andSelf().contents().filter (index, element) =>
+        if element.nodeType is Node.TEXT_NODE and element.textContent.match(/\S/)
           target_num++
-      @plugin.element.find(':not(iframe,textarea,script)').andSelf().contents().filter (index, element) =>
-        if element.nodeType is Node.TEXT_NODE and element.textContent.match /\S/
+      @plugin.element.find(":not(#{@plugin.options.ignore})").andSelf().contents().filter (index, element) =>
+        if element.nodeType is Node.TEXT_NODE and element.textContent.match(/\S/)
           setEomojiTag element

@@ -11,10 +11,11 @@
 ###
 
 do ($ = jQuery, window, document) ->
-  pluginName = "emojidexReplace"
+  pluginName = 'emojidexReplace'
   defaults =
     onComplete: undefined
     useLoadingImg: true
+    ignore: 'iframe, textarea, script, pre, code'
 
   class Plugin
     constructor: (@element, options) ->

@@ -18,10 +18,11 @@
 
   (function($, window, document) {
     var Plugin, defaults, pluginName;
-    pluginName = "emojidexReplace";
+    pluginName = 'emojidexReplace';
     defaults = {
       onComplete: void 0,
-      useLoadingImg: true
+      useLoadingImg: true,
+      ignore: 'iframe, textarea, script, pre, code'
     };
     Plugin = (function() {
       function Plugin(element, options) {
@@ -108,7 +109,7 @@
 
     Replacer.prototype.setLoadingTag = function(plugin) {
       var _this = this;
-      return plugin.element.find(":not(iframe,textarea,script)").andSelf().contents().filter(function(index, element) {
+      return plugin.element.find(":not(" + plugin.options.ignore + ")").andSelf().contents().filter(function(index, element) {
         var replaced_text;
         if (element.parentElement.tagName !== 'STYLE' && element.nodeType === Node.TEXT_NODE && element.textContent.match(/\S/)) {
           replaced_text = _this.getTextWithLoadingTag(element.textContent);
@@ -290,12 +291,12 @@
         return searchEmoji_setEmojiTag(this.plugin.element);
       } else {
         target_num = 0;
-        this.plugin.element.find(':not(iframe,textarea,script)').andSelf().contents().filter(function(index, element) {
+        this.plugin.element.find(":not(" + this.plugin.options.ignore + ")").andSelf().contents().filter(function(index, element) {
           if (element.nodeType === Node.TEXT_NODE && element.textContent.match(/\S/)) {
             return target_num++;
           }
         });
-        return this.plugin.element.find(':not(iframe,textarea,script)').andSelf().contents().filter(function(index, element) {
+        return this.plugin.element.find(":not(" + this.plugin.options.ignore + ")").andSelf().contents().filter(function(index, element) {
           if (element.nodeType === Node.TEXT_NODE && element.textContent.match(/\S/)) {
             return setEomojiTag(element);
           }

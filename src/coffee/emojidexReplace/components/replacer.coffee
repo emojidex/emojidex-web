@@ -15,8 +15,8 @@ class Replacer
     $ element.find '.emojidex-loading-icon'
 
   setLoadingTag: (plugin) ->
-    plugin.element.find(":not(iframe,textarea,script)").andSelf().contents().filter (index, element) =>
-      if element.parentElement.tagName isnt 'STYLE' and element.nodeType is Node.TEXT_NODE and element.textContent.match /\S/
+    plugin.element.find(":not(#{plugin.options.ignore})").andSelf().contents().filter (index, element) =>
+      if element.parentElement.tagName isnt 'STYLE' and element.nodeType is Node.TEXT_NODE and element.textContent.match(/\S/)
         replaced_text = @getTextWithLoadingTag element.textContent
         $(element).replaceWith replaced_text if replaced_text isnt element.textContent
 
