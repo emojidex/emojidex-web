@@ -1,7 +1,7 @@
 .window.emoji-pallet {
   background-color: white; }
   .window.emoji-pallet .window-body {
-    height: 256px;
+    overflow-y: auto;
     overflow: hidden; }
 
 /*# sourceMappingURL=emoji_pallet.css.map */
