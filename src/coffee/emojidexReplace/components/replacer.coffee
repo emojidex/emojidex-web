@@ -1,65 +1,52 @@
 class Replacer
-  emoji_data: null
-  element: null
-  options: null
-  emoji_regexps: null
+  constructor: ->
+    @loadingNum = undefined
 
-  getCategorizedData: (emoji_data) ->
-    new_emoji_data = {}
-    for emoji in emoji_data
-
-      if emoji.category is null
-        unless new_emoji_data.uncategorized?
-          new_emoji_data.uncategorized = [emoji]
-        else
-          new_emoji_data.uncategorized.push emoji
-
-      else
-        unless new_emoji_data[emoji.category]?
-          new_emoji_data[emoji.category] = [emoji]
-        else
-          new_emoji_data[emoji.category].push emoji
-
-    return new_emoji_data
-
-  setEmojiCSS_getEmojiRegexps: (emoji_data) ->
-    regexp_for_utf = ""
-    regexp_for_code = ":("
-
-    emoji_css = $('<style type="text/css" />')
-    for category of emoji_data
-      emoji_in_category = emoji_data[category]
-      for emoji in emoji_in_category
-        regexp_for_utf += emoji.moji + "|"
-        regexp_for_code += emoji.code + "|"
-        emoji_css.append "i.emojidex-" + emoji.code + " {background-image: url('" + emoji.img_url + "')}"
-    $("head").append emoji_css
-
-    return utf: regexp_for_utf.slice(0, -1), code: regexp_for_code.slice(0, -1) + "):"
+    ignore = '\'":;@&#~{}<>\\r\\n\\[\\]\\!\\$\\+\\?\\%\\*\\/\\\\'
+    @regexpCode = RegExp ":([^\\s#{ignore}][^#{ignore}]*[^\\s#{ignore}]):|:([^\\s#{ignore}]):", 'g'
 
   getEmojiTag: (emoji_code) ->
-    return '<i class="emojidex-' + emoji_code + '"></i>'
+    "<img class='emojidex-emoji' src='#{@plugin.ec.cdn_url}#{@plugin.ec.size_code}/#{emoji_code}.png' title='#{@replaceUnderToSpace emoji_code}'></img>"
 
-  replaceForUTF: (options) ->
-    replaced_string = options.s_replace.replace new RegExp(options.regexp, "g"), (matched_string) ->
-      for category of options.emoji_data
-        for emoji in options.emoji_data[category]
-          if emoji.moji is matched_string
-            return Replacer::getEmojiTag emoji.code
+  getLoadingTag: (emoji_data, type) ->
+    "<div class='emojidex-loading-icon' data-emoji='#{emoji_data}' data-type='#{type}'></div>"
 
-  replaceForCode: (options) ->
-    replaced_string = options.s_replace.replace new RegExp(options.regexp, "g"), (matched_string) ->
-      matched_string = matched_string.replace /:/g, ""
-      for category of options.emoji_data
-        for emoji in options.emoji_data[category]
-          if emoji.code is matched_string
-            return Replacer::getEmojiTag emoji.code
+  getLoadingElement: (element) ->
+    $ element.find '.emojidex-loading-icon'
 
-  setEmojiIcon: (loader) ->
-    $(@element).find(":not(iframe,textarea,script)").andSelf().contents().filter(->
-      @nodeType is Node.TEXT_NODE
-    ).each ->
-      replaced_string = @textContent
-      replaced_string = Replacer::replaceForUTF s_replace: replaced_string, regexp: loader.emoji_regexps.utf, emoji_data: loader.emoji_data if loader.emoji_regexps.utf?
-      replaced_string = Replacer::replaceForCode s_replace: replaced_string, regexp: loader.emoji_regexps.code, emoji_data: loader.emoji_data if loader.emoji_regexps.code?
-      $(@).replaceWith replaced_string
+  setLoadingTag: (plugin) ->
+    plugin.element.find(":not(#{plugin.options.ignore})").andSelf().contents().filter (index, element) =>
+      if element.parentElement.tagName isnt 'STYLE' and element.nodeType is Node.TEXT_NODE and element.textContent.match(/\S/)
+        replaced_text = @getTextWithLoadingTag element.textContent
+        $(element).replaceWith replaced_text if replaced_text isnt element.textContent
+
+  getTextWithLoadingTag: (text) ->
+    text_bak = text
+    text = text.replace @plugin.options.regexpUtf, (matched_string) =>
+      @getLoadingTag matched_string, 'utf'
+    text = text.replace @regexpCode, (matched_string, pattern1) =>
+      @getLoadingTag matched_string, 'code'
+    return text
+
+  fadeOutLoadingTag_fadeInEmojiTag: (element, emoji_code, match = true) ->
+    emoji_tag = undefined
+    if match
+      emoji_tag = $(@getEmojiTag emoji_code).hide()
+    else
+      emoji_tag = emoji_code
+
+    element.fadeOut "normal", =>
+      element.after emoji_tag
+      element.remove()
+      if match
+        emoji_tag.fadeIn "fast", =>
+          if --@loadingNum is 0 && @plugin.options.onComplete?
+            @plugin.options.onComplete @plugin.element
+      else
+        @loadingNum--
+
+  replaceSpaceToUnder: (string) ->
+    string.replace /\s/g, '_'
+
+  replaceUnderToSpace: (string) ->
+    string.replace /_/g, ' '

@@ -1,4 +1,4 @@
-/ doctype html
+doctype html
 html
   head
     meta charset="utf-8"
@@ -7,23 +7,28 @@ html
     meta content="" name="description"
     meta content="width=device-width" name="viewport"
 
-    link href="css/bootstrap_and_override.css" rel="stylesheet"
-    link href="css/jquery.atwho.min.css" rel="stylesheet"
+    link href="css/bootstrap_and_override.min.css" rel="stylesheet"
+    link href="css/emojidex.min.css" rel="stylesheet"
+
     link href="css/bootstrap-window.css" rel="stylesheet"
     link href="css/emoji_pallet.css" rel="stylesheet"
 
-    script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"
+    script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"
     script src="js/bootstrap.min.js"
-    script src="js/emojidex.js"
+    script src="js/emojidex.min.js"
 
     coffee:
       $(document).ready ->
-        $(".emojidex_replace").emojidexReplace()
+        $("body").emojidexReplace
+          onComplete: (element) ->
+            console.log 'Completed emojidexReplace!!'
+          ignore: 'iframe, textarea, script, pre, code'
 
         $(".emojidex-plain_text").emojidexAutocomplete()
         $(".emojidex-content_editable").emojidexAutocomplete()
 
         $("#pallet-btn").emojidexPallet()
+        return
 
   body
     .container
@@ -38,7 +43,8 @@ html
               span.icon-bar
               span.icon-bar
           #navbar-top.collapse.navbar-collapse
-            a.btn.btn-primary.navbar-btn.pull-right data-toggle="modal" href="#modal-licensing_info"  Licensing Info
+            a.btn.btn-primary.navbar-btn.pull-right data-toggle="modal" href="#modal-licensing_info"
+              | :spiral_note_pad: Licensing Info
 
       #modal-licensing_info.modal.fade
         .modal-dialog
@@ -47,72 +53,73 @@ html
               button.close data-dismiss="modal"  &times;
               h4.modal-title Licensing Info
             .modal-body
+              h4 Print and Physical Works and Media / Virtual Works / Software / Virtual Media
               p
-                | All emoji © 2013 emojidex.
-                br Exclusive Licensing Rights @ emoji company.
-              p For licenses please contact:
-              h2 Print and Physical Works and Media
-              a href="http://www.emoji-company.com"
-                img.mt-l.mb-xl src="img/emoji-company-logo.png"
-              p emoji company GmbH
-              p
-                a href="mailto:licensing@emoji-company.com"  licensing@emoji-company.com
-                br
-                  a href="http://www.emoji-company.com" target="_blank"  www.emoji-company.com
-              h2 Virtual Works / Software / Virtual Media
+                | emojidex emoji and emojidex  2013 - 2015 Genshin Souzou Kabushiki Kaisha [Phantom Creation Inc.]
               a href="https://www.emojidex.com"
                 img.mt-l.mb-xl src="img/logo.png"
-              p emojidex™ / Genshin Souzou K.K. [Phantom Creation Inc]
-                br Aichi, Japan
-              p
-                a href="mailto:info@emojidex.com"  info@emojidex.com
-                br
-                  a href="http://www.emojidex.com" target="_blank"  www.emojidex.com
+              br
+              | Email:
+              '
+              a href="mailto:info@emojidex.com" info@emojidex.com
+              br
+              | URL:
+              '
+              a href="http://www.emojidex.com" target="_blank" www.emojidex.com
 
     .container
       .row
         .col-md-12
-          h1 emojidex-coffee examples
-          hr
+          h1 emojidex-web examples
 
       .row
         .col-md-12
-          h3 emojidex replace
+          h3 emojidexReplace :kissing_heart:
+          hr.mt-s.mb-m
           .emojidex_replace
-            | Examples of auto replacement:
+            | Auto Replace examples.
             br
-            | (Check the HTML or SLIM sources)
+            | (Check the
+            '
+            a href='https://github.com/emojidex/emojidex-web/blob/master/dist/index.html' target='_blank'
+              | HTML
+            '
+            | or
+            '
+            a href='https://github.com/emojidex/emojidex-web/blob/master/src/slim/index.slim' target='_blank'
+              | SLIM
+            '
+            | sources)
             br
             br
-            | UTF moji codes to emoji:
-            br
-            | ❤🛅😄😡💌😈👍
-            br
-            br
-            | :code: to emoji:
-            br
-            | :octopus::boar: :frog:\:hand_salute: no_match::no_match:
-          hr
 
-      .row
+            h5
+              | UTF moji codes to emoji:
+            | ❤🛅😄😡💌😈👍#️⃣
+
+            h5.mt-xl
+              | :code: to emoji:
+            | ❤:octopus::boar::frog:\:hand_salute: no_match:😄::no match::heart eyes(wh):
+
+      .row.mt-xl
         .col-md-12
-          h3 Plain Text
-          form role="form"
-            .form-group
-              textarea.emojidex-plain_text.form-control rows="5"
-                | Hello, Let's type ":".&nbsp;
+          h3 emojidexAutocomplete :laughing:
+          hr.mt-s.mb-mß
+          .row.mt-m
+            .col-md-12
+              h4 Plain Text
+              form role="form"
+                .form-groupß
+                  textarea.emojidex-plain_text.form-control rows="5"
+                    | Try typing a colon and the start of a word to start a code search, like ":tes".
+          .row
+            .col-md-12
+              h4 Content Editable
+              .emojidex-content_editable.inputor contenteditable="true"
+                | Try typing a colon and the start of a word to start a code search, like ":tes".
 
-      hr
-
-      .row
+      .row.mt-xl
         .col-md-12
-          h3 Content Editable
-          .emojidex-content_editable.inputor contenteditable="true"
-            | Hello, Let's type ":".&nbsp;
-
-      hr
-
-      .row
-        .col-md-12
-          #pallet-btn.btn.btn-primary
-            | Pallet Button
+          style
+            <%= highlightjs_style %>
+          <%= document %>

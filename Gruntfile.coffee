@@ -89,7 +89,7 @@ module.exports = (grunt) ->
                   ]
             task: [
               "coffee:#{path.dirname(filepath).split('/')[2]}"
-              'concat'
+              'concat:emojidex_js'
               'uglify:emojidex'
               defaults.jasmine.prop.join(':')
             ]
@@ -131,7 +131,7 @@ module.exports = (grunt) ->
                 dest: 'dist/'
                 ext: '.html'
               ]
-          task: ['slim:esteWatch']
+          task: ['slim:esteWatch', 'md2html']
 
         setGruntConfig_getTask define_slim
 
@@ -147,11 +147,26 @@ module.exports = (grunt) ->
                 dest: 'dist/css/'
                 ext: '.css'
               ]
-          task: ['sass:esteWatch']
+          task: ['sass:esteWatch', 'concat:emojidex_css', 'cssmin:emojidex']
 
         setGruntConfig_getTask define_sass
 
     # grunt --------------------------------
+    md2html:
+      readme:
+        files: [
+          {
+            src: 'README.md'
+            dest: 'dist/index.html'
+          }
+        ]
+        options:
+          layout: 'dist/index.html'
+          highlightjs:
+            enabled: true
+            compressStyle: true
+            options: {}
+
     jasmine:
       all:
         src: [
@@ -166,7 +181,7 @@ module.exports = (grunt) ->
         keepRunner: true
         outfile: 'build/_SpecRunner.html'
         vendor:[
-          'https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js'
+          'node_modules/jquery/dist/jquery.min.js'
         ]
         helpers:[
           'node_modules/jasmine-jquery/lib/jasmine-jquery.js'
@@ -232,29 +247,13 @@ module.exports = (grunt) ->
 
     copy:
       img:
-        expand: true,
+        expand: true
         cwd: 'src/img/'
         src: '**/*'
         dest: 'dist/img/'
 
-      lib:
-        files: [
-          {
-            expand: true,
-            cwd: 'bower_components/At.js/dist/css'
-            src: 'jquery.atwho.min.css'
-            dest: 'dist/css/'
-          }
-          {
-            expand: true,
-            cwd: 'bower_components/bootstrap-window/dist/css'
-            src: 'bootstrap-window.css'
-            dest: 'dist/css/'
-          }
-        ]
-
     concat:
-      emojidex:
+      emojidex_js:
         options:
           stripBanners: true
           banner: '<%= meta.banner %><%= grunt.getLicense("build/licenses.json") %>\n */\n'
@@ -267,6 +266,13 @@ module.exports = (grunt) ->
         ]
         dest: 'dist/js/emojidex.js'
 
+      emojidex_css:
+        src: [
+          'bower_components/At.js/dist/css/jquery.atwho.min.css'
+          'dist/css/emojidex.css'
+        ]
+        dest: 'dist/css/emojidex.css'
+
     uglify:
       emojidex:
         options:
@@ -278,6 +284,15 @@ module.exports = (grunt) ->
       bootstrap:
         src: ['node_modules/bootstrap-sass/assets/javascripts/bootstrap.js']
         dest: 'dist/js/bootstrap.min.js'
+
+    cssmin:
+      emojidex:
+        src : ['dist/css/emojidex.css']
+        dest : 'dist/css/emojidex.min.css'
+
+      bootstrap:
+        src : ['dist/css/bootstrap_and_override.css']
+        dest : 'dist/css/bootstrap_and_override.min.css'
 
     save_license:
       dist:
@@ -298,6 +313,8 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-copy'
   grunt.loadNpmTasks 'grunt-contrib-jasmine'
   grunt.loadNpmTasks 'grunt-license-saver'
+  grunt.loadNpmTasks 'grunt-contrib-cssmin'
+  grunt.loadNpmTasks 'grunt-md2html'
 
-  grunt.registerTask 'default', ['save_license', 'coffee', 'concat', 'uglify', 'sass', 'slim', 'copy', 'jasmine']
+  grunt.registerTask 'default', ['save_license', 'coffee', 'sass', 'concat', 'uglify', 'cssmin', 'slim', 'copy', 'jasmine', 'md2html']
   grunt.registerTask 'dev', ['connect', 'esteWatch']

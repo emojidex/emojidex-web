@@ -2,7 +2,7 @@ $navbar-logo-space: 15px;
 $navbar-height: 60px;
 $navbar-logo-fix: 10px;
 
-@import 'node_modules/bootstrap-sass/assets/stylesheets/bootstrap';
+@import "../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 @import "fix-space";
 
 @media (max-width: $screen-xs-max) {
@@ -39,15 +39,6 @@ body {
       height: $navbar-height - $navbar-logo-space;
     }
   }
-}
-
-i[class*="emojidex-"] {
-  display: inline-block;
-  vertical-align: bottom;
-  width: 1.5em;
-  height: 1.5em;
-  background-size: 100%;
-  background-repeat: no-repeat;
 }
 
 .inputor {

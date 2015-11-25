@@ -13,7 +13,8 @@
 do ($ = jQuery, window, document) ->
   pluginName = "emojidexAutocomplete"
   defaults =
-    limit: 10
+    listLimit: 10
+    insertImg: true
 
   class Plugin
     constructor: (@element, options) ->
