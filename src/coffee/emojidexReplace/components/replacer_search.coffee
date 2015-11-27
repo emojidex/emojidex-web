@@ -33,6 +33,15 @@ class ReplacerSearch extends Replacer
     checkComplete = =>
       if --@plugin.replacer.loadingNum is 0 and @plugin.options.onComplete?
         @plugin.options.onComplete @plugin.element
+
+        if @plugin.options.reloadOnAjax
+          @plugin.element.watch
+            properties: 'prop_innerText'
+            watchChildren: true
+            callback: (data, i) =>
+              console.log data
+              plugin_data = @plugin.element.data().plugin_emojidexReplace
+              # $(data.vals[0).replacer.loadEmoji()
       return
 
     checkSearchEnd = (searches, element, text, code_emoji)=>
