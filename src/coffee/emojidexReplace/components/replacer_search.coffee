@@ -31,17 +31,17 @@ class ReplacerSearch extends Replacer
 
     # for useLoadingImg: false --------
     checkComplete = =>
-      if --@plugin.replacer.loadingNum is 0 and @plugin.options.onComplete?
-        @plugin.options.onComplete @plugin.element
+      if @targetNum is 0 and @plugin.replacer.loadingNum is 0
+        if @plugin.options.onComplete?
+          @plugin.options.onComplete @plugin.element
 
         if @plugin.options.reloadOnAjax
           @plugin.element.watch
             properties: 'prop_innerText'
             watchChildren: true
             callback: (data, i) =>
-              console.log data
               plugin_data = @plugin.element.data().plugin_emojidexReplace
-              # $(data.vals[0).replacer.loadEmoji()
+              plugin_data.replacer.loadEmoji()
       return
 
     checkSearchEnd = (searches, element, text, code_emoji)=>
@@ -52,7 +52,13 @@ class ReplacerSearch extends Replacer
       replaced_text = text
       for code in code_emoji
         replaced_text = replaced_text.replace code.matched, =>
-          @getEmojiTag @replaceSpaceToUnder code.code
+          emoji_tag = @getEmojiTag @replaceSpaceToUnder code.code
+          @plugin.replacer.loadingNum++
+          $(emoji_tag).load (e)=>
+            @plugin.replacer.loadingNum--
+            checkComplete()
+          return emoji_tag
+
       $(element).replaceWith replaced_text
 
     setEomojiTag = (element) =>
@@ -60,7 +66,12 @@ class ReplacerSearch extends Replacer
       text = element.textContent.replace @plugin.options.regexpUtf, (matched_string) =>
         for emoji of @plugin.options.utfEmojiData
           if emoji is matched_string
-            return @getEmojiTag @plugin.options.utfEmojiData[emoji]
+            emoji_tag = @getEmojiTag @plugin.options.utfEmojiData[emoji]
+            @plugin.replacer.loadingNum++
+            $(emoji_tag).load (e)=>
+              @plugin.replacer.loadingNum--
+              checkComplete()
+            return emoji_tag
 
       if text.match @regexpCode
         searches = 0
@@ -80,6 +91,7 @@ class ReplacerSearch extends Replacer
       else
         $(element).replaceWith text
 
+      @targetNum--
       checkComplete()
 
     # start: loadEmoji --------
@@ -87,9 +99,10 @@ class ReplacerSearch extends Replacer
       @setLoadingTag @plugin
       searchEmoji_setEmojiTag @plugin.element
     else
+      @targetNum = 0
       @plugin.element.find(":not(#{@plugin.options.ignore})").andSelf().contents().filter (index, element) =>
         if element.parentElement.tagName isnt 'STYLE' and element.nodeType is Node.TEXT_NODE and element.textContent.match(/\S/)
-          @plugin.replacer.loadingNum++
+          @targetNum++
       @plugin.element.find(":not(#{@plugin.options.ignore})").andSelf().contents().filter (index, element) =>
         if element.parentElement.tagName isnt 'STYLE' and element.nodeType is Node.TEXT_NODE and element.textContent.match(/\S/)
           setEomojiTag element
