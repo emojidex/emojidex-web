@@ -31,8 +31,9 @@ class ReplacerSearch extends Replacer
 
     # for useLoadingImg: false --------
     checkComplete = =>
-      if --target_num is 0 and @plugin.options.onComplete?
+      if --@plugin.replacer.loadingNum is 0 and @plugin.options.onComplete?
         @plugin.options.onComplete @plugin.element
+      return
 
     checkSearchEnd = (searches, element, text, code_emoji)=>
       if searches is 0
@@ -44,44 +45,42 @@ class ReplacerSearch extends Replacer
         replaced_text = replaced_text.replace code.matched, =>
           @getEmojiTag @replaceSpaceToUnder code.code
       $(element).replaceWith replaced_text
-      checkComplete()
 
     setEomojiTag = (element) =>
-      if element.parentElement.tagName isnt 'STYLE'
-        code_emoji = []
-        text = element.textContent.replace @plugin.options.regexpUtf, (matched_string) =>
-          for emoji of @plugin.options.utfEmojiData
-            if emoji is matched_string
-              return @getEmojiTag @plugin.options.utfEmojiData[emoji]
+      code_emoji = []
+      text = element.textContent.replace @plugin.options.regexpUtf, (matched_string) =>
+        for emoji of @plugin.options.utfEmojiData
+          if emoji is matched_string
+            return @getEmojiTag @plugin.options.utfEmojiData[emoji]
 
-        if text.match @regexpCode
-          searches = 0
-          text.replace @regexpCode, ->
-            searches++
-          text.replace @regexpCode, (matched_string, pattarn1, offset, string) =>
-            emoji_image = $("<img src='#{@plugin.ec.cdn_url}#{@plugin.ec.size_code}/#{@replaceSpaceToUnder pattarn1}.png'></img>")
-            emoji_image.load (e) =>
-              searches--
-              code_emoji.push
-                matched: matched_string
-                code: pattarn1
-              checkSearchEnd searches, element, text, code_emoji
-            emoji_image.error (e) =>
-              searches--
-              checkSearchEnd searches, element, text, code_emoji
-        else
-          $(element).replaceWith text
-          checkComplete()
+      if text.match @regexpCode
+        searches = 0
+        text.replace @regexpCode, ->
+          searches++
+        text.replace @regexpCode, (matched_string, pattarn1, offset, string) =>
+          emoji_image = $("<img src='#{@plugin.ec.cdn_url}#{@plugin.ec.size_code}/#{@replaceSpaceToUnder pattarn1}.png'></img>")
+          emoji_image.load (e) =>
+            searches--
+            code_emoji.push
+              matched: matched_string
+              code: pattarn1
+            checkSearchEnd searches, element, text, code_emoji
+          emoji_image.error (e) =>
+            searches--
+            checkSearchEnd searches, element, text, code_emoji
+      else
+        $(element).replaceWith text
+
+      checkComplete()
 
     # start: loadEmoji --------
     if @plugin.options.useLoadingImg
       @setLoadingTag @plugin
       searchEmoji_setEmojiTag @plugin.element
     else
-      target_num = 0
       @plugin.element.find(":not(#{@plugin.options.ignore})").andSelf().contents().filter (index, element) =>
-        if element.nodeType is Node.TEXT_NODE and element.textContent.match(/\S/)
-          target_num++
+        if element.parentElement.tagName isnt 'STYLE' and element.nodeType is Node.TEXT_NODE and element.textContent.match(/\S/)
+          @plugin.replacer.loadingNum++
       @plugin.element.find(":not(#{@plugin.options.ignore})").andSelf().contents().filter (index, element) =>
-        if element.nodeType is Node.TEXT_NODE and element.textContent.match(/\S/)
+        if element.parentElement.tagName isnt 'STYLE' and element.nodeType is Node.TEXT_NODE and element.textContent.match(/\S/)
           setEomojiTag element

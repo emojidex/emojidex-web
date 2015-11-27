@@ -22,7 +22,8 @@
     defaults = {
       onComplete: void 0,
       useLoadingImg: true,
-      ignore: 'iframe, textarea, script, pre, code'
+      ignore: 'iframe, textarea, script, pre, code',
+      reloadOnAjax: true
     };
     Plugin = (function() {
       function Plugin(element, options) {
@@ -90,7 +91,7 @@
   Replacer = (function() {
     function Replacer() {
       var ignore;
-      this.loadingNum = void 0;
+      this.loadingNum = 0;
       ignore = '\'":;@&#~{}<>\\r\\n\\[\\]\\!\\$\\+\\?\\%\\*\\/\\\\';
       this.regexpCode = RegExp(":([^\\s" + ignore + "][^" + ignore + "]*[^\\s" + ignore + "]):|:([^\\s" + ignore + "]):", 'g');
     }
@@ -150,8 +151,22 @@
         element.remove();
         if (match) {
           return emoji_tag.fadeIn("fast", function() {
-            if (--_this.loadingNum === 0 && (_this.plugin.options.onComplete != null)) {
-              return _this.plugin.options.onComplete(_this.plugin.element);
+            if (--_this.loadingNum === 0) {
+              if (_this.plugin.options.onComplete != null) {
+                _this.plugin.options.onComplete(_this.plugin.element);
+              }
+              if (_this.plugin.options.reloadOnAjax) {
+                return _this.plugin.element.watch({
+                  properties: 'prop_innerText',
+                  watchChildren: true,
+                  callback: function(data, i) {
+                    var plugin_data;
+                    plugin_data = _this.plugin.element.data().plugin_emojidexReplace;
+                    plugin_data.options.useLoadingImg = false;
+                    return plugin_data.replacer.loadEmoji();
+                  }
+                });
+              }
             }
           });
         } else {
@@ -181,7 +196,7 @@
     }
 
     ReplacerSearch.prototype.loadEmoji = function() {
-      var checkComplete, checkSearchEnd, replaceCodeToEmojTag_replaceElement, searchEmoji_setEmojiTag, setEomojiTag, target_num,
+      var checkComplete, checkSearchEnd, replaceCodeToEmojTag_replaceElement, searchEmoji_setEmojiTag, setEomojiTag,
         _this = this;
       searchEmoji_setEmojiTag = function(element) {
         var emoji, loading_element, loading_elements, replaceToEmojiIcon, _i, _len, _results;
@@ -226,8 +241,8 @@
         return _results;
       };
       checkComplete = function() {
-        if (--target_num === 0 && (_this.plugin.options.onComplete != null)) {
-          return _this.plugin.options.onComplete(_this.plugin.element);
+        if (--_this.plugin.replacer.loadingNum === 0 && (_this.plugin.options.onComplete != null)) {
+          _this.plugin.options.onComplete(_this.plugin.element);
         }
       };
       checkSearchEnd = function(searches, element, text, code_emoji) {
@@ -244,60 +259,56 @@
             return _this.getEmojiTag(_this.replaceSpaceToUnder(code.code));
           });
         }
-        $(element).replaceWith(replaced_text);
-        return checkComplete();
+        return $(element).replaceWith(replaced_text);
       };
       setEomojiTag = function(element) {
         var code_emoji, searches, text;
-        if (element.parentElement.tagName !== 'STYLE') {
-          code_emoji = [];
-          text = element.textContent.replace(_this.plugin.options.regexpUtf, function(matched_string) {
-            var emoji;
-            for (emoji in _this.plugin.options.utfEmojiData) {
-              if (emoji === matched_string) {
-                return _this.getEmojiTag(_this.plugin.options.utfEmojiData[emoji]);
-              }
+        code_emoji = [];
+        text = element.textContent.replace(_this.plugin.options.regexpUtf, function(matched_string) {
+          var emoji;
+          for (emoji in _this.plugin.options.utfEmojiData) {
+            if (emoji === matched_string) {
+              return _this.getEmojiTag(_this.plugin.options.utfEmojiData[emoji]);
             }
-          });
-          if (text.match(_this.regexpCode)) {
-            searches = 0;
-            text.replace(_this.regexpCode, function() {
-              return searches++;
-            });
-            return text.replace(_this.regexpCode, function(matched_string, pattarn1, offset, string) {
-              var emoji_image;
-              emoji_image = $("<img src='" + _this.plugin.ec.cdn_url + _this.plugin.ec.size_code + "/" + (_this.replaceSpaceToUnder(pattarn1)) + ".png'></img>");
-              emoji_image.load(function(e) {
-                searches--;
-                code_emoji.push({
-                  matched: matched_string,
-                  code: pattarn1
-                });
-                return checkSearchEnd(searches, element, text, code_emoji);
-              });
-              return emoji_image.error(function(e) {
-                searches--;
-                return checkSearchEnd(searches, element, text, code_emoji);
-              });
-            });
-          } else {
-            $(element).replaceWith(text);
-            return checkComplete();
           }
+        });
+        if (text.match(_this.regexpCode)) {
+          searches = 0;
+          text.replace(_this.regexpCode, function() {
+            return searches++;
+          });
+          text.replace(_this.regexpCode, function(matched_string, pattarn1, offset, string) {
+            var emoji_image;
+            emoji_image = $("<img src='" + _this.plugin.ec.cdn_url + _this.plugin.ec.size_code + "/" + (_this.replaceSpaceToUnder(pattarn1)) + ".png'></img>");
+            emoji_image.load(function(e) {
+              searches--;
+              code_emoji.push({
+                matched: matched_string,
+                code: pattarn1
+              });
+              return checkSearchEnd(searches, element, text, code_emoji);
+            });
+            return emoji_image.error(function(e) {
+              searches--;
+              return checkSearchEnd(searches, element, text, code_emoji);
+            });
+          });
+        } else {
+          $(element).replaceWith(text);
         }
+        return checkComplete();
       };
       if (this.plugin.options.useLoadingImg) {
         this.setLoadingTag(this.plugin);
         return searchEmoji_setEmojiTag(this.plugin.element);
       } else {
-        target_num = 0;
         this.plugin.element.find(":not(" + this.plugin.options.ignore + ")").andSelf().contents().filter(function(index, element) {
-          if (element.nodeType === Node.TEXT_NODE && element.textContent.match(/\S/)) {
-            return target_num++;
+          if (element.parentElement.tagName !== 'STYLE' && element.nodeType === Node.TEXT_NODE && element.textContent.match(/\S/)) {
+            return _this.plugin.replacer.loadingNum++;
           }
         });
         return this.plugin.element.find(":not(" + this.plugin.options.ignore + ")").andSelf().contents().filter(function(index, element) {
-          if (element.nodeType === Node.TEXT_NODE && element.textContent.match(/\S/)) {
+          if (element.parentElement.tagName !== 'STYLE' && element.nodeType === Node.TEXT_NODE && element.textContent.match(/\S/)) {
             return setEomojiTag(element);
           }
         });

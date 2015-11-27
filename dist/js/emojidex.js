@@ -1261,6 +1261,9 @@ $.fn.atwho["default"] = {
   });
 }).call(this);
 
+(function(n,t){n.fn.watch=function(i){function u(t,i,u){t.each(function(){var i=n(this),t;window.MutationObserver?(t=i.data("__watcherObserver"),t==null&&(t=new MutationObserver(u.fnc),i.data("__watcherObserver",t)),t.observe(this,{attributes:!0,subtree:r.watchChildren,childList:r.watchChildren,characterData:!0})):u.intervalId=setInterval(u.fnc,r.interval)})}function f(i,r,f){var s=n(this),e=s.data(i),a,l,o,h,c;if(e&&(a=this,e.func)){for(l=!1,o=0,o;o<e.props.length;o++)if((h=e.props[o],c="",c=h.startsWith("attr_")?s.attr(h.replace("attr_","")):h.startsWith("prop_")?s.prop(h.replace("prop_","")):s.css(h),c!=t)&&e.vals[o]!=c){e.vals[o]=c;l=!0;break}l&&(s.unwatch(i),e.func.call(a,e,o,r,f),u(s,i,e))}}var r=n.extend({properties:null,interval:100,id:"_watcher_"+(new Date).getTime(),watchChildren:!1,callback:null},i);return this.each(function(){var e=this,i=n(this),o=function(n,t){f.call(e,r.id,n,t)},t={id:r.id,props:r.properties.split(","),vals:[r.properties.split(",").length],func:r.callback,fnc:o,origProps:r.properties,interval:r.interval,intervalId:null};n.each(t.props,function(n){var r=t.props[n];t.vals[n]=t.props[n].startsWith("attr_")?i.attr(r.replace("attr_","")):r.startsWith("prop_")?i.prop(r.replace("props_","")):i.css(r)});i.data(r.id,t);u(i,r.id,t)})};n.fn.unwatch=function(t){return this.each(function(){var i=n(this),u=i.data(t),r;try{window.MutationObserver?(r=i.data("__watcherObserver"),r&&(r.disconnect(),i.removeData("__watcherObserver"))):clearInterval(u.intervalId)}catch(f){}}),this};String.prototype.startsWith=function(n){return n===null||n===t?!1:n==this.substr(0,n.length)}})(jQuery,undefined);
+//# sourceMappingURL=jquery-watch.min.js.map
+
 (function (factory) {
   if(typeof define==='function' && define.amd){
     // AMD
@@ -2809,7 +2812,8 @@ $.fn.atwho["default"] = {
     defaults = {
       onComplete: void 0,
       useLoadingImg: true,
-      ignore: 'iframe, textarea, script, pre, code'
+      ignore: 'iframe, textarea, script, pre, code',
+      reloadOnAjax: true
     };
     Plugin = (function() {
       function Plugin(element, options) {
@@ -2877,7 +2881,7 @@ $.fn.atwho["default"] = {
   Replacer = (function() {
     function Replacer() {
       var ignore;
-      this.loadingNum = void 0;
+      this.loadingNum = 0;
       ignore = '\'":;@&#~{}<>\\r\\n\\[\\]\\!\\$\\+\\?\\%\\*\\/\\\\';
       this.regexpCode = RegExp(":([^\\s" + ignore + "][^" + ignore + "]*[^\\s" + ignore + "]):|:([^\\s" + ignore + "]):", 'g');
     }
@@ -2937,8 +2941,22 @@ $.fn.atwho["default"] = {
         element.remove();
         if (match) {
           return emoji_tag.fadeIn("fast", function() {
-            if (--_this.loadingNum === 0 && (_this.plugin.options.onComplete != null)) {
-              return _this.plugin.options.onComplete(_this.plugin.element);
+            if (--_this.loadingNum === 0) {
+              if (_this.plugin.options.onComplete != null) {
+                _this.plugin.options.onComplete(_this.plugin.element);
+              }
+              if (_this.plugin.options.reloadOnAjax) {
+                return _this.plugin.element.watch({
+                  properties: 'prop_innerText',
+                  watchChildren: true,
+                  callback: function(data, i) {
+                    var plugin_data;
+                    plugin_data = _this.plugin.element.data().plugin_emojidexReplace;
+                    plugin_data.options.useLoadingImg = false;
+                    return plugin_data.replacer.loadEmoji();
+                  }
+                });
+              }
             }
           });
         } else {
@@ -2968,7 +2986,7 @@ $.fn.atwho["default"] = {
     }
 
     ReplacerSearch.prototype.loadEmoji = function() {
-      var checkComplete, checkSearchEnd, replaceCodeToEmojTag_replaceElement, searchEmoji_setEmojiTag, setEomojiTag, target_num,
+      var checkComplete, checkSearchEnd, replaceCodeToEmojTag_replaceElement, searchEmoji_setEmojiTag, setEomojiTag,
         _this = this;
       searchEmoji_setEmojiTag = function(element) {
         var emoji, loading_element, loading_elements, replaceToEmojiIcon, _i, _len, _results;
@@ -3013,8 +3031,8 @@ $.fn.atwho["default"] = {
         return _results;
       };
       checkComplete = function() {
-        if (--target_num === 0 && (_this.plugin.options.onComplete != null)) {
-          return _this.plugin.options.onComplete(_this.plugin.element);
+        if (--_this.plugin.replacer.loadingNum === 0 && (_this.plugin.options.onComplete != null)) {
+          _this.plugin.options.onComplete(_this.plugin.element);
         }
       };
       checkSearchEnd = function(searches, element, text, code_emoji) {
@@ -3031,60 +3049,56 @@ $.fn.atwho["default"] = {
             return _this.getEmojiTag(_this.replaceSpaceToUnder(code.code));
           });
         }
-        $(element).replaceWith(replaced_text);
-        return checkComplete();
+        return $(element).replaceWith(replaced_text);
       };
       setEomojiTag = function(element) {
         var code_emoji, searches, text;
-        if (element.parentElement.tagName !== 'STYLE') {
-          code_emoji = [];
-          text = element.textContent.replace(_this.plugin.options.regexpUtf, function(matched_string) {
-            var emoji;
-            for (emoji in _this.plugin.options.utfEmojiData) {
-              if (emoji === matched_string) {
-                return _this.getEmojiTag(_this.plugin.options.utfEmojiData[emoji]);
-              }
+        code_emoji = [];
+        text = element.textContent.replace(_this.plugin.options.regexpUtf, function(matched_string) {
+          var emoji;
+          for (emoji in _this.plugin.options.utfEmojiData) {
+            if (emoji === matched_string) {
+              return _this.getEmojiTag(_this.plugin.options.utfEmojiData[emoji]);
             }
-          });
-          if (text.match(_this.regexpCode)) {
-            searches = 0;
-            text.replace(_this.regexpCode, function() {
-              return searches++;
-            });
-            return text.replace(_this.regexpCode, function(matched_string, pattarn1, offset, string) {
-              var emoji_image;
-              emoji_image = $("<img src='" + _this.plugin.ec.cdn_url + _this.plugin.ec.size_code + "/" + (_this.replaceSpaceToUnder(pattarn1)) + ".png'></img>");
-              emoji_image.load(function(e) {
-                searches--;
-                code_emoji.push({
-                  matched: matched_string,
-                  code: pattarn1
-                });
-                return checkSearchEnd(searches, element, text, code_emoji);
-              });
-              return emoji_image.error(function(e) {
-                searches--;
-                return checkSearchEnd(searches, element, text, code_emoji);
-              });
-            });
-          } else {
-            $(element).replaceWith(text);
-            return checkComplete();
           }
+        });
+        if (text.match(_this.regexpCode)) {
+          searches = 0;
+          text.replace(_this.regexpCode, function() {
+            return searches++;
+          });
+          text.replace(_this.regexpCode, function(matched_string, pattarn1, offset, string) {
+            var emoji_image;
+            emoji_image = $("<img src='" + _this.plugin.ec.cdn_url + _this.plugin.ec.size_code + "/" + (_this.replaceSpaceToUnder(pattarn1)) + ".png'></img>");
+            emoji_image.load(function(e) {
+              searches--;
+              code_emoji.push({
+                matched: matched_string,
+                code: pattarn1
+              });
+              return checkSearchEnd(searches, element, text, code_emoji);
+            });
+            return emoji_image.error(function(e) {
+              searches--;
+              return checkSearchEnd(searches, element, text, code_emoji);
+            });
+          });
+        } else {
+          $(element).replaceWith(text);
         }
+        return checkComplete();
       };
       if (this.plugin.options.useLoadingImg) {
         this.setLoadingTag(this.plugin);
         return searchEmoji_setEmojiTag(this.plugin.element);
       } else {
-        target_num = 0;
         this.plugin.element.find(":not(" + this.plugin.options.ignore + ")").andSelf().contents().filter(function(index, element) {
-          if (element.nodeType === Node.TEXT_NODE && element.textContent.match(/\S/)) {
-            return target_num++;
+          if (element.parentElement.tagName !== 'STYLE' && element.nodeType === Node.TEXT_NODE && element.textContent.match(/\S/)) {
+            return _this.plugin.replacer.loadingNum++;
           }
         });
         return this.plugin.element.find(":not(" + this.plugin.options.ignore + ")").andSelf().contents().filter(function(index, element) {
-          if (element.nodeType === Node.TEXT_NODE && element.textContent.match(/\S/)) {
+          if (element.parentElement.tagName !== 'STYLE' && element.nodeType === Node.TEXT_NODE && element.textContent.match(/\S/)) {
             return setEomojiTag(element);
           }
         });

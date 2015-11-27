@@ -1,6 +1,6 @@
 class Replacer
   constructor: ->
-    @loadingNum = undefined
+    @loadingNum = 0
 
     ignore = '\'":;@&#~{}<>\\r\\n\\[\\]\\!\\$\\+\\?\\%\\*\\/\\\\'
     @regexpCode = RegExp ":([^\\s#{ignore}][^#{ignore}]*[^\\s#{ignore}]):|:([^\\s#{ignore}]):", 'g'
@@ -40,8 +40,19 @@ class Replacer
       element.remove()
       if match
         emoji_tag.fadeIn "fast", =>
-          if --@loadingNum is 0 && @plugin.options.onComplete?
-            @plugin.options.onComplete @plugin.element
+          if --@loadingNum is 0
+            if @plugin.options.onComplete?
+              @plugin.options.onComplete @plugin.element
+
+            if @plugin.options.reloadOnAjax
+              @plugin.element.watch
+                properties: 'prop_innerText'
+                watchChildren: true
+                callback: (data, i) =>
+                  plugin_data = @plugin.element.data().plugin_emojidexReplace
+                  plugin_data.options.useLoadingImg = false
+                  plugin_data.replacer.loadEmoji()
+
       else
         @loadingNum--
 

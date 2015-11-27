@@ -16,6 +16,7 @@ do ($ = jQuery, window, document) ->
     onComplete: undefined
     useLoadingImg: true
     ignore: 'iframe, textarea, script, pre, code'
+    reloadOnAjax: true
 
   class Plugin
     constructor: (@element, options) ->
@@ -63,5 +64,5 @@ do ($ = jQuery, window, document) ->
 
   $.fn[pluginName] = (options) ->
     @each ->
-      unless $.data(this, "plugin_" + pluginName)
-        $.data this, "plugin_" + pluginName, new Plugin(this, options)
+      unless $.data @, "plugin_#{pluginName}"
+        $.data @, "plugin_#{pluginName}", new Plugin @, options
