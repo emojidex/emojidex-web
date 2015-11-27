@@ -262,6 +262,7 @@ module.exports = (grunt) ->
           'bower_components/Caret.js/dist/jquery.caret.min.js'
           'bower_components/At.js/dist/js/jquery.atwho.min.js'
           'node_modules/emojidex-client/dist/js/*.min.js'
+          'node_modules/clipboard/dist/clipboard.min.js'
           'src/compiled_js/**/*.js'
         ]
         dest: 'dist/js/emojidex.js'
@@ -298,6 +299,7 @@ module.exports = (grunt) ->
       dist:
         src: [
           'node_modules/emojidex-client/dist/js/emojidex-client.js'
+          'node_modules/clipboard/dist/clipboard.js'
           'bower_components/Caret.js/dist/jquery.caret.js'
           'bower_components/At.js/dist/js/jquery.atwho.js'
         ]

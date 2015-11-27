@@ -45,6 +45,7 @@
     function Pallet(plugin) {
       this.plugin = plugin;
       this.ec = new EmojidexClient;
+      this.clipboard = new Clipboard('.emoji-btn');
       this.setPallet(this.plugin.element);
     }
 
@@ -63,7 +64,7 @@
           emoji_list = $('<div class="emoji_list"></div>');
           for (_i = 0, _len = result_emoji.length; _i < _len; _i++) {
             emoji = result_emoji[_i];
-            emoji_list.append("<button class='btn btn-default col-xs-2'><img src='" + _this.ec.cdn_url + "px32/" + (emoji.code.replace(/\s/g, '_')) + ".png'></img></button>");
+            emoji_list.append("<button class='btn btn-default col-xs-1 emoji-btn' data-clipboard-text=':" + (emoji.code.replace(/\s/g, '_')) + ":'><img src='" + _this.ec.cdn_url + "px32/" + (emoji.code.replace(/\s/g, '_')) + ".png'></img></button>");
           }
           console.dir(_this.ec);
           return _this.ec.Categories.sync(function(categories) {
