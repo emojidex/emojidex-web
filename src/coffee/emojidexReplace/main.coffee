@@ -14,7 +14,7 @@ do ($ = jQuery, window, document) ->
   pluginName = 'emojidexReplace'
   defaults =
     onComplete: undefined
-    useLoadingImg: true
+    useLoadingImg: false
     ignore: 'iframe, textarea, script, pre, code'
     reloadOnAjax: true
 

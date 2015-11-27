@@ -51,6 +51,7 @@ class Replacer
                 callback: (data, i) =>
                   plugin_data = @plugin.element.data().plugin_emojidexReplace
                   plugin_data.options.useLoadingImg = false
+                  plugin_data.options.reloadOnAjax = false
                   plugin_data.replacer.loadEmoji()
 
       else

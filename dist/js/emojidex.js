@@ -2811,7 +2811,7 @@ $.fn.atwho["default"] = {
     pluginName = 'emojidexReplace';
     defaults = {
       onComplete: void 0,
-      useLoadingImg: true,
+      useLoadingImg: false,
       ignore: 'iframe, textarea, script, pre, code',
       reloadOnAjax: true
     };
@@ -2953,6 +2953,7 @@ $.fn.atwho["default"] = {
                     var plugin_data;
                     plugin_data = _this.plugin.element.data().plugin_emojidexReplace;
                     plugin_data.options.useLoadingImg = false;
+                    plugin_data.options.reloadOnAjax = false;
                     return plugin_data.replacer.loadEmoji();
                   }
                 });
@@ -3031,20 +3032,24 @@ $.fn.atwho["default"] = {
         return _results;
       };
       checkComplete = function() {
-        if (_this.targetNum === 0 && _this.plugin.replacer.loadingNum === 0) {
+        if (_this.replaced_text === _this.targetNum) {
           if (_this.plugin.options.onComplete != null) {
             _this.plugin.options.onComplete(_this.plugin.element);
           }
           if (_this.plugin.options.reloadOnAjax) {
-            _this.plugin.element.watch({
-              properties: 'prop_innerText',
-              watchChildren: true,
-              callback: function(data, i) {
-                var plugin_data;
-                plugin_data = _this.plugin.element.data().plugin_emojidexReplace;
-                return plugin_data.replacer.loadEmoji();
-              }
-            });
+            setTimeout(function() {
+              return _this.plugin.element.watch({
+                properties: 'prop_innerText',
+                watchChildren: true,
+                id: 'reload_emoji_watcher',
+                callback: function(data, i) {
+                  var plugin_data;
+                  plugin_data = _this.plugin.element.data().plugin_emojidexReplace;
+                  plugin_data.options.reloadOnAjax = false;
+                  return plugin_data.replacer.loadEmoji();
+                }
+              });
+            }, 1000);
           }
         }
       };
@@ -3060,16 +3065,14 @@ $.fn.atwho["default"] = {
           code = code_emoji[_i];
           replaced_text = replaced_text.replace(code.matched, function() {
             var emoji_tag;
+            _this.emoji_tags++;
             emoji_tag = _this.getEmojiTag(_this.replaceSpaceToUnder(code.code));
-            _this.plugin.replacer.loadingNum++;
-            $(emoji_tag).load(function(e) {
-              _this.plugin.replacer.loadingNum--;
-              return checkComplete();
-            });
             return emoji_tag;
           });
         }
-        return $(element).replaceWith(replaced_text);
+        $(element).replaceWith(replaced_text);
+        _this.replaced_text++;
+        return checkComplete();
       };
       setEomojiTag = function(element) {
         var code_emoji, searches, text;
@@ -3078,12 +3081,8 @@ $.fn.atwho["default"] = {
           var emoji, emoji_tag;
           for (emoji in _this.plugin.options.utfEmojiData) {
             if (emoji === matched_string) {
+              _this.emoji_tags++;
               emoji_tag = _this.getEmojiTag(_this.plugin.options.utfEmojiData[emoji]);
-              _this.plugin.replacer.loadingNum++;
-              $(emoji_tag).load(function(e) {
-                _this.plugin.replacer.loadingNum--;
-                return checkComplete();
-              });
               return emoji_tag;
             }
           }
@@ -3093,7 +3092,7 @@ $.fn.atwho["default"] = {
           text.replace(_this.regexpCode, function() {
             return searches++;
           });
-          text.replace(_this.regexpCode, function(matched_string, pattarn1, offset, string) {
+          return text.replace(_this.regexpCode, function(matched_string, pattarn1, offset, string) {
             var emoji_image;
             emoji_image = $("<img src='" + _this.plugin.ec.cdn_url + _this.plugin.ec.size_code + "/" + (_this.replaceSpaceToUnder(pattarn1)) + ".png'></img>");
             emoji_image.load(function(e) {
@@ -3111,15 +3110,17 @@ $.fn.atwho["default"] = {
           });
         } else {
           $(element).replaceWith(text);
+          _this.replaced_text++;
+          return checkComplete();
         }
-        _this.targetNum--;
-        return checkComplete();
       };
       if (this.plugin.options.useLoadingImg) {
         this.setLoadingTag(this.plugin);
         return searchEmoji_setEmojiTag(this.plugin.element);
       } else {
         this.targetNum = 0;
+        this.replaced_text = 0;
+        this.emoji_tags = 0;
         this.plugin.element.find(":not(" + this.plugin.options.ignore + ")").andSelf().contents().filter(function(index, element) {
           if (element.parentElement.tagName !== 'STYLE' && element.nodeType === Node.TEXT_NODE && element.textContent.match(/\S/)) {
             return _this.targetNum++;
