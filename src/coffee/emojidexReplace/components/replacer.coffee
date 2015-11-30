@@ -16,7 +16,7 @@ class Replacer
 
   setLoadingTag: (plugin) ->
     plugin.element.find(":not(#{plugin.options.ignore})").andSelf().contents().filter (index, element) =>
-      if element.parentElement.tagName isnt 'STYLE' and element.nodeType is Node.TEXT_NODE and element.textContent.match(/\S/)
+      if element.nodeType is Node.TEXT_NODE and element.textContent.match(/\S/)
         replaced_text = @getTextWithLoadingTag element.textContent
         $(element).replaceWith replaced_text if replaced_text isnt element.textContent
 
@@ -28,15 +28,23 @@ class Replacer
     return text
 
   reloadEmoji: ->
-    @plugin.element.watch
-      id: 'reload_emoji_watcher'
-      properties: 'prop_innerText'
-      watchChildren: true
-      callback: (data, i) =>
-        plugin_data = @plugin.element.data().plugin_emojidexReplace
-        plugin_data.options.useLoadingImg = false
-        plugin_data.options.reloadOnAjax = false
-        plugin_data.replacer.loadEmoji()
+    reload = (mutations) =>
+      for mutation in mutations
+        for node in mutation.addedNodes
+          if node.nodeName isnt 'SCRIPT' and node.nodeName isnt 'STYLE'
+            @plugin.options.reloadOnAjax = false
+            @plugin.replacer.loadEmoji()
+
+    observer = new MutationObserver reload
+    if @plugin.element.selector
+      target = document.querySelector @plugin.element.selector
+    else
+      target = @plugin.element[0]
+    config =
+      attributes: true
+      childList: true
+      attributeFilter: ['innerText']
+    observer.observe target, config
 
   fadeOutLoadingTag_fadeInEmojiTag: (element, emoji_code, match = true) ->
     emoji_tag = undefined

@@ -36,9 +36,7 @@ class ReplacerSearch extends Replacer
           @plugin.options.onComplete @plugin.element
 
         if @plugin.options.reloadOnAjax
-          setTimeout =>
-            @reloadEmoji()
-          , 1000
+          @reloadEmoji()
       return
 
     checkSearchEnd = (searches, element, text, code_emoji)=>
@@ -96,8 +94,8 @@ class ReplacerSearch extends Replacer
       @replaced_text = 0
       @emoji_tags = 0
       @plugin.element.find(":not(#{@plugin.options.ignore})").andSelf().contents().filter (index, element) =>
-        if element.parentElement.tagName isnt 'STYLE' and element.nodeType is Node.TEXT_NODE and element.textContent.match(/\S/)
+        if element.nodeType is Node.TEXT_NODE and element.textContent.match(/\S/)
           @targetNum++
       @plugin.element.find(":not(#{@plugin.options.ignore})").andSelf().contents().filter (index, element) =>
-        if element.parentElement.tagName isnt 'STYLE' and element.nodeType is Node.TEXT_NODE and element.textContent.match(/\S/)
+        if element.nodeType is Node.TEXT_NODE and element.textContent.match(/\S/)
           setEomojiTag element

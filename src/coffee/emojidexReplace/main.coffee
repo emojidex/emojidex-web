@@ -15,7 +15,7 @@ do ($ = jQuery, window, document) ->
   defaults =
     onComplete: undefined
     useLoadingImg: false
-    ignore: 'iframe, textarea, script, pre, code'
+    ignore: 'script, style, iframe, textarea, pre, code'
     reloadOnAjax: true
 
   class Plugin
