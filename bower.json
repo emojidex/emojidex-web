@@ -1,5 +1,5 @@
 {
-  "name": "emojidex-coffee",
+  "name": "emojidex",
   "devDependencies": {
     "At.js": "0.5.1",
     "Caret.js": "0.2.0",
