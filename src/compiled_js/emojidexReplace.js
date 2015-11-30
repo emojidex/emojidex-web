@@ -12,7 +12,7 @@
 
 
 (function() {
-  var ReplacerSearch,
+  var Replacer, ReplacerSearch,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -21,9 +21,9 @@
     pluginName = 'emojidexReplace';
     defaults = {
       onComplete: void 0,
-      useLoadingImg: false,
+      useLoadingImg: true,
       ignore: 'script, style, iframe, textarea, pre, code',
-      reloadOnAjax: true
+      autoUpdate: true
     };
     Plugin = (function() {
       function Plugin(element, options) {
@@ -88,6 +88,135 @@
     };
   })(jQuery, window, document);
 
+  Replacer = (function() {
+    function Replacer() {
+      var ignore;
+      this.loadingNum = 0;
+      ignore = '\'":;@&#~{}<>\\r\\n\\[\\]\\!\\$\\+\\?\\%\\*\\/\\\\';
+      this.regexpCode = RegExp(":([^\\s" + ignore + "][^" + ignore + "]*[^\\s" + ignore + "]):|:([^\\s" + ignore + "]):", 'g');
+    }
+
+    Replacer.prototype.getEmojiTag = function(emoji_code) {
+      return "<img class='emojidex-emoji' src='" + this.plugin.ec.cdn_url + this.plugin.ec.size_code + "/" + emoji_code + ".png' title='" + (this.replaceUnderToSpace(emoji_code)) + "'></img>";
+    };
+
+    Replacer.prototype.getLoadingTag = function(emoji_data, type) {
+      return "<div class='emojidex-loading-icon' data-emoji='" + emoji_data + "' data-type='" + type + "'></div>";
+    };
+
+    Replacer.prototype.getLoadingElement = function(element) {
+      return $(element.find('.emojidex-loading-icon'));
+    };
+
+    Replacer.prototype.setLoadingTag = function(plugin) {
+      var _this = this;
+      return plugin.element.find(":not(" + plugin.options.ignore + ")").andSelf().contents().filter(function(index, element) {
+        var replaced_text;
+        if (element.nodeType === Node.TEXT_NODE && element.textContent.match(/\S/)) {
+          replaced_text = _this.getTextWithLoadingTag(element.textContent);
+          if (replaced_text !== element.textContent) {
+            return $(element).replaceWith(replaced_text);
+          }
+        }
+      });
+    };
+
+    Replacer.prototype.getTextWithLoadingTag = function(text) {
+      var _this = this;
+      text = text.replace(this.plugin.options.regexpUtf, function(matched_string) {
+        return _this.getLoadingTag(matched_string, 'utf');
+      });
+      text = text.replace(this.regexpCode, function(matched_string) {
+        return _this.getLoadingTag(matched_string, 'code');
+      });
+      return text;
+    };
+
+    Replacer.prototype.reloadEmoji = function() {
+      var config, reload, target,
+        _this = this;
+      reload = function(mutations) {
+        var mutation, node, _i, _len, _results;
+        _results = [];
+        for (_i = 0, _len = mutations.length; _i < _len; _i++) {
+          mutation = mutations[_i];
+          _results.push((function() {
+            var _j, _len1, _ref, _results1;
+            _ref = mutation.addedNodes;
+            _results1 = [];
+            for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+              node = _ref[_j];
+              if (node.nodeName !== 'SCRIPT' && node.nodeName !== 'STYLE') {
+                this.plugin.options.useLoadingImg = false;
+                this.plugin.options.autoUpdate = false;
+                _results1.push(this.plugin.replacer.loadEmoji());
+              } else {
+                _results1.push(void 0);
+              }
+            }
+            return _results1;
+          }).call(_this));
+        }
+        return _results;
+      };
+      this.dom_observer = new MutationObserver(reload);
+      if (this.plugin.element.selector) {
+        target = document.querySelector(this.plugin.element.selector);
+      } else {
+        target = this.plugin.element[0];
+      }
+      config = {
+        attributes: true,
+        childList: true,
+        attributeFilter: ['innerText']
+      };
+      return this.dom_observer.observe(target, config);
+    };
+
+    Replacer.prototype.fadeOutLoadingTag_fadeInEmojiTag = function(element, emoji_code, match) {
+      var emoji_tag,
+        _this = this;
+      if (match == null) {
+        match = true;
+      }
+      emoji_tag = void 0;
+      if (match) {
+        emoji_tag = $(this.getEmojiTag(emoji_code)).hide();
+      } else {
+        emoji_tag = emoji_code;
+      }
+      return element.fadeOut("normal", function() {
+        element.after(emoji_tag);
+        element.remove();
+        if (match) {
+          return emoji_tag.fadeIn("fast", function() {
+            if (--_this.loadingNum === 0) {
+              if (_this.plugin.options.onComplete != null) {
+                _this.plugin.options.onComplete(_this.plugin.element);
+              }
+              if (_this.plugin.options.autoUpdate) {
+                return _this.reloadEmoji();
+              }
+            }
+          });
+        } else {
+          return _this.loadingNum--;
+        }
+      });
+    };
+
+    Replacer.prototype.replaceSpaceToUnder = function(string) {
+      return string.replace(/\s/g, '_');
+    };
+
+    Replacer.prototype.replaceUnderToSpace = function(string) {
+      return string.replace(/_/g, ' ');
+    };
+
+    return Replacer;
+
+  })();
+
   ReplacerSearch = (function(_super) {
     __extends(ReplacerSearch, _super);
 
@@ -146,7 +275,7 @@
           if (_this.plugin.options.onComplete != null) {
             _this.plugin.options.onComplete(_this.plugin.element);
           }
-          if (_this.plugin.options.reloadOnAjax) {
+          if (_this.plugin.options.autoUpdate) {
             _this.reloadEmoji();
           }
         }

@@ -261,7 +261,6 @@ module.exports = (grunt) ->
           # 'bower_components/bootstrap-window/dist/js/bootstrap-window.min.js'
           'bower_components/Caret.js/dist/jquery.caret.js'
           'bower_components/At.js/dist/js/jquery.atwho.js'
-          'bower_components/jquery-watch-dom/jquery-watch.min.js'
           'node_modules/emojidex-client/dist/js/emojidex-client.js'
           'src/compiled_js/**/*.js'
         ]
@@ -301,7 +300,6 @@ module.exports = (grunt) ->
           'node_modules/emojidex-client/dist/js/emojidex-client.js'
           'bower_components/Caret.js/dist/jquery.caret.js'
           'bower_components/At.js/dist/js/jquery.atwho.js'
-          'bower_components/jquery-watch-dom/jquery-watch.js'
         ]
         dest: 'build/licenses.json'
 

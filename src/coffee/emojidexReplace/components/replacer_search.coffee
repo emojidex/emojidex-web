@@ -35,7 +35,7 @@ class ReplacerSearch extends Replacer
         if @plugin.options.onComplete?
           @plugin.options.onComplete @plugin.element
 
-        if @plugin.options.reloadOnAjax
+        if @plugin.options.autoUpdate
           @reloadEmoji()
       return
 

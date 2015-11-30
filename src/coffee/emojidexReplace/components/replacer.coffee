@@ -32,10 +32,11 @@ class Replacer
       for mutation in mutations
         for node in mutation.addedNodes
           if node.nodeName isnt 'SCRIPT' and node.nodeName isnt 'STYLE'
-            @plugin.options.reloadOnAjax = false
+            @plugin.options.useLoadingImg = false
+            @plugin.options.autoUpdate = false
             @plugin.replacer.loadEmoji()
 
-    observer = new MutationObserver reload
+    @dom_observer = new MutationObserver reload
     if @plugin.element.selector
       target = document.querySelector @plugin.element.selector
     else
@@ -44,7 +45,7 @@ class Replacer
       attributes: true
       childList: true
       attributeFilter: ['innerText']
-    observer.observe target, config
+    @dom_observer.observe target, config
 
   fadeOutLoadingTag_fadeInEmojiTag: (element, emoji_code, match = true) ->
     emoji_tag = undefined
@@ -62,7 +63,7 @@ class Replacer
             if @plugin.options.onComplete?
               @plugin.options.onComplete @plugin.element
 
-            if @plugin.options.reloadOnAjax
+            if @plugin.options.autoUpdate
               @reloadEmoji()
 
       else
