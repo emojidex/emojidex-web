@@ -2811,7 +2811,7 @@ $.fn.atwho["default"] = {
     pluginName = 'emojidexReplace';
     defaults = {
       onComplete: void 0,
-      useLoadingImg: true,
+      useLoadingImg: false,
       ignore: 'iframe, textarea, script, pre, code',
       reloadOnAjax: true
     };
@@ -2922,6 +2922,22 @@ $.fn.atwho["default"] = {
       return text;
     };
 
+    Replacer.prototype.reloadEmoji = function() {
+      var _this = this;
+      return this.plugin.element.watch({
+        id: 'reload_emoji_watcher',
+        properties: 'prop_innerText',
+        watchChildren: true,
+        callback: function(data, i) {
+          var plugin_data;
+          plugin_data = _this.plugin.element.data().plugin_emojidexReplace;
+          plugin_data.options.useLoadingImg = false;
+          plugin_data.options.reloadOnAjax = false;
+          return plugin_data.replacer.loadEmoji();
+        }
+      });
+    };
+
     Replacer.prototype.fadeOutLoadingTag_fadeInEmojiTag = function(element, emoji_code, match) {
       var emoji_tag,
         _this = this;
@@ -2944,17 +2960,7 @@ $.fn.atwho["default"] = {
                 _this.plugin.options.onComplete(_this.plugin.element);
               }
               if (_this.plugin.options.reloadOnAjax) {
-                return _this.plugin.element.watch({
-                  properties: 'prop_innerText',
-                  watchChildren: true,
-                  callback: function(data, i) {
-                    var plugin_data;
-                    plugin_data = _this.plugin.element.data().plugin_emojidexReplace;
-                    plugin_data.options.useLoadingImg = false;
-                    plugin_data.options.reloadOnAjax = false;
-                    return plugin_data.replacer.loadEmoji();
-                  }
-                });
+                return _this.reloadEmoji();
               }
             }
           });
@@ -3036,17 +3042,7 @@ $.fn.atwho["default"] = {
           }
           if (_this.plugin.options.reloadOnAjax) {
             setTimeout(function() {
-              return _this.plugin.element.watch({
-                properties: 'prop_innerText',
-                watchChildren: true,
-                id: 'reload_emoji_watcher',
-                callback: function(data, i) {
-                  var plugin_data;
-                  plugin_data = _this.plugin.element.data().plugin_emojidexReplace;
-                  plugin_data.options.reloadOnAjax = false;
-                  return plugin_data.replacer.loadEmoji();
-                }
-              });
+              return _this.reloadEmoji();
             }, 1000);
           }
         }

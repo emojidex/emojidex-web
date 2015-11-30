@@ -37,15 +37,7 @@ class ReplacerSearch extends Replacer
 
         if @plugin.options.reloadOnAjax
           setTimeout =>
-            @plugin.element.watch
-              properties: 'prop_innerText'
-              watchChildren: true
-              id: 'reload_emoji_watcher'
-              callback: (data, i) =>
-                # debugger
-                plugin_data = @plugin.element.data().plugin_emojidexReplace
-                plugin_data.options.reloadOnAjax = false
-                plugin_data.replacer.loadEmoji()
+            @reloadEmoji()
           , 1000
       return
 

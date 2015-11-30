@@ -27,6 +27,17 @@ class Replacer
       @getLoadingTag matched_string, 'code'
     return text
 
+  reloadEmoji: ->
+    @plugin.element.watch
+      id: 'reload_emoji_watcher'
+      properties: 'prop_innerText'
+      watchChildren: true
+      callback: (data, i) =>
+        plugin_data = @plugin.element.data().plugin_emojidexReplace
+        plugin_data.options.useLoadingImg = false
+        plugin_data.options.reloadOnAjax = false
+        plugin_data.replacer.loadEmoji()
+
   fadeOutLoadingTag_fadeInEmojiTag: (element, emoji_code, match = true) ->
     emoji_tag = undefined
     if match
@@ -44,14 +55,7 @@ class Replacer
               @plugin.options.onComplete @plugin.element
 
             if @plugin.options.reloadOnAjax
-              @plugin.element.watch
-                properties: 'prop_innerText'
-                watchChildren: true
-                callback: (data, i) =>
-                  plugin_data = @plugin.element.data().plugin_emojidexReplace
-                  plugin_data.options.useLoadingImg = false
-                  plugin_data.options.reloadOnAjax = false
-                  plugin_data.replacer.loadEmoji()
+              @reloadEmoji()
 
       else
         @loadingNum--
