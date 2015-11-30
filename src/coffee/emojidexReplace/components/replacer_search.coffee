@@ -36,10 +36,6 @@ class ReplacerSearch extends Replacer
           @plugin.options.onComplete @plugin.element
 
         if @plugin.options.reloadOnAjax
-          # mem = @plugin.element[0].innerText
-          # setTimeout =>
-          #   console.log mem is @plugin.element[0].innerText
-          # , 0
           setTimeout =>
             @plugin.element.watch
               properties: 'prop_innerText'
@@ -51,9 +47,6 @@ class ReplacerSearch extends Replacer
                 plugin_data.options.reloadOnAjax = false
                 plugin_data.replacer.loadEmoji()
           , 1000
-      # else
-        # console.log @targetNum
-        # console.log @replaced_text
       return
 
     checkSearchEnd = (searches, element, text, code_emoji)=>
@@ -85,13 +78,14 @@ class ReplacerSearch extends Replacer
         searches = 0
         text.replace @regexpCode, ->
           searches++
-        text.replace @regexpCode, (matched_string, pattarn1, offset, string) =>
-          emoji_image = $("<img src='#{@plugin.ec.cdn_url}#{@plugin.ec.size_code}/#{@replaceSpaceToUnder pattarn1}.png'></img>")
+        text.replace @regexpCode, (matched_string) =>
+          matched_code = matched_string.replace /\:/g, ''
+          emoji_image = $("<img src='#{@plugin.ec.cdn_url}#{@plugin.ec.size_code}/#{@replaceSpaceToUnder matched_code}.png'></img>")
           emoji_image.load (e) =>
             searches--
             code_emoji.push
               matched: matched_string
-              code: pattarn1
+              code: matched_code
             checkSearchEnd searches, element, text, code_emoji
           emoji_image.error (e) =>
             searches--

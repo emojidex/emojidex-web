@@ -21,7 +21,7 @@
     pluginName = 'emojidexReplace';
     defaults = {
       onComplete: void 0,
-      useLoadingImg: false,
+      useLoadingImg: true,
       ignore: 'iframe, textarea, script, pre, code',
       reloadOnAjax: true
     };
@@ -122,13 +122,11 @@
     };
 
     Replacer.prototype.getTextWithLoadingTag = function(text) {
-      var text_bak,
-        _this = this;
-      text_bak = text;
+      var _this = this;
       text = text.replace(this.plugin.options.regexpUtf, function(matched_string) {
         return _this.getLoadingTag(matched_string, 'utf');
       });
-      text = text.replace(this.regexpCode, function(matched_string, pattern1) {
+      text = text.replace(this.regexpCode, function(matched_string) {
         return _this.getLoadingTag(matched_string, 'code');
       });
       return text;
@@ -302,14 +300,15 @@
           text.replace(_this.regexpCode, function() {
             return searches++;
           });
-          return text.replace(_this.regexpCode, function(matched_string, pattarn1, offset, string) {
-            var emoji_image;
-            emoji_image = $("<img src='" + _this.plugin.ec.cdn_url + _this.plugin.ec.size_code + "/" + (_this.replaceSpaceToUnder(pattarn1)) + ".png'></img>");
+          return text.replace(_this.regexpCode, function(matched_string) {
+            var emoji_image, matched_code;
+            matched_code = matched_string.replace(/\:/g, '');
+            emoji_image = $("<img src='" + _this.plugin.ec.cdn_url + _this.plugin.ec.size_code + "/" + (_this.replaceSpaceToUnder(matched_code)) + ".png'></img>");
             emoji_image.load(function(e) {
               searches--;
               code_emoji.push({
                 matched: matched_string,
-                code: pattarn1
+                code: matched_code
               });
               return checkSearchEnd(searches, element, text, code_emoji);
             });

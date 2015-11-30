@@ -21,10 +21,9 @@ class Replacer
         $(element).replaceWith replaced_text if replaced_text isnt element.textContent
 
   getTextWithLoadingTag: (text) ->
-    text_bak = text
     text = text.replace @plugin.options.regexpUtf, (matched_string) =>
       @getLoadingTag matched_string, 'utf'
-    text = text.replace @regexpCode, (matched_string, pattern1) =>
+    text = text.replace @regexpCode, (matched_string) =>
       @getLoadingTag matched_string, 'code'
     return text
 
