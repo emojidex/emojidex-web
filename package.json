@@ -9,7 +9,7 @@
     "type": "git",
     "url": "https://github.com/emojidex/emojidex-web.git"
   },
-  "licenses": {
+  "license": {
     "description": "Licensed under the emojidex Open License",
     "type": "emojiOL",
     "url": "https://www.emojidex.com/emojidex/emojidex_open_license",
