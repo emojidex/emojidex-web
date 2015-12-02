@@ -15,7 +15,7 @@
  *
  * Includes:
  * --------------------------------
- * emojidex client - v0.3.7
+ * emojidex client - v0.3.8
  * * Provides search, index caching and combining and asset URI resolution
  * https://github.com/emojidex/emojidex-web-client
  *
@@ -38,7 +38,7 @@
  * Project home:
  * https://github.com/julien-maurel/jQuery-Storage-API
  *
- * Version: 1.7.3
+ * Version: 1.7.5
  *
  * --------------------------------
  * --------------------------------
@@ -1491,7 +1491,7 @@ $.fn.atwho["default"] = {
     }else{
       o=s;
     }
-    if(o._cookie){
+    if(o && o._cookie){
       // If storage is a cookie, use $.cookie to retrieve keys
       for(var key in $.cookie()){
         if(key!='') {
@@ -1530,9 +1530,9 @@ $.fn.atwho["default"] = {
 
   // Test if storage is natively available on browser
   function _testStorage(name){
-    if(!window[name]) return false;
     var foo='jsapi';
     try{
+      if(!window[name]) return false;
       window[name].setItem(foo,foo);
       window[name].removeItem(foo);
       return true;
@@ -1540,10 +1540,10 @@ $.fn.atwho["default"] = {
       return false;
     }
   }
-
+  
   // Check if storages are natively available on browser
   var storage_available=_testStorage('localStorage');
-
+  
   // Namespace object
   var storage={
     _type:'',
@@ -2579,11 +2579,14 @@ $.fn.atwho["default"] = {
     };
 
     EmojidexUtil.prototype.breakout = function(items) {
-      if (items == null) {
+      if (items != null) {
+        if (items instanceof Array) {
+          return items;
+        } else {
+          return [items];
+        }
+      } else {
         return [];
-      }
-      if (!(items instanceof Array)) {
-        return items = [items];
       }
     };
 
