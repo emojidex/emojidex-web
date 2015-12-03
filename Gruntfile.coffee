@@ -39,10 +39,10 @@ module.exports = (grunt) ->
         ' *   emojidexReplace, emojidexAutocomplete\n' +
         ' *\n' +
         ' * =LICENSE=\n' +
-        ' * <%= pkg.licenses.description %>\n' +
-        ' * <%= pkg.licenses.url %>\n' +
+        ' * <%= pkg.license.description %>\n' +
+        ' * <%= pkg.license.url %>\n' +
         ' *\n' +
-        ' * <%= pkg.licenses.copyright %>\n' +
+        ' * <%= pkg.license.copyright %>\n' +
         ' *\n' +
         ' *\n' +
         ' * Includes:\n' +

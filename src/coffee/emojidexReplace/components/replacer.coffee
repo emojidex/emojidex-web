@@ -1,6 +1,6 @@
 class Replacer
   constructor: ->
-    @loadingNum = undefined
+    @loadingNum = 0
 
     ignore = '\'":;@&#~{}<>\\r\\n\\[\\]\\!\\$\\+\\?\\%\\*\\/\\\\'
     @regexpCode = RegExp ":([^\\s#{ignore}][^#{ignore}]*[^\\s#{ignore}]):|:([^\\s#{ignore}]):", 'g'
@@ -16,17 +16,36 @@ class Replacer
 
   setLoadingTag: (plugin) ->
     plugin.element.find(":not(#{plugin.options.ignore})").andSelf().contents().filter (index, element) =>
-      if element.parentElement.tagName isnt 'STYLE' and element.nodeType is Node.TEXT_NODE and element.textContent.match(/\S/)
+      if element.nodeType is Node.TEXT_NODE and element.textContent.match(/\S/)
         replaced_text = @getTextWithLoadingTag element.textContent
         $(element).replaceWith replaced_text if replaced_text isnt element.textContent
 
   getTextWithLoadingTag: (text) ->
-    text_bak = text
     text = text.replace @plugin.options.regexpUtf, (matched_string) =>
       @getLoadingTag matched_string, 'utf'
-    text = text.replace @regexpCode, (matched_string, pattern1) =>
+    text = text.replace @regexpCode, (matched_string) =>
       @getLoadingTag matched_string, 'code'
     return text
+
+  reloadEmoji: ->
+    reload = (mutations) =>
+      for mutation in mutations
+        for node in mutation.addedNodes
+          if node.nodeName isnt 'SCRIPT' and node.nodeName isnt 'STYLE'
+            @plugin.options.useLoadingImg = false
+            @plugin.options.autoUpdate = false
+            @plugin.replacer.loadEmoji()
+
+    @dom_observer = new MutationObserver reload
+    if @plugin.element.selector
+      target = document.querySelector @plugin.element.selector
+    else
+      target = @plugin.element[0]
+    config =
+      attributes: true
+      childList: true
+      attributeFilter: ['innerText']
+    @dom_observer.observe target, config
 
   fadeOutLoadingTag_fadeInEmojiTag: (element, emoji_code, match = true) ->
     emoji_tag = undefined
@@ -40,8 +59,13 @@ class Replacer
       element.remove()
       if match
         emoji_tag.fadeIn "fast", =>
-          if --@loadingNum is 0 && @plugin.options.onComplete?
-            @plugin.options.onComplete @plugin.element
+          if --@loadingNum is 0
+            if @plugin.options.onComplete?
+              @plugin.options.onComplete @plugin.element
+
+            if @plugin.options.autoUpdate
+              @reloadEmoji()
+
       else
         @loadingNum--
 

@@ -22,7 +22,8 @@
     defaults = {
       onComplete: void 0,
       useLoadingImg: true,
-      ignore: 'iframe, textarea, script, pre, code'
+      ignore: 'script, style, iframe, textarea, pre, code',
+      autoUpdate: true
     };
     Plugin = (function() {
       function Plugin(element, options) {
@@ -90,7 +91,7 @@
   Replacer = (function() {
     function Replacer() {
       var ignore;
-      this.loadingNum = void 0;
+      this.loadingNum = 0;
       ignore = '\'":;@&#~{}<>\\r\\n\\[\\]\\!\\$\\+\\?\\%\\*\\/\\\\';
       this.regexpCode = RegExp(":([^\\s" + ignore + "][^" + ignore + "]*[^\\s" + ignore + "]):|:([^\\s" + ignore + "]):", 'g');
     }
@@ -111,7 +112,7 @@
       var _this = this;
       return plugin.element.find(":not(" + plugin.options.ignore + ")").andSelf().contents().filter(function(index, element) {
         var replaced_text;
-        if (element.parentElement.tagName !== 'STYLE' && element.nodeType === Node.TEXT_NODE && element.textContent.match(/\S/)) {
+        if (element.nodeType === Node.TEXT_NODE && element.textContent.match(/\S/)) {
           replaced_text = _this.getTextWithLoadingTag(element.textContent);
           if (replaced_text !== element.textContent) {
             return $(element).replaceWith(replaced_text);
@@ -121,16 +122,55 @@
     };
 
     Replacer.prototype.getTextWithLoadingTag = function(text) {
-      var text_bak,
-        _this = this;
-      text_bak = text;
+      var _this = this;
       text = text.replace(this.plugin.options.regexpUtf, function(matched_string) {
         return _this.getLoadingTag(matched_string, 'utf');
       });
-      text = text.replace(this.regexpCode, function(matched_string, pattern1) {
+      text = text.replace(this.regexpCode, function(matched_string) {
         return _this.getLoadingTag(matched_string, 'code');
       });
       return text;
+    };
+
+    Replacer.prototype.reloadEmoji = function() {
+      var config, reload, target,
+        _this = this;
+      reload = function(mutations) {
+        var mutation, node, _i, _len, _results;
+        _results = [];
+        for (_i = 0, _len = mutations.length; _i < _len; _i++) {
+          mutation = mutations[_i];
+          _results.push((function() {
+            var _j, _len1, _ref, _results1;
+            _ref = mutation.addedNodes;
+            _results1 = [];
+            for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+              node = _ref[_j];
+              if (node.nodeName !== 'SCRIPT' && node.nodeName !== 'STYLE') {
+                this.plugin.options.useLoadingImg = false;
+                this.plugin.options.autoUpdate = false;
+                _results1.push(this.plugin.replacer.loadEmoji());
+              } else {
+                _results1.push(void 0);
+              }
+            }
+            return _results1;
+          }).call(_this));
+        }
+        return _results;
+      };
+      this.dom_observer = new MutationObserver(reload);
+      if (this.plugin.element.selector) {
+        target = document.querySelector(this.plugin.element.selector);
+      } else {
+        target = this.plugin.element[0];
+      }
+      config = {
+        attributes: true,
+        childList: true,
+        attributeFilter: ['innerText']
+      };
+      return this.dom_observer.observe(target, config);
     };
 
     Replacer.prototype.fadeOutLoadingTag_fadeInEmojiTag = function(element, emoji_code, match) {
@@ -150,8 +190,13 @@
         element.remove();
         if (match) {
           return emoji_tag.fadeIn("fast", function() {
-            if (--_this.loadingNum === 0 && (_this.plugin.options.onComplete != null)) {
-              return _this.plugin.options.onComplete(_this.plugin.element);
+            if (--_this.loadingNum === 0) {
+              if (_this.plugin.options.onComplete != null) {
+                _this.plugin.options.onComplete(_this.plugin.element);
+              }
+              if (_this.plugin.options.autoUpdate) {
+                return _this.reloadEmoji();
+              }
             }
           });
         } else {
@@ -181,7 +226,7 @@
     }
 
     ReplacerSearch.prototype.loadEmoji = function() {
-      var checkComplete, checkSearchEnd, replaceCodeToEmojTag_replaceElement, searchEmoji_setEmojiTag, setEomojiTag, target_num,
+      var checkComplete, checkSearchEnd, replaceCodeToEmojTag_replaceElement, searchEmoji_setEmojiTag, setEomojiTag,
         _this = this;
       searchEmoji_setEmojiTag = function(element) {
         var emoji, loading_element, loading_elements, replaceToEmojiIcon, _i, _len, _results;
@@ -226,8 +271,13 @@
         return _results;
       };
       checkComplete = function() {
-        if (--target_num === 0 && (_this.plugin.options.onComplete != null)) {
-          return _this.plugin.options.onComplete(_this.plugin.element);
+        if (_this.replaced_text === _this.targetNum) {
+          if (_this.plugin.options.onComplete != null) {
+            _this.plugin.options.onComplete(_this.plugin.element);
+          }
+          if (_this.plugin.options.autoUpdate) {
+            _this.reloadEmoji();
+          }
         }
       };
       checkSearchEnd = function(searches, element, text, code_emoji) {
@@ -241,59 +291,67 @@
         for (_i = 0, _len = code_emoji.length; _i < _len; _i++) {
           code = code_emoji[_i];
           replaced_text = replaced_text.replace(code.matched, function() {
-            return _this.getEmojiTag(_this.replaceSpaceToUnder(code.code));
+            var emoji_tag;
+            _this.emoji_tags++;
+            emoji_tag = _this.getEmojiTag(_this.replaceSpaceToUnder(code.code));
+            return emoji_tag;
           });
         }
         $(element).replaceWith(replaced_text);
+        _this.replaced_text++;
         return checkComplete();
       };
       setEomojiTag = function(element) {
         var code_emoji, searches, text;
-        if (element.parentElement.tagName !== 'STYLE') {
-          code_emoji = [];
-          text = element.textContent.replace(_this.plugin.options.regexpUtf, function(matched_string) {
-            var emoji;
-            for (emoji in _this.plugin.options.utfEmojiData) {
-              if (emoji === matched_string) {
-                return _this.getEmojiTag(_this.plugin.options.utfEmojiData[emoji]);
-              }
+        code_emoji = [];
+        text = element.textContent.replace(_this.plugin.options.regexpUtf, function(matched_string) {
+          var emoji, emoji_tag;
+          for (emoji in _this.plugin.options.utfEmojiData) {
+            if (emoji === matched_string) {
+              _this.emoji_tags++;
+              emoji_tag = _this.getEmojiTag(_this.plugin.options.utfEmojiData[emoji]);
+              return emoji_tag;
             }
-          });
-          if (text.match(_this.regexpCode)) {
-            searches = 0;
-            text.replace(_this.regexpCode, function() {
-              return searches++;
-            });
-            return text.replace(_this.regexpCode, function(matched_string, pattarn1, offset, string) {
-              var emoji_image;
-              emoji_image = $("<img src='" + _this.plugin.ec.cdn_url + _this.plugin.ec.size_code + "/" + (_this.replaceSpaceToUnder(pattarn1)) + ".png'></img>");
-              emoji_image.load(function(e) {
-                searches--;
-                code_emoji.push({
-                  matched: matched_string,
-                  code: pattarn1
-                });
-                return checkSearchEnd(searches, element, text, code_emoji);
-              });
-              return emoji_image.error(function(e) {
-                searches--;
-                return checkSearchEnd(searches, element, text, code_emoji);
-              });
-            });
-          } else {
-            $(element).replaceWith(text);
-            return checkComplete();
           }
+        });
+        if (text.match(_this.regexpCode)) {
+          searches = 0;
+          text.replace(_this.regexpCode, function() {
+            return searches++;
+          });
+          return text.replace(_this.regexpCode, function(matched_string) {
+            var emoji_image, matched_code;
+            matched_code = matched_string.replace(/\:/g, '');
+            emoji_image = $("<img src='" + _this.plugin.ec.cdn_url + _this.plugin.ec.size_code + "/" + (_this.replaceSpaceToUnder(matched_code)) + ".png'></img>");
+            emoji_image.load(function(e) {
+              searches--;
+              code_emoji.push({
+                matched: matched_string,
+                code: matched_code
+              });
+              return checkSearchEnd(searches, element, text, code_emoji);
+            });
+            return emoji_image.error(function(e) {
+              searches--;
+              return checkSearchEnd(searches, element, text, code_emoji);
+            });
+          });
+        } else {
+          $(element).replaceWith(text);
+          _this.replaced_text++;
+          return checkComplete();
         }
       };
       if (this.plugin.options.useLoadingImg) {
         this.setLoadingTag(this.plugin);
         return searchEmoji_setEmojiTag(this.plugin.element);
       } else {
-        target_num = 0;
+        this.targetNum = 0;
+        this.replaced_text = 0;
+        this.emoji_tags = 0;
         this.plugin.element.find(":not(" + this.plugin.options.ignore + ")").andSelf().contents().filter(function(index, element) {
           if (element.nodeType === Node.TEXT_NODE && element.textContent.match(/\S/)) {
-            return target_num++;
+            return _this.targetNum++;
           }
         });
         return this.plugin.element.find(":not(" + this.plugin.options.ignore + ")").andSelf().contents().filter(function(index, element) {
