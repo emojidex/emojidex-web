@@ -250,12 +250,17 @@ var Window=null;!function(a){"use strict";Window=function(b){b=b||{};var c={sele
     }
 
     Pallet.prototype.setPallet = function(element) {
-      var body,
-        _this = this;
-      body = '';
+      var _this = this;
       return $(element).click(function(e) {
-        var search_input, tab_content, tab_list;
-        search_input = '<li><div class="input-group"><label class="sr-only" for="search">検索</label><input type="text" name="search" id="sidebar-emoji-search-input" class="form-control" placeholder="検索"><span class="input-group-btn"><button type="submit" class="btn btn-primary" id="sidebar-emoji-search-submit"><span class="glyphicon glyphicon-search"></span></button></span></div></li>';
+        var search_btn, search_input, tab_content, tab_list;
+        search_input = $('<div class="input-group"><input type="text" name="search" id="pallet-emoji-search-input" class="form-control" placeholder="検索"><span class="input-group-btn"></span></div>');
+        search_btn = $('<button type="submit" class="btn btn-primary" id="pallet-emoji-search-submit"><span class="glyphicon glyphicon-search"></span></button>');
+        search_btn.click(function() {
+          return console.log(111);
+        });
+        search_input.find('.input-group-btn').append(search_btn);
+        _this.search_tab_content.append(search_input);
+        console.log($('#pallet-emoji-search-submit'));
         tab_list = $('<ul class="nav nav-pills"></ul>');
         tab_content = $('<div class="tab-content"></div>');
         return _this.ec.Categories.sync(function(categories) {
@@ -265,15 +270,9 @@ var Window=null;!function(a){"use strict";Window=function(b){b=b||{};var c={sele
             tab_list.append("<li class='" + (tab_list[0].children.length === 0 ? " active" : "") + "'><a href='#" + category.name + "' data-toggle='pill'>" + category.name + "</a></li>");
             tab_content.append("<div class='tab-pane " + (tab_content[0].children.length === 0 ? " active" : "") + "' id='" + category.name + "'>" + category.name + "</div>");
           }
-          tab_list.append(search_input);
-          tab_list.append($("<li class=''><a hreh='#search_tab' data-toggle='pill'> 《 </a></li>").click(function() {
-            return _this.ec.Search.prev();
-          }));
-          tab_list.append($("<li class=''><a href='#search_tab' data-toggle='pill'>search</a></li>").click(function() {
+          tab_list.append($('<li class=""><a href="#search_tab" data-toggle="pill">Search</a></li>').click(function() {
+            console.log('search');
             return _this.search();
-          }));
-          tab_list.append($("<li class=''><a hreh='#search_tab' data-toggle='pill'> 》 </a></li>").click(function() {
-            return _this.ec.Search.next();
           }));
           tab_content.append(_this.search_tab_content);
           return _this.setWindow(tab_list.add(tab_content));
@@ -284,14 +283,23 @@ var Window=null;!function(a){"use strict";Window=function(b){b=b||{};var c={sele
     Pallet.prototype.search = function() {
       var _this = this;
       return this.ec.Search.search("face", function(result_emoji) {
-        var emoji, search_emoji_list, _i, _len;
+        var emoji, pagination, search_emoji_list, _i, _len;
         $('.serach_emoji_list').remove();
+        $('.search_pagination').remove();
         search_emoji_list = $('<div class="serach_emoji_list"></div>');
         for (_i = 0, _len = result_emoji.length; _i < _len; _i++) {
           emoji = result_emoji[_i];
           search_emoji_list.append("<button class='btn btn-default col-xs-1 emoji-btn' data-clipboard-text=':" + (emoji.code.replace(/\s/g, '_')) + ":'><img src='" + _this.ec.cdn_url + "px32/" + (emoji.code.replace(/\s/g, '_')) + ".png'></img></button>");
         }
-        return _this.search_tab_content.append(search_emoji_list);
+        _this.search_tab_content.append(search_emoji_list);
+        pagination = $('<div class="search_pagination"></div>');
+        pagination.append($('<button>《 </button>').click(function() {
+          return _this.ec.Search.prev();
+        }));
+        pagination.append($('<button> 》 </button>').click(function() {
+          return _this.ec.Search.next();
+        }));
+        return _this.search_tab_content.append(pagination);
       });
     };
 

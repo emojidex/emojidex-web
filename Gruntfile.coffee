@@ -251,6 +251,11 @@ module.exports = (grunt) ->
         cwd: 'src/img/'
         src: '**/*'
         dest: 'dist/img/'
+      bootstrap_icons:
+        expand: true
+        cwd: 'node_modules/bootstrap-sass/assets/fonts/'
+        src: '**/*'
+        dest: 'dist/fonts/'
 
     concat:
       emojidex_js:
