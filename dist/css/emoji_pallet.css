@@ -4,4 +4,17 @@
     overflow-y: auto;
     overflow: hidden; }
 
+hr {
+  margin-top: 10px;
+  margin-bottom: 15px;
+  border-top: 1px solid #797979; }
+
+.emoji-btn {
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px; }
+
+.serach-emoji-list {
+  margin-top: 10px;
+  height: auto; }
+
 /*# sourceMappingURL=emoji_pallet.css.map */

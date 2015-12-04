@@ -46,8 +46,8 @@
       this.plugin = plugin;
       this.ec = new EmojidexClient;
       this.clipboard = new Clipboard('.emoji-btn');
-      this.setPallet(this.plugin.element);
       this.can_create_window = true;
+      this.setPallet(this.plugin.element);
     }
 
     Pallet.prototype.setPallet = function(element) {
@@ -86,7 +86,10 @@
             }
             tab_list.append("<li class=''><a href='#search_tab' data-toggle='pill'>Search</a></li>");
             tab_content.append(_this.search_tab_content);
-            return _this.setWindow(tab_list.add(tab_content));
+            _this.emoji_pallet = $('<div class="emoji-pallet"></div>');
+            _this.emoji_pallet.append(tab_list.add(tab_content));
+            _this.emoji_pallet.find('ul').after('<hr>');
+            return _this.setWindow(_this.emoji_pallet);
           });
         }
       });
@@ -96,22 +99,22 @@
       var _this = this;
       return this.ec.Search.search(search_word, function(result_emoji) {
         var emoji, pagination, search_emoji_list, _i, _len;
-        $('.serach_emoji_list').remove();
-        $('.search_pagination').remove();
-        search_emoji_list = $('<div class="serach_emoji_list"></div>');
+        $('.serach-emoji-list').remove();
+        $('.search-pagination').remove();
+        search_emoji_list = $('<div class="serach-emoji-list clearfix"></div>');
         for (_i = 0, _len = result_emoji.length; _i < _len; _i++) {
           emoji = result_emoji[_i];
           search_emoji_list.append("<button class='emoji-btn btn btn-default col-xs-2 col-sm-1' data-clipboard-text=':" + (emoji.code.replace(/\s/g, '_')) + ":'><img class='img-responsive center-block' src='" + _this.ec.cdn_url + "px32/" + (emoji.code.replace(/\s/g, '_')) + ".png'></img></button>");
         }
         _this.search_tab_content.append(search_emoji_list);
-        pagination = $('<div class="search_pagination row"><div class="col-xs-12"></div></div>');
-        pagination.find('.col-xs-12').append($('<button class="btn btn-link col-xs-1 col-xs-offset-3">《 </button>').click(function() {
+        pagination = $('<div class="search-pagination"><div class="text-center"><ul class="pagination"></ul></div></div>');
+        pagination.find('.pagination').append($('<li><span>&laquo;</span></li>').click(function() {
           if (_this.ec.Search.cur_page > 1) {
             return _this.ec.Search.prev();
           }
         }));
-        pagination.find('.col-xs-12').append($("<p class='col-xs-4 text-center'>" + _this.ec.Search.cur_page + " / " + _this.ec.Search.count + "</p>"));
-        pagination.find('.col-xs-12').append($('<button class="btn btn-link col-xs-1"> 》 </button>').click(function() {
+        pagination.find('.pagination').append($("<li><span>" + _this.ec.Search.cur_page + " / " + _this.ec.Search.count + "</span></li>"));
+        pagination.find('.pagination').append($('<li><span>&raquo;</span></li>').click(function() {
           if (_this.ec.Search.cur_page < _this.ec.Search.count) {
             return _this.ec.Search.next();
           }

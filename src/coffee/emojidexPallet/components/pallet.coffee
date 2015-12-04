@@ -2,8 +2,10 @@ class Pallet
   constructor: (@plugin) ->
     @ec = new EmojidexClient
     @clipboard = new Clipboard '.emoji-btn'
-    @setPallet @plugin.element
     @can_create_window = true
+
+    # start main --------
+    @setPallet @plugin.element
 
   setPallet: (element) ->
     search_emoji_input = =>
@@ -36,26 +38,29 @@ class Pallet
           tab_list.append "<li class=''><a href='#search_tab' data-toggle='pill'>Search</a></li>"
           tab_content.append @search_tab_content
 
-          @setWindow tab_list.add tab_content
+          @emoji_pallet = $ '<div class="emoji-pallet"></div>'
+          @emoji_pallet.append(tab_list.add tab_content)
+          @emoji_pallet.find('ul').after('<hr>')
+
+          @setWindow @emoji_pallet
 
   search: (search_word) ->
     @ec.Search.search search_word, (result_emoji) =>
-      $('.serach_emoji_list').remove()
-      $('.search_pagination').remove()
+      $('.serach-emoji-list').remove()
+      $('.search-pagination').remove()
 
-      search_emoji_list = $ '<div class="serach_emoji_list"></div>'
-      # search_emoji_list_col = search_emoji_list.find 'col-xs-12'
+      search_emoji_list = $ '<div class="serach-emoji-list clearfix"></div>'
       for emoji in result_emoji
         search_emoji_list.append "<button class='emoji-btn btn btn-default col-xs-2 col-sm-1' data-clipboard-text=':#{emoji.code.replace /\s/g, '_'}:'><img class='img-responsive center-block' src='#{@ec.cdn_url}px32/#{emoji.code.replace /\s/g, '_'}.png'></img></button>"
       @search_tab_content.append search_emoji_list
 
       # TODO: ページ番号
-      pagination = $ '<div class="search_pagination row"><div class="col-xs-12"></div></div>'
-      pagination.find('.col-xs-12').append $('<button class="btn btn-link col-xs-1 col-xs-offset-3">《 </button>').click =>
+      pagination = $ '<div class="search-pagination"><div class="text-center"><ul class="pagination"></ul></div></div>'
+      pagination.find('.pagination').append $('<li><span>&laquo;</span></li>').click =>
         if @ec.Search.cur_page > 1
           @ec.Search.prev()
-      pagination.find('.col-xs-12').append $("<p class='col-xs-4 text-center'>#{@ec.Search.cur_page} / #{@ec.Search.count}</p>")
-      pagination.find('.col-xs-12').append $('<button class="btn btn-link col-xs-1"> 》 </button>').click =>
+      pagination.find('.pagination').append $("<li><span>#{@ec.Search.cur_page} / #{@ec.Search.count}</span></li>")
+      pagination.find('.pagination').append $('<li><span>&raquo;</span></li>').click =>
         if @ec.Search.cur_page < @ec.Search.count
           @ec.Search.next()
       @search_tab_content.append pagination
