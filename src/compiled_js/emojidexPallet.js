@@ -51,19 +51,28 @@
     }
 
     Pallet.prototype.setPallet = function(element) {
-      var _this = this;
+      var search_emoji_input,
+        _this = this;
+      search_emoji_input = function() {
+        var search_word;
+        search_word = $('#pallet-emoji-search-input').val();
+        if (search_word.length > 0) {
+          return _this.search(search_word);
+        }
+      };
       return $(element).click(function(e) {
         var search_btn, tab_content, tab_list;
         if (_this.can_create_window) {
           _this.can_create_window = false;
           _this.search_tab_content = $('<div class="tab-pane" id="search_tab"><div class="input-group"><input type="text" name="search" id="pallet-emoji-search-input" class="form-control" placeholder="検索"><span class="input-group-btn"></span></div></div>');
+          _this.search_tab_content.find('#pallet-emoji-search-input').keypress(function(e) {
+            if (e.keyCode === 13) {
+              return search_emoji_input();
+            }
+          });
           search_btn = $('<button type="submit" class="btn btn-primary" id="pallet-emoji-search-submit"><span class="glyphicon glyphicon-search"></span></button>');
           search_btn.click(function() {
-            var search_word;
-            search_word = $('#pallet-emoji-search-input').val();
-            if (search_word.length > 0) {
-              return _this.search(search_word);
-            }
+            return search_emoji_input();
           });
           _this.search_tab_content.find('.input-group-btn').append(search_btn);
           tab_list = $('<ul class="nav nav-pills"></ul>');
@@ -86,26 +95,24 @@
     Pallet.prototype.search = function(search_word) {
       var _this = this;
       return this.ec.Search.search(search_word, function(result_emoji) {
-        var emoji, max_page, now_page, pagination, search_emoji_list, _i, _len;
+        var emoji, pagination, search_emoji_list, _i, _len;
         $('.serach_emoji_list').remove();
         $('.search_pagination').remove();
         search_emoji_list = $('<div class="serach_emoji_list"></div>');
         for (_i = 0, _len = result_emoji.length; _i < _len; _i++) {
           emoji = result_emoji[_i];
-          search_emoji_list.append("<button class='btn btn-default col-xs-1 emoji-btn' data-clipboard-text=':" + (emoji.code.replace(/\s/g, '_')) + ":'><img src='" + _this.ec.cdn_url + "px32/" + (emoji.code.replace(/\s/g, '_')) + ".png'></img></button>");
+          search_emoji_list.append("<button class='emoji-btn btn btn-default col-xs-2 col-sm-1' data-clipboard-text=':" + (emoji.code.replace(/\s/g, '_')) + ":'><img class='img-responsive center-block' src='" + _this.ec.cdn_url + "px32/" + (emoji.code.replace(/\s/g, '_')) + ".png'></img></button>");
         }
         _this.search_tab_content.append(search_emoji_list);
-        now_page = 2;
-        max_page = 10;
-        pagination = $('<div class="search_pagination row"></div>');
-        pagination.append($('<button class="btn btn-link col-xs-1 col-xs-offset-4">《 </button>').click(function() {
-          if (now_page !== 1) {
+        pagination = $('<div class="search_pagination row"><div class="col-xs-12"></div></div>');
+        pagination.find('.col-xs-12').append($('<button class="btn btn-link col-xs-1 col-xs-offset-3">《 </button>').click(function() {
+          if (_this.ec.Search.cur_page > 1) {
             return _this.ec.Search.prev();
           }
         }));
-        pagination.append($("<span class='col-xs-2 col-xs-offset-1'>" + now_page + " / " + max_page + "</span>"));
-        pagination.append($('<button class="btn btn-link col-xs-1"> 》 </button>').click(function() {
-          if (now_page < max_page) {
+        pagination.find('.col-xs-12').append($("<p class='col-xs-4 text-center'>" + _this.ec.Search.cur_page + " / " + _this.ec.Search.count + "</p>"));
+        pagination.find('.col-xs-12').append($('<button class="btn btn-link col-xs-1"> 》 </button>').click(function() {
+          if (_this.ec.Search.cur_page < _this.ec.Search.count) {
             return _this.ec.Search.next();
           }
         }));

@@ -6,15 +6,22 @@ class Pallet
     @can_create_window = true
 
   setPallet: (element) ->
+    search_emoji_input = =>
+      search_word = $('#pallet-emoji-search-input').val()
+      if search_word.length > 0
+        @search(search_word)
+
     $(element).click (e) =>
       if @can_create_window
         @can_create_window = false
         @search_tab_content = $ '<div class="tab-pane" id="search_tab"><div class="input-group"><input type="text" name="search" id="pallet-emoji-search-input" class="form-control" placeholder="検索"><span class="input-group-btn"></span></div></div>'
+        @search_tab_content.find('#pallet-emoji-search-input').keypress (e) ->
+          if e.keyCode is 13
+            search_emoji_input()
+
         search_btn = $ '<button type="submit" class="btn btn-primary" id="pallet-emoji-search-submit"><span class="glyphicon glyphicon-search"></span></button>'
-        search_btn.click =>
-          search_word = $('#pallet-emoji-search-input').val()
-          if search_word.length > 0
-            @search(search_word)
+        search_btn.click ->
+          search_emoji_input()
         @search_tab_content.find('.input-group-btn').append search_btn
 
         tab_list = $ '<ul class="nav nav-pills"></ul>'
@@ -37,20 +44,19 @@ class Pallet
       $('.search_pagination').remove()
 
       search_emoji_list = $ '<div class="serach_emoji_list"></div>'
+      # search_emoji_list_col = search_emoji_list.find 'col-xs-12'
       for emoji in result_emoji
-        search_emoji_list.append "<button class='btn btn-default col-xs-1 emoji-btn' data-clipboard-text=':#{emoji.code.replace /\s/g, '_'}:'><img src='#{@ec.cdn_url}px32/#{emoji.code.replace /\s/g, '_'}.png'></img></button>"
+        search_emoji_list.append "<button class='emoji-btn btn btn-default col-xs-2 col-sm-1' data-clipboard-text=':#{emoji.code.replace /\s/g, '_'}:'><img class='img-responsive center-block' src='#{@ec.cdn_url}px32/#{emoji.code.replace /\s/g, '_'}.png'></img></button>"
       @search_tab_content.append search_emoji_list
 
       # TODO: ページ番号
-      now_page = 2
-      max_page = 10
-      pagination = $ '<div class="search_pagination row"></div>'
-      pagination.append $('<button class="btn btn-link col-xs-1 col-xs-offset-4">《 </button>').click =>
-        if now_page != 1
+      pagination = $ '<div class="search_pagination row"><div class="col-xs-12"></div></div>'
+      pagination.find('.col-xs-12').append $('<button class="btn btn-link col-xs-1 col-xs-offset-3">《 </button>').click =>
+        if @ec.Search.cur_page > 1
           @ec.Search.prev()
-      pagination.append $("<span class='col-xs-2 col-xs-offset-1'>#{now_page} / #{max_page}</span>")
-      pagination.append $('<button class="btn btn-link col-xs-1"> 》 </button>').click =>
-        if now_page < max_page
+      pagination.find('.col-xs-12').append $("<p class='col-xs-4 text-center'>#{@ec.Search.cur_page} / #{@ec.Search.count}</p>")
+      pagination.find('.col-xs-12').append $('<button class="btn btn-link col-xs-1"> 》 </button>').click =>
+        if @ec.Search.cur_page < @ec.Search.count
           @ec.Search.next()
       @search_tab_content.append pagination
 
