@@ -17,6 +17,15 @@ hr {
   -moz-border-radius: 0px;
 }
 
+.search-pagination {
+  .pallet-pager {
+    // float: left;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
 .serach-emoji-list {
   margin-top: 10px;
   height: auto;
