@@ -44,6 +44,7 @@ class Replacer
     config =
       attributes: true
       childList: true
+      subtree: true
       attributeFilter: ['innerText']
     @dom_observer.observe target, config
 
