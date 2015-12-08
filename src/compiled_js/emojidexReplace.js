@@ -168,6 +168,7 @@
       config = {
         attributes: true,
         childList: true,
+        subtree: true,
         attributeFilter: ['innerText']
       };
       return this.dom_observer.observe(target, config);

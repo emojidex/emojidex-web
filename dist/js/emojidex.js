@@ -1,5 +1,5 @@
 /*
- * jQuery emojidex - v0.5.1
+ * jQuery emojidex - v0.5.2
  * emojidex plugin for jQuery/Zepto and compatible
  * https://github.com/emojidex/emojidex-web
  *
@@ -2958,6 +2958,7 @@ $.fn.atwho["default"] = {
       config = {
         attributes: true,
         childList: true,
+        subtree: true,
         attributeFilter: ['innerText']
       };
       return this.dom_observer.observe(target, config);
