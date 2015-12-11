@@ -198,7 +198,7 @@
     Pallet.prototype.setPagination = function(kind, prev_func, next_func, cur_page, max_page) {
       var pagination,
         _this = this;
-      pagination = $("<div class='" + kind + "-pagination text-center'><ul class='pagination'></ul></div>");
+      pagination = $("<div class='" + kind + "-pagination text-center'><ul class='pagination mb-0'></ul></div>");
       pagination.find('.pagination').append($('<li class="pallet-pager"><span>&laquo;</span></li>').click(function() {
         return prev_func();
       }));
@@ -213,10 +213,14 @@
       var ep, template,
         _this = this;
       template = $("      <div class='window emoji-pallet'>        <div class='window-header'>          <button type='button' class='close' data-dismiss='window' aria-hidden='true'>            x          </button>          <h4 class='window-title text-primary'>          </h4>        </div>        <div class='window-body'>        </div>      </div>    ");
-      template.find('.close').click(function() {
-        _this.can_create_window = true;
-        return _this.tabs_emoji = [];
+      template.find('.close').click(function(e) {
+        _this.saved_window_body = $('.window.emoji-pallet .window-body').children().clone(true);
+        return _this.can_create_window = true;
       });
+      console.log(this.saved_window_body);
+      if (this.saved_window_body != null) {
+        body = this.saved_window_body;
+      }
       return ep = new Window({
         template: template,
         title: 'emoji pallet',

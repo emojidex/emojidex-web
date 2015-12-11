@@ -5,6 +5,8 @@ class Pallet
     @can_create_window = true
     @tabs_emoji = []
 
+    # @login_service = new LoginService @
+
     # start main --------
     @setPallet @plugin.element
 
@@ -107,7 +109,7 @@ class Pallet
     emoji_list
 
   setPagination: (kind, prev_func, next_func, cur_page, max_page) ->
-    pagination = $ "<div class='#{kind}-pagination text-center'><ul class='pagination'></ul></div>"
+    pagination = $ "<div class='#{kind}-pagination text-center'><ul class='pagination mb-0'></ul></div>"
     pagination.find('.pagination').append $('<li class="pallet-pager"><span>&laquo;</span></li>').click =>
       prev_func()
     pagination.find('.pagination').append $("<li class='disabled'><span>#{cur_page} / #{max_page}</span></li>")
@@ -130,10 +132,12 @@ class Pallet
       </div>
     ")
 
-    template.find('.close').click =>
+    template.find('.close').click (e)=>
+      @saved_window_body = $('.window.emoji-pallet .window-body').children().clone(true)
       @can_create_window = true
-      @tabs_emoji = []
 
+    console.log @saved_window_body
+    body = @saved_window_body if @saved_window_body?
     ep = new Window
       template: template
       title: 'emoji pallet'

@@ -3,6 +3,10 @@
   .window-body {
     overflow-y: auto;
     overflow: hidden;
+    .emoji-btn {
+      -webkit-border-radius: 0px;
+      -moz-border-radius: 0px;
+    }
   }
 }
 
@@ -12,10 +16,6 @@ hr {
   border-top: 1px solid #797979
 }
 
-.emoji-btn {
-  -webkit-border-radius: 0px;
-  -moz-border-radius: 0px;
-}
 
 .search-pagination {
   .pallet-pager {

@@ -3,15 +3,14 @@
   .window.emoji-pallet .window-body {
     overflow-y: auto;
     overflow: hidden; }
+    .window.emoji-pallet .window-body .emoji-btn {
+      -webkit-border-radius: 0px;
+      -moz-border-radius: 0px; }
 
 hr {
   margin-top: 10px;
   margin-bottom: 15px;
   border-top: 1px solid #797979; }
-
-.emoji-btn {
-  -webkit-border-radius: 0px;
-  -moz-border-radius: 0px; }
 
 .search-pagination .pallet-pager:hover {
   cursor: pointer; }

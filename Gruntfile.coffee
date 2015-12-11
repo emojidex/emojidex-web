@@ -63,7 +63,7 @@ module.exports = (grunt) ->
         livereload:
           enabled: true
           port: 35729,
-          extensions: ['slim', 'coffee', 'scss']
+          extensions: ['slim', 'coffee', 'scss', 'sass']
 
       'coffee': (filepath) ->
         defaults =
@@ -136,6 +136,20 @@ module.exports = (grunt) ->
         setGruntConfig_getTask define_slim
 
       'scss': (filepath) ->
+        define_sass =
+          config:
+            prop: ['sass', 'esteWatch']
+            value:
+              files: [
+                expand: true
+                flatten: true
+                src: filepath
+                dest: 'dist/css/'
+                ext: '.css'
+              ]
+          task: ['sass:esteWatch', 'concat:emojidex_css', 'cssmin:emojidex']
+
+      'sass': (filepath) ->
         define_sass =
           config:
             prop: ['sass', 'esteWatch']
