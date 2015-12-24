@@ -2,13 +2,33 @@ class Pallet
   constructor: (@plugin) ->
     @ec = new EmojidexClient
     @clipboard = new Clipboard '.emoji-btn'
-    @can_create_window = true
     @tabs_emoji = []
 
     # @login_service = new LoginService @
 
     # start main --------
+    @createDialog()
     @setPallet @plugin.element
+
+  createDialog: ->
+    @dialog = $ '<div id="dialog"></div>'
+    $('body').append @dialog
+
+    $('#dialog').dialog
+      autoOpen: false
+      width: 700
+      title: 'Emojidex Pallet'
+
+      create: (e) ->
+        $('.ui-dialog-titlebar-close').hide()
+        close_btn = $ '<button type="button" class="btn btn-default btn-xs pull-right" aria-label="Close"><span aria-hidden="true">&times;</span></button>'
+        close_btn.click (e) ->
+          $('#dialog').dialog 'close'
+        $('.ui-dialog-titlebar').append close_btn
+
+      open: (e) ->
+        $('.ui-dialog :button').blur();
+        $('.nav.nav-pills a').blur();
 
   setPallet: (element) ->
     search_emoji_input = =>
@@ -17,9 +37,9 @@ class Pallet
         @search(search_word)
 
     $(element).click (e) =>
-      if @can_create_window
-        @can_create_window = false
-
+      if @emoji_pallet?
+        @openDialog()
+      else
         search_tab_content = $ '<div class="tab-pane" id="tab-content-search"><div class="input-group"><input type="text" name="search" id="pallet-emoji-search-input" class="form-control" placeholder="検索"><span class="input-group-btn"></span></div></div>'
         search_tab_content.find('#pallet-emoji-search-input').keypress (e) ->
           if e.keyCode is 13
@@ -49,7 +69,8 @@ class Pallet
           @emoji_pallet.append(tab_list.add tab_content)
           @emoji_pallet.find('ul').after('<hr>')
 
-          @setWindow @emoji_pallet
+          @dialog.append(@emoji_pallet)
+          @openDialog()
           $("#tab-#{categories[0].code}").click()
 
   setCategory: (category_name) ->
@@ -117,28 +138,5 @@ class Pallet
       next_func()
     pagination
 
-  setWindow: (body) ->
-    template = $("
-      <div class='window emoji-pallet'>
-        <div class='window-header'>
-          <button type='button' class='close' data-dismiss='window' aria-hidden='true'>
-            x
-          </button>
-          <h4 class='window-title text-primary'>
-          </h4>
-        </div>
-        <div class='window-body'>
-        </div>
-      </div>
-    ")
-
-    template.find('.close').click (e)=>
-      @saved_window_body = $('.window.emoji-pallet .window-body').children().clone(true)
-      @can_create_window = true
-
-    console.log @saved_window_body
-    body = @saved_window_body if @saved_window_body?
-    ep = new Window
-      template: template
-      title: 'emoji pallet'
-      bodyContent: body
+  openDialog: ->
+    $('#dialog').dialog 'open'

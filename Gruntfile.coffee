@@ -283,6 +283,7 @@ module.exports = (grunt) ->
           'node_modules/emojidex-client/dist/js/*.min.js'
           'node_modules/clipboard/dist/clipboard.min.js'
           'src/compiled_js/**/*.js'
+          'src/vendor/jquery-ui-1.11.4.custom/jquery-ui.min.js'
         ]
         dest: 'dist/js/emojidex.js'
 
@@ -290,6 +291,7 @@ module.exports = (grunt) ->
         src: [
           'bower_components/At.js/dist/css/jquery.atwho.min.css'
           'dist/css/emojidex.css'
+          'src/vendor/jquery-ui-1.11.4.custom/jquery-ui.css'
         ]
         dest: 'dist/css/emojidex.css'
 

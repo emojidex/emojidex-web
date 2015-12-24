@@ -46,10 +46,33 @@
       this.plugin = plugin;
       this.ec = new EmojidexClient;
       this.clipboard = new Clipboard('.emoji-btn');
-      this.can_create_window = true;
       this.tabs_emoji = [];
+      this.createDialog();
       this.setPallet(this.plugin.element);
     }
+
+    Pallet.prototype.createDialog = function() {
+      this.dialog = $('<div id="dialog"></div>');
+      $('body').append(this.dialog);
+      return $('#dialog').dialog({
+        autoOpen: false,
+        width: 700,
+        title: 'Emojidex Pallet',
+        create: function(e) {
+          var close_btn;
+          $('.ui-dialog-titlebar-close').hide();
+          close_btn = $('<button type="button" class="btn btn-default btn-xs pull-right" aria-label="Close"><span aria-hidden="true">&times;</span></button>');
+          close_btn.click(function(e) {
+            return $('#dialog').dialog('close');
+          });
+          return $('.ui-dialog-titlebar').append(close_btn);
+        },
+        open: function(e) {
+          $('.ui-dialog :button').blur();
+          return $('.nav.nav-pills a').blur();
+        }
+      });
+    };
 
     Pallet.prototype.setPallet = function(element) {
       var search_emoji_input,
@@ -63,8 +86,9 @@
       };
       return $(element).click(function(e) {
         var search_btn, search_tab_content, tab_content, tab_list;
-        if (_this.can_create_window) {
-          _this.can_create_window = false;
+        if (_this.emoji_pallet != null) {
+          return _this.openDialog();
+        } else {
           search_tab_content = $('<div class="tab-pane" id="tab-content-search"><div class="input-group"><input type="text" name="search" id="pallet-emoji-search-input" class="form-control" placeholder="検索"><span class="input-group-btn"></span></div></div>');
           search_tab_content.find('#pallet-emoji-search-input').keypress(function(e) {
             if (e.keyCode === 13) {
@@ -95,7 +119,8 @@
             _this.emoji_pallet = $('<div class="emoji-pallet"></div>');
             _this.emoji_pallet.append(tab_list.add(tab_content));
             _this.emoji_pallet.find('ul').after('<hr>');
-            _this.setWindow(_this.emoji_pallet);
+            _this.dialog.append(_this.emoji_pallet);
+            _this.openDialog();
             return $("#tab-" + categories[0].code).click();
           });
         }
@@ -209,23 +234,8 @@
       return pagination;
     };
 
-    Pallet.prototype.setWindow = function(body) {
-      var ep, template,
-        _this = this;
-      template = $("      <div class='window emoji-pallet'>        <div class='window-header'>          <button type='button' class='close' data-dismiss='window' aria-hidden='true'>            x          </button>          <h4 class='window-title text-primary'>          </h4>        </div>        <div class='window-body'>        </div>      </div>    ");
-      template.find('.close').click(function(e) {
-        _this.saved_window_body = $('.window.emoji-pallet .window-body').children().clone(true);
-        return _this.can_create_window = true;
-      });
-      console.log(this.saved_window_body);
-      if (this.saved_window_body != null) {
-        body = this.saved_window_body;
-      }
-      return ep = new Window({
-        template: template,
-        title: 'emoji pallet',
-        bodyContent: body
-      });
+    Pallet.prototype.openDialog = function() {
+      return $('#dialog').dialog('open');
     };
 
     return Pallet;
