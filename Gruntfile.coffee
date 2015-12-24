@@ -277,7 +277,6 @@ module.exports = (grunt) ->
           stripBanners: true
           banner: '<%= meta.banner %><%= grunt.getLicense("build/licenses.json") %>\n */\n'
         src: [
-          'bower_components/bootstrap-window/dist/js/bootstrap-window.min.js'
           'bower_components/Caret.js/dist/jquery.caret.min.js'
           'bower_components/At.js/dist/js/jquery.atwho.min.js'
           'node_modules/emojidex-client/dist/js/*.min.js'
