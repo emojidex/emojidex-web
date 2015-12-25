@@ -1,0 +1,35 @@
+class SearchTab
+  constructor: (@pallet) ->
+    @tab_list = "<li class=''><a href='#tab-content-search' data-toggle='pill'>Search</a></li>"
+    @tab_content = @getTabContent()
+
+  getTabContent: ->
+    tab_content = $ '<div class="tab-pane" id="tab-content-search"><div class="input-group"><input type="text" name="search" id="pallet-emoji-search-input" class="form-control" placeholder="検索"><span class="input-group-btn"></span></div></div>'
+    tab_content.find('#pallet-emoji-search-input').keypress (e) =>
+      if e.keyCode is 13
+        @searchEmojiInput()
+
+    search_btn = $ '<div class="btn btn-primary" id="pallet-emoji-search-submit"><span class="glyphicon glyphicon-search"></span></div>'
+    search_btn.click =>
+      @searchEmojiInput()
+    tab_content.find('.input-group-btn').append search_btn
+
+    return tab_content
+
+  searchEmojiInput: ->
+    search_word = $('#pallet-emoji-search-input').val()
+    if search_word.length > 0
+      @search(search_word)
+
+  search: (search_word) ->
+    @pallet.ec.Search.search search_word, (result_emoji) =>
+      $('.search-emoji-list').remove()
+      $('.search-pagination').remove()
+      @tab_content.append @pallet.setEmojiList('search', result_emoji)
+
+      cur_page = if @pallet.ec.Search.meta.total_count is 0 then 0 else @pallet.ec.Search.cur_page
+      max_page = Math.floor @pallet.ec.Search.meta.total_count / @pallet.ec.options.limit
+      max_page++ if @pallet.ec.Search.meta.total_count % @pallet.ec.options.limit > 0
+      prev_func = => @pallet.ec.Search.prev()
+      next_func = => @pallet.ec.Search.next()
+      @tab_content.append @pallet.setPagination('search', prev_func, next_func, cur_page, max_page)

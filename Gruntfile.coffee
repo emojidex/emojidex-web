@@ -227,6 +227,7 @@ module.exports = (grunt) ->
           'src/compiled_js/emojidexPallet.js': [
             'src/coffee/emojidexPallet/main.coffee'
             'src/coffee/emojidexPallet/components/*.coffee'
+            'src/coffee/emojidexPallet/components/tabs/*.coffee'
           ]
 
       spec:
