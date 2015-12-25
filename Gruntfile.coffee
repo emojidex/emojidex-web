@@ -242,7 +242,7 @@ module.exports = (grunt) ->
        files: [
         expand: true
         cwd: 'src/sass/'
-        src: '*.scss'
+        src: ['*.sass', '*.scss']
         dest: 'dist/css/'
         ext: '.css'
        ]
@@ -289,8 +289,9 @@ module.exports = (grunt) ->
       emojidex_css:
         src: [
           'bower_components/At.js/dist/css/jquery.atwho.min.css'
+          'dist/css/emoji_pallet.css'
+          'dist/css/jquery-ui.css'
           'dist/css/emojidex.css'
-          'src/vendor/jquery-ui-1.11.4.custom/jquery-ui.css'
         ]
         dest: 'dist/css/emojidex.css'
 

@@ -1,19 +1,17 @@
-.window.emoji-pallet {
-  background-color: white;
-  .window-body {
+#dialog {
+  .category-emoji-list {
     overflow-y: auto;
-    overflow: hidden;
-    .emoji-btn {
-      -webkit-border-radius: 0px;
-      -moz-border-radius: 0px;
-    }
+    max-height: 512px;
+  }
+  .emoji-btn {
+    border-radius: 0px;
   }
 }
 
 hr {
   margin-top: 10px;
   margin-bottom: 15px;
-  border-top: 1px solid #797979
+  border-top: 1px solid #797979;
 }
 
 

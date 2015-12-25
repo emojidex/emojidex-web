@@ -215,7 +215,7 @@
       emoji_list = $("<div class='" + kind + "-emoji-list clearfix'></div>");
       for (_i = 0, _len = result_emoji.length; _i < _len; _i++) {
         emoji = result_emoji[_i];
-        emoji_list.append("<button class='emoji-btn btn btn-default col-xs-2 col-sm-1' data-clipboard-text=':" + (emoji.code.replace(/\s/g, '_')) + ":'><img alt='" + emoji.code + "' title='" + emoji.code + "' class='img-responsive center-block' src='" + this.ec.cdn_url + "px32/" + (emoji.code.replace(/\s/g, '_')) + ".png'></img></button>");
+        emoji_list.append("<button class='emoji-btn btn btn-default pull-left' data-clipboard-text=':" + (emoji.code.replace(/\s/g, '_')) + ":'><img alt='" + emoji.code + "' title='" + emoji.code + "' class='img-responsive center-block' src='" + this.ec.cdn_url + "px32/" + (emoji.code.replace(/\s/g, '_')) + ".png'></img></button>");
       }
       return emoji_list;
     };
