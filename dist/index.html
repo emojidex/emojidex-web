@@ -19,6 +19,9 @@
               return console.log('Completed emojidexReplace!!');
             }
           });
+          $(".emojidex-plain_text").emojidexAutocomplete();
+          $(".emojidex-content_editable").emojidexAutocomplete();
+          $("#pallet-btn").emojidexPallet();
         });
       
       }).call(this);
@@ -91,14 +94,14 @@
           <h3>
             emojidexAutocomplete :laughing:
           </h3>
-          <hr class="mt-s mb-m" />
+          <hr class="mt-s mb-mß" />
           <div class="row mt-m">
             <div class="col-md-12">
               <h4>
                 Plain Text
               </h4>
               <form role="form">
-                <div class="form-group">
+                <div class="form-groupß">
                   <textarea class="emojidex-plain_text form-control" rows="5">Try typing a colon and the start of a word to start a code search, like ":tes".</textarea>
                 </div>
               </form>
@@ -116,8 +119,24 @@
           </div>
         </div>
       </div>
-      <div class="row mt-xl">
+      <div class="row">
         <div class="col-md-12">
+          <h3>
+            emojidexPallet :blush:
+          </h3>
+          <hr class="mt-s mb-m" />
+          Work in progress... :bow:
+          <div class="emojidex_pallet mt-m">
+            <button class="btn btn-lg btn-primary" id="pallet-btn" type="button">Open pallet</button>
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 64px">
+        <div class="col-md-12">
+          <h3>
+            README :robot face:
+          </h3>
+          <hr class="mt-s mb-m" />
           <style>
             .hljs-change,.hljs-flow,.hljs-keyword,.hljs-literal,.hljs-strong,.hljs-tag,.hljs-tag .hljs-title,.hljs-winutils,.nginx .hljs-title,.tex .hljs-special{color:#f92672}.hljs{display:block;overflow-x:auto;padding:.5em;background:#272822;-webkit-text-size-adjust:none;color:#ddd}.asciidoc .hljs-code,.hljs .hljs-constant,.markdown .hljs-code{color:#66d9ef}.hljs-class .hljs-title,.hljs-code,.hljs-header{color:#fff}.hljs-attribute,.hljs-link_label,.hljs-regexp,.hljs-symbol,.hljs-symbol .hljs-string,.hljs-value{color:#bf79db}.apache .hljs-cbracket,.apache .hljs-tag,.django .hljs-filter .hljs-argument,.django .hljs-template_tag,.django .hljs-variable,.hljs-addition,.hljs-attr_selector,.hljs-built_in,.hljs-bullet,.hljs-emphasis,.hljs-envvar,.hljs-link_url,.hljs-name,.hljs-pragma,.hljs-preprocessor,.hljs-prompt,.hljs-pseudo,.hljs-stream,.hljs-string,.hljs-subst,.hljs-tag .hljs-value,.hljs-title,.hljs-type,.ruby .hljs-class .hljs-parent,.smalltalk .hljs-array,.smalltalk .hljs-class,.smalltalk .hljs-localvars,.tex .hljs-command{color:#a6e22e}.apache .hljs-sqbracket,.hljs-annotation,.hljs-blockquote,.hljs-comment,.hljs-decorator,.hljs-deletion,.hljs-doctype,.hljs-horizontal_rule,.hljs-pi,.hljs-shebang,.smartquote,.tex .hljs-formula{color:#75715e}.apache .hljs-tag,.bash .hljs-variable,.css .hljs-id,.diff .hljs-header,.hljs-chunk,.hljs-doctag,.hljs-header,.hljs-keyword,.hljs-literal,.hljs-request,.hljs-status,.hljs-title,.hljs-type,.hljs-winutils,.rsl .hljs-built_in,.smalltalk .hljs-class,.tex .hljs-special,.vbscript .hljs-built_in{font-weight:700}.coffeescript .javascript,.javascript .xml,.tex .hljs-formula,.xml .css,.xml .hljs-cdata,.xml .javascript,.xml .vbscript{opacity:.5}
           </style>

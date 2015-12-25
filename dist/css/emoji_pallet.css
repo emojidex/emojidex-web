@@ -1,0 +1,21 @@
+#emojidex-dialog .category-emoji-list {
+  overflow-y: auto;
+  max-height: 256px; }
+#emojidex-dialog .emoji-btn {
+  border-radius: 0px; }
+#emojidex-dialog hr {
+  margin-top: 10px;
+  margin-bottom: 15px;
+  border-top: 1px solid #797979; }
+
+.search-pagination .pallet-pager:hover {
+  cursor: pointer; }
+
+.search-emoji-list {
+  margin-top: 10px;
+  height: auto; }
+
+.pallet-pager {
+  cursor: pointer; }
+
+/*# sourceMappingURL=emoji_pallet.css.map */

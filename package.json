@@ -39,5 +39,8 @@
   },
   "scripts": {
     "test": "grunt && grunt jasmine"
+  },
+  "dependencies": {
+    "clipboard": "^1.5.5"
   }
 }

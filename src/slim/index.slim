@@ -20,13 +20,13 @@ html
           onComplete: (element) ->
             console.log 'Completed emojidexReplace!!'
 
-        # $(".emojidex-plain_text").emojidexAutocomplete()
-        # $(".emojidex-content_editable").emojidexAutocomplete()
+        $(".emojidex-plain_text").emojidexAutocomplete()
+        $(".emojidex-content_editable").emojidexAutocomplete()
 
+        $("#pallet-btn").emojidexPallet()
         return
 
   body
-    / | :heart::heart::heart::hearaaat:😡💌😈
     .container
       nav.navbar.navbar-default.navbar-fixed-top role="navigation"
         .container
@@ -100,12 +100,12 @@ html
       .row.mt-xl
         .col-md-12
           h3 emojidexAutocomplete :laughing:
-          hr.mt-s.mb-m
+          hr.mt-s.mb-mß
           .row.mt-m
             .col-md-12
               h4 Plain Text
               form role="form"
-                .form-group
+                .form-groupß
                   textarea.emojidex-plain_text.form-control rows="5"
                     | Try typing a colon and the start of a word to start a code search, like ":tes".
           .row
@@ -114,8 +114,19 @@ html
               .emojidex-content_editable.inputor contenteditable="true"
                 | Try typing a colon and the start of a word to start a code search, like ":tes".
 
-      .row.mt-xl
+      .row
         .col-md-12
+          h3 emojidexPallet :blush:
+          hr.mt-s.mb-m
+          | Work in progress... :bow:
+          .emojidex_pallet.mt-m
+            button type="button" class="btn btn-lg btn-primary" id="pallet-btn"
+              | Open pallet
+
+      .row style='margin-top: 64px'
+        .col-md-12
+          h3 README :robot face:
+          hr.mt-s.mb-m
           style
             <%= highlightjs_style %>
           <%= document %>

@@ -63,7 +63,7 @@ module.exports = (grunt) ->
         livereload:
           enabled: true
           port: 35729,
-          extensions: ['slim', 'coffee', 'scss']
+          extensions: ['slim', 'coffee', 'scss', 'sass']
 
       'coffee': (filepath) ->
         defaults =
@@ -148,7 +148,21 @@ module.exports = (grunt) ->
                 ext: '.css'
               ]
           task: ['sass:esteWatch', 'concat:emojidex_css', 'cssmin:emojidex']
+        setGruntConfig_getTask define_sass
 
+      'sass': (filepath) ->
+        define_sass =
+          config:
+            prop: ['sass', 'esteWatch']
+            value:
+              files: [
+                expand: true
+                flatten: true
+                src: filepath
+                dest: 'dist/css/'
+                ext: '.css'
+              ]
+          task: ['sass:esteWatch', 'concat:emojidex_css', 'cssmin:emojidex']
         setGruntConfig_getTask define_sass
 
     # grunt --------------------------------
@@ -228,7 +242,7 @@ module.exports = (grunt) ->
        files: [
         expand: true
         cwd: 'src/sass/'
-        src: '*.scss'
+        src: ['*.sass', '*.scss']
         dest: 'dist/css/'
         ext: '.css'
        ]
@@ -251,6 +265,11 @@ module.exports = (grunt) ->
         cwd: 'src/img/'
         src: '**/*'
         dest: 'dist/img/'
+      bootstrap_icons:
+        expand: true
+        cwd: 'node_modules/bootstrap-sass/assets/fonts/'
+        src: '**/*'
+        dest: 'dist/fonts/'
 
     concat:
       emojidex_js:
@@ -258,20 +277,23 @@ module.exports = (grunt) ->
           stripBanners: true
           banner: '<%= meta.banner %><%= grunt.getLicense("build/licenses.json") %>\n */\n'
         src: [
-          # 'bower_components/bootstrap-window/dist/js/bootstrap-window.min.js'
-          'bower_components/Caret.js/dist/jquery.caret.js'
-          'bower_components/At.js/dist/js/jquery.atwho.js'
-          'node_modules/emojidex-client/dist/js/emojidex-client.js'
+          'bower_components/Caret.js/dist/jquery.caret.min.js'
+          'bower_components/At.js/dist/js/jquery.atwho.min.js'
+          'node_modules/emojidex-client/dist/js/*.min.js'
+          'node_modules/clipboard/dist/clipboard.min.js'
           'src/compiled_js/**/*.js'
+          'src/vendor/jquery-ui-1.11.4.custom/jquery-ui.min.js'
         ]
         dest: 'dist/js/emojidex.js'
 
       emojidex_css:
         src: [
           'bower_components/At.js/dist/css/jquery.atwho.min.css'
+          'dist/css/emoji_pallet.css'
+          'dist/css/jquery-ui.css'
           'dist/css/emojidex.css'
         ]
-        dest: 'dist/css/emojidex.css'
+        dest: 'dist/css/emojidex-concat.css'
 
     uglify:
       emojidex:
@@ -287,7 +309,7 @@ module.exports = (grunt) ->
 
     cssmin:
       emojidex:
-        src : ['dist/css/emojidex.css']
+        src : ['dist/css/emojidex-concat.css']
         dest : 'dist/css/emojidex.min.css'
 
       bootstrap:
@@ -298,6 +320,7 @@ module.exports = (grunt) ->
       dist:
         src: [
           'node_modules/emojidex-client/dist/js/emojidex-client.js'
+          'node_modules/clipboard/dist/clipboard.js'
           'bower_components/Caret.js/dist/jquery.caret.js'
           'bower_components/At.js/dist/js/jquery.atwho.js'
         ]

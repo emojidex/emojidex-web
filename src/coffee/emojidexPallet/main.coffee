@@ -22,7 +22,7 @@ do ($ = jQuery, window, document) ->
       @_name = pluginName
 
       # start: Plugin --------
-      @pallet = new Pallet
+      @pallet = new Pallet @
 
   $.fn[pluginName] = (options) ->
     @each ->
