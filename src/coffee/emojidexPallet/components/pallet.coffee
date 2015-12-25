@@ -45,7 +45,7 @@ class Pallet
           if e.keyCode is 13
             search_emoji_input()
 
-        search_btn = $ '<button type="submit" class="btn btn-primary" id="pallet-emoji-search-submit"><span class="glyphicon glyphicon-search"></span></button>'
+        search_btn = $ '<div class="btn btn-primary" id="pallet-emoji-search-submit"><span class="glyphicon glyphicon-search"></span></div>'
         search_btn.click ->
           search_emoji_input()
         search_tab_content.find('.input-group-btn').append search_btn

@@ -95,7 +95,7 @@
               return search_emoji_input();
             }
           });
-          search_btn = $('<button type="submit" class="btn btn-primary" id="pallet-emoji-search-submit"><span class="glyphicon glyphicon-search"></span></button>');
+          search_btn = $('<div class="btn btn-primary" id="pallet-emoji-search-submit"><span class="glyphicon glyphicon-search"></span></div>');
           search_btn.click(function() {
             return search_emoji_input();
           });
