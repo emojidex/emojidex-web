@@ -1,5 +1,5 @@
 /*
- * jQuery emojidex - v0.5.1
+ * jQuery emojidex - v0.6.0
  * emojidex plugin for jQuery/Zepto and compatible
  * https://github.com/emojidex/emojidex-web
  *
@@ -501,7 +501,7 @@
       onComplete: void 0,
       useLoadingImg: true,
       ignore: 'script, style, iframe, textarea, pre, code',
-      autoUpdate: true
+      autoUpdate: false
     };
     Plugin = (function() {
       function Plugin(element, options) {
@@ -646,6 +646,7 @@
       config = {
         attributes: true,
         childList: true,
+        subtree: true,
         attributeFilter: ['innerText']
       };
       return this.dom_observer.observe(target, config);
