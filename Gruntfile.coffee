@@ -293,7 +293,7 @@ module.exports = (grunt) ->
           'dist/css/jquery-ui.css'
           'dist/css/emojidex.css'
         ]
-        dest: 'dist/css/emojidex.css'
+        dest: 'dist/css/emojidex-concat.css'
 
     uglify:
       emojidex:
@@ -309,7 +309,7 @@ module.exports = (grunt) ->
 
     cssmin:
       emojidex:
-        src : ['dist/css/emojidex.css']
+        src : ['dist/css/emojidex-concat.css']
         dest : 'dist/css/emojidex.min.css'
 
       bootstrap:

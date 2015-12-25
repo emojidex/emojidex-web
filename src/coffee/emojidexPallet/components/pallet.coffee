@@ -11,10 +11,10 @@ class Pallet
     @setPallet @plugin.element
 
   createDialog: ->
-    @dialog = $ '<div id="dialog"></div>'
+    @dialog = $ '<div id="emojidex-dialog"></div>'
     $('body').append @dialog
 
-    $('#dialog').dialog
+    $('#emojidex-dialog').dialog
       autoOpen: false
       width: 700
       title: 'Emojidex Pallet'
@@ -23,7 +23,7 @@ class Pallet
         $('.ui-dialog-titlebar-close').hide()
         close_btn = $ '<button type="button" class="btn btn-default btn-xs pull-right" aria-label="Close"><span aria-hidden="true">&times;</span></button>'
         close_btn.click (e) ->
-          $('#dialog').dialog 'close'
+          $('#emojidex-dialog').dialog 'close'
         $('.ui-dialog-titlebar').append close_btn
 
       open: (e) ->
@@ -139,4 +139,4 @@ class Pallet
     pagination
 
   openDialog: ->
-    $('#dialog').dialog 'open'
+    $('#emojidex-dialog').dialog 'open'

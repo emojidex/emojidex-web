@@ -1,11 +1,8 @@
-.window.emoji-pallet {
-  background-color: white; }
-  .window.emoji-pallet .window-body {
-    overflow-y: auto;
-    overflow: hidden; }
-    .window.emoji-pallet .window-body .emoji-btn {
-      -webkit-border-radius: 0px;
-      -moz-border-radius: 0px; }
+#emojidex-dialog .category-emoji-list {
+  overflow-y: auto;
+  max-height: 256px; }
+#emojidex-dialog .emoji-btn {
+  border-radius: 0px; }
 
 hr {
   margin-top: 10px;

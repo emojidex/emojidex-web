@@ -1,3 +1,27 @@
+.atwho-view{position:absolute;top:0;left:0;display:none;margin-top:18px;background:#fff;color:#000;border:1px solid #DDD;border-radius:3px;box-shadow:0 0 5px rgba(0,0,0,.1);min-width:120px;z-index:11110!important}.atwho-view .cur{background:#36F;color:#fff}.atwho-view .cur small{color:#fff}.atwho-view strong{color:#36F}.atwho-view .cur strong{color:#fff;font:700}.atwho-view ul{list-style:none;padding:0;margin:auto}.atwho-view ul li{display:block;padding:5px 10px;border-bottom:1px solid #DDD;cursor:pointer}.atwho-view small{font-size:smaller;color:#777;font-weight:400}
+#emojidex-dialog .category-emoji-list {
+  overflow-y: auto;
+  max-height: 256px; }
+#emojidex-dialog .emoji-btn {
+  border-radius: 0px; }
+
+hr {
+  margin-top: 10px;
+  margin-bottom: 15px;
+  border-top: 1px solid #797979; }
+
+.search-pagination .pallet-pager:hover {
+  cursor: pointer; }
+
+.search-emoji-list {
+  margin-top: 10px;
+  height: auto; }
+
+.pallet-pager {
+  cursor: pointer; }
+
+/*# sourceMappingURL=emoji_pallet.css.map */
+
 /*! jQuery UI - v1.11.4 - 2015-12-24
  ** http://jqueryui.com
  ** Includes: core.css, draggable.css, resizable.css, selectable.css, button.css, dialog.css, theme.css
@@ -442,3 +466,22 @@ input.ui-button::-moz-focus-inner, button.ui-button::-moz-focus-inner {
   border-radius: 0px; }
 
 /*# sourceMappingURL=jquery-ui.css.map */
+
+.emojidex-loading-icon {
+  display: inline-block;
+  vertical-align: bottom;
+  width: 1.35em;
+  height: 1.35em;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-image: url("http://assets.emojidex.com/scripts/image/emojidex-web_loading1.gif"); }
+
+img[class*="emojidex-"] {
+  display: inline-block;
+  vertical-align: bottom;
+  width: 1.35em;
+  height: 1.35em;
+  background-size: 100%;
+  background-repeat: no-repeat; }
+
+/*# sourceMappingURL=emojidex.css.map */
