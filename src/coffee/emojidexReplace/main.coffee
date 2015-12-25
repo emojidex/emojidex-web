@@ -16,7 +16,9 @@ do ($ = jQuery, window, document) ->
     onComplete: undefined
     useLoadingImg: true
     ignore: 'script, style, iframe, textarea, pre, code'
-    autoUpdate: true
+
+    # this option is beta --------
+    autoUpdate: false
 
   class Plugin
     constructor: (@element, options) ->

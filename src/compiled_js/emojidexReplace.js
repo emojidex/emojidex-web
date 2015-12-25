@@ -23,7 +23,7 @@
       onComplete: void 0,
       useLoadingImg: true,
       ignore: 'script, style, iframe, textarea, pre, code',
-      autoUpdate: true
+      autoUpdate: false
     };
     Plugin = (function() {
       function Plugin(element, options) {
