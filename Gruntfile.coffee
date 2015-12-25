@@ -148,6 +148,7 @@ module.exports = (grunt) ->
                 ext: '.css'
               ]
           task: ['sass:esteWatch', 'concat:emojidex_css', 'cssmin:emojidex']
+        setGruntConfig_getTask define_sass
 
       'sass': (filepath) ->
         define_sass =
@@ -162,7 +163,6 @@ module.exports = (grunt) ->
                 ext: '.css'
               ]
           task: ['sass:esteWatch', 'concat:emojidex_css', 'cssmin:emojidex']
-
         setGruntConfig_getTask define_sass
 
     # grunt --------------------------------
