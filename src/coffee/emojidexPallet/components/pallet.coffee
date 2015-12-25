@@ -47,6 +47,10 @@ class Pallet
           tab_list.append search_tab.tab_list
           tab_content.append search_tab.tab_content
 
+          user_tab = new UserTab @
+          tab_list.append user_tab.tab_list
+          tab_content.append user_tab.tab_content
+
           @emoji_pallet = $ '<div class="emoji-pallet"></div>'
           @emoji_pallet.append(tab_list.add tab_content)
           @emoji_pallet.find('ul').after('<hr>')

@@ -1,6 +1,6 @@
 class SearchTab
   constructor: (@pallet) ->
-    @tab_list = "<li class=''><a href='#tab-content-search' data-toggle='pill'>Search</a></li>"
+    @tab_list = "<li id='tab-search'><a href='#tab-content-search' data-toggle='pill'>Search</a></li>"
     @tab_content = @getTabContent()
 
   getTabContent: ->
@@ -14,7 +14,7 @@ class SearchTab
       @searchEmojiInput()
     tab_content.find('.input-group-btn').append search_btn
 
-    return tab_content
+    tab_content
 
   searchEmojiInput: ->
     search_word = $('#pallet-emoji-search-input').val()

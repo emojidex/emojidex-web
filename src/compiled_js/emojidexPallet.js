@@ -12,7 +12,7 @@
 
 
 (function() {
-  var CategoryTab, Pallet, SearchTab;
+  var CategoryTab, Pallet, SearchTab, UserTab;
 
   (function($, window, document) {
     var Plugin, defaults, pluginName;
@@ -83,7 +83,7 @@
           tab_list = $('<ul class="nav nav-pills"></ul>');
           tab_content = $('<div class="tab-content"></div>');
           return _this.ec.Categories.sync(function(categories) {
-            var category, category_tab, search_tab, _i, _len;
+            var category, category_tab, search_tab, user_tab, _i, _len;
             for (_i = 0, _len = categories.length; _i < _len; _i++) {
               category = categories[_i];
               category_tab = new CategoryTab(_this, category, tab_list[0].children.length);
@@ -93,6 +93,9 @@
             search_tab = new SearchTab(_this);
             tab_list.append(search_tab.tab_list);
             tab_content.append(search_tab.tab_content);
+            user_tab = new UserTab(_this);
+            tab_list.append(user_tab.tab_list);
+            tab_content.append(user_tab.tab_content);
             _this.emoji_pallet = $('<div class="emoji-pallet"></div>');
             _this.emoji_pallet.append(tab_list.add(tab_content));
             _this.emoji_pallet.find('ul').after('<hr>');
@@ -185,7 +188,7 @@
   SearchTab = (function() {
     function SearchTab(pallet) {
       this.pallet = pallet;
-      this.tab_list = "<li class=''><a href='#tab-content-search' data-toggle='pill'>Search</a></li>";
+      this.tab_list = "<li id='tab-search'><a href='#tab-content-search' data-toggle='pill'>Search</a></li>";
       this.tab_content = this.getTabContent();
     }
 
@@ -237,6 +240,53 @@
     };
 
     return SearchTab;
+
+  })();
+
+  UserTab = (function() {
+    function UserTab(pallet) {
+      this.pallet = pallet;
+      this.tab_list = "<li id='tab-user'><a href='#tab-content-user' data-toggle='pill'>User</a></li>";
+      this.tab_content = this.getTabContent();
+    }
+
+    UserTab.prototype.getTabContent = function() {
+      var login_btn, tab_content,
+        _this = this;
+      tab_content = $('<div class="tab-pane" id="tab-content-user"><input type="text" class="form-control" id="pallet-emoji-username-input" placeholder="Username"><input type="password" class="form-control mt-m" id="pallet-emoji-password-input" placeholder="Password"></div>');
+      login_btn = $('<div class="btn btn-primary btn-block mt-m" id="pallet-emoji-search-submit">Login</div>');
+      login_btn.click(function() {
+        return _this.checkInput();
+      });
+      tab_content.append(login_btn);
+      return tab_content;
+    };
+
+    UserTab.prototype.checkInput = function() {
+      var password, username;
+      username = $('#pallet-emoji-username-input').val();
+      password = $('#pallet-emoji-password-input').val();
+      if (username.length > 0 && password.length > 0) {
+        return this.login(username, password);
+      }
+    };
+
+    UserTab.prototype.login = function(username, password) {
+      var _this = this;
+      return this.pallet.ec.User.plain_auth(username, password, function(auth_info) {
+        if (auth_info.status === 'verified') {
+          return _this.setFavorite();
+        } else {
+          return console.log('error');
+        }
+      });
+    };
+
+    UserTab.prototype.setFavorite = function() {
+      return console.log('success');
+    };
+
+    return UserTab;
 
   })();
 
