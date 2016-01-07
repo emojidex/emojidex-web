@@ -61,8 +61,10 @@ class Pallet
 
   setEmojiList: (kind, result_emoji) ->
     emoji_list = $ "<div class='#{kind}-emoji-list clearfix'></div>"
+
     for emoji in result_emoji
-      emoji_list.append "<button class='emoji-btn btn btn-default pull-left' data-clipboard-text=':#{emoji.code.replace /\s/g, '_'}:'><img alt='#{emoji.code}' title='#{emoji.code}' class='img-responsive center-block' src='#{@ec.cdn_url}px32/#{emoji.code.replace /\s/g, '_'}.png'></img></button>"
+      code = emoji.code ? emoji.emoji_code
+      emoji_list.append "<button class='emoji-btn btn btn-default pull-left' data-clipboard-text=':#{code.replace /\s/g, '_'}:'><img alt='#{code}' title='#{code}' class='img-responsive center-block' src='#{@ec.cdn_url}px32/#{code.replace /\s/g, '_'}.png'></img></button>"
     emoji_list
 
   setPagination: (kind, prev_func, next_func, cur_page, max_page) ->

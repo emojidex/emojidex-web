@@ -108,11 +108,12 @@
     };
 
     Pallet.prototype.setEmojiList = function(kind, result_emoji) {
-      var emoji, emoji_list, _i, _len;
+      var code, emoji, emoji_list, _i, _len, _ref;
       emoji_list = $("<div class='" + kind + "-emoji-list clearfix'></div>");
       for (_i = 0, _len = result_emoji.length; _i < _len; _i++) {
         emoji = result_emoji[_i];
-        emoji_list.append("<button class='emoji-btn btn btn-default pull-left' data-clipboard-text=':" + (emoji.code.replace(/\s/g, '_')) + ":'><img alt='" + emoji.code + "' title='" + emoji.code + "' class='img-responsive center-block' src='" + this.ec.cdn_url + "px32/" + (emoji.code.replace(/\s/g, '_')) + ".png'></img></button>");
+        code = (_ref = emoji.code) != null ? _ref : emoji.emoji_code;
+        emoji_list.append("<button class='emoji-btn btn btn-default pull-left' data-clipboard-text=':" + (code.replace(/\s/g, '_')) + ":'><img alt='" + code + "' title='" + code + "' class='img-responsive center-block' src='" + this.ec.cdn_url + "px32/" + (code.replace(/\s/g, '_')) + ".png'></img></button>");
       }
       return emoji_list;
     };
@@ -254,7 +255,12 @@
       var login_btn, tab_content,
         _this = this;
       tab_content = $('<div class="tab-pane" id="tab-content-user"><input type="text" class="form-control" id="pallet-emoji-username-input" placeholder="Username"><input type="password" class="form-control mt-m" id="pallet-emoji-password-input" placeholder="Password"></div>');
-      login_btn = $('<div class="btn btn-primary btn-block mt-m" id="pallet-emoji-search-submit">Login</div>');
+      tab_content.find('#pallet-emoji-password-input').keypress(function(e) {
+        if (e.keyCode === 13) {
+          return _this.checkInput();
+        }
+      });
+      login_btn = $('<div class="btn btn-primary btn-block mt-m" id="pallet-emoji-login-submit">Login</div>');
       login_btn.click(function() {
         return _this.checkInput();
       });
@@ -264,6 +270,7 @@
 
     UserTab.prototype.checkInput = function() {
       var password, username;
+      $('#login-error').remove();
       username = $('#pallet-emoji-username-input').val();
       password = $('#pallet-emoji-password-input').val();
       if (username.length > 0 && password.length > 0) {
@@ -275,15 +282,71 @@
       var _this = this;
       return this.pallet.ec.User.plain_auth(username, password, function(auth_info) {
         if (auth_info.status === 'verified') {
-          return _this.setFavorite();
+          _this.hideLoginForm();
+          _this.setUserTab();
+          _this.setHistory(auth_info);
+          return _this.setFavorite(auth_info);
         } else {
-          return console.log('error');
+          return _this.showError(auth_info);
         }
       });
     };
 
-    UserTab.prototype.setFavorite = function() {
-      return console.log('success');
+    UserTab.prototype.showError = function(auth_info) {
+      return this.tab_content.prepend($('<div id="login-error"><span style="color:red">ログインに失敗しました。</span><div>'));
+    };
+
+    UserTab.prototype.hideLoginForm = function() {
+      $('#pallet-emoji-username-input').hide();
+      $('#pallet-emoji-password-input').hide();
+      return $('#pallet-emoji-login-submit').hide();
+    };
+
+    UserTab.prototype.setUserTab = function() {
+      var user_tab_list;
+      user_tab_list = $('<ul class="nav nav-tabs mb-m mt-m"></ul>');
+      user_tab_list.append($('<li id="tab-user-history" class="active"><a href="#tab-content-user-history" data-toggle="tab">History</a></li>'));
+      user_tab_list.append($('<li id="tab-user-favorite"><a href="#tab-content-user-favorite" data-toggle="tab">Favorite</a></li>'));
+      this.user_tab_content = $('<div class="tab-content"></div>');
+      this.tab_content.append(user_tab_list);
+      return this.tab_content.append(this.user_tab_content);
+    };
+
+    UserTab.prototype.setHistory = function(auth_info) {
+      var _this = this;
+      return this.pallet.ec.User.History.get(function(histories) {
+        var tab_pane;
+        tab_pane = $('<div class="tab-pane active" id="tab-content-user-history"></div>');
+        tab_pane.append(_this.pallet.setEmojiList('history', histories.history));
+        return _this.user_tab_content.append(tab_pane);
+      });
+    };
+
+    UserTab.prototype.setFavorite = function(auth_info) {
+      var _this = this;
+      return this.pallet.ec.User.Favorites.get(function(favorites) {
+        var tab_pane;
+        tab_pane = $('<div class="tab-pane" id="tab-content-user-favorite"></div>');
+        tab_pane.append(_this.pallet.setEmojiList('faorite', favorites.emoji));
+        return _this.user_tab_content.append(tab_pane);
+      });
+    };
+
+    UserTab.prototype.setPagination = function(meta, pane, kind) {
+      var cur_page, max_page, next_func, prev_func,
+        _this = this;
+      cur_page = meta.total_count === 0 ? 0 : meta.page;
+      max_page = Math.floor(meta.total_count / 50);
+      if (meta.total_count % 50 > 0) {
+        max_page++;
+      }
+      prev_func = function() {
+        return console.log('prev');
+      };
+      next_func = function() {
+        return console.log('next');
+      };
+      return this.user_tab_content.append(pane.append(this.pallet.setPagination(kind, prev_func, next_func, cur_page, max_page)));
     };
 
     return UserTab;

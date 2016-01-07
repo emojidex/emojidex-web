@@ -2,7 +2,9 @@
   overflow-y: auto;
   max-height: 256px; }
 #emojidex-dialog .emoji-btn {
-  border-radius: 0px; }
+  border-radius: 3px;
+  padding: 5px;
+  margin: 2px; }
 #emojidex-dialog hr {
   margin-top: 10px;
   margin-bottom: 15px;
