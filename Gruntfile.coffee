@@ -282,6 +282,7 @@ module.exports = (grunt) ->
           'bower_components/At.js/dist/js/jquery.atwho.min.js'
           'node_modules/emojidex-client/dist/js/*.min.js'
           'node_modules/clipboard/dist/clipboard.min.js'
+          'node_modules/bootstrap-sass/assets/javascripts/bootstrap/tab.js'
           'src/compiled_js/**/*.js'
           'src/vendor/jquery-ui-1.11.4.custom/jquery-ui.min.js'
         ]

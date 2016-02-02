@@ -7,11 +7,31 @@
   background-repeat: no-repeat;
 }
 
-.emojidex-loading-icon {
-  @include emoji;
-  background-image: url('http://assets.emojidex.com/scripts/image/emojidex-web_loading1.gif');
-}
+.ui-dialog {
+  .emojidex-loading-icon {
+    @include emoji;
+    background-image: url('http://assets.emojidex.com/scripts/image/emojidex-web_loading1.gif');
+  }
 
-img[class*="emojidex-"] {
-  @include emoji;
+  img[class*="emojidex-"] {
+    @include emoji;
+  }
+
+  @import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/variables';
+  @import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins';
+  @import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/type';
+
+  @import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/buttons';
+  @import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/navs';
+  @import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/pagination';
+
+  @import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/utilities';
+
+  .nav {
+    li {
+      a {
+        text-decoration: none;
+      }
+    }
+  }
 }
