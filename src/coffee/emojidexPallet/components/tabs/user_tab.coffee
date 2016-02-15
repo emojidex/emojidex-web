@@ -31,6 +31,8 @@ class UserTab
         @setUserTab()
         @setHistory(auth_info)
         @setFavorite(auth_info)
+        @setNewest(auth_info)
+        @setPopular(auth_info)
       else
         @showError(auth_info)
 
@@ -47,6 +49,8 @@ class UserTab
     user_tab_list = $ '<ul class="nav nav-tabs mb-m mt-m"></ul>'
     user_tab_list.append $ '<li id="tab-user-history" class="active"><a href="#tab-content-user-history" data-toggle="tab">History</a></li>'
     user_tab_list.append $ '<li id="tab-user-favorite"><a href="#tab-content-user-favorite" data-toggle="tab">Favorite</a></li>'
+    user_tab_list.append $ '<li id="tab-user-newest"><a href="#tab-content-user-newest" data-toggle="tab">Newest</a></li>'
+    user_tab_list.append $ '<li id="tab-user-popular"><a href="#tab-content-user-popular" data-toggle="tab">Popular</a></li>'
 
     @user_tab_content = $ '<div class="tab-content"></div>'
 
@@ -54,20 +58,36 @@ class UserTab
     @tab_content.append @user_tab_content
 
   setHistory: (auth_info) ->
-    @pallet.ec.User.History.get (histories) =>
-      tab_pane = $ '<div class="tab-pane active" id="tab-content-user-history"></div>'
-      tab_pane.append @pallet.setEmojiList('history', histories.history)
-      @user_tab_content.append tab_pane
-
-      # @setPagination(histories.meta, tab_pane, 'history')
+    @pallet.ec.User.History.get (response) =>
+      @setData(response.history, response.meta, 'history')
 
   setFavorite: (auth_info) ->
-    @pallet.ec.User.Favorites.get (favorites) =>
-      tab_pane = $ '<div class="tab-pane" id="tab-content-user-favorite"></div>'
-      tab_pane.append @pallet.setEmojiList('faorite', favorites.emoji)
-      @user_tab_content.append tab_pane
+    @pallet.ec.User.Favorites.get (response) =>
+      @setData(response.emoji, response.meta, 'favorite')
 
-      # @setPagination(favorites.meta, tab_pane, 'favorite')
+  setData: (data, meta, kind) ->
+    tab_pane = $ "<div class='tab-pane #{'active' if kind is 'history'}' id='tab-content-user-#{kind}'></div>"
+    tab_pane.append @pallet.setEmojiList(kind, data)
+    @user_tab_content.append tab_pane
+
+    # @setPagination(meta, tab_pane, kind)
+
+  setNewest: (auth_info) ->
+    @pallet.ec.User.Newest.get (response) =>
+      @setPremiumData(response, 'newest')
+
+  setPopular: (auth_info) ->
+    @pallet.ec.User.Popular.get (response) =>
+      @setPremiumData(response, 'popular')
+
+  setPremiumData: (response, kind) ->
+    tab_pane = $ "<div class='tab-pane' id='tab-content-user-#{kind}'></div>"
+    if response.statusText is 'Payment Required'
+      # TODO: text
+      tab_pane.append $ '<p style="margin-top:15px;">プレミアム・プロユーザーのみ閲覧できます。</p>'
+    else
+      tab_pane.append @pallet.setEmojiList(kind, response.emoji)
+    @user_tab_content.append tab_pane
 
   setPagination: (meta, pane, kind) ->
     # TODO: limit, prev/next func

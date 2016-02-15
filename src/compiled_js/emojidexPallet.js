@@ -285,7 +285,9 @@
           _this.hideLoginForm();
           _this.setUserTab();
           _this.setHistory(auth_info);
-          return _this.setFavorite(auth_info);
+          _this.setFavorite(auth_info);
+          _this.setNewest(auth_info);
+          return _this.setPopular(auth_info);
         } else {
           return _this.showError(auth_info);
         }
@@ -307,6 +309,8 @@
       user_tab_list = $('<ul class="nav nav-tabs mb-m mt-m"></ul>');
       user_tab_list.append($('<li id="tab-user-history" class="active"><a href="#tab-content-user-history" data-toggle="tab">History</a></li>'));
       user_tab_list.append($('<li id="tab-user-favorite"><a href="#tab-content-user-favorite" data-toggle="tab">Favorite</a></li>'));
+      user_tab_list.append($('<li id="tab-user-newest"><a href="#tab-content-user-newest" data-toggle="tab">Newest</a></li>'));
+      user_tab_list.append($('<li id="tab-user-popular"><a href="#tab-content-user-popular" data-toggle="tab">Popular</a></li>'));
       this.user_tab_content = $('<div class="tab-content"></div>');
       this.tab_content.append(user_tab_list);
       return this.tab_content.append(this.user_tab_content);
@@ -314,22 +318,48 @@
 
     UserTab.prototype.setHistory = function(auth_info) {
       var _this = this;
-      return this.pallet.ec.User.History.get(function(histories) {
-        var tab_pane;
-        tab_pane = $('<div class="tab-pane active" id="tab-content-user-history"></div>');
-        tab_pane.append(_this.pallet.setEmojiList('history', histories.history));
-        return _this.user_tab_content.append(tab_pane);
+      return this.pallet.ec.User.History.get(function(response) {
+        return _this.setData(response.history, response.meta, 'history');
       });
     };
 
     UserTab.prototype.setFavorite = function(auth_info) {
       var _this = this;
-      return this.pallet.ec.User.Favorites.get(function(favorites) {
-        var tab_pane;
-        tab_pane = $('<div class="tab-pane" id="tab-content-user-favorite"></div>');
-        tab_pane.append(_this.pallet.setEmojiList('faorite', favorites.emoji));
-        return _this.user_tab_content.append(tab_pane);
+      return this.pallet.ec.User.Favorites.get(function(response) {
+        return _this.setData(response.emoji, response.meta, 'favorite');
       });
+    };
+
+    UserTab.prototype.setData = function(data, meta, kind) {
+      var tab_pane;
+      tab_pane = $("<div class='tab-pane " + (kind === 'history' ? 'active' : void 0) + "' id='tab-content-user-" + kind + "'></div>");
+      tab_pane.append(this.pallet.setEmojiList(kind, data));
+      return this.user_tab_content.append(tab_pane);
+    };
+
+    UserTab.prototype.setNewest = function(auth_info) {
+      var _this = this;
+      return this.pallet.ec.User.Newest.get(function(response) {
+        return _this.setPremiumData(response, 'newest');
+      });
+    };
+
+    UserTab.prototype.setPopular = function(auth_info) {
+      var _this = this;
+      return this.pallet.ec.User.Popular.get(function(response) {
+        return _this.setPremiumData(response, 'popular');
+      });
+    };
+
+    UserTab.prototype.setPremiumData = function(response, kind) {
+      var tab_pane;
+      tab_pane = $("<div class='tab-pane' id='tab-content-user-" + kind + "'></div>");
+      if (response.statusText === 'Payment Required') {
+        tab_pane.append($('<p style="margin-top:15px;">プレミアム・プロユーザーのみ閲覧できます。</p>'));
+      } else {
+        tab_pane.append(this.pallet.setEmojiList(kind, response.emoji));
+      }
+      return this.user_tab_content.append(tab_pane);
     };
 
     UserTab.prototype.setPagination = function(meta, pane, kind) {
