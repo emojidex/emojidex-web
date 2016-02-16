@@ -84,7 +84,7 @@ class UserTab
     tab_pane = $ "<div class='tab-pane' id='tab-content-user-#{kind}'></div>"
     if response.statusText is 'Payment Required'
       # TODO: text
-      tab_pane.append $ '<p style="margin-top:15px;">プレミアム・プロユーザーのみ閲覧できます。</p>'
+      tab_pane.append $ '<p style="margin-top:15px;"><a class="btn btn-primary" href="https://www.emojidex.com/profile">プレミアム・プロユーザーのみ閲覧できます。</a></p>'
     else
       tab_pane.append @pallet.setEmojiList(kind, response.emoji)
     @user_tab_content.append tab_pane

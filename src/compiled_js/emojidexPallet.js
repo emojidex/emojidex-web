@@ -355,7 +355,7 @@
       var tab_pane;
       tab_pane = $("<div class='tab-pane' id='tab-content-user-" + kind + "'></div>");
       if (response.statusText === 'Payment Required') {
-        tab_pane.append($('<p style="margin-top:15px;">プレミアム・プロユーザーのみ閲覧できます。</p>'));
+        tab_pane.append($('<p style="margin-top:15px;"><a class="btn btn-primary" href="https://www.emojidex.com/profile">プレミアム・プロユーザーのみ閲覧できます。</a></p>'));
       } else {
         tab_pane.append(this.pallet.setEmojiList(kind, response.emoji));
       }
