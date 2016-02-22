@@ -182,15 +182,26 @@ module.exports = (grunt) ->
             options: {}
 
     jasmine:
-      all:
+      coverage:
         src: [
-          'dist/js/*.min.js'
+          'dist/js/*.js'
         ]
         options:
-          specs: [
-            'build/spec/**/*.js'
-          ]
-
+          specs: 'build/spec/**/*.js'
+          template: require('grunt-template-jasmine-istanbul')
+          templateOptions:
+            coverage: 'build/spec/coverage/coverage.json'
+            report: [
+              {
+                type: 'html'
+                options: dir: 'build/spec/coverage/html'
+              }
+              {
+                type: 'cobertura'
+                options: dir: 'build/spec/coverage/cobertura'
+              }
+              { type: 'text-summary' }
+            ]
       options:
         keepRunner: true
         outfile: 'build/_SpecRunner.html'

@@ -34,6 +34,7 @@
     "grunt-markdown": "^0.7.0",
     "grunt-md2html": "^0.3.0",
     "grunt-slim": "^0.1.0",
+    "grunt-template-jasmine-istanbul": "^0.4.0",
     "jasmine-jquery": "^2.0.5",
     "jquery": "^2.1.4"
   },
