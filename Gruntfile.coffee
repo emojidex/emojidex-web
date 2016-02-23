@@ -120,20 +120,36 @@ module.exports = (grunt) ->
         setGruntConfig_getTask(getDefineUsePattern filepath, define_list)
 
       'slim': (filepath) ->
-        define_slim =
-          config:
-            prop: ['slim', 'esteWatch']
-            value:
-              files: [
-                expand: true
-                flatten: true
-                src: filepath
-                dest: 'dist/'
-                ext: '.html'
-              ]
-          task: ['slim:esteWatch', 'md2html']
+        define_list =
+          dist:
+            pattern: 'src/slim/**/*'
+            config:
+              prop: ['slim', 'esteWatch']
+              value:
+                files: [
+                  expand: true
+                  flatten: true
+                  src: filepath
+                  dest: 'dist/'
+                  ext: '.html'
+                ]
+            task: ['slim:esteWatch', 'md2html']
 
-        setGruntConfig_getTask define_slim
+          spec:
+            pattern: 'spec/fixture/**/*'
+            config:
+              prop: ['slim', 'esteWatch']
+              value:
+                files: [
+                  expand: true
+                  flatten: true
+                  src: filepath
+                  dest: 'build/spec/fixture/'
+                  ext: '.html'
+                ]
+            task: ['slim:esteWatch']
+
+        setGruntConfig_getTask(getDefineUsePattern filepath, define_list)
 
       'scss': (filepath) ->
         define_sass =
@@ -262,12 +278,20 @@ module.exports = (grunt) ->
     slim:
       options:
         pretty: true
-      dsit:
+      dist:
         files: [
           expand: true
           cwd: 'src/slim/'
           src: '*.slim'
           dest: 'dist/'
+          ext: '.html'
+        ]
+      spec:
+        files: [
+          expand: true
+          cwd: 'spec/fixture/'
+          src: '*.slim'
+          dest: 'build/spec/fixture/'
           ext: '.html'
         ]
 
