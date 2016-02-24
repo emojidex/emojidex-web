@@ -4,7 +4,7 @@ describe "emojidexReplace", ->
     loadFixtures('index.html')
     @jquery = new $
 
-  it 'Replace to emojix-emoji', (done) ->
+  it 'replace to emojix-emoji', (done) ->
     $('body').emojidexReplace
       onComplete: (element) ->
         expect($('.emojidex_replace')).toContainElement('img.emojidex-emoji')
