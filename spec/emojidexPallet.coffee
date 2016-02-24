@@ -2,13 +2,12 @@ describe "emojidexPallet", ->
   beforeEach ->
     jasmine.getFixtures().fixturesPath = '../build/spec/fixture/'
     loadFixtures('index.html')
-    @jquery = new $
+    $("#pallet-btn").emojidexPallet()
+    $('#pallet-btn').click()
 
-  it "Defined emojidexPallet ?", ->
-    # expect(@jquery.emojidexPallet).toBeDefined()
+  it "show emojidexPallet", ->
     expect($('#pallet-btn')).toContainText('Open pallet')
 
-    # spyEvent = spyOnEvent('#pallet-btn', 'click')
-    # $('#pallet-btn').click()
-    # expect('click').toHaveBeenTriggeredOn('#pallet-btn')
-    # expect(spyEvent).toHaveBeenTriggered()
+  it "Defined emojidexPallet ?", ->
+
+    expect($('#pallet-btn')).toContainText('Open pallet')
