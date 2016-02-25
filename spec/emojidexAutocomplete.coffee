@@ -10,9 +10,9 @@ describe "emojidexAutocomplete", ->
 
     plan_text.caret 'pos', 5
     plan_text.focus().keyup()
-    setTimeout ( ->
-      atwho_view = $('.atwho-view')
-      expect(atwho_view.css('display')).toEqual('block')
-      atwho_view.css('display', 'none')
-      done()
-    ), 3000
+    spec_timer
+      callback: ->
+        atwho_view = $('.atwho-view')
+        expect(atwho_view.css('display')).toEqual('block')
+        atwho_view.css('display', 'none')
+        done()

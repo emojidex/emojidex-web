@@ -1,5 +1,12 @@
 module.exports = (grunt) ->
-  path = require('path')
+  path = require 'path'
+
+  dotenv = require 'dotenv'
+  dotenv.config()
+
+  data_path = process.env.DATA_PATH
+  unless data_path?
+    data_path = 'build/spec/helpers/data.js'
 
   grunt.getLicense = (licenses_json) ->
     licenses = grunt.file.readJSON licenses_json
@@ -225,6 +232,7 @@ module.exports = (grunt) ->
           'node_modules/jquery/dist/jquery.min.js'
         ]
         helpers:[
+          'build/spec/helper/*.js'
           'node_modules/jasmine-jquery/lib/jasmine-jquery.js'
         ]
 
@@ -259,9 +267,8 @@ module.exports = (grunt) ->
 
       spec:
         expand: true
-        flatten: true
         cwd: 'spec/'
-        src: ['*.coffee']
+        src: ['**/*.coffee']
         dest: 'build/spec/'
         ext: '.js'
 
