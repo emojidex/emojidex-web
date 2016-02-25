@@ -10,6 +10,7 @@ describe "emojidexAutocomplete", ->
 
     plan_text.caret 'pos', 5
     plan_text.focus().keyup()
+
     spec_timer
       callback: ->
         atwho_view = $('.atwho-view')

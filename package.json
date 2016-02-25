@@ -37,7 +37,8 @@
     "grunt-slim": "^0.1.0",
     "grunt-template-jasmine-istanbul": "^0.4.0",
     "jasmine-jquery": "^2.0.5",
-    "jquery": "^2.1.4"
+    "jquery": "^2.1.4",
+    "jquery-watch": "^1.21.0"
   },
   "scripts": {
     "test": "grunt && grunt jasmine"
