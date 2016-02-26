@@ -1,9 +1,9 @@
 describe "emojidexReplace", ->
   beforeEach ->
-    jasmine.getFixtures().fixturesPath = '../build/spec/fixture/'
-    loadFixtures('index.html')
+    helperBefore()
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000
 
-  it 'replace to emojix-emoji', (done) ->
+  it 'replace to emojidex-emoji', (done) ->
     $('body').emojidexReplace
       onComplete: (element) ->
         expect($('.emojidex_replace')).toContainElement('img.emojidex-emoji')

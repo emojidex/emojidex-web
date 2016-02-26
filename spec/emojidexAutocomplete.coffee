@@ -1,9 +1,8 @@
 describe "emojidexAutocomplete", ->
   beforeEach ->
-    jasmine.getFixtures().fixturesPath = '../build/spec/fixture/'
-    loadFixtures('index.html')
+    helperBefore()
 
-  it "show autocomplete view", (done) ->
+  it "show autocomplete view (If this spec failed, test in browser.)", (done) ->
     plan_text = $('.emojidex-plain_text').emojidexAutocomplete()
     atwho_view = $('.atwho-view')
     expect(atwho_view).toHaveCss({display: 'none'})
