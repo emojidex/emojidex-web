@@ -1,7 +1,9 @@
 describe "emojidexReplace", ->
   beforeEach ->
     helperBefore()
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000
+
+  afterAll ->
+    helperAfter()
 
   it 'replace to emojidex-emoji', (done) ->
     $('body').emojidexReplace

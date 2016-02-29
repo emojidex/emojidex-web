@@ -643,19 +643,36 @@
     };
 
     UserTab.prototype.hideLoginForm = function() {
+      $('#pallet-emoji-username-input').val('');
+      $('#pallet-emoji-password-input').val('');
       $('#pallet-emoji-username-input').hide();
       $('#pallet-emoji-password-input').hide();
       return $('#pallet-emoji-login-submit').hide();
     };
 
+    UserTab.prototype.showLoginForm = function() {
+      $('#pallet-emoji-username-input').show();
+      $('#pallet-emoji-password-input').show();
+      return $('#pallet-emoji-login-submit').show();
+    };
+
     UserTab.prototype.setUserTab = function() {
-      var user_tab_list;
-      user_tab_list = $('<ul class="nav nav-tabs mb-m mt-m"></ul>');
+      var logout_btn, user_tab_list,
+        _this = this;
+      user_tab_list = $('<ul class="nav nav-tabs mb-m mt-m" id="user_tab_list"></ul>');
       user_tab_list.append($('<li id="tab-user-history" class="active"><a href="#tab-content-user-history" data-toggle="tab">History</a></li>'));
       user_tab_list.append($('<li id="tab-user-favorite"><a href="#tab-content-user-favorite" data-toggle="tab">Favorite</a></li>'));
       user_tab_list.append($('<li id="tab-user-newest"><a href="#tab-content-user-newest" data-toggle="tab">Newest</a></li>'));
       user_tab_list.append($('<li id="tab-user-popular"><a href="#tab-content-user-popular" data-toggle="tab">Popular</a></li>'));
-      this.user_tab_content = $('<div class="tab-content"></div>');
+      logout_btn = $('<button class="btn btn-default btm-sm pull-right" id="pallet-emoji-logout">LogOut</button>');
+      logout_btn.click(function() {
+        _this.pallet.ec.User.logout();
+        $('#user_tab_list').remove();
+        $('#user_tab_content').remove();
+        return _this.showLoginForm();
+      });
+      user_tab_list.append(logout_btn);
+      this.user_tab_content = $('<div class="tab-content" id="user_tab_content"></div>');
       this.tab_content.append(user_tab_list);
       return this.tab_content.append(this.user_tab_content);
     };
@@ -676,7 +693,7 @@
 
     UserTab.prototype.setData = function(data, meta, kind) {
       var tab_pane;
-      tab_pane = $("<div class='tab-pane " + (kind === 'history' ? 'active' : void 0) + "' id='tab-content-user-" + kind + "'></div>");
+      tab_pane = $("<div class='tab-pane " + (kind === 'history' ? 'active' : '') + "' id='tab-content-user-" + kind + "'></div>");
       tab_pane.append(this.pallet.setEmojiList(kind, data));
       return this.user_tab_content.append(tab_pane);
     };

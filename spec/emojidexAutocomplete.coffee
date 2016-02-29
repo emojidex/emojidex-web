@@ -2,6 +2,9 @@ describe "emojidexAutocomplete", ->
   beforeEach ->
     helperBefore()
 
+  afterAll ->
+    helperAfter()
+
   it "show autocomplete view (If this spec failed, test in browser.)", (done) ->
     plan_text = $('.emojidex-plain_text').emojidexAutocomplete()
     atwho_view = $('.atwho-view')
@@ -11,6 +14,7 @@ describe "emojidexAutocomplete", ->
     plan_text.focus().keyup()
 
     spec_timer
+      time: 3000
       callback: ->
         atwho_view = $('.atwho-view')
         expect(atwho_view.css('display')).toEqual('block')

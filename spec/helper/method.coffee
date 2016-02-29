@@ -3,9 +3,12 @@
   # loadFixtures('index.html')
   $('body').append("<div id='spec-wrap'>#{readFixtures 'index.html'}</div>");
 
+@helperAfter = ->
+  $('#spec-wrap').remove()
+
 @spec_timer = (option) ->
   default_option =
-    time: 3000
+    time: 100
     callback: undefined
   $.extend default_option, option
 

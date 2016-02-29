@@ -207,7 +207,7 @@ module.exports = (grunt) ->
     jasmine:
       coverage:
         src: [
-          'dist/js/*.js'
+          'dist/js/emojidex.js'
         ]
         options:
           specs: 'build/spec/**/*.js'
