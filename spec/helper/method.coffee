@@ -18,31 +18,7 @@
   object.unwatch id
   object.removeData id
 
-@placeCaretAtEnd = (elm) ->
-  elm.focus()
-  range = document.createRange()
-  range.selectNodeContents elm
-  range.collapse false
-  sel = window.getSelection()
-  sel.removeAllRanges()
-  sel.addRange range
-
-@KEY_CODE =
-  DOWN: 40
-  UP: 38
-  ESC: 27
-  TAB: 9
-  ENTER: 13
-  CTRL: 17
-  P: 80
-  N: 78
-
-@triggerAtwhoAt = ($inputor) ->
-  simulateTypingIn $inputor
-  simulateChoose $inputor
-
-@simulateTypingIn = ($inputor, flag, pos=31) ->
-  $inputor.data("atwho").setContextFor flag || "@"
+@simulateTypingIn = ($inputor, pos=22) ->
   oDocument = $inputor[0].ownerDocument
   oWindow = oDocument.defaultView || oDocument.parentWindow
   if $inputor.attr('contentEditable') == 'true' && oWindow.getSelection
@@ -56,8 +32,4 @@
     sel.addRange(range)
   else
     $inputor.caret('pos', pos)
-  $inputor.trigger("keyup")
-
-@simulateChoose = ($inputor) ->
-  e = $.Event("keydown", keyCode: KEY_CODE.ENTER)
-  $inputor.trigger(e)
+  $inputor.trigger('keyup')
