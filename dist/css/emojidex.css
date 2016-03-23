@@ -1,3 +1,11 @@
+img.emojidex-emoji {
+  display: inline-block;
+  vertical-align: bottom;
+  width: 1.35em;
+  height: 1.35em;
+  background-size: 100%;
+  background-repeat: no-repeat; }
+
 .ui-dialog .emojidex-loading-icon {
   display: inline-block;
   vertical-align: bottom;

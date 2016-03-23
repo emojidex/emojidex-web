@@ -7,6 +7,10 @@
   background-repeat: no-repeat;
 }
 
+img.emojidex-emoji {
+  @include emoji;
+}
+
 .ui-dialog {
   .emojidex-loading-icon {
     @include emoji;
