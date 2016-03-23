@@ -1,5 +1,12 @@
 module.exports = (grunt) ->
-  path = require('path')
+  path = require 'path'
+
+  dotenv = require 'dotenv'
+  dotenv.config()
+
+  data_path = process.env.DATA_PATH
+  unless data_path?
+    data_path = 'build/spec/helper/data.js'
 
   grunt.getLicense = (licenses_json) ->
     licenses = grunt.file.readJSON licenses_json
@@ -120,20 +127,36 @@ module.exports = (grunt) ->
         setGruntConfig_getTask(getDefineUsePattern filepath, define_list)
 
       'slim': (filepath) ->
-        define_slim =
-          config:
-            prop: ['slim', 'esteWatch']
-            value:
-              files: [
-                expand: true
-                flatten: true
-                src: filepath
-                dest: 'dist/'
-                ext: '.html'
-              ]
-          task: ['slim:esteWatch', 'md2html']
+        define_list =
+          dist:
+            pattern: 'src/slim/**/*'
+            config:
+              prop: ['slim', 'esteWatch']
+              value:
+                files: [
+                  expand: true
+                  flatten: true
+                  src: filepath
+                  dest: 'dist/'
+                  ext: '.html'
+                ]
+            task: ['slim:esteWatch', 'md2html']
 
-        setGruntConfig_getTask define_slim
+          spec:
+            pattern: 'spec/fixture/**/*'
+            config:
+              prop: ['slim', 'esteWatch']
+              value:
+                files: [
+                  expand: true
+                  flatten: true
+                  src: filepath
+                  dest: 'build/spec/fixture/'
+                  ext: '.html'
+                ]
+            task: ['slim:esteWatch']
+
+        setGruntConfig_getTask(getDefineUsePattern filepath, define_list)
 
       'scss': (filepath) ->
         define_sass =
@@ -182,22 +205,35 @@ module.exports = (grunt) ->
             options: {}
 
     jasmine:
-      all:
+      coverage:
         src: [
-          'dist/js/*.min.js'
+          'dist/js/emojidex.js'
         ]
         options:
-          specs: [
-            'build/spec/**/*.js'
-          ]
-
+          specs: 'build/spec/**/*.js'
+          template: require('grunt-template-jasmine-istanbul')
+          templateOptions:
+            coverage: 'build/spec/coverage/coverage.json'
+            report: [
+              {
+                type: 'html'
+                options: dir: 'build/spec/coverage/html'
+              }
+              {
+                type: 'cobertura'
+                options: dir: 'build/spec/coverage/cobertura'
+              }
+              { type: 'text-summary' }
+            ]
       options:
         keepRunner: true
         outfile: 'build/_SpecRunner.html'
         vendor:[
           'node_modules/jquery/dist/jquery.min.js'
+          'node_modules/jquery-watch/jquery-watch.min.js'
         ]
         helpers:[
+          'build/spec/helper/*.js'
           'node_modules/jasmine-jquery/lib/jasmine-jquery.js'
         ]
 
@@ -232,9 +268,8 @@ module.exports = (grunt) ->
 
       spec:
         expand: true
-        flatten: true
         cwd: 'spec/'
-        src: ['*.coffee']
+        src: ['**/*.coffee']
         dest: 'build/spec/'
         ext: '.js'
 
@@ -251,12 +286,20 @@ module.exports = (grunt) ->
     slim:
       options:
         pretty: true
-      dsit:
+      dist:
         files: [
           expand: true
           cwd: 'src/slim/'
           src: '*.slim'
           dest: 'dist/'
+          ext: '.html'
+        ]
+      spec:
+        files: [
+          expand: true
+          cwd: 'spec/fixture/'
+          src: '*.slim'
+          dest: 'build/spec/fixture/'
           ext: '.html'
         ]
 

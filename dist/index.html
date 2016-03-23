@@ -8,7 +8,7 @@
     <meta content="width=device-width" name="viewport" />
     <link href="css/bootstrap_and_override.min.css" rel="stylesheet" />
     <link href="css/emojidex.min.css" rel="stylesheet" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="//code.jquery.com/jquery-2.2.1.min.js"></script>
     <script src="js/emojidex.js"></script>
     <script>
       (function() {
@@ -67,6 +67,55 @@
           <h1>
             emojidex-web examples
           </h1>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <h3>
+            emojidexReplace :kissing_heart:
+          </h3>
+          <hr class="mt-s mb-m" />
+          <div class="emojidex_replace">
+            Auto Replace examples.<br />(Check the <a href="https://github.com/emojidex/emojidex-web/blob/master/dist/index.html" target="_blank">HTML</a> or <a href="https://github.com/emojidex/emojidex-web/blob/master/src/slim/index.slim" target="_blank">SLIM</a> sources)<br /><br />
+            <h5>
+              UTF moji codes to emoji:
+            </h5>
+            ❤🛅😄😡💌😈👍#️⃣
+            <h5 class="mt-xl">
+              :code: to emoji:
+            </h5>
+            ❤:octopus::boar::frog:\:hand_salute: no_match:😄::no match::heart eyes(wh):
+          </div>
+        </div>
+      </div>
+      <div class="row mt-xl">
+        <div class="col-md-12">
+          <h3>
+            emojidexAutocomplete :laughing:
+          </h3>
+          <hr class="mt-s mb-mß" />
+          <div class="row mt-m">
+            <div class="col-md-12">
+              <h4>
+                Plain Text
+              </h4>
+              <form role="form">
+                <div class="form-groupß">
+                  <textarea class="emojidex-plain_text form-control" rows="5">Try typing a colon and the start of a word to start a code search, like ":tes".</textarea>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <h4>
+                Content Editable
+              </h4>
+              <div class="emojidex-content_editable inputor" contenteditable="true">
+                Try typing a colon and the start of a word to start a code search, like ":tes".
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="row">

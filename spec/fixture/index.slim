@@ -7,23 +7,8 @@ html
     meta content="" name="description"
     meta content="width=device-width" name="viewport"
 
-    link href="css/bootstrap_and_override.min.css" rel="stylesheet"
-    link href="css/emojidex.min.css" rel="stylesheet"
-
-    script src="//code.jquery.com/jquery-2.2.1.min.js"
-    script src="js/emojidex.js"
-
-    coffee:
-      $(document).ready ->
-        $("body").emojidexReplace
-          onComplete: (element) ->
-            console.log 'Completed emojidexReplace!!'
-
-        $(".emojidex-plain_text").emojidexAutocomplete()
-        $(".emojidex-content_editable").emojidexAutocomplete()
-
-        $("#pallet-btn").emojidexPallet()
-        return
+    link href="../../../dist/css/bootstrap_and_override.min.css" rel="stylesheet"
+    link href="../../../dist/css/emojidex.min.css" rel="stylesheet"
 
   body
     .container
@@ -31,7 +16,7 @@ html
         .container
           .navbar-header
             a href="#"
-              img src="img/logo.png"
+              img src="../../../dist/img/logo.png"
             button.navbar-toggle.collapsed data-target="#navbar-top" data-toggle="collapse" type="button"
               span.sr-only Toggle navigation
               span.icon-bar
@@ -52,7 +37,7 @@ html
               p
                 | emojidex emoji and emojidex  2013 - 2015 Genshin Souzou Kabushiki Kaisha [Phantom Creation Inc.]
               a href="https://www.emojidex.com"
-                img.mt-l.mb-xl src="img/logo.png"
+                img.mt-l.mb-xl src="../../../dist/img/logo.png"
               br
               | Email:
               '
@@ -106,12 +91,12 @@ html
               form role="form"
                 .form-groupß
                   textarea.emojidex-plain_text.form-control rows="5"
-                    | Try typing a colon and the start of a word to start a code search, like ":tes".
+                    | :face
           .row
             .col-md-12
               h4 Content Editable
               .emojidex-content_editable.inputor contenteditable="true"
-                | Try typing a colon and the start of a word to start a code search, like ":tes".
+                | :face
 
       .row
         .col-md-12

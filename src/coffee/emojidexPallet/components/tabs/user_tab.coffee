@@ -41,18 +41,33 @@ class UserTab
     @tab_content.prepend $ '<div id="login-error"><span style="color:red">ログインに失敗しました。</span><div>'
 
   hideLoginForm: ->
+    $('#pallet-emoji-username-input').val('')
+    $('#pallet-emoji-password-input').val('')
     $('#pallet-emoji-username-input').hide()
     $('#pallet-emoji-password-input').hide()
     $('#pallet-emoji-login-submit').hide()
 
+  showLoginForm: ->
+    $('#pallet-emoji-username-input').show()
+    $('#pallet-emoji-password-input').show()
+    $('#pallet-emoji-login-submit').show()
+
   setUserTab: ->
-    user_tab_list = $ '<ul class="nav nav-tabs mb-m mt-m"></ul>'
+    user_tab_list = $ '<ul class="nav nav-tabs mb-m mt-m" id="user_tab_list"></ul>'
     user_tab_list.append $ '<li id="tab-user-history" class="active"><a href="#tab-content-user-history" data-toggle="tab">History</a></li>'
     user_tab_list.append $ '<li id="tab-user-favorite"><a href="#tab-content-user-favorite" data-toggle="tab">Favorite</a></li>'
     user_tab_list.append $ '<li id="tab-user-newest"><a href="#tab-content-user-newest" data-toggle="tab">Newest</a></li>'
     user_tab_list.append $ '<li id="tab-user-popular"><a href="#tab-content-user-popular" data-toggle="tab">Popular</a></li>'
 
-    @user_tab_content = $ '<div class="tab-content"></div>'
+    logout_btn = $ '<button class="btn btn-default btm-sm pull-right" id="pallet-emoji-logout">LogOut</button>'
+    logout_btn.click =>
+      @pallet.ec.User.logout()
+      $('#user_tab_list').remove()
+      $('#user_tab_content').remove()
+      @showLoginForm()
+    user_tab_list.append logout_btn
+
+    @user_tab_content = $ '<div class="tab-content" id="user_tab_content"></div>'
 
     @tab_content.append user_tab_list
     @tab_content.append @user_tab_content
@@ -66,7 +81,7 @@ class UserTab
       @setData(response.emoji, response.meta, 'favorite')
 
   setData: (data, meta, kind) ->
-    tab_pane = $ "<div class='tab-pane #{'active' if kind is 'history'}' id='tab-content-user-#{kind}'></div>"
+    tab_pane = $ "<div class='tab-pane #{if kind is 'history' then 'active' else ''}' id='tab-content-user-#{kind}'></div>"
     tab_pane.append @pallet.setEmojiList(kind, data)
     @user_tab_content.append tab_pane
 

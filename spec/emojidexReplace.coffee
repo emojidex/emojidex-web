@@ -1,5 +1,12 @@
 describe "emojidexReplace", ->
+  beforeEach ->
+    helperBefore()
 
-  it "Defined emojidexReplace ?", ->
-    jquery = new $
-    expect(jquery.emojidexReplace).toBeDefined()
+  afterAll ->
+    helperAfter()
+
+  it 'replace to emojidex-emoji', (done) ->
+    $('body').emojidexReplace
+      onComplete: (element) ->
+        expect($('.emojidex_replace')).toContainElement('img.emojidex-emoji')
+        done()
