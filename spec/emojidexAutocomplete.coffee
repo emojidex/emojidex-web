@@ -8,16 +8,19 @@ describe "emojidexAutocomplete", ->
   it 'show autocomplete view (If this spec failed, test in browser.)', (done) ->
     plan_text = $('.emojidex-plain_text').emojidexAutocomplete()
     atwho_view = $('.atwho-view')
-    expect(atwho_view).toHaveCss({display: 'none'})
-
-    simulateTypingIn plan_text
 
     spec_timer
-      time: 3000
+      time: 1
       callback: ->
-        atwho_view = $('.atwho-view')
-        expect(atwho_view.css('display')).toEqual('block')
-        done()
+        expect(atwho_view.css('display')).toEqual('none')
+        simulateTypingIn plan_text
+
+        spec_timer
+          time: 3000
+          callback: ->
+            atwho_view = $('.atwho-view')
+            expect(atwho_view.css('display')).toEqual('block')
+            done()
 
   it 'insert the text to emojidex-plain_text', ->
     text = $($('.atwho-view ul li')[0]).data('value')

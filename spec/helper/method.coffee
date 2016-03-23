@@ -1,7 +1,6 @@
 @helperBefore = ->
   jasmine.getFixtures().fixturesPath = '../build/spec/fixture/'
-  # loadFixtures('index.html')
-  $('body').append("<div id='spec-wrap'>#{readFixtures 'index.html'}</div>");
+  $('body').append "<div id='spec-wrap'>#{readFixtures 'index.html'}</div>"
 
 @helperAfter = ->
   $('#spec-wrap').remove()
