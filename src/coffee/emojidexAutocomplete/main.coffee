@@ -24,7 +24,7 @@ do ($ = jQuery, window, document) ->
 
       # start: Plugin --------
       @autocomplete = new AutoComplete @
-      @autocomplete.setAutoComplete()
+      # @autocomplete.setAutoComplete()
 
   $.fn[pluginName] = (options) ->
     @each ->

@@ -1,6 +1,9 @@
 class AutoComplete
     constructor: (@plugin) ->
       @searching_num = 0
+      @EC = new EmojidexClient
+        onReady: (EC) =>
+          @setAutoComplete()
 
     setAutoComplete: ->
       setAtwho = (at_options) =>
@@ -23,11 +26,11 @@ class AutoComplete
 
         # start: setSearchedEmojiData --------
         num = ++@searching_num
-        ec.Search.search(match_string, (response) =>
+        @EC.Search.search(match_string, (response) =>
 
-          searched_data = for emoji in ec.Search.results
+          searched_data = for emoji in @EC.Search.results
             code: emoji.code.replace(/\s/g, '_')
-            img_url: "#{ec.cdn_url}#{ec.size_code}/#{emoji.code.replace /\s/g, '_'}.png"
+            img_url: "#{@EC.cdn_url}#{@EC.size_code}/#{emoji.code.replace /\s/g, '_'}.png"
 
           if @searching_num == num
             updateAtwho(searched_data, at_obj) if searched_data.length
@@ -56,7 +59,6 @@ class AutoComplete
         li.replace regexp, (str, $1, $2, $3) -> "> #{$1}<strong>#{$2}</strong>#{$3} <"
 
       # start: setAutoComplete --------
-      ec = new EmojidexClient
       at_init =
         at: ':'
         suffix: ''

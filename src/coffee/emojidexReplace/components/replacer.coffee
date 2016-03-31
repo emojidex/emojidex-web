@@ -6,7 +6,7 @@ class Replacer
     @regexpCode = RegExp ":([^\\s#{ignore}][^#{ignore}]*[^\\s#{ignore}]):|:([^\\s#{ignore}]):", 'g'
 
   getEmojiTag: (emoji_code) ->
-    "<img class='emojidex-emoji' src='#{@plugin.ec.cdn_url}#{@plugin.ec.size_code}/#{emoji_code}.png' title='#{@replaceUnderToSpace emoji_code}'></img>"
+    "<img class='emojidex-emoji' src='#{@plugin.EC.cdn_url}#{@plugin.EC.size_code}/#{emoji_code}.png' title='#{@replaceUnderToSpace emoji_code}'></img>"
 
   getLoadingTag: (emoji_data, type) ->
     "<div class='emojidex-loading-icon' data-emoji='#{emoji_data}' data-type='#{type}'></div>"

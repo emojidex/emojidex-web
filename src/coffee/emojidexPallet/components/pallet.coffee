@@ -1,13 +1,14 @@
 class Pallet
   constructor: (@plugin) ->
     @ec = new EmojidexClient
-    @clipboard = new Clipboard '.emoji-btn'
+      onReady: (EC) =>
+        @clipboard = new Clipboard '.emoji-btn'
 
-    # @login_service = new LoginService @
+        # @login_service = new LoginService @
 
-    # start main --------
-    @createDialog()
-    @setPallet @plugin.element
+        # start main --------
+        @createDialog()
+        @setPallet @plugin.element
 
   createDialog: ->
     @dialog = $ '<div id="emojidex-dialog"></div>'

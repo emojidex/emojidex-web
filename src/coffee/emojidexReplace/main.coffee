@@ -27,38 +27,38 @@ do ($ = jQuery, window, document) ->
       @_defaults = defaults
       @_name = pluginName
 
-      @ec = new EmojidexClient
+      @EC = new EmojidexClient
+        onReady: (EC) =>
+          if @checkUpdate()
+            $.ajax
+              url: @EC.api_url + 'moji_codes'
+              dataType: 'json'
+              success: (response) =>
+                regexp = response.moji_array.join('|')
+                @options.regexpUtf = RegExp regexp, 'g'
+                @options.utfEmojiData = response.moji_index
 
-      if @checkUpdate()
-        @options.regexpUtf = RegExp @ec.Data.storage.get('emojidex.regexpUtf'), 'g'
-        @options.utfEmojiData = @ec.Data.storage.get 'emojidex.utfEmojiData'
-        @replace()
-      else
-        $.ajax
-          url: @ec.api_url + 'moji_codes'
-          dataType: 'json'
-          success: (response) =>
-            @ec.Data.storage.set 'emojidex.utfInfoUpdated', new Date().toString()
-
-            regexp = response.moji_array.join('|')
-            @ec.Data.storage.set 'emojidex.regexpUtf', regexp
-            @options.regexpUtf = RegExp regexp, 'g'
-
-            @ec.Data.storage.set 'emojidex.utfEmojiData', response.moji_index
-            @options.utfEmojiData = response.moji_index
-
+                @EC.Data.storage.update('emojidex.utfInfoUpdated', new Date().toString()).then( =>
+                  return @EC.Data.storage.update 'emojidex.regexpUtf', regexp
+                ).then( =>
+                  return @EC.Data.storage.update 'emojidex.utfEmojiData', response.moji_index
+                ).then =>
+                  @replace()
+          else
+            @options.regexpUtf = RegExp @EC.Data.storage.get('emojidex.regexpUtf'), 'g'
+            @options.utfEmojiData = @EC.Data.storage.get 'emojidex.utfEmojiData'
             @replace()
 
     checkUpdate: ->
-      if @ec.Data.storage.isSet 'emojidex.utfInfoUpdated'
+      if @EC.Data.storage.isSet 'emojidex.utfInfoUpdated'
         current = new Date
-        updated = new Date @ec.Data.storage.get 'emojidex.utfInfoUpdated'
-        if current - updated <= 3600000 * 48
+        updated = new Date @EC.Data.storage.get 'emojidex.utfInfoUpdated'
+        if current - updated >= 3600000 * 48
           return true
         else
           return false
       else
-        return false
+        return true
 
     replace: ->
       @replacer = new ReplacerSearch @

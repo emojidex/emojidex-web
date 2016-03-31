@@ -6,7 +6,7 @@ class ReplacerSearch extends Replacer
     # for useLoadingImg: true --------
     searchEmoji_setEmojiTag = (element) =>
       replaceToEmojiIcon = (type, loading_element, emoji_code) =>
-        emoji_image = $("<img src='#{@plugin.ec.cdn_url}#{@plugin.ec.size_code}/#{emoji_code}.png'></img>")
+        emoji_image = $("<img src='#{@plugin.EC.cdn_url}#{@plugin.EC.size_code}/#{emoji_code}.png'></img>")
         emoji_image.load (e) =>
           @fadeOutLoadingTag_fadeInEmojiTag loading_element, emoji_code
         emoji_image.error (e) =>
@@ -70,7 +70,7 @@ class ReplacerSearch extends Replacer
           searches++
         text.replace @regexpCode, (matched_string) =>
           matched_code = matched_string.replace /\:/g, ''
-          emoji_image = $("<img src='#{@plugin.ec.cdn_url}#{@plugin.ec.size_code}/#{@replaceSpaceToUnder matched_code}.png'></img>")
+          emoji_image = $("<img src='#{@plugin.EC.cdn_url}#{@plugin.EC.size_code}/#{@replaceSpaceToUnder matched_code}.png'></img>")
           emoji_image.load (e) =>
             searches--
             code_emoji.push

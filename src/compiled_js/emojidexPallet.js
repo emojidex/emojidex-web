@@ -43,11 +43,15 @@
 
   Pallet = (function() {
     function Pallet(plugin) {
+      var _this = this;
       this.plugin = plugin;
-      this.ec = new EmojidexClient;
-      this.clipboard = new Clipboard('.emoji-btn');
-      this.createDialog();
-      this.setPallet(this.plugin.element);
+      this.ec = new EmojidexClient({
+        onReady: function(EC) {
+          _this.clipboard = new Clipboard('.emoji-btn');
+          _this.createDialog();
+          return _this.setPallet(_this.plugin.element);
+        }
+      });
     }
 
     Pallet.prototype.createDialog = function() {

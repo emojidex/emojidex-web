@@ -33,41 +33,47 @@
         this.options = $.extend({}, defaults, options);
         this._defaults = defaults;
         this._name = pluginName;
-        this.ec = new EmojidexClient;
-        if (this.checkUpdate()) {
-          this.options.regexpUtf = RegExp(this.ec.Data.storage.get('emojidex.regexpUtf'), 'g');
-          this.options.utfEmojiData = this.ec.Data.storage.get('emojidex.utfEmojiData');
-          this.replace();
-        } else {
-          $.ajax({
-            url: this.ec.api_url + 'moji_codes',
-            dataType: 'json',
-            success: function(response) {
-              var regexp;
-              _this.ec.Data.storage.set('emojidex.utfInfoUpdated', new Date().toString());
-              regexp = response.moji_array.join('|');
-              _this.ec.Data.storage.set('emojidex.regexpUtf', regexp);
-              _this.options.regexpUtf = RegExp(regexp, 'g');
-              _this.ec.Data.storage.set('emojidex.utfEmojiData', response.moji_index);
-              _this.options.utfEmojiData = response.moji_index;
+        this.EC = new EmojidexClient({
+          onReady: function(EC) {
+            if (_this.checkUpdate()) {
+              return $.ajax({
+                url: _this.EC.api_url + 'moji_codes',
+                dataType: 'json',
+                success: function(response) {
+                  var regexp;
+                  regexp = response.moji_array.join('|');
+                  _this.options.regexpUtf = RegExp(regexp, 'g');
+                  _this.options.utfEmojiData = response.moji_index;
+                  return _this.EC.Data.storage.update('emojidex.utfInfoUpdated', new Date().toString()).then(function() {
+                    return _this.EC.Data.storage.update('emojidex.regexpUtf', regexp);
+                  }).then(function() {
+                    return _this.EC.Data.storage.update('emojidex.utfEmojiData', response.moji_index);
+                  }).then(function() {
+                    return _this.replace();
+                  });
+                }
+              });
+            } else {
+              _this.options.regexpUtf = RegExp(_this.EC.Data.storage.get('emojidex.regexpUtf'), 'g');
+              _this.options.utfEmojiData = _this.EC.Data.storage.get('emojidex.utfEmojiData');
               return _this.replace();
             }
-          });
-        }
+          }
+        });
       }
 
       Plugin.prototype.checkUpdate = function() {
         var current, updated;
-        if (this.ec.Data.storage.isSet('emojidex.utfInfoUpdated')) {
+        if (this.EC.Data.storage.isSet('emojidex.utfInfoUpdated')) {
           current = new Date;
-          updated = new Date(this.ec.Data.storage.get('emojidex.utfInfoUpdated'));
-          if (current - updated <= 3600000 * 48) {
+          updated = new Date(this.EC.Data.storage.get('emojidex.utfInfoUpdated'));
+          if (current - updated >= 3600000 * 48) {
             return true;
           } else {
             return false;
           }
         } else {
-          return false;
+          return true;
         }
       };
 
@@ -97,7 +103,7 @@
     }
 
     Replacer.prototype.getEmojiTag = function(emoji_code) {
-      return "<img class='emojidex-emoji' src='" + this.plugin.ec.cdn_url + this.plugin.ec.size_code + "/" + emoji_code + ".png' title='" + (this.replaceUnderToSpace(emoji_code)) + "'></img>";
+      return "<img class='emojidex-emoji' src='" + this.plugin.EC.cdn_url + this.plugin.EC.size_code + "/" + emoji_code + ".png' title='" + (this.replaceUnderToSpace(emoji_code)) + "'></img>";
     };
 
     Replacer.prototype.getLoadingTag = function(emoji_data, type) {
@@ -233,7 +239,7 @@
         var emoji, loading_element, loading_elements, replaceToEmojiIcon, _i, _len, _results;
         replaceToEmojiIcon = function(type, loading_element, emoji_code) {
           var emoji_image;
-          emoji_image = $("<img src='" + _this.plugin.ec.cdn_url + _this.plugin.ec.size_code + "/" + emoji_code + ".png'></img>");
+          emoji_image = $("<img src='" + _this.plugin.EC.cdn_url + _this.plugin.EC.size_code + "/" + emoji_code + ".png'></img>");
           emoji_image.load(function(e) {
             return _this.fadeOutLoadingTag_fadeInEmojiTag(loading_element, emoji_code);
           });
@@ -323,7 +329,7 @@
           return text.replace(_this.regexpCode, function(matched_string) {
             var emoji_image, matched_code;
             matched_code = matched_string.replace(/\:/g, '');
-            emoji_image = $("<img src='" + _this.plugin.ec.cdn_url + _this.plugin.ec.size_code + "/" + (_this.replaceSpaceToUnder(matched_code)) + ".png'></img>");
+            emoji_image = $("<img src='" + _this.plugin.EC.cdn_url + _this.plugin.EC.size_code + "/" + (_this.replaceSpaceToUnder(matched_code)) + ".png'></img>");
             emoji_image.load(function(e) {
               searches--;
               code_emoji.push({
