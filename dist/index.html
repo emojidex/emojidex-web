@@ -13,13 +13,18 @@
     <script src="js/emojidex.js"></script>
     <script>
       (function() {
-        $(document).ready(function() {
-          $("body").emojidexReplace({
-            onComplete: function(element) {
-              return console.log('Completed emojidexReplace!!');
-            }
-          });
-        });
+        $(document).ready((function(_this) {
+          return function() {
+            $("body").emojidexReplace({
+              onComplete: function(element) {
+                return console.log('Completed emojidexReplace!!');
+              }
+            });
+            $(".emojidex-plain_text").emojidexAutocomplete();
+            $(".emojidex-content_editable").emojidexAutocomplete();
+            $("#pallet-btn").emojidexPallet();
+          };
+        })(this));
       
       }).call(this);
       

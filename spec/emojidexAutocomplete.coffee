@@ -2,8 +2,8 @@ describe "emojidexAutocomplete", ->
   beforeAll ->
     helperBefore()
 
-  # afterAll ->
-  #   helperAfter()
+  afterAll ->
+    helperAfter()
 
   it 'show autocomplete view (If this spec failed, test in browser.)', (done) ->
     plan_text = $('.emojidex-plain_text').emojidexAutocomplete
@@ -30,7 +30,7 @@ describe "emojidexAutocomplete", ->
     content_editable = $('.emojidex-content_editable').emojidexAutocomplete
       onComplete: =>
         simulateTypingIn content_editable
-         spec_timer
+        spec_timer
           time: 3000
           callback: ->
             text = $($('.atwho-view ul li')[0]).data('value')

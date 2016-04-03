@@ -15,15 +15,15 @@ html
     script src="js/emojidex.js"
 
     coffee:
-      $(document).ready ->
+      $(document).ready =>
         $("body").emojidexReplace
           onComplete: (element) ->
             console.log 'Completed emojidexReplace!!'
 
-        # $(".emojidex-plain_text").emojidexAutocomplete()
-        # $(".emojidex-content_editable").emojidexAutocomplete()
+        $(".emojidex-plain_text").emojidexAutocomplete()
+        $(".emojidex-content_editable").emojidexAutocomplete()
 
-        # $("#pallet-btn").emojidexPallet()
+        $("#pallet-btn").emojidexPallet()
         return
 
   body

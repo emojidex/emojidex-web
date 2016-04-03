@@ -1,6 +1,7 @@
 class Pallet
   constructor: (@plugin) ->
     @EC = new EmojidexClient
+      storageHubPath: 'https://www.emojidex.com/hub?pallet'
       onReady: (EC) =>
         @clipboard = new Clipboard '.emoji-btn'
 
@@ -9,6 +10,8 @@ class Pallet
         # start main --------
         @createDialog()
         @setPallet @plugin.element
+
+        @plugin.options.onComplete?()
 
   createDialog: ->
     @dialog = $ '<div id="emojidex-dialog"></div>'

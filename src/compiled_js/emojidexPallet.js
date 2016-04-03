@@ -47,10 +47,13 @@
       var _this = this;
       this.plugin = plugin;
       this.EC = new EmojidexClient({
+        storageHubPath: 'https://www.emojidex.com/hub?pallet',
         onReady: function(EC) {
+          var _base;
           _this.clipboard = new Clipboard('.emoji-btn');
           _this.createDialog();
-          return _this.setPallet(_this.plugin.element);
+          _this.setPallet(_this.plugin.element);
+          return typeof (_base = _this.plugin.options).onComplete === "function" ? _base.onComplete() : void 0;
         }
       });
     }
@@ -158,7 +161,7 @@
 
     CategoryTab.prototype.setCategory = function(category_name) {
       if (this.tab_data != null) {
-        return this.pallet.ec.Categories.called_data = this.tab_data;
+        return this.pallet.EC.Categories.called_data = this.tab_data;
       } else {
         return this.setCategoryTabContent(category_name);
       }
@@ -166,22 +169,22 @@
 
     CategoryTab.prototype.setCategoryTabContent = function(category_name) {
       var _this = this;
-      return this.pallet.ec.Categories.getEmoji(category_name, function(result_emoji) {
+      return this.pallet.EC.Categories.getEmoji(category_name, function(result_emoji) {
         var cur_page, max_page, next_func, prev_func;
-        _this.tab_data = _this.pallet.ec.Categories.called_data;
+        _this.tab_data = _this.pallet.EC.Categories.called_data;
         _this.tab_content.find('.category-emoji-list').remove();
         _this.tab_content.find('.category-pagination').remove();
         _this.tab_content.append(_this.pallet.setEmojiList('category', result_emoji));
-        cur_page = _this.pallet.ec.Categories.meta.total_count === 0 ? 0 : _this.pallet.ec.Categories.cur_page;
-        max_page = Math.floor(_this.pallet.ec.Categories.meta.total_count / _this.pallet.ec.options.limit);
-        if (_this.pallet.ec.Categories.meta.total_count % _this.pallet.ec.options.limit > 0) {
+        cur_page = _this.pallet.EC.Categories.meta.total_count === 0 ? 0 : _this.pallet.EC.Categories.cur_page;
+        max_page = Math.floor(_this.pallet.EC.Categories.meta.total_count / _this.pallet.EC.options.limit);
+        if (_this.pallet.EC.Categories.meta.total_count % _this.pallet.EC.options.limit > 0) {
           max_page++;
         }
         prev_func = function() {
-          return _this.pallet.ec.Categories.prev();
+          return _this.pallet.EC.Categories.prev();
         };
         next_func = function() {
-          return _this.pallet.ec.Categories.next();
+          return _this.pallet.EC.Categories.next();
         };
         return _this.tab_content.append(_this.pallet.setPagination('category', prev_func, next_func, cur_page, max_page));
       });
@@ -225,21 +228,21 @@
 
     SearchTab.prototype.search = function(search_word) {
       var _this = this;
-      return this.pallet.ec.Search.search(search_word, function(result_emoji) {
+      return this.pallet.EC.Search.search(search_word, function(result_emoji) {
         var cur_page, max_page, next_func, prev_func;
         $('.search-emoji-list').remove();
         $('.search-pagination').remove();
         _this.tab_content.append(_this.pallet.setEmojiList('search', result_emoji));
-        cur_page = _this.pallet.ec.Search.meta.total_count === 0 ? 0 : _this.pallet.ec.Search.cur_page;
-        max_page = Math.floor(_this.pallet.ec.Search.meta.total_count / _this.pallet.ec.options.limit);
-        if (_this.pallet.ec.Search.meta.total_count % _this.pallet.ec.options.limit > 0) {
+        cur_page = _this.pallet.EC.Search.meta.total_count === 0 ? 0 : _this.pallet.EC.Search.cur_page;
+        max_page = Math.floor(_this.pallet.EC.Search.meta.total_count / _this.pallet.EC.options.limit);
+        if (_this.pallet.EC.Search.meta.total_count % _this.pallet.EC.options.limit > 0) {
           max_page++;
         }
         prev_func = function() {
-          return _this.pallet.ec.Search.prev();
+          return _this.pallet.EC.Search.prev();
         };
         next_func = function() {
-          return _this.pallet.ec.Search.next();
+          return _this.pallet.EC.Search.next();
         };
         return _this.tab_content.append(_this.pallet.setPagination('search', prev_func, next_func, cur_page, max_page));
       });
@@ -285,7 +288,7 @@
 
     UserTab.prototype.login = function(username, password) {
       var _this = this;
-      return this.pallet.ec.User.plain_auth(username, password, function(auth_info) {
+      return this.pallet.EC.User.plain_auth(username, password, function(auth_info) {
         if (auth_info.status === 'verified') {
           _this.hideLoginForm();
           _this.setUserTab();
@@ -327,7 +330,7 @@
       user_tab_list.append($('<li id="tab-user-popular"><a href="#tab-content-user-popular" data-toggle="tab">Popular</a></li>'));
       logout_btn = $('<button class="btn btn-default btm-sm pull-right" id="pallet-emoji-logout">LogOut</button>');
       logout_btn.click(function() {
-        _this.pallet.ec.User.logout();
+        _this.pallet.EC.User.logout();
         $('#user_tab_list').remove();
         $('#user_tab_content').remove();
         return _this.showLoginForm();
@@ -340,14 +343,14 @@
 
     UserTab.prototype.setHistory = function(auth_info) {
       var _this = this;
-      return this.pallet.ec.User.History.get(function(response) {
+      return this.pallet.EC.User.History.get(function(response) {
         return _this.setData(response.history, response.meta, 'history');
       });
     };
 
     UserTab.prototype.setFavorite = function(auth_info) {
       var _this = this;
-      return this.pallet.ec.User.Favorites.get(function(response) {
+      return this.pallet.EC.User.Favorites.get(function(response) {
         return _this.setData(response.emoji, response.meta, 'favorite');
       });
     };
@@ -361,14 +364,14 @@
 
     UserTab.prototype.setNewest = function(auth_info) {
       var _this = this;
-      return this.pallet.ec.User.Newest.get(function(response) {
+      return this.pallet.EC.User.Newest.get(function(response) {
         return _this.setPremiumData(response, 'newest');
       });
     };
 
     UserTab.prototype.setPopular = function(auth_info) {
       var _this = this;
-      return this.pallet.ec.User.Popular.get(function(response) {
+      return this.pallet.EC.User.Popular.get(function(response) {
         return _this.setPremiumData(response, 'popular');
       });
     };
