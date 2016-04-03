@@ -12,6 +12,7 @@ class AutoComplete
         ).on('hidden.atwho', (e) ->
           $(e.currentTarget).atwho(at_options)
         )
+        @plugin.options.onComplete?()
 
       setSearchedEmojiData = (at_obj, match_string) =>
         updateAtwho = (searched_data, at_bak) ->

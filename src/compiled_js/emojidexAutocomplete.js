@@ -18,6 +18,7 @@
     var Plugin, defaults, pluginName;
     pluginName = "emojidexAutocomplete";
     defaults = {
+      onComplete: void 0,
       listLimit: 10,
       insertImg: true
     };
@@ -58,11 +59,13 @@
       var at_init, getMatchString, getRegexp, onHighlighter, setAtwho, setSearchedEmojiData,
         _this = this;
       setAtwho = function(at_options) {
-        return $(_this.plugin.element).atwho(at_options).on('reposition.atwho', function(e) {
+        var _base;
+        $(_this.plugin.element).atwho(at_options).on('reposition.atwho', function(e) {
           return $(e.currentTarget).atwho(at_options);
         }).on('hidden.atwho', function(e) {
           return $(e.currentTarget).atwho(at_options);
         });
+        return typeof (_base = _this.plugin.options).onComplete === "function" ? _base.onComplete() : void 0;
       };
       setSearchedEmojiData = function(at_obj, match_string) {
         var num, updateAtwho;
