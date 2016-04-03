@@ -13,6 +13,7 @@
 do ($ = jQuery, window, document) ->
   pluginName = "emojidexPallet"
   defaults =
+    onComplete: undefined
     switch_element: $("#pallet-btn")
 
   class Plugin

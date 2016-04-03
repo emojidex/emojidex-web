@@ -30,7 +30,7 @@ describe "emojidexAutocomplete", ->
     content_editable = $('.emojidex-content_editable').emojidexAutocomplete
       onComplete: =>
         simulateTypingIn content_editable
-        spec_timer
+         spec_timer
           time: 3000
           callback: ->
             text = $($('.atwho-view ul li')[0]).data('value')

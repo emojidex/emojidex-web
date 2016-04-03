@@ -369,6 +369,7 @@
     var Plugin, defaults, pluginName;
     pluginName = "emojidexPallet";
     defaults = {
+      onComplete: void 0,
       switch_element: $("#pallet-btn")
     };
     Plugin = (function() {
@@ -396,7 +397,7 @@
     function Pallet(plugin) {
       var _this = this;
       this.plugin = plugin;
-      this.ec = new EmojidexClient({
+      this.EC = new EmojidexClient({
         onReady: function(EC) {
           _this.clipboard = new Clipboard('.emoji-btn');
           _this.createDialog();
@@ -437,7 +438,7 @@
         } else {
           tab_list = $('<ul class="nav nav-pills"></ul>');
           tab_content = $('<div class="tab-content"></div>');
-          return _this.ec.Categories.sync(function(categories) {
+          return _this.EC.Categories.sync(function(categories) {
             var category, category_tab, search_tab, user_tab, _i, _len;
             for (_i = 0, _len = categories.length; _i < _len; _i++) {
               category = categories[_i];
@@ -468,7 +469,7 @@
       for (_i = 0, _len = result_emoji.length; _i < _len; _i++) {
         emoji = result_emoji[_i];
         code = (_ref = emoji.code) != null ? _ref : emoji.emoji_code;
-        emoji_list.append("<button class='emoji-btn btn btn-default pull-left' data-clipboard-text=':" + (code.replace(/\s/g, '_')) + ":'><img alt='" + code + "' title='" + code + "' class='img-responsive center-block' src='" + this.ec.cdn_url + "px32/" + (code.replace(/\s/g, '_')) + ".png'></img></button>");
+        emoji_list.append("<button class='emoji-btn btn btn-default pull-left' data-clipboard-text=':" + (code.replace(/\s/g, '_')) + ":'><img alt='" + code + "' title='" + code + "' class='img-responsive center-block' src='" + this.EC.cdn_url + "px32/" + (code.replace(/\s/g, '_')) + ".png'></img></button>");
       }
       return emoji_list;
     };

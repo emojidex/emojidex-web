@@ -25,7 +25,7 @@ class UserTab
       @login username, password
 
   login: (username, password) ->
-    @pallet.ec.User.plain_auth username, password, (auth_info) =>
+    @pallet.EC.User.plain_auth username, password, (auth_info) =>
       if auth_info.status == 'verified'
         @hideLoginForm()
         @setUserTab()
@@ -61,7 +61,7 @@ class UserTab
 
     logout_btn = $ '<button class="btn btn-default btm-sm pull-right" id="pallet-emoji-logout">LogOut</button>'
     logout_btn.click =>
-      @pallet.ec.User.logout()
+      @pallet.EC.User.logout()
       $('#user_tab_list').remove()
       $('#user_tab_content').remove()
       @showLoginForm()
@@ -73,11 +73,11 @@ class UserTab
     @tab_content.append @user_tab_content
 
   setHistory: (auth_info) ->
-    @pallet.ec.User.History.get (response) =>
+    @pallet.EC.User.History.get (response) =>
       @setData(response.history, response.meta, 'history')
 
   setFavorite: (auth_info) ->
-    @pallet.ec.User.Favorites.get (response) =>
+    @pallet.EC.User.Favorites.get (response) =>
       @setData(response.emoji, response.meta, 'favorite')
 
   setData: (data, meta, kind) ->
@@ -88,11 +88,11 @@ class UserTab
     # @setPagination(meta, tab_pane, kind)
 
   setNewest: (auth_info) ->
-    @pallet.ec.User.Newest.get (response) =>
+    @pallet.EC.User.Newest.get (response) =>
       @setPremiumData(response, 'newest')
 
   setPopular: (auth_info) ->
-    @pallet.ec.User.Popular.get (response) =>
+    @pallet.EC.User.Popular.get (response) =>
       @setPremiumData(response, 'popular')
 
   setPremiumData: (response, kind) ->

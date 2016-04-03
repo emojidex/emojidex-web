@@ -22,14 +22,14 @@ class SearchTab
       @search(search_word)
 
   search: (search_word) ->
-    @pallet.ec.Search.search search_word, (result_emoji) =>
+    @pallet.EC.Search.search search_word, (result_emoji) =>
       $('.search-emoji-list').remove()
       $('.search-pagination').remove()
       @tab_content.append @pallet.setEmojiList('search', result_emoji)
 
-      cur_page = if @pallet.ec.Search.meta.total_count is 0 then 0 else @pallet.ec.Search.cur_page
-      max_page = Math.floor @pallet.ec.Search.meta.total_count / @pallet.ec.options.limit
-      max_page++ if @pallet.ec.Search.meta.total_count % @pallet.ec.options.limit > 0
-      prev_func = => @pallet.ec.Search.prev()
-      next_func = => @pallet.ec.Search.next()
+      cur_page = if @pallet.EC.Search.meta.total_count is 0 then 0 else @pallet.EC.Search.cur_page
+      max_page = Math.floor @pallet.EC.Search.meta.total_count / @pallet.EC.options.limit
+      max_page++ if @pallet.EC.Search.meta.total_count % @pallet.EC.options.limit > 0
+      prev_func = => @pallet.EC.Search.prev()
+      next_func = => @pallet.EC.Search.next()
       @tab_content.append @pallet.setPagination('search', prev_func, next_func, cur_page, max_page)
