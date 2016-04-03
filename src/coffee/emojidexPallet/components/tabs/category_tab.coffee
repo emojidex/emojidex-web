@@ -13,8 +13,8 @@ class CategoryTab
       @setCategoryTabContent category_name
 
   setCategoryTabContent: (category_name)->
-    @pallet.EC.Categories.getEmoji category_name, (result_emoji) =>
-      @tab_data = @pallet.EC.Categories.called_data
+    @pallet.EC.Categories.getEmoji category_name, (result_emoji, called_data) =>
+      @tab_data = called_data
 
       @tab_content.find('.category-emoji-list').remove()
       @tab_content.find('.category-pagination').remove()

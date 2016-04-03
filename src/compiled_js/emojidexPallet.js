@@ -169,9 +169,9 @@
 
     CategoryTab.prototype.setCategoryTabContent = function(category_name) {
       var _this = this;
-      return this.pallet.EC.Categories.getEmoji(category_name, function(result_emoji) {
+      return this.pallet.EC.Categories.getEmoji(category_name, function(result_emoji, called_data) {
         var cur_page, max_page, next_func, prev_func;
-        _this.tab_data = _this.pallet.EC.Categories.called_data;
+        _this.tab_data = called_data;
         _this.tab_content.find('.category-emoji-list').remove();
         _this.tab_content.find('.category-pagination').remove();
         _this.tab_content.append(_this.pallet.setEmojiList('category', result_emoji));
