@@ -1,5 +1,5 @@
 /*
- * jQuery emojidex - v0.6.3
+ * jQuery emojidex - v0.7.0
  * emojidex plugin for jQuery/Zepto and compatible
  * https://github.com/emojidex/emojidex-web
  *
@@ -15,7 +15,7 @@
  *
  * Includes:
  * --------------------------------
- * emojidex client - v0.7.0-beta.7
+ * emojidex client - v0.7.0
  * * Provides search, index caching and combining and asset URI resolution
  * https://github.com/emojidex/emojidex-web-client
  *

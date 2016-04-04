@@ -1,6 +1,6 @@
 {
   "name": "emojidex",
-  "version": "0.6.3",
+  "version": "0.7.0",
   "title": "jQuery emojidex",
   "description": "emojidex plugin for jQuery/Zepto and compatible",
   "author": "emojidex",
@@ -18,7 +18,7 @@
   "devDependencies": {
     "bootstrap-sass": "^3.3.1",
     "dotenv": "^2.0.0",
-    "emojidex-client": "^0.7.0-beta.1",
+    "emojidex-client": "^0.7.0",
     "grunt": "~0.4.1",
     "grunt-cli": "~0.1.7",
     "grunt-contrib-coffee": "~0.7.0",
