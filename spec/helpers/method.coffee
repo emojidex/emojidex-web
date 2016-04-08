@@ -1,4 +1,5 @@
 @helperBefore = ->
+  jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000
   jasmine.getFixtures().fixturesPath = '../build/spec/fixture/'
   $('body').append "<div id='spec-wrap'>#{readFixtures 'index.html'}</div>"
 

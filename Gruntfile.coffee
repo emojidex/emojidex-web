@@ -6,7 +6,7 @@ module.exports = (grunt) ->
 
   data_path = process.env.DATA_PATH
   unless data_path?
-    data_path = 'build/spec/helper/data.js'
+    data_path = ''
 
   grunt.getLicense = (licenses_json) ->
     licenses = grunt.file.readJSON licenses_json
@@ -234,7 +234,9 @@ module.exports = (grunt) ->
           'node_modules/promise-polyfill/promise.min.js'
         ]
         helpers:[
-          'build/spec/helper/*.js'
+          'build/spec/helpers/method.js'
+          'build/spec/helpers/data.js'
+          data_path
           'node_modules/jasmine-jquery/lib/jasmine-jquery.js'
         ]
 
