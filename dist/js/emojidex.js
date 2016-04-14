@@ -1,5 +1,5 @@
 /*
- * jQuery emojidex - v0.8.0
+ * jQuery emojidex - v0.8.1
  * emojidex plugin for jQuery/Zepto and compatible
  * https://github.com/emojidex/emojidex-web
  *
@@ -767,7 +767,7 @@
     defaults = {
       onComplete: void 0,
       useLoadingImg: true,
-      ignore: 'script, style, iframe, textarea, pre, code',
+      ignore: 'script, style, iframe, input, textarea, pre, code',
       autoUpdate: false
     };
     Plugin = (function() {
