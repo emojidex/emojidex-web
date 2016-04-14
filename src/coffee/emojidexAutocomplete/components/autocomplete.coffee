@@ -64,9 +64,10 @@ class AutoComplete
         at: ':'
         suffix: ''
         limit: @plugin.options.listLimit
-        search_key: "code"
-        tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20'></img>${code}</li>"
-        insert_tpl: if @plugin.options.insertImg then "<img src='${img_url}' height='20' width='20' />" else ":${code}:"
+        searchKey: "code"
+        displayTpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20'></img>${code}</li>"
+        insertTpl: if false then "<img src='${img_url}' height='20' width='20' />" else ":${code}:"
+        # insertTpl: if @plugin.options.insertImg then "<img src='${img_url}' height='20' width='20' />" else ":${code}:"
         callbacks:
           highlighter: onHighlighter
           matcher: (flag, subtext, should_startWithSpace) ->

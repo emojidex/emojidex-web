@@ -134,9 +134,9 @@
         at: ':',
         suffix: '',
         limit: this.plugin.options.listLimit,
-        search_key: "code",
-        tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20'></img>${code}</li>",
-        insert_tpl: this.plugin.options.insertImg ? "<img src='${img_url}' height='20' width='20' />" : ":${code}:",
+        searchKey: "code",
+        displayTpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20'></img>${code}</li>",
+        insertTpl: false ? "<img src='${img_url}' height='20' width='20' />" : ":${code}:",
         callbacks: {
           highlighter: onHighlighter,
           matcher: function(flag, subtext, should_startWithSpace) {
