@@ -325,7 +325,7 @@ module.exports = (grunt) ->
           banner: '<%= meta.banner %><%= grunt.getLicense("build/licenses.json") %>\n */\n'
         src: [
           'bower_components/Caret.js/dist/jquery.caret.min.js'
-          'bower_components/At.js/dist/js/jquery.atwho.min.js'
+          'bower_components/At.js/dist/js/jquery.atwho.js'
           'node_modules/emojidex-client/dist/js/*.min.js'
           'node_modules/clipboard/dist/clipboard.min.js'
           'node_modules/bootstrap-sass/assets/javascripts/bootstrap/tab.js'
