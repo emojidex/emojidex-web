@@ -4,7 +4,7 @@ class SearchTab
     @tab_content = @getTabContent()
 
   getTabContent: ->
-    tab_content = $ '<div class="tab-pane" id="tab-content-search"><div class="input-group"><input type="text" name="search" id="pallet-emoji-search-input" class="form-control" placeholder="検索"><span class="input-group-btn"></span></div></div>'
+    tab_content = $ '<div class="tab-pane" id="tab-content-search"><div class="input-group"><input type="text" name="search" id="pallet-emoji-search-input" class="form-control" placeholder="Search emoji"><span class="input-group-btn"></span></div></div>'
     tab_content.find('#pallet-emoji-search-input').keypress (e) =>
       if e.keyCode is 13
         @searchEmojiInput()

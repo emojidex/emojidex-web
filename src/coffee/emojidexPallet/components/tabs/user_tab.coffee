@@ -14,6 +14,10 @@ class UserTab
       @checkInput()
     tab_content.append login_btn
 
+    if @pallet.EC.Data.storage.hub_cache?.emojidex?.auth_info?.status == 'verified'
+      auth_info = @pallet.EC.Data.storage.hub_cache.emojidex.auth_info
+      @login auth_info.user, auth_info.token, 'token'
+
     tab_content
 
   checkInput: ->
@@ -22,10 +26,10 @@ class UserTab
     username = $('#pallet-emoji-username-input').val()
     password = $('#pallet-emoji-password-input').val()
     if username.length > 0 && password.length > 0
-      @login username, password
+      @login username, password, 'plain'
 
-  login: (username, password) ->
-    @pallet.EC.User.plain_auth username, password, (auth_info) =>
+  login: (username, password, type) ->
+    callback = (auth_info) =>
       if auth_info.status == 'verified'
         @hideLoginForm()
         @setUserTab()
@@ -35,6 +39,11 @@ class UserTab
         @setPopular(auth_info)
       else
         @showError(auth_info)
+
+    if type == 'plain'
+      @pallet.EC.User.plain_auth username, password, (auth_info) -> callback(auth_info)
+    else
+      @pallet.EC.User.token_auth username, password, (auth_info) -> callback(auth_info)
 
   showError: (auth_info) ->
     # TODO: error text
