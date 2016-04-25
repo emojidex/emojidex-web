@@ -361,7 +361,7 @@ module.exports = (grunt) ->
         dest : 'dist/css/emojidex.min.css'
 
       bootstrap:
-        src : ['src/compiled_css/bootstrap_and_override.css']
+        src : ['src/compiled_css/document.css']
         dest : 'dist/css/document.min.css'
 
     save_license:
