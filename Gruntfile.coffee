@@ -282,7 +282,7 @@ module.exports = (grunt) ->
         expand: true
         cwd: 'src/sass/'
         src: ['*.sass', '*.scss']
-        dest: 'dist/css/'
+        dest: 'src/compiled_css/'
         ext: '.css'
        ]
 
@@ -337,11 +337,11 @@ module.exports = (grunt) ->
       emojidex_css:
         src: [
           'bower_components/At.js/dist/css/jquery.atwho.min.css'
-          'dist/css/emoji_pallet.css'
-          'dist/css/jquery-ui.css'
-          'dist/css/emojidex.css'
+          'src/compiled_css/emoji_pallet.css'
+          'src/compiled_css/jquery-ui.css'
+          'src/compiled_css/emojidex.css'
         ]
-        dest: 'dist/css/emojidex-concat.css'
+        dest: 'dist/css/emojidex.css'
 
     uglify:
       emojidex:
@@ -357,12 +357,12 @@ module.exports = (grunt) ->
 
     cssmin:
       emojidex:
-        src : ['dist/css/emojidex-concat.css']
+        src : ['dist/css/emojidex.css']
         dest : 'dist/css/emojidex.min.css'
 
       bootstrap:
-        src : ['dist/css/bootstrap_and_override.css']
-        dest : 'dist/css/bootstrap_and_override.min.css'
+        src : ['src/compiled_css/bootstrap_and_override.css']
+        dest : 'dist/css/document.min.css'
 
     save_license:
       dist:
