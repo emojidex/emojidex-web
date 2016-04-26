@@ -47,7 +47,7 @@ class UserTab
 
   showError: (auth_info) ->
     # TODO: error text
-    @tab_content.prepend $ '<div id="login-error"><span style="color:red">ログインに失敗しました。</span><div>'
+    @tab_content.prepend $ '<div id="login-error"><span style="color:red">You failed to login.</span><div>'
 
   hideLoginForm: ->
     $('#pallet-emoji-username-input').val('')
@@ -108,7 +108,7 @@ class UserTab
     tab_pane = $ "<div class='tab-pane' id='tab-content-user-#{kind}'></div>"
     if response.statusText is 'Payment Required'
       # TODO: text
-      tab_pane.append $ '<p style="margin-top:15px;"><a class="btn btn-primary" href="https://www.emojidex.com/profile">プレミアム・プロユーザーのみ閲覧できます。</a></p>'
+      tab_pane.append $ '<p style="margin-top:15px;"><a class="btn btn-primary" href="https://www.emojidex.com/profile" target="_blank">Premium/Pro user only.</a></p>'
     else
       tab_pane.append @pallet.setEmojiList(kind, response.emoji)
     @user_tab_content.append tab_pane

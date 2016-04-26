@@ -92,7 +92,7 @@ describe "emojidexPallet", ->
         callback: (data, i) ->
           if data.vals[0].match /login-error/
             # TODO: english text
-            expect($('#login-error span').text()).toBe 'ログインに失敗しました。'
+            expect($('#login-error span').text()).toBe 'You failed to login.'
             remove_watch $('#tab-content-user'), 'content_user'
             done()
 
@@ -162,7 +162,7 @@ describe "emojidexPallet", ->
         callback: ->
           if $('#tab-content-user-newest').length
             $('#tab-user-newest a').click()
-            expect($('#tab-content-user-newest').find('a').text()).toBe 'プレミアム・プロユーザーのみ閲覧できます。'
+            expect($('#tab-content-user-newest').find('a').text()).toBe 'Premium/Pro user only.'
             done()
           else
             spec_timer timer_option
