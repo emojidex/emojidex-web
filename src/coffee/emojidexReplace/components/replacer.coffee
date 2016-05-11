@@ -66,7 +66,6 @@ class Replacer
 
             if @plugin.options.autoUpdate
               @reloadEmoji()
-
       else
         @loadingNum--
 

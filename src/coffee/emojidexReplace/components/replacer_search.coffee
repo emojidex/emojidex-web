@@ -23,6 +23,7 @@ class ReplacerSearch extends Replacer
               $ loading_element
               @replaceSpaceToUnder loading_element.dataset.emoji.replace /:/g, ''
             )
+            break
           when 'utf'
             for emoji of @plugin.options.utfEmojiData
               if emoji is loading_element.dataset.emoji

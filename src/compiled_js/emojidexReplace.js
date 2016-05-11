@@ -254,7 +254,7 @@
           loading_element = loading_elements[_i];
           switch (loading_element.dataset.type) {
             case 'code':
-              _results.push(replaceToEmojiIcon(loading_element.dataset.type, $(loading_element), _this.replaceSpaceToUnder(loading_element.dataset.emoji.replace(/:/g, ''))));
+              replaceToEmojiIcon(loading_element.dataset.type, $(loading_element), _this.replaceSpaceToUnder(loading_element.dataset.emoji.replace(/:/g, '')));
               break;
             case 'utf':
               _results.push((function() {
