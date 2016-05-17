@@ -20,14 +20,15 @@ describe "emojidexAutocomplete", ->
             done()
 
   it 'insert the text to emojidex-plain_text', ->
-    text = $($('.atwho-view ul li')[0]).data('value')
+    text = $($('.atwho-view ul li')[0]).text().replace /\ /g, ''
     $($('.atwho-view ul li')[0]).click()
-    expect($('textarea.emojidex-plain_text').val()).toBe text
+    expect($('textarea.emojidex-plain_text').val()).toBe ":#{text}:"
 
     $('#atwho-container').remove()
 
   it 'insert the emoji image to emojidex-content_editable', (done) ->
     content_editable = $('.emojidex-content_editable').emojidexAutocomplete
+      insertImg: true
       onComplete: =>
         simulateTypingIn content_editable
         spec_timer
