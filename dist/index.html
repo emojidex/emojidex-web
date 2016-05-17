@@ -21,7 +21,9 @@
               }
             });
             $(".emojidex-plain_text").emojidexAutocomplete();
-            $(".emojidex-content_editable").emojidexAutocomplete();
+            $(".emojidex-content_editable").emojidexAutocomplete({
+              insertImg: true
+            });
             $("#pallet-btn").emojidexPallet();
           };
         })(this));

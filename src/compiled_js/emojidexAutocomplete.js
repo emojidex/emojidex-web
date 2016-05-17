@@ -12,7 +12,7 @@
 
 
 (function() {
-  var AutoComplete, OriginAutoComplete;
+  var AutoComplete;
 
   (function($, window, document) {
     var Plugin, defaults, pluginName;
@@ -20,7 +20,7 @@
     defaults = {
       onComplete: void 0,
       listLimit: 10,
-      insertImg: true
+      insertImg: false
     };
     Plugin = (function() {
       function Plugin(element, options) {
@@ -56,43 +56,6 @@
     }
 
     AutoComplete.prototype.setAutoComplete = function() {
-      var config, emojis, emojisList;
-      emojis = ['smile', 'iphone', 'girl', 'smiley', 'heart', 'kiss', 'copyright', 'coffee'];
-      emojisList = $.map(emojis, function(value, i) {
-        return {
-          'id': i,
-          'name': value
-        };
-      });
-      config = {
-        at: ':',
-        data: emojisList,
-        limit: this.plugin.options.listLimit,
-        searchKey: "name",
-        displayTpl: "<li><img src='http://a248.e.akamai.net/assets.github.com/images/icons/emoji/${name}.png' height='20' width='20'/> ${name} </li>",
-        insertTpl: ":${name}:"
-      };
-      $(this.plugin).atwho(config).atwho('run');
-      return console.log($(this.plugin));
-    };
-
-    return AutoComplete;
-
-  })();
-
-  OriginAutoComplete = (function() {
-    function OriginAutoComplete(plugin) {
-      var _this = this;
-      this.plugin = plugin;
-      this.searching_num = 0;
-      this.EC = new EmojidexClient({
-        onReady: function(EC) {
-          return _this.setAutoComplete();
-        }
-      });
-    }
-
-    OriginAutoComplete.prototype.setAutoComplete = function() {
       var at_init, getMatchString, getRegexp, onHighlighter, setAtwho, setSearchedEmojiData,
         _this = this;
       setAtwho = function(at_options) {
@@ -118,7 +81,7 @@
               }
             }
           };
-          return at_bak.$inputor.atwho($.extend({}, at_bak.setting, at_options)).atwho('run');
+          return at_bak.$inputor.atwho('destroy').atwho($.extend({}, at_bak.setting, at_options)).atwho('run');
         };
         num = ++_this.searching_num;
         _this.EC.Search.search(match_string, function(response) {
@@ -172,7 +135,7 @@
         suffix: '',
         limit: this.plugin.options.listLimit,
         searchKey: "code",
-        displayTpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20'></img>${code}</li>",
+        displayTpl: "<li><img src='${img_url}' height='20' width='20'></img>${code}</li>",
         insertTpl: this.plugin.options.insertImg ? "<img src='${img_url}' height='20' width='20' />" : ":${code}:",
         callbacks: {
           highlighter: onHighlighter,
@@ -188,7 +151,7 @@
       return setAtwho(at_init);
     };
 
-    return OriginAutoComplete;
+    return AutoComplete;
 
   })();
 

@@ -15,7 +15,7 @@ do ($ = jQuery, window, document) ->
   defaults =
     onComplete: undefined
     listLimit: 10
-    insertImg: true
+    insertImg: false
 
   class Plugin
     constructor: (@element, options) ->
