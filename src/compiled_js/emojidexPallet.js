@@ -204,7 +204,7 @@
     SearchTab.prototype.getTabContent = function() {
       var search_btn, tab_content,
         _this = this;
-      tab_content = $('<div class="tab-pane" id="tab-content-search"><div class="input-group"><input type="text" name="search" id="pallet-emoji-search-input" class="form-control" placeholder="検索"><span class="input-group-btn"></span></div></div>');
+      tab_content = $('<div class="tab-pane" id="tab-content-search"><div class="input-group"><input type="text" name="search" id="pallet-emoji-search-input" class="form-control" placeholder="Search emoji"><span class="input-group-btn"></span></div></div>');
       tab_content.find('#pallet-emoji-search-input').keypress(function(e) {
         if (e.keyCode === 13) {
           return _this.searchEmojiInput();
@@ -260,7 +260,7 @@
     }
 
     UserTab.prototype.getTabContent = function() {
-      var login_btn, tab_content,
+      var auth_info, login_btn, tab_content, _ref, _ref1, _ref2,
         _this = this;
       tab_content = $('<div class="tab-pane" id="tab-content-user"><input type="text" class="form-control" id="pallet-emoji-username-input" placeholder="Username"><input type="password" class="form-control mt-m" id="pallet-emoji-password-input" placeholder="Password"></div>');
       tab_content.find('#pallet-emoji-password-input').keypress(function(e) {
@@ -273,6 +273,10 @@
         return _this.checkInput();
       });
       tab_content.append(login_btn);
+      if (((_ref = this.pallet.EC.Data.storage.hub_cache) != null ? (_ref1 = _ref.emojidex) != null ? (_ref2 = _ref1.auth_info) != null ? _ref2.status : void 0 : void 0 : void 0) === 'verified') {
+        auth_info = this.pallet.EC.Data.storage.hub_cache.emojidex.auth_info;
+        this.login(auth_info.user, auth_info.token, 'token');
+      }
       return tab_content;
     };
 
@@ -282,13 +286,14 @@
       username = $('#pallet-emoji-username-input').val();
       password = $('#pallet-emoji-password-input').val();
       if (username.length > 0 && password.length > 0) {
-        return this.login(username, password);
+        return this.login(username, password, 'plain');
       }
     };
 
-    UserTab.prototype.login = function(username, password) {
-      var _this = this;
-      return this.pallet.EC.User.plain_auth(username, password, function(auth_info) {
+    UserTab.prototype.login = function(username, password, type) {
+      var callback,
+        _this = this;
+      callback = function(auth_info) {
         if (auth_info.status === 'verified') {
           _this.hideLoginForm();
           _this.setUserTab();
@@ -299,11 +304,20 @@
         } else {
           return _this.showError(auth_info);
         }
-      });
+      };
+      if (type === 'plain') {
+        return this.pallet.EC.User.plain_auth(username, password, function(auth_info) {
+          return callback(auth_info);
+        });
+      } else {
+        return this.pallet.EC.User.token_auth(username, password, function(auth_info) {
+          return callback(auth_info);
+        });
+      }
     };
 
     UserTab.prototype.showError = function(auth_info) {
-      return this.tab_content.prepend($('<div id="login-error"><span style="color:red">ログインに失敗しました。</span><div>'));
+      return this.tab_content.prepend($('<div id="login-error"><span style="color:red">You failed to login.</span><div>'));
     };
 
     UserTab.prototype.hideLoginForm = function() {
@@ -380,7 +394,7 @@
       var tab_pane;
       tab_pane = $("<div class='tab-pane' id='tab-content-user-" + kind + "'></div>");
       if (response.statusText === 'Payment Required') {
-        tab_pane.append($('<p style="margin-top:15px;"><a class="btn btn-primary" href="https://www.emojidex.com/profile">プレミアム・プロユーザーのみ閲覧できます。</a></p>'));
+        tab_pane.append($('<p style="margin-top:15px;"><a class="btn btn-primary" href="https://www.emojidex.com/profile" target="_blank">Premium/Pro user only.</a></p>'));
       } else {
         tab_pane.append(this.pallet.setEmojiList(kind, response.emoji));
       }

@@ -33,3 +33,9 @@
   else
     $inputor.caret('pos', pos)
   $inputor.trigger('keyup')
+
+@clearStorage = ->
+  CSC = new CrossStorageClient 'https://www.emojidex.com/hub',
+    frameId: 'emojidex-client-storage-hub'
+  CSC.onConnect().then =>
+    CSC.clear()

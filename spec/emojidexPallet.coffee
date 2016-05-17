@@ -1,5 +1,6 @@
 describe "emojidexPallet", ->
   beforeAll (done) ->
+    clearStorage()
     helperBefore()
     $("#pallet-btn").emojidexPallet
       onComplete: =>
@@ -91,7 +92,7 @@ describe "emojidexPallet", ->
         callback: (data, i) ->
           if data.vals[0].match /login-error/
             # TODO: english text
-            expect($('#login-error span').text()).toBe 'ログインに失敗しました。'
+            expect($('#login-error span').text()).toBe 'You failed to login.'
             remove_watch $('#tab-content-user'), 'content_user'
             done()
 
@@ -99,45 +100,6 @@ describe "emojidexPallet", ->
       $('#pallet-emoji-username-input').val('aaa')
       $('#pallet-emoji-password-input').val('aaa')
       $('#pallet-emoji-login-submit').click()
-
-    it 'general user login [Require user info]', (done) ->
-      $('#tab-content-user').watch
-        id: 'content_user'
-        properties: 'prop_innerHTML'
-        watchChildren: true
-        callback: (data, i) ->
-          if data.vals[0].match /history-emoji-list/
-            expect($('#tab-content-user-history').find('img').length).toBeTruthy()
-            remove_watch $('#tab-content-user'), 'content_user'
-            done()
-
-      $('#tab-user a').click()
-      $('#pallet-emoji-username-input').val(user_info.username)
-      $('#pallet-emoji-password-input').val(user_info.password)
-      $('#pallet-emoji-login-submit').click()
-
-    it 'general user can not see the newest/popular emoji', (done) ->
-      timer_option =
-        callback: ->
-          if $('#tab-content-user-newest').length
-            $('#tab-user-newest a').click()
-            expect($('#tab-content-user-newest').find('a').text()).toBe 'プレミアム・プロユーザーのみ閲覧できます。'
-            done()
-          else
-            spec_timer timer_option
-      spec_timer timer_option
-
-    it 'logout', (done) ->
-      $('#tab-content-user').watch
-        id: 'content_user'
-        properties: 'prop_innerHTML'
-        watchChildren: true
-        callback: (data, i) ->
-          expect($('#pallet-emoji-username-input')).toHaveCss({display: 'block'})
-          remove_watch $('#tab-content-user'), 'content_user'
-          done()
-
-      $('#pallet-emoji-logout').click()
 
     it 'premium user login [Require premium user info]', (done) ->
       $('#tab-content-user').watch
@@ -167,6 +129,74 @@ describe "emojidexPallet", ->
             spec_timer timer_option
       spec_timer timer_option
 
+    it 'logout', (done) ->
+      $('#tab-content-user').watch
+        id: 'content_user'
+        properties: 'prop_innerHTML'
+        watchChildren: true
+        callback: (data, i) ->
+          expect($('#pallet-emoji-username-input')).toHaveCss({display: 'block'})
+          remove_watch $('#tab-content-user'), 'content_user'
+          done()
+
+      $('#pallet-emoji-logout').click()
+
+    it 'general user login [Require user info]', (done) ->
+      $('#tab-content-user').watch
+        id: 'content_user'
+        properties: 'prop_innerHTML'
+        watchChildren: true
+        callback: (data, i) ->
+          if data.vals[0].match /history-emoji-list/
+            expect($('#tab-content-user-history').find('img').length).toBeTruthy()
+            remove_watch $('#tab-content-user'), 'content_user'
+            done()
+
+      $('#tab-user a').click()
+      $('#pallet-emoji-username-input').val(user_info.username)
+      $('#pallet-emoji-password-input').val(user_info.password)
+      $('#pallet-emoji-login-submit').click()
+
+    it 'general user can not see the newest/popular emoji', (done) ->
+      timer_option =
+        callback: ->
+          if $('#tab-content-user-newest').length
+            $('#tab-user-newest a').click()
+            expect($('#tab-content-user-newest').find('a').text()).toBe 'Premium/Pro user only.'
+            done()
+          else
+            spec_timer timer_option
+      spec_timer timer_option
+
   it 'close emojidexPallet', ->
     $('button.pull-right[aria-label="Close"]').click()
     expect($('.ui-dialog')).toHaveCss({display: 'none'})
+
+  it 'login with storage data', (done) ->
+    $('.ui-dialog').remove()
+    $('#emojidex-dialog').remove()
+    $('#pallet-btn').removeData()
+    $('#pallet-btn').unbind()
+
+    $("#pallet-btn").emojidexPallet
+      onComplete: =>
+        $('.ui-dialog').watch
+          id: 'dialog_2'
+          properties: 'display'
+          callback: ->
+            remove_watch $('.ui-dialog'), 'dialog_2'
+
+            $('#tab-content-user').watch
+              id: 'content_user'
+              properties: 'prop_innerHTML'
+              watchChildren: true
+              callback: (data, i) ->
+                if data.vals[0].match /history-emoji-list/
+                  expect($('#tab-content-user-history').find('img').length).toBeTruthy()
+                  $('button.pull-right[aria-label="Close"]').click()
+                  remove_watch $('#tab-content-user'), 'content_user'
+                  done()
+
+            $('#tab-user a').click()
+
+        $("#pallet-btn").click()

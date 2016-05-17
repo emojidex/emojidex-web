@@ -14,6 +14,10 @@ class UserTab
       @checkInput()
     tab_content.append login_btn
 
+    if @pallet.EC.Data.storage.hub_cache?.emojidex?.auth_info?.status == 'verified'
+      auth_info = @pallet.EC.Data.storage.hub_cache.emojidex.auth_info
+      @login auth_info.user, auth_info.token, 'token'
+
     tab_content
 
   checkInput: ->
@@ -22,10 +26,10 @@ class UserTab
     username = $('#pallet-emoji-username-input').val()
     password = $('#pallet-emoji-password-input').val()
     if username.length > 0 && password.length > 0
-      @login username, password
+      @login username, password, 'plain'
 
-  login: (username, password) ->
-    @pallet.EC.User.plain_auth username, password, (auth_info) =>
+  login: (username, password, type) ->
+    callback = (auth_info) =>
       if auth_info.status == 'verified'
         @hideLoginForm()
         @setUserTab()
@@ -36,9 +40,14 @@ class UserTab
       else
         @showError(auth_info)
 
+    if type == 'plain'
+      @pallet.EC.User.plain_auth username, password, (auth_info) -> callback(auth_info)
+    else
+      @pallet.EC.User.token_auth username, password, (auth_info) -> callback(auth_info)
+
   showError: (auth_info) ->
     # TODO: error text
-    @tab_content.prepend $ '<div id="login-error"><span style="color:red">ログインに失敗しました。</span><div>'
+    @tab_content.prepend $ '<div id="login-error"><span style="color:red">You failed to login.</span><div>'
 
   hideLoginForm: ->
     $('#pallet-emoji-username-input').val('')
@@ -99,7 +108,7 @@ class UserTab
     tab_pane = $ "<div class='tab-pane' id='tab-content-user-#{kind}'></div>"
     if response.statusText is 'Payment Required'
       # TODO: text
-      tab_pane.append $ '<p style="margin-top:15px;"><a class="btn btn-primary" href="https://www.emojidex.com/profile">プレミアム・プロユーザーのみ閲覧できます。</a></p>'
+      tab_pane.append $ '<p style="margin-top:15px;"><a class="btn btn-primary" href="https://www.emojidex.com/profile" target="_blank">Premium/Pro user only.</a></p>'
     else
       tab_pane.append @pallet.setEmojiList(kind, response.emoji)
     @user_tab_content.append tab_pane
