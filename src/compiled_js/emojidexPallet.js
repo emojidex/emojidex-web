@@ -18,8 +18,7 @@
     var Plugin, defaults, pluginName;
     pluginName = "emojidexPallet";
     defaults = {
-      onComplete: void 0,
-      switch_element: $("#pallet-btn")
+      onComplete: void 0
     };
     Plugin = (function() {
       function Plugin(element, options) {

@@ -15,7 +15,7 @@ do ($ = jQuery, window, document) ->
   defaults =
     onComplete: undefined
     useLoadingImg: true
-    ignore: 'script, style, iframe, input, textarea, pre, code'
+    ignore: 'script, noscript, canvas, style, iframe, input, textarea, pre, code'
 
     # this option is beta --------
     autoUpdate: false
