@@ -68,6 +68,10 @@ UTF moji codes to emoji:
 emojidexReplace({
   onComplete: undefined,
   useLoadingImg: true,
+  ignore: 'script, noscript, canvas, style, iframe, input, textarea, pre, code'
+
+  // this option is beta --------
+  autoUpdate: false
 });
 ```
 
@@ -91,6 +95,19 @@ Type: `Boolean` Default: `true`
 
 置換実行中に[CSSに指定されている]ローディング画像を表示するか、しないかを設定出来ます。
 
+#### options.ignore
+Type: `String` Default: `script, noscript, canvas, style, iframe, input, textarea, pre, code`
+
+置換処理を除外する要素を文字列で指定出来ます。
+
+#### options.autoUpdate
+Type: `Boolean` Default: `false`
+
+※このオプションはベータ機能のオプションです。`true`にするとページの内容に依っては処理がとても重く可能性があります。
+
+Ajax処理等で、動的に追加された要素に対しても置換処理を行うかを`Boolean`で指定出来ます。
+
+
 ### .emojidexAutocomplete()
 input, textarea, [contenteditable="true"]で「:」から始まる文字列を使ってemojidexの対応絵文字検索し、
 候補をリスト表示します。
@@ -102,10 +119,17 @@ input, textareaでは候補を選択すると「:【対応する絵文字コー�
 #### Default options
 ```js
 emojidexAutocomplete({
+  onComplete: undefined,
   listLimit: 10,
   insertImg: true
 });
 ```
+
+#### options.onComplete
+Type: `Function` Default: `undefined`
+
+オートコンプリートの設置が完了した際に実行される関数を設定する事が出来ます。
+
 #### options.listLimit
 Type: `Int` Default: `10`
 
@@ -117,6 +141,28 @@ Type: `Boolean` Default: `true`
 ターゲットが[contenteditable="true"]の時に画像挿入するか、プレーンテキストを挿入するかの設定が
 出来ます。
 `false`に設定するとプレーンテキストが挿入されます。
+
+
+### .emojidexPallet()
+設定された要素をクリックする事で、様々な機能を持った絵文字パレットを表示する事が出来ます。
+
+パレットの絵文字タイルをクリックすると、クリップボードに絵文字のコードがコピーされます。
+また、絵文字の検索や、emojidex.comにログインする機能を使う事で、お気に入りや使用履歴等と連携する事が出来ます。
+
+### Options
+#### Default options
+```js
+emojidexAutocomplete({
+  onComplete: undefined,
+});
+```
+
+#### options.onComplete
+Type: `Function` Default: `undefined`
+
+パレットの設置が完了した際に実行される関数を設定する事が出来ます。
+
+
 
 ビルドの仕方
 ------------

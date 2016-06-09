@@ -1,5 +1,5 @@
 /*
- * jQuery emojidex - v0.8.4
+ * jQuery emojidex - v0.8.5
  * emojidex plugin for jQuery/Zepto and compatible
  * https://github.com/emojidex/emojidex-web
  *
@@ -364,8 +364,7 @@
     var Plugin, defaults, pluginName;
     pluginName = "emojidexPallet";
     defaults = {
-      onComplete: void 0,
-      switch_element: $("#pallet-btn")
+      onComplete: void 0
     };
     Plugin = (function() {
       function Plugin(element, options) {
@@ -781,7 +780,7 @@
     defaults = {
       onComplete: void 0,
       useLoadingImg: true,
-      ignore: 'script, style, iframe, input, textarea, pre, code',
+      ignore: 'script, noscript, canvas, style, iframe, input, textarea, pre, code',
       autoUpdate: false
     };
     Plugin = (function() {

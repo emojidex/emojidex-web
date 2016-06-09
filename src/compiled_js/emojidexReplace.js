@@ -22,7 +22,7 @@
     defaults = {
       onComplete: void 0,
       useLoadingImg: true,
-      ignore: 'script, style, iframe, input, textarea, pre, code',
+      ignore: 'script, noscript, canvas, style, iframe, input, textarea, pre, code',
       autoUpdate: false
     };
     Plugin = (function() {
