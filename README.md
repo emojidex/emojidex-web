@@ -67,6 +67,10 @@ UTF moji codes to emoji:
 emojidexReplace({
   onComplete: undefined,
   useLoadingImg: true,
+  ignore: 'script, noscript, canvas, style, iframe, input, textarea, pre, code'
+
+  // this option is beta --------
+  autoUpdate: false
 });
 ```
 
@@ -90,6 +94,17 @@ Type: `Boolean` Default: `true`
 
 Specifies weather or not to show the loading image [specified in the CSS] while downloading emoji.
 
+#### options.ignore
+Type: `String` Default: `script, noscript, canvas, style, iframe, input, textarea, pre, code`
+
+Set tags to ignore the contents of during blanket conversions.
+
+#### options.autoUpdate
+Type: `Boolean` Default: `false`
+
+*Currently in beta*
+Automatically run conversions on AJAX events.
+
 ### .emojidexAutocomplete()
 Enables the autocomplete pop when a `:` colon is entered for `input`, `textarea`,
 and elements where `contenteditable="true"`.  
@@ -101,10 +116,17 @@ For `contenteditable="true"` elements the codes are converted immediately into e
 #### Default options
 ```js
 emojidexAutocomplete({
+  onComplete: undefined,
   listLimit: 10,
   insertImg: true
 });
 ```
+
+#### options.onComplete
+Type: `Function` Default: `undefined`
+
+Sets a function to run when an autocomplete finishes.
+
 #### options.listLimit
 Type: `Int` Default: `10`
 
@@ -115,6 +137,26 @@ Type: `Boolean` Default: `true`
 
 Defines the behavior of `contenteditable="true"` elements. When true, codes are automatically
 converted to images. When false they remain as plain text.
+
+### .emojidexPallet()
+Sets an element to open up an emoji pallet chooser when clicked.
+
+emoji are copied to the clipboard when clicked.
+The pallet contains a tabbed index, search functionality, and displays history and favorites when 
+a user is logged in.
+
+### Options
+#### Default options
+```js
+emojidexAutocomplete({
+  onComplete: undefined,
+});
+```
+
+#### options.onComplete
+Type: `Function` Default: `undefined`
+
+Calls the defined method after a pallet has been set to an element.
 
 Building
 --------
@@ -151,4 +193,4 @@ License
 =======
 emojidex and emojidex tools are licensed under the [emojidex Open License](https://www.emojidex.com/emojidex/emojidex_open_license).
 
-©2013 the emojidex project / Genshin Souzou K.K. [Phantom Creation Inc.]
+©2013 the emojidex project / K.K. GenSouSha

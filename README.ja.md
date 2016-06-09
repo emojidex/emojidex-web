@@ -107,7 +107,6 @@ Type: `Boolean` Default: `false`
 
 Ajax処理等で、動的に追加された要素に対しても置換処理を行うかを`Boolean`で指定出来ます。
 
-
 ### .emojidexAutocomplete()
 input, textarea, [contenteditable="true"]で「:」から始まる文字列を使ってemojidexの対応絵文字検索し、
 候補をリスト表示します。
@@ -202,4 +201,4 @@ emojidexとemojidex関連のツール全てが
 [emojidex Open License](https://www.emojidex.com/emojidex/emojidex_open_license)
 にてライセンスされています。
 
-©2013emojidex / 幻信創造株式会社
+©2013 emojidex / 株式会社幻創社
