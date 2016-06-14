@@ -115,14 +115,43 @@
     };
 
     Pallet.prototype.setEmojiList = function(kind, result_emoji) {
-      var code, emoji, emoji_list, _i, _len, _ref;
+      var emoji, emoji_button, emoji_button_image, emoji_list, _i, _len;
       emoji_list = $("<div class='" + kind + "-emoji-list clearfix'></div>");
       for (_i = 0, _len = result_emoji.length; _i < _len; _i++) {
         emoji = result_emoji[_i];
-        code = (_ref = emoji.code) != null ? _ref : emoji.emoji_code;
-        emoji_list.append("<button class='emoji-btn btn btn-default pull-left' data-clipboard-text=':" + (code.replace(/\s/g, '_')) + ":'><img alt='" + code + "' title='" + code + "' class='img-responsive center-block' src='" + this.EC.cdn_url + "px32/" + (code.replace(/\s/g, '_')) + ".png'></img></button>");
+        emoji_button = $('<button/>');
+        emoji_button.addClass('emoji-btn btn btn-default pull-left');
+        emoji_button_image = $('<img/>');
+        emoji_button_image.prop('alt', "" + emoji.code);
+        emoji_button_image.prop('title', "" + emoji.code);
+        emoji_button_image.addClass('img-responsive center-block');
+        emoji_button_image.prop('src', "" + this.EC.cdn_url + "px32/" + (emoji.code.replace(/\s/g, '_')) + ".png");
+        emoji_button.append(emoji_button_image);
+        emoji_button.click(function() {
+          return this.insertEmojiAtCaret(emoji);
+        });
+        emoji_list.append(emoji_button);
       }
       return emoji_list;
+    };
+
+    Pallet.prototype.mojiOrCode = function(emoji) {
+      if (emoji.moji !== null && emoji.moji !== '') {
+        return emoji.moji;
+      } else {
+        return ":" + emoji.code + ":";
+      }
+    };
+
+    Pallet.prototype.insertEmojiAtCaret = function(emoji) {
+      var elem, pos, startTxt, stopTxt, txt;
+      elem = $('.emojidex-content_editable');
+      pos = elem.caret('pos');
+      txt = elem.html();
+      startTxt = txt.substring(0, pos);
+      stopTxt = txt.substring(pos, txt.length);
+      elem.html(startTxt + ("" + (this.mojiOrCode(emoji))) + stopTxt);
+      return elem.caret('pos', pos);
     };
 
     Pallet.prototype.setPagination = function(kind, prev_func, next_func, cur_page, max_page) {

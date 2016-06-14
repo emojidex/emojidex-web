@@ -32,8 +32,8 @@ class Pallet
         $('.ui-dialog-titlebar').append close_btn
 
       open: (e) ->
-        $('.ui-dialog :button').blur();
-        $('.nav.nav-pills a').blur();
+        $('.ui-dialog :button').blur()
+        $('.nav.nav-pills a').blur()
 
   setPallet: (element) ->
     $(element).click (e) =>
@@ -69,9 +69,29 @@ class Pallet
     emoji_list = $ "<div class='#{kind}-emoji-list clearfix'></div>"
 
     for emoji in result_emoji
-      code = emoji.code ? emoji.emoji_code
-      emoji_list.append "<button class='emoji-btn btn btn-default pull-left' data-clipboard-text=':#{code.replace /\s/g, '_'}:'><img alt='#{code}' title='#{code}' class='img-responsive center-block' src='#{@EC.cdn_url}px32/#{code.replace /\s/g, '_'}.png'></img></button>"
+      emoji_button = $('<button/>')
+      emoji_button.addClass 'emoji-btn btn btn-default pull-left'
+      emoji_button_image = $('<img/>')
+      emoji_button_image.prop 'alt', "#{emoji.code}"
+      emoji_button_image.prop 'title', "#{emoji.code}"
+      emoji_button_image.addClass 'img-responsive center-block'
+      emoji_button_image.prop 'src', "#{@EC.cdn_url}px32/#{emoji.code.replace /\s/g, '_'}.png"
+      emoji_button.append emoji_button_image
+      emoji_button.click -> @insertEmojiAtCaret(emoji)
+      emoji_list.append emoji_button
     emoji_list
+
+  mojiOrCode:(emoji) ->
+    if emoji.moji != null && emoji.moji != '' then emoji.moji else ":#{emoji.code}:"
+
+  insertEmojiAtCaret: (emoji) ->
+    elem = $('.emojidex-content_editable')
+    pos = elem.caret('pos')
+    txt = elem.html()
+    startTxt = txt.substring(0,  pos)
+    stopTxt = txt.substring(pos, txt.length)
+    elem.html(startTxt + "#{@mojiOrCode(emoji)}" + stopTxt)
+    elem.caret('pos', pos)
 
   setPagination: (kind, prev_func, next_func, cur_page, max_page) ->
     pagination = $ "<div class='#{kind}-pagination text-center'><ul class='pagination mb-0'></ul></div>"
