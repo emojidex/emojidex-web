@@ -83,27 +83,50 @@ class Pallet
       emoji_button_image.addClass 'img-responsive center-block'
       emoji_button_image.prop 'src', "#{@EC.cdn_url}px32/#{emoji.code.replace /\s/g, '_'}.png"
       emoji_button.append emoji_button_image
-      emoji_button.prop 'text', @mojiOrCode(emoji)
+      emoji_button.prop 'emoji_data', emoji
       emoji_button.click (e)=>
-        @insertAtCaret($(e.currentTarget).prop('text'))
+        @insertEmojiAtCaret($(e.currentTarget).prop('emoji_data'))
       emoji_list.append emoji_button
     emoji_list
 
   mojiOrCode:(emoji) ->
     if emoji.moji != null && emoji.moji != '' then emoji.moji else ":#{emoji.code}:"
 
-  insertAtCaret: (text) ->
+  insertEmojiAtCaret: (emoji) ->
     if Pallet.active_editable == null
       return #TODO copy to clipboard if active editable is null
 
+    code = @mojiOrCode(emoji)
     elem = $(Pallet.active_editable)
     pos = elem.caret('pos')
-    txt = elem.html()
-    startTxt = txt.substring(0,  pos)
-    stopTxt = txt.substring(pos, txt.length)
-    elem.html(startTxt + text + stopTxt)
-    elem.focus()
-    elem.caret('pos', pos + text.length)
+    if elem.is('[contenteditable="true"]')
+      txt = elem.html()
+      startTxt = txt.substring(0,  pos)
+      stopTxt = txt.substring(pos, txt.length)
+      wrapper = $('<img/>')
+      wrapper.prop 'src', "#{@EC.cdn_url}px32/#{emoji.code.replace /\s/g, '_'}.png"
+      wrapper.addClass 'emojidex-emoji'
+      wrapper.prop 'alt', code
+      if emoji.link != null && emoji.link != ''
+        inner_wrapper = wrapper
+        wrapper = $('<a/>')
+        wrapper.prop 'href', emoji.link
+        wrapper.alt = ''
+        wrapper.append inner_wrapper
+
+      elem.html(startTxt)
+      elem.append(wrapper)
+      elem.focus()
+      elem.caret('pos', elem.html().length - 1)
+      elem.append(stopTxt)
+    else
+      txt = elem.val()
+      startTxt = txt.substring(0,  pos)
+      stopTxt = txt.substring(pos, txt.length)
+      elem.val(startTxt + code + stopTxt)
+      elem.focus()
+      elem.caret('pos', pos + code.length)
+
 
 
   setPagination: (kind, prev_func, next_func, cur_page, max_page) ->
