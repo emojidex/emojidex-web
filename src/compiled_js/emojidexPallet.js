@@ -115,7 +115,8 @@
     };
 
     Pallet.prototype.setEmojiList = function(kind, result_emoji) {
-      var emoji, emoji_button, emoji_button_image, emoji_list, _i, _len;
+      var emoji, emoji_button, emoji_button_image, emoji_list, _i, _len,
+        _this = this;
       emoji_list = $("<div class='" + kind + "-emoji-list clearfix'></div>");
       for (_i = 0, _len = result_emoji.length; _i < _len; _i++) {
         emoji = result_emoji[_i];
@@ -128,7 +129,7 @@
         emoji_button_image.prop('src', "" + this.EC.cdn_url + "px32/" + (emoji.code.replace(/\s/g, '_')) + ".png");
         emoji_button.append(emoji_button_image);
         emoji_button.click(function() {
-          return this.insertEmojiAtCaret(emoji);
+          return _this.insertEmojiAtCaret(emoji);
         });
         emoji_list.append(emoji_button);
       }

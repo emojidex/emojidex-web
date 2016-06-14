@@ -77,7 +77,7 @@ class Pallet
       emoji_button_image.addClass 'img-responsive center-block'
       emoji_button_image.prop 'src', "#{@EC.cdn_url}px32/#{emoji.code.replace /\s/g, '_'}.png"
       emoji_button.append emoji_button_image
-      emoji_button.click -> @insertEmojiAtCaret(emoji)
+      emoji_button.click => @insertEmojiAtCaret(emoji)
       emoji_list.append emoji_button
     emoji_list
 
