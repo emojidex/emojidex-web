@@ -42,6 +42,8 @@
   })(jQuery, window, document);
 
   Pallet = (function() {
+    Pallet.active_editable = null;
+
     function Pallet(plugin) {
       var _this = this;
       this.plugin = plugin;
@@ -50,6 +52,12 @@
         onReady: function(EC) {
           var _base;
           _this.clipboard = new Clipboard('.emoji-btn');
+          $('.emojidex-content_editable').on('focus keyup mouseup', function(e) {
+            return Pallet.active_editable = e.currentTarget;
+          });
+          $('.emojidex-plain_text').on('focus keyup mouseup', function(e) {
+            return Pallet.active_editable = e.currentTarget;
+          });
           _this.createDialog();
           _this.setPallet(_this.plugin.element);
           return typeof (_base = _this.plugin.options).onComplete === "function" ? _base.onComplete() : void 0;
@@ -128,8 +136,9 @@
         emoji_button_image.addClass('img-responsive center-block');
         emoji_button_image.prop('src', "" + this.EC.cdn_url + "px32/" + (emoji.code.replace(/\s/g, '_')) + ".png");
         emoji_button.append(emoji_button_image);
-        emoji_button.click(function() {
-          return _this.insertEmojiAtCaret(emoji);
+        emoji_button.prop('text', this.mojiOrCode(emoji));
+        emoji_button.click(function(e) {
+          return _this.insertAtCaret($(e.currentTarget).prop('text'));
         });
         emoji_list.append(emoji_button);
       }
@@ -144,15 +153,19 @@
       }
     };
 
-    Pallet.prototype.insertEmojiAtCaret = function(emoji) {
+    Pallet.prototype.insertAtCaret = function(text) {
       var elem, pos, startTxt, stopTxt, txt;
-      elem = $('.emojidex-content_editable');
+      if (Pallet.active_editable === null) {
+        return;
+      }
+      elem = $(Pallet.active_editable);
       pos = elem.caret('pos');
       txt = elem.html();
       startTxt = txt.substring(0, pos);
       stopTxt = txt.substring(pos, txt.length);
-      elem.html(startTxt + ("" + (this.mojiOrCode(emoji))) + stopTxt);
-      return elem.caret('pos', pos);
+      elem.html(startTxt + text + stopTxt);
+      elem.focus();
+      return elem.caret('pos', pos + text.length);
     };
 
     Pallet.prototype.setPagination = function(kind, prev_func, next_func, cur_page, max_page) {

@@ -1,9 +1,15 @@
 class Pallet
+  @active_editable: null
+
   constructor: (@plugin) ->
     @EC = new EmojidexClient
       storageHubPath: 'https://www.emojidex.com/hub?pallet'
       onReady: (EC) =>
         @clipboard = new Clipboard '.emoji-btn'
+        $('.emojidex-content_editable').on('focus keyup mouseup', (e)->
+          Pallet.active_editable = e.currentTarget)
+        $('.emojidex-plain_text').on('focus keyup mouseup', (e)->
+          Pallet.active_editable = e.currentTarget)
 
         # @login_service = new LoginService @
 
@@ -77,21 +83,28 @@ class Pallet
       emoji_button_image.addClass 'img-responsive center-block'
       emoji_button_image.prop 'src', "#{@EC.cdn_url}px32/#{emoji.code.replace /\s/g, '_'}.png"
       emoji_button.append emoji_button_image
-      emoji_button.click => @insertEmojiAtCaret(emoji)
+      emoji_button.prop 'text', @mojiOrCode(emoji)
+      emoji_button.click (e)=>
+        @insertAtCaret($(e.currentTarget).prop('text'))
       emoji_list.append emoji_button
     emoji_list
 
   mojiOrCode:(emoji) ->
     if emoji.moji != null && emoji.moji != '' then emoji.moji else ":#{emoji.code}:"
 
-  insertEmojiAtCaret: (emoji) ->
-    elem = $('.emojidex-content_editable')
+  insertAtCaret: (text) ->
+    if Pallet.active_editable == null
+      return #TODO copy to clipboard if active editable is null
+
+    elem = $(Pallet.active_editable)
     pos = elem.caret('pos')
     txt = elem.html()
     startTxt = txt.substring(0,  pos)
     stopTxt = txt.substring(pos, txt.length)
-    elem.html(startTxt + "#{@mojiOrCode(emoji)}" + stopTxt)
-    elem.caret('pos', pos)
+    elem.html(startTxt + text + stopTxt)
+    elem.focus()
+    elem.caret('pos', pos + text.length)
+
 
   setPagination: (kind, prev_func, next_func, cur_page, max_page) ->
     pagination = $ "<div class='#{kind}-pagination text-center'><ul class='pagination mb-0'></ul></div>"
