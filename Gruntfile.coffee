@@ -98,7 +98,7 @@ module.exports = (grunt) ->
               "coffee:#{path.dirname(filepath).split('/')[2]}"
               'concat:emojidex_js'
               'uglify:emojidex'
-              defaults.jasmine.prop.join(':')
+              # defaults.jasmine.prop.join(':')
             ]
 
           spec:
@@ -122,7 +122,8 @@ module.exports = (grunt) ->
                     ]
               }
             ]
-            task: [defaults.coffee.prop.join(':'), defaults.jasmine.prop.join(':')]
+            # task: [defaults.coffee.prop.join(':'), defaults.jasmine.prop.join(':')]
+            task: [defaults.coffee.prop.join(':')]
 
         setGruntConfig_getTask(getDefineUsePattern filepath, define_list)
 
@@ -387,5 +388,6 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-cssmin'
   grunt.loadNpmTasks 'grunt-md2html'
 
-  grunt.registerTask 'default', ['save_license', 'coffee', 'sass', 'concat', 'uglify', 'cssmin', 'slim', 'copy', 'jasmine', 'md2html']
+  # grunt.registerTask 'default', ['save_license', 'coffee', 'sass', 'concat', 'uglify', 'cssmin', 'slim', 'copy', 'jasmine', 'md2html']
+  grunt.registerTask 'default', ['save_license', 'coffee', 'sass', 'concat', 'uglify', 'cssmin', 'slim', 'copy', 'md2html']
   grunt.registerTask 'dev', ['connect', 'esteWatch']
