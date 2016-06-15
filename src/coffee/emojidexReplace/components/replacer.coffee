@@ -28,25 +28,43 @@ class Replacer
     return text
 
   reloadEmoji: ->
-    reload = (mutations) =>
-      for mutation in mutations
-        for node in mutation.addedNodes
-          if node.nodeName isnt 'SCRIPT' and node.nodeName isnt 'STYLE'
-            @plugin.options.useLoadingImg = false
-            @plugin.options.autoUpdate = false
-            @plugin.replacer.loadEmoji()
+    queues = []
+    doQueue = =>
+      disconnect()
+      body = $('body')[0]
+      if queues.indexOf(body) > -1
+        matchText body, regExp
+        queues = []
+      else
+        queue_limit = 500
+        while queues.length > 0 and queue_limit > 0
+          console.count('replace')
+          queue = queues.pop()
+          @plugin.options.useLoadingImg = false
+          @plugin.replacer.loadEmoji()
+          queue_limit--
 
-    @dom_observer = new MutationObserver reload
-    if @plugin.element.selector
-      target = document.querySelector @plugin.element.selector
-    else
-      target = @plugin.element[0]
-    config =
-      attributes: true
-      childList: true
-      subtree: true
-      attributeFilter: ['innerText']
-    @dom_observer.observe target, config
+    DomObserve = =>
+      config =
+        childList: true
+        subtree: true
+        characterData: true
+      dom_observer.observe @plugin.element[0], config
+
+    disconnect = ->
+      dom_observer.disconnect()
+
+    dom_observer = new MutationObserver (mutations) =>
+      for mutation in mutations
+        if queues.indexOf(mutation.target) is -1
+          queues.push mutation.target
+
+    setInterval (->
+      if queues.length > 0
+        console.log queues
+        doQueue()
+    ), 1000
+    DomObserve()
 
   fadeOutLoadingTag_fadeInEmojiTag: (element, emoji_code, match = true) ->
     emoji_tag = undefined

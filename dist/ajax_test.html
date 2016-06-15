@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>emojidex-web ajax test</title>
+    <meta content="" name="description" />
+    <meta content="width=device-width" name="viewport" />
+    <link href="css/emojidex.min.css" rel="stylesheet" />
+    <script src="//code.jquery.com/jquery-2.2.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/emojidex.js"></script>
+    <script>
+      (function() {
+        $(document).ready((function(_this) {
+          return function() {
+            $("body").emojidexReplace({
+              autoUpdate: true,
+              onComplete: function(element) {
+                return console.log('Completed emojidexReplace!!');
+              }
+            });
+            return setInterval(function() {
+              return $('#ajax_test').append(':heart:');
+            }, 3000);
+          };
+        })(this));
+      
+      }).call(this);
+      
+    </script>
+  </head>
+  <body>
+    <div id="ajax_test">
+      :heart:
+    </div>
+  </body>
+</html>

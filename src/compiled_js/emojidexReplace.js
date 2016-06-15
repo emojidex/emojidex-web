@@ -12,7 +12,7 @@
 
 
 (function() {
-  var Replacer, ReplacerSearch,
+  var Observer, Replacer, ReplacerSearch,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -94,6 +94,15 @@
     };
   })(jQuery, window, document);
 
+  Observer = (function() {
+    function Observer() {
+      console.log('I am Observer...');
+    }
+
+    return Observer;
+
+  })();
+
   Replacer = (function() {
     function Replacer() {
       var ignore;
@@ -139,45 +148,61 @@
     };
 
     Replacer.prototype.reloadEmoji = function() {
-      var config, reload, target,
+      var DomObserve, disconnect, doQueue, dom_observer, queues,
         _this = this;
-      reload = function(mutations) {
-        var mutation, node, _i, _len, _results;
+      queues = [];
+      doQueue = function() {
+        var body, queue, queue_limit, _results;
+        disconnect();
+        body = $('body')[0];
+        if (queues.indexOf(body) > -1) {
+          matchText(body, regExp);
+          return queues = [];
+        } else {
+          queue_limit = 500;
+          _results = [];
+          while (queues.length > 0 && queue_limit > 0) {
+            console.count('replace');
+            queue = queues.pop();
+            _this.plugin.options.useLoadingImg = false;
+            _this.plugin.replacer.loadEmoji();
+            _results.push(queue_limit--);
+          }
+          return _results;
+        }
+      };
+      DomObserve = function() {
+        var config;
+        config = {
+          childList: true,
+          subtree: true,
+          characterData: true
+        };
+        return dom_observer.observe(_this.plugin.element[0], config);
+      };
+      disconnect = function() {
+        return dom_observer.disconnect();
+      };
+      dom_observer = new MutationObserver(function(mutations) {
+        var mutation, _i, _len, _results;
         _results = [];
         for (_i = 0, _len = mutations.length; _i < _len; _i++) {
           mutation = mutations[_i];
-          _results.push((function() {
-            var _j, _len1, _ref, _results1;
-            _ref = mutation.addedNodes;
-            _results1 = [];
-            for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
-              node = _ref[_j];
-              if (node.nodeName !== 'SCRIPT' && node.nodeName !== 'STYLE') {
-                this.plugin.options.useLoadingImg = false;
-                this.plugin.options.autoUpdate = false;
-                _results1.push(this.plugin.replacer.loadEmoji());
-              } else {
-                _results1.push(void 0);
-              }
-            }
-            return _results1;
-          }).call(_this));
+          if (queues.indexOf(mutation.target) === -1) {
+            _results.push(queues.push(mutation.target));
+          } else {
+            _results.push(void 0);
+          }
         }
         return _results;
-      };
-      this.dom_observer = new MutationObserver(reload);
-      if (this.plugin.element.selector) {
-        target = document.querySelector(this.plugin.element.selector);
-      } else {
-        target = this.plugin.element[0];
-      }
-      config = {
-        attributes: true,
-        childList: true,
-        subtree: true,
-        attributeFilter: ['innerText']
-      };
-      return this.dom_observer.observe(target, config);
+      });
+      setInterval((function() {
+        if (queues.length > 0) {
+          console.log(queues);
+          return doQueue();
+        }
+      }), 1000);
+      return DomObserve();
     };
 
     Replacer.prototype.fadeOutLoadingTag_fadeInEmojiTag = function(element, emoji_code, match) {
