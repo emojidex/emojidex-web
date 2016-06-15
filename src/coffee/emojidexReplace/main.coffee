@@ -19,6 +19,7 @@ do ($ = jQuery, window, document) ->
 
     # this option is beta --------
     autoUpdate: false
+    updateLimit: 10
 
   class Plugin
     constructor: (@element, options) ->

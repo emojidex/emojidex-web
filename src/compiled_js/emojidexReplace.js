@@ -23,7 +23,8 @@
       onComplete: void 0,
       useLoadingImg: true,
       ignore: 'script, noscript, canvas, style, iframe, input, textarea, pre, code',
-      autoUpdate: false
+      autoUpdate: false,
+      updateLimit: 10
     };
     Plugin = (function() {
       function Plugin(element, options) {
@@ -148,41 +149,9 @@
     };
 
     Replacer.prototype.reloadEmoji = function() {
-      var DomObserve, disconnect, doQueue, dom_observer, queues,
+      var DomObserve, disconnect, doQueue, dom_observer, queueTimer, queues,
         _this = this;
       queues = [];
-      doQueue = function() {
-        var body, queue, queue_limit, _results;
-        disconnect();
-        body = $('body')[0];
-        if (queues.indexOf(body) > -1) {
-          matchText(body, regExp);
-          return queues = [];
-        } else {
-          queue_limit = 500;
-          _results = [];
-          while (queues.length > 0 && queue_limit > 0) {
-            console.count('replace');
-            queue = queues.pop();
-            _this.plugin.options.useLoadingImg = false;
-            _this.plugin.replacer.loadEmoji();
-            _results.push(queue_limit--);
-          }
-          return _results;
-        }
-      };
-      DomObserve = function() {
-        var config;
-        config = {
-          childList: true,
-          subtree: true,
-          characterData: true
-        };
-        return dom_observer.observe(_this.plugin.element[0], config);
-      };
-      disconnect = function() {
-        return dom_observer.disconnect();
-      };
       dom_observer = new MutationObserver(function(mutations) {
         var mutation, _i, _len, _results;
         _results = [];
@@ -196,13 +165,50 @@
         }
         return _results;
       });
-      setInterval((function() {
-        if (queues.length > 0) {
+      doQueue = function(DO) {
+        var body, queue, queue_limit, _results;
+        disconnect(DO);
+        body = $('body')[0];
+        if (queues.indexOf(body) !== -1) {
           console.log(queues);
-          return doQueue();
+          console.log('reset queues');
+          _this.plugin.replacer.loadEmoji();
+          return queues = [];
+        } else {
+          queue_limit = _this.plugin.options.updateLimit;
+          _results = [];
+          while (queues.length > 0 && queue_limit > 0) {
+            console.count('replace');
+            queue = queues.pop();
+            _this.plugin.replacer.loadEmoji();
+            _results.push(queue_limit--);
+          }
+          return _results;
         }
-      }), 1000);
-      return DomObserve();
+      };
+      DomObserve = function(DO) {
+        var config;
+        config = {
+          childList: true,
+          subtree: true,
+          characterData: true
+        };
+        return DO.observe(_this.plugin.element[0], config);
+      };
+      disconnect = function(DO) {
+        return DO.disconnect();
+      };
+      DomObserve(dom_observer);
+      queueTimer = function() {
+        return setTimeout(function() {
+          if (queues.length > 0) {
+            console.log('queues.length:', queues.length);
+            doQueue(dom_observer);
+            return queueTimer();
+          }
+        }, 1000);
+      };
+      return queueTimer();
     };
 
     Replacer.prototype.fadeOutLoadingTag_fadeInEmojiTag = function(element, emoji_code, match) {
