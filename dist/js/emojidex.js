@@ -843,7 +843,12 @@
         return this.replacer.loadEmoji().then(function() {
           var _base;
           console.log('replace END ---');
-          return typeof (_base = _this.options).onComplete === "function" ? _base.onComplete(_this.element) : void 0;
+          if (typeof (_base = _this.options).onComplete === "function") {
+            _base.onComplete(_this.element);
+          }
+          return setTimeout(function() {
+            return _this.replace();
+          }, 3000);
         });
       };
 
@@ -976,7 +981,7 @@
         _results = [];
         for (_i = 0, _len = targets.length; _i < _len; _i++) {
           target = targets[_i];
-          _results.push(_this.getTextWithLoadingTag(target).then(function(data) {
+          _results.push(_this.getAddedLoadingTagText(target).then(function(data) {
             $(data.element).replaceWith(data.text);
             return checkReplaceComplete();
           }));
@@ -985,7 +990,7 @@
       });
     };
 
-    Replacer.prototype.getTextWithLoadingTag = function(target_element) {
+    Replacer.prototype.getAddedLoadingTagText = function(target_element) {
       var replaced_text,
         _this = this;
       replaced_text = target_element.textContent.replace(this.plugin.options.regexpUtf, function(matched_string) {
@@ -994,7 +999,7 @@
       return new Promise(function(resolve, reject) {
         var checkReplaceEnd, code, code_only, emoji_image, matched_codes, replaced_num, timeout, _i, _len, _results;
         timeout = setTimeout(function() {
-          return reject(new Error('emojidex: getTextWithLoadingTag - Timeout'));
+          return reject(new Error('emojidex: getAddedLoadingTagText - Timeout'));
         }, _this.promiseWaitTime);
         checkReplaceEnd = function() {
           if (matched_codes.length === ++replaced_num) {
@@ -1115,37 +1120,41 @@
           };
           complete_num = 0;
           loading_elements = _this.getLoadingElement(element);
-          _results = [];
-          for (_i = 0, _len = loading_elements.length; _i < _len; _i++) {
-            loading_element = loading_elements[_i];
-            switch (loading_element.dataset.type) {
-              case 'code':
-                replaceToEmojiIcon(loading_element.dataset.type, $(loading_element), _this.replaceSpaceToUnder(loading_element.dataset.emoji.replace(/:/g, ''))).then(function() {
-                  return checkReplaceComplete();
-                });
-                break;
-              case 'utf':
-                _results.push((function() {
-                  var _results1;
-                  _results1 = [];
-                  for (emoji in this.plugin.options.utfEmojiData) {
-                    if (emoji === loading_element.dataset.emoji) {
-                      this.fadeOutLoadingTag_fadeInEmojiTag($(loading_element), this.plugin.options.utfEmojiData[emoji]).then(function() {
-                        return checkReplaceComplete();
-                      });
-                      break;
-                    } else {
-                      _results1.push(void 0);
+          if (loading_elements.length) {
+            _results = [];
+            for (_i = 0, _len = loading_elements.length; _i < _len; _i++) {
+              loading_element = loading_elements[_i];
+              switch (loading_element.dataset.type) {
+                case 'code':
+                  replaceToEmojiIcon(loading_element.dataset.type, $(loading_element), _this.replaceSpaceToUnder(loading_element.dataset.emoji.replace(/:/g, ''))).then(function() {
+                    return checkReplaceComplete();
+                  });
+                  break;
+                case 'utf':
+                  _results.push((function() {
+                    var _results1;
+                    _results1 = [];
+                    for (emoji in this.plugin.options.utfEmojiData) {
+                      if (emoji === loading_element.dataset.emoji) {
+                        this.fadeOutLoadingTag_fadeInEmojiTag($(loading_element), this.plugin.options.utfEmojiData[emoji]).then(function() {
+                          return checkReplaceComplete();
+                        });
+                        break;
+                      } else {
+                        _results1.push(void 0);
+                      }
                     }
-                  }
-                  return _results1;
-                }).call(_this));
-                break;
-              default:
-                _results.push(void 0);
+                    return _results1;
+                  }).call(_this));
+                  break;
+                default:
+                  _results.push(void 0);
+              }
             }
+            return _results;
+          } else {
+            return resolve();
           }
-          return _results;
         });
       };
       setEomojiTag = function(element) {

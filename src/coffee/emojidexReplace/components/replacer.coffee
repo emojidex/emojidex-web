@@ -30,17 +30,17 @@ class Replacer
         if element.nodeType is Node.TEXT_NODE and element.textContent.match(/\S/)
           targets.push element
       for target in targets
-        @getTextWithLoadingTag(target).then (data) ->
+        @getAddedLoadingTagText(target).then (data) ->
           $(data.element).replaceWith data.text
           checkReplaceComplete()
 
-  getTextWithLoadingTag: (target_element) ->
+  getAddedLoadingTagText: (target_element) ->
     replaced_text = target_element.textContent.replace @plugin.options.regexpUtf, (matched_string) =>
       @getLoadingTag matched_string, 'utf'
 
     new Promise (resolve, reject) =>
       timeout = setTimeout ->
-        reject new Error('emojidex: getTextWithLoadingTag - Timeout')
+        reject new Error('emojidex: getAddedLoadingTagText - Timeout')
       , @promiseWaitTime
 
       checkReplaceEnd = () =>

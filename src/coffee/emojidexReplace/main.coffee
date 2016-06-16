@@ -67,9 +67,9 @@ do ($ = jQuery, window, document) ->
       @replacer.loadEmoji().then =>
         console.log 'replace END ---'
         @options.onComplete? @element
-        # setTimeout =>
-        #   @replace()
-        # , 5000
+        setTimeout =>
+          @replace()
+        , 3000
 
   $.fn[pluginName] = (options) ->
     @each ->

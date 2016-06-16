@@ -26,22 +26,25 @@ class ReplacerSearch extends Replacer
 
         complete_num = 0
         loading_elements = @getLoadingElement element
-        for loading_element in loading_elements
-          switch loading_element.dataset.type
-            when 'code'
-              replaceToEmojiIcon(
-                loading_element.dataset.type
-                $ loading_element
-                @replaceSpaceToUnder loading_element.dataset.emoji.replace /:/g, ''
-              ).then ->
-                checkReplaceComplete()
-              break
-            when 'utf'
-              for emoji of @plugin.options.utfEmojiData
-                if emoji is loading_element.dataset.emoji
-                  @fadeOutLoadingTag_fadeInEmojiTag($(loading_element), @plugin.options.utfEmojiData[emoji]).then ->
-                    checkReplaceComplete()
-                  break
+        if loading_elements.length
+          for loading_element in loading_elements
+            switch loading_element.dataset.type
+              when 'code'
+                replaceToEmojiIcon(
+                  loading_element.dataset.type
+                  $ loading_element
+                  @replaceSpaceToUnder loading_element.dataset.emoji.replace /:/g, ''
+                ).then ->
+                  checkReplaceComplete()
+                break
+              when 'utf'
+                for emoji of @plugin.options.utfEmojiData
+                  if emoji is loading_element.dataset.emoji
+                    @fadeOutLoadingTag_fadeInEmojiTag($(loading_element), @plugin.options.utfEmojiData[emoji]).then ->
+                      checkReplaceComplete()
+                    break
+        else
+          resolve()
 
     # for useLoadingImg: false --------
     setEomojiTag = (element) =>
