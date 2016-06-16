@@ -13,14 +13,20 @@
       (function() {
         $(document).ready((function(_this) {
           return function() {
+            var addTimer, count;
             $("body").emojidexReplace({
               autoUpdate: true,
+              useLoadingImg: false,
               onComplete: function(element) {
                 return console.log('Completed emojidexReplace!!');
               }
             });
-            return setInterval(function() {
-              return $('#ajax_test').append('<br>:heart::rainboaaaw:');
+            count = 0;
+            return addTimer = setInterval(function() {
+              $('#ajax_test').append('<br>:heart::rainboaaaw:');
+              if (++count === 1) {
+                return clearInterval(addTimer);
+              }
             }, 1000);
           };
         })(this));
@@ -31,7 +37,7 @@
   </head>
   <body>
     <div id="ajax_test">
-      :heart:
+      :heart::hearteee:💙💙💙
     </div>
   </body>
 </html>

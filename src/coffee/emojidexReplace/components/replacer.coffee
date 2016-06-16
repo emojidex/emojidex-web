@@ -1,6 +1,6 @@
 class Replacer
   constructor: ->
-    @loadingNum = 0
+    @promiseWaitTime = 3000
 
     ignore = '\'":;@&#~{}<>\\r\\n\\[\\]\\!\\$\\+\\?\\%\\*\\/\\\\'
     @regexpCode = RegExp ":([^\\s#{ignore}][^#{ignore}]*[^\\s#{ignore}]):|:([^\\s#{ignore}]):", 'g'
@@ -15,10 +15,16 @@ class Replacer
     $ element.find '.emojidex-loading-icon'
 
   setLoadingTag: (plugin) ->
-    plugin.element.find(":not(#{plugin.options.ignore})").andSelf().contents().filter (index, element) =>
-      if element.nodeType is Node.TEXT_NODE and element.textContent.match(/\S/)
-        replaced_text = @getTextWithLoadingTag element.textContent
-        $(element).replaceWith replaced_text if replaced_text isnt element.textContent
+    return new Promise (resolve, reject) =>
+      timeout = setTimeout ->
+        reject new Error('emojidex: setLoadingTag - Timeout')
+      , @promiseWaitTime
+
+      plugin.element.find(":not(#{plugin.options.ignore})").andSelf().contents().filter (index, element) =>
+        if element.nodeType is Node.TEXT_NODE and element.textContent.match(/\S/)
+          replaced_text = @getTextWithLoadingTag element.textContent
+          $(element).replaceWith replaced_text if replaced_text isnt element.textContent
+          resolve()
 
   getTextWithLoadingTag: (text) ->
     text = text.replace @plugin.options.regexpUtf, (matched_string) =>
@@ -35,15 +41,16 @@ class Replacer
           queues.push mutation.target
 
     doQueue = (DO) =>
+      # @plugin.options.useLoadingImg = false
       disconnect DO
       body = $('body')[0]
       if queues.indexOf(body) isnt -1
-        console.log queues
-        console.log 'reset queues'
+        console.count('reset queues')
         @plugin.replacer.loadEmoji()
         queues = []
       else
         queue_limit = @plugin.options.updateLimit
+        queue_limit = 2
         while queues.length > 0 and queue_limit > 0
           console.count('replace')
           queue = queues.pop()
@@ -52,6 +59,7 @@ class Replacer
       # DomObserve DO
 
     DomObserve = (DO) =>
+      console.count 'DomObserve:'
       config =
         childList: true
         subtree: true
@@ -59,16 +67,18 @@ class Replacer
       DO.observe @plugin.element[0], config
 
     disconnect = (DO) ->
+      console.count 'disconnect:'
       DO.disconnect()
 
     DomObserve dom_observer
 
-    queueTimer = -> 
+    queueTimer = ->
       setTimeout ->
+        # console.count 'start timer:'
         if queues.length > 0
           console.log 'queues.length:', queues.length
           doQueue dom_observer
-          queueTimer()
+        queueTimer()
       , 1000
     queueTimer()
 
@@ -79,19 +89,23 @@ class Replacer
     else
       emoji_tag = emoji_code
 
-    element.fadeOut "normal", =>
-      element.after emoji_tag
-      element.remove()
-      if match
-        emoji_tag.fadeIn "fast", =>
-          if --@loadingNum is 0
-            if @plugin.options.onComplete?
-              @plugin.options.onComplete @plugin.element
+    return new Promise (resolve, reject) =>
+      timeout = setTimeout ->
+        reject new Error('emojidex: fadeOutLoadingTag_fadeInEmojiTag - Timeout')
+      , @promiseWaitTime
 
-            if @plugin.options.autoUpdate
-              @reloadEmoji()
-      else
-        @loadingNum--
+      element.fadeOut
+        duration: 'normal'
+        done: =>
+          element.after emoji_tag
+          element.remove()
+          if match
+            emoji_tag.fadeIn
+              duration: "fast"
+              done: =>
+                resolve()
+          else
+            resolve()
 
   replaceSpaceToUnder: (string) ->
     string.replace /\s/g, '_'
