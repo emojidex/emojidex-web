@@ -2,7 +2,7 @@ class ReplacerSearch extends Replacer
   constructor: (@plugin) ->
     super
 
-  loadEmoji: ->
+  loadEmoji: (target_element) ->
     # for useLoadingImg: true --------
     searchEmoji_setEmojiTag = (element) =>
       replaceToEmojiIcon = (type, loading_element, emoji_code) =>
@@ -66,14 +66,19 @@ class ReplacerSearch extends Replacer
 
         replaced_num = 0
         matched_codes = replaced_text.match @regexpCode
-        if matched_codes.length
+        if matched_codes?.length
           for code in matched_codes
-            code_only = code.replace /\:/g, ''
-            emoji_image = $("<img src='#{@plugin.EC.cdn_url}#{@plugin.EC.size_code}/#{@replaceSpaceToUnder code_only}.png' data-code='#{code_only}'></img>")
-            emoji_image.load (e) =>
-              replaced_text = replaced_text.replace ":#{e.currentTarget.dataset.code}:", @getEmojiTag e.currentTarget.dataset.code
-              checkReplaceEnd()
-            emoji_image.error (e) =>
+            if @ignore_codes.indexOf(code) is -1
+              code_only = code.replace /\:/g, ''
+              emoji_image = $("<img src='#{@plugin.EC.cdn_url}#{@plugin.EC.size_code}/#{@replaceSpaceToUnder code_only}.png' data-code='#{code_only}'></img>")
+              emoji_image.load (e) =>
+                replaced_text = replaced_text.replace ":#{e.currentTarget.dataset.code}:", @getEmojiTag e.currentTarget.dataset.code
+                checkReplaceEnd()
+              emoji_image.error (e) =>
+                @ignore_codes.push ":#{e.currentTarget.dataset.code}:"
+                replaced_text = replaced_text.replace ":#{e.currentTarget.dataset.code}:", "<span class='emojidex-ignore-code'>:#{e.currentTarget.dataset.code}:<span>"
+                checkReplaceEnd()
+            else
               checkReplaceEnd()
         else
           $(element).replaceWith replaced_text
@@ -83,10 +88,10 @@ class ReplacerSearch extends Replacer
         $(element).replaceWith replaced_text
 
     # start: loadEmoji --------
+    target_element = target_element || @plugin.element
     if @plugin.options.useLoadingImg
-      return @setLoadingTag(@plugin).then =>
-        searchEmoji_setEmojiTag @plugin.element
-
+      return @setLoadingTag().then =>
+        searchEmoji_setEmojiTag target_element
     else
       return new Promise (resolve, reject) =>
         timeout = setTimeout ->
@@ -99,9 +104,11 @@ class ReplacerSearch extends Replacer
 
         complete_num = 0
         targets = []
-        @plugin.element.find(":not(#{@plugin.options.ignore})").andSelf().contents().filter (index, element) =>
+        target_element.find(":not(#{@plugin.options.ignore})").andSelf().contents().filter (index, element) =>
           if element.nodeType is Node.TEXT_NODE and element.textContent.match(/\S/)
             targets.push element
+
+        console.log 'targets node length:', targets.length, targets
         for target in targets
           setEomojiTag(target).then (e)->
             checkReplaceComplete()

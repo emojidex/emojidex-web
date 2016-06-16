@@ -1,53 +1,63 @@
 class Observer
-  constructor: ->
-    console.log 'I am Observer...'
+  constructor: (@plugin)->
+    @dom_observer = undefined
+    @queues = []
+    @replacer = new ReplacerSearch @plugin
+
+  doQueue: ->
+    return new Promise (resolve, reject) =>
+      console.log '@promiseWaitTime', @replacer.promiseWaitTime
+      timeout = setTimeout ->
+        reject new Error('emojidex: doQueue - Timeout')
+      , @replacer.promiseWaitTime
+
+      body = $('body')[0]
+      if @queues.indexOf(body) isnt -1
+        @queues = []
+        @replacer.loadEmoji($(body)).then ->
+          resolve()
+      else
+        queue_limit = 3
+        checkComplete = =>
+          if @queues.length > 0 and queue_limit-- > 0
+            queue = @queues.pop()
+            @replacer.loadEmoji($(queue)).then ->
+              checkComplete()
+          else
+            resolve()
+        checkComplete()
+
+  domObserve: ->
+    console.count 'DomObserve:'
+    config =
+      childList: true
+      subtree: true
+      characterData: true
+    @dom_observer.observe @plugin.element[0], config
+
+  disconnect: ->
+    console.count 'disconnect:'
+    @dom_observer.disconnect()
+
+  startQueueTimer: ->
+    @queueTimer = setInterval =>
+      console.count 'start timer:'
+      if @queues.length > 0
+        @disconnect()
+        console.log '@queues.length:', @queues.length, @queues
+        @doQueue().then =>
+          console.log 'doQueue ENDDDDDDD----'
+          @domObserve()
+    , 3000
 
   reloadEmoji: ->
-    queues = []
-    dom_observer = new MutationObserver (mutations) =>
-      for mutation in mutations
-        if queues.indexOf(mutation.target) is -1
-          queues.push mutation.target
 
-    doQueue = (DO) =>
-      # @plugin.options.useLoadingImg = false
-      disconnect DO
-      body = $('body')[0]
-      if queues.indexOf(body) isnt -1
-        console.count('reset queues')
-        @plugin.replacer.loadEmoji()
-        queues = []
-      else
-        queue_limit = @plugin.options.updateLimit
-        queue_limit = 2
-        while queues.length > 0 and queue_limit > 0
-          console.count('replace')
-          queue = queues.pop()
-          promise = @plugin.replacer.loadEmoji()
-          console.log promise
-          queue_limit--
-      # DomObserve DO
+    @replacer.loadEmoji().then =>
+      @startQueueTimer()
 
-    DomObserve = (DO) =>
-      console.count 'DomObserve:'
-      config =
-        childList: true
-        subtree: true
-        characterData: true
-      DO.observe @plugin.element[0], config
-
-    disconnect = (DO) ->
-      console.count 'disconnect:'
-      DO.disconnect()
-
-    DomObserve dom_observer
-
-    queueTimer = ->
-      setTimeout ->
-        # console.count 'start timer:'
-        if queues.length > 0
-          console.log 'queues.length:', queues.length
-          doQueue dom_observer
-        queueTimer()
-      , 1000
-    queueTimer()
+      @dom_observer = new MutationObserver (mutations) =>
+        for mutation in mutations
+          if @queues.indexOf(mutation.target) is -1 and @queues.length - 1 < 10
+            # unless $(mutation.target).hasClass('js-macaw-cards-iframe-container')
+            @queues.push mutation.target
+      @domObserve()
