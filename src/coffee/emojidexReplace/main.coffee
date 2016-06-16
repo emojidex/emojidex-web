@@ -28,6 +28,9 @@ do ($ = jQuery, window, document) ->
       @_defaults = defaults
       @_name = pluginName
 
+      # add twitter ignore --------
+      @options.ignore += ', .js-media-container, .js-macaw-cards-iframe-container, .stream-items, ._timestamp, .count-inner'
+
       @EC = new EmojidexClient
         onReady: (EC) =>
           if @checkUpdate()
@@ -64,10 +67,9 @@ do ($ = jQuery, window, document) ->
     replace: ->
       if @options.autoUpdate
         console.log 'autoUpdate START ---'
-        @options.useLoadingImg = false
+        # @options.useLoadingImg = false
         @observer = new Observer @
         @observer.reloadEmoji()
-
       else
         console.log 'replace START ---'
         @replacer = new ReplacerSearch @

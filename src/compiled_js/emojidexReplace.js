@@ -34,6 +34,7 @@
         this.options = $.extend({}, defaults, options);
         this._defaults = defaults;
         this._name = pluginName;
+        this.options.ignore += ', .js-media-container, .js-macaw-cards-iframe-container, .stream-items, ._timestamp, .count-inner';
         this.EC = new EmojidexClient({
           onReady: function(EC) {
             if (_this.checkUpdate()) {
@@ -82,7 +83,6 @@
         var _this = this;
         if (this.options.autoUpdate) {
           console.log('autoUpdate START ---');
-          this.options.useLoadingImg = false;
           this.observer = new Observer(this);
           return this.observer.reloadEmoji();
         } else {
@@ -196,7 +196,11 @@
           for (_i = 0, _len = mutations.length; _i < _len; _i++) {
             mutation = mutations[_i];
             if (_this.queues.indexOf(mutation.target) === -1 && _this.queues.length - 1 < 10) {
-              _results.push(_this.queues.push(mutation.target));
+              if (!$(mutation.target).is(_this.plugin.options.ignore)) {
+                _results.push(_this.queues.push(mutation.target));
+              } else {
+                _results.push(void 0);
+              }
             } else {
               _results.push(void 0);
             }
@@ -250,15 +254,20 @@
             return targets.push(element);
           }
         });
-        _results = [];
-        for (_i = 0, _len = targets.length; _i < _len; _i++) {
-          target = targets[_i];
-          _results.push(_this.getAddedLoadingTagText(target).then(function(data) {
-            $(data.element).replaceWith(data.text);
-            return checkReplaceComplete();
-          }));
+        console.log('targets node length:', targets.length, targets);
+        if (targets.length) {
+          _results = [];
+          for (_i = 0, _len = targets.length; _i < _len; _i++) {
+            target = targets[_i];
+            _results.push(_this.getAddedLoadingTagText(target).then(function(data) {
+              $(data.element).replaceWith("<span class='emojidex-ignore-element'>" + data.text + "</span>");
+              return checkReplaceComplete();
+            }));
+          }
+          return _results;
+        } else {
+          return resolve();
         }
-        return _results;
       });
     };
 

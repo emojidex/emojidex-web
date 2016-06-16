@@ -65,6 +65,6 @@ class Observer
       @dom_observer = new MutationObserver (mutations) =>
         for mutation in mutations
           if @queues.indexOf(mutation.target) is -1 and @queues.length - 1 < 10
-            # unless $(mutation.target).hasClass('js-macaw-cards-iframe-container')
-            @queues.push mutation.target
+            unless $(mutation.target).is @plugin.options.ignore
+              @queues.push mutation.target
       @domObserve()

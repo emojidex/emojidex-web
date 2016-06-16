@@ -29,10 +29,14 @@ class Replacer
       @plugin.element.find(":not(#{@plugin.options.ignore})").andSelf().contents().filter (index, element) =>
         if element.nodeType is Node.TEXT_NODE and element.textContent.match(/\S/)
           targets.push element
-      for target in targets
-        @getAddedLoadingTagText(target).then (data) ->
-          $(data.element).replaceWith data.text
-          checkReplaceComplete()
+      console.log 'targets node length:', targets.length, targets
+      if targets.length
+        for target in targets
+          @getAddedLoadingTagText(target).then (data) ->
+            $(data.element).replaceWith "<span class='emojidex-ignore-element'>#{data.text}</span>"
+            checkReplaceComplete()
+      else
+        resolve()
 
   getAddedLoadingTagText: (target_element) ->
     replaced_text = target_element.textContent.replace @plugin.options.regexpUtf, (matched_string) =>
