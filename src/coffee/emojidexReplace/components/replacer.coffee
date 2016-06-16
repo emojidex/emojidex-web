@@ -1,7 +1,6 @@
 class Replacer
   constructor: ->
     @promiseWaitTime = 5000
-    @ignore_codes = []
 
     ignore = '\'":;@&#~{}<>\\r\\n\\[\\]\\!\\$\\+\\?\\%\\*\\/\\\\'
     @regexpCode = RegExp ":([^\\s#{ignore}][^#{ignore}]*[^\\s#{ignore}]):|:([^\\s#{ignore}]):", 'g'

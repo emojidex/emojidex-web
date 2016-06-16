@@ -13,14 +13,17 @@ class Observer
 
       body = $('body')[0]
       if @queues.indexOf(body) isnt -1
+        console.log '@queues.indexOf(body) isnt -1: true ---'
         @queues = []
         @replacer.loadEmoji($(body)).then ->
           resolve()
       else
+        console.log '@queues.indexOf(body) isnt -1: false ---'
         queue_limit = 3
         checkComplete = =>
           if @queues.length > 0 and queue_limit-- > 0
             queue = @queues.pop()
+            console.log 'checkComplete---', queue
             @replacer.loadEmoji($(queue)).then ->
               checkComplete()
           else
@@ -40,19 +43,23 @@ class Observer
     @dom_observer.disconnect()
 
   startQueueTimer: ->
-    @queueTimer = setInterval =>
+    setTimeout =>
       console.count 'start timer:'
+      @queues.length
       if @queues.length > 0
-        @disconnect()
         console.log '@queues.length:', @queues.length, @queues
+        @disconnect()
         @doQueue().then =>
-          console.log 'doQueue ENDDDDDDD----'
           @domObserve()
-    , 3000
+          @startQueueTimer()
+      else
+        @startQueueTimer()
+    , 1000
 
   reloadEmoji: ->
 
     @replacer.loadEmoji().then =>
+      console.log 'first replace END ---'
       @startQueueTimer()
 
       @dom_observer = new MutationObserver (mutations) =>

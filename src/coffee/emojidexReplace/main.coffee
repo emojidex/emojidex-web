@@ -15,7 +15,7 @@ do ($ = jQuery, window, document) ->
   defaults =
     onComplete: undefined
     useLoadingImg: true
-    ignore: 'script, noscript, canvas, style, iframe, input, textarea, pre, code, .emojidex-ignore-code'
+    ignore: 'script, noscript, canvas, img, style, iframe, input, textarea, pre, code, .emojidex-ignore-element'
 
     # this option is beta --------
     autoUpdate: false
@@ -62,7 +62,6 @@ do ($ = jQuery, window, document) ->
         return true
 
     replace: ->
-      console.log 'replace START ---'
       if @options.autoUpdate
         console.log 'autoUpdate START ---'
         @options.useLoadingImg = false
@@ -70,6 +69,7 @@ do ($ = jQuery, window, document) ->
         @observer.reloadEmoji()
 
       else
+        console.log 'replace START ---'
         @replacer = new ReplacerSearch @
         @replacer.loadEmoji().then =>
           console.log 'replace END ---'
