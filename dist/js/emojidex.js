@@ -977,7 +977,6 @@
         for (_i = 0, _len = targets.length; _i < _len; _i++) {
           target = targets[_i];
           _results.push(_this.getTextWithLoadingTag(target).then(function(data) {
-            console.log('getTextWithLoadingTag', data);
             $(data.element).replaceWith(data.text);
             return checkReplaceComplete();
           }));
@@ -1095,20 +1094,12 @@
         var replaceToEmojiIcon;
         replaceToEmojiIcon = function(type, loading_element, emoji_code) {
           return new Promise(function(resolve, reject) {
-            var emoji_image, timeout;
+            var timeout;
             timeout = setTimeout(function() {
               return reject(new Error('emojidex: replaceToEmojiIcon - Timeout'));
             }, _this.promiseWaitTime);
-            emoji_image = $("<img src='" + _this.plugin.EC.cdn_url + _this.plugin.EC.size_code + "/" + emoji_code + ".png'></img>");
-            emoji_image.load(function(e) {
-              return _this.fadeOutLoadingTag_fadeInEmojiTag(loading_element, emoji_code).then(function() {
-                return resolve();
-              });
-            });
-            return emoji_image.error(function(e) {
-              return _this.fadeOutLoadingTag_fadeInEmojiTag(loading_element, "" + loading_element[0].dataset.emoji, false).then(function() {
-                return resolve();
-              });
+            return _this.fadeOutLoadingTag_fadeInEmojiTag(loading_element, emoji_code).then(function() {
+              return resolve();
             });
           });
         };

@@ -11,13 +11,8 @@ class ReplacerSearch extends Replacer
             reject new Error('emojidex: replaceToEmojiIcon - Timeout')
           , @promiseWaitTime
 
-          emoji_image = $("<img src='#{@plugin.EC.cdn_url}#{@plugin.EC.size_code}/#{emoji_code}.png'></img>")
-          emoji_image.load (e) =>
-            @fadeOutLoadingTag_fadeInEmojiTag(loading_element, emoji_code).then ->
-              resolve()
-          emoji_image.error (e) =>
-            @fadeOutLoadingTag_fadeInEmojiTag(loading_element, "#{loading_element[0].dataset.emoji}", false).then ->
-              resolve()
+          @fadeOutLoadingTag_fadeInEmojiTag(loading_element, emoji_code).then ->
+            resolve()
 
       # start: searchEmoji_setEmojiTag --------
       return new Promise (resolve, reject) =>

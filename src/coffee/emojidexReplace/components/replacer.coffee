@@ -31,7 +31,6 @@ class Replacer
           targets.push element
       for target in targets
         @getTextWithLoadingTag(target).then (data) ->
-          console.log 'getTextWithLoadingTag', data
           $(data.element).replaceWith data.text
           checkReplaceComplete()
 
