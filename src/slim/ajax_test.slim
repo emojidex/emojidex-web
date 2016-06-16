@@ -16,12 +16,12 @@ html
       $(document).ready =>
         $("body").emojidexReplace
           autoUpdate: true
-          useLoadingImg: false
+          useLoadingImg: true
           onComplete: (element) ->
             console.log 'Completed emojidexReplace!!'
         count = 0
         addTimer = setInterval ->
-          $('#ajax_test').append('<br>:heart::rainboaaaw:')
+          $('#ajax_test').append('<br>:heart::rainboaaaw:💙')
           if ++count is 1
             clearInterval addTimer
         , 1000

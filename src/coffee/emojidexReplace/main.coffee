@@ -62,8 +62,14 @@ do ($ = jQuery, window, document) ->
         return true
 
     replace: ->
+      console.log 'replace START ---'
       @replacer = new ReplacerSearch @
-      @replacer.loadEmoji()
+      @replacer.loadEmoji().then =>
+        console.log 'replace END ---'
+        @options.onComplete? @element
+        # setTimeout =>
+        #   @replace()
+        # , 5000
 
   $.fn[pluginName] = (options) ->
     @each ->

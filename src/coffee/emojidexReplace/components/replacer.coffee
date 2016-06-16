@@ -1,6 +1,6 @@
 class Replacer
   constructor: ->
-    @promiseWaitTime = 3000
+    @promiseWaitTime = 5000
 
     ignore = '\'":;@&#~{}<>\\r\\n\\[\\]\\!\\$\\+\\?\\%\\*\\/\\\\'
     @regexpCode = RegExp ":([^\\s#{ignore}][^#{ignore}]*[^\\s#{ignore}]):|:([^\\s#{ignore}]):", 'g'
@@ -20,67 +20,52 @@ class Replacer
         reject new Error('emojidex: setLoadingTag - Timeout')
       , @promiseWaitTime
 
-      plugin.element.find(":not(#{plugin.options.ignore})").andSelf().contents().filter (index, element) =>
-        if element.nodeType is Node.TEXT_NODE and element.textContent.match(/\S/)
-          replaced_text = @getTextWithLoadingTag element.textContent
-          $(element).replaceWith replaced_text if replaced_text isnt element.textContent
+      checkReplaceComplete = =>
+        if targets.length is ++complete_num
           resolve()
 
-  getTextWithLoadingTag: (text) ->
-    text = text.replace @plugin.options.regexpUtf, (matched_string) =>
+      complete_num = 0
+      targets = []
+      plugin.element.find(":not(#{plugin.options.ignore})").andSelf().contents().filter (index, element) =>
+        if element.nodeType is Node.TEXT_NODE and element.textContent.match(/\S/)
+          targets.push element
+      for target in targets
+        @getTextWithLoadingTag(target).then (data) ->
+          console.log 'getTextWithLoadingTag', data
+          $(data.element).replaceWith data.text
+          checkReplaceComplete()
+
+  getTextWithLoadingTag: (target_element) ->
+    replaced_text = target_element.textContent.replace @plugin.options.regexpUtf, (matched_string) =>
       @getLoadingTag matched_string, 'utf'
-    text = text.replace @regexpCode, (matched_string) =>
-      @getLoadingTag matched_string, 'code'
-    return text
 
-  reloadEmoji: ->
-    queues = []
-    dom_observer = new MutationObserver (mutations) =>
-      for mutation in mutations
-        if queues.indexOf(mutation.target) is -1
-          queues.push mutation.target
+    new Promise (resolve, reject) =>
+      timeout = setTimeout ->
+        reject new Error('emojidex: getTextWithLoadingTag - Timeout')
+      , @promiseWaitTime
 
-    doQueue = (DO) =>
-      # @plugin.options.useLoadingImg = false
-      disconnect DO
-      body = $('body')[0]
-      if queues.indexOf(body) isnt -1
-        console.count('reset queues')
-        @plugin.replacer.loadEmoji()
-        queues = []
+      checkReplaceEnd = () =>
+        if matched_codes.length is ++replaced_num
+          resolve
+            element: target_element
+            text: replaced_text
+
+      replaced_num = 0
+      matched_codes = replaced_text.match @regexpCode
+      if matched_codes.length
+        for code in matched_codes
+          code_only = code.replace /\:/g, ''
+          emoji_image = $("<img src='#{@plugin.EC.cdn_url}#{@plugin.EC.size_code}/#{@replaceSpaceToUnder code_only}.png' data-code='#{code_only}'></img>")
+          emoji_image.load (e) =>
+            replaced_text = replaced_text.replace ":#{e.currentTarget.dataset.code}:", @getLoadingTag e.currentTarget.dataset.code, 'code'
+            checkReplaceEnd()
+          emoji_image.error (e) =>
+            checkReplaceEnd()
       else
-        queue_limit = @plugin.options.updateLimit
-        queue_limit = 2
-        while queues.length > 0 and queue_limit > 0
-          console.count('replace')
-          queue = queues.pop()
-          @plugin.replacer.loadEmoji()
-          queue_limit--
-      # DomObserve DO
+        resolve
+          element: target_element
+          text: replaced_text
 
-    DomObserve = (DO) =>
-      console.count 'DomObserve:'
-      config =
-        childList: true
-        subtree: true
-        characterData: true
-      DO.observe @plugin.element[0], config
-
-    disconnect = (DO) ->
-      console.count 'disconnect:'
-      DO.disconnect()
-
-    DomObserve dom_observer
-
-    queueTimer = ->
-      setTimeout ->
-        # console.count 'start timer:'
-        if queues.length > 0
-          console.log 'queues.length:', queues.length
-          doQueue dom_observer
-        queueTimer()
-      , 1000
-    queueTimer()
 
   fadeOutLoadingTag_fadeInEmojiTag: (element, emoji_code, match = true) ->
     emoji_tag = undefined

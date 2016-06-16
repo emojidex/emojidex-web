@@ -16,14 +16,14 @@
             var addTimer, count;
             $("body").emojidexReplace({
               autoUpdate: true,
-              useLoadingImg: false,
+              useLoadingImg: true,
               onComplete: function(element) {
                 return console.log('Completed emojidexReplace!!');
               }
             });
             count = 0;
             return addTimer = setInterval(function() {
-              $('#ajax_test').append('<br>:heart::rainboaaaw:');
+              $('#ajax_test').append('<br>:heart::rainboaaaw:💙');
               if (++count === 1) {
                 return clearInterval(addTimer);
               }

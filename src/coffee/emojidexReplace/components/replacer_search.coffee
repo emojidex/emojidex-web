@@ -86,10 +86,8 @@ class ReplacerSearch extends Replacer
 
     # start: loadEmoji --------
     if @plugin.options.useLoadingImg
-      return @setLoadingTag(@plugin).then( =>
+      return @setLoadingTag(@plugin).then =>
         searchEmoji_setEmojiTag @plugin.element
-      ).then =>
-        @plugin.options.onComplete? @plugin.element
 
     else
       return new Promise (resolve, reject) =>
@@ -99,7 +97,6 @@ class ReplacerSearch extends Replacer
 
         checkReplaceComplete = =>
           if targets.length is ++complete_num
-            console.log 'Finish: setEmoji'
             resolve()
 
         complete_num = 0
