@@ -99,9 +99,29 @@ class ReplacerSearch extends Replacer
 
         complete_num = 0
         targets = []
-        element.find(":not(#{@plugin.options.ignore})").andSelf().contents().filter (index, element) =>
-          if element.nodeType is Node.TEXT_NODE and element.textContent.match(/\S/)
-            targets.push element
+
+        console.time 'setTargets'
+        setTargets = (node) =>
+          child = node.firstChild
+          while child
+            switch child.nodeType
+              when 1
+                if $(child).is @plugin.options.ignore
+                  break
+                if child.isContentEditable
+                  break
+                setTargets child
+                break
+              when 3
+                targets.push child if child.textContent.match(/\S/)
+                break
+            child = child.nextSibling
+        setTargets element[0]
+
+        # element.find(":not(#{@plugin.options.ignore})").andSelf().contents().filter (index, element) =>
+        #   if element.nodeType is Node.TEXT_NODE and element.textContent.match(/\S/)
+        #     targets.push element
+        console.timeEnd 'setTargets'
 
         console.log 'targets node length:', targets.length, targets
         if targets.length

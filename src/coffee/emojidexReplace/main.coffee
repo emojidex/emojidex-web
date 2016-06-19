@@ -23,35 +23,38 @@ do ($ = jQuery, window, document) ->
 
   class Plugin
     constructor: (@element, options) ->
-      @element = $ @element
-      @options = $.extend {}, defaults, options
-      @_defaults = defaults
-      @_name = pluginName
+      unless $('body').hasClass('emojidexReplacerStart')
+        $('body').addClass 'emojidexReplacerStart'
 
-      # add twitter ignore --------
-      @options.ignore += ', .js-media-container, .js-macaw-cards-iframe-container, ._timestamp, .count-inner'
+        @element = $ @element
+        @options = $.extend {}, defaults, options
+        @_defaults = defaults
+        @_name = pluginName
 
-      @EC = new EmojidexClient
-        onReady: (EC) =>
-          if @checkUpdate()
-            $.ajax
-              url: @EC.api_url + 'moji_codes'
-              dataType: 'json'
-              success: (response) =>
-                regexp = response.moji_array.join('|')
-                @options.regexpUtf = RegExp regexp, 'g'
-                @options.utfEmojiData = response.moji_index
+        # add twitter ignore --------
+        @options.ignore += ', .js-media-container, .js-macaw-cards-iframe-container, ._timestamp, .count-inner'
 
-                @EC.Data.storage.update('emojidex.utfInfoUpdated', new Date().toString()).then( =>
-                  return @EC.Data.storage.update 'emojidex.regexpUtf', regexp
-                ).then( =>
-                  return @EC.Data.storage.update 'emojidex.utfEmojiData', response.moji_index
-                ).then =>
-                  @replace()
-          else
-            @options.regexpUtf = RegExp @EC.Data.storage.get('emojidex.regexpUtf'), 'g'
-            @options.utfEmojiData = @EC.Data.storage.get 'emojidex.utfEmojiData'
-            @replace()
+        @EC = new EmojidexClient
+          onReady: (EC) =>
+            if @checkUpdate()
+              $.ajax
+                url: @EC.api_url + 'moji_codes'
+                dataType: 'json'
+                success: (response) =>
+                  regexp = response.moji_array.join('|')
+                  @options.regexpUtf = RegExp regexp, 'g'
+                  @options.utfEmojiData = response.moji_index
+
+                  @EC.Data.storage.update('emojidex.utfInfoUpdated', new Date().toString()).then( =>
+                    return @EC.Data.storage.update 'emojidex.regexpUtf', regexp
+                  ).then( =>
+                    return @EC.Data.storage.update 'emojidex.utfEmojiData', response.moji_index
+                  ).then =>
+                    @replace()
+            else
+              @options.regexpUtf = RegExp @EC.Data.storage.get('emojidex.regexpUtf'), 'g'
+              @options.utfEmojiData = @EC.Data.storage.get 'emojidex.utfEmojiData'
+              @replace()
 
     checkUpdate: ->
       if @EC.Data.storage.isSet 'emojidex.utfInfoUpdated'

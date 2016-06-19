@@ -788,38 +788,41 @@
       function Plugin(element, options) {
         var _this = this;
         this.element = element;
-        this.element = $(this.element);
-        this.options = $.extend({}, defaults, options);
-        this._defaults = defaults;
-        this._name = pluginName;
-        this.options.ignore += ', .js-media-container, .js-macaw-cards-iframe-container, ._timestamp, .count-inner';
-        this.EC = new EmojidexClient({
-          onReady: function(EC) {
-            if (_this.checkUpdate()) {
-              return $.ajax({
-                url: _this.EC.api_url + 'moji_codes',
-                dataType: 'json',
-                success: function(response) {
-                  var regexp;
-                  regexp = response.moji_array.join('|');
-                  _this.options.regexpUtf = RegExp(regexp, 'g');
-                  _this.options.utfEmojiData = response.moji_index;
-                  return _this.EC.Data.storage.update('emojidex.utfInfoUpdated', new Date().toString()).then(function() {
-                    return _this.EC.Data.storage.update('emojidex.regexpUtf', regexp);
-                  }).then(function() {
-                    return _this.EC.Data.storage.update('emojidex.utfEmojiData', response.moji_index);
-                  }).then(function() {
-                    return _this.replace();
-                  });
-                }
-              });
-            } else {
-              _this.options.regexpUtf = RegExp(_this.EC.Data.storage.get('emojidex.regexpUtf'), 'g');
-              _this.options.utfEmojiData = _this.EC.Data.storage.get('emojidex.utfEmojiData');
-              return _this.replace();
+        if (!$('body').hasClass('emojidexReplacerStart')) {
+          $('body').addClass('emojidexReplacerStart');
+          this.element = $(this.element);
+          this.options = $.extend({}, defaults, options);
+          this._defaults = defaults;
+          this._name = pluginName;
+          this.options.ignore += ', .js-media-container, .js-macaw-cards-iframe-container, ._timestamp, .count-inner';
+          this.EC = new EmojidexClient({
+            onReady: function(EC) {
+              if (_this.checkUpdate()) {
+                return $.ajax({
+                  url: _this.EC.api_url + 'moji_codes',
+                  dataType: 'json',
+                  success: function(response) {
+                    var regexp;
+                    regexp = response.moji_array.join('|');
+                    _this.options.regexpUtf = RegExp(regexp, 'g');
+                    _this.options.utfEmojiData = response.moji_index;
+                    return _this.EC.Data.storage.update('emojidex.utfInfoUpdated', new Date().toString()).then(function() {
+                      return _this.EC.Data.storage.update('emojidex.regexpUtf', regexp);
+                    }).then(function() {
+                      return _this.EC.Data.storage.update('emojidex.utfEmojiData', response.moji_index);
+                    }).then(function() {
+                      return _this.replace();
+                    });
+                  }
+                });
+              } else {
+                _this.options.regexpUtf = RegExp(_this.EC.Data.storage.get('emojidex.regexpUtf'), 'g');
+                _this.options.utfEmojiData = _this.EC.Data.storage.get('emojidex.utfEmojiData');
+                return _this.replace();
+              }
             }
-          }
-        });
+          });
+        }
       }
 
       Plugin.prototype.checkUpdate = function() {
@@ -1251,7 +1254,7 @@
         });
       } else {
         return new Promise(function(resolve, reject) {
-          var checkReplaceComplete, complete_num, target, targets, timeout, _i, _len, _results;
+          var checkReplaceComplete, complete_num, setTargets, target, targets, timeout, _i, _len, _results;
           timeout = setTimeout(function() {
             return reject(new Error('emojidex: loadEmoji useLoadingImg: false - Timeout'));
           }, _this.promiseWaitTime);
@@ -1262,11 +1265,34 @@
           };
           complete_num = 0;
           targets = [];
-          element.find(":not(" + _this.plugin.options.ignore + ")").andSelf().contents().filter(function(index, element) {
-            if (element.nodeType === Node.TEXT_NODE && element.textContent.match(/\S/)) {
-              return targets.push(element);
+          console.time('setTargets');
+          setTargets = function(node) {
+            var child, _results;
+            child = node.firstChild;
+            _results = [];
+            while (child) {
+              switch (child.nodeType) {
+                case 1:
+                  if ($(child).is(_this.plugin.options.ignore)) {
+                    break;
+                  }
+                  if (child.isContentEditable) {
+                    break;
+                  }
+                  setTargets(child);
+                  break;
+                case 3:
+                  if (child.textContent.match(/\S/)) {
+                    targets.push(child);
+                  }
+                  break;
+              }
+              _results.push(child = child.nextSibling);
             }
-          });
+            return _results;
+          };
+          setTargets(element[0]);
+          console.timeEnd('setTargets');
           console.log('targets node length:', targets.length, targets);
           if (targets.length) {
             _results = [];
