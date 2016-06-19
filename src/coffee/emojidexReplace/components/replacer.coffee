@@ -6,6 +6,7 @@ class Replacer
     @regexpCode = RegExp ":([^\\s#{ignore}][^#{ignore}]*[^\\s#{ignore}]):|:([^\\s#{ignore}]):", 'g'
 
     @targets = []
+    @complete_num = 0
 
   setTargets: (node) ->
     child = node.firstChild
@@ -22,6 +23,11 @@ class Replacer
           @targets.push child if child.textContent.match(/\S/)
           break
       child = child.nextSibling
+
+  checkReplaceComplete: (resolve) ->
+    if @targets.length is ++@complete_num
+      console.timeEnd 'replace target total'
+      resolve()
 
   getEmojiTag: (emoji_code) ->
     "<img class='emojidex-emoji' src='#{@plugin.EC.cdn_url}#{@plugin.EC.size_code}/#{emoji_code}.png' title='#{@replaceUnderToSpace emoji_code}'></img>"

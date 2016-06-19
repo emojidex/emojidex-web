@@ -48,13 +48,16 @@ class ReplacerSearch extends Replacer
 
     # for useLoadingImg: false --------
     setEomojiTag = (element) =>
+      console.time 'replace for utf'
       replaced_text = element.textContent.replace @plugin.options.regexpUtf, (matched_string) =>
         for emoji of @plugin.options.utfEmojiData
           if emoji is matched_string
             @emoji_tags++
             emoji_tag = @getEmojiTag @plugin.options.utfEmojiData[emoji]
             return emoji_tag
+      console.timeEnd 'replace for utf'
 
+      console.time 'replace for code'
       replaced_promise = new Promise (resolve, reject) =>
         timeout = setTimeout ->
           reject new Error('emojidex: setEomojiTag - Timeout')
@@ -62,6 +65,7 @@ class ReplacerSearch extends Replacer
 
         checkReplaceEnd = () =>
           if matched_codes.length is ++replaced_num
+            console.timeEnd 'replace for code'
             resolve()
 
         replaced_num = 0
@@ -93,24 +97,16 @@ class ReplacerSearch extends Replacer
           reject new Error('emojidex: loadEmoji useLoadingImg: false - Timeout')
         , @promiseWaitTime
 
-        checkReplaceComplete = =>
-          if @targets.length is ++complete_num
-            resolve()
-
-        complete_num = 0
-
-        console.time 'setTargets'
+        @targets = []
+        @complete_num = 0
         @setTargets element[0]
 
-        # element.find(":not(#{@plugin.options.ignore})").andSelf().contents().filter (index, element) =>
-        #   if element.nodeType is Node.TEXT_NODE and element.textContent.match(/\S/)
-        #     targets.push element
-        console.timeEnd 'setTargets'
-
         console.log 'targets node length:', @targets.length, @targets
+
+        console.time 'replace target total'
         if @targets.length
           for target in @targets
-            setEomojiTag(target).then (e)->
-              checkReplaceComplete()
+            setEomojiTag(target).then (e) =>
+              @checkReplaceComplete resolve
         else
           resolve()

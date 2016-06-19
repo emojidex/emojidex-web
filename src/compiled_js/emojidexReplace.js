@@ -226,6 +226,7 @@
       ignore = '\'":;@&#~{}<>\\r\\n\\[\\]\\!\\$\\+\\?\\%\\*\\/\\\\';
       this.regexpCode = RegExp(":([^\\s" + ignore + "][^" + ignore + "]*[^\\s" + ignore + "]):|:([^\\s" + ignore + "]):", 'g');
       this.targets = [];
+      this.complete_num = 0;
     }
 
     Replacer.prototype.setTargets = function(node) {
@@ -252,6 +253,13 @@
         _results.push(child = child.nextSibling);
       }
       return _results;
+    };
+
+    Replacer.prototype.checkReplaceComplete = function(resolve) {
+      if (this.targets.length === ++this.complete_num) {
+        console.timeEnd('replace target total');
+        return resolve();
+      }
     };
 
     Replacer.prototype.getEmojiTag = function(emoji_code) {
@@ -471,6 +479,7 @@
       };
       setEomojiTag = function(element) {
         var replaced_promise, replaced_text;
+        console.time('replace for utf');
         replaced_text = element.textContent.replace(_this.plugin.options.regexpUtf, function(matched_string) {
           var emoji, emoji_tag;
           for (emoji in _this.plugin.options.utfEmojiData) {
@@ -481,6 +490,8 @@
             }
           }
         });
+        console.timeEnd('replace for utf');
+        console.time('replace for code');
         replaced_promise = new Promise(function(resolve, reject) {
           var checkReplaceEnd, code, code_only, emoji_image, matched_codes, replaced_num, timeout, _i, _len, _results;
           timeout = setTimeout(function() {
@@ -488,6 +499,7 @@
           }, _this.promiseWaitTime);
           checkReplaceEnd = function() {
             if (matched_codes.length === ++replaced_num) {
+              console.timeEnd('replace for code');
               return resolve();
             }
           };
@@ -523,27 +535,22 @@
         });
       } else {
         return new Promise(function(resolve, reject) {
-          var checkReplaceComplete, complete_num, target, timeout, _i, _len, _ref, _results;
+          var target, timeout, _i, _len, _ref, _results;
           timeout = setTimeout(function() {
             return reject(new Error('emojidex: loadEmoji useLoadingImg: false - Timeout'));
           }, _this.promiseWaitTime);
-          checkReplaceComplete = function() {
-            if (_this.targets.length === ++complete_num) {
-              return resolve();
-            }
-          };
-          complete_num = 0;
-          console.time('setTargets');
+          _this.targets = [];
+          _this.complete_num = 0;
           _this.setTargets(element[0]);
-          console.timeEnd('setTargets');
           console.log('targets node length:', _this.targets.length, _this.targets);
+          console.time('replace target total');
           if (_this.targets.length) {
             _ref = _this.targets;
             _results = [];
             for (_i = 0, _len = _ref.length; _i < _len; _i++) {
               target = _ref[_i];
               _results.push(setEomojiTag(target).then(function(e) {
-                return checkReplaceComplete();
+                return _this.checkReplaceComplete(resolve);
               }));
             }
             return _results;
