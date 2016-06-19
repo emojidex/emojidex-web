@@ -94,38 +94,22 @@ class ReplacerSearch extends Replacer
         , @promiseWaitTime
 
         checkReplaceComplete = =>
-          if targets.length is ++complete_num
+          if @targets.length is ++complete_num
             resolve()
 
         complete_num = 0
-        targets = []
 
         console.time 'setTargets'
-        setTargets = (node) =>
-          child = node.firstChild
-          while child
-            switch child.nodeType
-              when 1
-                if $(child).is @plugin.options.ignore
-                  break
-                if child.isContentEditable
-                  break
-                setTargets child
-                break
-              when 3
-                targets.push child if child.textContent.match(/\S/)
-                break
-            child = child.nextSibling
-        setTargets element[0]
+        @setTargets element[0]
 
         # element.find(":not(#{@plugin.options.ignore})").andSelf().contents().filter (index, element) =>
         #   if element.nodeType is Node.TEXT_NODE and element.textContent.match(/\S/)
         #     targets.push element
         console.timeEnd 'setTargets'
 
-        console.log 'targets node length:', targets.length, targets
-        if targets.length
-          for target in targets
+        console.log 'targets node length:', @targets.length, @targets
+        if @targets.length
+          for target in @targets
             setEomojiTag(target).then (e)->
               checkReplaceComplete()
         else

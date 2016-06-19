@@ -5,6 +5,24 @@ class Replacer
     ignore = '\'":;@&#~{}<>\\r\\n\\[\\]\\!\\$\\+\\?\\%\\*\\/\\\\'
     @regexpCode = RegExp ":([^\\s#{ignore}][^#{ignore}]*[^\\s#{ignore}]):|:([^\\s#{ignore}]):", 'g'
 
+    @targets = []
+
+  setTargets: (node) ->
+    child = node.firstChild
+    while child
+      switch child.nodeType
+        when 1
+          if $(child).is @plugin.options.ignore
+            break
+          if child.isContentEditable
+            break
+          @setTargets child
+          break
+        when 3
+          @targets.push child if child.textContent.match(/\S/)
+          break
+      child = child.nextSibling
+
   getEmojiTag: (emoji_code) ->
     "<img class='emojidex-emoji' src='#{@plugin.EC.cdn_url}#{@plugin.EC.size_code}/#{emoji_code}.png' title='#{@replaceUnderToSpace emoji_code}'></img>"
 

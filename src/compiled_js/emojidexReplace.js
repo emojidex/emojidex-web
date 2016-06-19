@@ -36,7 +36,7 @@
           this.options = $.extend({}, defaults, options);
           this._defaults = defaults;
           this._name = pluginName;
-          this.options.ignore += ', .js-media-container, .js-macaw-cards-iframe-container, ._timestamp, .count-inner';
+          this.options.ignore += ', .js-media-container, .js-macaw-cards-iframe-container, ._timestamp, .count-inner, .ProfileCard-bio, .PermalinkOverlay-modal, .tl-form';
           this.EC = new EmojidexClient({
             onReady: function(EC) {
               if (_this.checkUpdate()) {
@@ -225,7 +225,34 @@
       this.promiseWaitTime = 5000;
       ignore = '\'":;@&#~{}<>\\r\\n\\[\\]\\!\\$\\+\\?\\%\\*\\/\\\\';
       this.regexpCode = RegExp(":([^\\s" + ignore + "][^" + ignore + "]*[^\\s" + ignore + "]):|:([^\\s" + ignore + "]):", 'g');
+      this.targets = [];
     }
+
+    Replacer.prototype.setTargets = function(node) {
+      var child, _results;
+      child = node.firstChild;
+      _results = [];
+      while (child) {
+        switch (child.nodeType) {
+          case 1:
+            if ($(child).is(this.plugin.options.ignore)) {
+              break;
+            }
+            if (child.isContentEditable) {
+              break;
+            }
+            this.setTargets(child);
+            break;
+          case 3:
+            if (child.textContent.match(/\S/)) {
+              this.targets.push(child);
+            }
+            break;
+        }
+        _results.push(child = child.nextSibling);
+      }
+      return _results;
+    };
 
     Replacer.prototype.getEmojiTag = function(emoji_code) {
       return "<img class='emojidex-emoji' src='" + this.plugin.EC.cdn_url + this.plugin.EC.size_code + "/" + emoji_code + ".png' title='" + (this.replaceUnderToSpace(emoji_code)) + "'></img>";
@@ -496,50 +523,25 @@
         });
       } else {
         return new Promise(function(resolve, reject) {
-          var checkReplaceComplete, complete_num, setTargets, target, targets, timeout, _i, _len, _results;
+          var checkReplaceComplete, complete_num, target, timeout, _i, _len, _ref, _results;
           timeout = setTimeout(function() {
             return reject(new Error('emojidex: loadEmoji useLoadingImg: false - Timeout'));
           }, _this.promiseWaitTime);
           checkReplaceComplete = function() {
-            if (targets.length === ++complete_num) {
+            if (_this.targets.length === ++complete_num) {
               return resolve();
             }
           };
           complete_num = 0;
-          targets = [];
           console.time('setTargets');
-          setTargets = function(node) {
-            var child, _results;
-            child = node.firstChild;
-            _results = [];
-            while (child) {
-              switch (child.nodeType) {
-                case 1:
-                  if ($(child).is(_this.plugin.options.ignore)) {
-                    break;
-                  }
-                  if (child.isContentEditable) {
-                    break;
-                  }
-                  setTargets(child);
-                  break;
-                case 3:
-                  if (child.textContent.match(/\S/)) {
-                    targets.push(child);
-                  }
-                  break;
-              }
-              _results.push(child = child.nextSibling);
-            }
-            return _results;
-          };
-          setTargets(element[0]);
+          _this.setTargets(element[0]);
           console.timeEnd('setTargets');
-          console.log('targets node length:', targets.length, targets);
-          if (targets.length) {
+          console.log('targets node length:', _this.targets.length, _this.targets);
+          if (_this.targets.length) {
+            _ref = _this.targets;
             _results = [];
-            for (_i = 0, _len = targets.length; _i < _len; _i++) {
-              target = targets[_i];
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              target = _ref[_i];
               _results.push(setEomojiTag(target).then(function(e) {
                 return checkReplaceComplete();
               }));
