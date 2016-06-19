@@ -34,7 +34,7 @@
         this.options = $.extend({}, defaults, options);
         this._defaults = defaults;
         this._name = pluginName;
-        this.options.ignore += ', .js-media-container, .js-macaw-cards-iframe-container, .stream-items, ._timestamp, .count-inner';
+        this.options.ignore += ', .js-media-container, .js-macaw-cards-iframe-container, ._timestamp, .count-inner';
         this.EC = new EmojidexClient({
           onReady: function(EC) {
             if (_this.checkUpdate()) {
@@ -83,6 +83,7 @@
         var _this = this;
         if (this.options.autoUpdate) {
           console.log('autoUpdate START ---');
+          this.options.useLoadingImg = false;
           this.observer = new Observer(this);
           return this.observer.reloadEmoji();
         } else {
