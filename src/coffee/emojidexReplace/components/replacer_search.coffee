@@ -87,6 +87,7 @@ class ReplacerSearch extends Replacer
       return @setLoadingTag().then =>
         searchEmoji_setEmojiTag element
     else
+      # start fix: process of get node
       return new Promise (resolve, reject) =>
         timeout = setTimeout ->
           reject new Error('emojidex: loadEmoji useLoadingImg: false - Timeout')
