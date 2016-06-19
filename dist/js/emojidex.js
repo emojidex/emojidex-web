@@ -794,7 +794,7 @@
           this.options = $.extend({}, defaults, options);
           this._defaults = defaults;
           this._name = pluginName;
-          this.options.ignore += ', .js-media-container, .js-macaw-cards-iframe-container, ._timestamp, .count-inner, .ProfileCard-bio, .PermalinkOverlay-modal, .tl-form';
+          this.options.ignore += ', .js-media-container, .js-macaw-cards-iframe-container, ._timestamp, .count-inner, .ProfileCard-bio, .tl-form';
           this.EC = new EmojidexClient({
             onReady: function(EC) {
               if (_this.checkUpdate()) {
@@ -1236,8 +1236,7 @@
         });
       };
       setEomojiTag = function(element) {
-        var replaced_promise, replaced_text;
-        console.time('replace for utf');
+        var matched_codes, replaced_promise, replaced_text;
         replaced_text = element.textContent.replace(_this.plugin.options.regexpUtf, function(matched_string) {
           var emoji, emoji_tag;
           for (emoji in _this.plugin.options.utfEmojiData) {
@@ -1248,22 +1247,19 @@
             }
           }
         });
-        console.timeEnd('replace for utf');
-        console.time('replace for code');
-        replaced_promise = new Promise(function(resolve, reject) {
-          var checkReplaceEnd, code, code_only, emoji_image, matched_codes, replaced_num, timeout, _i, _len, _results;
-          timeout = setTimeout(function() {
-            return reject(new Error('emojidex: setEomojiTag - Timeout'));
-          }, _this.promiseWaitTime);
-          checkReplaceEnd = function() {
-            if (matched_codes.length === ++replaced_num) {
-              console.timeEnd('replace for code');
-              return resolve();
-            }
-          };
-          replaced_num = 0;
-          matched_codes = replaced_text.match(_this.regexpCode);
-          if (matched_codes != null ? matched_codes.length : void 0) {
+        matched_codes = replaced_text.match(_this.regexpCode);
+        if (matched_codes != null ? matched_codes.length : void 0) {
+          replaced_promise = new Promise(function(resolve, reject) {
+            var checkReplaceEnd, code, code_only, emoji_image, replaced_num, timeout, _i, _len, _results;
+            timeout = setTimeout(function() {
+              return reject(new Error('emojidex: setEomojiTag - Timeout'));
+            }, _this.promiseWaitTime);
+            checkReplaceEnd = function() {
+              if (matched_codes.length === ++replaced_num) {
+                return resolve();
+              }
+            };
+            replaced_num = 0;
             _results = [];
             for (_i = 0, _len = matched_codes.length; _i < _len; _i++) {
               code = matched_codes[_i];
@@ -1278,13 +1274,13 @@
               }));
             }
             return _results;
-          } else {
-            return resolve();
-          }
-        });
-        return replaced_promise.then(function() {
+          });
+          return replaced_promise.then(function() {
+            return $(element).replaceWith("<span class='emojidex-ignore-element'>" + replaced_text + "</span>");
+          });
+        } else {
           return $(element).replaceWith("<span class='emojidex-ignore-element'>" + replaced_text + "</span>");
-        });
+        }
       };
       element = target_element || this.plugin.element;
       if (this.plugin.options.useLoadingImg) {

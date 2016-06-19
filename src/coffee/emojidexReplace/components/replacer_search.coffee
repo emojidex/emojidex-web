@@ -48,29 +48,25 @@ class ReplacerSearch extends Replacer
 
     # for useLoadingImg: false --------
     setEomojiTag = (element) =>
-      console.time 'replace for utf'
       replaced_text = element.textContent.replace @plugin.options.regexpUtf, (matched_string) =>
         for emoji of @plugin.options.utfEmojiData
           if emoji is matched_string
             @emoji_tags++
             emoji_tag = @getEmojiTag @plugin.options.utfEmojiData[emoji]
             return emoji_tag
-      console.timeEnd 'replace for utf'
 
-      console.time 'replace for code'
-      replaced_promise = new Promise (resolve, reject) =>
-        timeout = setTimeout ->
-          reject new Error('emojidex: setEomojiTag - Timeout')
-        , @promiseWaitTime
+      matched_codes = replaced_text.match @regexpCode
+      if matched_codes?.length
+        replaced_promise = new Promise (resolve, reject) =>
+          timeout = setTimeout ->
+            reject new Error('emojidex: setEomojiTag - Timeout')
+          , @promiseWaitTime
 
-        checkReplaceEnd = () =>
-          if matched_codes.length is ++replaced_num
-            console.timeEnd 'replace for code'
-            resolve()
+          checkReplaceEnd = () =>
+            if matched_codes.length is ++replaced_num
+              resolve()
 
-        replaced_num = 0
-        matched_codes = replaced_text.match @regexpCode
-        if matched_codes?.length
+          replaced_num = 0
           for code in matched_codes
             code_only = code.replace /\:/g, ''
             emoji_image = $("<img src='#{@plugin.EC.cdn_url}#{@plugin.EC.size_code}/#{@replaceSpaceToUnder code_only}.png' data-code='#{code_only}'></img>")
@@ -79,11 +75,13 @@ class ReplacerSearch extends Replacer
               checkReplaceEnd()
             emoji_image.error (e) =>
               checkReplaceEnd()
-        else
-          resolve()
 
-      replaced_promise.then ->
+        replaced_promise.then ->
+          $(element).replaceWith "<span class='emojidex-ignore-element'>#{replaced_text}</span>"
+
+      else
         $(element).replaceWith "<span class='emojidex-ignore-element'>#{replaced_text}</span>"
+
 
     # start: loadEmoji --------
     element = target_element || @plugin.element

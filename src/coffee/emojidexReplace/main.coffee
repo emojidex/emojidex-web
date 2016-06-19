@@ -32,7 +32,7 @@ do ($ = jQuery, window, document) ->
         @_name = pluginName
 
         # add twitter ignore --------
-        @options.ignore += ', .js-media-container, .js-macaw-cards-iframe-container, ._timestamp, .count-inner, .ProfileCard-bio, .PermalinkOverlay-modal, .tl-form'
+        @options.ignore += ', .js-media-container, .js-macaw-cards-iframe-container, ._timestamp, .count-inner, .ProfileCard-bio, .tl-form'
 
         @EC = new EmojidexClient
           onReady: (EC) =>
