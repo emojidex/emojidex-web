@@ -28,7 +28,7 @@ class Replacer
     "<img class='emojidex-emoji' src='#{@plugin.EC.cdn_url}#{@plugin.EC.size_code}/#{emoji_code}.png' title='#{@replaceUnderToSpace emoji_code}'></img>"
 
   getLoadingTag: (emoji_data, type) ->
-    "<div class='emojidex-loading-icon' data-emoji='#{emoji_data}' data-type='#{type}'></div>"
+    "<span class='emojidex-loading-icon' data-emoji='#{emoji_data}' data-type='#{type}'></span>"
 
   getLoadingElement: (element) ->
     $ element.find '.emojidex-loading-icon'
@@ -47,46 +47,25 @@ class Replacer
         checker = new CountChecker @targets.length, ->
           resolve()
         for target in @targets
-          @getAddedLoadingTagText(target).then (data) ->
-            $(data.element).replaceWith "<span class='emojidex-ignore-element'>#{data.text}</span>"
-            checker.check()
+          $(target).replaceWith "<span class='emojidex-ignore-element'>#{@getAddedLoadingTagText(target)}</span>"
+          checker.check()
       else
         resolve()
 
   getAddedLoadingTagText: (target_element) ->
-    replaced_text = target_element.textContent.replace @plugin.options.regexpUtf, (matched_string) =>
+    replaced_text = target_element.data
+    replaced_text = replaced_text.replace @plugin.options.regexpUtf, (matched_string) =>
       @getLoadingTag matched_string, 'utf'
-
-    new Promise (resolve, reject) =>
-      timeout = setTimeout ->
-        reject new Error('emojidex: getAddedLoadingTagText - Timeout')
-      , @promiseWaitTime
-
-      matched_codes = replaced_text.match @regexpCode
-      if matched_codes?.length
-        checker = new CountChecker matched_codes.length, ->
-          resolve
-            element: target_element
-            text: replaced_text
-        for code in matched_codes
-          code_only = code.replace /\:/g, ''
-          emoji_image = $("<img src='#{@plugin.EC.cdn_url}#{@plugin.EC.size_code}/#{@replaceSpaceToUnder code_only}.png' data-code='#{code_only}'></img>")
-          emoji_image.load (e) =>
-            replaced_text = replaced_text.replace ":#{e.currentTarget.dataset.code}:", @getLoadingTag e.currentTarget.dataset.code, 'code'
-            checker.check()
-          emoji_image.error (e) =>
-            checker.check()
-      else
-        resolve
-          element: target_element
-          text: replaced_text
+    replaced_text = replaced_text.replace @regexpCode, (matched_string) =>
+      @getLoadingTag matched_string.replace(/:/g, ''), 'code'
+    return replaced_text
 
   fadeOutLoadingTag_fadeInEmojiTag: (element, emoji_code, match = true) ->
     emoji_tag = undefined
     if match
       emoji_tag = $(@getEmojiTag emoji_code).hide()
     else
-      emoji_tag = emoji_code
+      emoji_tag = ":#{emoji_code}:"
 
     return new Promise (resolve, reject) =>
       timeout = setTimeout ->

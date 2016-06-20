@@ -15,15 +15,7 @@
           return function() {
             return $("body").emojidexReplace({
               onComplete: function(element) {
-                var addTimer, count;
-                console.log('Completed emojidexReplace!!');
-                count = 0;
-                return addTimer = setInterval(function() {
-                  $('#ajax_test').append('<br>:heart::rainboaaaw:💙');
-                  if (++count === 5) {
-                    return clearInterval(addTimer);
-                  }
-                }, 1000);
+                return console.log('Completed emojidexReplace!!');
               }
             });
           };
