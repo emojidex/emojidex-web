@@ -24,11 +24,6 @@ class Replacer
           break
       child = child.nextSibling
 
-  checkReplaceComplete: (resolve) ->
-    if @targets.length is ++@complete_num
-      console.timeEnd 'replace target total'
-      resolve()
-
   getEmojiTag: (emoji_code) ->
     "<img class='emojidex-emoji' src='#{@plugin.EC.cdn_url}#{@plugin.EC.size_code}/#{emoji_code}.png' title='#{@replaceUnderToSpace emoji_code}'></img>"
 
@@ -44,21 +39,17 @@ class Replacer
         reject new Error('emojidex: setLoadingTag - Timeout')
       , @promiseWaitTime
 
-      checkReplaceComplete = =>
-        if targets.length is ++complete_num
-          resolve()
+      @targets = []
+      @setTargets @plugin.element[0]
+      console.log 'targets node length:', @targets.length, @targets
 
-      complete_num = 0
-      targets = []
-      @plugin.element.find(":not(#{@plugin.options.ignore})").andSelf().contents().filter (index, element) =>
-        if element.nodeType is Node.TEXT_NODE and element.textContent.match(/\S/)
-          targets.push element
-      console.log 'targets node length:', targets.length, targets
-      if targets.length
-        for target in targets
+      if @targets.length
+        checker = new CountChecker @targets.length, ->
+          resolve()
+        for target in @targets
           @getAddedLoadingTagText(target).then (data) ->
             $(data.element).replaceWith "<span class='emojidex-ignore-element'>#{data.text}</span>"
-            checkReplaceComplete()
+            checker.check()
       else
         resolve()
 
@@ -71,23 +62,20 @@ class Replacer
         reject new Error('emojidex: getAddedLoadingTagText - Timeout')
       , @promiseWaitTime
 
-      checkReplaceEnd = () =>
-        if matched_codes.length is ++replaced_num
+      matched_codes = replaced_text.match @regexpCode
+      if matched_codes?.length
+        checker = new CountChecker matched_codes.length, ->
           resolve
             element: target_element
             text: replaced_text
-
-      replaced_num = 0
-      matched_codes = replaced_text.match @regexpCode
-      if matched_codes?.length
         for code in matched_codes
           code_only = code.replace /\:/g, ''
           emoji_image = $("<img src='#{@plugin.EC.cdn_url}#{@plugin.EC.size_code}/#{@replaceSpaceToUnder code_only}.png' data-code='#{code_only}'></img>")
           emoji_image.load (e) =>
             replaced_text = replaced_text.replace ":#{e.currentTarget.dataset.code}:", @getLoadingTag e.currentTarget.dataset.code, 'code'
-            checkReplaceEnd()
+            checker.check()
           emoji_image.error (e) =>
-            checkReplaceEnd()
+            checker.check()
       else
         resolve
           element: target_element

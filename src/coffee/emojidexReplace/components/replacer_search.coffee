@@ -20,13 +20,11 @@ class ReplacerSearch extends Replacer
           reject new Error('emojidex: searchEmoji_setEmojiTag - Timeout')
         , @promiseWaitTime
 
-        checkReplaceComplete = =>
-          if loading_elements.length is ++complete_num
-            resolve()
-
-        complete_num = 0
         loading_elements = @getLoadingElement element
+
         if loading_elements.length
+          checker = new CountChecker loading_elements.length, ->
+            resolve()
           for loading_element in loading_elements
             switch loading_element.dataset.type
               when 'code'
@@ -35,13 +33,13 @@ class ReplacerSearch extends Replacer
                   $ loading_element
                   @replaceSpaceToUnder loading_element.dataset.emoji.replace /:/g, ''
                 ).then ->
-                  checkReplaceComplete()
+                  checker.check()
                 break
               when 'utf'
                 for emoji of @plugin.options.utfEmojiData
                   if emoji is loading_element.dataset.emoji
                     @fadeOutLoadingTag_fadeInEmojiTag($(loading_element), @plugin.options.utfEmojiData[emoji]).then ->
-                      checkReplaceComplete()
+                      checker.check()
                     break
         else
           resolve()
@@ -56,33 +54,28 @@ class ReplacerSearch extends Replacer
             return emoji_tag
 
       matched_codes = replaced_text.match @regexpCode
-      if matched_codes?.length
-        replaced_promise = new Promise (resolve, reject) =>
+      replaced_promise = new Promise (resolve, reject) =>
+        if matched_codes?.length
           timeout = setTimeout ->
             reject new Error('emojidex: setEomojiTag - Timeout')
           , @promiseWaitTime
 
-          
-          checkReplaceEnd = () =>
-            if matched_codes.length is ++replaced_num
-              resolve()
+          checker = new CountChecker matched_codes.length, ->
+            resolve()
 
-          replaced_num = 0
           for code in matched_codes
             code_only = code.replace /\:/g, ''
             emoji_image = $("<img src='#{@plugin.EC.cdn_url}#{@plugin.EC.size_code}/#{@replaceSpaceToUnder code_only}.png' data-code='#{code_only}'></img>")
             emoji_image.load (e) =>
               replaced_text = replaced_text.replace ":#{e.currentTarget.dataset.code}:", @getEmojiTag e.currentTarget.dataset.code
-              checkReplaceEnd()
+              checker.check()
             emoji_image.error (e) =>
-              checkReplaceEnd()
+              checker.check()
+        else
+          resolve()
 
-        replaced_promise.then ->
-          $(element).replaceWith "<span class='emojidex-ignore-element'>#{replaced_text}</span>"
-
-      else
+      replaced_promise.then ->
         $(element).replaceWith "<span class='emojidex-ignore-element'>#{replaced_text}</span>"
-
 
     # start: loadEmoji --------
     element = target_element || @plugin.element
@@ -97,15 +90,16 @@ class ReplacerSearch extends Replacer
         , @promiseWaitTime
 
         @targets = []
-        @complete_num = 0
         @setTargets element[0]
-
         console.log 'targets node length:', @targets.length, @targets
 
         console.time 'replace target total'
         if @targets.length
+          checker = new CountChecker @targets.length, ->
+            console.timeEnd 'replace target total'
+            resolve()
           for target in @targets
             setEomojiTag(target).then (e) =>
-              @checkReplaceComplete resolve
+              checker.check()
         else
           resolve()

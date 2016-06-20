@@ -57,9 +57,11 @@ class Observer
     , 1000
 
   reloadEmoji: ->
-
     @replacer.loadEmoji().then =>
       console.log 'first replace END ---'
+
+      @plugin.options.onComplete? @plugin.element
+
       @startQueueTimer()
 
       @dom_observer = new MutationObserver (mutations) =>

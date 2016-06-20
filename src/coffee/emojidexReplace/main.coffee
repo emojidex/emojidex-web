@@ -18,7 +18,7 @@ do ($ = jQuery, window, document) ->
     ignore: 'script, noscript, canvas, img, style, iframe, input, textarea, pre, code, .emojidex-ignore-element'
 
     # this option is beta --------
-    autoUpdate: false
+    autoUpdate: true
     updateLimit: 10
 
   class Plugin
@@ -70,7 +70,7 @@ do ($ = jQuery, window, document) ->
     replace: ->
       if @options.autoUpdate
         console.log 'autoUpdate START ---'
-        @options.useLoadingImg = false
+        # @options.useLoadingImg = false
         @observer = new Observer @
         @observer.reloadEmoji()
       else

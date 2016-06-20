@@ -15,10 +15,14 @@ html
     coffee:
       $(document).ready =>
         $("body").emojidexReplace
-          autoUpdate: true
-          useLoadingImg: true
           onComplete: (element) ->
             console.log 'Completed emojidexReplace!!'
+            count = 0
+            addTimer = setInterval ->
+              $('#ajax_test').append('<br>:heart::rainboaaaw:💙')
+              if ++count is 5
+                clearInterval addTimer
+            , 1000
 
   body
     #ajax_test
