@@ -904,7 +904,7 @@
             return resolve();
           });
         } else {
-          queue_limit = 300;
+          queue_limit = 100;
           checkComplete = function() {
             var queue;
             if (_this.queues.length > 0 && queue_limit-- > 0) {

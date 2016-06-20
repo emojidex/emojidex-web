@@ -11,14 +11,13 @@ class Observer
         reject new Error('emojidex: doQueue - Timeout')
       , @replacer.promiseWaitTime
 
-
       body = $('body')[0]
       if @queues.indexOf(body) isnt -1
         @queues = []
         @replacer.loadEmoji($(body)).then ->
           resolve()
       else
-        queue_limit = 300
+        queue_limit = 100
         checkComplete = =>
           if @queues.length > 0 and queue_limit-- > 0
             queue = @queues.pop()
