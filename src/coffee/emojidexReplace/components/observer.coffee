@@ -3,6 +3,7 @@ class Observer
     @dom_observer = undefined
     @queues = []
     @replacer = new ReplacerSearch @plugin
+    @flagReEntry = true
 
   doQueue: ->
     return new Promise (resolve, reject) =>
@@ -23,7 +24,7 @@ class Observer
         checkComplete = =>
           if @queues.length > 0 and queue_limit-- > 0
             queue = @queues.pop()
-            console.log 'checkComplete---', queue
+            console.log queue
             @replacer.loadEmoji($(queue)).then ->
               checkComplete()
           else
@@ -65,8 +66,17 @@ class Observer
       @startQueueTimer()
 
       @dom_observer = new MutationObserver (mutations) =>
-        for mutation in mutations
-          if @queues.indexOf(mutation.target) is -1 and @queues.length - 1 < 10
-            unless $(mutation.target).is @plugin.options.ignore
-              @queues.push mutation.target
+        if @flagReEntry
+          @flagReEntry = false
+          for mutation in mutations
+            if mutation.type == 'childList'
+              if mutation.addedNodes
+                for addedNode in mutation.addedNodes
+                  if @queues.indexOf(addedNode) is -1 and @queues.length - 1 < 10
+                    unless $(addedNode).is @plugin.options.ignore
+                      @queues.push addedNode
+
+          # @doQueue()
+          @flagReEntry = true
+
       @domObserve()

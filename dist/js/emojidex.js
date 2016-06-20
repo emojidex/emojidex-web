@@ -892,6 +892,7 @@
       this.dom_observer = void 0;
       this.queues = [];
       this.replacer = new ReplacerSearch(this.plugin);
+      this.flagReEntry = true;
     }
 
     Observer.prototype.doQueue = function() {
@@ -916,7 +917,7 @@
             var queue;
             if (_this.queues.length > 0 && queue_limit-- > 0) {
               queue = _this.queues.pop();
-              console.log('checkComplete---', queue);
+              console.log(queue);
               return _this.replacer.loadEmoji($(queue)).then(function() {
                 return checkComplete();
               });
@@ -973,21 +974,27 @@
         }
         _this.startQueueTimer();
         _this.dom_observer = new MutationObserver(function(mutations) {
-          var mutation, _i, _len, _results;
-          _results = [];
-          for (_i = 0, _len = mutations.length; _i < _len; _i++) {
-            mutation = mutations[_i];
-            if (_this.queues.indexOf(mutation.target) === -1 && _this.queues.length - 1 < 10) {
-              if (!$(mutation.target).is(_this.plugin.options.ignore)) {
-                _results.push(_this.queues.push(mutation.target));
-              } else {
-                _results.push(void 0);
+          var addedNode, mutation, _i, _j, _len, _len1, _ref;
+          if (_this.flagReEntry) {
+            _this.flagReEntry = false;
+            for (_i = 0, _len = mutations.length; _i < _len; _i++) {
+              mutation = mutations[_i];
+              if (mutation.type === 'childList') {
+                if (mutation.addedNodes) {
+                  _ref = mutation.addedNodes;
+                  for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+                    addedNode = _ref[_j];
+                    if (_this.queues.indexOf(addedNode) === -1 && _this.queues.length - 1 < 10) {
+                      if (!$(addedNode).is(_this.plugin.options.ignore)) {
+                        _this.queues.push(addedNode);
+                      }
+                    }
+                  }
+                }
               }
-            } else {
-              _results.push(void 0);
             }
+            return _this.flagReEntry = true;
           }
-          return _results;
         });
         return _this.domObserve();
       });
