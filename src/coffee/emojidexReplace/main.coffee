@@ -15,11 +15,8 @@ do ($ = jQuery, window, document) ->
   defaults =
     onComplete: undefined
     useLoadingImg: true
-    ignore: 'script, noscript, canvas, img, style, iframe, input, textarea, pre, code'
-
-    # this option is beta --------
     autoUpdate: true
-    updateLimit: 10
+    ignore: 'script, noscript, canvas, img, style, iframe, input, textarea, pre, code'
 
   class Plugin
     constructor: (@element, options) ->
@@ -30,9 +27,6 @@ do ($ = jQuery, window, document) ->
         @options = $.extend {}, defaults, options
         @_defaults = defaults
         @_name = pluginName
-
-        # add twitter ignore --------
-        # @options.ignore += ', .js-media-container, .js-macaw-cards-iframe-container, ._timestamp, .count-inner, .ProfileCard-bio, .tl-form'
 
         @EC = new EmojidexClient
           onReady: (EC) =>
@@ -69,7 +63,6 @@ do ($ = jQuery, window, document) ->
 
     replace: ->
       if @options.autoUpdate
-        # @options.useLoadingImg = false
         @observer = new Observer @
         @observer.reloadEmoji()
       else

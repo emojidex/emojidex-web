@@ -49,7 +49,7 @@ class Replacer
         checker = new CountChecker @targets.length, ->
           resolve()
         for target in @targets
-          $(target).replaceWith "<span'>#{@getAddedLoadingTagText(target)}</span>"
+          $(target).replaceWith @getAddedLoadingTagText(target)
           checker.check()
       else
         resolve()

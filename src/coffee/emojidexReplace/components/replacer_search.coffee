@@ -74,7 +74,7 @@ class ReplacerSearch extends Replacer
           resolve()
 
       replaced_promise.then ->
-        $(element).replaceWith "<span'>#{replaced_text}</span>"
+        $(element).replaceWith replaced_text
 
     # start: loadEmoji --------
     element = target_element || @plugin.element

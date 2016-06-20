@@ -22,9 +22,8 @@
     defaults = {
       onComplete: void 0,
       useLoadingImg: true,
-      ignore: 'script, noscript, canvas, img, style, iframe, input, textarea, pre, code',
       autoUpdate: true,
-      updateLimit: 10
+      ignore: 'script, noscript, canvas, img, style, iframe, input, textarea, pre, code'
     };
     Plugin = (function() {
       function Plugin(element, options) {
@@ -288,7 +287,7 @@
           _results = [];
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             target = _ref[_i];
-            $(target).replaceWith("<span'>" + (_this.getAddedLoadingTagText(target)) + "</span>");
+            $(target).replaceWith(_this.getAddedLoadingTagText(target));
             _results.push(checker.check());
           }
           return _results;
@@ -479,7 +478,7 @@
           }
         });
         return replaced_promise.then(function() {
-          return $(element).replaceWith("<span'>" + replaced_text + "</span>");
+          return $(element).replaceWith(replaced_text);
         });
       };
       element = target_element || this.plugin.element;
