@@ -49,7 +49,7 @@ class Replacer
         checker = new CountChecker @targets.length, ->
           resolve()
         for target in @targets
-          $(target).replaceWith "<span class='emojidex-ignore-element'>#{@getAddedLoadingTagText(target)}</span>"
+          $(target).replaceWith "<span'>#{@getAddedLoadingTagText(target)}</span>"
           checker.check()
       else
         resolve()

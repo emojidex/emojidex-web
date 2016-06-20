@@ -15,7 +15,7 @@ do ($ = jQuery, window, document) ->
   defaults =
     onComplete: undefined
     useLoadingImg: true
-    ignore: 'script, noscript, canvas, img, style, iframe, input, textarea, pre, code, .emojidex-ignore-element, .emojidex-loading-icon'
+    ignore: 'script, noscript, canvas, img, style, iframe, input, textarea, pre, code'
 
     # this option is beta --------
     autoUpdate: true
@@ -32,7 +32,7 @@ do ($ = jQuery, window, document) ->
         @_name = pluginName
 
         # add twitter ignore --------
-        @options.ignore += ', .js-media-container, .js-macaw-cards-iframe-container, ._timestamp, .count-inner, .ProfileCard-bio, .tl-form'
+        # @options.ignore += ', .js-media-container, .js-macaw-cards-iframe-container, ._timestamp, .count-inner, .ProfileCard-bio, .tl-form'
 
         @EC = new EmojidexClient
           onReady: (EC) =>
@@ -69,15 +69,12 @@ do ($ = jQuery, window, document) ->
 
     replace: ->
       if @options.autoUpdate
-        console.log 'autoUpdate START ---'
         # @options.useLoadingImg = false
         @observer = new Observer @
         @observer.reloadEmoji()
       else
-        console.log 'replace START ---'
         @replacer = new ReplacerSearch @
         @replacer.loadEmoji().then =>
-          console.log 'replace END ---'
           @options.onComplete? @element
 
   $.fn[pluginName] = (options) ->

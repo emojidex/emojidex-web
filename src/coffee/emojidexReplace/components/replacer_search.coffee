@@ -25,7 +25,6 @@ class ReplacerSearch extends Replacer
         , @promiseWaitTime
 
         loading_elements = $ '.emojidex-loading-icon'
-        console.log 'loading_elements', loading_elements
         if loading_elements.length
           checker = new CountChecker loading_elements.length, ->
             resolve()
@@ -75,14 +74,12 @@ class ReplacerSearch extends Replacer
           resolve()
 
       replaced_promise.then ->
-        $(element).replaceWith "<span class='emojidex-ignore-element'>#{replaced_text}</span>"
+        $(element).replaceWith "<span'>#{replaced_text}</span>"
 
     # start: loadEmoji --------
     element = target_element || @plugin.element
     if @plugin.options.useLoadingImg
-      console.time 'setLoadingTag'
       return @setLoadingTag(element).then =>
-        console.timeEnd 'setLoadingTag'
         return searchEmoji_setEmojiTag element
     else
       return new Promise (resolve, reject) =>

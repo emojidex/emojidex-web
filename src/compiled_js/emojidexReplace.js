@@ -22,7 +22,7 @@
     defaults = {
       onComplete: void 0,
       useLoadingImg: true,
-      ignore: 'script, noscript, canvas, img, style, iframe, input, textarea, pre, code, .emojidex-ignore-element, .emojidex-loading-icon',
+      ignore: 'script, noscript, canvas, img, style, iframe, input, textarea, pre, code',
       autoUpdate: true,
       updateLimit: 10
     };
@@ -36,7 +36,6 @@
           this.options = $.extend({}, defaults, options);
           this._defaults = defaults;
           this._name = pluginName;
-          this.options.ignore += ', .js-media-container, .js-macaw-cards-iframe-container, ._timestamp, .count-inner, .ProfileCard-bio, .tl-form';
           this.EC = new EmojidexClient({
             onReady: function(EC) {
               if (_this.checkUpdate()) {
@@ -85,15 +84,12 @@
       Plugin.prototype.replace = function() {
         var _this = this;
         if (this.options.autoUpdate) {
-          console.log('autoUpdate START ---');
           this.observer = new Observer(this);
           return this.observer.reloadEmoji();
         } else {
-          console.log('replace START ---');
           this.replacer = new ReplacerSearch(this);
           return this.replacer.loadEmoji().then(function() {
             var _base;
-            console.log('replace END ---');
             return typeof (_base = _this.options).onComplete === "function" ? _base.onComplete(_this.element) : void 0;
           });
         }
@@ -151,14 +147,12 @@
             return resolve();
           });
         } else {
-          queue_limit = 50;
+          queue_limit = 300;
           checkComplete = function() {
             var queue;
             if (_this.queues.length > 0 && queue_limit-- > 0) {
               queue = _this.queues.pop();
-              console.time('re loadEmoji');
               return _this.replacer.loadEmoji($(queue)).then(function() {
-                console.timeEnd('re loadEmoji');
                 return checkComplete();
               });
             } else {
@@ -204,9 +198,7 @@
                   for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
                     addedNode = _ref[_j];
                     if (_this.queues.indexOf(addedNode) === -1) {
-                      if (!$(addedNode).is(_this.plugin.options.ignore)) {
-                        _this.queues.push(addedNode);
-                      }
+                      _this.queues.push(addedNode);
                     }
                   }
                 }
@@ -296,7 +288,7 @@
           _results = [];
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             target = _ref[_i];
-            $(target).replaceWith("<span class='emojidex-ignore-element'>" + (_this.getAddedLoadingTagText(target)) + "</span>");
+            $(target).replaceWith("<span'>" + (_this.getAddedLoadingTagText(target)) + "</span>");
             _results.push(checker.check());
           }
           return _results;
@@ -406,7 +398,6 @@
             return reject(new Error('emojidex: searchEmoji_setEmojiTag - Timeout'));
           }, _this.promiseWaitTime);
           loading_elements = $('.emojidex-loading-icon');
-          console.log('loading_elements', loading_elements);
           if (loading_elements.length) {
             checker = new CountChecker(loading_elements.length, function() {
               return resolve();
@@ -488,14 +479,12 @@
           }
         });
         return replaced_promise.then(function() {
-          return $(element).replaceWith("<span class='emojidex-ignore-element'>" + replaced_text + "</span>");
+          return $(element).replaceWith("<span'>" + replaced_text + "</span>");
         });
       };
       element = target_element || this.plugin.element;
       if (this.plugin.options.useLoadingImg) {
-        console.time('setLoadingTag');
         return this.setLoadingTag(element).then(function() {
-          console.timeEnd('setLoadingTag');
           return searchEmoji_setEmojiTag(element);
         });
       } else {

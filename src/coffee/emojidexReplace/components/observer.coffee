@@ -18,13 +18,11 @@ class Observer
         @replacer.loadEmoji($(body)).then ->
           resolve()
       else
-        queue_limit = 50
+        queue_limit = 300
         checkComplete = =>
           if @queues.length > 0 and queue_limit-- > 0
             queue = @queues.pop()
-            console.time 're loadEmoji'
             @replacer.loadEmoji($(queue)).then ->
-              console.timeEnd 're loadEmoji'
               checkComplete()
           else
             resolve()
@@ -53,8 +51,7 @@ class Observer
               if mutation.addedNodes
                 for addedNode in mutation.addedNodes
                   if @queues.indexOf(addedNode) is -1
-                    unless $(addedNode).is @plugin.options.ignore
-                      @queues.push addedNode
+                    @queues.push addedNode
 
           @doQueue().then =>
             @domObserve()
