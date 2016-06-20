@@ -12,7 +12,7 @@
 
 
 (function() {
-  var Observer, Replacer, ReplacerSearch,
+  var CheckEnd, Observer, Replacer, ReplacerSearch,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -111,6 +111,30 @@
       });
     };
   })(jQuery, window, document);
+
+  CheckEnd = (function() {
+    function CheckEnd() {}
+
+    constructor(function(resolve) {
+      this.resolve = resolve;
+      return this.count;
+    });
+
+    return CheckEnd;
+
+  })();
+
+  CheckEnd = (function() {
+    function CheckEnd() {}
+
+    constructor(function(resolve) {
+      this.resolve = resolve;
+      return this.count;
+    });
+
+    return CheckEnd;
+
+  })();
 
   Observer = (function() {
     function Observer(plugin) {

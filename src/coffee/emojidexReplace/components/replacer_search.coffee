@@ -62,6 +62,7 @@ class ReplacerSearch extends Replacer
             reject new Error('emojidex: setEomojiTag - Timeout')
           , @promiseWaitTime
 
+          
           checkReplaceEnd = () =>
             if matched_codes.length is ++replaced_num
               resolve()
