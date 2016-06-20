@@ -9,17 +9,20 @@ class Replacer
     @complete_num = 0
 
   setTargets: (node) ->
+    if node.nodeType is Node.TEXT_NODE
+      return @targets.push node if node.textContent.match(/\S/)
+
     child = node.firstChild
     while child
       switch child.nodeType
-        when 1
+        when Node.ELEMENT_NODE
           if $(child).is @plugin.options.ignore
             break
           if child.isContentEditable
             break
           @setTargets child
           break
-        when 3
+        when Node.TEXT_NODE
           @targets.push child if child.textContent.match(/\S/)
           break
       child = child.nextSibling

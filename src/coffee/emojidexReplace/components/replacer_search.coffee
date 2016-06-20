@@ -91,8 +91,10 @@ class ReplacerSearch extends Replacer
         , @promiseWaitTime
 
         @targets = []
+        console.time 'setTargets'
         @setTargets element[0]
         console.log 'targets node length:', @targets.length, @targets
+        console.timeEnd 'setTargets'
 
         console.time 'replace target total'
         if @targets.length

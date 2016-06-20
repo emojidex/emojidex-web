@@ -779,7 +779,7 @@
     pluginName = 'emojidexReplace';
     defaults = {
       onComplete: void 0,
-      useLoadingImg: true,
+      useLoadingImg: false,
       ignore: 'script, noscript, canvas, img, style, iframe, input, textarea, pre, code, .emojidex-ignore-element',
       autoUpdate: true,
       updateLimit: 10
@@ -788,8 +788,8 @@
       function Plugin(element, options) {
         var _this = this;
         this.element = element;
-        if (!$('body').hasClass('emojidexReplacerStart')) {
-          $('body').addClass('emojidexReplacerStart');
+        if (!window.emojidexReplacerOnce) {
+          window.emojidexReplacerOnce = true;
           this.element = $(this.element);
           this.options = $.extend({}, defaults, options);
           this._defaults = defaults;
@@ -1009,11 +1009,16 @@
 
     Replacer.prototype.setTargets = function(node) {
       var child, _results;
+      if (node.nodeType === Node.TEXT_NODE) {
+        if (node.textContent.match(/\S/)) {
+          return this.targets.push(node);
+        }
+      }
       child = node.firstChild;
       _results = [];
       while (child) {
         switch (child.nodeType) {
-          case 1:
+          case Node.ELEMENT_NODE:
             if ($(child).is(this.plugin.options.ignore)) {
               break;
             }
@@ -1022,7 +1027,7 @@
             }
             this.setTargets(child);
             break;
-          case 3:
+          case Node.TEXT_NODE:
             if (child.textContent.match(/\S/)) {
               this.targets.push(child);
             }
@@ -1270,8 +1275,10 @@
             return reject(new Error('emojidex: loadEmoji useLoadingImg: false - Timeout'));
           }, _this.promiseWaitTime);
           _this.targets = [];
+          console.time('setTargets');
           _this.setTargets(element[0]);
           console.log('targets node length:', _this.targets.length, _this.targets);
+          console.timeEnd('setTargets');
           console.time('replace target total');
           if (_this.targets.length) {
             checker = new CountChecker(_this.targets.length, function() {

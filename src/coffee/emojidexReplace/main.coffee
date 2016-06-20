@@ -14,7 +14,7 @@ do ($ = jQuery, window, document) ->
   pluginName = 'emojidexReplace'
   defaults =
     onComplete: undefined
-    useLoadingImg: true
+    useLoadingImg: false
     ignore: 'script, noscript, canvas, img, style, iframe, input, textarea, pre, code, .emojidex-ignore-element'
 
     # this option is beta --------
@@ -23,8 +23,8 @@ do ($ = jQuery, window, document) ->
 
   class Plugin
     constructor: (@element, options) ->
-      unless $('body').hasClass('emojidexReplacerStart')
-        $('body').addClass 'emojidexReplacerStart'
+      unless window.emojidexReplacerOnce
+        window.emojidexReplacerOnce = true
 
         @element = $ @element
         @options = $.extend {}, defaults, options
