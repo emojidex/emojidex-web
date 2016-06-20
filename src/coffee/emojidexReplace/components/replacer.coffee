@@ -36,15 +36,14 @@ class Replacer
   getLoadingElement: (element) ->
     $ element.find '.emojidex-loading-icon'
 
-  setLoadingTag: ->
+  setLoadingTag: (element) ->
     return new Promise (resolve, reject) =>
       timeout = setTimeout ->
         reject new Error('emojidex: setLoadingTag - Timeout')
       , @promiseWaitTime
 
       @targets = []
-      @setTargets @plugin.element[0]
-      console.log 'targets node length:', @targets.length, @targets
+      @setTargets element[0]
 
       if @targets.length
         checker = new CountChecker @targets.length, ->

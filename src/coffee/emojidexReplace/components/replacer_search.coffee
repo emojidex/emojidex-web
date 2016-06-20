@@ -12,7 +12,6 @@ class ReplacerSearch extends Replacer
           , @promiseWaitTime
           emoji_image = $("<img src='#{@plugin.EC.cdn_url}px8/#{loading_element.dataset.emoji}.png'></img>")
           emoji_image.load (e) =>
-            console.log 'load SUCCESS ------'
             @fadeOutLoadingTag_fadeInEmojiTag($(loading_element), loading_element.dataset.emoji).then ->
               resolve()
           emoji_image.error (e) =>
@@ -20,13 +19,13 @@ class ReplacerSearch extends Replacer
               resolve()
 
       # start: searchEmoji_setEmojiTag --------
-      console.log 'searchEmoji_setEmojiTag =========='
       return new Promise (resolve, reject) =>
         timeout = setTimeout ->
           reject new Error('emojidex: searchEmoji_setEmojiTag - Timeout')
         , @promiseWaitTime
 
         loading_elements = $ '.emojidex-loading-icon'
+        console.log 'loading_elements', loading_elements
         if loading_elements.length
           checker = new CountChecker loading_elements.length, ->
             resolve()
@@ -81,9 +80,10 @@ class ReplacerSearch extends Replacer
     # start: loadEmoji --------
     element = target_element || @plugin.element
     if @plugin.options.useLoadingImg
-      console.log element
-      return @setLoadingTag().then =>
-        searchEmoji_setEmojiTag element
+      console.time 'setLoadingTag'
+      return @setLoadingTag(element).then =>
+        console.timeEnd 'setLoadingTag'
+        return searchEmoji_setEmojiTag element
     else
       return new Promise (resolve, reject) =>
         timeout = setTimeout ->
@@ -91,15 +91,10 @@ class ReplacerSearch extends Replacer
         , @promiseWaitTime
 
         @targets = []
-        console.time 'setTargets'
         @setTargets element[0]
-        console.log 'targets node length:', @targets.length, @targets
-        console.timeEnd 'setTargets'
 
-        console.time 'replace target total'
         if @targets.length
           checker = new CountChecker @targets.length, ->
-            console.timeEnd 'replace target total'
             resolve()
           for target in @targets
             setEomojiTag(target).then (e) =>
