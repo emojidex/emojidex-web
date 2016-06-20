@@ -10,9 +10,9 @@ class ReplacerSearch extends Replacer
           timeout = setTimeout ->
             reject new Error('emojidex: replaceToEmojiIconOrRollback - Timeout')
           , @promiseWaitTime
-
           emoji_image = $("<img src='#{@plugin.EC.cdn_url}px8/#{loading_element.dataset.emoji}.png'></img>")
           emoji_image.load (e) =>
+            console.log 'load SUCCESS ------'
             @fadeOutLoadingTag_fadeInEmojiTag($(loading_element), loading_element.dataset.emoji).then ->
               resolve()
           emoji_image.error (e) =>
@@ -20,13 +20,13 @@ class ReplacerSearch extends Replacer
               resolve()
 
       # start: searchEmoji_setEmojiTag --------
+      console.log 'searchEmoji_setEmojiTag =========='
       return new Promise (resolve, reject) =>
         timeout = setTimeout ->
           reject new Error('emojidex: searchEmoji_setEmojiTag - Timeout')
         , @promiseWaitTime
 
-        loading_elements = @getLoadingElement element
-
+        loading_elements = $ '.emojidex-loading-icon'
         if loading_elements.length
           checker = new CountChecker loading_elements.length, ->
             resolve()

@@ -14,8 +14,8 @@ do ($ = jQuery, window, document) ->
   pluginName = 'emojidexReplace'
   defaults =
     onComplete: undefined
-    useLoadingImg: false
-    ignore: 'script, noscript, canvas, img, style, iframe, input, textarea, pre, code, .emojidex-ignore-element'
+    useLoadingImg: true
+    ignore: 'script, noscript, canvas, img, style, iframe, input, textarea, pre, code, .emojidex-ignore-element, .emojidex-loading-icon'
 
     # this option is beta --------
     autoUpdate: true

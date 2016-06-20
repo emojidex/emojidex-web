@@ -779,8 +779,8 @@
     pluginName = 'emojidexReplace';
     defaults = {
       onComplete: void 0,
-      useLoadingImg: false,
-      ignore: 'script, noscript, canvas, img, style, iframe, input, textarea, pre, code, .emojidex-ignore-element',
+      useLoadingImg: true,
+      ignore: 'script, noscript, canvas, img, style, iframe, input, textarea, pre, code, .emojidex-ignore-element, .emojidex-loading-icon',
       autoUpdate: true,
       updateLimit: 10
     };
@@ -903,16 +903,15 @@
         timeout = setTimeout(function() {
           return reject(new Error('emojidex: doQueue - Timeout'));
         }, _this.replacer.promiseWaitTime);
+        console.log('@queues', _this.queues.length, _this.queues);
         body = $('body')[0];
         if (_this.queues.indexOf(body) !== -1) {
-          console.log('@queues.indexOf(body) isnt -1: true ---');
           _this.queues = [];
           return _this.replacer.loadEmoji($(body)).then(function() {
             return resolve();
           });
         } else {
-          console.log('@queues.indexOf(body) isnt -1: false ---');
-          queue_limit = 3;
+          queue_limit = 50;
           checkComplete = function() {
             var queue;
             if (_this.queues.length > 0 && queue_limit-- > 0) {
@@ -946,24 +945,6 @@
       return this.dom_observer.disconnect();
     };
 
-    Observer.prototype.startQueueTimer = function() {
-      var _this = this;
-      return setTimeout(function() {
-        console.count('start timer:');
-        _this.queues.length;
-        if (_this.queues.length > 0) {
-          console.log('@queues.length:', _this.queues.length, _this.queues);
-          _this.disconnect();
-          return _this.doQueue().then(function() {
-            _this.domObserve();
-            return _this.startQueueTimer();
-          });
-        } else {
-          return _this.startQueueTimer();
-        }
-      }, 1000);
-    };
-
     Observer.prototype.reloadEmoji = function() {
       var _this = this;
       return this.replacer.loadEmoji().then(function() {
@@ -972,10 +953,11 @@
         if (typeof (_base = _this.plugin.options).onComplete === "function") {
           _base.onComplete(_this.plugin.element);
         }
-        _this.startQueueTimer();
         _this.dom_observer = new MutationObserver(function(mutations) {
           var addedNode, mutation, _i, _j, _len, _len1, _ref;
+          console.log('OBSERVE==================');
           if (_this.flagReEntry) {
+            _this.disconnect();
             _this.flagReEntry = false;
             for (_i = 0, _len = mutations.length; _i < _len; _i++) {
               mutation = mutations[_i];
@@ -984,7 +966,7 @@
                   _ref = mutation.addedNodes;
                   for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
                     addedNode = _ref[_j];
-                    if (_this.queues.indexOf(addedNode) === -1 && _this.queues.length - 1 < 10) {
+                    if (_this.queues.indexOf(addedNode) === -1) {
                       if (!$(addedNode).is(_this.plugin.options.ignore)) {
                         _this.queues.push(addedNode);
                       }
@@ -993,6 +975,10 @@
                 }
               }
             }
+            console.log('OBSERVE:doQueue==================');
+            _this.doQueue().then(function() {
+              return _this.domObserve();
+            });
             return _this.flagReEntry = true;
           }
         });
@@ -1168,6 +1154,7 @@
             }, _this.promiseWaitTime);
             emoji_image = $("<img src='" + _this.plugin.EC.cdn_url + "px8/" + loading_element.dataset.emoji + ".png'></img>");
             emoji_image.load(function(e) {
+              console.log('load SUCCESS ------');
               return _this.fadeOutLoadingTag_fadeInEmojiTag($(loading_element), loading_element.dataset.emoji).then(function() {
                 return resolve();
               });
@@ -1179,12 +1166,13 @@
             });
           });
         };
+        console.log('searchEmoji_setEmojiTag ==========');
         return new Promise(function(resolve, reject) {
           var checker, emoji, loading_element, loading_elements, timeout, _i, _len, _results;
           timeout = setTimeout(function() {
             return reject(new Error('emojidex: searchEmoji_setEmojiTag - Timeout'));
           }, _this.promiseWaitTime);
-          loading_elements = _this.getLoadingElement(element);
+          loading_elements = $('.emojidex-loading-icon');
           if (loading_elements.length) {
             checker = new CountChecker(loading_elements.length, function() {
               return resolve();
