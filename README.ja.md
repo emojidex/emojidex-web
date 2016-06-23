@@ -96,14 +96,12 @@ Type: `Boolean` Default: `true`
 置換実行中に[CSSに指定されている]ローディング画像を表示するか、しないかを設定出来ます。
 
 #### options.ignore
-Type: `String` Default: `script, noscript, canvas, style, iframe, input, textarea, pre, code`
+Type: `String` Default: `script, noscript, canvas, img, style, iframe, input, textarea, pre, code`
 
 置換処理を除外する要素を文字列で指定出来ます。
 
 #### options.autoUpdate
-Type: `Boolean` Default: `false`
-
-※このオプションはベータ機能のオプションです。`true`にするとページの内容に依っては処理がとても重く可能性があります。
+Type: `Boolean` Default: `true`
 
 Ajax処理等で、動的に追加された要素に対しても置換処理を行うかを`Boolean`で指定出来ます。
 

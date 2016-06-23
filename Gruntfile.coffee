@@ -166,9 +166,9 @@ module.exports = (grunt) ->
             value:
               files: [
                 expand: true
-                flatten: true
-                src: filepath
-                dest: 'dist/css/'
+                cwd: 'src/sass/'
+                src: ['*.sass', '*.scss']
+                dest: 'src/compiled_css/'
                 ext: '.css'
               ]
           task: ['sass:esteWatch', 'concat:emojidex_css', 'cssmin:emojidex']
@@ -181,9 +181,9 @@ module.exports = (grunt) ->
             value:
               files: [
                 expand: true
-                flatten: true
-                src: filepath
-                dest: 'dist/css/'
+                cwd: 'src/sass/'
+                src: ['*.sass', '*.scss']
+                dest: 'src/compiled_css/'
                 ext: '.css'
               ]
           task: ['sass:esteWatch', 'concat:emojidex_css', 'cssmin:emojidex']
@@ -278,14 +278,14 @@ module.exports = (grunt) ->
         ext: '.js'
 
     sass:
-     dist:
-       files: [
-        expand: true
-        cwd: 'src/sass/'
-        src: ['*.sass', '*.scss']
-        dest: 'src/compiled_css/'
-        ext: '.css'
-       ]
+      dist:
+        files: [
+          expand: true
+          cwd: 'src/sass/'
+          src: ['*.sass', '*.scss']
+          dest: 'src/compiled_css/'
+          ext: '.css'
+        ]
 
     slim:
       options:

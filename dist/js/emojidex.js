@@ -1,5 +1,5 @@
 /*
- * jQuery emojidex - v0.8.5
+ * jQuery emojidex - v0.9.1
  * emojidex plugin for jQuery/Zepto and compatible
  * https://github.com/emojidex/emojidex-web
  *
@@ -38,7 +38,7 @@
  * --------------------------------
  * --------------------------------
 !
- * clipboard.js v1.5.12
+ * clipboard.js v1.5.10
  * https://zenorocha.github.io/clipboard.js
  *
  * Licensed MIT © Zeno Rocha
@@ -58,12 +58,12 @@
 (function(){!function(a){return"function"==typeof define&&define.amd?define(["jquery"],a):a(window.jQuery)}(function(a){var b,c,d,e,f,g,h,i=[].slice;c=function(){function b(b){this.current_flag=null,this.controllers={},this.alias_maps={},this.$inputor=a(b),this.setIframe(),this.listen()}return b.prototype.createContainer=function(b){return 0===(this.$el=a("#atwho-container",b)).length?a(b.body).append(this.$el=a("<div id='atwho-container'></div>")):void 0},b.prototype.setIframe=function(a,b){var c;return null==b&&(b=!1),a?(this.window=a.contentWindow,this.document=a.contentDocument||this.window.document,this.iframe=a):(this.document=document,this.window=window,this.iframe=null),(this.iframeStandalone=b)?(null!=(c=this.$el)&&c.remove(),this.createContainer(this.document)):this.createContainer(document)},b.prototype.controller=function(a){var b,c,d,e;if(this.alias_maps[a])c=this.controllers[this.alias_maps[a]];else{e=this.controllers;for(d in e)if(b=e[d],d===a){c=b;break}}return c?c:this.controllers[this.current_flag]},b.prototype.set_context_for=function(a){return this.current_flag=a,this},b.prototype.reg=function(a,b){var c,e;return c=(e=this.controllers)[a]||(e[a]=new d(this,a)),b.alias&&(this.alias_maps[b.alias]=a),c.init(b),this},b.prototype.listen=function(){return this.$inputor.on("keyup.atwhoInner",function(a){return function(b){return a.on_keyup(b)}}(this)).on("keydown.atwhoInner",function(a){return function(b){return a.on_keydown(b)}}(this)).on("scroll.atwhoInner",function(a){return function(b){var c;return null!=(c=a.controller())?c.view.hide(b):void 0}}(this)).on("blur.atwhoInner",function(a){return function(b){var c;return(c=a.controller())?c.view.hide(b,c.get_opt("display_timeout")):void 0}}(this)).on("click.atwhoInner",function(a){return function(b){var c;return null!=(c=a.controller())?c.view.hide(b):void 0}}(this))},b.prototype.shutdown=function(){var a,b,c;c=this.controllers;for(b in c)a=c[b],a.destroy(),delete this.controllers[b];return this.$inputor.off(".atwhoInner"),this.$el.remove()},b.prototype.dispatch=function(){return a.map(this.controllers,function(a){return function(b){var c;return(c=b.get_opt("delay"))?(clearTimeout(a.delayedCallback),a.delayedCallback=setTimeout(function(){return b.look_up()?a.set_context_for(b.at):void 0},c)):b.look_up()?a.set_context_for(b.at):void 0}}(this))},b.prototype.on_keyup=function(b){var c;switch(b.keyCode){case f.ESC:b.preventDefault(),null!=(c=this.controller())&&c.view.hide();break;case f.DOWN:case f.UP:case f.CTRL:a.noop();break;case f.P:case f.N:b.ctrlKey||this.dispatch();break;default:this.dispatch()}},b.prototype.on_keydown=function(b){var c,d;if(c=null!=(d=this.controller())?d.view:void 0,c&&c.visible())switch(b.keyCode){case f.ESC:b.preventDefault(),c.hide(b);break;case f.UP:b.preventDefault(),c.prev();break;case f.DOWN:b.preventDefault(),c.next();break;case f.P:if(!b.ctrlKey)return;b.preventDefault(),c.prev();break;case f.N:if(!b.ctrlKey)return;b.preventDefault(),c.next();break;case f.TAB:case f.ENTER:if(!c.visible())return;b.preventDefault(),c.choose(b);break;default:a.noop()}},b}(),d=function(){function b(b,c){this.app=b,this.at=c,this.$inputor=this.app.$inputor,this.id=this.$inputor[0].id||this.uid(),this.setting=null,this.query=null,this.pos=0,this.cur_rect=null,this.range=null,0===(this.$el=a("#atwho-ground-"+this.id,this.app.$el)).length&&this.app.$el.append(this.$el=a("<div id='atwho-ground-"+this.id+"'></div>")),this.model=new g(this),this.view=new h(this)}return b.prototype.uid=function(){return(Math.random().toString(16)+"000000000").substr(2,8)+(new Date).getTime()},b.prototype.init=function(b){return this.setting=a.extend({},this.setting||a.fn.atwho["default"],b),this.view.init(),this.model.reload(this.setting.data)},b.prototype.destroy=function(){return this.trigger("beforeDestroy"),this.model.destroy(),this.view.destroy(),this.$el.remove()},b.prototype.call_default=function(){var b,c,d;d=arguments[0],b=2<=arguments.length?i.call(arguments,1):[];try{return e[d].apply(this,b)}catch(f){return c=f,a.error(""+c+" Or maybe At.js doesn't have function "+d)}},b.prototype.trigger=function(a,b){var c,d;return null==b&&(b=[]),b.push(this),c=this.get_opt("alias"),d=c?""+a+"-"+c+".atwho":""+a+".atwho",this.$inputor.trigger(d,b)},b.prototype.callbacks=function(a){return this.get_opt("callbacks")[a]||e[a]},b.prototype.get_opt=function(a){var b;try{return this.setting[a]}catch(c){return b=c,null}},b.prototype.content=function(){return this.$inputor.is("textarea, input")?this.$inputor.val():this.$inputor.text()},b.prototype.catch_query=function(){var a,b,c,d,e,f;return b=this.content(),a=this.$inputor.caret("pos",{iframe:this.app.iframe}),f=b.slice(0,a),d=this.callbacks("matcher").call(this,this.at,f,this.get_opt("start_with_space")),"string"==typeof d&&d.length<=this.get_opt("max_len",20)?(e=a-d.length,c=e+d.length,this.pos=e,d={text:d,head_pos:e,end_pos:c},this.trigger("matched",[this.at,d.text])):(d=null,this.view.hide()),this.query=d},b.prototype.rect=function(){var b,c,d;if(b=this.$inputor.caret("offset",this.pos-1,{iframe:this.app.iframe}))return this.app.iframe&&!this.app.iframeStandalone&&(c=a(this.app.iframe).offset(),b.left+=c.left,b.top+=c.top),"true"===this.$inputor.attr("contentEditable")&&(b=this.cur_rect||(this.cur_rect=b)),d=this.app.document.selection?0:2,{left:b.left,top:b.top,bottom:b.top+b.height+d}},b.prototype.reset_rect=function(){return"true"===this.$inputor.attr("contentEditable")?this.cur_rect=null:void 0},b.prototype.mark_range=function(){return"true"===this.$inputor.attr("contentEditable")&&(this.app.window.getSelection&&(this.range=this.app.window.getSelection().getRangeAt(0)),this.app.document.selection)?this.ie8_range=this.app.document.selection.createRange():void 0},b.prototype.insert_content_for=function(b){var c,d,e;return d=b.data("value"),e=this.get_opt("insert_tpl"),this.$inputor.is("textarea, input")||!e?d:(c=a.extend({},b.data("item-data"),{"atwho-data-value":d,"atwho-at":this.at}),this.callbacks("tpl_eval").call(this,e,c))},b.prototype.insert=function(b){var c,d,e,f,g,h,i,j,k;return c=this.$inputor,k=this.callbacks("inserting_wrapper").call(this,c,b,this.get_opt("suffix")),c.is("textarea, input")?(h=c.val(),i=h.slice(0,Math.max(this.query.head_pos-this.at.length,0)),j=""+i+k+h.slice(this.query.end_pos||0),c.val(j),c.caret("pos",i.length+k.length,{iframe:this.app.iframe})):(f=this.range)?(e=f.startOffset-(this.query.end_pos-this.query.head_pos)-this.at.length,f.setStart(f.endContainer,Math.max(e,0)),f.setEnd(f.endContainer,f.endOffset),f.deleteContents(),d=a(k,this.app.document)[0],f.insertNode(d),f.setEndAfter(d),f.collapse(!1),g=this.app.window.getSelection(),g.removeAllRanges(),g.addRange(f)):(f=this.ie8_range)&&(f.moveStart("character",this.query.end_pos-this.query.head_pos-this.at.length),f.pasteHTML(k),f.collapse(!1),f.select()),c.is(":focus")||c.focus(),c.change()},b.prototype.render_view=function(a){var b;return b=this.get_opt("search_key"),a=this.callbacks("sorter").call(this,this.query.text,a.slice(0,1001),b),this.view.render(a.slice(0,this.get_opt("limit")))},b.prototype.look_up=function(){var b,c;if(b=this.catch_query())return c=function(a){return a&&a.length>0?this.render_view(a):this.view.hide()},this.model.query(b.text,a.proxy(c,this)),b},b}(),g=function(){function b(a){this.context=a,this.at=this.context.at,this.storage=this.context.$inputor}return b.prototype.destroy=function(){return this.storage.data(this.at,null)},b.prototype.saved=function(){return this.fetch()>0},b.prototype.query=function(a,b){var c,d,e;return c=this.fetch(),d=this.context.get_opt("search_key"),c=this.context.callbacks("filter").call(this.context,a,c,d)||[],e=this.context.callbacks("remote_filter"),c.length>0||!e&&0===c.length?b(c):e.call(this.context,a,b)},b.prototype.fetch=function(){return this.storage.data(this.at)||[]},b.prototype.save=function(a){return this.storage.data(this.at,this.context.callbacks("before_save").call(this.context,a||[]))},b.prototype.load=function(a){return!this.saved()&&a?this._load(a):void 0},b.prototype.reload=function(a){return this._load(a)},b.prototype._load=function(b){return"string"==typeof b?a.ajax(b,{dataType:"json"}).done(function(a){return function(b){return a.save(b)}}(this)):this.save(b)},b}(),h=function(){function b(b){this.context=b,this.$el=a("<div class='atwho-view'><ul class='atwho-view-ul'></ul></div>"),this.timeout_id=null,this.context.$el.append(this.$el),this.bind_event()}return b.prototype.init=function(){var a;return a=this.context.get_opt("alias")||this.context.at.charCodeAt(0),this.$el.attr({id:"at-view-"+a})},b.prototype.destroy=function(){return this.$el.remove()},b.prototype.bind_event=function(){var b;return b=this.$el.find("ul"),b.on("mouseenter.atwho-view","li",function(c){return b.find(".cur").removeClass("cur"),a(c.currentTarget).addClass("cur")}).on("click",function(a){return function(b){return a.choose(b),b.preventDefault()}}(this))},b.prototype.visible=function(){return this.$el.is(":visible")},b.prototype.choose=function(a){var b,c;return(b=this.$el.find(".cur")).length&&(c=this.context.insert_content_for(b),this.context.insert(this.context.callbacks("before_insert").call(this.context,c,b),b),this.context.trigger("inserted",[b,a]),this.hide(a)),this.context.get_opt("hide_without_suffix")?this.stop_showing=!0:void 0},b.prototype.reposition=function(b){var c,d,e,f;return f=this.context.app.iframeStandalone?this.context.app.window:window,b.bottom+this.$el.height()-a(f).scrollTop()>a(f).height()&&(b.bottom=b.top-this.$el.height()),b.left>(d=a(f).width()-this.$el.width()-5)&&(b.left=d),c={left:b.left,top:b.bottom},null!=(e=this.context.callbacks("before_reposition"))&&e.call(this.context,c),this.$el.offset(c),this.context.trigger("reposition",[c])},b.prototype.next=function(){var a,b;return a=this.$el.find(".cur").removeClass("cur"),b=a.next(),b.length||(b=this.$el.find("li:first")),b.addClass("cur")},b.prototype.prev=function(){var a,b;return a=this.$el.find(".cur").removeClass("cur"),b=a.prev(),b.length||(b=this.$el.find("li:last")),b.addClass("cur")},b.prototype.show=function(){var a;return this.stop_showing?void(this.stop_showing=!1):(this.context.mark_range(),this.visible()||(this.$el.show(),this.context.trigger("shown")),(a=this.context.rect())?this.reposition(a):void 0)},b.prototype.hide=function(a,b){var c;if(this.visible())return isNaN(b)?(this.context.reset_rect(),this.$el.hide(),this.context.trigger("hidden",[a])):(c=function(a){return function(){return a.hide()}}(this),clearTimeout(this.timeout_id),this.timeout_id=setTimeout(c,b))},b.prototype.render=function(b){var c,d,e,f,g,h,i;if(!(a.isArray(b)&&b.length>0))return void this.hide();for(this.$el.find("ul").empty(),d=this.$el.find("ul"),g=this.context.get_opt("tpl"),h=0,i=b.length;i>h;h++)e=b[h],e=a.extend({},e,{"atwho-at":this.context.at}),f=this.context.callbacks("tpl_eval").call(this.context,g,e),c=a(this.context.callbacks("highlighter").call(this.context,f,this.context.query.text)),c.data("item-data",e),d.append(c);return this.show(),this.context.get_opt("highlight_first")?d.find("li:first").addClass("cur"):void 0},b}(),f={DOWN:40,UP:38,ESC:27,TAB:9,ENTER:13,CTRL:17,P:80,N:78},e={before_save:function(b){var c,d,e,f;if(!a.isArray(b))return b;for(f=[],d=0,e=b.length;e>d;d++)c=b[d],f.push(a.isPlainObject(c)?c:{name:c});return f},matcher:function(a,b,c){var d,e;return a=a.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g,"\\$&"),c&&(a="(?:^|\\s)"+a),e=new RegExp(a+"([A-Za-z0-9_+-]*)$|"+a+"([^\\x00-\\xff]*)$","gi"),d=e.exec(b),d?d[2]||d[1]:null},filter:function(a,b,c){var d,e,f,g;for(g=[],e=0,f=b.length;f>e;e++)d=b[e],~new String(d[c]).toLowerCase().indexOf(a.toLowerCase())&&g.push(d);return g},remote_filter:null,sorter:function(a,b,c){var d,e,f,g;if(!a)return b;for(g=[],e=0,f=b.length;f>e;e++)d=b[e],d.atwho_order=new String(d[c]).toLowerCase().indexOf(a.toLowerCase()),d.atwho_order>-1&&g.push(d);return g.sort(function(a,b){return a.atwho_order-b.atwho_order})},tpl_eval:function(a,b){var c;try{return a.replace(/\$\{([^\}]*)\}/g,function(a,c){return b[c]})}catch(d){return c=d,""}},highlighter:function(a,b){var c;return b?(c=new RegExp(">\\s*(\\w*?)("+b.replace("+","\\+")+")(\\w*)\\s*<","ig"),a.replace(c,function(a,b,c,d){return"> "+b+"<strong>"+c+"</strong>"+d+" <"})):a},before_insert:function(a){return a},inserting_wrapper:function(a,b,c){var d,e;return d=""===c?c:c||" ",a.is("textarea, input")?""+b+d:"true"===a.attr("contentEditable")?(d=""===c?c:c||"&nbsp;",/firefox/i.test(navigator.userAgent)?e="<span>"+b+d+"</span>":(c="<span contenteditable='false'>"+d+"<span>",e="<span contenteditable='false'>"+b+c+"</span>"),this.app.document.selection&&(e="<span contenteditable='true'>"+b+"</span>"),e):void 0}},b={load:function(a,b){var c;return(c=this.controller(a))?c.model.load(b):void 0},setIframe:function(a,b){return this.setIframe(a,b),null},run:function(){return this.dispatch()},destroy:function(){return this.shutdown(),this.$inputor.data("atwho",null)}},a.fn.atwho=function(d){var e,f;return f=arguments,e=null,this.filter('textarea, input, [contenteditable=""], [contenteditable=true]').each(function(){var g,h;return(h=(g=a(this)).data("atwho"))||g.data("atwho",h=new c(this)),"object"!=typeof d&&d?b[d]&&h?e=b[d].apply(h,Array.prototype.slice.call(f,1)):a.error("Method "+d+" does not exist on jQuery.caret"):h.reg(d.at,d)}),e||this},a.fn.atwho["default"]={at:void 0,alias:void 0,data:null,tpl:"<li data-value='${atwho-at}${name}'>${name}</li>",insert_tpl:"<span id='${id}'>${atwho-data-value}</span>",callbacks:e,search_key:"name",suffix:void 0,hide_without_suffix:!1,start_with_space:!0,highlight_first:!0,limit:5,max_len:20,display_timeout:300,delay:null}})}).call(this);
 !function(a){function b(a,c){c=c||{},this._id=b._generateUUID(),this._promise=c.promise||Promise,this._frameId=c.frameId||"CrossStorageClient-"+this._id,this._origin=b._getOrigin(a),this._requests={},this._connected=!1,this._closed=!1,this._count=0,this._timeout=c.timeout||5e3,this._listener=null,this._installListener();var d;c.frameId&&(d=document.getElementById(c.frameId)),d&&this._poll(),d?this._hub=d.contentWindow:this._createFrame(a)}b.frameStyle={display:"none",position:"absolute",top:"-999px",left:"-999px"},b._getOrigin=function(a){var b,c,d;return b=document.createElement("a"),b.href=a,b.host||(b=window.location),c=b.protocol&&":"!==b.protocol?b.protocol:window.location.protocol,d=c+"//"+b.host,d=d.replace(/:80$|:443$/,"")},b._generateUUID=function(){return"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,function(a){var b=16*Math.random()|0,c="x"==a?b:3&b|8;return c.toString(16)})},b.prototype.onReadyFrame=function(){var a=this;return this._hub?this._promise.resolve():this._closed?this._promise.reject(new Error("CrossStorageClient has closed")):new this._promise(function(b,c){var d=setTimeout(function(){c(new Error("CrossStorageClient could not ready frame"))},a._timeout),e=setInterval(function(){a._hub&&(clearTimeout(d),clearInterval(e),b())},100)})},b.prototype.onConnect=function(){var a=this;return this._connected?this._promise.resolve():this._closed?this._promise.reject(new Error("CrossStorageClient has closed")):(this._requests.connect||(this._requests.connect=[]),new this._promise(function(b,c){var d=setTimeout(function(){c(new Error("CrossStorageClient could not connect"))},a._timeout);a._requests.connect.push(function(a){return clearTimeout(d),a?c(a):void b()})}))},b.prototype.set=function(a,b,c){return this._request("set",{key:a,value:b,ttl:c})},b.prototype.get=function(){var a=Array.prototype.slice.call(arguments);return this._request("get",{keys:a})},b.prototype.del=function(){var a=Array.prototype.slice.call(arguments);return this._request("del",{keys:a})},b.prototype.clear=function(){return this._request("clear")},b.prototype.getKeys=function(){return this._request("getKeys")},b.prototype.close=function(){var a=document.getElementById(this._frameId);a&&a.parentNode.removeChild(a),window.removeEventListener?window.removeEventListener("message",this._listener,!1):window.detachEvent("onmessage",this._listener),this._connected=!1,this._closed=!0},b.prototype._installListener=function(){var a=this;this._listener=function(b){var c,d,e,f;if(!a._closed&&b.data&&"string"==typeof b.data&&(d="null"===b.origin?"file://":b.origin,d===a._origin))if("cross-storage:unavailable"!==b.data){if(-1!==b.data.indexOf("cross-storage:")&&!a._connected){if(a._connected=!0,!a._requests.connect)return;for(c=0;c<a._requests.connect.length;c++)a._requests.connect[c](e);delete a._requests.connect}if("cross-storage:ready"!==b.data){try{f=JSON.parse(b.data)}catch(g){return}f.id&&a._requests[f.id]&&a._requests[f.id](f.error,f.result)}}else{if(a._closed||a.close(),!a._requests.connect)return;for(e=new Error("Closing client. Could not access localStorage in hub."),c=0;c<a._requests.connect.length;c++)a._requests.connect[c](e)}},window.addEventListener?window.addEventListener("message",this._listener,!1):window.attachEvent("onmessage",this._listener)},b.prototype._poll=function(){var a,b,c;a=this,c="file://"===a._origin?"*":a._origin,b=setInterval(function(){return a._connected?clearInterval(b):void(a._hub&&a._hub.postMessage("cross-storage:poll",c))},1e3)},b.prototype._createFrame=function(a){var c,d,e=this;c=window.document.createElement("iframe"),c.id=this._frameId;for(d in b.frameStyle)b.frameStyle.hasOwnProperty(d)&&(c.style[d]=b.frameStyle[d]);window.document.body.appendChild(c),c.onload=function(){e._hub=c.contentWindow},c.src=a},b.prototype._request=function(a,b){var c,d;return this._closed?this._promise.reject(new Error("CrossStorageClient has closed")):(d=this,d._count++,c={id:this._id+":"+d._count,method:"cross-storage:"+a,params:b},new this._promise(function(a,b){var e,f,g;e=setTimeout(function(){d._requests[c.id]&&(delete d._requests[c.id],b(new Error("Timeout: could not perform "+c.method)))},d._timeout),d._requests[c.id]=function(c,d){return clearTimeout(e),c?b(new Error(c)):void a(d)},Array.prototype.toJSON&&(f=Array.prototype.toJSON,Array.prototype.toJSON=null),g="file://"===d._origin?"*":d._origin,d._hub.postMessage(JSON.stringify(c),g),f&&(Array.prototype.toJSON=f)}))},"undefined"!=typeof module&&module.exports?module.exports=b:"undefined"!=typeof exports?exports.CrossStorageClient=b:"function"==typeof define&&define.amd?define([],function(){return b}):a.CrossStorageClient=b}(this),function(){var a,b,c,d,e,f,g,h,i,j,k,l,m=function(a,b){return function(){return a.apply(b,arguments)}};this.EmojidexClient=function(){function c(c){var h=this;this.env={api_ver:1,cdn_addr:"cdn.emojidex.com",s_cdn_addr:"",asset_addr:"assets.emojidex.com",s_asset_addr:""},this.defaults={locale:"en",api_url:"https://www.emojidex.com/api/v1/",cdn_url:"http://"+this.env.cdn_addr+"/emoji/",closed_net:!1,min_query_len:4,size_code:"px32",detailed:!1,limit:32},this.options=$.extend({},this.defaults,c),this.closed_net=this.options.closed_net,this.api_url=this.options.api_url,this.cdn_url=this.options.cdn_url,this.size_code=this.options.size_code,this.detailed=this.options.detailed,this.limit=this.options.limit,this.locale=this.options.locale,this.Data=new b(this,this.options).then(function(b){return h.User=new g(h),h.Indexes=new e(h),h.Util=new l(h),h.Search=new f(h),h.Emoji=new d(h),h.Categories=new a(h)}).then(function(){var a;return"function"==typeof(a=h.options).onReady?a.onReady(h):void 0})}return c}(),a=function(){function a(a){var b=this;return this.EC=a,this._categories=this.EC.Data.categories(),this.sync().then(function(){return b.EC.Categories=b})}return a.prototype._categoriesAPI=function(a,b,c,d){var e,f=this;return e={page:1,limit:this.EC.limit,detailed:this.EC.detailed},$.extend(e,c),this.called_func=d,this.called_data={category_name:a,callback:b,param:e},$.ajax({url:""+this.EC.api_url+"emoji",dataType:"json",data:e,success:function(c){return f.meta=c.meta,f.results=c.emoji,f.cur_page=c.meta.page,f.count=c.meta.count,f.EC.Emoji.combine(c.emoji).then(function(){return"function"==typeof b?b(c.emoji,{category_name:a,callback:b,param:e}):void 0})}})},a.prototype.getEmoji=function(a,b,c){var d;return d={category:a},$.extend(d,c),this._categoriesAPI(a,b,d,this.getEmoji)},a.prototype.next=function(){return this.count===this.called_data.param.limit&&this.called_data.param.page++,this.called_func(this.called_data.category_name,this.called_data.callback,this.called_data.param,{ajax:this.called_func})},a.prototype.prev=function(){return this.called_data.param.page>1&&this.called_data.param.page--,this.called_func(this.called_data.category_name,this.called_data.callback,this.called_data.param,{ajax:this.called_func})},a.prototype.sync=function(a,b){var c,d=this;return null!=(null!=(c=this._categories)?c.length:void 0)?new Promise(function(b,c){return"function"==typeof a&&a(d._categories),b()}):(null==b&&(b=this.EC.locale),$.ajax({url:this.EC.api_url+"categories",dataType:"json",data:{locale:b}}).then(function(b){return d._categories=b.categories,d.EC.Data.categories(b.categories).then(function(){return"function"==typeof a?a(d._categories):void 0})}))},a.prototype.all=function(a){var b=this;return null!=this._categories?"function"==typeof a?a(this._categories):void 0:setTimeout(function(){return b.all(a)},500)},a}(),b=function(){function a(a,b){var d=this;return this.EC=a,this.options=b,this._def_auth_info={status:"none",user:"",token:null},null!=this.options.storageHubPath?this.storage=new c(this.options.storageHubPath):this.storage=new c,this.storage.hub.onReadyFrame().then(function(){return d.storage.hub.onConnect()}).then(function(){return d.storage.hub.getKeys()}).then(function(a){var b,c,e,f,g;return-1!==a.indexOf("emojidex")?d.storage.update_cache("emojidex"):(d.storage.hub_cache={emojidex:{emoji:(null!=(b=d.EC.options)?b.emoji:void 0)||[],history:(null!=(c=d.EC.options)?c.history:void 0)||[],favorites:(null!=(e=d.EC.options)?e.favorites:void 0)||[],categories:(null!=(f=d.EC.options)?f.categories:void 0)||[],auth_info:(null!=(g=d.EC.options)?g.auth_info:void 0)||d._def_auth_info}},d.storage.update("emojidex",d.storage.hub_cache.emojidex))}).then(function(a){var b,c;return null!=(null!=(b=d.storage.hub_cache)&&null!=(c=b.emojidex)?c.cdn_url:void 0)?d.EC.cdn_url=d.storage.get("emojidex.cdn_url"):d.EC.cdn_url===d.EC.defaults.cdn_url&&d.EC.closed_net===!1?$.ajax({url:d.EC.api_url+"/env",dataType:"json"}).then(function(a){return d.EC.env=a,d.EC.cdn_url="https://"+d.EC.env.s_cdn_addr+"/emoji/",d.storage.update("emojidex",{cdn_url:d.EC.cdn_url})}):void 0}).then(function(a){return d.EC.Data=d})}return a.prototype.emoji=function(a){var b,c,d,e,f,g,h,i;if(null!=a){if(this.storage.hub_cache.emojidex.emoji.length>0){for(c=this.storage.hub_cache.emojidex.emoji,e=0,g=a.length;g>e;e++)for(d=a[e],f=0,h=c.length;h>f;f++){if(b=c[f],d.code===b.code){c.splice(c.indexOf(b),1,d);break}b===c[c.length-1]&&c.push(d)}return this.storage.update("emojidex",{emoji:c})}return this.storage.update("emojidex",{emoji:a})}return null!=(null!=(i=this.storage.hub_cache.emojidex)?i.emoji:void 0)?this.storage.hub_cache.emojidex.emoji:void 0},a.prototype.favorites=function(a){return null!=a?this.storage.update("emojidex",{favorites:a}):this.storage.hub_cache.favorites},a.prototype.history=function(a){return null!=a?this.storage.update("emojidex",{history:a}):this.storage.hub_cache.history},a.prototype.categories=function(a){return null!=a?this.storage.update("emojidex",{categories:a}):this.storage.hub_cache.categories},a.prototype.auth_info=function(a){return null!=a?this.storage.update("emojidex",{auth_info:a}):void 0},a}(),c=function(){function a(a){null==a&&(a="https://www.emojidex.com/hub"),this.hub=new CrossStorageClient(a,{frameId:"emojidex-client-storage-hub"}),this.hub_cache={}}return a.prototype._get_chained_data=function(a,b,c){var d,e;return null==c&&(c=!0),a=this._get_parsed_query(a),d=function(c,e){return 0===a.array.length?c[e]=b:(c[e]={},d(c[e],a.array.shift())),c},e=d({},a.array.shift()),c?e:e[a.first]},a.prototype._get_hub_data=function(a){var b=this;return a=a.split("."),this.hub.onConnect().then(function(){return b.hub.get(a.shift())}).then(function(b){var c,d,e;if(a.length)for(d=0,e=a.length;e>d;d++)c=a[d],b=b[c];return b})},a.prototype._get_parsed_query=function(a){var b;return b=a.split("."),a={code:a,array:b,first:b[0]}},a.prototype.get=function(a){var b,c,d,e;if(a=a instanceof Array?a:a.split("."),b=this.hub_cache,a.length)for(d=0,e=a.length;e>d;d++)c=a[d],b=b[c];return b},a.prototype.set=function(a,b,c){var d,e=this;return d=a.split(".")[0],this.hub.onConnect().then(function(){var f;return c?(f={},f[d]=b,e.hub.set(d,f)):e.hub.set(d,e._get_chained_data(a,b))}).then(function(){return e.update_cache(d)})},a.prototype.update=function(a,b){var c;return c=$.extend(!0,{},this.get(a.split(".")[0]),this._get_chained_data(a,b,!1)),this.set(a,c,!0)},a.prototype.update_cache=function(a){var b=this;return this.hub.onConnect().then(function(){return a?a:b.hub.getKeys()}).then(function(a){return b.hub.get(a)}).then(function(c){return a?b.hub_cache[a]=c[a]:b.hub_cache=c})},a.prototype._remove=function(a){var b,c,d;if(a=this._get_parsed_query(a),1===a.array.length)return this.hub.del(a.code);for(d=c=this.get(a.array.shift()),b=0;b<a.array.length-1;)c=c[a.array[b]],b++;return delete c[a.array[b]],this.update(a.first,d)},a.prototype.clear=function(){var a=this;return this.hub.onConnect().then(function(){return a.hub.clear()})},a.prototype.keys=function(a){var b,c,d=this;if(a){c=[];for(b in this.get(a))c.push(b);return c}return this.hub.onConnect().then(function(){return d.hub.getKeys()})},a.prototype.isEmpty=function(a){return this.get(a)?!1:!0},a.prototype.isSet=function(a){return this.get(a)?!0:!1},a}(),d=function(){function a(a){this.EC=a,this.combine=m(this.combine,this),this._emoji_instance=[]}return a.prototype._emoji=function(){return null!=this._emoji_instance?this._emoji_instance:this.checkUpdate()?(this.EC.Data.storage.update("emojidex.seedUpdated",(new Date).toString()),this.seed()):this._emoji_instance=this.EC.Data.storage.get("emojidex.emoji")},a.prototype.checkUpdate=function(){var a,b;return this.EC.Data.storage.isSet("emojidex.seedUpdated")?(a=new Date,b=new Date(this.EC.Data.storage.get("emojidex.seedUpdated")),a-b>=1728e5?!0:!1):!0},a.prototype.seed=function(a){return this.EC.Indexes["static"](["utf_emoji","extended_emoji"],null,a)},a.prototype.all=function(){return this._emoji()},a.prototype.search=function(a,b){var c,d;return d=function(){var b,d,e,f;for(e=this._emoji(),f=[],b=0,d=e.length;d>b;b++)c=e[b],c.code.match(a)&&f.push(c);return f}.call(this),"function"==typeof b&&b(d),d},a.prototype.starting=function(a,b){var c,d;return d=function(){var b,d,e,f;for(e=this._emoji(),f=[],b=0,d=e.length;d>b;b++)c=e[b],c.code.match("^"+a)&&f.push(c);return f}.call(this),"function"==typeof b&&b(d),d},a.prototype.ending=function(a,b){var c,d;return d=function(){var b,d,e,f;for(e=this._emoji(),f=[],b=0,d=e.length;d>b;b++)c=e[b],c.code.match(a+"$")&&f.push(c);return f}.call(this),"function"==typeof b&&b(d),d},a.prototype.tags=function(a,b){var c,d,e,f,g,h;for(a=this.EC.Util.breakout(a),e=(null!=b?b.selection:void 0)||this._emoji(),c=[],g=0,h=a.length;h>g;g++)f=a[g],c=c.concat(function(){var a,b,c;for(c=[],a=0,b=e.length;b>a;a++)d=e[a],$.inArray(f,d.tags)>=0&&c.push(d);return c}());return c},a.prototype.categories=function(a,b){var c,d,e,f,g,h;for(a=this.EC.Util.breakout(a),f=(null!=b?b.selection:void 0)||this._emoji(),d=[],g=0,h=a.length;h>g;g++)c=a[g],d=d.concat(function(){var a,b,d;for(d=[],a=0,b=f.length;b>a;a++)e=f[a],e.category===c&&d.push(e);return d}());return d},a.prototype.advanced=function(a){return this.categories(a.categories,{selection:this.tags(a.tags,{selection:this.search(a.term)})})},a.prototype.combine=function(a){var b=this;return this.EC.Data.emoji(a).then(function(a){return b._emoji_instance=a.emoji})},a.prototype.flush=function(){return this._emoji_instance=[],this.EC.Data.storage._remove("emojidex.emoji")},a}(),e=function(){function a(a){this.EC=a,this.results=[],this.cur_page=1,this.count=0}return a.prototype._indexesAPI=function(a,b,c,d){var e,f=this;return e={page:1,limit:this.EC.limit,detailed:this.EC.detailed},$.extend(e,c),null!=d&&(this.indexed_func=d,this.indexed={query:a,callback:b,param:e}),$.ajax({url:this.EC.api_url+a,dataType:"json",data:e,success:function(a){return f.results=a.emoji,f.cur_page=a.meta.page,f.count=a.meta.count,f.EC.Emoji.combine(a.emoji).then(function(c){return"function"==typeof b?b(a.emoji):void 0})},error:function(a){return f.results=[]}})},a.prototype.index=function(a,b){return this._indexesAPI("emoji",a,b,this.index)},a.prototype.user=function(a,b,c){return this._indexesAPI("users/"+a+"/emoji",b,c)},a.prototype["static"]=function(a,b,c){var d,e,f,g,h,i,j,k=this;for(f=0,e=[],d=function(b){return $.ajax({url:b,dataType:"json",success:function(b){return e=e.concat(b),++f===a.length?k.EC.Emoji.combine(e).then(function(a){return"function"==typeof c?c(a):void 0}):void 0}})},j=[],h=0,i=a.length;i>h;h++)g=a[h],b?j.push(d(""+(this.EC.api_url+g)+"?locale="+b)):j.push(d(""+(this.EC.api_url+g)));return j},a.prototype.select=function(a,b,c){return this.EC.Search.find(a,b,c)},a.prototype.next=function(){return this.count===this.indexed.param.limit&&this.indexed.param.page++,this.indexed_func(this.indexed.callback,this.indexed.param,this.indexed_func)},a.prototype.prev=function(){return this.indexed.param.page>1&&this.indexed.param.page--,this.indexed_func(this.indexed.callback,this.indexed.param,this.indexed_func)},a}(),f=function(){function a(a){this.EC=a,this.Util=new l,this.results=[],this.cur_page=1,this.count=0}return a.prototype._searchAPI=function(a,b,c,d){var e,f=this;return e={page:1,limit:this.EC.limit,detailed:this.EC.detailed},$.extend(e,c),this.searched_func=d.ajax,this.searched={data:a,callback:b,param:e},this.EC.closed_net?"function"==typeof d.storage?d.storage(a,b):void 0:$.ajax({url:this.EC.api_url+"search/emoji",dataType:"json",data:e,success:function(a){return f.meta=a.meta,f.results=a.emoji,f.cur_page=a.meta.page,f.count=a.meta.count,f.EC.Emoji.combine(a.emoji).then(function(c){return"function"==typeof b?b(a.emoji):void 0})},error:function(a){return f.results=[]}})},a.prototype.search=function(a,b,c){return c=$.extend({code_cont:this.EC.Util.escape_term(a)},c),this._searchAPI(a,b,c,{ajax:this.search,storage:this.EC.Emoji.search})},a.prototype.starting=function(a,b,c){return c=$.extend({code_sw:this.Util.escape_term(a)},c),this._searchAPI(a,b,c,{ajax:this.starting,storage:this.EC.Emoji.starting})},a.prototype.ending=function(a,b,c){return c=$.extend({code_ew:this.Util.escape_term(a)},c),this._searchAPI(a,b,c,{ajax:this.ending,storage:this.EC.Emoji.ending})},a.prototype.tags=function(a,b,c){return c=$.extend({"tags[]":this.Util.breakout(a)},c),this._searchAPI(a,b,c,{ajax:this.tags,storage:this.EC.Emoji.tags})},a.prototype.advanced=function(a,b,c){var d;return d={code_cont:this.Util.escape_term(a.term),"tags[]":this.Util.breakout(a.tags),"categories[]":this.Util.breakout(a.categories)},$.extend(d,c),this._searchAPI(a,b,d,{ajax:this.advanced,storage:this.EC.Emoji.advanced})},a.prototype.find=function(a,b,c){var d,e=this;return d={detailed:this.EC.detailed},$.extend(d,c),this.EC.closed_net?void 0:$.ajax({url:this.EC.api_url+("/emoji/"+a),dataType:"json",data:d,success:function(a){return e.EC.Emoji.combine([a]).then(function(c){return"function"==typeof b?b(a):void 0})}})},a.prototype.next=function(){return this.count===this.searched.param.limit&&this.searched.param.page++,this.searched_func(this.searched.data,this.searched.callback,this.searched.param,{ajax:this.searched_func})},a.prototype.prev=function(){return this.searched.param.page>1&&this.searched.param.page--,this.searched_func(this.searched.data,this.searched.callback,this.searched.param,{ajax:this.searched_func})},a}(),g=function(){function a(a){this.EC=a,this.auth_info=this.EC.Data._def_auth_info,this.History=new i(this.EC),this.Favorites=new h(this.EC),this.Newest=new j(this.EC),this.Popular=new k(this.EC)}return a.prototype._auto_login=function(){var a;if(!this.closed_net)return this.auth_info=this.EC.Data.auth_info(),null!=(null!=(a=this.auth_info)?a.token:void 0)?this.sync_user_data():this.logout()},a.prototype.login=function(a){switch(a.authtype){case"plain":return this.plain_auth(a.username,a.password,a.callback);case"token":return this.token_auth(a.username,a.auth_token,a.callback);case"basic":return this.basic_auth(a.user,a.password,a.callback);case"google":return this.google_auth(a.callback);default:return this._auto_login()}},a.prototype.logout=function(){return this.EC.Data.auth_info(this.EC.Data._def_auth_info)},a.prototype._authenticateAPI=function(a,b){var c,d=this;return c={url:this.EC.api_url+"users/authenticate",dataType:"json",success:function(a){return d._set_auth_from_response(a).then(function(){return"function"==typeof b?b(d.auth_info):void 0})},error:function(a){var c;return c=JSON.parse(a.responseText),d.auth_info={status:c.auth_status,token:null,user:""},d.EC.Data.auth_info(d.EC.Data.auth_info).then(function(){return"function"==typeof b?b({auth_info:d.auth_info,error_info:a}):void 0})}},$.ajax($.extend(c,a))},a.prototype.plain_auth=function(a,b,c){return this._authenticateAPI({data:{username:a,password:b}},c)},a.prototype.token_auth=function(a,b,c){return this._authenticateAPI({data:{username:a,token:b}},c)},a.prototype.basic_auth=function(a,b,c){return this._authenticateAPI({data:{user:a,password:b}},c)},a.prototype.google_auth=function(a){return!1},a.prototype.set_auth=function(a,b){var c=this;return this.EC.Data.auth_info({status:"verified",user:a,token:b}).then(function(a){return c.auth_info=c.EC.Data.storage.get("emojidex.auth_info"),c.sync_user_data(),a})},a.prototype._set_auth_from_response=function(a){var b=this;return this.EC.Data.auth_info({status:a.auth_status,token:a.auth_token,user:a.auth_user}).then(function(a){return b.auth_info=b.EC.Data.storage.get("emojidex.auth_info"),b.sync_user_data(),a})},a.prototype.sync_user_data=function(){return this.History.token=this.Favorites.token=this.Newest.token=this.Popular.token=this.auth_info.token,this.Favorites.sync(),this.History.sync()},a}(),h=function(){function a(a,b){this.EC=a,this.token=b,this._favorites=this.EC.Data.favorites()}return a.prototype._favoritesAPI=function(a){var b;return null!=this.token?(b={url:this.EC.api_url+"users/favorites",dataType:"json"},$.ajax($.extend(b,a))):void 0},a.prototype.get=function(a){var b,c=this;return b={data:{auth_token:this.token},success:function(b){return c._favorites=b,c.EC.Data.favorites(b),"function"==typeof a?a(c._favorites):void 0}},this._favoritesAPI(b)},a.prototype.set=function(a){var b,c=this;return b={type:"POST",data:{auth_token:this.token,emoji_code:a},success:function(a){return c._favorites.push(a),c.EC.Data.favorites(c._favorites)}},this._favoritesAPI(b)},a.prototype.unset=function(a){var b,c=this;return b={type:"DELETE",data:{auth_token:this.token,emoji_code:a},success:function(a){return c.sync()}},this._favoritesAPI(b)},a.prototype.sync=function(){return this.get()},a.prototype.all=function(a){var b=this;return null!=this._favorites?"function"==typeof a?a(this._favorites):void 0:setTimeout(function(){return b.all(a)},500)},a}(),i=function(){function a(a,b){this.EC=a,this.token=b,this._history=this.EC.Data.history()}return a.prototype._historyAPI=function(a){var b;return null!=this.token?(b={url:this.EC.api_url+"users/history",dataType:"json"},$.ajax($.extend(b,a))):void 0},a.prototype.get=function(a){var b,c=this;return b={data:{auth_token:this.token},success:function(b){return c._history=b,c.EC.Data.history(b),"function"==typeof a?a(c._history):void 0}},this._historyAPI(b)},a.prototype.set=function(a){var b,c=this;return b={type:"POST",data:{auth_token:this.token,emoji_code:a},success:function(a){var b,d,e,f,g;for(g=c._history,d=e=0,f=g.length;f>e;d=++e)if(b=g[d],b.emoji_code===a.emoji_code)return c._history[d]=a,c.EC.Data.history(c._history),a}},this._historyAPI(b)},a.prototype.sync=function(){return this.get()},a.prototype.all=function(a){var b=this;return null!=this._history?"function"==typeof a?a(this._history):void 0:setTimeout(function(){return b.all(a)},500)},a}(),j=function(){function a(a,b){this.EC=a,this.token=b}return a.prototype._newestAPI=function(a){var b;return null!=this.token?(b={url:this.EC.api_url+"newest",dataType:"json"},$.ajax($.extend(b,a))):void 0},a.prototype.get=function(a){var b;return b={data:{auth_token:this.token},success:function(b){return"function"==typeof a?a(b):void 0},error:function(b){return"function"==typeof a?a(b):void 0}},this._newestAPI(b)},a}(),k=function(){function a(a,b){this.EC=a,this.token=b}return a.prototype._popularAPI=function(a){var b;return null!=this.token?(b={url:this.EC.api_url+"popular",dataType:"json"},$.ajax($.extend(b,a))):void 0},a.prototype.get=function(a){var b;return b={data:{auth_token:this.token},success:function(b){return"function"==typeof a?a(b):void 0},error:function(b){return"function"==typeof a?a(b):void 0}},this._popularAPI(b)},a}(),l=function(){function a(a){this.EC=a}return a.prototype.escape_term=function(a){return a.replace(/\s/g,"_").replace(/(\(|\))/g,"\\$1")},a.prototype.de_escape_term=function(a){return a.replace(/_/g," ")},a.prototype.breakout=function(a){return null!=a?a instanceof Array?a:[a]:[]},a.prototype.simplify=function(a,b){var c,d,e,f;for(null==a&&(a=this.results),null==b&&(b=this.EC.size_code),f=[],d=0,e=a.length;e>d;d++)c=a[d],f.push({code:this.escape_term(c.code),img_url:""+this.EC.cdn_url+"/"+b+"/"+this.escape_term(c.code)+".png"});return f},a}()}.call(this);
 /*!
- * clipboard.js v1.5.12
+ * clipboard.js v1.5.10
  * https://zenorocha.github.io/clipboard.js
  *
  * Licensed MIT © Zeno Rocha
  */
-!function(t){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=t();else if("function"==typeof define&&define.amd)define([],t);else{var e;e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self?self:this,e.Clipboard=t()}}(function(){var t,e,n;return function t(e,n,o){function i(a,c){if(!n[a]){if(!e[a]){var s="function"==typeof require&&require;if(!c&&s)return s(a,!0);if(r)return r(a,!0);var l=new Error("Cannot find module '"+a+"'");throw l.code="MODULE_NOT_FOUND",l}var u=n[a]={exports:{}};e[a][0].call(u.exports,function(t){var n=e[a][1][t];return i(n?n:t)},u,u.exports,t,e,n,o)}return n[a].exports}for(var r="function"==typeof require&&require,a=0;a<o.length;a++)i(o[a]);return i}({1:[function(t,e,n){var o=t("matches-selector");e.exports=function(t,e,n){for(var i=n?t:t.parentNode;i&&i!==document;){if(o(i,e))return i;i=i.parentNode}}},{"matches-selector":5}],2:[function(t,e,n){function o(t,e,n,o,r){var a=i.apply(this,arguments);return t.addEventListener(n,a,r),{destroy:function(){t.removeEventListener(n,a,r)}}}function i(t,e,n,o){return function(n){n.delegateTarget=r(n.target,e,!0),n.delegateTarget&&o.call(t,n)}}var r=t("closest");e.exports=o},{closest:1}],3:[function(t,e,n){n.node=function(t){return void 0!==t&&t instanceof HTMLElement&&1===t.nodeType},n.nodeList=function(t){var e=Object.prototype.toString.call(t);return void 0!==t&&("[object NodeList]"===e||"[object HTMLCollection]"===e)&&"length"in t&&(0===t.length||n.node(t[0]))},n.string=function(t){return"string"==typeof t||t instanceof String},n.fn=function(t){var e=Object.prototype.toString.call(t);return"[object Function]"===e}},{}],4:[function(t,e,n){function o(t,e,n){if(!t&&!e&&!n)throw new Error("Missing required arguments");if(!c.string(e))throw new TypeError("Second argument must be a String");if(!c.fn(n))throw new TypeError("Third argument must be a Function");if(c.node(t))return i(t,e,n);if(c.nodeList(t))return r(t,e,n);if(c.string(t))return a(t,e,n);throw new TypeError("First argument must be a String, HTMLElement, HTMLCollection, or NodeList")}function i(t,e,n){return t.addEventListener(e,n),{destroy:function(){t.removeEventListener(e,n)}}}function r(t,e,n){return Array.prototype.forEach.call(t,function(t){t.addEventListener(e,n)}),{destroy:function(){Array.prototype.forEach.call(t,function(t){t.removeEventListener(e,n)})}}}function a(t,e,n){return s(document.body,t,e,n)}var c=t("./is"),s=t("delegate");e.exports=o},{"./is":3,delegate:2}],5:[function(t,e,n){function o(t,e){if(r)return r.call(t,e);for(var n=t.parentNode.querySelectorAll(e),o=0;o<n.length;++o)if(n[o]==t)return!0;return!1}var i=Element.prototype,r=i.matchesSelector||i.webkitMatchesSelector||i.mozMatchesSelector||i.msMatchesSelector||i.oMatchesSelector;e.exports=o},{}],6:[function(t,e,n){function o(t){var e;if("INPUT"===t.nodeName||"TEXTAREA"===t.nodeName)t.focus(),t.setSelectionRange(0,t.value.length),e=t.value;else{t.hasAttribute("contenteditable")&&t.focus();var n=window.getSelection(),o=document.createRange();o.selectNodeContents(t),n.removeAllRanges(),n.addRange(o),e=n.toString()}return e}e.exports=o},{}],7:[function(t,e,n){function o(){}o.prototype={on:function(t,e,n){var o=this.e||(this.e={});return(o[t]||(o[t]=[])).push({fn:e,ctx:n}),this},once:function(t,e,n){function o(){i.off(t,o),e.apply(n,arguments)}var i=this;return o._=e,this.on(t,o,n)},emit:function(t){var e=[].slice.call(arguments,1),n=((this.e||(this.e={}))[t]||[]).slice(),o=0,i=n.length;for(o;i>o;o++)n[o].fn.apply(n[o].ctx,e);return this},off:function(t,e){var n=this.e||(this.e={}),o=n[t],i=[];if(o&&e)for(var r=0,a=o.length;a>r;r++)o[r].fn!==e&&o[r].fn._!==e&&i.push(o[r]);return i.length?n[t]=i:delete n[t],this}},e.exports=o},{}],8:[function(e,n,o){!function(i,r){if("function"==typeof t&&t.amd)t(["module","select"],r);else if("undefined"!=typeof o)r(n,e("select"));else{var a={exports:{}};r(a,i.select),i.clipboardAction=a.exports}}(this,function(t,e){"use strict";function n(t){return t&&t.__esModule?t:{"default":t}}function o(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}var i=n(e),r="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol?"symbol":typeof t},a=function(){function t(t,e){for(var n=0;n<e.length;n++){var o=e[n];o.enumerable=o.enumerable||!1,o.configurable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(t,o.key,o)}}return function(e,n,o){return n&&t(e.prototype,n),o&&t(e,o),e}}(),c=function(){function t(e){o(this,t),this.resolveOptions(e),this.initSelection()}return t.prototype.resolveOptions=function t(){var e=arguments.length<=0||void 0===arguments[0]?{}:arguments[0];this.action=e.action,this.emitter=e.emitter,this.target=e.target,this.text=e.text,this.trigger=e.trigger,this.selectedText=""},t.prototype.initSelection=function t(){this.text?this.selectFake():this.target&&this.selectTarget()},t.prototype.selectFake=function t(){var e=this,n="rtl"==document.documentElement.getAttribute("dir");this.removeFake(),this.fakeHandlerCallback=function(){return e.removeFake()},this.fakeHandler=document.body.addEventListener("click",this.fakeHandlerCallback)||!0,this.fakeElem=document.createElement("textarea"),this.fakeElem.style.fontSize="12pt",this.fakeElem.style.border="0",this.fakeElem.style.padding="0",this.fakeElem.style.margin="0",this.fakeElem.style.position="absolute",this.fakeElem.style[n?"right":"left"]="-9999px",this.fakeElem.style.top=(window.pageYOffset||document.documentElement.scrollTop)+"px",this.fakeElem.setAttribute("readonly",""),this.fakeElem.value=this.text,document.body.appendChild(this.fakeElem),this.selectedText=(0,i.default)(this.fakeElem),this.copyText()},t.prototype.removeFake=function t(){this.fakeHandler&&(document.body.removeEventListener("click",this.fakeHandlerCallback),this.fakeHandler=null,this.fakeHandlerCallback=null),this.fakeElem&&(document.body.removeChild(this.fakeElem),this.fakeElem=null)},t.prototype.selectTarget=function t(){this.selectedText=(0,i.default)(this.target),this.copyText()},t.prototype.copyText=function t(){var e=void 0;try{e=document.execCommand(this.action)}catch(n){e=!1}this.handleResult(e)},t.prototype.handleResult=function t(e){e?this.emitter.emit("success",{action:this.action,text:this.selectedText,trigger:this.trigger,clearSelection:this.clearSelection.bind(this)}):this.emitter.emit("error",{action:this.action,trigger:this.trigger,clearSelection:this.clearSelection.bind(this)})},t.prototype.clearSelection=function t(){this.target&&this.target.blur(),window.getSelection().removeAllRanges()},t.prototype.destroy=function t(){this.removeFake()},a(t,[{key:"action",set:function t(){var e=arguments.length<=0||void 0===arguments[0]?"copy":arguments[0];if(this._action=e,"copy"!==this._action&&"cut"!==this._action)throw new Error('Invalid "action" value, use either "copy" or "cut"')},get:function t(){return this._action}},{key:"target",set:function t(e){if(void 0!==e){if(!e||"object"!==("undefined"==typeof e?"undefined":r(e))||1!==e.nodeType)throw new Error('Invalid "target" value, use a valid Element');if("copy"===this.action&&e.hasAttribute("disabled"))throw new Error('Invalid "target" attribute. Please use "readonly" instead of "disabled" attribute');if("cut"===this.action&&(e.hasAttribute("readonly")||e.hasAttribute("disabled")))throw new Error('Invalid "target" attribute. You can\'t cut text from elements with "readonly" or "disabled" attributes');this._target=e}},get:function t(){return this._target}}]),t}();t.exports=c})},{select:6}],9:[function(e,n,o){!function(i,r){if("function"==typeof t&&t.amd)t(["module","./clipboard-action","tiny-emitter","good-listener"],r);else if("undefined"!=typeof o)r(n,e("./clipboard-action"),e("tiny-emitter"),e("good-listener"));else{var a={exports:{}};r(a,i.clipboardAction,i.tinyEmitter,i.goodListener),i.clipboard=a.exports}}(this,function(t,e,n,o){"use strict";function i(t){return t&&t.__esModule?t:{"default":t}}function r(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}function a(t,e){if(!t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!e||"object"!=typeof e&&"function"!=typeof e?t:e}function c(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function, not "+typeof e);t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}}),e&&(Object.setPrototypeOf?Object.setPrototypeOf(t,e):t.__proto__=e)}function s(t,e){var n="data-clipboard-"+t;if(e.hasAttribute(n))return e.getAttribute(n)}var l=i(e),u=i(n),f=i(o),d=function(t){function e(n,o){r(this,e);var i=a(this,t.call(this));return i.resolveOptions(o),i.listenClick(n),i}return c(e,t),e.prototype.resolveOptions=function t(){var e=arguments.length<=0||void 0===arguments[0]?{}:arguments[0];this.action="function"==typeof e.action?e.action:this.defaultAction,this.target="function"==typeof e.target?e.target:this.defaultTarget,this.text="function"==typeof e.text?e.text:this.defaultText},e.prototype.listenClick=function t(e){var n=this;this.listener=(0,f.default)(e,"click",function(t){return n.onClick(t)})},e.prototype.onClick=function t(e){var n=e.delegateTarget||e.currentTarget;this.clipboardAction&&(this.clipboardAction=null),this.clipboardAction=new l.default({action:this.action(n),target:this.target(n),text:this.text(n),trigger:n,emitter:this})},e.prototype.defaultAction=function t(e){return s("action",e)},e.prototype.defaultTarget=function t(e){var n=s("target",e);return n?document.querySelector(n):void 0},e.prototype.defaultText=function t(e){return s("text",e)},e.prototype.destroy=function t(){this.listener.destroy(),this.clipboardAction&&(this.clipboardAction.destroy(),this.clipboardAction=null)},e}(u.default);t.exports=d})},{"./clipboard-action":8,"good-listener":4,"tiny-emitter":7}]},{},[9])(9)});
+!function(t){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=t();else if("function"==typeof define&&define.amd)define([],t);else{var e;e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self?self:this,e.Clipboard=t()}}(function(){var t,e,n;return function t(e,n,o){function i(c,a){if(!n[c]){if(!e[c]){var s="function"==typeof require&&require;if(!a&&s)return s(c,!0);if(r)return r(c,!0);var l=new Error("Cannot find module '"+c+"'");throw l.code="MODULE_NOT_FOUND",l}var u=n[c]={exports:{}};e[c][0].call(u.exports,function(t){var n=e[c][1][t];return i(n?n:t)},u,u.exports,t,e,n,o)}return n[c].exports}for(var r="function"==typeof require&&require,c=0;c<o.length;c++)i(o[c]);return i}({1:[function(t,e,n){var o=t("matches-selector");e.exports=function(t,e,n){for(var i=n?t:t.parentNode;i&&i!==document;){if(o(i,e))return i;i=i.parentNode}}},{"matches-selector":5}],2:[function(t,e,n){function o(t,e,n,o,r){var c=i.apply(this,arguments);return t.addEventListener(n,c,r),{destroy:function(){t.removeEventListener(n,c,r)}}}function i(t,e,n,o){return function(n){n.delegateTarget=r(n.target,e,!0),n.delegateTarget&&o.call(t,n)}}var r=t("closest");e.exports=o},{closest:1}],3:[function(t,e,n){n.node=function(t){return void 0!==t&&t instanceof HTMLElement&&1===t.nodeType},n.nodeList=function(t){var e=Object.prototype.toString.call(t);return void 0!==t&&("[object NodeList]"===e||"[object HTMLCollection]"===e)&&"length"in t&&(0===t.length||n.node(t[0]))},n.string=function(t){return"string"==typeof t||t instanceof String},n.fn=function(t){var e=Object.prototype.toString.call(t);return"[object Function]"===e}},{}],4:[function(t,e,n){function o(t,e,n){if(!t&&!e&&!n)throw new Error("Missing required arguments");if(!a.string(e))throw new TypeError("Second argument must be a String");if(!a.fn(n))throw new TypeError("Third argument must be a Function");if(a.node(t))return i(t,e,n);if(a.nodeList(t))return r(t,e,n);if(a.string(t))return c(t,e,n);throw new TypeError("First argument must be a String, HTMLElement, HTMLCollection, or NodeList")}function i(t,e,n){return t.addEventListener(e,n),{destroy:function(){t.removeEventListener(e,n)}}}function r(t,e,n){return Array.prototype.forEach.call(t,function(t){t.addEventListener(e,n)}),{destroy:function(){Array.prototype.forEach.call(t,function(t){t.removeEventListener(e,n)})}}}function c(t,e,n){return s(document.body,t,e,n)}var a=t("./is"),s=t("delegate");e.exports=o},{"./is":3,delegate:2}],5:[function(t,e,n){function o(t,e){if(r)return r.call(t,e);for(var n=t.parentNode.querySelectorAll(e),o=0;o<n.length;++o)if(n[o]==t)return!0;return!1}var i=Element.prototype,r=i.matchesSelector||i.webkitMatchesSelector||i.mozMatchesSelector||i.msMatchesSelector||i.oMatchesSelector;e.exports=o},{}],6:[function(t,e,n){function o(t){var e;if("INPUT"===t.nodeName||"TEXTAREA"===t.nodeName)t.focus(),t.setSelectionRange(0,t.value.length),e=t.value;else{t.hasAttribute("contenteditable")&&t.focus();var n=window.getSelection(),o=document.createRange();o.selectNodeContents(t),n.removeAllRanges(),n.addRange(o),e=n.toString()}return e}e.exports=o},{}],7:[function(t,e,n){function o(){}o.prototype={on:function(t,e,n){var o=this.e||(this.e={});return(o[t]||(o[t]=[])).push({fn:e,ctx:n}),this},once:function(t,e,n){function o(){i.off(t,o),e.apply(n,arguments)}var i=this;return o._=e,this.on(t,o,n)},emit:function(t){var e=[].slice.call(arguments,1),n=((this.e||(this.e={}))[t]||[]).slice(),o=0,i=n.length;for(o;i>o;o++)n[o].fn.apply(n[o].ctx,e);return this},off:function(t,e){var n=this.e||(this.e={}),o=n[t],i=[];if(o&&e)for(var r=0,c=o.length;c>r;r++)o[r].fn!==e&&o[r].fn._!==e&&i.push(o[r]);return i.length?n[t]=i:delete n[t],this}},e.exports=o},{}],8:[function(e,n,o){!function(i,r){if("function"==typeof t&&t.amd)t(["module","select"],r);else if("undefined"!=typeof o)r(n,e("select"));else{var c={exports:{}};r(c,i.select),i.clipboardAction=c.exports}}(this,function(t,e){"use strict";function n(t){return t&&t.__esModule?t:{"default":t}}function o(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}var i=n(e),r="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol?"symbol":typeof t},c=function(){function t(t,e){for(var n=0;n<e.length;n++){var o=e[n];o.enumerable=o.enumerable||!1,o.configurable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(t,o.key,o)}}return function(e,n,o){return n&&t(e.prototype,n),o&&t(e,o),e}}(),a=function(){function t(e){o(this,t),this.resolveOptions(e),this.initSelection()}return t.prototype.resolveOptions=function t(){var e=arguments.length<=0||void 0===arguments[0]?{}:arguments[0];this.action=e.action,this.emitter=e.emitter,this.target=e.target,this.text=e.text,this.trigger=e.trigger,this.selectedText=""},t.prototype.initSelection=function t(){this.text?this.selectFake():this.target&&this.selectTarget()},t.prototype.selectFake=function t(){var e=this,n="rtl"==document.documentElement.getAttribute("dir");this.removeFake(),this.fakeHandler=document.body.addEventListener("click",function(){return e.removeFake()}),this.fakeElem=document.createElement("textarea"),this.fakeElem.style.fontSize="12pt",this.fakeElem.style.border="0",this.fakeElem.style.padding="0",this.fakeElem.style.margin="0",this.fakeElem.style.position="fixed",this.fakeElem.style[n?"right":"left"]="-9999px",this.fakeElem.style.top=(window.pageYOffset||document.documentElement.scrollTop)+"px",this.fakeElem.setAttribute("readonly",""),this.fakeElem.value=this.text,document.body.appendChild(this.fakeElem),this.selectedText=(0,i.default)(this.fakeElem),this.copyText()},t.prototype.removeFake=function t(){this.fakeHandler&&(document.body.removeEventListener("click"),this.fakeHandler=null),this.fakeElem&&(document.body.removeChild(this.fakeElem),this.fakeElem=null)},t.prototype.selectTarget=function t(){this.selectedText=(0,i.default)(this.target),this.copyText()},t.prototype.copyText=function t(){var e=void 0;try{e=document.execCommand(this.action)}catch(n){e=!1}this.handleResult(e)},t.prototype.handleResult=function t(e){e?this.emitter.emit("success",{action:this.action,text:this.selectedText,trigger:this.trigger,clearSelection:this.clearSelection.bind(this)}):this.emitter.emit("error",{action:this.action,trigger:this.trigger,clearSelection:this.clearSelection.bind(this)})},t.prototype.clearSelection=function t(){this.target&&this.target.blur(),window.getSelection().removeAllRanges()},t.prototype.destroy=function t(){this.removeFake()},c(t,[{key:"action",set:function t(){var e=arguments.length<=0||void 0===arguments[0]?"copy":arguments[0];if(this._action=e,"copy"!==this._action&&"cut"!==this._action)throw new Error('Invalid "action" value, use either "copy" or "cut"')},get:function t(){return this._action}},{key:"target",set:function t(e){if(void 0!==e){if(!e||"object"!==("undefined"==typeof e?"undefined":r(e))||1!==e.nodeType)throw new Error('Invalid "target" value, use a valid Element');if("copy"===this.action&&e.hasAttribute("disabled"))throw new Error('Invalid "target" attribute. Please use "readonly" instead of "disabled" attribute');if("cut"===this.action&&(e.hasAttribute("readonly")||e.hasAttribute("disabled")))throw new Error('Invalid "target" attribute. You can\'t cut text from elements with "readonly" or "disabled" attributes');this._target=e}},get:function t(){return this._target}}]),t}();t.exports=a})},{select:6}],9:[function(e,n,o){!function(i,r){if("function"==typeof t&&t.amd)t(["module","./clipboard-action","tiny-emitter","good-listener"],r);else if("undefined"!=typeof o)r(n,e("./clipboard-action"),e("tiny-emitter"),e("good-listener"));else{var c={exports:{}};r(c,i.clipboardAction,i.tinyEmitter,i.goodListener),i.clipboard=c.exports}}(this,function(t,e,n,o){"use strict";function i(t){return t&&t.__esModule?t:{"default":t}}function r(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}function c(t,e){if(!t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!e||"object"!=typeof e&&"function"!=typeof e?t:e}function a(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function, not "+typeof e);t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}}),e&&(Object.setPrototypeOf?Object.setPrototypeOf(t,e):t.__proto__=e)}function s(t,e){var n="data-clipboard-"+t;if(e.hasAttribute(n))return e.getAttribute(n)}var l=i(e),u=i(n),f=i(o),d=function(t){function e(n,o){r(this,e);var i=c(this,t.call(this));return i.resolveOptions(o),i.listenClick(n),i}return a(e,t),e.prototype.resolveOptions=function t(){var e=arguments.length<=0||void 0===arguments[0]?{}:arguments[0];this.action="function"==typeof e.action?e.action:this.defaultAction,this.target="function"==typeof e.target?e.target:this.defaultTarget,this.text="function"==typeof e.text?e.text:this.defaultText},e.prototype.listenClick=function t(e){var n=this;this.listener=(0,f.default)(e,"click",function(t){return n.onClick(t)})},e.prototype.onClick=function t(e){var n=e.delegateTarget||e.currentTarget;this.clipboardAction&&(this.clipboardAction=null),this.clipboardAction=new l.default({action:this.action(n),target:this.target(n),text:this.text(n),trigger:n,emitter:this})},e.prototype.defaultAction=function t(e){return s("action",e)},e.prototype.defaultTarget=function t(e){var n=s("target",e);return n?document.querySelector(n):void 0},e.prototype.defaultText=function t(e){return s("text",e)},e.prototype.destroy=function t(){this.listener.destroy(),this.clipboardAction&&(this.clipboardAction.destroy(),this.clipboardAction=null)},e}(u.default);t.exports=d})},{"./clipboard-action":8,"good-listener":4,"tiny-emitter":7}]},{},[9])(9)});
 +function ($) {
   'use strict';
 
@@ -836,7 +836,7 @@
 }).call(this);
 
 (function() {
-  var Replacer, ReplacerSearch,
+  var CountChecker, Observer, Replacer, ReplacerSearch,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -846,44 +846,47 @@
     defaults = {
       onComplete: void 0,
       useLoadingImg: true,
-      ignore: 'script, noscript, canvas, style, iframe, input, textarea, pre, code',
-      autoUpdate: false
+      autoUpdate: true,
+      ignore: 'script, noscript, canvas, img, style, iframe, input, textarea, pre, code'
     };
     Plugin = (function() {
       function Plugin(element, options) {
         var _this = this;
         this.element = element;
-        this.element = $(this.element);
-        this.options = $.extend({}, defaults, options);
-        this._defaults = defaults;
-        this._name = pluginName;
-        this.EC = new EmojidexClient({
-          onReady: function(EC) {
-            if (_this.checkUpdate()) {
-              return $.ajax({
-                url: _this.EC.api_url + 'moji_codes',
-                dataType: 'json',
-                success: function(response) {
-                  var regexp;
-                  regexp = response.moji_array.join('|');
-                  _this.options.regexpUtf = RegExp(regexp, 'g');
-                  _this.options.utfEmojiData = response.moji_index;
-                  return _this.EC.Data.storage.update('emojidex.utfInfoUpdated', new Date().toString()).then(function() {
-                    return _this.EC.Data.storage.update('emojidex.regexpUtf', regexp);
-                  }).then(function() {
-                    return _this.EC.Data.storage.update('emojidex.utfEmojiData', response.moji_index);
-                  }).then(function() {
-                    return _this.replace();
-                  });
-                }
-              });
-            } else {
-              _this.options.regexpUtf = RegExp(_this.EC.Data.storage.get('emojidex.regexpUtf'), 'g');
-              _this.options.utfEmojiData = _this.EC.Data.storage.get('emojidex.utfEmojiData');
-              return _this.replace();
+        if (!window.emojidexReplacerOnce) {
+          window.emojidexReplacerOnce = true;
+          this.element = $(this.element);
+          this.options = $.extend({}, defaults, options);
+          this._defaults = defaults;
+          this._name = pluginName;
+          this.EC = new EmojidexClient({
+            onReady: function(EC) {
+              if (_this.checkUpdate()) {
+                return $.ajax({
+                  url: _this.EC.api_url + 'moji_codes',
+                  dataType: 'json',
+                  success: function(response) {
+                    var regexp;
+                    regexp = response.moji_array.join('|');
+                    _this.options.regexpUtf = RegExp(regexp, 'g');
+                    _this.options.utfEmojiData = response.moji_index;
+                    return _this.EC.Data.storage.update('emojidex.utfInfoUpdated', new Date().toString()).then(function() {
+                      return _this.EC.Data.storage.update('emojidex.regexpUtf', regexp);
+                    }).then(function() {
+                      return _this.EC.Data.storage.update('emojidex.utfEmojiData', response.moji_index);
+                    }).then(function() {
+                      return _this.replace();
+                    });
+                  }
+                });
+              } else {
+                _this.options.regexpUtf = RegExp(_this.EC.Data.storage.get('emojidex.regexpUtf'), 'g');
+                _this.options.utfEmojiData = _this.EC.Data.storage.get('emojidex.utfEmojiData');
+                return _this.replace();
+              }
             }
-          }
-        });
+          });
+        }
       }
 
       Plugin.prototype.checkUpdate = function() {
@@ -902,8 +905,17 @@
       };
 
       Plugin.prototype.replace = function() {
-        this.replacer = new ReplacerSearch(this);
-        return this.replacer.loadEmoji();
+        var _this = this;
+        if (this.options.autoUpdate) {
+          this.observer = new Observer(this);
+          return this.observer.reloadEmoji();
+        } else {
+          this.replacer = new ReplacerSearch(this);
+          return this.replacer.loadEmoji().then(function() {
+            var _base;
+            return typeof (_base = _this.options).onComplete === "function" ? _base.onComplete(_this.element) : void 0;
+          });
+        }
       };
 
       return Plugin;
@@ -918,90 +930,208 @@
     };
   })(jQuery, window, document);
 
+  CountChecker = (function() {
+    function CountChecker(limit, callback) {
+      this.limit = limit;
+      this.callback = callback;
+      this.count = 0;
+    }
+
+    CountChecker.prototype.check = function() {
+      if (++this.count === this.limit) {
+        return this.callback();
+      }
+    };
+
+    return CountChecker;
+
+  })();
+
+  Observer = (function() {
+    function Observer(plugin) {
+      this.plugin = plugin;
+      this.dom_observer = void 0;
+      this.queues = [];
+      this.replacer = new ReplacerSearch(this.plugin);
+      this.flagReEntry = true;
+    }
+
+    Observer.prototype.doQueue = function() {
+      var _this = this;
+      return new Promise(function(resolve, reject) {
+        var body, checkComplete, queue_limit, timeout;
+        timeout = setTimeout(function() {
+          return reject(new Error('emojidex: doQueue - Timeout'));
+        }, _this.replacer.promiseWaitTime);
+        body = $('body')[0];
+        if (_this.queues.indexOf(body) !== -1) {
+          _this.queues = [];
+          return _this.replacer.loadEmoji($(body)).then(function() {
+            return resolve();
+          });
+        } else {
+          queue_limit = 100;
+          checkComplete = function() {
+            var queue;
+            if (_this.queues.length > 0 && queue_limit-- > 0) {
+              queue = _this.queues.pop();
+              return _this.replacer.loadEmoji($(queue)).then(function() {
+                return checkComplete();
+              });
+            } else {
+              return resolve();
+            }
+          };
+          return checkComplete();
+        }
+      });
+    };
+
+    Observer.prototype.domObserve = function() {
+      var config;
+      config = {
+        childList: true,
+        subtree: true,
+        characterData: true
+      };
+      return this.dom_observer.observe(this.plugin.element[0], config);
+    };
+
+    Observer.prototype.disconnect = function() {
+      return this.dom_observer.disconnect();
+    };
+
+    Observer.prototype.reloadEmoji = function() {
+      var _this = this;
+      return this.replacer.loadEmoji().then(function() {
+        var _base;
+        if (typeof (_base = _this.plugin.options).onComplete === "function") {
+          _base.onComplete(_this.plugin.element);
+        }
+        _this.dom_observer = new MutationObserver(function(mutations) {
+          var addedNode, mutation, _i, _j, _len, _len1, _ref;
+          if (_this.flagReEntry) {
+            _this.disconnect();
+            _this.flagReEntry = false;
+            for (_i = 0, _len = mutations.length; _i < _len; _i++) {
+              mutation = mutations[_i];
+              if (mutation.type === 'childList') {
+                if (mutation.addedNodes) {
+                  _ref = mutation.addedNodes;
+                  for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+                    addedNode = _ref[_j];
+                    if (_this.queues.indexOf(addedNode) === -1) {
+                      _this.queues.push(addedNode);
+                    }
+                  }
+                }
+              }
+            }
+            _this.doQueue().then(function() {
+              return _this.domObserve();
+            });
+            return _this.flagReEntry = true;
+          }
+        });
+        return _this.domObserve();
+      });
+    };
+
+    return Observer;
+
+  })();
+
   Replacer = (function() {
     function Replacer() {
       var ignore;
-      this.loadingNum = 0;
+      this.promiseWaitTime = 5000;
       ignore = '\'":;@&#~{}<>\\r\\n\\[\\]\\!\\$\\+\\?\\%\\*\\/\\\\';
       this.regexpCode = RegExp(":([^\\s" + ignore + "][^" + ignore + "]*[^\\s" + ignore + "]):|:([^\\s" + ignore + "]):", 'g');
+      this.targets = [];
+      this.complete_num = 0;
     }
+
+    Replacer.prototype.setTargets = function(node) {
+      var child, _results;
+      if (node.nodeType === Node.TEXT_NODE) {
+        if (node.textContent.match(/\S/)) {
+          return this.targets.push(node);
+        }
+      }
+      child = node.firstChild;
+      _results = [];
+      while (child) {
+        switch (child.nodeType) {
+          case Node.ELEMENT_NODE:
+            if ($(child).is(this.plugin.options.ignore)) {
+              break;
+            }
+            if (child.isContentEditable) {
+              break;
+            }
+            this.setTargets(child);
+            break;
+          case Node.TEXT_NODE:
+            if (child.textContent.match(/\S/)) {
+              this.targets.push(child);
+            }
+            break;
+        }
+        _results.push(child = child.nextSibling);
+      }
+      return _results;
+    };
 
     Replacer.prototype.getEmojiTag = function(emoji_code) {
       return "<img class='emojidex-emoji' src='" + this.plugin.EC.cdn_url + this.plugin.EC.size_code + "/" + emoji_code + ".png' title='" + (this.replaceUnderToSpace(emoji_code)) + "'></img>";
     };
 
     Replacer.prototype.getLoadingTag = function(emoji_data, type) {
-      return "<div class='emojidex-loading-icon' data-emoji='" + emoji_data + "' data-type='" + type + "'></div>";
+      return "<span class='emojidex-loading-icon' data-emoji='" + emoji_data + "' data-type='" + type + "'></span>";
     };
 
     Replacer.prototype.getLoadingElement = function(element) {
       return $(element.find('.emojidex-loading-icon'));
     };
 
-    Replacer.prototype.setLoadingTag = function(plugin) {
+    Replacer.prototype.setLoadingTag = function(element) {
       var _this = this;
-      return plugin.element.find(":not(" + plugin.options.ignore + ")").andSelf().contents().filter(function(index, element) {
-        var replaced_text;
-        if (element.nodeType === Node.TEXT_NODE && element.textContent.match(/\S/)) {
-          replaced_text = _this.getTextWithLoadingTag(element.textContent);
-          if (replaced_text !== element.textContent) {
-            return $(element).replaceWith(replaced_text);
+      return new Promise(function(resolve, reject) {
+        var checker, target, timeout, _i, _len, _ref, _results;
+        timeout = setTimeout(function() {
+          return reject(new Error('emojidex: setLoadingTag - Timeout'));
+        }, _this.promiseWaitTime);
+        _this.targets = [];
+        _this.setTargets(element[0]);
+        if (_this.targets.length) {
+          checker = new CountChecker(_this.targets.length, function() {
+            return resolve();
+          });
+          _ref = _this.targets;
+          _results = [];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            target = _ref[_i];
+            $(target).replaceWith(_this.getAddedLoadingTagText(target));
+            _results.push(checker.check());
           }
+          return _results;
+        } else {
+          return resolve();
         }
       });
     };
 
-    Replacer.prototype.getTextWithLoadingTag = function(text) {
-      var _this = this;
-      text = text.replace(this.plugin.options.regexpUtf, function(matched_string) {
+    Replacer.prototype.getAddedLoadingTagText = function(target_element) {
+      var replaced_text,
+        _this = this;
+      replaced_text = target_element.data;
+      replaced_text = replaced_text.replace(this.plugin.options.regexpUtf, function(matched_string) {
         return _this.getLoadingTag(matched_string, 'utf');
       });
-      text = text.replace(this.regexpCode, function(matched_string) {
-        return _this.getLoadingTag(matched_string, 'code');
+      replaced_text = replaced_text.replace(this.regexpCode, function(matched_string) {
+        return _this.getLoadingTag(matched_string.replace(/:/g, ''), 'code');
       });
-      return text;
-    };
-
-    Replacer.prototype.reloadEmoji = function() {
-      var config, reload, target,
-        _this = this;
-      reload = function(mutations) {
-        var mutation, node, _i, _len, _results;
-        _results = [];
-        for (_i = 0, _len = mutations.length; _i < _len; _i++) {
-          mutation = mutations[_i];
-          _results.push((function() {
-            var _j, _len1, _ref, _results1;
-            _ref = mutation.addedNodes;
-            _results1 = [];
-            for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
-              node = _ref[_j];
-              if (node.nodeName !== 'SCRIPT' && node.nodeName !== 'STYLE') {
-                this.plugin.options.useLoadingImg = false;
-                this.plugin.options.autoUpdate = false;
-                _results1.push(this.plugin.replacer.loadEmoji());
-              } else {
-                _results1.push(void 0);
-              }
-            }
-            return _results1;
-          }).call(_this));
-        }
-        return _results;
-      };
-      this.dom_observer = new MutationObserver(reload);
-      if (this.plugin.element.selector) {
-        target = document.querySelector(this.plugin.element.selector);
-      } else {
-        target = this.plugin.element[0];
-      }
-      config = {
-        attributes: true,
-        childList: true,
-        subtree: true,
-        attributeFilter: ['innerText']
-      };
-      return this.dom_observer.observe(target, config);
+      return replaced_text;
     };
 
     Replacer.prototype.fadeOutLoadingTag_fadeInEmojiTag = function(element, emoji_code, match) {
@@ -1014,25 +1144,30 @@
       if (match) {
         emoji_tag = $(this.getEmojiTag(emoji_code)).hide();
       } else {
-        emoji_tag = emoji_code;
+        emoji_tag = ":" + emoji_code + ":";
       }
-      return element.fadeOut("normal", function() {
-        element.after(emoji_tag);
-        element.remove();
-        if (match) {
-          return emoji_tag.fadeIn("fast", function() {
-            if (--_this.loadingNum === 0) {
-              if (_this.plugin.options.onComplete != null) {
-                _this.plugin.options.onComplete(_this.plugin.element);
-              }
-              if (_this.plugin.options.autoUpdate) {
-                return _this.reloadEmoji();
-              }
+      return new Promise(function(resolve, reject) {
+        var timeout;
+        timeout = setTimeout(function() {
+          return reject(new Error('emojidex: fadeOutLoadingTag_fadeInEmojiTag - Timeout'));
+        }, _this.promiseWaitTime);
+        return element.fadeOut({
+          duration: 'normal',
+          done: function() {
+            element.after(emoji_tag);
+            element.remove();
+            if (match) {
+              return emoji_tag.fadeIn({
+                duration: "fast",
+                done: function() {
+                  return resolve();
+                }
+              });
+            } else {
+              return resolve();
             }
-          });
-        } else {
-          return _this.loadingNum--;
-        }
+          }
+        });
       });
     };
 
@@ -1056,86 +1191,79 @@
       ReplacerSearch.__super__.constructor.apply(this, arguments);
     }
 
-    ReplacerSearch.prototype.loadEmoji = function() {
-      var checkComplete, checkSearchEnd, replaceCodeToEmojTag_replaceElement, searchEmoji_setEmojiTag, setEomojiTag,
+    ReplacerSearch.prototype.loadEmoji = function(target_element) {
+      var element, searchEmoji_setEmojiTag, setEomojiTag,
         _this = this;
       searchEmoji_setEmojiTag = function(element) {
-        var emoji, loading_element, loading_elements, replaceToEmojiIcon, _i, _len, _results;
-        replaceToEmojiIcon = function(type, loading_element, emoji_code) {
-          var emoji_image;
-          emoji_image = $("<img src='" + _this.plugin.EC.cdn_url + _this.plugin.EC.size_code + "/" + emoji_code + ".png'></img>");
-          emoji_image.load(function(e) {
-            return _this.fadeOutLoadingTag_fadeInEmojiTag(loading_element, emoji_code);
-          });
-          return emoji_image.error(function(e) {
-            return _this.fadeOutLoadingTag_fadeInEmojiTag(loading_element, "" + loading_element[0].dataset.emoji, false);
+        var replaceToEmojiIconOrRollback;
+        replaceToEmojiIconOrRollback = function(loading_element) {
+          return new Promise(function(resolve, reject) {
+            var emoji_image, timeout;
+            timeout = setTimeout(function() {
+              return reject(new Error('emojidex: replaceToEmojiIconOrRollback - Timeout'));
+            }, _this.promiseWaitTime);
+            emoji_image = $("<img src='" + _this.plugin.EC.cdn_url + "px8/" + loading_element.dataset.emoji + ".png'></img>");
+            emoji_image.load(function(e) {
+              return _this.fadeOutLoadingTag_fadeInEmojiTag($(loading_element), loading_element.dataset.emoji).then(function() {
+                return resolve();
+              });
+            });
+            return emoji_image.error(function(e) {
+              return _this.fadeOutLoadingTag_fadeInEmojiTag($(loading_element), loading_element.dataset.emoji, false).then(function() {
+                return resolve();
+              });
+            });
           });
         };
-        loading_elements = _this.getLoadingElement(element);
-        _this.loadingNum = loading_elements.length;
-        _results = [];
-        for (_i = 0, _len = loading_elements.length; _i < _len; _i++) {
-          loading_element = loading_elements[_i];
-          switch (loading_element.dataset.type) {
-            case 'code':
-              _results.push(replaceToEmojiIcon(loading_element.dataset.type, $(loading_element), _this.replaceSpaceToUnder(loading_element.dataset.emoji.replace(/:/g, ''))));
-              break;
-            case 'utf':
-              _results.push((function() {
-                var _results1;
-                _results1 = [];
-                for (emoji in this.plugin.options.utfEmojiData) {
-                  if (emoji === loading_element.dataset.emoji) {
-                    this.fadeOutLoadingTag_fadeInEmojiTag($(loading_element), this.plugin.options.utfEmojiData[emoji]);
-                    break;
-                  } else {
-                    _results1.push(void 0);
-                  }
-                }
-                return _results1;
-              }).call(_this));
-              break;
-            default:
-              _results.push(void 0);
+        return new Promise(function(resolve, reject) {
+          var checker, emoji, loading_element, loading_elements, timeout, _i, _len, _results;
+          timeout = setTimeout(function() {
+            return reject(new Error('emojidex: searchEmoji_setEmojiTag - Timeout'));
+          }, _this.promiseWaitTime);
+          loading_elements = $('.emojidex-loading-icon');
+          if (loading_elements.length) {
+            checker = new CountChecker(loading_elements.length, function() {
+              return resolve();
+            });
+            _results = [];
+            for (_i = 0, _len = loading_elements.length; _i < _len; _i++) {
+              loading_element = loading_elements[_i];
+              switch (loading_element.dataset.type) {
+                case 'code':
+                  replaceToEmojiIconOrRollback(loading_element).then(function() {
+                    return checker.check();
+                  });
+                  break;
+                case 'utf':
+                  _results.push((function() {
+                    var _results1;
+                    _results1 = [];
+                    for (emoji in this.plugin.options.utfEmojiData) {
+                      if (emoji === loading_element.dataset.emoji) {
+                        this.fadeOutLoadingTag_fadeInEmojiTag($(loading_element), this.plugin.options.utfEmojiData[emoji]).then(function() {
+                          return checker.check();
+                        });
+                        break;
+                      } else {
+                        _results1.push(void 0);
+                      }
+                    }
+                    return _results1;
+                  }).call(_this));
+                  break;
+                default:
+                  _results.push(void 0);
+              }
+            }
+            return _results;
+          } else {
+            return resolve();
           }
-        }
-        return _results;
-      };
-      checkComplete = function() {
-        if (_this.replaced_text === _this.targetNum) {
-          if (_this.plugin.options.onComplete != null) {
-            _this.plugin.options.onComplete(_this.plugin.element);
-          }
-          if (_this.plugin.options.autoUpdate) {
-            _this.reloadEmoji();
-          }
-        }
-      };
-      checkSearchEnd = function(searches, element, text, code_emoji) {
-        if (searches === 0) {
-          return replaceCodeToEmojTag_replaceElement(element, text, code_emoji);
-        }
-      };
-      replaceCodeToEmojTag_replaceElement = function(element, text, code_emoji) {
-        var code, replaced_text, _i, _len;
-        replaced_text = text;
-        for (_i = 0, _len = code_emoji.length; _i < _len; _i++) {
-          code = code_emoji[_i];
-          replaced_text = replaced_text.replace(code.matched, function() {
-            var emoji_tag;
-            _this.emoji_tags++;
-            emoji_tag = _this.getEmojiTag(_this.replaceSpaceToUnder(code.code));
-            return emoji_tag;
-          });
-        }
-        $(element).replaceWith(replaced_text);
-        _this.replaced_text++;
-        return checkComplete();
+        });
       };
       setEomojiTag = function(element) {
-        var code_emoji, searches, text;
-        code_emoji = [];
-        text = element.textContent.replace(_this.plugin.options.regexpUtf, function(matched_string) {
+        var matched_codes, replaced_promise, replaced_text;
+        replaced_text = element.textContent.replace(_this.plugin.options.regexpUtf, function(matched_string) {
           var emoji, emoji_tag;
           for (emoji in _this.plugin.options.utfEmojiData) {
             if (emoji === matched_string) {
@@ -1145,49 +1273,66 @@
             }
           }
         });
-        if (text.match(_this.regexpCode)) {
-          searches = 0;
-          text.replace(_this.regexpCode, function() {
-            return searches++;
-          });
-          return text.replace(_this.regexpCode, function(matched_string) {
-            var emoji_image, matched_code;
-            matched_code = matched_string.replace(/\:/g, '');
-            emoji_image = $("<img src='" + _this.plugin.EC.cdn_url + _this.plugin.EC.size_code + "/" + (_this.replaceSpaceToUnder(matched_code)) + ".png'></img>");
-            emoji_image.load(function(e) {
-              searches--;
-              code_emoji.push({
-                matched: matched_string,
-                code: matched_code
+        matched_codes = replaced_text.match(_this.regexpCode);
+        replaced_promise = new Promise(function(resolve, reject) {
+          var checker, code, code_only, emoji_image, timeout, _i, _len, _results;
+          if (matched_codes != null ? matched_codes.length : void 0) {
+            timeout = setTimeout(function() {
+              return reject(new Error('emojidex: setEomojiTag - Timeout'));
+            }, _this.promiseWaitTime);
+            checker = new CountChecker(matched_codes.length, function() {
+              return resolve();
+            });
+            _results = [];
+            for (_i = 0, _len = matched_codes.length; _i < _len; _i++) {
+              code = matched_codes[_i];
+              code_only = code.replace(/\:/g, '');
+              emoji_image = $("<img src='" + _this.plugin.EC.cdn_url + "px8/" + (_this.replaceSpaceToUnder(code_only)) + ".png' data-code='" + code_only + "'></img>");
+              emoji_image.load(function(e) {
+                replaced_text = replaced_text.replace(":" + e.currentTarget.dataset.code + ":", _this.getEmojiTag(e.currentTarget.dataset.code));
+                return checker.check();
               });
-              return checkSearchEnd(searches, element, text, code_emoji);
-            });
-            return emoji_image.error(function(e) {
-              searches--;
-              return checkSearchEnd(searches, element, text, code_emoji);
-            });
-          });
-        } else {
-          $(element).replaceWith(text);
-          _this.replaced_text++;
-          return checkComplete();
-        }
-      };
-      if (this.plugin.options.useLoadingImg) {
-        this.setLoadingTag(this.plugin);
-        return searchEmoji_setEmojiTag(this.plugin.element);
-      } else {
-        this.targetNum = 0;
-        this.replaced_text = 0;
-        this.emoji_tags = 0;
-        this.plugin.element.find(":not(" + this.plugin.options.ignore + ")").andSelf().contents().filter(function(index, element) {
-          if (element.nodeType === Node.TEXT_NODE && element.textContent.match(/\S/)) {
-            return _this.targetNum++;
+              _results.push(emoji_image.error(function(e) {
+                return checker.check();
+              }));
+            }
+            return _results;
+          } else {
+            return resolve();
           }
         });
-        return this.plugin.element.find(":not(" + this.plugin.options.ignore + ")").andSelf().contents().filter(function(index, element) {
-          if (element.nodeType === Node.TEXT_NODE && element.textContent.match(/\S/)) {
-            return setEomojiTag(element);
+        return replaced_promise.then(function() {
+          return $(element).replaceWith(replaced_text);
+        });
+      };
+      element = target_element || this.plugin.element;
+      if (this.plugin.options.useLoadingImg) {
+        return this.setLoadingTag(element).then(function() {
+          return searchEmoji_setEmojiTag(element);
+        });
+      } else {
+        return new Promise(function(resolve, reject) {
+          var checker, target, timeout, _i, _len, _ref, _results;
+          timeout = setTimeout(function() {
+            return reject(new Error('emojidex: loadEmoji useLoadingImg: false - Timeout'));
+          }, _this.promiseWaitTime);
+          _this.targets = [];
+          _this.setTargets(element[0]);
+          if (_this.targets.length) {
+            checker = new CountChecker(_this.targets.length, function() {
+              return resolve();
+            });
+            _ref = _this.targets;
+            _results = [];
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              target = _ref[_i];
+              _results.push(setEomojiTag(target).then(function(e) {
+                return checker.check();
+              }));
+            }
+            return _results;
+          } else {
+            return resolve();
           }
         });
       }

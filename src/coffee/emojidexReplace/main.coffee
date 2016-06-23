@@ -15,39 +15,40 @@ do ($ = jQuery, window, document) ->
   defaults =
     onComplete: undefined
     useLoadingImg: true
-    ignore: 'script, noscript, canvas, style, iframe, input, textarea, pre, code'
-
-    # this option is beta --------
-    autoUpdate: false
+    autoUpdate: true
+    ignore: 'script, noscript, canvas, img, style, iframe, input, textarea, pre, code'
 
   class Plugin
     constructor: (@element, options) ->
-      @element = $ @element
-      @options = $.extend {}, defaults, options
-      @_defaults = defaults
-      @_name = pluginName
+      unless window.emojidexReplacerOnce
+        window.emojidexReplacerOnce = true
 
-      @EC = new EmojidexClient
-        onReady: (EC) =>
-          if @checkUpdate()
-            $.ajax
-              url: @EC.api_url + 'moji_codes'
-              dataType: 'json'
-              success: (response) =>
-                regexp = response.moji_array.join('|')
-                @options.regexpUtf = RegExp regexp, 'g'
-                @options.utfEmojiData = response.moji_index
+        @element = $ @element
+        @options = $.extend {}, defaults, options
+        @_defaults = defaults
+        @_name = pluginName
 
-                @EC.Data.storage.update('emojidex.utfInfoUpdated', new Date().toString()).then( =>
-                  return @EC.Data.storage.update 'emojidex.regexpUtf', regexp
-                ).then( =>
-                  return @EC.Data.storage.update 'emojidex.utfEmojiData', response.moji_index
-                ).then =>
-                  @replace()
-          else
-            @options.regexpUtf = RegExp @EC.Data.storage.get('emojidex.regexpUtf'), 'g'
-            @options.utfEmojiData = @EC.Data.storage.get 'emojidex.utfEmojiData'
-            @replace()
+        @EC = new EmojidexClient
+          onReady: (EC) =>
+            if @checkUpdate()
+              $.ajax
+                url: @EC.api_url + 'moji_codes'
+                dataType: 'json'
+                success: (response) =>
+                  regexp = response.moji_array.join('|')
+                  @options.regexpUtf = RegExp regexp, 'g'
+                  @options.utfEmojiData = response.moji_index
+
+                  @EC.Data.storage.update('emojidex.utfInfoUpdated', new Date().toString()).then( =>
+                    return @EC.Data.storage.update 'emojidex.regexpUtf', regexp
+                  ).then( =>
+                    return @EC.Data.storage.update 'emojidex.utfEmojiData', response.moji_index
+                  ).then =>
+                    @replace()
+            else
+              @options.regexpUtf = RegExp @EC.Data.storage.get('emojidex.regexpUtf'), 'g'
+              @options.utfEmojiData = @EC.Data.storage.get 'emojidex.utfEmojiData'
+              @replace()
 
     checkUpdate: ->
       if @EC.Data.storage.isSet 'emojidex.utfInfoUpdated'
@@ -61,8 +62,13 @@ do ($ = jQuery, window, document) ->
         return true
 
     replace: ->
-      @replacer = new ReplacerSearch @
-      @replacer.loadEmoji()
+      if @options.autoUpdate
+        @observer = new Observer @
+        @observer.reloadEmoji()
+      else
+        @replacer = new ReplacerSearch @
+        @replacer.loadEmoji().then =>
+          @options.onComplete? @element
 
   $.fn[pluginName] = (options) ->
     @each ->

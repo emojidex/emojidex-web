@@ -2,9 +2,11 @@
 
 @mixin emoji {
   display: inline-block;
-  vertical-align: bottom;
-  width: 1.35em;
-  height: 1.35em;
+  position: relative;
+  vertical-align: middle;
+  width: 1.2em;
+  height: 1.2em;
+  top: -0.1em;
   background-size: 100%;
   background-repeat: no-repeat;
 }
@@ -13,12 +15,12 @@ img.emojidex-emoji {
   @include emoji;
 }
 
-.ui-dialog {
-  .emojidex-loading-icon {
-    @include emoji;
-    background-image: url('http://assets.emojidex.com/scripts/image/emojidex-web_loading1.gif');
-  }
+.emojidex-loading-icon {
+  @include emoji;
+  background-image: url('http://assets.emojidex.com/scripts/image/emojidex-web_loading1.gif');
+}
 
+.ui-dialog {
   img[class*="emojidex-"] {
     @include emoji;
   }

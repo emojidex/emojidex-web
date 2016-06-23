@@ -95,14 +95,13 @@ Type: `Boolean` Default: `true`
 Specifies weather or not to show the loading image [specified in the CSS] while downloading emoji.
 
 #### options.ignore
-Type: `String` Default: `script, noscript, canvas, style, iframe, input, textarea, pre, code`
+Type: `String` Default: `script, noscript, canvas, img, style, iframe, input, textarea, pre, code`
 
 Set tags to ignore the contents of during blanket conversions.
 
 #### options.autoUpdate
-Type: `Boolean` Default: `false`
+Type: `Boolean` Default: `true`
 
-*Currently in beta*
 Automatically run conversions on AJAX events.
 
 ### .emojidexAutocomplete()
@@ -142,7 +141,7 @@ converted to images. When false they remain as plain text.
 Sets an element to open up an emoji pallet chooser when clicked.
 
 emoji are copied to the clipboard when clicked.
-The pallet contains a tabbed index, search functionality, and displays history and favorites when 
+The pallet contains a tabbed index, search functionality, and displays history and favorites when
 a user is logged in.
 
 ### Options

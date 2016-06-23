@@ -614,11 +614,24 @@ input.ui-button::-moz-focus-inner, button.ui-button::-moz-focus-inner {
 
 img.emojidex-emoji {
   display: inline-block;
-  vertical-align: bottom;
-  width: 1.35em;
-  height: 1.35em;
+  position: relative;
+  vertical-align: middle;
+  width: 1.2em;
+  height: 1.2em;
+  top: -0.1em;
   background-size: 100%;
   background-repeat: no-repeat; }
+
+.emojidex-loading-icon {
+  display: inline-block;
+  position: relative;
+  vertical-align: middle;
+  width: 1.2em;
+  height: 1.2em;
+  top: -0.1em;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-image: url("http://assets.emojidex.com/scripts/image/emojidex-web_loading1.gif"); }
 
 .ui-dialog {
   /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
@@ -627,19 +640,13 @@ img.emojidex-emoji {
   line-height: 1.42857;
   color: #333333;
   background-color: #fff; }
-  .ui-dialog .emojidex-loading-icon {
-    display: inline-block;
-    vertical-align: bottom;
-    width: 1.35em;
-    height: 1.35em;
-    background-size: 100%;
-    background-repeat: no-repeat;
-    background-image: url("http://assets.emojidex.com/scripts/image/emojidex-web_loading1.gif"); }
   .ui-dialog img[class*="emojidex-"] {
     display: inline-block;
-    vertical-align: bottom;
-    width: 1.35em;
-    height: 1.35em;
+    position: relative;
+    vertical-align: middle;
+    width: 1.2em;
+    height: 1.2em;
+    top: -0.1em;
     background-size: 100%;
     background-repeat: no-repeat; }
   .ui-dialog html {
