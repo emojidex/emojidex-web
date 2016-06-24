@@ -472,17 +472,21 @@
       var emoji, emoji_button, emoji_button_image, emoji_list, _i, _len,
         _this = this;
       emoji_list = $("<div class='" + kind + "-emoji-list clearfix'></div>");
+      console.log(kind);
       for (_i = 0, _len = result_emoji.length; _i < _len; _i++) {
         emoji = result_emoji[_i];
-        emoji_button = $('<button/>');
-        emoji_button.addClass('emoji-btn btn btn-default pull-left');
-        emoji_button_image = $('<img/>');
-        emoji_button_image.prop('alt', "" + emoji.code);
-        emoji_button_image.prop('title', "" + emoji.code);
-        emoji_button_image.addClass('img-responsive center-block');
-        emoji_button_image.prop('src', "" + this.EC.cdn_url + "px32/" + (emoji.code.replace(/\s/g, '_')) + ".png");
-        emoji_button.append(emoji_button_image);
+        emoji_button = $('<button>', {
+          "class": 'emoji-btn btn btn-default pull-left'
+        });
         emoji_button.prop('emoji_data', emoji);
+        console.log(emoji.code, emoji);
+        emoji_button_image = $('<img>', {
+          alt: "" + emoji.code,
+          title: "" + emoji.code,
+          "class": 'img-responsive center-block',
+          src: "" + this.EC.cdn_url + "px32/" + (emoji.code.replace(/\s/g, '_')) + ".png"
+        });
+        emoji_button.append(emoji_button_image);
         emoji_button.click(function(e) {
           return _this.insertEmojiAtCaret($(e.currentTarget).prop('emoji_data'));
         });
@@ -511,15 +515,17 @@
         txt = elem.html();
         startTxt = txt.substring(0, pos);
         stopTxt = txt.substring(pos, txt.length);
-        wrapper = $('<img/>');
-        wrapper.prop('src', "" + this.EC.cdn_url + "px32/" + (emoji.code.replace(/\s/g, '_')) + ".png");
-        wrapper.addClass('emojidex-emoji');
-        wrapper.prop('alt', code);
+        wrapper = $('<img>', {
+          "class": 'emojidex-emoji',
+          src: "" + this.EC.cdn_url + "px32/" + (emoji.code.replace(/\s/g, '_')) + ".png",
+          alt: code
+        });
         if (emoji.link !== null && emoji.link !== '') {
           inner_wrapper = wrapper;
-          wrapper = $('<a/>');
-          wrapper.prop('href', emoji.link);
-          wrapper.alt = '';
+          wrapper = $('<a>', {
+            href: emoji.link,
+            alt: ''
+          });
           wrapper.append(inner_wrapper);
         }
         elem.html(startTxt);
