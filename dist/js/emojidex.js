@@ -987,33 +987,32 @@
 
     Replacer.prototype.setTargets = function(node) {
       var child, _results;
-      if (node.nodeType === Node.TEXT_NODE) {
-        if (node.textContent.match(/\S/)) {
-          return this.targets.push(node);
-        }
-      }
-      child = node.firstChild;
-      _results = [];
-      while (child) {
-        switch (child.nodeType) {
-          case Node.ELEMENT_NODE:
-            if ($(child).is(this.plugin.options.ignore)) {
+      if (!(node.parentNode && node.parentNode.isContentEditable)) {
+        child = node.firstChild;
+        _results = [];
+        while (child) {
+          switch (child.nodeType) {
+            case Node.ELEMENT_NODE:
+              if ($(child).is(this.plugin.options.ignore)) {
+                break;
+              }
+              if (child.isContentEditable) {
+                break;
+              }
+              this.setTargets(child);
               break;
-            }
-            if (child.isContentEditable) {
+            case Node.TEXT_NODE:
+              if (child.data.indexOf('function(') === -1) {
+                if (child.data.match(/\S/)) {
+                  this.targets.push(child);
+                }
+              }
               break;
-            }
-            this.setTargets(child);
-            break;
-          case Node.TEXT_NODE:
-            if (child.textContent.match(/\S/)) {
-              this.targets.push(child);
-            }
-            break;
+          }
+          _results.push(child = child.nextSibling);
         }
-        _results.push(child = child.nextSibling);
+        return _results;
       }
-      return _results;
     };
 
     Replacer.prototype.getEmojiTag = function(emoji_code) {

@@ -9,23 +9,22 @@ class Replacer
     @complete_num = 0
 
   setTargets: (node) ->
-    if node.nodeType is Node.TEXT_NODE
-      return @targets.push node if node.textContent.match(/\S/)
-
-    child = node.firstChild
-    while child
-      switch child.nodeType
-        when Node.ELEMENT_NODE
-          if $(child).is @plugin.options.ignore
+    unless node.parentNode and node.parentNode.isContentEditable
+      child = node.firstChild
+      while child
+        switch child.nodeType
+          when Node.ELEMENT_NODE
+            if $(child).is @plugin.options.ignore
+              break
+            if child.isContentEditable
+              break
+            @setTargets child
             break
-          if child.isContentEditable
+          when Node.TEXT_NODE
+            if child.data.indexOf('function(') is -1
+              @targets.push child if child.data.match(/\S/)
             break
-          @setTargets child
-          break
-        when Node.TEXT_NODE
-          @targets.push child if child.textContent.match(/\S/)
-          break
-      child = child.nextSibling
+        child = child.nextSibling
 
   getEmojiTag: (emoji_code) ->
     "<img class='emojidex-emoji' src='#{@plugin.EC.cdn_url}#{@plugin.EC.size_code}/#{emoji_code}.png' title='#{@replaceUnderToSpace emoji_code}'></img>"
