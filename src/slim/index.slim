@@ -23,7 +23,9 @@ html
         $(".emojidex-plain_text").emojidexAutocomplete()
         $(".emojidex-content_editable").emojidexAutocomplete()
 
-        $("#pallet-btn").emojidexPallet()
+        $("#pallet-btn").emojidexPallet
+          onComplete: ->
+            $("#pallet-btn").click()
         return
 
   body

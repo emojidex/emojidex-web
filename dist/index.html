@@ -22,7 +22,11 @@
             });
             $(".emojidex-plain_text").emojidexAutocomplete();
             $(".emojidex-content_editable").emojidexAutocomplete();
-            $("#pallet-btn").emojidexPallet();
+            $("#pallet-btn").emojidexPallet({
+              onComplete: function() {
+                return $("#pallet-btn").click();
+              }
+            });
           };
         })(this));
       
