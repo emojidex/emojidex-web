@@ -184,7 +184,6 @@
         range.collapse(false);
         selection.removeAllRanges();
         selection.addRange(range);
-        window.emojidex_range = range;
         return elem.change();
       } else {
         txt = elem.val();

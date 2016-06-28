@@ -115,24 +115,13 @@ class Pallet
 
       selection = window.getSelection()
       range = selection.getRangeAt(0)
-      
+
       range.insertNode wrapper[0]
       range.collapse false
       selection.removeAllRanges()
       selection.addRange(range)
 
-      window.emojidex_range = range
-
       elem.change()
-
-      # txt = elem.html()
-      # startTxt = txt.substring(0,  pos)
-      # stopTxt = txt.substring(pos, txt.length)
-      #
-      # elem.html(startTxt)
-      # elem.append(wrapper)
-      # elem.focus()
-      # elem.append(stopTxt)
     else
       txt = elem.val()
       startTxt = txt.substring(0,  pos)
@@ -140,8 +129,6 @@ class Pallet
       elem.val(startTxt + code + stopTxt)
       elem.focus()
       elem.caret('pos', pos + code.length)
-
-
 
   setPagination: (kind, prev_func, next_func, cur_page, max_page) ->
     pagination = $ "<div class='#{kind}-pagination text-center'><ul class='pagination mb-0'></ul></div>"
