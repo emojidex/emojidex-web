@@ -156,12 +156,13 @@
     };
 
     Pallet.prototype.insertEmojiAtCaret = function(emoji) {
-      var code, elem, link_wrapper, pos, range, startTxt, stopTxt, txt, wrapper;
+      var code, elem, link_wrapper, pos, range, selection, startTxt, stopTxt, txt, wrapper;
       if (Pallet.active_editable === null) {
         return;
       }
       code = this.mojiOrCode(emoji);
       elem = $(Pallet.active_editable);
+      elem.focus();
       pos = elem.caret('pos');
       if (elem.is('[contenteditable="true"]')) {
         wrapper = $('<img>', {
@@ -177,11 +178,13 @@
           });
           wrapper = link_wrapper.append(wrapper);
         }
-        elem.focus();
-        range = window.getSelection().getRangeAt(0);
+        selection = window.getSelection();
+        range = selection.getRangeAt(0);
         range.insertNode(wrapper[0]);
+        range.collapse(false);
+        selection.removeAllRanges();
+        selection.addRange(range);
         window.emojidex_range = range;
-        elem.caret('pos', range.startOffset + 10);
         return elem.change();
       } else {
         txt = elem.val();

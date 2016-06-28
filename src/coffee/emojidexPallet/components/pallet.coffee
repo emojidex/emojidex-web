@@ -99,9 +99,9 @@ class Pallet
 
     code = @mojiOrCode(emoji)
     elem = $(Pallet.active_editable)
+    elem.focus()
     pos = elem.caret('pos')
     if elem.is('[contenteditable="true"]')
-
       wrapper = $ '<img>',
         class: 'emojidex-emoji'
         src: "#{@EC.cdn_url}px32/#{emoji.code.replace /\s/g, '_'}.png"
@@ -113,13 +113,16 @@ class Pallet
           alt: ''
         wrapper = link_wrapper.append(wrapper)
 
-      elem.focus()
-
-      range = window.getSelection().getRangeAt(0)
+      selection = window.getSelection()
+      range = selection.getRangeAt(0)
+      
       range.insertNode wrapper[0]
-      # range.collapse false
+      range.collapse false
+      selection.removeAllRanges()
+      selection.addRange(range)
+
       window.emojidex_range = range
-      elem.caret('pos', range.startOffset + 10)
+
       elem.change()
 
       # txt = elem.html()
