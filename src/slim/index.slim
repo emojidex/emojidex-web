@@ -23,9 +23,7 @@ html
         $(".emojidex-plain_text").emojidexAutocomplete()
         $(".emojidex-content_editable").emojidexAutocomplete()
 
-        $("#pallet-btn").emojidexPallet
-          onComplete: ->
-            $("#pallet-btn").click()
+        $("#pallet-btn").emojidexPallet()
         return
 
   body
@@ -114,8 +112,7 @@ html
             .col-md-12
               h4 Content Editable
               .emojidex-content_editable.inputor contenteditable="true"
-                | Try
-                / | Try typing a colon and the start of a word to start a code search, like ":tes".
+                | Try typing a colon and the start of a word to start a code search, like ":tes".
 
       .row
         .col-md-12

@@ -22,11 +22,7 @@
             });
             $(".emojidex-plain_text").emojidexAutocomplete();
             $(".emojidex-content_editable").emojidexAutocomplete();
-            $("#pallet-btn").emojidexPallet({
-              onComplete: function() {
-                return $("#pallet-btn").click();
-              }
-            });
+            $("#pallet-btn").emojidexPallet();
           };
         })(this));
       
@@ -119,7 +115,7 @@
                 Content Editable
               </h4>
               <div class="emojidex-content_editable inputor" contenteditable="true">
-                Try
+                Try typing a colon and the start of a word to start a code search, like ":tes".
               </div>
             </div>
           </div>
