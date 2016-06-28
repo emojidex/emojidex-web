@@ -73,13 +73,11 @@ class Pallet
 
   setEmojiList: (kind, result_emoji) ->
     emoji_list = $ "<div class='#{kind}-emoji-list clearfix'></div>"
-    console.log kind
     for emoji in result_emoji
       emoji_button = $ '<button>',
         class: 'emoji-btn btn btn-default pull-left'
       emoji_button.prop 'emoji_data', emoji
 
-      console.log emoji.code, emoji
       emoji_button_image = $ '<img>',
         alt: "#{emoji.code}"
         title: "#{emoji.code}"
@@ -103,25 +101,35 @@ class Pallet
     elem = $(Pallet.active_editable)
     pos = elem.caret('pos')
     if elem.is('[contenteditable="true"]')
-      txt = elem.html()
-      startTxt = txt.substring(0,  pos)
-      stopTxt = txt.substring(pos, txt.length)
+
       wrapper = $ '<img>',
         class: 'emojidex-emoji'
         src: "#{@EC.cdn_url}px32/#{emoji.code.replace /\s/g, '_'}.png"
         alt: code
       if emoji.link != null && emoji.link != ''
-        inner_wrapper = wrapper
+        link_wrapper = wrapper
         wrapper = $ '<a>',
           href: emoji.link
           alt: ''
-        wrapper.append inner_wrapper
+        wrapper = link_wrapper.append(wrapper)
 
-      elem.html(startTxt)
-      elem.append(wrapper)
       elem.focus()
-      elem.caret('pos', elem.html().length - 1)
-      elem.append(stopTxt)
+
+      range = window.getSelection().getRangeAt(0)
+      range.insertNode wrapper[0]
+      # range.collapse false
+      window.emojidex_range = range
+      elem.caret('pos', range.startOffset + 10)
+      elem.change()
+
+      # txt = elem.html()
+      # startTxt = txt.substring(0,  pos)
+      # stopTxt = txt.substring(pos, txt.length)
+      #
+      # elem.html(startTxt)
+      # elem.append(wrapper)
+      # elem.focus()
+      # elem.append(stopTxt)
     else
       txt = elem.val()
       startTxt = txt.substring(0,  pos)

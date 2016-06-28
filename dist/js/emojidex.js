@@ -472,14 +472,12 @@
       var emoji, emoji_button, emoji_button_image, emoji_list, _i, _len,
         _this = this;
       emoji_list = $("<div class='" + kind + "-emoji-list clearfix'></div>");
-      console.log(kind);
       for (_i = 0, _len = result_emoji.length; _i < _len; _i++) {
         emoji = result_emoji[_i];
         emoji_button = $('<button>', {
           "class": 'emoji-btn btn btn-default pull-left'
         });
         emoji_button.prop('emoji_data', emoji);
-        console.log(emoji.code, emoji);
         emoji_button_image = $('<img>', {
           alt: "" + emoji.code,
           title: "" + emoji.code,
@@ -504,7 +502,7 @@
     };
 
     Pallet.prototype.insertEmojiAtCaret = function(emoji) {
-      var code, elem, inner_wrapper, pos, startTxt, stopTxt, txt, wrapper;
+      var code, elem, link_wrapper, pos, range, startTxt, stopTxt, txt, wrapper;
       if (Pallet.active_editable === null) {
         return;
       }
@@ -512,27 +510,25 @@
       elem = $(Pallet.active_editable);
       pos = elem.caret('pos');
       if (elem.is('[contenteditable="true"]')) {
-        txt = elem.html();
-        startTxt = txt.substring(0, pos);
-        stopTxt = txt.substring(pos, txt.length);
         wrapper = $('<img>', {
           "class": 'emojidex-emoji',
           src: "" + this.EC.cdn_url + "px32/" + (emoji.code.replace(/\s/g, '_')) + ".png",
           alt: code
         });
         if (emoji.link !== null && emoji.link !== '') {
-          inner_wrapper = wrapper;
+          link_wrapper = wrapper;
           wrapper = $('<a>', {
             href: emoji.link,
             alt: ''
           });
-          wrapper.append(inner_wrapper);
+          wrapper = link_wrapper.append(wrapper);
         }
-        elem.html(startTxt);
-        elem.append(wrapper);
         elem.focus();
-        elem.caret('pos', elem.html().length - 1);
-        return elem.append(stopTxt);
+        range = window.getSelection().getRangeAt(0);
+        range.insertNode(wrapper[0]);
+        window.emojidex_range = range;
+        elem.caret('pos', range.startOffset + 10);
+        return elem.change();
       } else {
         txt = elem.val();
         startTxt = txt.substring(0, pos);
