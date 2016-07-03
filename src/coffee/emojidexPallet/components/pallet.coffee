@@ -1,19 +1,13 @@
 class Pallet
-  @active_editable: null
-
   constructor: (@plugin) ->
+    @active_input_area = null
     @EC = new EmojidexClient
       storageHubPath: 'https://www.emojidex.com/hub?pallet'
       onReady: (EC) =>
-        @clipboard = new Clipboard '.emoji-btn'
-        $('.emojidex-content_editable').on('focus keyup mouseup', (e)->
-          Pallet.active_editable = e.currentTarget)
-        $('.emojidex-plain_text').on('focus keyup mouseup', (e)->
-          Pallet.active_editable = e.currentTarget)
-
-        # @login_service = new LoginService @
-
         # start main --------
+        $('input, textarea, [contenteditable="true"]').on 'focus keyup mouseup', (e) =>
+          @active_input_area = $ e.currentTarget
+
         @createDialog()
         @setPallet @plugin.element
 
@@ -94,13 +88,16 @@ class Pallet
     if emoji.moji != null && emoji.moji != '' then emoji.moji else ":#{emoji.code}:"
 
   insertEmojiAtCaret: (emoji) ->
-    if Pallet.active_editable == null
-      return #TODO copy to clipboard if active editable is null
-
+    @clipboard.destroy() if @clipboard
     code = @mojiOrCode(emoji)
-    elem = $(Pallet.active_editable)
-    elem.focus()
-    pos = elem.caret('pos')
+
+    if @active_input_area is null
+      @clipboard = new Clipboard '.emoji-btn',
+        text: (e) ->
+          return code
+      return
+
+    elem = @active_input_area
     if elem.is('[contenteditable="true"]')
       wrapper = $ '<img>',
         class: 'emojidex-emoji'
@@ -113,6 +110,7 @@ class Pallet
           alt: ''
         wrapper = link_wrapper.append(wrapper)
 
+      elem.focus()
       selection = window.getSelection()
       range = selection.getRangeAt(0)
 
@@ -123,6 +121,7 @@ class Pallet
 
       elem.change()
     else
+      pos = elem.caret('pos')
       txt = elem.val()
       startTxt = txt.substring(0,  pos)
       stopTxt = txt.substring(pos, txt.length)

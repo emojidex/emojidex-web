@@ -42,21 +42,16 @@
   })(jQuery, window, document);
 
   Pallet = (function() {
-    Pallet.active_editable = null;
-
     function Pallet(plugin) {
       var _this = this;
       this.plugin = plugin;
+      this.active_input_area = null;
       this.EC = new EmojidexClient({
         storageHubPath: 'https://www.emojidex.com/hub?pallet',
         onReady: function(EC) {
           var _base;
-          _this.clipboard = new Clipboard('.emoji-btn');
-          $('.emojidex-content_editable').on('focus keyup mouseup', function(e) {
-            return Pallet.active_editable = e.currentTarget;
-          });
-          $('.emojidex-plain_text').on('focus keyup mouseup', function(e) {
-            return Pallet.active_editable = e.currentTarget;
+          $('input, textarea, [contenteditable="true"]').on('focus keyup mouseup', function(e) {
+            return _this.active_input_area = $(e.currentTarget);
           });
           _this.createDialog();
           _this.setPallet(_this.plugin.element);
@@ -157,13 +152,19 @@
 
     Pallet.prototype.insertEmojiAtCaret = function(emoji) {
       var code, elem, link_wrapper, pos, range, selection, startTxt, stopTxt, txt, wrapper;
-      if (Pallet.active_editable === null) {
-        return;
+      if (this.clipboard) {
+        this.clipboard.destroy();
       }
       code = this.mojiOrCode(emoji);
-      elem = $(Pallet.active_editable);
-      elem.focus();
-      pos = elem.caret('pos');
+      if (this.active_input_area === null) {
+        this.clipboard = new Clipboard('.emoji-btn', {
+          text: function(e) {
+            return code;
+          }
+        });
+        return;
+      }
+      elem = this.active_input_area;
       if (elem.is('[contenteditable="true"]')) {
         wrapper = $('<img>', {
           "class": 'emojidex-emoji',
@@ -178,6 +179,7 @@
           });
           wrapper = link_wrapper.append(wrapper);
         }
+        elem.focus();
         selection = window.getSelection();
         range = selection.getRangeAt(0);
         range.insertNode(wrapper[0]);
@@ -186,6 +188,7 @@
         selection.addRange(range);
         return elem.change();
       } else {
+        pos = elem.caret('pos');
         txt = elem.val();
         startTxt = txt.substring(0, pos);
         stopTxt = txt.substring(pos, txt.length);
