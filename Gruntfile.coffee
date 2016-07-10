@@ -338,8 +338,6 @@ module.exports = (grunt) ->
       emojidex_css:
         src: [
           'bower_components/At.js/dist/css/jquery.atwho.min.css'
-          'src/compiled_css/emoji_pallet.css'
-          'src/compiled_css/jquery-ui.css'
           'src/compiled_css/emojidex.css'
         ]
         dest: 'dist/css/emojidex.css'

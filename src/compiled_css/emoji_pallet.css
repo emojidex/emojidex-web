@@ -1,23 +1,82 @@
-#emojidex-dialog .category-emoji-list {
-  overflow-y: auto;
-  max-height: 256px; }
-#emojidex-dialog .emoji-btn {
-  border-radius: 3px;
-  padding: 5px;
-  margin: 2px; }
-#emojidex-dialog hr {
-  margin-top: 10px;
-  margin-bottom: 15px;
-  border-top: 1px solid #797979; }
+/*
+Error: Undefined mixin 'emoji'.
+        on line 65 of src/sass/emoji_pallet.scss, in `emoji'
+        from line 65 of src/sass/emoji_pallet.scss
 
-.search-pagination .pallet-pager:hover {
-  cursor: pointer; }
+60:     cursor: pointer;
+61:   }
+62: 
+63: 
+64:   img[class*="emojidex-"] {
+65:     @include emoji;
+66:   }
+67: 
+68:   .nav {
+69:     li {
+70:       a {
 
-.search-emoji-list {
-  margin-top: 10px;
-  height: auto; }
-
-.pallet-pager {
-  cursor: pointer; }
-
-/*# sourceMappingURL=emoji_pallet.css.map */
+Backtrace:
+src/sass/emoji_pallet.scss:65:in `emoji'
+src/sass/emoji_pallet.scss:65
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/tree/visitors/perform.rb:351:in `block in visit_mixin'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/stack.rb:98:in `block in with_mixin'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/stack.rb:115:in `with_frame'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/stack.rb:98:in `with_mixin'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/tree/visitors/perform.rb:349:in `visit_mixin'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/tree/visitors/base.rb:36:in `visit'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/tree/visitors/perform.rb:160:in `block in visit'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/stack.rb:79:in `block in with_base'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/stack.rb:115:in `with_frame'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/stack.rb:79:in `with_base'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/tree/visitors/perform.rb:160:in `visit'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/tree/visitors/perform.rb:433:in `block (2 levels) in visit_rule'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/tree/visitors/perform.rb:433:in `map'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/tree/visitors/perform.rb:433:in `block in visit_rule'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/tree/visitors/perform.rb:181:in `with_environment'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/tree/visitors/perform.rb:431:in `visit_rule'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/tree/visitors/base.rb:36:in `visit'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/tree/visitors/perform.rb:160:in `block in visit'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/stack.rb:79:in `block in with_base'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/stack.rb:115:in `with_frame'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/stack.rb:79:in `with_base'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/tree/visitors/perform.rb:160:in `visit'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/tree/visitors/perform.rb:433:in `block (2 levels) in visit_rule'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/tree/visitors/perform.rb:433:in `map'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/tree/visitors/perform.rb:433:in `block in visit_rule'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/tree/visitors/perform.rb:181:in `with_environment'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/tree/visitors/perform.rb:431:in `visit_rule'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/tree/visitors/base.rb:36:in `visit'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/tree/visitors/perform.rb:160:in `block in visit'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/stack.rb:79:in `block in with_base'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/stack.rb:115:in `with_frame'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/stack.rb:79:in `with_base'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/tree/visitors/perform.rb:160:in `visit'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/tree/visitors/base.rb:52:in `block in visit_children'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/tree/visitors/base.rb:52:in `map'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/tree/visitors/base.rb:52:in `visit_children'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/tree/visitors/perform.rb:169:in `block in visit_children'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/tree/visitors/perform.rb:181:in `with_environment'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/tree/visitors/perform.rb:168:in `visit_children'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/tree/visitors/base.rb:36:in `block in visit'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/tree/visitors/perform.rb:188:in `visit_root'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/tree/visitors/base.rb:36:in `visit'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/tree/visitors/perform.rb:159:in `visit'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/tree/visitors/perform.rb:8:in `visit'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/tree/root_node.rb:36:in `css_tree'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/tree/root_node.rb:29:in `render_with_sourcemap'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/engine.rb:381:in `_render_with_sourcemap'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/engine.rb:298:in `render_with_sourcemap'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/exec/sass_scss.rb:391:in `run'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/exec/sass_scss.rb:63:in `process_result'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/exec/base.rb:52:in `parse'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/lib/sass/exec/base.rb:19:in `parse!'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/gems/sass-3.4.22/bin/sass:13:in `<top (required)>'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/bin/sass:23:in `load'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/bin/sass:23:in `<main>'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/bin/ruby_executable_hooks:15:in `eval'
+/home/snowsunny/.rvm/gems/ruby-2.3.1/bin/ruby_executable_hooks:15:in `<main>'
+*/
+body:before {
+  white-space: pre;
+  font-family: monospace;
+  content: "Error: Undefined mixin 'emoji'.\A         on line 65 of src/sass/emoji_pallet.scss, in `emoji'\A         from line 65 of src/sass/emoji_pallet.scss\A \A 60:     cursor: pointer;\A 61:   }\A 62: \A 63: \A 64:   img[class*=\"emojidex-\"] {\A 65:     @include emoji;\A 66:   }\A 67: \A 68:   .nav {\A 69:     li {\A 70:       a {"; }

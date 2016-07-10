@@ -61,9 +61,9 @@
     }
 
     Pallet.prototype.createDialog = function() {
-      this.dialog = $('<div id="emojidex-dialog"></div>');
-      $('body').append(this.dialog);
+      this.dialog = $('<div id="emojidex-dialog-content"></div>');
       return this.dialog.dialog({
+        dialogClass: 'emojidex-ui-dialog',
         autoOpen: false,
         width: 700,
         title: 'Emojidex Pallet',
@@ -72,9 +72,10 @@
           $('.ui-dialog-titlebar-close').hide();
           close_btn = $('<button type="button" class="btn btn-default btn-xs pull-right" aria-label="Close"><span aria-hidden="true">&times;</span></button>');
           close_btn.click(function(e) {
-            return $('#emojidex-dialog').dialog('close');
+            return $('#emojidex-dialog-content').dialog('close');
           });
-          return $('.ui-dialog-titlebar').append(close_btn);
+          $('.ui-dialog-titlebar').append(close_btn);
+          return $('.emojidex-ui-dialog').wrap('<span id="emojidex-emoji-pallet"></span>');
         },
         open: function(e) {
           $('.ui-dialog :button').blur();

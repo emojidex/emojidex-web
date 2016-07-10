@@ -14,10 +14,9 @@ class Pallet
         @plugin.options.onComplete?()
 
   createDialog: ->
-    @dialog = $ '<div id="emojidex-dialog"></div>'
-    $('body').append @dialog
-
+    @dialog = $ '<div id="emojidex-dialog-content"></div>'
     @dialog.dialog
+      dialogClass: 'emojidex-ui-dialog'
       autoOpen: false
       width: 700
       title: 'Emojidex Pallet'
@@ -27,9 +26,10 @@ class Pallet
 
         close_btn = $ '<button type="button" class="btn btn-default btn-xs pull-right" aria-label="Close"><span aria-hidden="true">&times;</span></button>'
         close_btn.click (e) ->
-          $('#emojidex-dialog').dialog 'close'
+          $('#emojidex-dialog-content').dialog 'close'
 
         $('.ui-dialog-titlebar').append close_btn
+        $('.emojidex-ui-dialog').wrap('<span id="emojidex-emoji-pallet"></span>')
 
       open: (e) ->
         $('.ui-dialog :button').blur()
