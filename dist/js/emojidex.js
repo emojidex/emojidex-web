@@ -1208,18 +1208,19 @@
         var replaceToEmojiIconOrRollback;
         replaceToEmojiIconOrRollback = function(loading_element) {
           return new Promise(function(resolve, reject) {
-            var emoji_image, timeout;
+            var emoji_code, emoji_image, timeout;
             timeout = setTimeout(function() {
               return reject(new Error('emojidex: replaceToEmojiIconOrRollback - Timeout'));
             }, _this.promiseWaitTime);
-            emoji_image = $("<img src='" + _this.plugin.EC.cdn_url + "px8/" + loading_element.dataset.emoji + ".png'></img>");
+            emoji_code = _this.replaceSpaceToUnder(loading_element.dataset.emoji);
+            emoji_image = $("<img src='" + _this.plugin.EC.cdn_url + "px8/" + emoji_code + ".png'></img>");
             emoji_image.load(function(e) {
-              return _this.fadeOutLoadingTag_fadeInEmojiTag($(loading_element), loading_element.dataset.emoji).then(function() {
+              return _this.fadeOutLoadingTag_fadeInEmojiTag($(loading_element), emoji_code).then(function() {
                 return resolve();
               });
             });
             return emoji_image.error(function(e) {
-              return _this.fadeOutLoadingTag_fadeInEmojiTag($(loading_element), loading_element.dataset.emoji, false).then(function() {
+              return _this.fadeOutLoadingTag_fadeInEmojiTag($(loading_element), emoji_code, false).then(function() {
                 return resolve();
               });
             });
@@ -1299,7 +1300,7 @@
               code_only = code.replace(/\:/g, '');
               emoji_image = $("<img src='" + _this.plugin.EC.cdn_url + "px8/" + (_this.replaceSpaceToUnder(code_only)) + ".png' data-code='" + code_only + "'></img>");
               emoji_image.load(function(e) {
-                replaced_text = replaced_text.replace(":" + e.currentTarget.dataset.code + ":", _this.getEmojiTag(e.currentTarget.dataset.code));
+                replaced_text = replaced_text.replace(":" + e.currentTarget.dataset.code + ":", _this.getEmojiTag(_this.replaceSpaceToUnder(e.currentTarget.dataset.code)));
                 return checker.check();
               });
               _results.push(emoji_image.error(function(e) {

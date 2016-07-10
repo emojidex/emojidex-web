@@ -153,6 +153,16 @@ img.emojidex-emoji {
   background-size: 100%;
   background-repeat: no-repeat; }
 
+img[class*="emojidex-"] {
+  display: inline-block;
+  position: relative;
+  vertical-align: middle;
+  width: 1.2em;
+  height: 1.2em;
+  top: -0.1em;
+  background-size: 100%;
+  background-repeat: no-repeat; }
+
 .emojidex-loading-icon {
   display: inline-block;
   position: relative;
@@ -2586,15 +2596,6 @@ img.emojidex-emoji {
     height: auto; }
   #emojidex-emoji-pallet .pallet-pager {
     cursor: pointer; }
-  #emojidex-emoji-pallet img[class*="emojidex-"] {
-    display: inline-block;
-    position: relative;
-    vertical-align: middle;
-    width: 1.2em;
-    height: 1.2em;
-    top: -0.1em;
-    background-size: 100%;
-    background-repeat: no-repeat; }
   #emojidex-emoji-pallet .nav {
     float: none; }
     #emojidex-emoji-pallet .nav li a {
