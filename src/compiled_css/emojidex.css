@@ -2569,7 +2569,6 @@ img.emojidex-emoji {
   #emojidex-emoji-pallet .affix {
     position: fixed; }
   #emojidex-emoji-pallet #emojidex-dialog-content .category-emoji-list {
-    overflow-y: auto;
     max-height: 256px; }
   #emojidex-emoji-pallet #emojidex-dialog-content .emoji-btn {
     border-radius: 3px;
@@ -2595,7 +2594,13 @@ img.emojidex-emoji {
     top: -0.1em;
     background-size: 100%;
     background-repeat: no-repeat; }
-  #emojidex-emoji-pallet .nav li a {
-    text-decoration: none; }
+  #emojidex-emoji-pallet .nav {
+    float: none; }
+    #emojidex-emoji-pallet .nav li a {
+      text-decoration: none;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.42857;
+      height: auto; }
 
 /*# sourceMappingURL=emojidex.css.map */

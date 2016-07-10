@@ -27,7 +27,7 @@
 
   #emojidex-dialog-content {
     .category-emoji-list {
-      overflow-y: auto;
+      // overflow-y: auto;
       max-height: 256px;
     }
     .emoji-btn {
@@ -65,9 +65,14 @@
   }
 
   .nav {
+    float: none;
     li {
       a {
         text-decoration: none;
+        font-family: $font-family-base;
+        font-size: $font-size-base;
+        line-height: $line-height-base;
+        height: auto;
       }
     }
   }
