@@ -875,6 +875,9 @@
                   success: function(response) {
                     var regexp;
                     regexp = response.moji_array.join('|');
+                    regexp = regexp.replace(/\*|\$|\+|\?/g, function(matched_string) {
+                      return '\\' + matched_string;
+                    });
                     _this.options.regexpUtf = RegExp(regexp, 'g');
                     _this.options.utfEmojiData = response.moji_index;
                     return _this.EC.Data.storage.update('emojidex.utfInfoUpdated', new Date().toString()).then(function() {

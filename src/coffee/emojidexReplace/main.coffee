@@ -36,6 +36,8 @@ do ($ = jQuery, window, document) ->
                 dataType: 'json'
                 success: (response) =>
                   regexp = response.moji_array.join('|')
+                  regexp = regexp.replace /\*|\$|\+|\?/g, (matched_string) ->
+                    return '\\' + matched_string
                   @options.regexpUtf = RegExp regexp, 'g'
                   @options.utfEmojiData = response.moji_index
 
