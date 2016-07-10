@@ -60,10 +60,6 @@
     cursor: pointer;
   }
 
-  img[class*="emojidex-"] {
-    @include emoji;
-  }
-
   .nav {
     float: none;
     li {
