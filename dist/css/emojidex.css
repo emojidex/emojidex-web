@@ -144,17 +144,7 @@
   padding-left: 20px; }
 
 img.emojidex-emoji {
-  display: inline-block;
-  position: relative;
-  vertical-align: middle;
-  width: 1.2em;
-  height: 1.2em;
-  top: -0.1em;
-  background-size: 100%;
-  background-repeat: no-repeat; }
-
-img[class*="emojidex-"] {
-  display: inline-block;
+  display: inline-block !important;
   position: relative;
   vertical-align: middle;
   width: 1.2em;
@@ -164,7 +154,7 @@ img[class*="emojidex-"] {
   background-repeat: no-repeat; }
 
 .emojidex-loading-icon {
-  display: inline-block;
+  display: inline-block !important;
   position: relative;
   vertical-align: middle;
   width: 1.2em;

@@ -1,7 +1,7 @@
 @import 'fix-space';
 
 @mixin emoji {
-  display: inline-block;
+  display: inline-block !important;
   position: relative;
   vertical-align: middle;
   width: 1.2em;
@@ -12,9 +12,6 @@
 }
 
 img.emojidex-emoji {
-  @include emoji;
-}
-img[class*="emojidex-"] {
   @include emoji;
 }
 

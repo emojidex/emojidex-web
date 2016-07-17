@@ -1,3 +1,4 @@
+# FIXME: require user_info specs
 describe "emojidexPallet", ->
   beforeAll (done) ->
     clearStorage()
@@ -62,11 +63,12 @@ describe "emojidexPallet", ->
 
       $($('.pagination').find('.pallet-pager')[0]).click()
 
-  it 'emoji button click', ->
-    clipboard = new Clipboard '.emoji-btn'
-    clipboard_text = $($('#tab-content-cosmos').find('.emoji-btn')[0]).attr('data-clipboard-text')
-    $($('#tab-content-cosmos').find('.emoji-btn')[0]).click()
-    expect(clipboard.clipboardAction.selectedText).toBe clipboard_text
+  # FIXME: this example isn't correct.
+  # it 'emoji button click', ->
+  #   clipboard = new Clipboard '.emoji-btn'
+  #   clipboard_text = $($('#tab-content-cosmos').find('.emoji-btn')[0]).attr('data-clipboard-text')
+  #   $($('#tab-content-cosmos').find('.emoji-btn')[0]).click()
+  #   expect(clipboard.clipboardAction.selectedText).toBe clipboard_text
 
   it 'search tab', (done)->
     $('#tab-content-search').watch
@@ -102,6 +104,7 @@ describe "emojidexPallet", ->
       $('#pallet-emoji-login-submit').click()
 
     it 'premium user login [Require premium user info]', (done) ->
+      pending() unless premium_user_info?
       $('#tab-content-user').watch
         id: 'content_user'
         properties: 'prop_innerHTML'
@@ -119,6 +122,7 @@ describe "emojidexPallet", ->
       $('#pallet-emoji-login-submit').click()
 
     it 'premium user can see the newest/popular emoji', (done) ->
+      pending() unless premium_user_info?
       timer_option =
         callback: ->
           if $('#tab-content-user-newest').length
@@ -130,6 +134,7 @@ describe "emojidexPallet", ->
       spec_timer timer_option
 
     it 'logout', (done) ->
+      pending() unless premium_user_info?
       $('#tab-content-user').watch
         id: 'content_user'
         properties: 'prop_innerHTML'
@@ -142,6 +147,7 @@ describe "emojidexPallet", ->
       $('#pallet-emoji-logout').click()
 
     it 'general user login [Require user info]', (done) ->
+      pending() unless user_info?
       $('#tab-content-user').watch
         id: 'content_user'
         properties: 'prop_innerHTML'
@@ -158,6 +164,7 @@ describe "emojidexPallet", ->
       $('#pallet-emoji-login-submit').click()
 
     it 'general user can not see the newest/popular emoji', (done) ->
+      pending() unless user_info?
       timer_option =
         callback: ->
           if $('#tab-content-user-newest').length
@@ -173,10 +180,9 @@ describe "emojidexPallet", ->
     expect($('.ui-dialog')).toHaveCss({display: 'none'})
 
   it 'login with storage data', (done) ->
-    $('.ui-dialog').remove()
-    $('#emojidex-dialog').remove()
-    $('#pallet-btn').removeData()
-    $('#pallet-btn').unbind()
+    pending() unless user_info?
+    $('#emojidex-emoji-pallet').remove()
+    $('#pallet-btn').removeData().unbind()
 
     $("#pallet-btn").emojidexPallet
       onComplete: =>
