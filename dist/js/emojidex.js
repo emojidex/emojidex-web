@@ -1,5 +1,5 @@
 /*
- * jQuery emojidex - v0.10.3
+ * jQuery emojidex - v0.11.0
  * emojidex plugin for jQuery/Zepto and compatible
  * https://github.com/emojidex/emojidex-web
  *
@@ -10,7 +10,7 @@
  * Licensed under the emojidex Open License
  * https://www.emojidex.com/emojidex/emojidex_open_license
  *
- * Copyright 2013 Genshin Souzou Kabushiki Kaisha
+ * Copyright 2013 emojidex
  *
  *
  * Includes:
@@ -56,7 +56,7 @@
 /*! jquery.caret 2016-02-27 */
 !function(a,b){"function"==typeof define&&define.amd?define(["jquery"],function(c){return a.returnExportsGlobal=b(c)}):"object"==typeof exports?module.exports=b(require("jquery")):b(jQuery)}(this,function(a){"use strict";var b,c,d,e,f,g,h,i,j,k,l;k="caret",b=function(){function b(a){this.$inputor=a,this.domInputor=this.$inputor[0]}return b.prototype.setPos=function(a){var b,c,d,e;return(e=j.getSelection())&&(d=0,c=!1,(b=function(a,f){var g,i,j,k,l,m;for(l=f.childNodes,m=[],j=0,k=l.length;k>j&&(g=l[j],!c);j++)if(3===g.nodeType){if(d+g.length>=a){c=!0,i=h.createRange(),i.setStart(g,a-d),e.removeAllRanges(),e.addRange(i);break}m.push(d+=g.length)}else m.push(b(a,g));return m})(a,this.domInputor)),this.domInputor},b.prototype.getIEPosition=function(){return this.getPosition()},b.prototype.getPosition=function(){var a,b;return b=this.getOffset(),a=this.$inputor.offset(),b.left-=a.left,b.top-=a.top,b},b.prototype.getOldIEPos=function(){var a,b;return b=h.selection.createRange(),a=h.body.createTextRange(),a.moveToElementText(this.domInputor),a.setEndPoint("EndToEnd",b),a.text.length},b.prototype.getPos=function(){var a,b,c;return(c=this.range())?(a=c.cloneRange(),a.selectNodeContents(this.domInputor),a.setEnd(c.endContainer,c.endOffset),b=a.toString().length,a.detach(),b):h.selection?this.getOldIEPos():void 0},b.prototype.getOldIEOffset=function(){var a,b;return a=h.selection.createRange().duplicate(),a.moveStart("character",-1),b=a.getBoundingClientRect(),{height:b.bottom-b.top,left:b.left,top:b.top}},b.prototype.getOffset=function(){var b,c,d,e,f;return j.getSelection&&(d=this.range())?(d.endOffset-1>0&&d.endContainer!==this.domInputor&&(b=d.cloneRange(),b.setStart(d.endContainer,d.endOffset-1),b.setEnd(d.endContainer,d.endOffset),e=b.getBoundingClientRect(),c={height:e.height,left:e.left+e.width,top:e.top},b.detach()),c&&0!==(null!=c?c.height:void 0)||(b=d.cloneRange(),f=a(h.createTextNode("|")),b.insertNode(f[0]),b.selectNode(f[0]),e=b.getBoundingClientRect(),c={height:e.height,left:e.left,top:e.top},f.remove(),b.detach())):h.selection&&(c=this.getOldIEOffset()),c&&(c.top+=a(j).scrollTop(),c.left+=a(j).scrollLeft()),c},b.prototype.range=function(){var a;if(j.getSelection)return a=j.getSelection(),a.rangeCount>0?a.getRangeAt(0):null},b}(),c=function(){function b(a){this.$inputor=a,this.domInputor=this.$inputor[0]}return b.prototype.getIEPos=function(){var a,b,c,d,e,f,g;return b=this.domInputor,f=h.selection.createRange(),e=0,f&&f.parentElement()===b&&(d=b.value.replace(/\r\n/g,"\n"),c=d.length,g=b.createTextRange(),g.moveToBookmark(f.getBookmark()),a=b.createTextRange(),a.collapse(!1),e=g.compareEndPoints("StartToEnd",a)>-1?c:-g.moveStart("character",-c)),e},b.prototype.getPos=function(){return h.selection?this.getIEPos():this.domInputor.selectionStart},b.prototype.setPos=function(a){var b,c;return b=this.domInputor,h.selection?(c=b.createTextRange(),c.move("character",a),c.select()):b.setSelectionRange&&b.setSelectionRange(a,a),b},b.prototype.getIEOffset=function(a){var b,c,d,e;return c=this.domInputor.createTextRange(),a||(a=this.getPos()),c.move("character",a),d=c.boundingLeft,e=c.boundingTop,b=c.boundingHeight,{left:d,top:e,height:b}},b.prototype.getOffset=function(b){var c,d,e;return c=this.$inputor,h.selection?(d=this.getIEOffset(b),d.top+=a(j).scrollTop()+c.scrollTop(),d.left+=a(j).scrollLeft()+c.scrollLeft(),d):(d=c.offset(),e=this.getPosition(b),d={left:d.left+e.left-c.scrollLeft(),top:d.top+e.top-c.scrollTop(),height:e.height})},b.prototype.getPosition=function(a){var b,c,e,f,g,h,i;return b=this.$inputor,f=function(a){return a=a.replace(/<|>|`|"|&/g,"?").replace(/\r\n|\r|\n/g,"<br/>"),/firefox/i.test(navigator.userAgent)&&(a=a.replace(/\s/g,"&nbsp;")),a},void 0===a&&(a=this.getPos()),i=b.val().slice(0,a),e=b.val().slice(a),g="<span style='position: relative; display: inline;'>"+f(i)+"</span>",g+="<span id='caret' style='position: relative; display: inline;'>|</span>",g+="<span style='position: relative; display: inline;'>"+f(e)+"</span>",h=new d(b),c=h.create(g).rect()},b.prototype.getIEPosition=function(a){var b,c,d,e,f;return d=this.getIEOffset(a),c=this.$inputor.offset(),e=d.left-c.left,f=d.top-c.top,b=d.height,{left:e,top:f,height:b}},b}(),d=function(){function b(a){this.$inputor=a}return b.prototype.css_attr=["borderBottomWidth","borderLeftWidth","borderRightWidth","borderTopStyle","borderRightStyle","borderBottomStyle","borderLeftStyle","borderTopWidth","boxSizing","fontFamily","fontSize","fontWeight","height","letterSpacing","lineHeight","marginBottom","marginLeft","marginRight","marginTop","outlineWidth","overflow","overflowX","overflowY","paddingBottom","paddingLeft","paddingRight","paddingTop","textAlign","textOverflow","textTransform","whiteSpace","wordBreak","wordWrap"],b.prototype.mirrorCss=function(){var b,c=this;return b={position:"absolute",left:-9999,top:0,zIndex:-2e4},"TEXTAREA"===this.$inputor.prop("tagName")&&this.css_attr.push("width"),a.each(this.css_attr,function(a,d){return b[d]=c.$inputor.css(d)}),b},b.prototype.create=function(b){return this.$mirror=a("<div></div>"),this.$mirror.css(this.mirrorCss()),this.$mirror.html(b),this.$inputor.after(this.$mirror),this},b.prototype.rect=function(){var a,b,c;return a=this.$mirror.find("#caret"),b=a.position(),c={left:b.left,top:b.top,height:a.height()},this.$mirror.remove(),c},b}(),e={contentEditable:function(a){return!(!a[0].contentEditable||"true"!==a[0].contentEditable)}},g={pos:function(a){return a||0===a?this.setPos(a):this.getPos()},position:function(a){return h.selection?this.getIEPosition(a):this.getPosition(a)},offset:function(a){var b;return b=this.getOffset(a)}},h=null,j=null,i=null,l=function(a){var b;return(b=null!=a?a.iframe:void 0)?(i=b,j=b.contentWindow,h=b.contentDocument||j.document):(i=void 0,j=window,h=document)},f=function(a){var b;h=a[0].ownerDocument,j=h.defaultView||h.parentWindow;try{return i=j.frameElement}catch(c){b=c}},a.fn.caret=function(d,f,h){var i;return g[d]?(a.isPlainObject(f)?(l(f),f=void 0):l(h),i=e.contentEditable(this)?new b(this):new c(this),g[d].apply(i,[f])):a.error("Method "+d+" does not exist on jQuery.caret")},a.fn.caret.EditableCaret=b,a.fn.caret.InputCaret=c,a.fn.caret.Utils=e,a.fn.caret.apis=g});
 (function(){!function(a){return"function"==typeof define&&define.amd?define(["jquery"],a):a(window.jQuery)}(function(a){var b,c,d,e,f,g,h,i=[].slice;c=function(){function b(b){this.current_flag=null,this.controllers={},this.alias_maps={},this.$inputor=a(b),this.setIframe(),this.listen()}return b.prototype.createContainer=function(b){return 0===(this.$el=a("#atwho-container",b)).length?a(b.body).append(this.$el=a("<div id='atwho-container'></div>")):void 0},b.prototype.setIframe=function(a,b){var c;return null==b&&(b=!1),a?(this.window=a.contentWindow,this.document=a.contentDocument||this.window.document,this.iframe=a):(this.document=document,this.window=window,this.iframe=null),(this.iframeStandalone=b)?(null!=(c=this.$el)&&c.remove(),this.createContainer(this.document)):this.createContainer(document)},b.prototype.controller=function(a){var b,c,d,e;if(this.alias_maps[a])c=this.controllers[this.alias_maps[a]];else{e=this.controllers;for(d in e)if(b=e[d],d===a){c=b;break}}return c?c:this.controllers[this.current_flag]},b.prototype.set_context_for=function(a){return this.current_flag=a,this},b.prototype.reg=function(a,b){var c,e;return c=(e=this.controllers)[a]||(e[a]=new d(this,a)),b.alias&&(this.alias_maps[b.alias]=a),c.init(b),this},b.prototype.listen=function(){return this.$inputor.on("keyup.atwhoInner",function(a){return function(b){return a.on_keyup(b)}}(this)).on("keydown.atwhoInner",function(a){return function(b){return a.on_keydown(b)}}(this)).on("scroll.atwhoInner",function(a){return function(b){var c;return null!=(c=a.controller())?c.view.hide(b):void 0}}(this)).on("blur.atwhoInner",function(a){return function(b){var c;return(c=a.controller())?c.view.hide(b,c.get_opt("display_timeout")):void 0}}(this)).on("click.atwhoInner",function(a){return function(b){var c;return null!=(c=a.controller())?c.view.hide(b):void 0}}(this))},b.prototype.shutdown=function(){var a,b,c;c=this.controllers;for(b in c)a=c[b],a.destroy(),delete this.controllers[b];return this.$inputor.off(".atwhoInner"),this.$el.remove()},b.prototype.dispatch=function(){return a.map(this.controllers,function(a){return function(b){var c;return(c=b.get_opt("delay"))?(clearTimeout(a.delayedCallback),a.delayedCallback=setTimeout(function(){return b.look_up()?a.set_context_for(b.at):void 0},c)):b.look_up()?a.set_context_for(b.at):void 0}}(this))},b.prototype.on_keyup=function(b){var c;switch(b.keyCode){case f.ESC:b.preventDefault(),null!=(c=this.controller())&&c.view.hide();break;case f.DOWN:case f.UP:case f.CTRL:a.noop();break;case f.P:case f.N:b.ctrlKey||this.dispatch();break;default:this.dispatch()}},b.prototype.on_keydown=function(b){var c,d;if(c=null!=(d=this.controller())?d.view:void 0,c&&c.visible())switch(b.keyCode){case f.ESC:b.preventDefault(),c.hide(b);break;case f.UP:b.preventDefault(),c.prev();break;case f.DOWN:b.preventDefault(),c.next();break;case f.P:if(!b.ctrlKey)return;b.preventDefault(),c.prev();break;case f.N:if(!b.ctrlKey)return;b.preventDefault(),c.next();break;case f.TAB:case f.ENTER:if(!c.visible())return;b.preventDefault(),c.choose(b);break;default:a.noop()}},b}(),d=function(){function b(b,c){this.app=b,this.at=c,this.$inputor=this.app.$inputor,this.id=this.$inputor[0].id||this.uid(),this.setting=null,this.query=null,this.pos=0,this.cur_rect=null,this.range=null,0===(this.$el=a("#atwho-ground-"+this.id,this.app.$el)).length&&this.app.$el.append(this.$el=a("<div id='atwho-ground-"+this.id+"'></div>")),this.model=new g(this),this.view=new h(this)}return b.prototype.uid=function(){return(Math.random().toString(16)+"000000000").substr(2,8)+(new Date).getTime()},b.prototype.init=function(b){return this.setting=a.extend({},this.setting||a.fn.atwho["default"],b),this.view.init(),this.model.reload(this.setting.data)},b.prototype.destroy=function(){return this.trigger("beforeDestroy"),this.model.destroy(),this.view.destroy(),this.$el.remove()},b.prototype.call_default=function(){var b,c,d;d=arguments[0],b=2<=arguments.length?i.call(arguments,1):[];try{return e[d].apply(this,b)}catch(f){return c=f,a.error(""+c+" Or maybe At.js doesn't have function "+d)}},b.prototype.trigger=function(a,b){var c,d;return null==b&&(b=[]),b.push(this),c=this.get_opt("alias"),d=c?""+a+"-"+c+".atwho":""+a+".atwho",this.$inputor.trigger(d,b)},b.prototype.callbacks=function(a){return this.get_opt("callbacks")[a]||e[a]},b.prototype.get_opt=function(a){var b;try{return this.setting[a]}catch(c){return b=c,null}},b.prototype.content=function(){return this.$inputor.is("textarea, input")?this.$inputor.val():this.$inputor.text()},b.prototype.catch_query=function(){var a,b,c,d,e,f;return b=this.content(),a=this.$inputor.caret("pos",{iframe:this.app.iframe}),f=b.slice(0,a),d=this.callbacks("matcher").call(this,this.at,f,this.get_opt("start_with_space")),"string"==typeof d&&d.length<=this.get_opt("max_len",20)?(e=a-d.length,c=e+d.length,this.pos=e,d={text:d,head_pos:e,end_pos:c},this.trigger("matched",[this.at,d.text])):(d=null,this.view.hide()),this.query=d},b.prototype.rect=function(){var b,c,d;if(b=this.$inputor.caret("offset",this.pos-1,{iframe:this.app.iframe}))return this.app.iframe&&!this.app.iframeStandalone&&(c=a(this.app.iframe).offset(),b.left+=c.left,b.top+=c.top),"true"===this.$inputor.attr("contentEditable")&&(b=this.cur_rect||(this.cur_rect=b)),d=this.app.document.selection?0:2,{left:b.left,top:b.top,bottom:b.top+b.height+d}},b.prototype.reset_rect=function(){return"true"===this.$inputor.attr("contentEditable")?this.cur_rect=null:void 0},b.prototype.mark_range=function(){return"true"===this.$inputor.attr("contentEditable")&&(this.app.window.getSelection&&(this.range=this.app.window.getSelection().getRangeAt(0)),this.app.document.selection)?this.ie8_range=this.app.document.selection.createRange():void 0},b.prototype.insert_content_for=function(b){var c,d,e;return d=b.data("value"),e=this.get_opt("insert_tpl"),this.$inputor.is("textarea, input")||!e?d:(c=a.extend({},b.data("item-data"),{"atwho-data-value":d,"atwho-at":this.at}),this.callbacks("tpl_eval").call(this,e,c))},b.prototype.insert=function(b){var c,d,e,f,g,h,i,j,k;return c=this.$inputor,k=this.callbacks("inserting_wrapper").call(this,c,b,this.get_opt("suffix")),c.is("textarea, input")?(h=c.val(),i=h.slice(0,Math.max(this.query.head_pos-this.at.length,0)),j=""+i+k+h.slice(this.query.end_pos||0),c.val(j),c.caret("pos",i.length+k.length,{iframe:this.app.iframe})):(f=this.range)?(e=f.startOffset-(this.query.end_pos-this.query.head_pos)-this.at.length,f.setStart(f.endContainer,Math.max(e,0)),f.setEnd(f.endContainer,f.endOffset),f.deleteContents(),d=a(k,this.app.document)[0],f.insertNode(d),f.setEndAfter(d),f.collapse(!1),g=this.app.window.getSelection(),g.removeAllRanges(),g.addRange(f)):(f=this.ie8_range)&&(f.moveStart("character",this.query.end_pos-this.query.head_pos-this.at.length),f.pasteHTML(k),f.collapse(!1),f.select()),c.is(":focus")||c.focus(),c.change()},b.prototype.render_view=function(a){var b;return b=this.get_opt("search_key"),a=this.callbacks("sorter").call(this,this.query.text,a.slice(0,1001),b),this.view.render(a.slice(0,this.get_opt("limit")))},b.prototype.look_up=function(){var b,c;if(b=this.catch_query())return c=function(a){return a&&a.length>0?this.render_view(a):this.view.hide()},this.model.query(b.text,a.proxy(c,this)),b},b}(),g=function(){function b(a){this.context=a,this.at=this.context.at,this.storage=this.context.$inputor}return b.prototype.destroy=function(){return this.storage.data(this.at,null)},b.prototype.saved=function(){return this.fetch()>0},b.prototype.query=function(a,b){var c,d,e;return c=this.fetch(),d=this.context.get_opt("search_key"),c=this.context.callbacks("filter").call(this.context,a,c,d)||[],e=this.context.callbacks("remote_filter"),c.length>0||!e&&0===c.length?b(c):e.call(this.context,a,b)},b.prototype.fetch=function(){return this.storage.data(this.at)||[]},b.prototype.save=function(a){return this.storage.data(this.at,this.context.callbacks("before_save").call(this.context,a||[]))},b.prototype.load=function(a){return!this.saved()&&a?this._load(a):void 0},b.prototype.reload=function(a){return this._load(a)},b.prototype._load=function(b){return"string"==typeof b?a.ajax(b,{dataType:"json"}).done(function(a){return function(b){return a.save(b)}}(this)):this.save(b)},b}(),h=function(){function b(b){this.context=b,this.$el=a("<div class='atwho-view'><ul class='atwho-view-ul'></ul></div>"),this.timeout_id=null,this.context.$el.append(this.$el),this.bind_event()}return b.prototype.init=function(){var a;return a=this.context.get_opt("alias")||this.context.at.charCodeAt(0),this.$el.attr({id:"at-view-"+a})},b.prototype.destroy=function(){return this.$el.remove()},b.prototype.bind_event=function(){var b;return b=this.$el.find("ul"),b.on("mouseenter.atwho-view","li",function(c){return b.find(".cur").removeClass("cur"),a(c.currentTarget).addClass("cur")}).on("click",function(a){return function(b){return a.choose(b),b.preventDefault()}}(this))},b.prototype.visible=function(){return this.$el.is(":visible")},b.prototype.choose=function(a){var b,c;return(b=this.$el.find(".cur")).length&&(c=this.context.insert_content_for(b),this.context.insert(this.context.callbacks("before_insert").call(this.context,c,b),b),this.context.trigger("inserted",[b,a]),this.hide(a)),this.context.get_opt("hide_without_suffix")?this.stop_showing=!0:void 0},b.prototype.reposition=function(b){var c,d,e,f;return f=this.context.app.iframeStandalone?this.context.app.window:window,b.bottom+this.$el.height()-a(f).scrollTop()>a(f).height()&&(b.bottom=b.top-this.$el.height()),b.left>(d=a(f).width()-this.$el.width()-5)&&(b.left=d),c={left:b.left,top:b.bottom},null!=(e=this.context.callbacks("before_reposition"))&&e.call(this.context,c),this.$el.offset(c),this.context.trigger("reposition",[c])},b.prototype.next=function(){var a,b;return a=this.$el.find(".cur").removeClass("cur"),b=a.next(),b.length||(b=this.$el.find("li:first")),b.addClass("cur")},b.prototype.prev=function(){var a,b;return a=this.$el.find(".cur").removeClass("cur"),b=a.prev(),b.length||(b=this.$el.find("li:last")),b.addClass("cur")},b.prototype.show=function(){var a;return this.stop_showing?void(this.stop_showing=!1):(this.context.mark_range(),this.visible()||(this.$el.show(),this.context.trigger("shown")),(a=this.context.rect())?this.reposition(a):void 0)},b.prototype.hide=function(a,b){var c;if(this.visible())return isNaN(b)?(this.context.reset_rect(),this.$el.hide(),this.context.trigger("hidden",[a])):(c=function(a){return function(){return a.hide()}}(this),clearTimeout(this.timeout_id),this.timeout_id=setTimeout(c,b))},b.prototype.render=function(b){var c,d,e,f,g,h,i;if(!(a.isArray(b)&&b.length>0))return void this.hide();for(this.$el.find("ul").empty(),d=this.$el.find("ul"),g=this.context.get_opt("tpl"),h=0,i=b.length;i>h;h++)e=b[h],e=a.extend({},e,{"atwho-at":this.context.at}),f=this.context.callbacks("tpl_eval").call(this.context,g,e),c=a(this.context.callbacks("highlighter").call(this.context,f,this.context.query.text)),c.data("item-data",e),d.append(c);return this.show(),this.context.get_opt("highlight_first")?d.find("li:first").addClass("cur"):void 0},b}(),f={DOWN:40,UP:38,ESC:27,TAB:9,ENTER:13,CTRL:17,P:80,N:78},e={before_save:function(b){var c,d,e,f;if(!a.isArray(b))return b;for(f=[],d=0,e=b.length;e>d;d++)c=b[d],f.push(a.isPlainObject(c)?c:{name:c});return f},matcher:function(a,b,c){var d,e;return a=a.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g,"\\$&"),c&&(a="(?:^|\\s)"+a),e=new RegExp(a+"([A-Za-z0-9_+-]*)$|"+a+"([^\\x00-\\xff]*)$","gi"),d=e.exec(b),d?d[2]||d[1]:null},filter:function(a,b,c){var d,e,f,g;for(g=[],e=0,f=b.length;f>e;e++)d=b[e],~new String(d[c]).toLowerCase().indexOf(a.toLowerCase())&&g.push(d);return g},remote_filter:null,sorter:function(a,b,c){var d,e,f,g;if(!a)return b;for(g=[],e=0,f=b.length;f>e;e++)d=b[e],d.atwho_order=new String(d[c]).toLowerCase().indexOf(a.toLowerCase()),d.atwho_order>-1&&g.push(d);return g.sort(function(a,b){return a.atwho_order-b.atwho_order})},tpl_eval:function(a,b){var c;try{return a.replace(/\$\{([^\}]*)\}/g,function(a,c){return b[c]})}catch(d){return c=d,""}},highlighter:function(a,b){var c;return b?(c=new RegExp(">\\s*(\\w*?)("+b.replace("+","\\+")+")(\\w*)\\s*<","ig"),a.replace(c,function(a,b,c,d){return"> "+b+"<strong>"+c+"</strong>"+d+" <"})):a},before_insert:function(a){return a},inserting_wrapper:function(a,b,c){var d,e;return d=""===c?c:c||" ",a.is("textarea, input")?""+b+d:"true"===a.attr("contentEditable")?(d=""===c?c:c||"&nbsp;",/firefox/i.test(navigator.userAgent)?e="<span>"+b+d+"</span>":(c="<span contenteditable='false'>"+d+"<span>",e="<span contenteditable='false'>"+b+c+"</span>"),this.app.document.selection&&(e="<span contenteditable='true'>"+b+"</span>"),e):void 0}},b={load:function(a,b){var c;return(c=this.controller(a))?c.model.load(b):void 0},setIframe:function(a,b){return this.setIframe(a,b),null},run:function(){return this.dispatch()},destroy:function(){return this.shutdown(),this.$inputor.data("atwho",null)}},a.fn.atwho=function(d){var e,f;return f=arguments,e=null,this.filter('textarea, input, [contenteditable=""], [contenteditable=true]').each(function(){var g,h;return(h=(g=a(this)).data("atwho"))||g.data("atwho",h=new c(this)),"object"!=typeof d&&d?b[d]&&h?e=b[d].apply(h,Array.prototype.slice.call(f,1)):a.error("Method "+d+" does not exist on jQuery.caret"):h.reg(d.at,d)}),e||this},a.fn.atwho["default"]={at:void 0,alias:void 0,data:null,tpl:"<li data-value='${atwho-at}${name}'>${name}</li>",insert_tpl:"<span id='${id}'>${atwho-data-value}</span>",callbacks:e,search_key:"name",suffix:void 0,hide_without_suffix:!1,start_with_space:!0,highlight_first:!0,limit:5,max_len:20,display_timeout:300,delay:null}})}).call(this);
-!function(a){function b(a,c){c=c||{},this._id=b._generateUUID(),this._promise=c.promise||Promise,this._frameId=c.frameId||"CrossStorageClient-"+this._id,this._origin=b._getOrigin(a),this._requests={},this._connected=!1,this._closed=!1,this._count=0,this._timeout=c.timeout||5e3,this._listener=null,this._installListener();var d;c.frameId&&(d=document.getElementById(c.frameId)),d&&this._poll(),d?this._hub=d.contentWindow:this._createFrame(a)}b.frameStyle={display:"none",position:"absolute",top:"-999px",left:"-999px"},b._getOrigin=function(a){var b,c,d;return b=document.createElement("a"),b.href=a,b.host||(b=window.location),c=b.protocol&&":"!==b.protocol?b.protocol:window.location.protocol,d=c+"//"+b.host,d=d.replace(/:80$|:443$/,"")},b._generateUUID=function(){return"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,function(a){var b=16*Math.random()|0,c="x"==a?b:3&b|8;return c.toString(16)})},b.prototype.onReadyFrame=function(){var a=this;return this._hub?this._promise.resolve():this._closed?this._promise.reject(new Error("CrossStorageClient has closed")):new this._promise(function(b,c){var d=setTimeout(function(){c(new Error("CrossStorageClient could not ready frame"))},a._timeout),e=setInterval(function(){a._hub&&(clearTimeout(d),clearInterval(e),b())},100)})},b.prototype.onConnect=function(){var a=this;return this._connected?this._promise.resolve():this._closed?this._promise.reject(new Error("CrossStorageClient has closed")):(this._requests.connect||(this._requests.connect=[]),new this._promise(function(b,c){var d=setTimeout(function(){c(new Error("CrossStorageClient could not connect"))},a._timeout);a._requests.connect.push(function(a){return clearTimeout(d),a?c(a):void b()})}))},b.prototype.set=function(a,b,c){return this._request("set",{key:a,value:b,ttl:c})},b.prototype.get=function(){var a=Array.prototype.slice.call(arguments);return this._request("get",{keys:a})},b.prototype.del=function(){var a=Array.prototype.slice.call(arguments);return this._request("del",{keys:a})},b.prototype.clear=function(){return this._request("clear")},b.prototype.getKeys=function(){return this._request("getKeys")},b.prototype.close=function(){var a=document.getElementById(this._frameId);a&&a.parentNode.removeChild(a),window.removeEventListener?window.removeEventListener("message",this._listener,!1):window.detachEvent("onmessage",this._listener),this._connected=!1,this._closed=!0},b.prototype._installListener=function(){var a=this;this._listener=function(b){var c,d,e,f;if(!a._closed&&b.data&&"string"==typeof b.data&&(d="null"===b.origin?"file://":b.origin,d===a._origin))if("cross-storage:unavailable"!==b.data){if(-1!==b.data.indexOf("cross-storage:")&&!a._connected){if(a._connected=!0,!a._requests.connect)return;for(c=0;c<a._requests.connect.length;c++)a._requests.connect[c](e);delete a._requests.connect}if("cross-storage:ready"!==b.data){try{f=JSON.parse(b.data)}catch(g){return}f.id&&a._requests[f.id]&&a._requests[f.id](f.error,f.result)}}else{if(a._closed||a.close(),!a._requests.connect)return;for(e=new Error("Closing client. Could not access localStorage in hub."),c=0;c<a._requests.connect.length;c++)a._requests.connect[c](e)}},window.addEventListener?window.addEventListener("message",this._listener,!1):window.attachEvent("onmessage",this._listener)},b.prototype._poll=function(){var a,b,c;a=this,c="file://"===a._origin?"*":a._origin,b=setInterval(function(){return a._connected?clearInterval(b):void(a._hub&&a._hub.postMessage("cross-storage:poll",c))},1e3)},b.prototype._createFrame=function(a){var c,d,e=this;c=window.document.createElement("iframe"),c.id=this._frameId;for(d in b.frameStyle)b.frameStyle.hasOwnProperty(d)&&(c.style[d]=b.frameStyle[d]);window.document.body.appendChild(c),c.onload=function(){e._hub=c.contentWindow},c.src=a},b.prototype._request=function(a,b){var c,d;return this._closed?this._promise.reject(new Error("CrossStorageClient has closed")):(d=this,d._count++,c={id:this._id+":"+d._count,method:"cross-storage:"+a,params:b},new this._promise(function(a,b){var e,f,g;e=setTimeout(function(){d._requests[c.id]&&(delete d._requests[c.id],b(new Error("Timeout: could not perform "+c.method)))},d._timeout),d._requests[c.id]=function(c,d){return clearTimeout(e),c?b(new Error(c)):void a(d)},Array.prototype.toJSON&&(f=Array.prototype.toJSON,Array.prototype.toJSON=null),g="file://"===d._origin?"*":d._origin,d._hub.postMessage(JSON.stringify(c),g),f&&(Array.prototype.toJSON=f)}))},"undefined"!=typeof module&&module.exports?module.exports=b:"undefined"!=typeof exports?exports.CrossStorageClient=b:"function"==typeof define&&define.amd?define([],function(){return b}):a.CrossStorageClient=b}(this),function(){var a,b,c,d,e,f,g,h,i,j,k,l,m=function(a,b){return function(){return a.apply(b,arguments)}};this.EmojidexClient=function(){function c(c){var h=this;this.env={api_ver:1,cdn_addr:"cdn.emojidex.com",s_cdn_addr:"",asset_addr:"assets.emojidex.com",s_asset_addr:""},this.defaults={locale:"en",api_url:"https://www.emojidex.com/api/v1/",cdn_url:"http://"+this.env.cdn_addr+"/emoji/",closed_net:!1,min_query_len:4,size_code:"px32",detailed:!1,limit:32},this.options=$.extend({},this.defaults,c),this.closed_net=this.options.closed_net,this.api_url=this.options.api_url,this.cdn_url=this.options.cdn_url,this.size_code=this.options.size_code,this.detailed=this.options.detailed,this.limit=this.options.limit,this.locale=this.options.locale,this.Data=new b(this,this.options).then(function(b){return h.User=new g(h),h.Indexes=new e(h),h.Util=new l(h),h.Search=new f(h),h.Emoji=new d(h),h.Categories=new a(h)}).then(function(){var a;return"function"==typeof(a=h.options).onReady?a.onReady(h):void 0})}return c}(),a=function(){function a(a){var b=this;return this.EC=a,this._categories=this.EC.Data.categories(),this.sync().then(function(){return b.EC.Categories=b})}return a.prototype._categoriesAPI=function(a,b,c,d){var e,f=this;return e={page:1,limit:this.EC.limit,detailed:this.EC.detailed},$.extend(e,c),this.called_func=d,this.called_data={category_name:a,callback:b,param:e},$.ajax({url:""+this.EC.api_url+"emoji",dataType:"json",data:e,success:function(c){return f.meta=c.meta,f.results=c.emoji,f.cur_page=c.meta.page,f.count=c.meta.count,f.EC.Emoji.combine(c.emoji).then(function(){return"function"==typeof b?b(c.emoji,{category_name:a,callback:b,param:e}):void 0})}})},a.prototype.getEmoji=function(a,b,c){var d;return d={category:a},$.extend(d,c),this._categoriesAPI(a,b,d,this.getEmoji)},a.prototype.next=function(){return this.count===this.called_data.param.limit&&this.called_data.param.page++,this.called_func(this.called_data.category_name,this.called_data.callback,this.called_data.param,{ajax:this.called_func})},a.prototype.prev=function(){return this.called_data.param.page>1&&this.called_data.param.page--,this.called_func(this.called_data.category_name,this.called_data.callback,this.called_data.param,{ajax:this.called_func})},a.prototype.sync=function(a,b){var c,d=this;return null!=(null!=(c=this._categories)?c.length:void 0)?new Promise(function(b,c){return"function"==typeof a&&a(d._categories),b()}):(null==b&&(b=this.EC.locale),$.ajax({url:this.EC.api_url+"categories",dataType:"json",data:{locale:b}}).then(function(b){return d._categories=b.categories,d.EC.Data.categories(b.categories).then(function(){return"function"==typeof a?a(d._categories):void 0})}))},a.prototype.all=function(a){var b=this;return null!=this._categories?"function"==typeof a?a(this._categories):void 0:setTimeout(function(){return b.all(a)},500)},a}(),b=function(){function a(a,b){var d=this;return this.EC=a,this.options=b,this._def_auth_info={status:"none",user:"",token:null},null!=this.options.storageHubPath?this.storage=new c(this.options.storageHubPath):this.storage=new c,this.storage.hub.onReadyFrame().then(function(){return d.storage.hub.onConnect()}).then(function(){return d.storage.hub.getKeys()}).then(function(a){var b,c,e,f,g;return-1!==a.indexOf("emojidex")?d.storage.update_cache("emojidex"):(d.storage.hub_cache={emojidex:{emoji:(null!=(b=d.EC.options)?b.emoji:void 0)||[],history:(null!=(c=d.EC.options)?c.history:void 0)||[],favorites:(null!=(e=d.EC.options)?e.favorites:void 0)||[],categories:(null!=(f=d.EC.options)?f.categories:void 0)||[],auth_info:(null!=(g=d.EC.options)?g.auth_info:void 0)||d._def_auth_info}},d.storage.update("emojidex",d.storage.hub_cache.emojidex))}).then(function(a){var b,c;return null!=(null!=(b=d.storage.hub_cache)&&null!=(c=b.emojidex)?c.cdn_url:void 0)?d.EC.cdn_url=d.storage.get("emojidex.cdn_url"):d.EC.cdn_url===d.EC.defaults.cdn_url&&d.EC.closed_net===!1?$.ajax({url:d.EC.api_url+"/env",dataType:"json"}).then(function(a){return d.EC.env=a,d.EC.cdn_url="https://"+d.EC.env.s_cdn_addr+"/emoji/",d.storage.update("emojidex",{cdn_url:d.EC.cdn_url})}):void 0}).then(function(a){return d.EC.Data=d})}return a.prototype.emoji=function(a){var b,c,d,e,f,g,h,i;if(null!=a){if(this.storage.hub_cache.emojidex.emoji.length>0){for(c=this.storage.hub_cache.emojidex.emoji,e=0,g=a.length;g>e;e++)for(d=a[e],f=0,h=c.length;h>f;f++){if(b=c[f],d.code===b.code){c.splice(c.indexOf(b),1,d);break}b===c[c.length-1]&&c.push(d)}return this.storage.update("emojidex",{emoji:c})}return this.storage.update("emojidex",{emoji:a})}return null!=(null!=(i=this.storage.hub_cache.emojidex)?i.emoji:void 0)?this.storage.hub_cache.emojidex.emoji:void 0},a.prototype.favorites=function(a){return null!=a?this.storage.update("emojidex",{favorites:a}):this.storage.hub_cache.favorites},a.prototype.history=function(a){return null!=a?this.storage.update("emojidex",{history:a}):this.storage.hub_cache.history},a.prototype.categories=function(a){return null!=a?this.storage.update("emojidex",{categories:a}):this.storage.hub_cache.categories},a.prototype.auth_info=function(a){return null!=a?this.storage.update("emojidex",{auth_info:a}):void 0},a}(),c=function(){function a(a){null==a&&(a="https://www.emojidex.com/hub"),this.hub=new CrossStorageClient(a,{frameId:"emojidex-client-storage-hub"}),this.hub_cache={}}return a.prototype._get_chained_data=function(a,b,c){var d,e;return null==c&&(c=!0),a=this._get_parsed_query(a),d=function(c,e){return 0===a.array.length?c[e]=b:(c[e]={},d(c[e],a.array.shift())),c},e=d({},a.array.shift()),c?e:e[a.first]},a.prototype._get_hub_data=function(a){var b=this;return a=a.split("."),this.hub.onConnect().then(function(){return b.hub.get(a.shift())}).then(function(b){var c,d,e;if(a.length)for(d=0,e=a.length;e>d;d++)c=a[d],b=b[c];return b})},a.prototype._get_parsed_query=function(a){var b;return b=a.split("."),a={code:a,array:b,first:b[0]}},a.prototype.get=function(a){var b,c,d,e;if(a=a instanceof Array?a:a.split("."),b=this.hub_cache,a.length)for(d=0,e=a.length;e>d;d++)c=a[d],b=b[c];return b},a.prototype.set=function(a,b,c){var d,e=this;return d=a.split(".")[0],this.hub.onConnect().then(function(){var f;return c?(f={},f[d]=b,e.hub.set(d,f)):e.hub.set(d,e._get_chained_data(a,b))}).then(function(){return e.update_cache(d)})},a.prototype.update=function(a,b){var c;return c=$.extend(!0,{},this.get(a.split(".")[0]),this._get_chained_data(a,b,!1)),this.set(a,c,!0)},a.prototype.update_cache=function(a){var b=this;return this.hub.onConnect().then(function(){return a?a:b.hub.getKeys()}).then(function(a){return b.hub.get(a)}).then(function(c){return a?b.hub_cache[a]=c[a]:b.hub_cache=c})},a.prototype._remove=function(a){var b,c,d;if(a=this._get_parsed_query(a),1===a.array.length)return this.hub.del(a.code);for(d=c=this.get(a.array.shift()),b=0;b<a.array.length-1;)c=c[a.array[b]],b++;return delete c[a.array[b]],this.update(a.first,d)},a.prototype.clear=function(){var a=this;return this.hub.onConnect().then(function(){return a.hub.clear()})},a.prototype.keys=function(a){var b,c,d=this;if(a){c=[];for(b in this.get(a))c.push(b);return c}return this.hub.onConnect().then(function(){return d.hub.getKeys()})},a.prototype.isEmpty=function(a){return this.get(a)?!1:!0},a.prototype.isSet=function(a){return this.get(a)?!0:!1},a}(),d=function(){function a(a){this.EC=a,this.combine=m(this.combine,this),this._emoji_instance=[]}return a.prototype._emoji=function(){return null!=this._emoji_instance?this._emoji_instance:this.checkUpdate()?(this.EC.Data.storage.update("emojidex.seedUpdated",(new Date).toString()),this.seed()):this._emoji_instance=this.EC.Data.storage.get("emojidex.emoji")},a.prototype.checkUpdate=function(){var a,b;return this.EC.Data.storage.isSet("emojidex.seedUpdated")?(a=new Date,b=new Date(this.EC.Data.storage.get("emojidex.seedUpdated")),a-b>=1728e5?!0:!1):!0},a.prototype.seed=function(a){return this.EC.Indexes["static"](["utf_emoji","extended_emoji"],null,a)},a.prototype.all=function(){return this._emoji()},a.prototype.search=function(a,b){var c,d;return d=function(){var b,d,e,f;for(e=this._emoji(),f=[],b=0,d=e.length;d>b;b++)c=e[b],c.code.match(a)&&f.push(c);return f}.call(this),"function"==typeof b&&b(d),d},a.prototype.starting=function(a,b){var c,d;return d=function(){var b,d,e,f;for(e=this._emoji(),f=[],b=0,d=e.length;d>b;b++)c=e[b],c.code.match("^"+a)&&f.push(c);return f}.call(this),"function"==typeof b&&b(d),d},a.prototype.ending=function(a,b){var c,d;return d=function(){var b,d,e,f;for(e=this._emoji(),f=[],b=0,d=e.length;d>b;b++)c=e[b],c.code.match(a+"$")&&f.push(c);return f}.call(this),"function"==typeof b&&b(d),d},a.prototype.tags=function(a,b){var c,d,e,f,g,h;for(a=this.EC.Util.breakout(a),e=(null!=b?b.selection:void 0)||this._emoji(),c=[],g=0,h=a.length;h>g;g++)f=a[g],c=c.concat(function(){var a,b,c;for(c=[],a=0,b=e.length;b>a;a++)d=e[a],$.inArray(f,d.tags)>=0&&c.push(d);return c}());return c},a.prototype.categories=function(a,b){var c,d,e,f,g,h;for(a=this.EC.Util.breakout(a),f=(null!=b?b.selection:void 0)||this._emoji(),d=[],g=0,h=a.length;h>g;g++)c=a[g],d=d.concat(function(){var a,b,d;for(d=[],a=0,b=f.length;b>a;a++)e=f[a],e.category===c&&d.push(e);return d}());return d},a.prototype.advanced=function(a){return this.categories(a.categories,{selection:this.tags(a.tags,{selection:this.search(a.term)})})},a.prototype.combine=function(a){var b=this;return this.EC.Data.emoji(a).then(function(a){return b._emoji_instance=a.emoji})},a.prototype.flush=function(){return this._emoji_instance=[],this.EC.Data.storage._remove("emojidex.emoji")},a}(),e=function(){function a(a){this.EC=a,this.results=[],this.cur_page=1,this.count=0}return a.prototype._indexesAPI=function(a,b,c,d){var e,f=this;return e={page:1,limit:this.EC.limit,detailed:this.EC.detailed},$.extend(e,c),null!=d&&(this.indexed_func=d,this.indexed={query:a,callback:b,param:e}),$.ajax({url:this.EC.api_url+a,dataType:"json",data:e,success:function(a){return f.results=a.emoji,f.cur_page=a.meta.page,f.count=a.meta.count,f.EC.Emoji.combine(a.emoji).then(function(c){return"function"==typeof b?b(a.emoji):void 0})},error:function(a){return f.results=[]}})},a.prototype.index=function(a,b){return this._indexesAPI("emoji",a,b,this.index)},a.prototype.user=function(a,b,c){return this._indexesAPI("users/"+a+"/emoji",b,c)},a.prototype["static"]=function(a,b,c){var d,e,f,g,h,i,j,k=this;for(f=0,e=[],d=function(b){return $.ajax({url:b,dataType:"json",success:function(b){return e=e.concat(b),++f===a.length?k.EC.Emoji.combine(e).then(function(a){return"function"==typeof c?c(a):void 0}):void 0}})},j=[],h=0,i=a.length;i>h;h++)g=a[h],b?j.push(d(""+(this.EC.api_url+g)+"?locale="+b)):j.push(d(""+(this.EC.api_url+g)));return j},a.prototype.select=function(a,b,c){return this.EC.Search.find(a,b,c)},a.prototype.next=function(){return this.count===this.indexed.param.limit&&this.indexed.param.page++,this.indexed_func(this.indexed.callback,this.indexed.param,this.indexed_func)},a.prototype.prev=function(){return this.indexed.param.page>1&&this.indexed.param.page--,this.indexed_func(this.indexed.callback,this.indexed.param,this.indexed_func)},a}(),f=function(){function a(a){this.EC=a,this.Util=new l,this.results=[],this.cur_page=1,this.count=0}return a.prototype._searchAPI=function(a,b,c,d){var e,f=this;return e={page:1,limit:this.EC.limit,detailed:this.EC.detailed},$.extend(e,c),this.searched_func=d.ajax,this.searched={data:a,callback:b,param:e},this.EC.closed_net?"function"==typeof d.storage?d.storage(a,b):void 0:$.ajax({url:this.EC.api_url+"search/emoji",dataType:"json",data:e,success:function(a){return f.meta=a.meta,f.results=a.emoji,f.cur_page=a.meta.page,f.count=a.meta.count,f.EC.Emoji.combine(a.emoji).then(function(c){return"function"==typeof b?b(a.emoji):void 0})},error:function(a){return f.results=[]}})},a.prototype.search=function(a,b,c){return c=$.extend({code_cont:this.EC.Util.escape_term(a)},c),this._searchAPI(a,b,c,{ajax:this.search,storage:this.EC.Emoji.search})},a.prototype.starting=function(a,b,c){return c=$.extend({code_sw:this.Util.escape_term(a)},c),this._searchAPI(a,b,c,{ajax:this.starting,storage:this.EC.Emoji.starting})},a.prototype.ending=function(a,b,c){return c=$.extend({code_ew:this.Util.escape_term(a)},c),this._searchAPI(a,b,c,{ajax:this.ending,storage:this.EC.Emoji.ending})},a.prototype.tags=function(a,b,c){return c=$.extend({"tags[]":this.Util.breakout(a)},c),this._searchAPI(a,b,c,{ajax:this.tags,storage:this.EC.Emoji.tags})},a.prototype.advanced=function(a,b,c){var d;return d={code_cont:this.Util.escape_term(a.term),"tags[]":this.Util.breakout(a.tags),"categories[]":this.Util.breakout(a.categories)},$.extend(d,c),this._searchAPI(a,b,d,{ajax:this.advanced,storage:this.EC.Emoji.advanced})},a.prototype.find=function(a,b,c){var d,e=this;return d={detailed:this.EC.detailed},$.extend(d,c),this.EC.closed_net?void 0:$.ajax({url:this.EC.api_url+("/emoji/"+a),dataType:"json",data:d,success:function(a){return e.EC.Emoji.combine([a]).then(function(c){return"function"==typeof b?b(a):void 0})}})},a.prototype.next=function(){return this.count===this.searched.param.limit&&this.searched.param.page++,this.searched_func(this.searched.data,this.searched.callback,this.searched.param,{ajax:this.searched_func})},a.prototype.prev=function(){return this.searched.param.page>1&&this.searched.param.page--,this.searched_func(this.searched.data,this.searched.callback,this.searched.param,{ajax:this.searched_func})},a}(),g=function(){function a(a){this.EC=a,this.auth_info=this.EC.Data._def_auth_info,this.History=new i(this.EC),this.Favorites=new h(this.EC),this.Newest=new j(this.EC),this.Popular=new k(this.EC)}return a.prototype._auto_login=function(){var a;if(!this.closed_net)return this.auth_info=this.EC.Data.auth_info(),null!=(null!=(a=this.auth_info)?a.token:void 0)?this.sync_user_data():this.logout()},a.prototype.login=function(a){switch(a.authtype){case"plain":return this.plain_auth(a.username,a.password,a.callback);case"token":return this.token_auth(a.username,a.auth_token,a.callback);case"basic":return this.basic_auth(a.user,a.password,a.callback);case"google":return this.google_auth(a.callback);default:return this._auto_login()}},a.prototype.logout=function(){return this.EC.Data.auth_info(this.EC.Data._def_auth_info)},a.prototype._authenticateAPI=function(a,b){var c,d=this;return c={url:this.EC.api_url+"users/authenticate",dataType:"json",success:function(a){return d._set_auth_from_response(a).then(function(){return"function"==typeof b?b(d.auth_info):void 0})},error:function(a){var c;return c=JSON.parse(a.responseText),d.auth_info={status:c.auth_status,token:null,user:""},d.EC.Data.auth_info(d.EC.Data.auth_info).then(function(){return"function"==typeof b?b({auth_info:d.auth_info,error_info:a}):void 0})}},$.ajax($.extend(c,a))},a.prototype.plain_auth=function(a,b,c){return this._authenticateAPI({data:{username:a,password:b}},c)},a.prototype.token_auth=function(a,b,c){return this._authenticateAPI({data:{username:a,token:b}},c)},a.prototype.basic_auth=function(a,b,c){return this._authenticateAPI({data:{user:a,password:b}},c)},a.prototype.google_auth=function(a){return!1},a.prototype.set_auth=function(a,b){var c=this;return this.EC.Data.auth_info({status:"verified",user:a,token:b}).then(function(a){return c.auth_info=c.EC.Data.storage.get("emojidex.auth_info"),c.sync_user_data(),a})},a.prototype._set_auth_from_response=function(a){var b=this;return this.EC.Data.auth_info({status:a.auth_status,token:a.auth_token,user:a.auth_user}).then(function(a){return b.auth_info=b.EC.Data.storage.get("emojidex.auth_info"),b.sync_user_data(),a})},a.prototype.sync_user_data=function(){return this.History.token=this.Favorites.token=this.Newest.token=this.Popular.token=this.auth_info.token,this.Favorites.sync(),this.History.sync()},a}(),h=function(){function a(a,b){this.EC=a,this.token=b,this._favorites=this.EC.Data.favorites()}return a.prototype._favoritesAPI=function(a){var b;return null!=this.token?(b={url:this.EC.api_url+"users/favorites",dataType:"json"},$.ajax($.extend(b,a))):void 0},a.prototype.get=function(a){var b,c=this;return b={data:{auth_token:this.token},success:function(b){return c._favorites=b,c.EC.Data.favorites(b),"function"==typeof a?a(c._favorites):void 0}},this._favoritesAPI(b)},a.prototype.set=function(a){var b,c=this;return b={type:"POST",data:{auth_token:this.token,emoji_code:a},success:function(a){return c._favorites.push(a),c.EC.Data.favorites(c._favorites)}},this._favoritesAPI(b)},a.prototype.unset=function(a){var b,c=this;return b={type:"DELETE",data:{auth_token:this.token,emoji_code:a},success:function(a){return c.sync()}},this._favoritesAPI(b)},a.prototype.sync=function(){return this.get()},a.prototype.all=function(a){var b=this;return null!=this._favorites?"function"==typeof a?a(this._favorites):void 0:setTimeout(function(){return b.all(a)},500)},a}(),i=function(){function a(a,b){this.EC=a,this.token=b,this._history=this.EC.Data.history()}return a.prototype._historyAPI=function(a){var b;return null!=this.token?(b={url:this.EC.api_url+"users/history",dataType:"json"},$.ajax($.extend(b,a))):void 0},a.prototype.get=function(a){var b,c=this;return b={data:{auth_token:this.token},success:function(b){return c._history=b,c.EC.Data.history(b),"function"==typeof a?a(c._history):void 0}},this._historyAPI(b)},a.prototype.set=function(a){var b,c=this;return b={type:"POST",data:{auth_token:this.token,emoji_code:a},success:function(a){var b,d,e,f,g;for(g=c._history,d=e=0,f=g.length;f>e;d=++e)if(b=g[d],b.emoji_code===a.emoji_code)return c._history[d]=a,c.EC.Data.history(c._history),a}},this._historyAPI(b)},a.prototype.sync=function(){return this.get()},a.prototype.all=function(a){var b=this;return null!=this._history?"function"==typeof a?a(this._history):void 0:setTimeout(function(){return b.all(a)},500)},a}(),j=function(){function a(a,b){this.EC=a,this.token=b}return a.prototype._newestAPI=function(a){var b;return null!=this.token?(b={url:this.EC.api_url+"newest",dataType:"json"},$.ajax($.extend(b,a))):void 0},a.prototype.get=function(a){var b;return b={data:{auth_token:this.token},success:function(b){return"function"==typeof a?a(b):void 0},error:function(b){return"function"==typeof a?a(b):void 0}},this._newestAPI(b)},a}(),k=function(){function a(a,b){this.EC=a,this.token=b}return a.prototype._popularAPI=function(a){var b;return null!=this.token?(b={url:this.EC.api_url+"popular",dataType:"json"},$.ajax($.extend(b,a))):void 0},a.prototype.get=function(a){var b;return b={data:{auth_token:this.token},success:function(b){return"function"==typeof a?a(b):void 0},error:function(b){return"function"==typeof a?a(b):void 0}},this._popularAPI(b)},a}(),l=function(){function a(a){this.EC=a}return a.prototype.escape_term=function(a){return a.replace(/\s/g,"_").replace(/(\(|\))/g,"\\$1")},a.prototype.de_escape_term=function(a){return a.replace(/_/g," ")},a.prototype.breakout=function(a){return null!=a?a instanceof Array?a:[a]:[]},a.prototype.simplify=function(a,b){var c,d,e,f;for(null==a&&(a=this.results),null==b&&(b=this.EC.size_code),f=[],d=0,e=a.length;e>d;d++)c=a[d],f.push({code:this.escape_term(c.code),img_url:""+this.EC.cdn_url+"/"+b+"/"+this.escape_term(c.code)+".png"});return f},a}()}.call(this);
+!function(a){function b(a,c){c=c||{},this._id=b._generateUUID(),this._promise=c.promise||Promise,this._frameId=c.frameId||"CrossStorageClient-"+this._id,this._origin=b._getOrigin(a),this._requests={},this._connected=!1,this._closed=!1,this._count=0,this._timeout=c.timeout||5e3,this._listener=null,this._installListener();var d;c.frameId&&(d=document.getElementById(c.frameId)),d&&this._poll(),d?this._hub=d.contentWindow:this._createFrame(a)}b.frameStyle={display:"none",position:"absolute",top:"-999px",left:"-999px"},b._getOrigin=function(a){var b,c,d;return b=document.createElement("a"),b.href=a,b.host||(b=window.location),c=b.protocol&&":"!==b.protocol?b.protocol:window.location.protocol,d=c+"//"+b.host,d=d.replace(/:80$|:443$/,"")},b._generateUUID=function(){return"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,function(a){var b=16*Math.random()|0,c="x"==a?b:3&b|8;return c.toString(16)})},b.prototype.onReadyFrame=function(){var a=this;return this._hub?this._promise.resolve():this._closed?this._promise.reject(new Error("CrossStorageClient has closed")):new this._promise(function(b,c){var d=setTimeout(function(){c(new Error("CrossStorageClient could not ready frame"))},a._timeout),e=setInterval(function(){a._hub&&(clearTimeout(d),clearInterval(e),b())},100)})},b.prototype.onConnect=function(){var a=this;return this._connected?this._promise.resolve():this._closed?this._promise.reject(new Error("CrossStorageClient has closed")):(this._requests.connect||(this._requests.connect=[]),new this._promise(function(b,c){var d=setTimeout(function(){c(new Error("CrossStorageClient could not connect"))},a._timeout);a._requests.connect.push(function(a){return clearTimeout(d),a?c(a):void b()})}))},b.prototype.set=function(a,b,c){return this._request("set",{key:a,value:b,ttl:c})},b.prototype.get=function(){var a=Array.prototype.slice.call(arguments);return this._request("get",{keys:a})},b.prototype.del=function(){var a=Array.prototype.slice.call(arguments);return this._request("del",{keys:a})},b.prototype.clear=function(){return this._request("clear")},b.prototype.getKeys=function(){return this._request("getKeys")},b.prototype.close=function(){var a=document.getElementById(this._frameId);a&&a.parentNode.removeChild(a),window.removeEventListener?window.removeEventListener("message",this._listener,!1):window.detachEvent("onmessage",this._listener),this._connected=!1,this._closed=!0},b.prototype._installListener=function(){var a=this;this._listener=function(b){var c,d,e,f;if(!a._closed&&b.data&&"string"==typeof b.data&&(d="null"===b.origin?"file://":b.origin,d===a._origin))if("cross-storage:unavailable"!==b.data){if(-1!==b.data.indexOf("cross-storage:")&&!a._connected){if(a._connected=!0,!a._requests.connect)return;for(c=0;c<a._requests.connect.length;c++)a._requests.connect[c](e);delete a._requests.connect}if("cross-storage:ready"!==b.data){try{f=JSON.parse(b.data)}catch(g){return}f.id&&a._requests[f.id]&&a._requests[f.id](f.error,f.result)}}else{if(a._closed||a.close(),!a._requests.connect)return;for(e=new Error("Closing client. Could not access localStorage in hub."),c=0;c<a._requests.connect.length;c++)a._requests.connect[c](e)}},window.addEventListener?window.addEventListener("message",this._listener,!1):window.attachEvent("onmessage",this._listener)},b.prototype._poll=function(){var a,b,c;a=this,c="file://"===a._origin?"*":a._origin,b=setInterval(function(){return a._connected?clearInterval(b):void(a._hub&&a._hub.postMessage("cross-storage:poll",c))},1e3)},b.prototype._createFrame=function(a){var c,d,e=this;c=window.document.createElement("iframe"),c.id=this._frameId;for(d in b.frameStyle)b.frameStyle.hasOwnProperty(d)&&(c.style[d]=b.frameStyle[d]);window.document.body.appendChild(c),c.onload=function(){e._hub=c.contentWindow},c.src=a},b.prototype._request=function(a,b){var c,d;return this._closed?this._promise.reject(new Error("CrossStorageClient has closed")):(d=this,d._count++,c={id:this._id+":"+d._count,method:"cross-storage:"+a,params:b},new this._promise(function(a,b){var e,f,g;e=setTimeout(function(){d._requests[c.id]&&(delete d._requests[c.id],b(new Error("Timeout: could not perform "+c.method)))},d._timeout),d._requests[c.id]=function(f,g){return clearTimeout(e),delete d._requests[c.id],f?b(new Error(f)):void a(g)},Array.prototype.toJSON&&(f=Array.prototype.toJSON,Array.prototype.toJSON=null),g="file://"===d._origin?"*":d._origin,d._hub.postMessage(JSON.stringify(c),g),f&&(Array.prototype.toJSON=f)}))},"undefined"!=typeof module&&module.exports?module.exports=b:"undefined"!=typeof exports?exports.CrossStorageClient=b:"function"==typeof define&&define.amd?define([],function(){return b}):a.CrossStorageClient=b}(this),function(){var a,b,c,d,e,f,g,h,i,j,k=function(a,b){return function(){return a.apply(b,arguments)}};this.EmojidexClient=function(){function c(c){this.env={api_ver:1,cdn_addr:"cdn.emojidex.com",s_cdn_addr:"",asset_addr:"assets.emojidex.com",s_asset_addr:""},this.defaults={locale:"en",api_url:"https://www.emojidex.com/api/v1/",cdn_url:"http://"+this.env.cdn_addr+"/emoji/",closed_net:!1,min_query_len:4,size_code:"px32",detailed:!1,limit:32},this.options=$.extend({},this.defaults,c),this.closed_net=this.options.closed_net,this.api_url=this.options.api_url,this.cdn_url=this.options.cdn_url,this.size_code=this.options.size_code,this.detailed=this.options.detailed,this.limit=this.options.limit,this.locale=this.options.locale,this.Data=new b(this,this.options).then(function(b){return function(c){return b.User=new g(b),b.Indexes=new e(b),b.Util=new j(b),b.Search=new f(b),b.Emoji=new d(b),b.Categories=new a(b)}}(this)).then(function(a){return function(){var b;return"function"==typeof(b=a.options).onReady?b.onReady(a):void 0}}(this))}return c}(),a=function(){function a(a){return this.EC=a,this._categories=this.EC.Data.categories(),this.sync().then(function(a){return function(){return a.EC.Categories=a}}(this))}return a.prototype._categoriesAPI=function(a,b,c,d){var e;return e={page:1,limit:this.EC.limit,detailed:this.EC.detailed},$.extend(e,c),this.called_func=d,this.called_data={category_name:a,callback:b,param:e},$.ajax({url:this.EC.api_url+"emoji",dataType:"json",data:e,success:function(c){return function(d){return c.meta=d.meta,c.results=d.emoji,c.cur_page=d.meta.page,c.count=d.meta.count,c.EC.Emoji.combine(d.emoji).then(function(){return"function"==typeof b?b(d.emoji,{category_name:a,callback:b,param:e}):void 0})}}(this)})},a.prototype.getEmoji=function(a,b,c){var d;return d={category:a},$.extend(d,c),this._categoriesAPI(a,b,d,this.getEmoji)},a.prototype.next=function(){return this.count===this.called_data.param.limit&&this.called_data.param.page++,this.called_func(this.called_data.category_name,this.called_data.callback,this.called_data.param,{ajax:this.called_func})},a.prototype.prev=function(){return this.called_data.param.page>1&&this.called_data.param.page--,this.called_func(this.called_data.category_name,this.called_data.callback,this.called_data.param,{ajax:this.called_func})},a.prototype.sync=function(a,b){var c;return null!=(null!=(c=this._categories)?c.length:void 0)?new Promise(function(b){return function(c,d){return"function"==typeof a&&a(b._categories),c()}}(this)):(null==b&&(b=this.EC.locale),$.ajax({url:this.EC.api_url+"categories",dataType:"json",data:{locale:b}}).then(function(b){return function(c){return b._categories=c.categories,b.EC.Data.categories(c.categories).then(function(){return"function"==typeof a?a(b._categories):void 0})}}(this)))},a.prototype.all=function(a){return null!=this._categories?"function"==typeof a?a(this._categories):void 0:setTimeout(function(b){return function(){return b.all(a)}}(this),500)},a}(),b=function(){function a(a,b){return this.EC=a,this.options=b,this._def_auth_info={status:"none",user:"",token:null,r18:!1,premium:!1,premium_exp:null,pro:!1,pro_exp:null},null!=this.options.storageHubPath?this.storage=new c(this.options.storageHubPath):this.storage=new c,this.storage.hub.onReadyFrame().then(function(a){return function(){return a.storage.hub.onConnect()}}(this)).then(function(a){return function(){return a.storage.hub.getKeys()}}(this)).then(function(a){return function(b){var c,d,e,f,g;return b.indexOf("emojidex")!==-1?a.storage.update_cache("emojidex"):(a.storage.hub_cache={emojidex:{emoji:(null!=(c=a.EC.options)?c.emoji:void 0)||[],history:(null!=(d=a.EC.options)?d.history:void 0)||[],favorites:(null!=(e=a.EC.options)?e.favorites:void 0)||[],categories:(null!=(f=a.EC.options)?f.categories:void 0)||[],auth_info:(null!=(g=a.EC.options)?g.auth_info:void 0)||a._def_auth_info}},a.storage.update("emojidex",a.storage.hub_cache.emojidex))}}(this)).then(function(a){return function(b){var c,d;return null!=(null!=(c=a.storage.hub_cache)&&null!=(d=c.emojidex)?d.cdn_url:void 0)?a.EC.cdn_url=a.storage.get("emojidex.cdn_url"):a.EC.cdn_url===a.EC.defaults.cdn_url&&a.EC.closed_net===!1?$.ajax({url:a.EC.api_url+"/env",dataType:"json"}).then(function(b){return a.EC.env=b,a.EC.cdn_url="https://"+a.EC.env.s_cdn_addr+"/emoji/",a.storage.update("emojidex",{cdn_url:a.EC.cdn_url})}):void 0}}(this)).then(function(a){return function(b){return a.EC.Data=a}}(this))}return a.prototype.emoji=function(a){var b,c,d,e,f,g,h,i;if(null!=a){if(this.storage.hub_cache.emojidex.emoji.length>0){for(c=this.storage.hub_cache.emojidex.emoji,d=0,f=a.length;d<f;d++)for(h=a[d],e=0,g=c.length;e<g;e++){if(b=c[e],h.code===b.code){c.splice(c.indexOf(b),1,h);break}b===c[c.length-1]&&c.push(h)}return this.storage.update("emojidex",{emoji:c})}return this.storage.update("emojidex",{emoji:a})}return null!=(null!=(i=this.storage.hub_cache.emojidex)?i.emoji:void 0)?this.storage.hub_cache.emojidex.emoji:void 0},a.prototype.favorites=function(a){return null!=a?this.storage.update("emojidex",{favorites:a}):this.storage.hub_cache.favorites},a.prototype.history=function(a){return null!=a?this.storage.update("emojidex",{history:a}):this.storage.hub_cache.history},a.prototype.categories=function(a){return null!=a?this.storage.update("emojidex",{categories:a}):this.storage.hub_cache.categories},a.prototype.auth_info=function(a){if(null!=a)return this.storage.update("emojidex",{auth_info:a})},a}(),c=function(){function a(a){null==a&&(a="https://www.emojidex.com/hub/0.8.2"),this.hub=new CrossStorageClient(a,{frameId:"emojidex-client-storage-hub"}),this.hub_cache={}}return a.prototype._get_chained_data=function(a,b,c){var d,e;return null==c&&(c=!0),a=this._get_parsed_query(a),d=function(c,e){return 0===a.array.length?c[e]=b:(c[e]={},d(c[e],a.array.shift())),c},e=d({},a.array.shift()),c?e:e[a.first]},a.prototype._get_hub_data=function(a){return a=a.split("."),this.hub.onConnect().then(function(b){return function(){return b.hub.get(a.shift())}}(this)).then(function(b){var c,d,e;if(a.length)for(c=0,d=a.length;c<d;c++)e=a[c],b=b[e];return b})},a.prototype._get_parsed_query=function(a){var b;return b=a.split("."),a={code:a,array:b,first:b[0]}},a.prototype.get=function(a){var b,c,d,e;if(a=a instanceof Array?a:a.split("."),b=this.hub_cache,a.length)for(c=0,d=a.length;c<d;c++)e=a[c],b=b[e];return b},a.prototype.set=function(a,b,c){var d;return d=a.split(".")[0],this.hub.onConnect().then(function(e){return function(){var f;return c?(f={},f[d]=b,e.hub.set(d,f)):e.hub.set(d,e._get_chained_data(a,b))}}(this)).then(function(a){return function(){return a.update_cache(d)}}(this))},a.prototype.update=function(a,b){var c;return c=$.extend(!0,{},this.get(a.split(".")[0]),this._get_chained_data(a,b,!1)),this.set(a,c,!0)},a.prototype.update_cache=function(a){return this.hub.onConnect().then(function(b){return function(){return a?a:b.hub.getKeys()}}(this)).then(function(a){return function(b){return a.hub.get(b)}}(this)).then(function(b){return function(c){return a?b.hub_cache[a]=c[a]:b.hub_cache=c}}(this))},a.prototype._remove=function(a){var b,c,d;if(a=this._get_parsed_query(a),1===a.array.length)return this.hub.del(a.code);for(d=c=this.get(a.array.shift()),b=0;b<a.array.length-1;)c=c[a.array[b]],b++;return delete c[a.array[b]],this.update(a.first,d)},a.prototype.clear=function(){return this.hub.onConnect().then(function(a){return function(){return a.hub.clear()}}(this))},a.prototype.keys=function(a){var b,c;if(a){c=[];for(b in this.get(a))c.push(b);return c}return this.hub.onConnect().then(function(a){return function(){return a.hub.getKeys()}}(this))},a.prototype.isEmpty=function(a){return!this.get(a)},a.prototype.isSet=function(a){return!!this.get(a)},a}(),d=function(){function a(a){this.EC=a,this.combine=k(this.combine,this),this._emoji_instance=[]}return a.prototype._emoji=function(){return null!=this._emoji_instance?this._emoji_instance:this.checkUpdate()?(this.EC.Data.storage.update("emojidex.seedUpdated",(new Date).toString()),this.seed()):this._emoji_instance=this.EC.Data.storage.get("emojidex.emoji")},a.prototype.checkUpdate=function(){var a,b;return!this.EC.Data.storage.isSet("emojidex.seedUpdated")||(a=new Date,b=new Date(this.EC.Data.storage.get("emojidex.seedUpdated")),a-b>=1728e5)},a.prototype.seed=function(a){return this.EC.Indexes["static"](["utf_emoji","extended_emoji"],null,a)},a.prototype.all=function(){return this._emoji()},a.prototype.search=function(a,b){var c,d;return d=function(){var b,d,e,f;for(e=this._emoji(),f=[],b=0,d=e.length;b<d;b++)c=e[b],c.code.match(a)&&f.push(c);return f}.call(this),"function"==typeof b&&b(d),d},a.prototype.starting=function(a,b){var c,d;return d=function(){var b,d,e,f;for(e=this._emoji(),f=[],b=0,d=e.length;b<d;b++)c=e[b],c.code.match("^"+a)&&f.push(c);return f}.call(this),"function"==typeof b&&b(d),d},a.prototype.ending=function(a,b){var c,d;return d=function(){var b,d,e,f;for(e=this._emoji(),f=[],b=0,d=e.length;b<d;b++)c=e[b],c.code.match(a+"$")&&f.push(c);return f}.call(this),"function"==typeof b&&b(d),d},a.prototype.tags=function(a,b){var c,d,e,f,g,h;for(a=this.EC.Util.breakout(a),g=(null!=b?b.selection:void 0)||this._emoji(),c=[],d=0,e=a.length;d<e;d++)h=a[d],c=c.concat(function(){var a,b,c;for(c=[],a=0,b=g.length;a<b;a++)f=g[a],$.inArray(h,f.tags)>=0&&c.push(f);return c}());return c},a.prototype.categories=function(a,b){var c,d,e,f,g,h;for(a=this.EC.Util.breakout(a),h=(null!=b?b.selection:void 0)||this._emoji(),d=[],e=0,f=a.length;e<f;e++)c=a[e],d=d.concat(function(){var a,b,d;for(d=[],a=0,b=h.length;a<b;a++)g=h[a],g.category===c&&d.push(g);return d}());return d},a.prototype.advanced=function(a){return this.categories(a.categories,{selection:this.tags(a.tags,{selection:this.search(a.term)})})},a.prototype.combine=function(a){return this.EC.Data.emoji(a).then(function(a){return function(b){return a._emoji_instance=b.emoji}}(this))},a.prototype.flush=function(){return this._emoji_instance=[],this.EC.Data.storage._remove("emojidex.emoji")},a}(),e=function(){function a(a){this.EC=a,this.results=[],this.cur_page=1,this.count=0}return a.prototype._indexesAPI=function(a,b,c,d){var e;return e={page:1,limit:this.EC.limit,detailed:this.EC.detailed},null!==this.EC.User.auth_info.token&&$.extend(e,{auth_token:this.EC.User.auth_info.token}),$.extend(e,c),null!=d&&(this.indexed_func=d,this.indexed={query:a,callback:b,param:e}),$.ajax({url:this.EC.api_url+a,dataType:"json",data:e,success:function(a){return function(c){return null!=c.status?(a.results=[],a.cur_page=0,a.count=0,"function"==typeof b?b([]):void 0):(a.results=c.emoji,a.cur_page=c.meta.page,a.count=c.meta.count,a.EC.Emoji.combine(c.emoji).then(function(a){return"function"==typeof b?b(c.emoji):void 0}))}}(this),error:function(a){return function(c){return a.results=[],a.cur_page=0,a.count=0,"function"==typeof b?b([]):void 0}}(this)})},a.prototype.index=function(a,b){return this._indexesAPI("emoji",a,b,this.index)},a.prototype.newest=function(a,b){return this._indexesAPI("newest",a,b,this.newest)},a.prototype.popular=function(a,b){return this._indexesAPI("popular",a,b,this.popular)},a.prototype.user=function(a,b,c){return this._indexesAPI("users/"+a+"/emoji",b,c)},a.prototype["static"]=function(a,b,c){var d,e,f,g,h,i,j;for(h=0,g=[],f=function(b){return function(d){return $.ajax({url:d,dataType:"json",success:function(d){if(g=g.concat(d),++h===a.length)return b.EC.Emoji.combine(g).then(function(a){return"function"==typeof c?c(a):void 0})}})}}(this),i=[],d=0,e=a.length;d<e;d++)j=a[d],b?i.push(f(this.EC.api_url+j+"?locale="+b)):i.push(f(""+(this.EC.api_url+j)));return i},a.prototype.select=function(a,b,c){return this.EC.Search.find(a,b,c)},a.prototype.next=function(){return this.count===this.indexed.param.limit&&this.indexed.param.page++,this.indexed_func(this.indexed.callback,this.indexed.param,this.indexed_func)},a.prototype.prev=function(){return this.indexed.param.page>1&&this.indexed.param.page--,this.indexed_func(this.indexed.callback,this.indexed.param,this.indexed_func)},a}(),f=function(){function a(a){this.EC=a,this.Util=new j,this.results=[],this.cur_page=1,this.count=0}return a.prototype._searchAPI=function(a,b,c,d){var e;return e={page:1,limit:this.EC.limit,detailed:this.EC.detailed},null!==this.EC.User.auth_info.token&&$.extend(e,{auth_token:this.EC.User.auth_info.token}),$.extend(e,c),this.searched_func=d.ajax,this.searched={data:a,callback:b,param:e},this.EC.closed_net?"function"==typeof d.storage?d.storage(a,b):void 0:$.ajax({url:this.EC.api_url+"search/emoji",dataType:"json",data:e,success:function(a){return function(c){return null!=c.status?(a.results=[],a.cur_page=0,a.count=0,"function"==typeof b?b([]):void 0):(a.meta=c.meta,a.results=c.emoji,a.cur_page=c.meta.page,a.count=c.meta.count,a.EC.Emoji.combine(c.emoji).then(function(a){return"function"==typeof b?b(c.emoji):void 0}))}}(this),error:function(a){return function(c){return a.results=[],a.cur_page=0,a.count=0,"function"==typeof b?b([]):void 0}}(this)})},a.prototype.search=function(a,b,c){return c=$.extend({code_cont:this.EC.Util.escape_term(a)},c),this._searchAPI(a,b,c,{ajax:this.search,storage:this.EC.Emoji.search})},a.prototype.starting=function(a,b,c){return c=$.extend({code_sw:this.Util.escape_term(a)},c),this._searchAPI(a,b,c,{ajax:this.starting,storage:this.EC.Emoji.starting})},a.prototype.ending=function(a,b,c){return c=$.extend({code_ew:this.Util.escape_term(a)},c),this._searchAPI(a,b,c,{ajax:this.ending,storage:this.EC.Emoji.ending})},a.prototype.tags=function(a,b,c){return c=$.extend({"tags[]":this.Util.breakout(a)},c),this._searchAPI(a,b,c,{ajax:this.tags,storage:this.EC.Emoji.tags})},a.prototype.advanced=function(a,b,c){var d;return d={code_cont:this.Util.escape_term(a.term),"tags[]":this.Util.breakout(a.tags),"categories[]":this.Util.breakout(a.categories)},$.extend(d,c),this._searchAPI(a,b,d,{ajax:this.advanced,storage:this.EC.Emoji.advanced})},a.prototype.find=function(a,b,c){var d;if(d={detailed:this.EC.detailed},$.extend(d,c),!this.EC.closed_net)return $.ajax({url:this.EC.api_url+("/emoji/"+a),dataType:"json",data:d,success:function(a){return function(c){return a.EC.Emoji.combine([c]).then(function(a){return"function"==typeof b?b(c):void 0})}}(this)})},a.prototype.next=function(){return this.count===this.searched.param.limit&&this.searched.param.page++,this.searched_func(this.searched.data,this.searched.callback,this.searched.param,{ajax:this.searched_func})},a.prototype.prev=function(){return this.searched.param.page>1&&this.searched.param.page--,this.searched_func(this.searched.data,this.searched.callback,this.searched.param,{ajax:this.searched_func})},a}(),g=function(){function a(a){this.EC=a,this.auth_info=this.EC.Data._def_auth_info,this.History=new i(this.EC),this.Favorites=new h(this.EC)}return a.prototype._auto_login=function(){var a;if(!this.closed_net)return this.auth_info=this.EC.Data.auth_info(),null!=(null!=(a=this.auth_info)?a.token:void 0)?this.sync_user_data():this.logout()},a.prototype.login=function(a){switch(a.authtype){case"plain":return this.plain_auth(a.username,a.password,a.callback);case"token":return this.token_auth(a.username,a.auth_token,a.callback);case"basic":return this.basic_auth(a.user,a.password,a.callback);case"google":return this.google_auth(a.callback);default:return this._auto_login()}},a.prototype.logout=function(){return this.EC.Data.auth_info(this.EC.Data._def_auth_info)},a.prototype._authenticateAPI=function(a,b){var c;return c={url:this.EC.api_url+"users/authenticate",dataType:"json",success:function(a){return function(c){return a._set_auth_from_response(c).then(function(){return"function"==typeof b?b(a.auth_info):void 0})}}(this),error:function(a){return function(c){var d;return d=JSON.parse(c.responseText),a.auth_info={status:d.auth_status,token:null,user:""},a.EC.Data.auth_info(a.EC.Data.auth_info).then(function(){return"function"==typeof b?b({auth_info:a.auth_info,error_info:c}):void 0})}}(this)},$.ajax($.extend(c,a))},a.prototype.plain_auth=function(a,b,c){return this._authenticateAPI({data:{username:a,password:b}},c)},a.prototype.token_auth=function(a,b,c){return this._authenticateAPI({data:{username:a,token:b}},c)},a.prototype.basic_auth=function(a,b,c){return this._authenticateAPI({data:{user:a,password:b}},c)},a.prototype.google_auth=function(a){return!1},a.prototype.set_auth=function(a,b,c,d,e,f,g){return null==c&&(c=!1),null==d&&(d=!1),null==e&&(e=null),null==f&&(f=!1),null==g&&(g=null),this.EC.Data.auth_info({status:"verified",user:a,token:b,r18:c,premium:d,premium_exp:e,pro:f,pro_exp:g}).then(function(a){return function(b){return a.auth_info=a.EC.Data.storage.get("emojidex.auth_info"),a.sync_user_data(),b}}(this))},a.prototype._set_auth_from_response=function(a){return this.EC.Data.auth_info({status:a.auth_status,token:a.auth_token,user:a.auth_user,r18:a.r18,premium:a.premium,premium_exp:a.premium_exp,pro:a.pro,pro_exp:a.pro_exp}).then(function(a){return function(b){return a.auth_info=a.EC.Data.storage.get("emojidex.auth_info"),a.sync_user_data(),b}}(this))},a.prototype.sync_user_data=function(){return this.History.token=this.Favorites.token=this.auth_info.token,this.Favorites.sync(),this.History.sync()},a}(),h=function(){function a(a,b){this.EC=a,this.token=b,this._favorites=this.EC.Data.favorites()}return a.prototype._favoritesAPI=function(a){var b;if(null!=this.token)return b={url:this.EC.api_url+"users/favorites",dataType:"json"},$.ajax($.extend(b,a))},a.prototype.get=function(a){var b;return b={data:{auth_token:this.token},success:function(b){return function(c){return b._favorites=c,b.EC.Data.favorites(c),"function"==typeof a?a(b._favorites):void 0}}(this)},this._favoritesAPI(b)},a.prototype.set=function(a){var b;return b={type:"POST",data:{auth_token:this.token,emoji_code:a},success:function(a){return function(b){return a._favorites.push(b),a.EC.Data.favorites(a._favorites)}}(this)},this._favoritesAPI(b)},a.prototype.unset=function(a){var b;return b={type:"DELETE",data:{auth_token:this.token,emoji_code:a},success:function(a){return function(b){return a.sync()}}(this)},this._favoritesAPI(b)},a.prototype.sync=function(){return this.get()},a.prototype.all=function(a){return null!=this._favorites?"function"==typeof a&&a(this._favorites):setTimeout(function(b){return function(){return b.all(a)}}(this),500),this._favorites},a}(),i=function(){function a(a,b){this.EC=a,this.token=b,this._history=this.EC.Data.history()}return a.prototype._historyAPI=function(a){var b;if(null!=this.token)return b={url:this.EC.api_url+"users/history",dataType:"json"},$.ajax($.extend(b,a))},a.prototype.get=function(a){var b;return b={data:{auth_token:this.token},success:function(b){return function(c){return b._history=c,b.EC.Data.history(c),"function"==typeof a?a(b._history):void 0}}(this)},this._historyAPI(b)},a.prototype.set=function(a){var b;return b={type:"POST",data:{auth_token:this.token,emoji_code:a},success:function(a){return function(b){var c,d,e,f,g;for(g=a._history,d=e=0,f=g.length;e<f;d=++e)if(c=g[d],c.emoji_code===b.emoji_code)return a._history[d]=b,a.EC.Data.history(a._history),b}}(this)},this._historyAPI(b)},a.prototype.sync=function(){return this.get()},a.prototype.all=function(a){return null!=this._history?"function"==typeof a&&a(this._history):setTimeout(function(b){return function(){return b.all(a)}}(this),500),this._history},a}(),j=function(){function a(a){this.EC=a}return a.prototype.escape_term=function(a){return a.replace(/\s/g,"_").replace(/(\(|\))/g,"\\$1")},a.prototype.de_escape_term=function(a){return a.replace(/_/g," ")},a.prototype.breakout=function(a){return null!=a?a instanceof Array?a:[a]:[]},a.prototype.simplify=function(a,b){var c,d,e,f;for(null==a&&(a=this.results),null==b&&(b=this.EC.size_code),f=[],c=0,d=a.length;c<d;c++)e=a[c],f.push({code:this.escape_term(e.code),img_url:this.EC.cdn_url+"/"+b+"/"+this.escape_term(e.code)+".png"});return f},a}()}.call(this);
 /*!
  * clipboard.js v1.5.12
  * https://zenorocha.github.io/clipboard.js
@@ -245,71 +245,75 @@
 
   AutoComplete = (function() {
     function AutoComplete(plugin) {
-      var _this = this;
       this.plugin = plugin;
       this.searching_num = 0;
       this.EC = new EmojidexClient({
-        onReady: function(EC) {
-          return _this.setAutoComplete();
-        }
+        onReady: (function(_this) {
+          return function(EC) {
+            return _this.setAutoComplete();
+          };
+        })(this)
       });
     }
 
     AutoComplete.prototype.setAutoComplete = function() {
-      var at_init, getMatchString, getRegexp, onHighlighter, setAtwho, setSearchedEmojiData,
-        _this = this;
-      setAtwho = function(at_options) {
-        var _base;
-        $(_this.plugin.element).atwho(at_options).on('reposition.atwho', function(e) {
-          return $(e.currentTarget).atwho(at_options);
-        }).on('hidden.atwho', function(e) {
-          return $(e.currentTarget).atwho(at_options);
-        });
-        return typeof (_base = _this.plugin.options).onComplete === "function" ? _base.onComplete() : void 0;
-      };
-      setSearchedEmojiData = function(at_obj, match_string) {
-        var num, updateAtwho;
-        updateAtwho = function(searched_data, at_bak) {
-          var at_options;
-          at_options = {
-            data: searched_data,
-            callbacks: {
-              highlighter: onHighlighter,
-              matcher: function(flag, subtext, should_startWithSpace) {
-                var match;
-                return match = getMatchString(subtext, getRegexp(flag, should_startWithSpace));
-              }
-            }
-          };
-          return at_bak.$inputor.atwho('destroy').atwho($.extend({}, at_bak.setting, at_options)).atwho('run');
+      var at_init, getMatchString, getRegexp, onHighlighter, setAtwho, setSearchedEmojiData;
+      setAtwho = (function(_this) {
+        return function(at_options) {
+          var base;
+          $(_this.plugin.element).atwho(at_options).on('reposition.atwho', function(e) {
+            return $(e.currentTarget).atwho(at_options);
+          }).on('hidden.atwho', function(e) {
+            return $(e.currentTarget).atwho(at_options);
+          });
+          return typeof (base = _this.plugin.options).onComplete === "function" ? base.onComplete() : void 0;
         };
-        num = ++_this.searching_num;
-        _this.EC.Search.search(match_string, function(response) {
-          var emoji, searched_data;
-          searched_data = (function() {
-            var _i, _len, _ref, _results;
-            _ref = this.EC.Search.results;
-            _results = [];
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              emoji = _ref[_i];
-              _results.push({
-                code: emoji.code.replace(/\s/g, '_'),
-                img_url: "" + this.EC.cdn_url + this.EC.size_code + "/" + (emoji.code.replace(/\s/g, '_')) + ".png"
-              });
+      })(this);
+      setSearchedEmojiData = (function(_this) {
+        return function(at_obj, match_string) {
+          var num, updateAtwho;
+          updateAtwho = function(searched_data, at_bak) {
+            var at_options;
+            at_options = {
+              data: searched_data,
+              callbacks: {
+                highlighter: onHighlighter,
+                matcher: function(flag, subtext, should_startWithSpace) {
+                  var match;
+                  return match = getMatchString(subtext, getRegexp(flag, should_startWithSpace));
+                }
+              }
+            };
+            return at_bak.$inputor.atwho('destroy').atwho($.extend({}, at_bak.setting, at_options)).atwho('run');
+          };
+          num = ++_this.searching_num;
+          _this.EC.Search.search(match_string, function(response) {
+            var emoji, searched_data;
+            searched_data = (function() {
+              var i, len, ref, results;
+              ref = this.EC.Search.results;
+              results = [];
+              for (i = 0, len = ref.length; i < len; i++) {
+                emoji = ref[i];
+                results.push({
+                  code: emoji.code.replace(/\s/g, '_'),
+                  img_url: "" + this.EC.cdn_url + this.EC.size_code + "/" + (emoji.code.replace(/\s/g, '_')) + ".png"
+                });
+              }
+              return results;
+            }).call(_this);
+            if (_this.searching_num === num) {
+              if (searched_data.length) {
+                updateAtwho(searched_data, at_obj);
+              }
+              return _this.searching_num = 0;
             }
-            return _results;
-          }).call(_this);
-          if (_this.searching_num === num) {
-            if (searched_data.length) {
-              updateAtwho(searched_data, at_obj);
-            }
-            return _this.searching_num = 0;
-          }
-        });
-        return match_string;
-      };
+          });
+          return match_string;
+        };
+      })(this);
       getRegexp = function(flag, should_startWithSpace) {
-        var regexp, _a, _y;
+        var _a, _y, regexp;
         _a = decodeURI("%C3%80");
         _y = decodeURI("%C3%BF");
         return regexp = new RegExp("[：" + flag + "]([^：:;@&#~\!\$\+\?\%\*\f\n\r\\\/]+)$", 'gi');
@@ -367,8 +371,8 @@
       onComplete: void 0
     };
     Plugin = (function() {
-      function Plugin(element, options) {
-        this.element = element;
+      function Plugin(element1, options) {
+        this.element = element1;
         this.options = $.extend({}, defaults, options);
         this._defaults = defaults;
         this._name = pluginName;
@@ -389,20 +393,21 @@
 
   Pallet = (function() {
     function Pallet(plugin) {
-      var _this = this;
       this.plugin = plugin;
       this.active_input_area = null;
       this.EC = new EmojidexClient({
         storageHubPath: 'https://www.emojidex.com/hub?pallet',
-        onReady: function(EC) {
-          var _base;
-          $('input, textarea, [contenteditable="true"]').on('focus keyup mouseup', function(e) {
-            return _this.active_input_area = $(e.currentTarget);
-          });
-          _this.createDialog();
-          _this.setPallet(_this.plugin.element);
-          return typeof (_base = _this.plugin.options).onComplete === "function" ? _base.onComplete() : void 0;
-        }
+        onReady: (function(_this) {
+          return function(EC) {
+            var base;
+            $('input, textarea, [contenteditable="true"]').on('focus keyup mouseup', function(e) {
+              return _this.active_input_area = $(e.currentTarget);
+            });
+            _this.createDialog();
+            _this.setPallet(_this.plugin.element);
+            return typeof (base = _this.plugin.options).onComplete === "function" ? base.onComplete() : void 0;
+          };
+        })(this)
       });
     }
 
@@ -431,45 +436,45 @@
     };
 
     Pallet.prototype.setPallet = function(element) {
-      var _this = this;
-      return $(element).click(function(e) {
-        var tab_content, tab_list;
-        if (_this.emoji_pallet != null) {
-          return _this.openDialog();
-        } else {
-          tab_list = $('<ul class="nav nav-pills"></ul>');
-          tab_content = $('<div class="tab-content"></div>');
-          return _this.EC.Categories.sync(function(categories) {
-            var category, category_tab, search_tab, user_tab, _i, _len;
-            for (_i = 0, _len = categories.length; _i < _len; _i++) {
-              category = categories[_i];
-              category_tab = new CategoryTab(_this, category, tab_list[0].children.length);
-              tab_list.append(category_tab.tab_list);
-              tab_content.append(category_tab.tab_content);
-            }
-            search_tab = new SearchTab(_this);
-            tab_list.append(search_tab.tab_list);
-            tab_content.append(search_tab.tab_content);
-            user_tab = new UserTab(_this);
-            tab_list.append(user_tab.tab_list);
-            tab_content.append(user_tab.tab_content);
-            _this.emoji_pallet = $('<div class="emoji-pallet"></div>');
-            _this.emoji_pallet.append(tab_list.add(tab_content));
-            _this.emoji_pallet.find('ul').after('<hr>');
-            _this.dialog.append(_this.emoji_pallet);
-            _this.openDialog();
-            return $("#tab-" + categories[0].code).click();
-          });
-        }
-      });
+      return $(element).click((function(_this) {
+        return function(e) {
+          var tab_content, tab_list;
+          if (_this.emoji_pallet != null) {
+            return _this.openDialog();
+          } else {
+            tab_list = $('<ul class="nav nav-pills"></ul>');
+            tab_content = $('<div class="tab-content"></div>');
+            return _this.EC.Categories.sync(function(categories) {
+              var category, category_tab, i, len, search_tab, user_tab;
+              for (i = 0, len = categories.length; i < len; i++) {
+                category = categories[i];
+                category_tab = new CategoryTab(_this, category, tab_list[0].children.length);
+                tab_list.append(category_tab.tab_list);
+                tab_content.append(category_tab.tab_content);
+              }
+              search_tab = new SearchTab(_this);
+              tab_list.append(search_tab.tab_list);
+              tab_content.append(search_tab.tab_content);
+              user_tab = new UserTab(_this);
+              tab_list.append(user_tab.tab_list);
+              tab_content.append(user_tab.tab_content);
+              _this.emoji_pallet = $('<div class="emoji-pallet"></div>');
+              _this.emoji_pallet.append(tab_list.add(tab_content));
+              _this.emoji_pallet.find('ul').after('<hr>');
+              _this.dialog.append(_this.emoji_pallet);
+              _this.openDialog();
+              return $("#tab-" + categories[0].code).click();
+            });
+          }
+        };
+      })(this));
     };
 
     Pallet.prototype.setEmojiList = function(kind, result_emoji) {
-      var emoji, emoji_button, emoji_button_image, emoji_list, _i, _len,
-        _this = this;
+      var emoji, emoji_button, emoji_button_image, emoji_list, i, len;
       emoji_list = $("<div class='" + kind + "-emoji-list clearfix'></div>");
-      for (_i = 0, _len = result_emoji.length; _i < _len; _i++) {
-        emoji = result_emoji[_i];
+      for (i = 0, len = result_emoji.length; i < len; i++) {
+        emoji = result_emoji[i];
         emoji_button = $('<button>', {
           "class": 'emoji-btn btn btn-default pull-left'
         });
@@ -478,12 +483,14 @@
           alt: "" + emoji.code,
           title: "" + emoji.code,
           "class": 'img-responsive center-block',
-          src: "" + this.EC.cdn_url + "px32/" + (emoji.code.replace(/\s/g, '_')) + ".png"
+          src: this.EC.cdn_url + "px32/" + (emoji.code.replace(/\s/g, '_')) + ".png"
         });
         emoji_button.append(emoji_button_image);
-        emoji_button.click(function(e) {
-          return _this.insertEmojiAtCaret($(e.currentTarget).prop('emoji_data'));
-        });
+        emoji_button.click((function(_this) {
+          return function(e) {
+            return _this.insertEmojiAtCaret($(e.currentTarget).prop('emoji_data'));
+          };
+        })(this));
         emoji_list.append(emoji_button);
       }
       return emoji_list;
@@ -515,7 +522,7 @@
       if (elem.is('[contenteditable="true"]')) {
         wrapper = $('<img>', {
           "class": 'emojidex-emoji',
-          src: "" + this.EC.cdn_url + "px32/" + (emoji.code.replace(/\s/g, '_')) + ".png",
+          src: this.EC.cdn_url + "px32/" + (emoji.code.replace(/\s/g, '_')) + ".png",
           alt: code
         });
         if (emoji.link !== null && emoji.link !== '') {
@@ -546,16 +553,19 @@
     };
 
     Pallet.prototype.setPagination = function(kind, prev_func, next_func, cur_page, max_page) {
-      var pagination,
-        _this = this;
+      var pagination;
       pagination = $("<div class='" + kind + "-pagination text-center'><ul class='pagination mb-0'></ul></div>");
-      pagination.find('.pagination').append($('<li class="pallet-pager"><span>&laquo;</span></li>').click(function() {
-        return prev_func();
-      }));
+      pagination.find('.pagination').append($('<li class="pallet-pager"><span>&laquo;</span></li>').click((function(_this) {
+        return function() {
+          return prev_func();
+        };
+      })(this)));
       pagination.find('.pagination').append($("<li class='disabled'><span>" + cur_page + " / " + max_page + "</span></li>"));
-      pagination.find('.pagination').append($('<li class="pallet-pager"><span>&raquo;</span></li>').click(function() {
-        return next_func();
-      }));
+      pagination.find('.pagination').append($('<li class="pallet-pager"><span>&raquo;</span></li>').click((function(_this) {
+        return function() {
+          return next_func();
+        };
+      })(this)));
       return pagination;
     };
 
@@ -569,12 +579,13 @@
 
   CategoryTab = (function() {
     function CategoryTab(pallet, category, length) {
-      var _this = this;
       this.pallet = pallet;
       this.tab_list = $("<li id='tab-" + category.code + "' data-code='" + category.code + "' class='" + (length === 0 ? " active" : "") + "'><a href='#tab-content-" + category.code + "' data-toggle='pill'>" + category.name + "</a></li>");
-      this.tab_list.click(function(e) {
-        return _this.setCategory($(e.currentTarget).data('code'));
-      });
+      this.tab_list.click((function(_this) {
+        return function(e) {
+          return _this.setCategory($(e.currentTarget).data('code'));
+        };
+      })(this));
       this.tab_content = $("<div class='tab-pane " + (length === 0 ? " active" : "") + "' id='tab-content-" + category.code + "'></div>");
     }
 
@@ -587,26 +598,27 @@
     };
 
     CategoryTab.prototype.setCategoryTabContent = function(category_name) {
-      var _this = this;
-      return this.pallet.EC.Categories.getEmoji(category_name, function(result_emoji, called_data) {
-        var cur_page, max_page, next_func, prev_func;
-        _this.tab_data = called_data;
-        _this.tab_content.find('.category-emoji-list').remove();
-        _this.tab_content.find('.category-pagination').remove();
-        _this.tab_content.append(_this.pallet.setEmojiList('category', result_emoji));
-        cur_page = _this.pallet.EC.Categories.meta.total_count === 0 ? 0 : _this.pallet.EC.Categories.cur_page;
-        max_page = Math.floor(_this.pallet.EC.Categories.meta.total_count / _this.pallet.EC.options.limit);
-        if (_this.pallet.EC.Categories.meta.total_count % _this.pallet.EC.options.limit > 0) {
-          max_page++;
-        }
-        prev_func = function() {
-          return _this.pallet.EC.Categories.prev();
+      return this.pallet.EC.Categories.getEmoji(category_name, (function(_this) {
+        return function(result_emoji, called_data) {
+          var cur_page, max_page, next_func, prev_func;
+          _this.tab_data = called_data;
+          _this.tab_content.find('.category-emoji-list').remove();
+          _this.tab_content.find('.category-pagination').remove();
+          _this.tab_content.append(_this.pallet.setEmojiList('category', result_emoji));
+          cur_page = _this.pallet.EC.Categories.meta.total_count === 0 ? 0 : _this.pallet.EC.Categories.cur_page;
+          max_page = Math.floor(_this.pallet.EC.Categories.meta.total_count / _this.pallet.EC.options.limit);
+          if (_this.pallet.EC.Categories.meta.total_count % _this.pallet.EC.options.limit > 0) {
+            max_page++;
+          }
+          prev_func = function() {
+            return _this.pallet.EC.Categories.prev();
+          };
+          next_func = function() {
+            return _this.pallet.EC.Categories.next();
+          };
+          return _this.tab_content.append(_this.pallet.setPagination('category', prev_func, next_func, cur_page, max_page));
         };
-        next_func = function() {
-          return _this.pallet.EC.Categories.next();
-        };
-        return _this.tab_content.append(_this.pallet.setPagination('category', prev_func, next_func, cur_page, max_page));
-      });
+      })(this));
     };
 
     return CategoryTab;
@@ -621,18 +633,21 @@
     }
 
     SearchTab.prototype.getTabContent = function() {
-      var search_btn, tab_content,
-        _this = this;
+      var search_btn, tab_content;
       tab_content = $('<div class="tab-pane" id="tab-content-search"><div class="input-group"><input type="text" name="search" id="pallet-emoji-search-input" class="form-control" placeholder="Search emoji"><span class="input-group-btn"></span></div></div>');
-      tab_content.find('#pallet-emoji-search-input').keypress(function(e) {
-        if (e.keyCode === 13) {
-          return _this.searchEmojiInput();
-        }
-      });
+      tab_content.find('#pallet-emoji-search-input').keypress((function(_this) {
+        return function(e) {
+          if (e.keyCode === 13) {
+            return _this.searchEmojiInput();
+          }
+        };
+      })(this));
       search_btn = $('<div class="btn btn-primary" id="pallet-emoji-search-submit"><span class="glyphicon glyphicon-search"></span></div>');
-      search_btn.click(function() {
-        return _this.searchEmojiInput();
-      });
+      search_btn.click((function(_this) {
+        return function() {
+          return _this.searchEmojiInput();
+        };
+      })(this));
       tab_content.find('.input-group-btn').append(search_btn);
       return tab_content;
     };
@@ -646,25 +661,26 @@
     };
 
     SearchTab.prototype.search = function(search_word) {
-      var _this = this;
-      return this.pallet.EC.Search.search(search_word, function(result_emoji) {
-        var cur_page, max_page, next_func, prev_func;
-        $('.search-emoji-list').remove();
-        $('.search-pagination').remove();
-        _this.tab_content.append(_this.pallet.setEmojiList('search', result_emoji));
-        cur_page = _this.pallet.EC.Search.meta.total_count === 0 ? 0 : _this.pallet.EC.Search.cur_page;
-        max_page = Math.floor(_this.pallet.EC.Search.meta.total_count / _this.pallet.EC.options.limit);
-        if (_this.pallet.EC.Search.meta.total_count % _this.pallet.EC.options.limit > 0) {
-          max_page++;
-        }
-        prev_func = function() {
-          return _this.pallet.EC.Search.prev();
+      return this.pallet.EC.Search.search(search_word, (function(_this) {
+        return function(result_emoji) {
+          var cur_page, max_page, next_func, prev_func;
+          $('.search-emoji-list').remove();
+          $('.search-pagination').remove();
+          _this.tab_content.append(_this.pallet.setEmojiList('search', result_emoji));
+          cur_page = _this.pallet.EC.Search.meta.total_count === 0 ? 0 : _this.pallet.EC.Search.cur_page;
+          max_page = Math.floor(_this.pallet.EC.Search.meta.total_count / _this.pallet.EC.options.limit);
+          if (_this.pallet.EC.Search.meta.total_count % _this.pallet.EC.options.limit > 0) {
+            max_page++;
+          }
+          prev_func = function() {
+            return _this.pallet.EC.Search.prev();
+          };
+          next_func = function() {
+            return _this.pallet.EC.Search.next();
+          };
+          return _this.tab_content.append(_this.pallet.setPagination('search', prev_func, next_func, cur_page, max_page));
         };
-        next_func = function() {
-          return _this.pallet.EC.Search.next();
-        };
-        return _this.tab_content.append(_this.pallet.setPagination('search', prev_func, next_func, cur_page, max_page));
-      });
+      })(this));
     };
 
     return SearchTab;
@@ -679,20 +695,23 @@
     }
 
     UserTab.prototype.getTabContent = function() {
-      var auth_info, login_btn, tab_content, _ref, _ref1, _ref2,
-        _this = this;
+      var auth_info, login_btn, ref, ref1, ref2, tab_content;
       tab_content = $('<div class="tab-pane" id="tab-content-user"><input type="text" class="form-control" id="pallet-emoji-username-input" placeholder="Username"><input type="password" class="form-control mt-m" id="pallet-emoji-password-input" placeholder="Password"></div>');
-      tab_content.find('#pallet-emoji-password-input').keypress(function(e) {
-        if (e.keyCode === 13) {
-          return _this.checkInput();
-        }
-      });
+      tab_content.find('#pallet-emoji-password-input').keypress((function(_this) {
+        return function(e) {
+          if (e.keyCode === 13) {
+            return _this.checkInput();
+          }
+        };
+      })(this));
       login_btn = $('<div class="btn btn-primary btn-block mt-m" id="pallet-emoji-login-submit">Login</div>');
-      login_btn.click(function() {
-        return _this.checkInput();
-      });
+      login_btn.click((function(_this) {
+        return function() {
+          return _this.checkInput();
+        };
+      })(this));
       tab_content.append(login_btn);
-      if (((_ref = this.pallet.EC.Data.storage.hub_cache) != null ? (_ref1 = _ref.emojidex) != null ? (_ref2 = _ref1.auth_info) != null ? _ref2.status : void 0 : void 0 : void 0) === 'verified') {
+      if (((ref = this.pallet.EC.Data.storage.hub_cache) != null ? (ref1 = ref.emojidex) != null ? (ref2 = ref1.auth_info) != null ? ref2.status : void 0 : void 0 : void 0) === 'verified') {
         auth_info = this.pallet.EC.Data.storage.hub_cache.emojidex.auth_info;
         this.login(auth_info.user, auth_info.token, 'token');
       }
@@ -710,20 +729,21 @@
     };
 
     UserTab.prototype.login = function(username, password, type) {
-      var callback,
-        _this = this;
-      callback = function(auth_info) {
-        if (auth_info.status === 'verified') {
-          _this.hideLoginForm();
-          _this.setUserTab();
-          _this.setHistory(auth_info);
-          _this.setFavorite(auth_info);
-          _this.setNewest(auth_info);
-          return _this.setPopular(auth_info);
-        } else {
-          return _this.showError(auth_info);
-        }
-      };
+      var callback;
+      callback = (function(_this) {
+        return function(auth_info) {
+          if (auth_info.status === 'verified') {
+            _this.hideLoginForm();
+            _this.setUserTab();
+            _this.setHistory(auth_info);
+            _this.setFavorite(auth_info);
+            _this.setNewest(auth_info);
+            return _this.setPopular(auth_info);
+          } else {
+            return _this.showError(auth_info);
+          }
+        };
+      })(this);
       if (type === 'plain') {
         return this.pallet.EC.User.plain_auth(username, password, function(auth_info) {
           return callback(auth_info);
@@ -754,20 +774,21 @@
     };
 
     UserTab.prototype.setUserTab = function() {
-      var logout_btn, user_tab_list,
-        _this = this;
+      var logout_btn, user_tab_list;
       user_tab_list = $('<ul class="nav nav-tabs mb-m mt-m" id="user_tab_list"></ul>');
       user_tab_list.append($('<li id="tab-user-history" class="active"><a href="#tab-content-user-history" data-toggle="tab">History</a></li>'));
       user_tab_list.append($('<li id="tab-user-favorite"><a href="#tab-content-user-favorite" data-toggle="tab">Favorite</a></li>'));
       user_tab_list.append($('<li id="tab-user-newest"><a href="#tab-content-user-newest" data-toggle="tab">Newest</a></li>'));
       user_tab_list.append($('<li id="tab-user-popular"><a href="#tab-content-user-popular" data-toggle="tab">Popular</a></li>'));
       logout_btn = $('<button class="btn btn-default btm-sm pull-right" id="pallet-emoji-logout">LogOut</button>');
-      logout_btn.click(function() {
-        _this.pallet.EC.User.logout();
-        $('#user_tab_list').remove();
-        $('#user_tab_content').remove();
-        return _this.showLoginForm();
-      });
+      logout_btn.click((function(_this) {
+        return function() {
+          _this.pallet.EC.User.logout();
+          $('#user_tab_list').remove();
+          $('#user_tab_content').remove();
+          return _this.showLoginForm();
+        };
+      })(this));
       user_tab_list.append(logout_btn);
       this.user_tab_content = $('<div class="tab-content" id="user_tab_content"></div>');
       this.tab_content.append(user_tab_list);
@@ -775,17 +796,19 @@
     };
 
     UserTab.prototype.setHistory = function(auth_info) {
-      var _this = this;
-      return this.pallet.EC.User.History.get(function(response) {
-        return _this.setData(response.history, response.meta, 'history');
-      });
+      return this.pallet.EC.User.History.get((function(_this) {
+        return function(response) {
+          return _this.setData(response.history, response.meta, 'history');
+        };
+      })(this));
     };
 
     UserTab.prototype.setFavorite = function(auth_info) {
-      var _this = this;
-      return this.pallet.EC.User.Favorites.get(function(response) {
-        return _this.setData(response.emoji, response.meta, 'favorite');
-      });
+      return this.pallet.EC.User.Favorites.get((function(_this) {
+        return function(response) {
+          return _this.setData(response.emoji, response.meta, 'favorite');
+        };
+      })(this));
     };
 
     UserTab.prototype.setData = function(data, meta, kind) {
@@ -796,17 +819,19 @@
     };
 
     UserTab.prototype.setNewest = function(auth_info) {
-      var _this = this;
-      return this.pallet.EC.User.Newest.get(function(response) {
-        return _this.setPremiumData(response, 'newest');
-      });
+      return this.pallet.EC.User.Newest.get((function(_this) {
+        return function(response) {
+          return _this.setPremiumData(response, 'newest');
+        };
+      })(this));
     };
 
     UserTab.prototype.setPopular = function(auth_info) {
-      var _this = this;
-      return this.pallet.EC.User.Popular.get(function(response) {
-        return _this.setPremiumData(response, 'popular');
-      });
+      return this.pallet.EC.User.Popular.get((function(_this) {
+        return function(response) {
+          return _this.setPremiumData(response, 'popular');
+        };
+      })(this));
     };
 
     UserTab.prototype.setPremiumData = function(response, kind) {
@@ -821,19 +846,22 @@
     };
 
     UserTab.prototype.setPagination = function(meta, pane, kind) {
-      var cur_page, max_page, next_func, prev_func,
-        _this = this;
+      var cur_page, max_page, next_func, prev_func;
       cur_page = meta.total_count === 0 ? 0 : meta.page;
       max_page = Math.floor(meta.total_count / 50);
       if (meta.total_count % 50 > 0) {
         max_page++;
       }
-      prev_func = function() {
-        return console.log('prev');
-      };
-      next_func = function() {
-        return console.log('next');
-      };
+      prev_func = (function(_this) {
+        return function() {
+          return console.log('prev');
+        };
+      })(this);
+      next_func = (function(_this) {
+        return function() {
+          return console.log('next');
+        };
+      })(this);
       return this.user_tab_content.append(pane.append(this.pallet.setPagination(kind, prev_func, next_func, cur_page, max_page)));
     };
 
@@ -845,8 +873,8 @@
 
 (function() {
   var CountChecker, Observer, Replacer, ReplacerSearch,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
 
   (function($, window, document) {
     var Plugin, defaults, pluginName;
@@ -858,9 +886,8 @@
       ignore: 'script, noscript, canvas, img, style, iframe, input, textarea, pre, code'
     };
     Plugin = (function() {
-      function Plugin(element, options) {
-        var _this = this;
-        this.element = element;
+      function Plugin(element1, options) {
+        this.element = element1;
         if (!window.emojidexReplacerOnce) {
           window.emojidexReplacerOnce = true;
           this.element = $(this.element);
@@ -868,34 +895,36 @@
           this._defaults = defaults;
           this._name = pluginName;
           this.EC = new EmojidexClient({
-            onReady: function(EC) {
-              if (_this.checkUpdate()) {
-                return $.ajax({
-                  url: _this.EC.api_url + 'moji_codes',
-                  dataType: 'json',
-                  success: function(response) {
-                    var regexp;
-                    regexp = response.moji_array.join('|');
-                    regexp = regexp.replace(/\*|\$|\+|\?/g, function(matched_string) {
-                      return '\\' + matched_string;
-                    });
-                    _this.options.regexpUtf = RegExp(regexp, 'g');
-                    _this.options.utfEmojiData = response.moji_index;
-                    return _this.EC.Data.storage.update('emojidex.utfInfoUpdated', new Date().toString()).then(function() {
-                      return _this.EC.Data.storage.update('emojidex.regexpUtf', regexp);
-                    }).then(function() {
-                      return _this.EC.Data.storage.update('emojidex.utfEmojiData', response.moji_index);
-                    }).then(function() {
-                      return _this.replace();
-                    });
-                  }
-                });
-              } else {
-                _this.options.regexpUtf = RegExp(_this.EC.Data.storage.get('emojidex.regexpUtf'), 'g');
-                _this.options.utfEmojiData = _this.EC.Data.storage.get('emojidex.utfEmojiData');
-                return _this.replace();
-              }
-            }
+            onReady: (function(_this) {
+              return function(EC) {
+                if (_this.checkUpdate()) {
+                  return $.ajax({
+                    url: _this.EC.api_url + 'moji_codes',
+                    dataType: 'json',
+                    success: function(response) {
+                      var regexp;
+                      regexp = response.moji_array.join('|');
+                      regexp = regexp.replace(/\*|\$|\+|\?/g, function(matched_string) {
+                        return '\\' + matched_string;
+                      });
+                      _this.options.regexpUtf = RegExp(regexp, 'g');
+                      _this.options.utfEmojiData = response.moji_index;
+                      return _this.EC.Data.storage.update('emojidex.utfInfoUpdated', new Date().toString()).then(function() {
+                        return _this.EC.Data.storage.update('emojidex.regexpUtf', regexp);
+                      }).then(function() {
+                        return _this.EC.Data.storage.update('emojidex.utfEmojiData', response.moji_index);
+                      }).then(function() {
+                        return _this.replace();
+                      });
+                    }
+                  });
+                } else {
+                  _this.options.regexpUtf = RegExp(_this.EC.Data.storage.get('emojidex.regexpUtf'), 'g');
+                  _this.options.utfEmojiData = _this.EC.Data.storage.get('emojidex.utfEmojiData');
+                  return _this.replace();
+                }
+              };
+            })(this)
           });
         }
       }
@@ -916,16 +945,17 @@
       };
 
       Plugin.prototype.replace = function() {
-        var _this = this;
         if (this.options.autoUpdate) {
           this.observer = new Observer(this);
           return this.observer.reloadEmoji();
         } else {
           this.replacer = new ReplacerSearch(this);
-          return this.replacer.loadEmoji().then(function() {
-            var _base;
-            return typeof (_base = _this.options).onComplete === "function" ? _base.onComplete(_this.element) : void 0;
-          });
+          return this.replacer.loadEmoji().then((function(_this) {
+            return function() {
+              var base;
+              return typeof (base = _this.options).onComplete === "function" ? base.onComplete(_this.element) : void 0;
+            };
+          })(this));
         }
       };
 
@@ -968,34 +998,35 @@
     }
 
     Observer.prototype.doQueue = function() {
-      var _this = this;
-      return new Promise(function(resolve, reject) {
-        var body, checkComplete, queue_limit, timeout;
-        timeout = setTimeout(function() {
-          return reject(new Error('emojidex: doQueue - Timeout'));
-        }, _this.replacer.promiseWaitTime);
-        body = $('body')[0];
-        if (_this.queues.indexOf(body) !== -1) {
-          _this.queues = [];
-          return _this.replacer.loadEmoji($(body)).then(function() {
-            return resolve();
-          });
-        } else {
-          queue_limit = 100;
-          checkComplete = function() {
-            var queue;
-            if (_this.queues.length > 0 && queue_limit-- > 0) {
-              queue = _this.queues.pop();
-              return _this.replacer.loadEmoji($(queue)).then(function() {
-                return checkComplete();
-              });
-            } else {
+      return new Promise((function(_this) {
+        return function(resolve, reject) {
+          var body, checkComplete, queue_limit, timeout;
+          timeout = setTimeout(function() {
+            return reject(new Error('emojidex: doQueue - Timeout'));
+          }, _this.replacer.promiseWaitTime);
+          body = $('body')[0];
+          if (_this.queues.indexOf(body) !== -1) {
+            _this.queues = [];
+            return _this.replacer.loadEmoji($(body)).then(function() {
               return resolve();
-            }
-          };
-          return checkComplete();
-        }
-      });
+            });
+          } else {
+            queue_limit = 100;
+            checkComplete = function() {
+              var queue;
+              if (_this.queues.length > 0 && queue_limit-- > 0) {
+                queue = _this.queues.pop();
+                return _this.replacer.loadEmoji($(queue)).then(function() {
+                  return checkComplete();
+                });
+              } else {
+                return resolve();
+              }
+            };
+            return checkComplete();
+          }
+        };
+      })(this));
     };
 
     Observer.prototype.domObserve = function() {
@@ -1013,44 +1044,212 @@
     };
 
     Observer.prototype.reloadEmoji = function() {
-      var _this = this;
-      return this.replacer.loadEmoji().then(function() {
-        var _base;
-        if (typeof (_base = _this.plugin.options).onComplete === "function") {
-          _base.onComplete(_this.plugin.element);
-        }
-        _this.dom_observer = new MutationObserver(function(mutations) {
-          var addedNode, mutation, _i, _j, _len, _len1, _ref;
-          if (_this.flagReEntry) {
-            _this.disconnect();
-            _this.flagReEntry = false;
-            for (_i = 0, _len = mutations.length; _i < _len; _i++) {
-              mutation = mutations[_i];
-              if (mutation.type === 'childList') {
-                if (mutation.addedNodes) {
-                  _ref = mutation.addedNodes;
-                  for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
-                    addedNode = _ref[_j];
-                    if (_this.queues.indexOf(addedNode) === -1) {
-                      _this.queues.push(addedNode);
+      return this.replacer.loadEmoji().then((function(_this) {
+        return function() {
+          var base;
+          if (typeof (base = _this.plugin.options).onComplete === "function") {
+            base.onComplete(_this.plugin.element);
+          }
+          _this.dom_observer = new MutationObserver(function(mutations) {
+            var addedNode, i, j, len, len1, mutation, ref;
+            if (_this.flagReEntry) {
+              _this.disconnect();
+              _this.flagReEntry = false;
+              for (i = 0, len = mutations.length; i < len; i++) {
+                mutation = mutations[i];
+                if (mutation.type === 'childList') {
+                  if (mutation.addedNodes) {
+                    ref = mutation.addedNodes;
+                    for (j = 0, len1 = ref.length; j < len1; j++) {
+                      addedNode = ref[j];
+                      if (_this.queues.indexOf(addedNode) === -1) {
+                        _this.queues.push(addedNode);
+                      }
                     }
                   }
                 }
               }
+              _this.doQueue().then(function() {
+                return _this.domObserve();
+              });
+              return _this.flagReEntry = true;
             }
-            _this.doQueue().then(function() {
-              return _this.domObserve();
-            });
-            return _this.flagReEntry = true;
-          }
-        });
-        return _this.domObserve();
-      });
+          });
+          return _this.domObserve();
+        };
+      })(this));
     };
 
     return Observer;
 
   })();
+
+  ReplacerSearch = (function(superClass) {
+    extend(ReplacerSearch, superClass);
+
+    function ReplacerSearch(plugin) {
+      this.plugin = plugin;
+      ReplacerSearch.__super__.constructor.apply(this, arguments);
+    }
+
+    ReplacerSearch.prototype.loadEmoji = function(target_element) {
+      var element, searchEmoji_setEmojiTag, setEomojiTag;
+      searchEmoji_setEmojiTag = (function(_this) {
+        return function(element) {
+          var replaceToEmojiIconOrRollback;
+          replaceToEmojiIconOrRollback = function(loading_element) {
+            return new Promise(function(resolve, reject) {
+              var emoji_code, emoji_image, timeout;
+              timeout = setTimeout(function() {
+                return reject(new Error('emojidex: replaceToEmojiIconOrRollback - Timeout'));
+              }, _this.promiseWaitTime);
+              emoji_code = _this.replaceSpaceToUnder(loading_element.dataset.emoji);
+              emoji_image = $("<img src='" + _this.plugin.EC.cdn_url + "px8/" + emoji_code + ".png'></img>");
+              emoji_image.load(function(e) {
+                return _this.fadeOutLoadingTag_fadeInEmojiTag($(loading_element), emoji_code).then(function() {
+                  return resolve();
+                });
+              });
+              return emoji_image.error(function(e) {
+                return _this.fadeOutLoadingTag_fadeInEmojiTag($(loading_element), emoji_code, false).then(function() {
+                  return resolve();
+                });
+              });
+            });
+          };
+          return new Promise(function(resolve, reject) {
+            var checker, emoji, i, len, loading_element, loading_elements, results, timeout;
+            timeout = setTimeout(function() {
+              return reject(new Error('emojidex: searchEmoji_setEmojiTag - Timeout'));
+            }, _this.promiseWaitTime);
+            loading_elements = $('.emojidex-loading-icon');
+            if (loading_elements.length) {
+              checker = new CountChecker(loading_elements.length, function() {
+                return resolve();
+              });
+              results = [];
+              for (i = 0, len = loading_elements.length; i < len; i++) {
+                loading_element = loading_elements[i];
+                switch (loading_element.dataset.type) {
+                  case 'code':
+                    replaceToEmojiIconOrRollback(loading_element).then(function() {
+                      return checker.check();
+                    });
+                    break;
+                  case 'utf':
+                    results.push((function() {
+                      var results1;
+                      results1 = [];
+                      for (emoji in this.plugin.options.utfEmojiData) {
+                        if (emoji === loading_element.dataset.emoji) {
+                          this.fadeOutLoadingTag_fadeInEmojiTag($(loading_element), this.plugin.options.utfEmojiData[emoji]).then(function() {
+                            return checker.check();
+                          });
+                          break;
+                        } else {
+                          results1.push(void 0);
+                        }
+                      }
+                      return results1;
+                    }).call(_this));
+                    break;
+                  default:
+                    results.push(void 0);
+                }
+              }
+              return results;
+            } else {
+              return resolve();
+            }
+          });
+        };
+      })(this);
+      setEomojiTag = (function(_this) {
+        return function(element) {
+          var matched_codes, replaced_promise, replaced_text;
+          replaced_text = element.textContent.replace(_this.plugin.options.regexpUtf, function(matched_string) {
+            var emoji, emoji_tag;
+            for (emoji in _this.plugin.options.utfEmojiData) {
+              if (emoji === matched_string) {
+                _this.emoji_tags++;
+                emoji_tag = _this.getEmojiTag(_this.plugin.options.utfEmojiData[emoji]);
+                return emoji_tag;
+              }
+            }
+          });
+          matched_codes = replaced_text.match(_this.regexpCode);
+          replaced_promise = new Promise(function(resolve, reject) {
+            var checker, code, code_only, emoji_image, i, len, results, timeout;
+            if (matched_codes != null ? matched_codes.length : void 0) {
+              timeout = setTimeout(function() {
+                return reject(new Error('emojidex: setEomojiTag - Timeout'));
+              }, _this.promiseWaitTime);
+              checker = new CountChecker(matched_codes.length, function() {
+                return resolve();
+              });
+              results = [];
+              for (i = 0, len = matched_codes.length; i < len; i++) {
+                code = matched_codes[i];
+                code_only = code.replace(/\:/g, '');
+                emoji_image = $("<img src='" + _this.plugin.EC.cdn_url + "px8/" + (_this.replaceSpaceToUnder(code_only)) + ".png' data-code='" + code_only + "'></img>");
+                emoji_image.load(function(e) {
+                  replaced_text = replaced_text.replace(":" + e.currentTarget.dataset.code + ":", _this.getEmojiTag(_this.replaceSpaceToUnder(e.currentTarget.dataset.code)));
+                  return checker.check();
+                });
+                results.push(emoji_image.error(function(e) {
+                  return checker.check();
+                }));
+              }
+              return results;
+            } else {
+              return resolve();
+            }
+          });
+          return replaced_promise.then(function() {
+            return $(element).replaceWith(replaced_text);
+          });
+        };
+      })(this);
+      element = target_element || this.plugin.element;
+      if (this.plugin.options.useLoadingImg) {
+        return this.setLoadingTag(element).then((function(_this) {
+          return function() {
+            return searchEmoji_setEmojiTag(element);
+          };
+        })(this));
+      } else {
+        return new Promise((function(_this) {
+          return function(resolve, reject) {
+            var checker, i, len, ref, results, target, timeout;
+            timeout = setTimeout(function() {
+              return reject(new Error('emojidex: loadEmoji useLoadingImg: false - Timeout'));
+            }, _this.promiseWaitTime);
+            _this.targets = [];
+            _this.setTargets(element[0]);
+            if (_this.targets.length) {
+              checker = new CountChecker(_this.targets.length, function() {
+                return resolve();
+              });
+              ref = _this.targets;
+              results = [];
+              for (i = 0, len = ref.length; i < len; i++) {
+                target = ref[i];
+                results.push(setEomojiTag(target).then(function(e) {
+                  return checker.check();
+                }));
+              }
+              return results;
+            } else {
+              return resolve();
+            }
+          };
+        })(this));
+      }
+    };
+
+    return ReplacerSearch;
+
+  })(Replacer);
 
   Replacer = (function() {
     function Replacer() {
@@ -1063,10 +1262,10 @@
     }
 
     Replacer.prototype.setTargets = function(node) {
-      var child, _results;
+      var child, results;
       if (!(node.parentNode && node.parentNode.isContentEditable)) {
         child = node.firstChild;
-        _results = [];
+        results = [];
         while (child) {
           switch (child.nodeType) {
             case Node.ELEMENT_NODE:
@@ -1086,9 +1285,9 @@
               }
               break;
           }
-          _results.push(child = child.nextSibling);
+          results.push(child = child.nextSibling);
         }
-        return _results;
+        return results;
       }
     };
 
@@ -1105,48 +1304,51 @@
     };
 
     Replacer.prototype.setLoadingTag = function(element) {
-      var _this = this;
-      return new Promise(function(resolve, reject) {
-        var checker, target, timeout, _i, _len, _ref, _results;
-        timeout = setTimeout(function() {
-          return reject(new Error('emojidex: setLoadingTag - Timeout'));
-        }, _this.promiseWaitTime);
-        _this.targets = [];
-        _this.setTargets(element[0]);
-        if (_this.targets.length) {
-          checker = new CountChecker(_this.targets.length, function() {
+      return new Promise((function(_this) {
+        return function(resolve, reject) {
+          var checker, i, len, ref, results, target, timeout;
+          timeout = setTimeout(function() {
+            return reject(new Error('emojidex: setLoadingTag - Timeout'));
+          }, _this.promiseWaitTime);
+          _this.targets = [];
+          _this.setTargets(element[0]);
+          if (_this.targets.length) {
+            checker = new CountChecker(_this.targets.length, function() {
+              return resolve();
+            });
+            ref = _this.targets;
+            results = [];
+            for (i = 0, len = ref.length; i < len; i++) {
+              target = ref[i];
+              $(target).replaceWith(_this.getAddedLoadingTagText(target));
+              results.push(checker.check());
+            }
+            return results;
+          } else {
             return resolve();
-          });
-          _ref = _this.targets;
-          _results = [];
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            target = _ref[_i];
-            $(target).replaceWith(_this.getAddedLoadingTagText(target));
-            _results.push(checker.check());
           }
-          return _results;
-        } else {
-          return resolve();
-        }
-      });
+        };
+      })(this));
     };
 
     Replacer.prototype.getAddedLoadingTagText = function(target_element) {
-      var replaced_text,
-        _this = this;
+      var replaced_text;
       replaced_text = target_element.data;
-      replaced_text = replaced_text.replace(this.plugin.options.regexpUtf, function(matched_string) {
-        return _this.getLoadingTag(matched_string, 'utf');
-      });
-      replaced_text = replaced_text.replace(this.regexpCode, function(matched_string) {
-        return _this.getLoadingTag(matched_string.replace(/:/g, ''), 'code');
-      });
+      replaced_text = replaced_text.replace(this.plugin.options.regexpUtf, (function(_this) {
+        return function(matched_string) {
+          return _this.getLoadingTag(matched_string, 'utf');
+        };
+      })(this));
+      replaced_text = replaced_text.replace(this.regexpCode, (function(_this) {
+        return function(matched_string) {
+          return _this.getLoadingTag(matched_string.replace(/:/g, ''), 'code');
+        };
+      })(this));
       return replaced_text;
     };
 
     Replacer.prototype.fadeOutLoadingTag_fadeInEmojiTag = function(element, emoji_code, match) {
-      var emoji_tag,
-        _this = this;
+      var emoji_tag;
       if (match == null) {
         match = true;
       }
@@ -1156,29 +1358,31 @@
       } else {
         emoji_tag = ":" + emoji_code + ":";
       }
-      return new Promise(function(resolve, reject) {
-        var timeout;
-        timeout = setTimeout(function() {
-          return reject(new Error('emojidex: fadeOutLoadingTag_fadeInEmojiTag - Timeout'));
-        }, _this.promiseWaitTime);
-        return element.fadeOut({
-          duration: 'normal',
-          done: function() {
-            element.after(emoji_tag);
-            element.remove();
-            if (match) {
-              return emoji_tag.fadeIn({
-                duration: "fast",
-                done: function() {
-                  return resolve();
-                }
-              });
-            } else {
-              return resolve();
+      return new Promise((function(_this) {
+        return function(resolve, reject) {
+          var timeout;
+          timeout = setTimeout(function() {
+            return reject(new Error('emojidex: fadeOutLoadingTag_fadeInEmojiTag - Timeout'));
+          }, _this.promiseWaitTime);
+          return element.fadeOut({
+            duration: 'normal',
+            done: function() {
+              element.after(emoji_tag);
+              element.remove();
+              if (match) {
+                return emoji_tag.fadeIn({
+                  duration: "fast",
+                  done: function() {
+                    return resolve();
+                  }
+                });
+              } else {
+                return resolve();
+              }
             }
-          }
-        });
-      });
+          });
+        };
+      })(this));
     };
 
     Replacer.prototype.replaceSpaceToUnder = function(string) {
@@ -1192,166 +1396,6 @@
     return Replacer;
 
   })();
-
-  ReplacerSearch = (function(_super) {
-    __extends(ReplacerSearch, _super);
-
-    function ReplacerSearch(plugin) {
-      this.plugin = plugin;
-      ReplacerSearch.__super__.constructor.apply(this, arguments);
-    }
-
-    ReplacerSearch.prototype.loadEmoji = function(target_element) {
-      var element, searchEmoji_setEmojiTag, setEomojiTag,
-        _this = this;
-      searchEmoji_setEmojiTag = function(element) {
-        var replaceToEmojiIconOrRollback;
-        replaceToEmojiIconOrRollback = function(loading_element) {
-          return new Promise(function(resolve, reject) {
-            var emoji_code, emoji_image, timeout;
-            timeout = setTimeout(function() {
-              return reject(new Error('emojidex: replaceToEmojiIconOrRollback - Timeout'));
-            }, _this.promiseWaitTime);
-            emoji_code = _this.replaceSpaceToUnder(loading_element.dataset.emoji);
-            emoji_image = $("<img src='" + _this.plugin.EC.cdn_url + "px8/" + emoji_code + ".png'></img>");
-            emoji_image.load(function(e) {
-              return _this.fadeOutLoadingTag_fadeInEmojiTag($(loading_element), emoji_code).then(function() {
-                return resolve();
-              });
-            });
-            return emoji_image.error(function(e) {
-              return _this.fadeOutLoadingTag_fadeInEmojiTag($(loading_element), emoji_code, false).then(function() {
-                return resolve();
-              });
-            });
-          });
-        };
-        return new Promise(function(resolve, reject) {
-          var checker, emoji, loading_element, loading_elements, timeout, _i, _len, _results;
-          timeout = setTimeout(function() {
-            return reject(new Error('emojidex: searchEmoji_setEmojiTag - Timeout'));
-          }, _this.promiseWaitTime);
-          loading_elements = $('.emojidex-loading-icon');
-          if (loading_elements.length) {
-            checker = new CountChecker(loading_elements.length, function() {
-              return resolve();
-            });
-            _results = [];
-            for (_i = 0, _len = loading_elements.length; _i < _len; _i++) {
-              loading_element = loading_elements[_i];
-              switch (loading_element.dataset.type) {
-                case 'code':
-                  replaceToEmojiIconOrRollback(loading_element).then(function() {
-                    return checker.check();
-                  });
-                  break;
-                case 'utf':
-                  _results.push((function() {
-                    var _results1;
-                    _results1 = [];
-                    for (emoji in this.plugin.options.utfEmojiData) {
-                      if (emoji === loading_element.dataset.emoji) {
-                        this.fadeOutLoadingTag_fadeInEmojiTag($(loading_element), this.plugin.options.utfEmojiData[emoji]).then(function() {
-                          return checker.check();
-                        });
-                        break;
-                      } else {
-                        _results1.push(void 0);
-                      }
-                    }
-                    return _results1;
-                  }).call(_this));
-                  break;
-                default:
-                  _results.push(void 0);
-              }
-            }
-            return _results;
-          } else {
-            return resolve();
-          }
-        });
-      };
-      setEomojiTag = function(element) {
-        var matched_codes, replaced_promise, replaced_text;
-        replaced_text = element.textContent.replace(_this.plugin.options.regexpUtf, function(matched_string) {
-          var emoji, emoji_tag;
-          for (emoji in _this.plugin.options.utfEmojiData) {
-            if (emoji === matched_string) {
-              _this.emoji_tags++;
-              emoji_tag = _this.getEmojiTag(_this.plugin.options.utfEmojiData[emoji]);
-              return emoji_tag;
-            }
-          }
-        });
-        matched_codes = replaced_text.match(_this.regexpCode);
-        replaced_promise = new Promise(function(resolve, reject) {
-          var checker, code, code_only, emoji_image, timeout, _i, _len, _results;
-          if (matched_codes != null ? matched_codes.length : void 0) {
-            timeout = setTimeout(function() {
-              return reject(new Error('emojidex: setEomojiTag - Timeout'));
-            }, _this.promiseWaitTime);
-            checker = new CountChecker(matched_codes.length, function() {
-              return resolve();
-            });
-            _results = [];
-            for (_i = 0, _len = matched_codes.length; _i < _len; _i++) {
-              code = matched_codes[_i];
-              code_only = code.replace(/\:/g, '');
-              emoji_image = $("<img src='" + _this.plugin.EC.cdn_url + "px8/" + (_this.replaceSpaceToUnder(code_only)) + ".png' data-code='" + code_only + "'></img>");
-              emoji_image.load(function(e) {
-                replaced_text = replaced_text.replace(":" + e.currentTarget.dataset.code + ":", _this.getEmojiTag(_this.replaceSpaceToUnder(e.currentTarget.dataset.code)));
-                return checker.check();
-              });
-              _results.push(emoji_image.error(function(e) {
-                return checker.check();
-              }));
-            }
-            return _results;
-          } else {
-            return resolve();
-          }
-        });
-        return replaced_promise.then(function() {
-          return $(element).replaceWith(replaced_text);
-        });
-      };
-      element = target_element || this.plugin.element;
-      if (this.plugin.options.useLoadingImg) {
-        return this.setLoadingTag(element).then(function() {
-          return searchEmoji_setEmojiTag(element);
-        });
-      } else {
-        return new Promise(function(resolve, reject) {
-          var checker, target, timeout, _i, _len, _ref, _results;
-          timeout = setTimeout(function() {
-            return reject(new Error('emojidex: loadEmoji useLoadingImg: false - Timeout'));
-          }, _this.promiseWaitTime);
-          _this.targets = [];
-          _this.setTargets(element[0]);
-          if (_this.targets.length) {
-            checker = new CountChecker(_this.targets.length, function() {
-              return resolve();
-            });
-            _ref = _this.targets;
-            _results = [];
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              target = _ref[_i];
-              _results.push(setEomojiTag(target).then(function(e) {
-                return checker.check();
-              }));
-            }
-            return _results;
-          } else {
-            return resolve();
-          }
-        });
-      }
-    };
-
-    return ReplacerSearch;
-
-  })(Replacer);
 
 }).call(this);
 

@@ -1,3 +1,4 @@
+
 /*
 * emojidexAutocomplete
 *
@@ -8,8 +9,7 @@
 * https://www.emojidex.com/emojidex/emojidex_open_license
 *
 * Copyright 2013 Genshin Souzou Kabushiki Kaisha
-*/
-
+ */
 
 (function() {
   var AutoComplete;
@@ -45,71 +45,75 @@
 
   AutoComplete = (function() {
     function AutoComplete(plugin) {
-      var _this = this;
       this.plugin = plugin;
       this.searching_num = 0;
       this.EC = new EmojidexClient({
-        onReady: function(EC) {
-          return _this.setAutoComplete();
-        }
+        onReady: (function(_this) {
+          return function(EC) {
+            return _this.setAutoComplete();
+          };
+        })(this)
       });
     }
 
     AutoComplete.prototype.setAutoComplete = function() {
-      var at_init, getMatchString, getRegexp, onHighlighter, setAtwho, setSearchedEmojiData,
-        _this = this;
-      setAtwho = function(at_options) {
-        var _base;
-        $(_this.plugin.element).atwho(at_options).on('reposition.atwho', function(e) {
-          return $(e.currentTarget).atwho(at_options);
-        }).on('hidden.atwho', function(e) {
-          return $(e.currentTarget).atwho(at_options);
-        });
-        return typeof (_base = _this.plugin.options).onComplete === "function" ? _base.onComplete() : void 0;
-      };
-      setSearchedEmojiData = function(at_obj, match_string) {
-        var num, updateAtwho;
-        updateAtwho = function(searched_data, at_bak) {
-          var at_options;
-          at_options = {
-            data: searched_data,
-            callbacks: {
-              highlighter: onHighlighter,
-              matcher: function(flag, subtext, should_startWithSpace) {
-                var match;
-                return match = getMatchString(subtext, getRegexp(flag, should_startWithSpace));
-              }
-            }
-          };
-          return at_bak.$inputor.atwho('destroy').atwho($.extend({}, at_bak.setting, at_options)).atwho('run');
+      var at_init, getMatchString, getRegexp, onHighlighter, setAtwho, setSearchedEmojiData;
+      setAtwho = (function(_this) {
+        return function(at_options) {
+          var base;
+          $(_this.plugin.element).atwho(at_options).on('reposition.atwho', function(e) {
+            return $(e.currentTarget).atwho(at_options);
+          }).on('hidden.atwho', function(e) {
+            return $(e.currentTarget).atwho(at_options);
+          });
+          return typeof (base = _this.plugin.options).onComplete === "function" ? base.onComplete() : void 0;
         };
-        num = ++_this.searching_num;
-        _this.EC.Search.search(match_string, function(response) {
-          var emoji, searched_data;
-          searched_data = (function() {
-            var _i, _len, _ref, _results;
-            _ref = this.EC.Search.results;
-            _results = [];
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              emoji = _ref[_i];
-              _results.push({
-                code: emoji.code.replace(/\s/g, '_'),
-                img_url: "" + this.EC.cdn_url + this.EC.size_code + "/" + (emoji.code.replace(/\s/g, '_')) + ".png"
-              });
+      })(this);
+      setSearchedEmojiData = (function(_this) {
+        return function(at_obj, match_string) {
+          var num, updateAtwho;
+          updateAtwho = function(searched_data, at_bak) {
+            var at_options;
+            at_options = {
+              data: searched_data,
+              callbacks: {
+                highlighter: onHighlighter,
+                matcher: function(flag, subtext, should_startWithSpace) {
+                  var match;
+                  return match = getMatchString(subtext, getRegexp(flag, should_startWithSpace));
+                }
+              }
+            };
+            return at_bak.$inputor.atwho('destroy').atwho($.extend({}, at_bak.setting, at_options)).atwho('run');
+          };
+          num = ++_this.searching_num;
+          _this.EC.Search.search(match_string, function(response) {
+            var emoji, searched_data;
+            searched_data = (function() {
+              var i, len, ref, results;
+              ref = this.EC.Search.results;
+              results = [];
+              for (i = 0, len = ref.length; i < len; i++) {
+                emoji = ref[i];
+                results.push({
+                  code: emoji.code.replace(/\s/g, '_'),
+                  img_url: "" + this.EC.cdn_url + this.EC.size_code + "/" + (emoji.code.replace(/\s/g, '_')) + ".png"
+                });
+              }
+              return results;
+            }).call(_this);
+            if (_this.searching_num === num) {
+              if (searched_data.length) {
+                updateAtwho(searched_data, at_obj);
+              }
+              return _this.searching_num = 0;
             }
-            return _results;
-          }).call(_this);
-          if (_this.searching_num === num) {
-            if (searched_data.length) {
-              updateAtwho(searched_data, at_obj);
-            }
-            return _this.searching_num = 0;
-          }
-        });
-        return match_string;
-      };
+          });
+          return match_string;
+        };
+      })(this);
       getRegexp = function(flag, should_startWithSpace) {
-        var regexp, _a, _y;
+        var _a, _y, regexp;
         _a = decodeURI("%C3%80");
         _y = decodeURI("%C3%BF");
         return regexp = new RegExp("[：" + flag + "]([^：:;@&#~\!\$\+\?\%\*\f\n\r\\\/]+)$", 'gi');
