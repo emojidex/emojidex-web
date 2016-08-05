@@ -35,8 +35,6 @@ class UserTab
         @setUserTab()
         @setHistory(auth_info)
         @setFavorite(auth_info)
-        @setNewest(auth_info)
-        @setPopular(auth_info)
       else
         @showError(auth_info)
 
@@ -65,8 +63,6 @@ class UserTab
     user_tab_list = $ '<ul class="nav nav-tabs mb-m mt-m" id="user_tab_list"></ul>'
     user_tab_list.append $ '<li id="tab-user-history" class="active"><a href="#tab-content-user-history" data-toggle="tab">History</a></li>'
     user_tab_list.append $ '<li id="tab-user-favorite"><a href="#tab-content-user-favorite" data-toggle="tab">Favorite</a></li>'
-    user_tab_list.append $ '<li id="tab-user-newest"><a href="#tab-content-user-newest" data-toggle="tab">Newest</a></li>'
-    user_tab_list.append $ '<li id="tab-user-popular"><a href="#tab-content-user-popular" data-toggle="tab">Popular</a></li>'
 
     logout_btn = $ '<button class="btn btn-default btm-sm pull-right" id="pallet-emoji-logout">LogOut</button>'
     logout_btn.click =>
@@ -95,14 +91,6 @@ class UserTab
     @user_tab_content.append tab_pane
 
     # @setPagination(meta, tab_pane, kind)
-
-  setNewest: (auth_info) ->
-    @pallet.EC.User.Newest.get (response) =>
-      @setPremiumData(response, 'newest')
-
-  setPopular: (auth_info) ->
-    @pallet.EC.User.Popular.get (response) =>
-      @setPremiumData(response, 'popular')
 
   setPremiumData: (response, kind) ->
     tab_pane = $ "<div class='tab-pane' id='tab-content-user-#{kind}'></div>"
