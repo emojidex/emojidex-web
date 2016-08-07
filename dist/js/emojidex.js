@@ -15,43 +15,6 @@
  *
  * Includes:
  * --------------------------------
- * emojidex client - v0.8.1
- * * Provides search, index caching and combining and asset URI resolution
- * https://github.com/emojidex/emojidex-web-client
- *
- * =LICENSE=
- * Licensed under the emojidex Open License
- * https://www.emojidex.com/emojidex/emojidex_open_license
- *
- * Copyright 2013 Genshin Souzou Kabushiki Kaisha
- *
- *
- * Includes:
- * --------------------------------*
- * cross-storage - Cross domain local storage
- *
- * @version   0.8.1
- * @link      https://github.com/zendesk/cross-storage
- * @author    Daniel St. Jules <danielst.jules@gmail.com>
- * @copyright Zendesk
- * @license   Apache-2.0
- * --------------------------------
- * --------------------------------
-!
- * clipboard.js v1.5.12
- * https://zenorocha.github.io/clipboard.js
- *
- * Licensed MIT © Zeno Rocha
- * --------------------------------
-  Implement Github like autocomplete mentions
-  http://ichord.github.com/At.js
-  Copyright (c) 2013 chord.luo@gmail.com
-  Licensed under the MIT license.
-* --------------------------------
-! jquery.atwho - v0.5.1 - 2014-09-14
- * Copyright (c) 2014 chord.luo <chord.luo@gmail.com>;
- * homepage: http://ichord.github.com/At.js* Licensed MIT
-* --------------------------------
  */
 /*! jQuery UI - v1.11.4 - 2015-12-24
 * http://jqueryui.com
@@ -82,7 +45,7 @@
     // jscs:enable requireDollarBeforejQueryAssignment
   }
 
-  Tab.VERSION = '3.3.6'
+  Tab.VERSION = '3.3.7'
 
   Tab.TRANSITION_DURATION = 150
 

@@ -1515,7 +1515,6 @@ img.emojidex-emoji {
   #emojidex-emoji-pallet input[type="file"]:focus,
   #emojidex-emoji-pallet input[type="radio"]:focus,
   #emojidex-emoji-pallet input[type="checkbox"]:focus {
-    outline: thin dotted;
     outline: 5px auto -webkit-focus-ring-color;
     outline-offset: -2px; }
   #emojidex-emoji-pallet output {
@@ -1956,7 +1955,6 @@ img.emojidex-emoji {
       color: #23527c;
       text-decoration: underline; }
     #emojidex-emoji-pallet a:focus {
-      outline: thin dotted;
       outline: 5px auto -webkit-focus-ring-color;
       outline-offset: -2px; }
   #emojidex-emoji-pallet figure {
@@ -2026,7 +2024,6 @@ img.emojidex-emoji {
     -ms-user-select: none;
     user-select: none; }
     #emojidex-emoji-pallet .btn:focus, #emojidex-emoji-pallet .btn.focus, #emojidex-emoji-pallet .btn:active:focus, #emojidex-emoji-pallet .btn:active.focus, #emojidex-emoji-pallet .btn.active:focus, #emojidex-emoji-pallet .btn.active.focus {
-      outline: thin dotted;
       outline: 5px auto -webkit-focus-ring-color;
       outline-offset: -2px; }
     #emojidex-emoji-pallet .btn:hover, #emojidex-emoji-pallet .btn:focus, #emojidex-emoji-pallet .btn.focus {

@@ -348,7 +348,7 @@ module.exports = (grunt) ->
       emojidex_js:
         options:
           stripBanners: true
-          banner: '<%= meta.banner %><%= grunt.getLicense("build/licenses.json") %>\n */\n'
+          banner: '<%= meta.banner %>\n */\n'
         src: [
           'src/vendor/jquery-ui-1.11.4.custom/jquery-ui.min.js'
           'node_modules/emojidex-client/dist/js/*.min.js'
@@ -370,7 +370,7 @@ module.exports = (grunt) ->
     uglify:
       emojidex:
         options:
-          banner: '<%= meta.banner %><%= grunt.getLicense("build/licenses.json") %>\n */\n'
+          banner: '<%= meta.banner %>\n */\n'
           manglet: true
         src: ['dist/js/emojidex.js']
         dest: 'dist/js/emojidex.min.js'
