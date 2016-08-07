@@ -13,7 +13,7 @@ Check out the demo at:
 [http://emojidex.github.io/emojidex-web](http://emojidex.github.io/emojidex-web)
 
 Usage
------
+=====
 Basic usage is simple.
 
 1\. First off load up the stylesheets and scripts:
@@ -40,7 +40,7 @@ $(document).ready(function() {
 And you're all set!
 
 Features
---------
+========
 ### .emojidexReplace()
 Scans text in the specified element and replaces any colon ":" encased short codes
 (eg: `:smile:`) or any UTF emoji (eg: `😄`) with emojidex emoji images.  
@@ -158,7 +158,7 @@ Type: `Function` Default: `undefined`
 Calls the defined method after a pallet has been set to an element.
 
 Building
---------
+========
 You will need node with a usable npm, grunt and bower.
 
 ### Get the source
@@ -187,6 +187,31 @@ grunt dev
 ```
 A live version of the latest build will be available at
 [http://localhost:8000/dist/](http://localhost:8000/dist/).
+
+Testing
+=======
+There are two types of specs: regular specs that use the test account and specs that require a
+premium account with R-18 enabled. As a developer you are eligable to receive a complimentary 
+upgrade to a premium account if you are working on either an emojidex package or module or 
+integration of emojidex in your own software. Simply contact info@emojidex.com with the subject 
+"Developer Account" and list the following details:
+1. Your username on emojidex
+2. The project(s) you intend to work on
+
+.env (optional)
+---------------
+After obtaining a permium account you can use it for testing. To do this you need to create a 
+file named '.env' with the following information:
+```
+USERNAME=Your_UserName
+EMAIL=your@email.com
+PASSWORD=YourPassword123
+AUTH_TOKEN=0123456789abcdef
+```
+replacing the Your_UserName and 0123456789abcdef etc. with your actual username and auth_token... 
+The quickest way to find your auth_token is to log in on your browser, open up your user 
+settings by clicking on your username in the top right, and scrolling down to the Auth Token 
+field (or to do an auth request with CURL as in the developer.emojidex.com documentation).
 
 License
 =======

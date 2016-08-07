@@ -731,7 +731,7 @@ e=!1,s=!1,i=!1;var o=t.ui.keyCode;switch(n.keyCode){case o.PAGE_UP:e=!0,this._mo
     };
 
     UserTab.prototype.showError = function(auth_info) {
-      return this.tab_content.prepend($('<div id="login-error"><span style="color:red">You failed to login.</span><div>'));
+      return this.tab_content.prepend($('<div id="login-error"><span style="color:red">Login failed - check your user name and password or log in from the emojidex site.</span><div>'));
     };
 
     UserTab.prototype.hideLoginForm = function() {

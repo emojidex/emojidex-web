@@ -8,7 +8,7 @@
 * Licensed under the emojidex Open License
 * https://www.emojidex.com/emojidex/emojidex_open_license
 *
-* Copyright 2013 Genshin Souzou Kabushiki Kaisha
+* Copyright 2013 emojidex
  */
 
 (function() {
@@ -405,7 +405,7 @@
     };
 
     UserTab.prototype.showError = function(auth_info) {
-      return this.tab_content.prepend($('<div id="login-error"><span style="color:red">You failed to login.</span><div>'));
+      return this.tab_content.prepend($('<div id="login-error"><span style="color:red">Login failed - check your user name and password or log in from the emojidex site.</span><div>'));
     };
 
     UserTab.prototype.hideLoginForm = function() {

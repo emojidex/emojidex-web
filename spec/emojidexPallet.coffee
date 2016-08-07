@@ -1,4 +1,3 @@
-# FIXME: require user_info specs
 describe "emojidexPallet", ->
   beforeAll (done) ->
     clearStorage()
@@ -94,7 +93,7 @@ describe "emojidexPallet", ->
         callback: (data, i) ->
           if data.vals[0].match /login-error/
             # TODO: english text
-            expect($('#login-error span').text()).toBe 'You failed to login.'
+            expect($('#login-error span').text()).toBe 'Login failed - check your user name and password or log in from the emojidex site.'
             remove_watch $('#tab-content-user'), 'content_user'
             done()
 
@@ -103,8 +102,8 @@ describe "emojidexPallet", ->
       $('#pallet-emoji-password-input').val('aaa')
       $('#pallet-emoji-login-submit').click()
 
-    it 'premium user login [Require premium user info]', (done) ->
-      pending() unless premium_user_info?
+    it 'premium user login [Requires a premium user account]', (done) ->
+      pending() unless user_info?
       $('#tab-content-user').watch
         id: 'content_user'
         properties: 'prop_innerHTML'
@@ -117,8 +116,8 @@ describe "emojidexPallet", ->
             done()
 
       $('#tab-user a').click()
-      $('#pallet-emoji-username-input').val(premium_user_info.username)
-      $('#pallet-emoji-password-input').val(premium_user_info.password)
+      $('#pallet-emoji-username-input').val(user_info.username)
+      $('#pallet-emoji-password-input').val(user_info.password)
       $('#pallet-emoji-login-submit').click()
 
     it 'premium user can see the newest/popular emoji', (done) ->

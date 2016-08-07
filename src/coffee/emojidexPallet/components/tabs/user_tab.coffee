@@ -44,8 +44,8 @@ class UserTab
       @pallet.EC.User.token_auth username, password, (auth_info) -> callback(auth_info)
 
   showError: (auth_info) ->
-    # TODO: error text
-    @tab_content.prepend $ '<div id="login-error"><span style="color:red">You failed to login.</span><div>'
+    # TODO: error text localization
+    @tab_content.prepend $ '<div id="login-error"><span style="color:red">Login failed - check your user name and password or log in from the emojidex site.</span><div>'
 
   hideLoginForm: ->
     $('#pallet-emoji-username-input').val('')

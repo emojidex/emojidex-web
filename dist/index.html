@@ -151,7 +151,7 @@ them with your app. The module is self contained and enclosed and should not int
 with other components of your site or app.  </p>
 <p>Check out the demo at:
 <a href="http://emojidex.github.io/emojidex-web">http://emojidex.github.io/emojidex-web</a></p>
-<h2 id="usage">Usage</h2>
+<h1 id="usage">Usage</h1>
 <p>Basic usage is simple.</p>
 <p>1. First off load up the stylesheets and scripts:</p>
 <pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-title">head</span>&gt;</span>
@@ -172,7 +172,7 @@ with other components of your site or app.  </p>
 });
 </code></pre>
 <p>And you&#39;re all set!</p>
-<h2 id="features">Features</h2>
+<h1 id="features">Features</h1>
 <h3 id="-emojidexreplace-">.emojidexReplace()</h3>
 <p>Scans text in the specified element and replaces any colon &quot;:&quot; encased short codes
 (eg: <code>:smile:</code>) or any UTF emoji (eg: <code>😄</code>) with emojidex emoji images.<br>No conversion occurs when no emoji on emojidex is found that corresponds to the short code or
@@ -252,7 +252,7 @@ a user is logged in.</p>
 <h4 id="options-oncomplete">options.onComplete</h4>
 <p>Type: <code>Function</code> Default: <code>undefined</code></p>
 <p>Calls the defined method after a pallet has been set to an element.</p>
-<h2 id="building">Building</h2>
+<h1 id="building">Building</h1>
 <p>You will need node with a usable npm, grunt and bower.</p>
 <h3 id="get-the-source">Get the source</h3>
 <p>First off we need the actual source to build. Clone this repository if you haven&#39;t already:</p>
@@ -273,6 +273,27 @@ bower <span class="hljs-keyword">install</span>
 </code></pre>
 <p>A live version of the latest build will be available at
 <a href="http://localhost:8000/dist/">http://localhost:8000/dist/</a>.</p>
+<h1 id="testing">Testing</h1>
+<p>There are two types of specs: regular specs that use the test account and specs that require a
+premium account with R-18 enabled. As a developer you are eligable to receive a complimentary 
+upgrade to a premium account if you are working on either an emojidex package or module or 
+integration of emojidex in your own software. Simply contact info@emojidex.com with the subject 
+&quot;Developer Account&quot; and list the following details:</p>
+<ol>
+<li>Your username on emojidex</li>
+<li>The project(s) you intend to work on</li>
+</ol>
+<h2 id="-env-optional-">.env (optional)</h2>
+<p>After obtaining a permium account you can use it for testing. To do this you need to create a 
+file named &#39;.env&#39; with the following information:</p>
+<pre><code><span class="hljs-setting">USERNAME=<span class="hljs-value">Your_UserName</span></span>
+<span class="hljs-setting">EMAIL=<span class="hljs-value">your@email.com</span></span>
+<span class="hljs-setting">PASSWORD=<span class="hljs-value">YourPassword123</span></span>
+<span class="hljs-setting">AUTH_TOKEN=<span class="hljs-value"><span class="hljs-number">0123456789</span>abcdef</span></span>
+</code></pre><p>replacing the Your_UserName and 0123456789abcdef etc. with your actual username and auth_token... 
+The quickest way to find your auth_token is to log in on your browser, open up your user 
+settings by clicking on your username in the top right, and scrolling down to the Auth Token 
+field (or to do an auth request with CURL as in the developer.emojidex.com documentation).</p>
 <h1 id="license">License</h1>
 <p>emojidex and emojidex tools are licensed under the <a href="https://www.emojidex.com/emojidex/emojidex_open_license">emojidex Open License</a>.</p>
 <p>©2013 the emojidex project / K.K. GenSouSha</p>
