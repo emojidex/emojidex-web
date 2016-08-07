@@ -15,7 +15,8 @@ class Pallet
   createDialog: ->
     @dialog = $ '<div id="emojidex-dialog-content"></div>'
     @dialog.dialog
-      dialogClass: 'emojidex-ui-dialog'
+      classes:
+        'ui-dialog': 'emojidex-ui-dialog'
       autoOpen: false
       width: 700
       title: 'Emojidex Pallet'

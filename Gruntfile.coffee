@@ -351,7 +351,8 @@ module.exports = (grunt) ->
           stripBanners: true
           banner: '<%= meta.banner %>\n */\n'
         src: [
-          'src/vendor/jquery-ui-1.11.4.custom/jquery-ui.min.js'
+          'src/vendor/jquery-ui-1.12.0/jquery-ui.min.js'
+          # 'src/vendor/jquery-ui-1.11.4.custom/jquery-ui.min.js'
           'node_modules/emojidex-client/dist/js/*.min.js'
           'bower_components/Caret.js/dist/jquery.caret.min.js'
           'bower_components/At.js/dist/js/jquery.atwho.min.js'

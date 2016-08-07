@@ -63,7 +63,9 @@
     Pallet.prototype.createDialog = function() {
       this.dialog = $('<div id="emojidex-dialog-content"></div>');
       return this.dialog.dialog({
-        dialogClass: 'emojidex-ui-dialog',
+        classes: {
+          'ui-dialog': 'emojidex-ui-dialog'
+        },
         autoOpen: false,
         width: 700,
         title: 'Emojidex Pallet',
