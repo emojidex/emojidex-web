@@ -6,8 +6,7 @@ describe "emojidexReplace", ->
     helperAfter()
 
   it 'replace to emojidex-emoji', (done) ->
-    console.log $('body')
     $('body').emojidexReplace
       onComplete: (element) ->
-        # expect($('.emojidex_replace')).toContainElement('img.emojidex-emoji')
+        expect($('.emojidex_replace')).toContainElement('img.emojidex-emoji')
         done()

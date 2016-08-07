@@ -12,10 +12,10 @@ class ReplacerSearch extends Replacer
           , @promiseWaitTime
           emoji_code = @replaceSpaceToUnder loading_element.dataset.emoji
           emoji_image = $("<img src='#{@plugin.EC.cdn_url}px8/#{emoji_code}.png'></img>")
-          emoji_image.load (e) =>
+          emoji_image.on 'load', (e) =>
             @fadeOutLoadingTag_fadeInEmojiTag($(loading_element), emoji_code).then ->
               resolve()
-          emoji_image.error (e) =>
+          emoji_image.on 'error', (e) =>
             @fadeOutLoadingTag_fadeInEmojiTag($(loading_element), emoji_code, false).then ->
               resolve()
 
@@ -66,10 +66,10 @@ class ReplacerSearch extends Replacer
           for code in matched_codes
             code_only = code.replace(/\:/g, '')
             emoji_image = $("<img src='#{@plugin.EC.cdn_url}px8/#{@replaceSpaceToUnder code_only}.png' data-code='#{code_only}'></img>")
-            emoji_image.load (e) =>
+            emoji_image.on 'load', (e) =>
               replaced_text = replaced_text.replace ":#{e.currentTarget.dataset.code}:", @getEmojiTag @replaceSpaceToUnder(e.currentTarget.dataset.code)
               checker.check()
-            emoji_image.error (e) =>
+            emoji_image.on 'error', (e) =>
               checker.check()
         else
           resolve()

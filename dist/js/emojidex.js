@@ -1201,12 +1201,12 @@
               }, _this.promiseWaitTime);
               emoji_code = _this.replaceSpaceToUnder(loading_element.dataset.emoji);
               emoji_image = $("<img src='" + _this.plugin.EC.cdn_url + "px8/" + emoji_code + ".png'></img>");
-              emoji_image.load(function(e) {
+              emoji_image.on('load', function(e) {
                 return _this.fadeOutLoadingTag_fadeInEmojiTag($(loading_element), emoji_code).then(function() {
                   return resolve();
                 });
               });
-              return emoji_image.error(function(e) {
+              return emoji_image.on('error', function(e) {
                 return _this.fadeOutLoadingTag_fadeInEmojiTag($(loading_element), emoji_code, false).then(function() {
                   return resolve();
                 });
@@ -1288,11 +1288,11 @@
                 code = matched_codes[i];
                 code_only = code.replace(/\:/g, '');
                 emoji_image = $("<img src='" + _this.plugin.EC.cdn_url + "px8/" + (_this.replaceSpaceToUnder(code_only)) + ".png' data-code='" + code_only + "'></img>");
-                emoji_image.load(function(e) {
+                emoji_image.on('load', function(e) {
                   replaced_text = replaced_text.replace(":" + e.currentTarget.dataset.code + ":", _this.getEmojiTag(_this.replaceSpaceToUnder(e.currentTarget.dataset.code)));
                   return checker.check();
                 });
-                results.push(emoji_image.error(function(e) {
+                results.push(emoji_image.on('error', function(e) {
                   return checker.check();
                 }));
               }

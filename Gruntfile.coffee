@@ -257,7 +257,7 @@ module.exports = (grunt) ->
         vendor:[
           'node_modules/jquery/dist/jquery.min.js'
           'node_modules/jquery-watch/jquery-watch.min.js'
-          'node_modules/promise-polyfill/promise.min.js'
+          # 'node_modules/promise-polyfill/promise.min.js'
         ]
         helpers:[
           'build/spec/helpers/method.js'
