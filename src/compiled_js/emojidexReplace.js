@@ -111,6 +111,152 @@
     };
   })(jQuery, window, document);
 
+  Replacer = (function() {
+    function Replacer() {
+      var ignore;
+      this.promiseWaitTime = 5000;
+      ignore = '\'":;@&#~{}<>\\r\\n\\[\\]\\!\\$\\+\\?\\%\\*\\/\\\\';
+      this.regexpCode = RegExp(":([^\\s" + ignore + "][^" + ignore + "]*[^\\s" + ignore + "]):|:([^\\s" + ignore + "]):", 'g');
+      this.targets = [];
+      this.complete_num = 0;
+    }
+
+    Replacer.prototype.setTargets = function(node) {
+      var child, results;
+      if (!(node.parentNode && node.parentNode.isContentEditable)) {
+        child = node.firstChild;
+        results = [];
+        while (child) {
+          switch (child.nodeType) {
+            case Node.ELEMENT_NODE:
+              if ($(child).is(this.plugin.options.ignore)) {
+                break;
+              }
+              if (child.isContentEditable) {
+                break;
+              }
+              this.setTargets(child);
+              break;
+            case Node.TEXT_NODE:
+              if (child.data.indexOf('function(') === -1) {
+                if (child.data.match(/\S/)) {
+                  this.targets.push(child);
+                }
+              }
+              break;
+          }
+          results.push(child = child.nextSibling);
+        }
+        return results;
+      }
+    };
+
+    Replacer.prototype.getEmojiTag = function(emoji_code) {
+      return "<img class='emojidex-emoji' src='" + this.plugin.EC.cdn_url + this.plugin.EC.size_code + "/" + emoji_code + ".png' title='" + (this.replaceUnderToSpace(emoji_code)) + "'></img>";
+    };
+
+    Replacer.prototype.getLoadingTag = function(emoji_data, type) {
+      return "<span class='emojidex-loading-icon' data-emoji='" + emoji_data + "' data-type='" + type + "'></span>";
+    };
+
+    Replacer.prototype.getLoadingElement = function(element) {
+      return $(element.find('.emojidex-loading-icon'));
+    };
+
+    Replacer.prototype.setLoadingTag = function(element) {
+      return new Promise((function(_this) {
+        return function(resolve, reject) {
+          var checker, i, len, ref, results, target, timeout;
+          timeout = setTimeout(function() {
+            return reject(new Error('emojidex: setLoadingTag - Timeout'));
+          }, _this.promiseWaitTime);
+          _this.targets = [];
+          _this.setTargets(element[0]);
+          if (_this.targets.length) {
+            checker = new CountChecker(_this.targets.length, function() {
+              return resolve();
+            });
+            ref = _this.targets;
+            results = [];
+            for (i = 0, len = ref.length; i < len; i++) {
+              target = ref[i];
+              $(target).replaceWith(_this.getAddedLoadingTagText(target));
+              results.push(checker.check());
+            }
+            return results;
+          } else {
+            return resolve();
+          }
+        };
+      })(this));
+    };
+
+    Replacer.prototype.getAddedLoadingTagText = function(target_element) {
+      var replaced_text;
+      replaced_text = target_element.data;
+      replaced_text = replaced_text.replace(this.plugin.options.regexpUtf, (function(_this) {
+        return function(matched_string) {
+          return _this.getLoadingTag(matched_string, 'utf');
+        };
+      })(this));
+      replaced_text = replaced_text.replace(this.regexpCode, (function(_this) {
+        return function(matched_string) {
+          return _this.getLoadingTag(matched_string.replace(/:/g, ''), 'code');
+        };
+      })(this));
+      return replaced_text;
+    };
+
+    Replacer.prototype.fadeOutLoadingTag_fadeInEmojiTag = function(element, emoji_code, match) {
+      var emoji_tag;
+      if (match == null) {
+        match = true;
+      }
+      emoji_tag = void 0;
+      if (match) {
+        emoji_tag = $(this.getEmojiTag(emoji_code)).hide();
+      } else {
+        emoji_tag = ":" + emoji_code + ":";
+      }
+      return new Promise((function(_this) {
+        return function(resolve, reject) {
+          var timeout;
+          timeout = setTimeout(function() {
+            return reject(new Error('emojidex: fadeOutLoadingTag_fadeInEmojiTag - Timeout'));
+          }, _this.promiseWaitTime);
+          return element.fadeOut({
+            duration: 'normal',
+            done: function() {
+              element.after(emoji_tag);
+              element.remove();
+              if (match) {
+                return emoji_tag.fadeIn({
+                  duration: "fast",
+                  done: function() {
+                    return resolve();
+                  }
+                });
+              } else {
+                return resolve();
+              }
+            }
+          });
+        };
+      })(this));
+    };
+
+    Replacer.prototype.replaceSpaceToUnder = function(string) {
+      return string.replace(/\s/g, '_');
+    };
+
+    Replacer.prototype.replaceUnderToSpace = function(string) {
+      return string.replace(/_/g, ' ');
+    };
+
+    return Replacer;
+
+  })();
+
   CountChecker = (function() {
     function CountChecker(limit, callback) {
       this.limit = limit;
@@ -390,151 +536,5 @@
     return ReplacerSearch;
 
   })(Replacer);
-
-  Replacer = (function() {
-    function Replacer() {
-      var ignore;
-      this.promiseWaitTime = 5000;
-      ignore = '\'":;@&#~{}<>\\r\\n\\[\\]\\!\\$\\+\\?\\%\\*\\/\\\\';
-      this.regexpCode = RegExp(":([^\\s" + ignore + "][^" + ignore + "]*[^\\s" + ignore + "]):|:([^\\s" + ignore + "]):", 'g');
-      this.targets = [];
-      this.complete_num = 0;
-    }
-
-    Replacer.prototype.setTargets = function(node) {
-      var child, results;
-      if (!(node.parentNode && node.parentNode.isContentEditable)) {
-        child = node.firstChild;
-        results = [];
-        while (child) {
-          switch (child.nodeType) {
-            case Node.ELEMENT_NODE:
-              if ($(child).is(this.plugin.options.ignore)) {
-                break;
-              }
-              if (child.isContentEditable) {
-                break;
-              }
-              this.setTargets(child);
-              break;
-            case Node.TEXT_NODE:
-              if (child.data.indexOf('function(') === -1) {
-                if (child.data.match(/\S/)) {
-                  this.targets.push(child);
-                }
-              }
-              break;
-          }
-          results.push(child = child.nextSibling);
-        }
-        return results;
-      }
-    };
-
-    Replacer.prototype.getEmojiTag = function(emoji_code) {
-      return "<img class='emojidex-emoji' src='" + this.plugin.EC.cdn_url + this.plugin.EC.size_code + "/" + emoji_code + ".png' title='" + (this.replaceUnderToSpace(emoji_code)) + "'></img>";
-    };
-
-    Replacer.prototype.getLoadingTag = function(emoji_data, type) {
-      return "<span class='emojidex-loading-icon' data-emoji='" + emoji_data + "' data-type='" + type + "'></span>";
-    };
-
-    Replacer.prototype.getLoadingElement = function(element) {
-      return $(element.find('.emojidex-loading-icon'));
-    };
-
-    Replacer.prototype.setLoadingTag = function(element) {
-      return new Promise((function(_this) {
-        return function(resolve, reject) {
-          var checker, i, len, ref, results, target, timeout;
-          timeout = setTimeout(function() {
-            return reject(new Error('emojidex: setLoadingTag - Timeout'));
-          }, _this.promiseWaitTime);
-          _this.targets = [];
-          _this.setTargets(element[0]);
-          if (_this.targets.length) {
-            checker = new CountChecker(_this.targets.length, function() {
-              return resolve();
-            });
-            ref = _this.targets;
-            results = [];
-            for (i = 0, len = ref.length; i < len; i++) {
-              target = ref[i];
-              $(target).replaceWith(_this.getAddedLoadingTagText(target));
-              results.push(checker.check());
-            }
-            return results;
-          } else {
-            return resolve();
-          }
-        };
-      })(this));
-    };
-
-    Replacer.prototype.getAddedLoadingTagText = function(target_element) {
-      var replaced_text;
-      replaced_text = target_element.data;
-      replaced_text = replaced_text.replace(this.plugin.options.regexpUtf, (function(_this) {
-        return function(matched_string) {
-          return _this.getLoadingTag(matched_string, 'utf');
-        };
-      })(this));
-      replaced_text = replaced_text.replace(this.regexpCode, (function(_this) {
-        return function(matched_string) {
-          return _this.getLoadingTag(matched_string.replace(/:/g, ''), 'code');
-        };
-      })(this));
-      return replaced_text;
-    };
-
-    Replacer.prototype.fadeOutLoadingTag_fadeInEmojiTag = function(element, emoji_code, match) {
-      var emoji_tag;
-      if (match == null) {
-        match = true;
-      }
-      emoji_tag = void 0;
-      if (match) {
-        emoji_tag = $(this.getEmojiTag(emoji_code)).hide();
-      } else {
-        emoji_tag = ":" + emoji_code + ":";
-      }
-      return new Promise((function(_this) {
-        return function(resolve, reject) {
-          var timeout;
-          timeout = setTimeout(function() {
-            return reject(new Error('emojidex: fadeOutLoadingTag_fadeInEmojiTag - Timeout'));
-          }, _this.promiseWaitTime);
-          return element.fadeOut({
-            duration: 'normal',
-            done: function() {
-              element.after(emoji_tag);
-              element.remove();
-              if (match) {
-                return emoji_tag.fadeIn({
-                  duration: "fast",
-                  done: function() {
-                    return resolve();
-                  }
-                });
-              } else {
-                return resolve();
-              }
-            }
-          });
-        };
-      })(this));
-    };
-
-    Replacer.prototype.replaceSpaceToUnder = function(string) {
-      return string.replace(/\s/g, '_');
-    };
-
-    Replacer.prototype.replaceUnderToSpace = function(string) {
-      return string.replace(/_/g, ' ');
-    };
-
-    return Replacer;
-
-  })();
 
 }).call(this);

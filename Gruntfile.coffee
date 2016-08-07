@@ -273,6 +273,7 @@ module.exports = (grunt) ->
         files:
           'src/compiled_js/emojidexReplace.js': [
             'src/coffee/emojidexReplace/main.coffee'
+            'src/coffee/emojidexReplace/components/replacer.coffee'
             'src/coffee/emojidexReplace/components/*.coffee'
           ]
 
@@ -352,7 +353,7 @@ module.exports = (grunt) ->
         src: [
           'src/vendor/jquery-ui-1.11.4.custom/jquery-ui.min.js'
           'node_modules/emojidex-client/dist/js/*.min.js'
-          # 'bower_components/Caret.js/dist/jquery.caret.min.js'
+          'bower_components/Caret.js/dist/jquery.caret.min.js'
           'bower_components/At.js/dist/js/jquery.atwho.min.js'
           'node_modules/clipboard/dist/clipboard.min.js'
           'node_modules/bootstrap-sass/assets/javascripts/bootstrap/tab.js'
