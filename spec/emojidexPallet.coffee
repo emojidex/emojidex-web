@@ -116,21 +116,21 @@ describe "emojidexPallet", ->
             done()
 
       $('#tab-user a').click()
-      $('#pallet-emoji-username-input').val(user_info.username)
+      $('#pallet-emoji-username-input').val(user_info.auth_user)
       $('#pallet-emoji-password-input').val(user_info.password)
       $('#pallet-emoji-login-submit').click()
 
-    it 'premium user can see the newest/popular emoji', (done) ->
-      pending() unless premium_user_info?
-      timer_option =
-        callback: ->
-          if $('#tab-content-user-newest').length
-            $('#tab-user-newest a').click()
-            expect($('#tab-content-user-newest').find('img').length).toBeTruthy()
-            done()
-          else
-            spec_timer timer_option
-      spec_timer timer_option
+   # it 'premium user can see the newest/popular emoji', (done) ->
+   #   pending() unless premium_user_info?
+   #   timer_option =
+   #     callback: ->
+   #       if $('#tab-content-user-newest').length
+   #         $('#tab-user-newest a').click()
+   #         expect($('#tab-content-user-newest').find('img').length).toBeTruthy()
+   #         done()
+   #       else
+   #         spec_timer timer_option
+   #   spec_timer timer_option
 
     it 'logout', (done) ->
       pending() unless premium_user_info?
@@ -152,27 +152,27 @@ describe "emojidexPallet", ->
         properties: 'prop_innerHTML'
         watchChildren: true
         callback: (data, i) ->
-          if data.vals[0].match /history-emoji-list/
-            expect($('#tab-content-user-history').find('img').length).toBeTruthy()
+          if data.vals[0].match /favorite-emoji-list/
+            expect($('#tab-content-user-favorite').find('img').length).toBeTruthy()
             remove_watch $('#tab-content-user'), 'content_user'
             done()
 
       $('#tab-user a').click()
-      $('#pallet-emoji-username-input').val(user_info.username)
+      $('#pallet-emoji-username-input').val(user_info.auth_user)
       $('#pallet-emoji-password-input').val(user_info.password)
       $('#pallet-emoji-login-submit').click()
 
-    it 'general user can not see the newest/popular emoji', (done) ->
-      pending() unless user_info?
-      timer_option =
-        callback: ->
-          if $('#tab-content-user-newest').length
-            $('#tab-user-newest a').click()
-            expect($('#tab-content-user-newest').find('a').text()).toBe 'Premium/Pro user only.'
-            done()
-          else
-            spec_timer timer_option
-      spec_timer timer_option
+   # it 'general user can not see the newest/popular emoji', (done) ->
+   #   pending() unless user_info?
+   #   timer_option =
+   #     callback: ->
+   #       if $('#tab-content-user-newest').length
+   #         $('#tab-user-newest a').click()
+   #         expect($('#tab-content-user-newest').find('a').text()).toBe 'Premium/Pro user only.'
+   #         done()
+   #       else
+   #         spec_timer timer_option
+   #   spec_timer timer_option
 
   it 'close emojidexPallet', ->
     $('button.pull-right[aria-label="Close"]').click()
@@ -196,8 +196,8 @@ describe "emojidexPallet", ->
               properties: 'prop_innerHTML'
               watchChildren: true
               callback: (data, i) ->
-                if data.vals[0].match /history-emoji-list/
-                  expect($('#tab-content-user-history').find('img').length).toBeTruthy()
+                if data.vals[0].match /favorite-emoji-list/
+                  expect($('#tab-content-user-favorite').find('img').length).toBeTruthy()
                   $('button.pull-right[aria-label="Close"]').click()
                   remove_watch $('#tab-content-user'), 'content_user'
                   done()

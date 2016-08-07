@@ -712,7 +712,6 @@ e=!1,s=!1,i=!1;var o=t.ui.keyCode;switch(n.keyCode){case o.PAGE_UP:e=!0,this._mo
           if (auth_info.status === 'verified') {
             _this.hideLoginForm();
             _this.setUserTab();
-            _this.setHistory(auth_info);
             return _this.setFavorite(auth_info);
           } else {
             return _this.showError(auth_info);
@@ -751,8 +750,7 @@ e=!1,s=!1,i=!1;var o=t.ui.keyCode;switch(n.keyCode){case o.PAGE_UP:e=!0,this._mo
     UserTab.prototype.setUserTab = function() {
       var logout_btn, user_tab_list;
       user_tab_list = $('<ul class="nav nav-tabs mb-m mt-m" id="user_tab_list"></ul>');
-      user_tab_list.append($('<li id="tab-user-history" class="active"><a href="#tab-content-user-history" data-toggle="tab">History</a></li>'));
-      user_tab_list.append($('<li id="tab-user-favorite"><a href="#tab-content-user-favorite" data-toggle="tab">Favorite</a></li>'));
+      user_tab_list.append($('<li id="tab-user-favorite" class="active"><a href="#tab-content-user-favorite" data-toggle="tab">Favorite</a></li>'));
       logout_btn = $('<button class="btn btn-default btm-sm pull-right" id="pallet-emoji-logout">LogOut</button>');
       logout_btn.click((function(_this) {
         return function() {
@@ -786,7 +784,7 @@ e=!1,s=!1,i=!1;var o=t.ui.keyCode;switch(n.keyCode){case o.PAGE_UP:e=!0,this._mo
 
     UserTab.prototype.setData = function(data, meta, kind) {
       var tab_pane;
-      tab_pane = $("<div class='tab-pane " + (kind === 'history' ? 'active' : '') + "' id='tab-content-user-" + kind + "'></div>");
+      tab_pane = $("<div class='tab-pane " + (kind === 'favorite' ? 'active' : '') + "' id='tab-content-user-" + kind + "'></div>");
       tab_pane.append(this.pallet.setEmojiList(kind, data));
       return this.user_tab_content.append(tab_pane);
     };

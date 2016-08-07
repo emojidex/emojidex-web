@@ -33,7 +33,7 @@ class UserTab
       if auth_info.status == 'verified'
         @hideLoginForm()
         @setUserTab()
-        @setHistory(auth_info)
+        #@setHistory(auth_info)
         @setFavorite(auth_info)
       else
         @showError(auth_info)
@@ -61,8 +61,8 @@ class UserTab
 
   setUserTab: ->
     user_tab_list = $ '<ul class="nav nav-tabs mb-m mt-m" id="user_tab_list"></ul>'
-    user_tab_list.append $ '<li id="tab-user-history" class="active"><a href="#tab-content-user-history" data-toggle="tab">History</a></li>'
-    user_tab_list.append $ '<li id="tab-user-favorite"><a href="#tab-content-user-favorite" data-toggle="tab">Favorite</a></li>'
+    user_tab_list.append $ '<li id="tab-user-favorite" class="active"><a href="#tab-content-user-favorite" data-toggle="tab">Favorite</a></li>'
+    #user_tab_list.append $ '<li id="tab-user-history"><a href="#tab-content-user-history" data-toggle="tab">History</a></li>'
 
     logout_btn = $ '<button class="btn btn-default btm-sm pull-right" id="pallet-emoji-logout">LogOut</button>'
     logout_btn.click =>
@@ -86,7 +86,7 @@ class UserTab
       @setData(response.emoji, response.meta, 'favorite')
 
   setData: (data, meta, kind) ->
-    tab_pane = $ "<div class='tab-pane #{if kind is 'history' then 'active' else ''}' id='tab-content-user-#{kind}'></div>"
+    tab_pane = $ "<div class='tab-pane #{if kind is 'favorite' then 'active' else ''}' id='tab-content-user-#{kind}'></div>"
     tab_pane.append @pallet.setEmojiList(kind, data)
     @user_tab_content.append tab_pane
 
@@ -95,7 +95,7 @@ class UserTab
   setPremiumData: (response, kind) ->
     tab_pane = $ "<div class='tab-pane' id='tab-content-user-#{kind}'></div>"
     if response.statusText is 'Payment Required'
-      # TODO: text
+      # TODO: text localization
       tab_pane.append $ '<p style="margin-top:15px;"><a class="btn btn-primary" href="https://www.emojidex.com/profile" target="_blank">Premium/Pro user only.</a></p>'
     else
       tab_pane.append @pallet.setEmojiList(kind, response.emoji)
