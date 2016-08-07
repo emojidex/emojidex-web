@@ -7,35 +7,47 @@ class ReplacerSearch extends Replacer
     searchEmoji_setEmojiTag = (element) =>
       replaceToEmojiIconOrRollback = (loading_element) =>
         return new Promise (resolve, reject) =>
-          timeout = setTimeout ->
-            reject new Error('emojidex: replaceToEmojiIconOrRollback - Timeout')
-          , @promiseWaitTime
           emoji_code = @replaceSpaceToUnder loading_element.dataset.emoji
-          emoji_image = $("<img src='#{@plugin.EC.cdn_url}px8/#{emoji_code}.png'></img>")
-          emoji_image.on 'load', (e) =>
-            @fadeOutLoadingTag_fadeInEmojiTag($(loading_element), emoji_code).then ->
+          timeout = setTimeout =>
+            @fadeOutLoadingTag_fadeInEmojiTag($(loading_element), emoji_code, false)
+          , @promiseWaitTime
+
+          @plugin.EC.Search.find emoji_code, (emoji)=>
+            if emoji.r18 == true && @plugin.EC.User.auth_info.r18 == false
               resolve()
-          emoji_image.on 'error', (e) =>
-            @fadeOutLoadingTag_fadeInEmojiTag($(loading_element), emoji_code, false).then ->
-              resolve()
+              return
+            emoji_image = $("<img src='#{@plugin.EC.cdn_url}px8/#{emoji_code}.png'></img>")
+            emoji_image.on 'load', (e) =>
+              @fadeOutLoadingTag_fadeInEmojiTag($(loading_element), emoji_code).then ->
+                resolve()
+            emoji_image.on 'error', (e) =>
+              @fadeOutLoadingTag_fadeInEmojiTag($(loading_element), emoji_code, false).then ->
+                resolve()
 
       # start: searchEmoji_setEmojiTag --------
+      return new Promise (resolve, reject) =>
+        timeout = setTimeout ->
+          reject new Error('emojidex: searchEmoji_setEmojiTag - Timeout')
+        , @promiseWaitTime
 
-      loading_elements = $ '.emojidex-loading-icon'
-      if loading_elements.length
-        checker = new CountChecker loading_elements.length
-        for loading_element in loading_elements
-          switch loading_element.dataset.type
-            when 'code'
-              replaceToEmojiIconOrRollback(loading_element).then ->
-                checker.check()
-              break
-            when 'utf'
-              for emoji of @plugin.options.utfEmojiData
-                if emoji is loading_element.dataset.emoji
-                  @fadeOutLoadingTag_fadeInEmojiTag($(loading_element), @plugin.options.utfEmojiData[emoji]).then ->
-                    checker.check()
-                  break
+        loading_elements = $ '.emojidex-loading-icon'
+        if loading_elements.length
+          checker = new CountChecker loading_elements.length, ->
+            resolve()
+          for loading_element in loading_elements
+            switch loading_element.dataset.type
+              when 'code'
+                replaceToEmojiIconOrRollback(loading_element).then ->
+                  checker.check()
+                break
+              when 'utf'
+                for emoji of @plugin.options.utfEmojiData
+                  if emoji is loading_element.dataset.emoji
+                    @fadeOutLoadingTag_fadeInEmojiTag($(loading_element), @plugin.options.utfEmojiData[emoji]).then ->
+                      checker.check()
+                    break
+        else
+          resolve()
 
     # for useLoadingImg: false --------
     setEmojiTag = (element) =>
@@ -57,20 +69,19 @@ class ReplacerSearch extends Replacer
             resolve()
 
           for code in matched_codes
-            code_only = @replaceSpaceToUnder(code.replace(/\:/g, ''))
+            code_only = code.replace(/\:/g, '')
+
 
             @plugin.EC.Search.find code_only, (emoji)=>
               if emoji.r18 == true && @plugin.EC.User.auth_info.r18 == false
                 resolve()
                 return
-              emoji_image = $("<img src='#{@plugin.EC.cdn_url}px8/#{code_only}.png' data-code='#{code_only}'></img>")
+              emoji_image = $("<img src='#{@plugin.EC.cdn_url}px8/#{@replaceSpaceToUnder code_only}.png' data-code='#{code_only}'></img>")
               emoji_image.on 'load', (e) =>
                 replaced_text = replaced_text.replace ":#{e.currentTarget.dataset.code}:", @getEmojiTag @replaceSpaceToUnder(e.currentTarget.dataset.code)
                 checker.check()
-                resolve()
               emoji_image.on 'error', (e) =>
                 checker.check()
-                resolve()
         else
           resolve()
 
@@ -79,13 +90,23 @@ class ReplacerSearch extends Replacer
 
     # start: loadEmoji --------
     element = target_element || @plugin.element
-
-    @targets = []
-    @setTargets element[0]
-
-    if @targets.length
-      checker = new CountChecker @targets.length, ->
-      for target in @targets
-        setEmojiTag(target).then (e) =>
-          checker.check()
+    if @plugin.options.useLoadingImg
+      return @setLoadingTag(element).then =>
+        return searchEmoji_setEmojiTag element
     else
+      return new Promise (resolve, reject) =>
+        timeout = setTimeout ->
+          reject new Error('emojidex: loadEmoji useLoadingImg: false - Timeout')
+        , @promiseWaitTime
+
+        @targets = []
+        @setTargets element[0]
+
+        if @targets.length
+          checker = new CountChecker @targets.length, ->
+            resolve()
+          for target in @targets
+            setEmojiTag(target).then (e) =>
+              checker.check()
+        else
+          resolve()
