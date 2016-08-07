@@ -98,26 +98,29 @@ class Pallet
       emoji_button.append emoji_button_image
       emoji_button.click (e)=>
         @insertEmojiAtCaret($(e.currentTarget).prop('emoji_data'))
-      
-      @EC.Search.find code, (ret)=>
-        @setButtonInfo(ret, emoji_button)
+      #TODO implement ↓ properly
+      #@EC.Search.find code, (ret)=>
+      #  @setButtonInfo(ret, emoji_button)
 
       emoji_divs.append emoji_button
 
     emoji_divs
 
-  setButtonInfo: (emoji, target) ->
-    target.prop 'emoji_data', emoji
-    target.unbind('click')
-    target.click (e)=>
-        @insertEmojiAtCaret($(e.currentTarget).prop('emoji_data'))
+  #TODO implement ↓ properly
+  #setButtonInfo: (emoji, target) ->
+  #  target.prop 'emoji_data', emoji
+  #  target.unbind('click')
+  #  target.click (e)=>
+  #    @insertEmojiAtCaret($(e.currentTarget).prop('emoji_data'))
 
   mojiOrCode: (emoji) ->
     if emoji.moji != null && emoji.moji != '' then emoji.moji else ":#{emoji.code}:"
 
   insertEmojiAtCaret: (emoji) ->
     @clipboard.destroy() if @clipboard
-    code = @mojiOrCode(emoji)
+
+    if @EC.User.auth_info.token != null
+      @EC.User.History.set(emoji.code.replace /\s/g, '_')
 
     if @active_input_area is null
       @clipboard = new Clipboard '.emoji-btn',
@@ -130,7 +133,7 @@ class Pallet
       wrapper = $ '<img>',
         class: 'emojidex-emoji'
         src: "#{@EC.cdn_url}px32/#{emoji.code.replace /\s/g, '_'}.png"
-        alt: code
+        alt: emoji.code
       if emoji.link != null && emoji.link != ''
         link_wrapper = wrapper
         wrapper = $ '<a>',
@@ -153,9 +156,9 @@ class Pallet
       txt = elem.val()
       startTxt = txt.substring(0,  pos)
       stopTxt = txt.substring(pos, txt.length)
-      elem.val(startTxt + code + stopTxt)
+      elem.val(startTxt + emoji.code + stopTxt)
       elem.focus()
-      elem.caret('pos', pos + code.length)
+      elem.caret('pos', pos + emoji.code.length)
 
   setPagination: (kind, prev_func, next_func, cur_page, max_page) ->
     pagination = $ "<div class='#{kind}-pagination text-center'><ul class='pagination mb-0'></ul></div>"

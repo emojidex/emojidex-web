@@ -495,24 +495,9 @@ e=!1,s=!1,i=!1;var o=t.ui.keyCode;switch(n.keyCode){case o.PAGE_UP:e=!0,this._mo
             return _this.insertEmojiAtCaret($(e.currentTarget).prop('emoji_data'));
           };
         })(this));
-        this.EC.Search.find(code, (function(_this) {
-          return function(ret) {
-            return _this.setButtonInfo(ret, emoji_button);
-          };
-        })(this));
         emoji_divs.append(emoji_button);
       }
       return emoji_divs;
-    };
-
-    Pallet.prototype.setButtonInfo = function(emoji, target) {
-      target.prop('emoji_data', emoji);
-      target.unbind('click');
-      return target.click((function(_this) {
-        return function(e) {
-          return _this.insertEmojiAtCaret($(e.currentTarget).prop('emoji_data'));
-        };
-      })(this));
     };
 
     Pallet.prototype.mojiOrCode = function(emoji) {
@@ -524,11 +509,13 @@ e=!1,s=!1,i=!1;var o=t.ui.keyCode;switch(n.keyCode){case o.PAGE_UP:e=!0,this._mo
     };
 
     Pallet.prototype.insertEmojiAtCaret = function(emoji) {
-      var code, elem, link_wrapper, pos, range, selection, startTxt, stopTxt, txt, wrapper;
+      var elem, link_wrapper, pos, range, selection, startTxt, stopTxt, txt, wrapper;
       if (this.clipboard) {
         this.clipboard.destroy();
       }
-      code = this.mojiOrCode(emoji);
+      if (this.EC.User.auth_info.token !== null) {
+        this.EC.User.History.set(emoji.code.replace(/\s/g, '_'));
+      }
       if (this.active_input_area === null) {
         this.clipboard = new Clipboard('.emoji-btn', {
           text: function(e) {
@@ -542,7 +529,7 @@ e=!1,s=!1,i=!1;var o=t.ui.keyCode;switch(n.keyCode){case o.PAGE_UP:e=!0,this._mo
         wrapper = $('<img>', {
           "class": 'emojidex-emoji',
           src: this.EC.cdn_url + "px32/" + (emoji.code.replace(/\s/g, '_')) + ".png",
-          alt: code
+          alt: emoji.code
         });
         if (emoji.link !== null && emoji.link !== '') {
           link_wrapper = wrapper;
@@ -565,9 +552,9 @@ e=!1,s=!1,i=!1;var o=t.ui.keyCode;switch(n.keyCode){case o.PAGE_UP:e=!0,this._mo
         txt = elem.val();
         startTxt = txt.substring(0, pos);
         stopTxt = txt.substring(pos, txt.length);
-        elem.val(startTxt + code + stopTxt);
+        elem.val(startTxt + emoji.code + stopTxt);
         elem.focus();
-        return elem.caret('pos', pos + code.length);
+        return elem.caret('pos', pos + emoji.code.length);
       }
     };
 
