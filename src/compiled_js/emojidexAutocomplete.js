@@ -50,6 +50,7 @@
       this.EC = new EmojidexClient({
         onReady: (function(_this) {
           return function(EC) {
+            _this.EC.User.login('session');
             return _this.setAutoComplete();
           };
         })(this)
