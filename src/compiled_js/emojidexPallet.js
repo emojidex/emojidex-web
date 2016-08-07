@@ -46,7 +46,6 @@
       this.plugin = plugin;
       this.active_input_area = null;
       this.EC = new EmojidexClient({
-        storageHubPath: 'https://www.emojidex.com/hub/0.8.2?pallet',
         onReady: (function(_this) {
           return function(EC) {
             var base;
