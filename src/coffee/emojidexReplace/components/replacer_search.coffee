@@ -59,18 +59,18 @@ class ReplacerSearch extends Replacer
           for code in matched_codes
             code_only = @replaceSpaceToUnder(code.replace(/\:/g, ''))
 
-          @plugin.EC.Search.find code_only, (emoji)=>
-            if emoji.r18 == true && @plugin.EC.User.auth_info.r18 == false
-              resolve()
-              return
-            emoji_image = $("<img src='#{@plugin.EC.cdn_url}px8/#{code_only}.png' data-code='#{code_only}'></img>")
-            emoji_image.on 'load', (e) =>
-              replaced_text = replaced_text.replace ":#{e.currentTarget.dataset.code}:", @getEmojiTag @replaceSpaceToUnder(e.currentTarget.dataset.code)
-              checker.check()
-              resolve()
-            emoji_image.on 'error', (e) =>
-              checker.check()
-              resolve()
+            @plugin.EC.Search.find code_only, (emoji)=>
+              if emoji.r18 == true && @plugin.EC.User.auth_info.r18 == false
+                resolve()
+                return
+              emoji_image = $("<img src='#{@plugin.EC.cdn_url}px8/#{code_only}.png' data-code='#{code_only}'></img>")
+              emoji_image.on 'load', (e) =>
+                replaced_text = replaced_text.replace ":#{e.currentTarget.dataset.code}:", @getEmojiTag @replaceSpaceToUnder(e.currentTarget.dataset.code)
+                checker.check()
+                resolve()
+              emoji_image.on 'error', (e) =>
+                checker.check()
+                resolve()
         else
           resolve()
 
