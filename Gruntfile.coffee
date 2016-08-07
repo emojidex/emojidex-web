@@ -403,4 +403,4 @@ module.exports = (grunt) ->
 
 
   grunt.registerTask 'default', ['clean', 'coffee', 'sass', 'concat', 'uglify', 'cssmin', 'slim', 'copy', 'jasmine:coverage:build', 'md2html']
-  grunt.registerTask 'dev', ['connect', 'esteWatch']
+  grunt.registerTask 'dev', ['default', 'connect', 'esteWatch']
