@@ -19,7 +19,7 @@ class Pallet
         'ui-dialog': 'emojidex-ui-dialog'
       autoOpen: false
       width: 700
-      title: 'Emojidex Pallet'
+      title: '<img src="http://assets.emojidex.com/logo-hdpi.png" alt="emojidex logo" />'
 
       create: (e) ->
         $('.ui-dialog-titlebar-close').hide()
@@ -65,9 +65,9 @@ class Pallet
           @openDialog()
           $("#tab-#{categories[0].code}").click()
 
-  setEmojiList: (kind, result_emoji) ->
-    emoji_list = $ "<div class='#{kind}-emoji-list clearfix'></div>"
-    for emoji in result_emoji
+  setEmojiList: (kind, emoji_list) ->
+    emoji_divs = $ "<div class='#{kind}-emoji-list clearfix'></div>"
+    for emoji in emoji_list
       emoji_button = $ '<button>',
         class: 'emoji-btn btn btn-default pull-left'
       emoji_button.prop 'emoji_data', emoji
@@ -81,10 +81,38 @@ class Pallet
       emoji_button.append emoji_button_image
       emoji_button.click (e)=>
         @insertEmojiAtCaret($(e.currentTarget).prop('emoji_data'))
-      emoji_list.append emoji_button
-    emoji_list
+      emoji_divs.append emoji_button
+    emoji_divs
 
-  mojiOrCode:(emoji) ->
+  setCodeList: (kind, code_list) ->
+    emoji_divs = $ "<div class='#{kind}-emoji-list clearfix'></div>"
+    for code in code_list
+      emoji_button = $ '<button>',
+        class: 'emoji-btn btn btn-default pull-left'
+      emoji_button_image = $ '<img>',
+        title: code
+        class: 'img-responsive center-block'
+        src: "#{@EC.cdn_url}px32/#{code.replace(/\s/g, '_')}.png"
+      emoji_button.prop 'emoji_data', {code: code}
+
+      emoji_button.append emoji_button_image
+      emoji_button.click (e)=>
+        @insertEmojiAtCaret($(e.currentTarget).prop('emoji_data'))
+      
+      @EC.Search.find code, (ret)=>
+        @setButtonInfo(ret, emoji_button)
+
+      emoji_divs.append emoji_button
+
+    emoji_divs
+
+  setButtonInfo: (emoji, target) ->
+    target.prop 'emoji_data', emoji
+    target.unbind('click')
+    target.click (e)=>
+        @insertEmojiAtCaret($(e.currentTarget).prop('emoji_data'))
+
+  mojiOrCode: (emoji) ->
     if emoji.moji != null && emoji.moji != '' then emoji.moji else ":#{emoji.code}:"
 
   insertEmojiAtCaret: (emoji) ->

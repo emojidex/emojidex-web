@@ -68,7 +68,7 @@
         },
         autoOpen: false,
         width: 700,
-        title: 'Emojidex Pallet',
+        title: '<img src="http://assets.emojidex.com/logo-hdpi.png" alt="emojidex logo" />',
         create: function(e) {
           var close_btn;
           $('.ui-dialog-titlebar-close').hide();
@@ -121,11 +121,11 @@
       })(this));
     };
 
-    Pallet.prototype.setEmojiList = function(kind, result_emoji) {
-      var emoji, emoji_button, emoji_button_image, emoji_list, i, len;
-      emoji_list = $("<div class='" + kind + "-emoji-list clearfix'></div>");
-      for (i = 0, len = result_emoji.length; i < len; i++) {
-        emoji = result_emoji[i];
+    Pallet.prototype.setEmojiList = function(kind, emoji_list) {
+      var emoji, emoji_button, emoji_button_image, emoji_divs, i, len;
+      emoji_divs = $("<div class='" + kind + "-emoji-list clearfix'></div>");
+      for (i = 0, len = emoji_list.length; i < len; i++) {
+        emoji = emoji_list[i];
         emoji_button = $('<button>', {
           "class": 'emoji-btn btn btn-default pull-left'
         });
@@ -142,9 +142,51 @@
             return _this.insertEmojiAtCaret($(e.currentTarget).prop('emoji_data'));
           };
         })(this));
-        emoji_list.append(emoji_button);
+        emoji_divs.append(emoji_button);
       }
-      return emoji_list;
+      return emoji_divs;
+    };
+
+    Pallet.prototype.setCodeList = function(kind, code_list) {
+      var code, emoji_button, emoji_button_image, emoji_divs, i, len;
+      emoji_divs = $("<div class='" + kind + "-emoji-list clearfix'></div>");
+      for (i = 0, len = code_list.length; i < len; i++) {
+        code = code_list[i];
+        emoji_button = $('<button>', {
+          "class": 'emoji-btn btn btn-default pull-left'
+        });
+        emoji_button_image = $('<img>', {
+          title: code,
+          "class": 'img-responsive center-block',
+          src: this.EC.cdn_url + "px32/" + (code.replace(/\s/g, '_')) + ".png"
+        });
+        emoji_button.prop('emoji_data', {
+          code: code
+        });
+        emoji_button.append(emoji_button_image);
+        emoji_button.click((function(_this) {
+          return function(e) {
+            return _this.insertEmojiAtCaret($(e.currentTarget).prop('emoji_data'));
+          };
+        })(this));
+        this.EC.Search.find(code, (function(_this) {
+          return function(ret) {
+            return _this.setButtonInfo(ret, emoji_button);
+          };
+        })(this));
+        emoji_divs.append(emoji_button);
+      }
+      return emoji_divs;
+    };
+
+    Pallet.prototype.setButtonInfo = function(emoji, target) {
+      target.prop('emoji_data', emoji);
+      target.unbind('click');
+      return target.click((function(_this) {
+        return function(e) {
+          return _this.insertEmojiAtCaret($(e.currentTarget).prop('emoji_data'));
+        };
+      })(this));
     };
 
     Pallet.prototype.mojiOrCode = function(emoji) {
@@ -386,6 +428,7 @@
           if (auth_info.status === 'verified') {
             _this.hideLoginForm();
             _this.setUserTab();
+            _this.setHistory(auth_info);
             return _this.setFavorite(auth_info);
           } else {
             return _this.showError(auth_info);
@@ -404,7 +447,7 @@
     };
 
     UserTab.prototype.showError = function(auth_info) {
-      return this.tab_content.prepend($('<div id="login-error"><span style="color:red">Login failed - check your user name and password or log in from the emojidex site.</span><div>'));
+      return this.tab_content.prepend($('<div id="login-error"><span style="color:red">Login failed. Please check your username and password or <a href="https://www.emojidex.com/users/sign_in">login here</a>.</span><div>'));
     };
 
     UserTab.prototype.hideLoginForm = function() {
@@ -425,6 +468,7 @@
       var logout_btn, user_tab_list;
       user_tab_list = $('<ul class="nav nav-tabs mb-m mt-m" id="user_tab_list"></ul>');
       user_tab_list.append($('<li id="tab-user-favorite" class="active"><a href="#tab-content-user-favorite" data-toggle="tab">Favorite</a></li>'));
+      user_tab_list.append($('<li id="tab-user-history"><a href="#tab-content-user-history" data-toggle="tab">History</a></li>'));
       logout_btn = $('<button class="btn btn-default btm-sm pull-right" id="pallet-emoji-logout">LogOut</button>');
       logout_btn.click((function(_this) {
         return function() {
@@ -443,7 +487,17 @@
     UserTab.prototype.setHistory = function(auth_info) {
       return this.pallet.EC.User.History.get((function(_this) {
         return function(response) {
-          return _this.setData(response.history, response.meta, 'history');
+          var item;
+          return _this.setDataByCodes((function() {
+            var i, len, ref, results;
+            ref = response.history;
+            results = [];
+            for (i = 0, len = ref.length; i < len; i++) {
+              item = ref[i];
+              results.push(item.emoji_code);
+            }
+            return results;
+          })(), response.meta, 'history');
         };
       })(this));
     };
@@ -460,6 +514,13 @@
       var tab_pane;
       tab_pane = $("<div class='tab-pane " + (kind === 'favorite' ? 'active' : '') + "' id='tab-content-user-" + kind + "'></div>");
       tab_pane.append(this.pallet.setEmojiList(kind, data));
+      return this.user_tab_content.append(tab_pane);
+    };
+
+    UserTab.prototype.setDataByCodes = function(data, meta, kind) {
+      var tab_pane;
+      tab_pane = $("<div class='tab-pane' id='tab-content-user-" + kind + "'></div>");
+      tab_pane.append(this.pallet.setCodeList(kind, data));
       return this.user_tab_content.append(tab_pane);
     };
 

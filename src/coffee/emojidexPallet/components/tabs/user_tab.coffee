@@ -33,7 +33,7 @@ class UserTab
       if auth_info.status == 'verified'
         @hideLoginForm()
         @setUserTab()
-        #@setHistory(auth_info)
+        @setHistory(auth_info)
         @setFavorite(auth_info)
       else
         @showError(auth_info)
@@ -45,7 +45,7 @@ class UserTab
 
   showError: (auth_info) ->
     # TODO: error text localization
-    @tab_content.prepend $ '<div id="login-error"><span style="color:red">Login failed - check your user name and password or log in from the emojidex site.</span><div>'
+    @tab_content.prepend $ '<div id="login-error"><span style="color:red">Login failed. Please check your username and password or <a href="https://www.emojidex.com/users/sign_in">login here</a>.</span><div>'
 
   hideLoginForm: ->
     $('#pallet-emoji-username-input').val('')
@@ -62,7 +62,7 @@ class UserTab
   setUserTab: ->
     user_tab_list = $ '<ul class="nav nav-tabs mb-m mt-m" id="user_tab_list"></ul>'
     user_tab_list.append $ '<li id="tab-user-favorite" class="active"><a href="#tab-content-user-favorite" data-toggle="tab">Favorite</a></li>'
-    #user_tab_list.append $ '<li id="tab-user-history"><a href="#tab-content-user-history" data-toggle="tab">History</a></li>'
+    user_tab_list.append $ '<li id="tab-user-history"><a href="#tab-content-user-history" data-toggle="tab">History</a></li>'
 
     logout_btn = $ '<button class="btn btn-default btm-sm pull-right" id="pallet-emoji-logout">LogOut</button>'
     logout_btn.click =>
@@ -79,7 +79,7 @@ class UserTab
 
   setHistory: (auth_info) ->
     @pallet.EC.User.History.get (response) =>
-      @setData(response.history, response.meta, 'history')
+      @setDataByCodes((item.emoji_code for item in response.history), response.meta, 'history')
 
   setFavorite: (auth_info) ->
     @pallet.EC.User.Favorites.get (response) =>
@@ -88,6 +88,13 @@ class UserTab
   setData: (data, meta, kind) ->
     tab_pane = $ "<div class='tab-pane #{if kind is 'favorite' then 'active' else ''}' id='tab-content-user-#{kind}'></div>"
     tab_pane.append @pallet.setEmojiList(kind, data)
+    @user_tab_content.append tab_pane
+
+    # @setPagination(meta, tab_pane, kind)
+
+  setDataByCodes: (data, meta, kind) ->
+    tab_pane = $ "<div class='tab-pane' id='tab-content-user-#{kind}'></div>"
+    tab_pane.append @pallet.setCodeList(kind, data)
     @user_tab_content.append tab_pane
 
     # @setPagination(meta, tab_pane, kind)
