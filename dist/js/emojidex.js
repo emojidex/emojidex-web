@@ -1261,8 +1261,11 @@ e=!1,s=!1,i=!1;var o=t.ui.keyCode;switch(n.keyCode){case o.PAGE_UP:e=!0,this._mo
                   resolve();
                   return;
                 }
-                emoji_image = $("<img src='" + _this.plugin.EC.cdn_url + "px8/" + emoji_code + ".png'></img>");
+                emoji_image = $("<img src='" + _this.plugin.EC.cdn_url + "px8/" + emoji_code + ".png' alt='" + emoji_code + "'></img>");
                 emoji_image.on('load', function(e) {
+                  if (emoji.link !== null && emoji.link !== '') {
+                    $(loading_element).wrap("<a href='" + emoji.link + "'></a>");
+                  }
                   return _this.fadeOutLoadingTag_fadeInEmojiTag($(loading_element), emoji_code).then(function() {
                     return resolve();
                   });
@@ -1357,7 +1360,11 @@ e=!1,s=!1,i=!1;var o=t.ui.keyCode;switch(n.keyCode){case o.PAGE_UP:e=!0,this._mo
                   }
                   emoji_image = $("<img src='" + _this.plugin.EC.cdn_url + "px8/" + (_this.replaceSpaceToUnder(code_only)) + ".png' data-code='" + code_only + "'></img>");
                   emoji_image.on('load', function(e) {
-                    replaced_text = replaced_text.replace(":" + e.currentTarget.dataset.code + ":", _this.getEmojiTag(_this.replaceSpaceToUnder(e.currentTarget.dataset.code)));
+                    if (emoji.link !== null && emoji.link !== '') {
+                      replaced_text = replaced_text.replace(":" + e.currentTarget.dataset.code + ":", "<a href='" + emoji.link + "'>" + (_this.getEmojiTag(_this.replaceSpaceToUnder(e.currentTarget.dataset.code))) + "</a>");
+                    } else {
+                      replaced_text = replaced_text.replace(":" + e.currentTarget.dataset.code + ":", _this.getEmojiTag(_this.replaceSpaceToUnder(e.currentTarget.dataset.code)));
+                    }
                     return checker.check();
                   });
                   return emoji_image.on('error', function(e) {
