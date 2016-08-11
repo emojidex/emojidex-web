@@ -93,7 +93,7 @@ describe "emojidexPallet", ->
         callback: (data, i) ->
           if data.vals[0].match /login-error/
             # TODO: english text
-            expect($('#login-error span').text()).toBe 'Login failed - check your user name and password or log in from the emojidex site.'
+            expect($('#login-error span').text()).toBe 'Login failed. Please check your username and password or login here.'
             remove_watch $('#tab-content-user'), 'content_user'
             done()
 
