@@ -101,7 +101,9 @@ module.exports = (grunt) ->
           jasmine:
             prop: ['jasmine', 'esteWatch']
             value:
-              src: ['dist/js/*.min.js']
+              src: [
+                'dist/js/emojidex.js'
+              ]
 
         define_list =
           emojidex:

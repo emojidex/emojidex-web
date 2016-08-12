@@ -10,20 +10,19 @@ class ReplacerSearch extends Replacer
           emoji_code = @replaceSpaceToUnder loading_element.dataset.emoji
           timeout = setTimeout =>
             @fadeOutLoadingTag_fadeInEmojiTag($(loading_element), emoji_code, false)
+            reject new Error('emojidex: replaceToEmojiIconOrRollback - Timeout')
           , @promiseWaitTime
 
-          @plugin.EC.Search.find emoji_code, (emoji)=>
-            if emoji.r18 == true && @plugin.EC.User.auth_info.r18 == false
-              resolve()
-              return
-            emoji_image = $("<img src='#{@plugin.EC.cdn_url}px8/#{emoji_code}.png' alt='#{emoji_code}'></img>")
-            emoji_image.on 'load', (e) =>
-              if emoji.link != null && emoji.link != ''
-                $(loading_element).wrap("<a href='#{emoji.link}'></a>")
-              @fadeOutLoadingTag_fadeInEmojiTag($(loading_element), emoji_code).then ->
-                resolve()
-            emoji_image.on 'error', (e) =>
+          @plugin.EC.Search.find emoji_code, (emoji) =>
+            if emoji.statusText is 'Not Found'
               @fadeOutLoadingTag_fadeInEmojiTag($(loading_element), emoji_code, false).then ->
+                resolve()
+            else if emoji.r18 == true && @plugin.EC.User.auth_info.r18 == false
+              console.log 'emoji.r18:', emoji.r18
+              @fadeOutLoadingTag_fadeInEmojiTag($(loading_element), emoji.code, false).then ->
+                resolve()
+            else
+              @fadeOutLoadingTag_fadeInEmojiTag($(loading_element), emoji).then ->
                 resolve()
 
       # start: searchEmoji_setEmojiTag --------
@@ -81,10 +80,7 @@ class ReplacerSearch extends Replacer
 
               emoji_image = $("<img src='#{@plugin.EC.cdn_url}px8/#{@replaceSpaceToUnder code_only}.png' data-code='#{code_only}'></img>")
               emoji_image.on 'load', (e) =>
-                if emoji.link != null && emoji.link != ''
-                  replaced_text = replaced_text.replace ":#{e.currentTarget.dataset.code}:", "<a href='#{emoji.link}'>#{@getEmojiTag(@replaceSpaceToUnder(e.currentTarget.dataset.code))}</a>"
-                else
-                  replaced_text = replaced_text.replace ":#{e.currentTarget.dataset.code}:", @getEmojiTag @replaceSpaceToUnder(e.currentTarget.dataset.code)
+                replaced_text = replaced_text.replace ":#{e.currentTarget.dataset.code}:", @getEmojiTag emoji
                 checker.check()
               emoji_image.on 'error', (e) =>
                 checker.check()
