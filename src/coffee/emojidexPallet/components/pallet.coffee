@@ -117,6 +117,7 @@ class Pallet
     if emoji.moji != null && emoji.moji != '' then emoji.moji else ":#{emoji.code}:"
 
   insertEmojiAtCaret: (emoji) ->
+    code = @mojiOrCode(emoji)
     @clipboard.destroy() if @clipboard
 
     if @EC.User.auth_info.token != null
@@ -138,7 +139,6 @@ class Pallet
         link_wrapper = wrapper
         wrapper = $ '<a>',
           href: emoji.link
-          alt: ''
         wrapper = link_wrapper.append(wrapper)
 
       elem.focus()
@@ -156,9 +156,9 @@ class Pallet
       txt = elem.val()
       startTxt = txt.substring(0,  pos)
       stopTxt = txt.substring(pos, txt.length)
-      elem.val(startTxt + emoji.code + stopTxt)
+      elem.val(startTxt + code + stopTxt)
       elem.focus()
-      elem.caret('pos', pos + emoji.code.length)
+      elem.caret('pos', pos + code.length)
 
   setPagination: (kind, prev_func, next_func, cur_page, max_page) ->
     pagination = $ "<div class='#{kind}-pagination text-center'><ul class='pagination mb-0'></ul></div>"

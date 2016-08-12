@@ -510,7 +510,8 @@ e=!1,s=!1,i=!1;var o=t.ui.keyCode;switch(n.keyCode){case o.PAGE_UP:e=!0,this._mo
     };
 
     Pallet.prototype.insertEmojiAtCaret = function(emoji) {
-      var elem, link_wrapper, pos, range, selection, startTxt, stopTxt, txt, wrapper;
+      var code, elem, link_wrapper, pos, range, selection, startTxt, stopTxt, txt, wrapper;
+      code = this.mojiOrCode(emoji);
       if (this.clipboard) {
         this.clipboard.destroy();
       }
@@ -535,8 +536,7 @@ e=!1,s=!1,i=!1;var o=t.ui.keyCode;switch(n.keyCode){case o.PAGE_UP:e=!0,this._mo
         if (emoji.link !== null && emoji.link !== '') {
           link_wrapper = wrapper;
           wrapper = $('<a>', {
-            href: emoji.link,
-            alt: ''
+            href: emoji.link
           });
           wrapper = link_wrapper.append(wrapper);
         }
@@ -553,9 +553,9 @@ e=!1,s=!1,i=!1;var o=t.ui.keyCode;switch(n.keyCode){case o.PAGE_UP:e=!0,this._mo
         txt = elem.val();
         startTxt = txt.substring(0, pos);
         stopTxt = txt.substring(pos, txt.length);
-        elem.val(startTxt + emoji.code + stopTxt);
+        elem.val(startTxt + code + stopTxt);
         elem.focus();
-        return elem.caret('pos', pos + emoji.code.length);
+        return elem.caret('pos', pos + code.length);
       }
     };
 
