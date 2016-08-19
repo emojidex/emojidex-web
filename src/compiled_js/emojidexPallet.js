@@ -260,7 +260,7 @@
   CategoryTab = (function() {
     function CategoryTab(pallet, category, length) {
       this.pallet = pallet;
-      this.tab_list = $("<li id='tab-" + category.code + "' data-code='" + category.code + "' class='" + (length === 0 ? " active" : "") + "'><a href='#tab-content-" + category.code + "' data-toggle='pill'>" + category.name + "</a></li>");
+      this.tab_list = $("<li id='tab-" + category.code + "' data-code='" + category.code + "' class='" + (length === 0 ? " active" : "") + "' style='width:40px'><a href='#tab-content-" + category.code + "' data-toggle='pill'><img src='http://assets.emojidex.com/scripts/image/categories/" + category.code + ".png' style='width:32px;height:32px' alt='" + category.name + "' /></a></li>");
       this.tab_list.click((function(_this) {
         return function(e) {
           return _this.setCategory($(e.currentTarget).data('code'));
