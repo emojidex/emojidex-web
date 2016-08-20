@@ -2,6 +2,7 @@ class Pallet
   constructor: (@plugin) ->
     @active_input_area = null
     @EC = new EmojidexClient
+      limit: 65,
       onReady: (EC) =>
         # start main --------
         $('input, textarea, [contenteditable="true"]').on 'focus keyup mouseup', (e) =>
@@ -44,6 +45,10 @@ class Pallet
         tab_content = $ '<div class="tab-content"></div>'
 
         @EC.Categories.sync (categories) =>
+          index_tab = new IndexTab @
+          tab_list.append index_tab.tab_list
+          tab_content.append index_tab.tab_content
+
           for category in categories
             category_tab = new CategoryTab @, category, tab_list[0].children.length
             tab_list.append category_tab.tab_list

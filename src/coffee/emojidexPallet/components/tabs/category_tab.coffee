@@ -1,6 +1,6 @@
 class CategoryTab
   constructor: (@pallet, category, length) ->
-    @tab_list = $ "<li id='tab-#{category.code}' data-code='#{category.code}' class='#{if length is 0 then " active" else ""}' style='width:40px'><a href='#tab-content-#{category.code}' data-toggle='pill'><img src='http://assets.emojidex.com/scripts/image/categories/#{category.code}.png' style='width:32px;height:32px' alt='#{category.name}' /></a></li>"
+    @tab_list = $ "<li id='tab-#{category.code}' data-code='#{category.code}' class='' style='width:40px'><a href='#tab-content-#{category.code}' data-toggle='pill'><img src='http://assets.emojidex.com/scripts/image/categories/#{category.code}.png' style='width:32px;height:32px' alt='#{category.name}' /></a></li>"
     @tab_list.click (e) =>
       @setCategory $(e.currentTarget).data 'code'
 
@@ -15,7 +15,6 @@ class CategoryTab
   setCategoryTabContent: (category_name)->
     @pallet.EC.Categories.getEmoji category_name, (result_emoji, called_data) =>
       @tab_data = called_data
-      , {count:64}
 
       @tab_content.find('.category-emoji-list').remove()
       @tab_content.find('.category-pagination').remove()

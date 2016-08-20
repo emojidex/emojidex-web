@@ -12,7 +12,7 @@
  */
 
 (function() {
-  var CategoryTab, Pallet, SearchTab, UserTab;
+  var CategoryTab, IndexTab, Pallet, SearchTab, UserTab;
 
   (function($, window, document) {
     var Plugin, defaults, pluginName;
@@ -46,6 +46,7 @@
       this.plugin = plugin;
       this.active_input_area = null;
       this.EC = new EmojidexClient({
+        limit: 65,
         onReady: (function(_this) {
           return function(EC) {
             var base;
@@ -96,7 +97,10 @@
             tab_list = $('<ul class="nav nav-pills"></ul>');
             tab_content = $('<div class="tab-content"></div>');
             return _this.EC.Categories.sync(function(categories) {
-              var category, category_tab, i, len, search_tab, user_tab;
+              var category, category_tab, i, index_tab, len, search_tab, user_tab;
+              index_tab = new IndexTab(_this);
+              tab_list.append(index_tab.tab_list);
+              tab_content.append(index_tab.tab_content);
               for (i = 0, len = categories.length; i < len; i++) {
                 category = categories[i];
                 category_tab = new CategoryTab(_this, category, tab_list[0].children.length);
@@ -260,7 +264,7 @@
   CategoryTab = (function() {
     function CategoryTab(pallet, category, length) {
       this.pallet = pallet;
-      this.tab_list = $("<li id='tab-" + category.code + "' data-code='" + category.code + "' class='" + (length === 0 ? " active" : "") + "' style='width:40px'><a href='#tab-content-" + category.code + "' data-toggle='pill'><img src='http://assets.emojidex.com/scripts/image/categories/" + category.code + ".png' style='width:32px;height:32px' alt='" + category.name + "' /></a></li>");
+      this.tab_list = $("<li id='tab-" + category.code + "' data-code='" + category.code + "' class='' style='width:40px'><a href='#tab-content-" + category.code + "' data-toggle='pill'><img src='http://assets.emojidex.com/scripts/image/categories/" + category.code + ".png' style='width:32px;height:32px' alt='" + category.name + "' /></a></li>");
       this.tab_list.click((function(_this) {
         return function(e) {
           return _this.setCategory($(e.currentTarget).data('code'));
@@ -302,6 +306,42 @@
     };
 
     return CategoryTab;
+
+  })();
+
+  IndexTab = (function() {
+    function IndexTab(pallet) {
+      this.pallet = pallet;
+      this.tab_list = $("<li id='tab-index' class='active'><a href='#tab-content-index' data-toggle='pill'>Index</a></li>");
+      this.tab_content = $("<div class='tab-pane active' id='tab-content-index'></div>");
+      this.setTabContent();
+    }
+
+    IndexTab.prototype.setTabContent = function() {
+      return this.pallet.EC.Indexes.index((function(_this) {
+        return function(result_emoji, called_data) {
+          var cur_page, max_page, next_func, prev_func;
+          _this.tab_data = called_data;
+          _this.tab_content.find('.index-emoji-list').remove();
+          _this.tab_content.find('.index-pagination').remove();
+          _this.tab_content.append(_this.pallet.setEmojiList('index', result_emoji));
+          cur_page = _this.pallet.EC.Indexes.cur_page;
+          max_page = Math.floor(_this.pallet.EC.Indexes.count / _this.pallet.EC.options.limit);
+          if (_this.pallet.EC.Indexes.count % _this.pallet.EC.options.limit > 0) {
+            max_page++;
+          }
+          prev_func = function() {
+            return _this.pallet.EC.Indexes.prev();
+          };
+          next_func = function() {
+            return _this.pallet.EC.Indexes.next();
+          };
+          return _this.tab_content.append(_this.pallet.setPagination('index', prev_func, next_func, cur_page, max_page));
+        };
+      })(this));
+    };
+
+    return IndexTab;
 
   })();
 
