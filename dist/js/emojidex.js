@@ -591,7 +591,7 @@ e=!1,s=!1,i=!1;var o=t.ui.keyCode;switch(n.keyCode){case o.PAGE_UP:e=!0,this._mo
   CategoryTab = (function() {
     function CategoryTab(pallet, category, length) {
       this.pallet = pallet;
-      this.tab_list = $("<li id='tab-" + category.code + "' data-code='" + category.code + "' class='' style='width:40px'><a href='#tab-content-" + category.code + "' data-toggle='pill'><img src='http://assets.emojidex.com/scripts/image/categories/" + category.code + ".png' style='width:32px;height:32px' alt='" + category.name + "' /></a></li>");
+      this.tab_list = $("<li id='tab-" + category.code + "' data-code='" + category.code + "'><a href='#tab-content-" + category.code + "' data-toggle='pill'><i class='emjdx-" + category.code + "'></a></li>");
       this.tab_list.click((function(_this) {
         return function(e) {
           return _this.setCategory($(e.currentTarget).data('code'));

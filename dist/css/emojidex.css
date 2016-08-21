@@ -1,4 +1,5 @@
 .atwho-view{position:absolute;top:0;left:0;display:none;margin-top:18px;background:#fff;color:#000;border:1px solid #DDD;border-radius:3px;box-shadow:0 0 5px rgba(0,0,0,.1);min-width:120px;z-index:11110!important}.atwho-view .cur{background:#36F;color:#fff}.atwho-view .cur small{color:#fff}.atwho-view strong{color:#36F}.atwho-view .cur strong{color:#fff;font:700}.atwho-view ul{list-style:none;padding:0;margin:auto}.atwho-view ul li{display:block;padding:5px 10px;border-bottom:1px solid #DDD;cursor:pointer}.atwho-view small{font-size:smaller;color:#777;font-weight:400}
+@charset "UTF-8";
 .mt-0 {
   margin-top: 0px; }
 
@@ -142,6 +143,63 @@
 
 .pl-xl {
   padding-left: 20px; }
+
+@font-face {
+  font-family: "emojidex-ui-icon";
+  src: url("http://assets.emojidex.com/scripts/fonts/emojidex-ui/emojidex-ui-icon.eot");
+  src: url("http://assets.emojidex.com/scripts/fonts/emojidex-ui/emojidex-ui-icon.eot?#iefix") format("embedded-opentype"), url("http://assets.emojidex.com/scripts/fonts/emojidex-ui/emojidex-ui-icon.woff") format("woff"), url("http://assets.emojidex.com/scripts/fonts/emojidex-ui/emojidex-ui-icon.ttf") format("truetype"), url("http://assets.emojidex.com/scripts/fonts/emojidex-ui/emojidex-ui-icon.svg#emojidex-ui-icon") format("svg");
+  font-weight: normal;
+  font-style: normal; }
+[class^="emjdx-"], [class*=" emjdx-"] {
+  font-family: "emojidex-ui-icon";
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; }
+
+.emjdx-all:before {
+  content: ""; }
+
+.emjdx-gestures:before {
+  content: ""; }
+
+.emjdx-places:before {
+  content: ""; }
+
+.emjdx-cosmos:before {
+  content: ""; }
+
+.emjdx-symbols:before {
+  content: ""; }
+
+.emjdx-people:before {
+  content: ""; }
+
+.emjdx-tools:before {
+  content: ""; }
+
+.emjdx-abstract:before {
+  content: ""; }
+
+.emjdx-food:before {
+  content: ""; }
+
+.emjdx-transportation:before {
+  content: ""; }
+
+.emjdx-objects:before {
+  content: ""; }
+
+.emjdx-faces:before {
+  content: ""; }
+
+.emjdx-nature:before {
+  content: ""; }
 
 img.emojidex-emoji {
   display: inline-block !important;

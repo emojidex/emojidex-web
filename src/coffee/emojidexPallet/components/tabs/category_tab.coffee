@@ -1,6 +1,6 @@
 class CategoryTab
   constructor: (@pallet, category, length) ->
-    @tab_list = $ "<li id='tab-#{category.code}' data-code='#{category.code}' class='' style='width:40px'><a href='#tab-content-#{category.code}' data-toggle='pill'><img src='http://assets.emojidex.com/scripts/image/categories/#{category.code}.png' style='width:32px;height:32px' alt='#{category.name}' /></a></li>"
+    @tab_list = $ "<li id='tab-#{category.code}' data-code='#{category.code}'><a href='#tab-content-#{category.code}' data-toggle='pill'><i class='emjdx-#{category.code}'></a></li>"
     @tab_list.click (e) =>
       @setCategory $(e.currentTarget).data 'code'
 
