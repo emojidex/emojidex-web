@@ -325,9 +325,9 @@
           _this.tab_content.find('.index-emoji-list').remove();
           _this.tab_content.find('.index-pagination').remove();
           _this.tab_content.append(_this.pallet.setEmojiList('index', result_emoji));
-          cur_page = _this.pallet.EC.Indexes.cur_page;
-          max_page = Math.floor(_this.pallet.EC.Indexes.count / _this.pallet.EC.options.limit);
-          if (_this.pallet.EC.Indexes.count % _this.pallet.EC.options.limit > 0) {
+          cur_page = _this.pallet.EC.Indexes.meta.total_count === 0 ? 0 : _this.pallet.EC.Indexes.cur_page;
+          max_page = Math.floor(_this.pallet.EC.Indexes.meta.total_count / _this.pallet.EC.options.limit);
+          if (_this.pallet.EC.Indexes.meta.total_count % _this.pallet.EC.options.limit > 0) {
             max_page++;
           }
           prev_func = function() {
