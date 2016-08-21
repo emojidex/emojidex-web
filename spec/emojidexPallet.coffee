@@ -23,41 +23,41 @@ describe "emojidexPallet", ->
     $('#pallet-btn').click()
 
   describe 'category tab', ->
-    it "change category", (done) ->
-      $('#tab-content-cosmos').watch
-        id: 'content_cosmos'
+    it "changes to a specific category", (done) ->
+      $('#tab-content-faces').watch
+        id: 'content_faces'
         properties: 'prop_innerHTML'
         watchChildren: true
         callback: (data, i) ->
           if data.vals[0].match /category-emoji-list/
-            expect($('#tab-content-cosmos').find('img').length).toBeTruthy()
-            remove_watch $('#tab-content-cosmos'), 'content_cosmos'
+            expect($('#tab-content-faces').find('img').length).toBeTruthy()
+            remove_watch $('#tab-content-faces'), 'content_faces'
             done()
 
-      $('#tab-cosmos a').click()
-      expect($('#tab-cosmos')).toHaveClass('active')
-      expect($('#tab-content-cosmos')).toHaveClass('active')
+      $('#tab-faces a').click()
+      expect($('#tab-faces')).toHaveClass('active')
+      expect($('#tab-content-faces')).toHaveClass('active')
 
-    it 'page next', (done) ->
-      $('#tab-content-cosmos').watch
-        id: "content_cosmos"
+    it 'switches to the next page', (done) ->
+      $('#tab-content-faces').watch
+        id: "content_faces"
         properties: 'prop_innerHTML'
         watchChildren: true
         callback: (data, i, mutations) ->
           expect($(data.vals[0]).find('ul.pagination li.disabled span').text().substr(0, 1)).toBe '2'
-          remove_watch $('#tab-content-cosmos'), 'content_cosmos'
+          remove_watch $('#tab-content-faces'), 'content_faces'
           done()
 
       $($('.pagination').find('.pallet-pager')[1]).click()
 
-    it 'page prev', (done) ->
-      $('#tab-content-cosmos').watch
-        id: "content_cosmos"
+    it 'switches to the previous page', (done) ->
+      $('#tab-content-faces').watch
+        id: "content_faces"
         properties: 'prop_innerHTML'
         watchChildren: true
         callback: (data, i, mutations) ->
           expect($(data.vals[0]).find('ul.pagination li.disabled span').text().substr(0, 1)).toBe '1'
-          remove_watch $('#tab-content-cosmos'), 'content_cosmos'
+          remove_watch $('#tab-content-faces'), 'content_faces'
           done()
 
       $($('.pagination').find('.pallet-pager')[0]).click()
