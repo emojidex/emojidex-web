@@ -609,7 +609,7 @@ e=!1,s=!1,i=!1;var o=t.ui.keyCode;switch(n.keyCode){case o.PAGE_UP:e=!0,this._mo
       this.pallet = pallet;
       this.sort_type = 'score';
       this.category_name = 'faces';
-      this.tab_list = $("<li id='tab-" + category.code + "' data-code='" + category.code + "' class='' style='width:40px'><a href='#tab-content-" + category.code + "' data-toggle='pill'><img src='http://assets.emojidex.com/scripts/image/categories/" + category.code + ".png' style='width:32px;height:32px' alt='" + category.name + "' /></a></li>");
+      this.tab_list = $("<li id='tab-" + category.code + "' data-code='" + category.code + "'><a href='#tab-content-" + category.code + "' data-toggle='pill'><i class='emjdx-" + category.code + "'></a></li>");
       this.tab_list.click((function(_this) {
         return function(e) {
           return _this.setCategory($(e.currentTarget).data('code'));
@@ -707,6 +707,7 @@ e=!1,s=!1,i=!1;var o=t.ui.keyCode;switch(n.keyCode){case o.PAGE_UP:e=!0,this._mo
   SearchTab = (function() {
     function SearchTab(pallet) {
       this.pallet = pallet;
+      this.sort_type = 'score';
       this.tab_list = "<li id='tab-search'><a href='#tab-content-search' data-toggle='pill'>Search</a></li>";
       this.tab_content = this.getTabContent();
     }
@@ -740,9 +741,10 @@ e=!1,s=!1,i=!1;var o=t.ui.keyCode;switch(n.keyCode){case o.PAGE_UP:e=!0,this._mo
     };
 
     SearchTab.prototype.search = function(search_word) {
+      this.search_word = search_word;
       return this.pallet.EC.Search.search(search_word, (function(_this) {
         return function(result_emoji) {
-          var cur_page, max_page, next_func, prev_func;
+          var cur_page, max_page, next_func, pagination, prev_func;
           $('.search-emoji-list').remove();
           $('.search-pagination').remove();
           _this.tab_content.append(_this.pallet.setEmojiList('search', result_emoji));
@@ -757,9 +759,17 @@ e=!1,s=!1,i=!1;var o=t.ui.keyCode;switch(n.keyCode){case o.PAGE_UP:e=!0,this._mo
           next_func = function() {
             return _this.pallet.EC.Search.next();
           };
-          return _this.tab_content.append(_this.pallet.setPagination('search', prev_func, next_func, cur_page, max_page));
+          pagination = _this.pallet.setPagination('search', prev_func, next_func, cur_page, max_page);
+          pagination.append(_this.pallet.setSorting(_this));
+          return _this.tab_content.append(pagination);
         };
-      })(this));
+      })(this), {
+        sort: this.sort_type
+      });
+    };
+
+    SearchTab.prototype.setTabContent = function() {
+      return this.search(this.search_word);
     };
 
     return SearchTab;

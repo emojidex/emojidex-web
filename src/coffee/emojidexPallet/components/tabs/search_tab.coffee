@@ -1,5 +1,6 @@
 class SearchTab
   constructor: (@pallet) ->
+    @sort_type = 'score'
     @tab_list = "<li id='tab-search'><a href='#tab-content-search' data-toggle='pill'>Search</a></li>"
     @tab_content = @getTabContent()
 
@@ -22,6 +23,7 @@ class SearchTab
       @search(search_word)
 
   search: (search_word) ->
+    @search_word = search_word
     @pallet.EC.Search.search search_word, (result_emoji) =>
       $('.search-emoji-list').remove()
       $('.search-pagination').remove()
@@ -32,4 +34,10 @@ class SearchTab
       max_page++ if @pallet.EC.Search.meta.total_count % @pallet.EC.options.limit > 0
       prev_func = => @pallet.EC.Search.prev()
       next_func = => @pallet.EC.Search.next()
-      @tab_content.append @pallet.setPagination('search', prev_func, next_func, cur_page, max_page)
+      pagination = @pallet.setPagination('search', prev_func, next_func, cur_page, max_page)
+      pagination.append @pallet.setSorting(@)
+      @tab_content.append pagination
+    , {sort: @sort_type}
+
+  setTabContent: () ->
+    @search(@search_word)
