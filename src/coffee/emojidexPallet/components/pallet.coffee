@@ -172,7 +172,20 @@ class Pallet
     pagination.find('.pagination').append $("<li class='disabled'><span>#{cur_page} / #{max_page}</span></li>")
     pagination.find('.pagination').append $('<li class="pallet-pager"><span>&raquo;</span></li>').click =>
       next_func()
+
     pagination
+
+  setSorting: (target_tab) ->
+    if @EC.User.auth_info.premium == true
+      sort_selector = $ '<select></select>'
+      sort_selector.append $('<option value="score">Score</option>')
+      sort_selector.append $('<option value="newest">Newest</option>')
+      sort_selector.append $('<option value="liked">Most Liked</option>')
+      sort_selector.val(target_tab.sort_type)
+      sort_selector.change ->
+        target_tab.sort_type = sort_selector.val()
+        target_tab.setTabContent()
+      sort_selector
 
   openDialog: ->
     @dialog.dialog 'open'

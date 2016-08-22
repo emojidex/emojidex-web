@@ -1,10 +1,11 @@
 class IndexTab
   constructor: (@pallet) ->
+    @sort_type = 'score'
     @tab_list = $ "<li id='tab-index' class='active'><a href='#tab-content-index' data-toggle='pill'>Index</a></li>"
     @tab_content = $ "<div class='tab-pane active' id='tab-content-index'></div>"
     @setTabContent()
 
-  setTabContent: ->
+  setTabContent: () ->
     @pallet.EC.Indexes.index (result_emoji, called_data) =>
       @tab_data = called_data
 
@@ -17,4 +18,7 @@ class IndexTab
       max_page++ if @pallet.EC.Indexes.meta.total_count % @pallet.EC.options.limit > 0
       prev_func = => @pallet.EC.Indexes.prev()
       next_func = => @pallet.EC.Indexes.next()
-      @tab_content.append @pallet.setPagination('index', prev_func, next_func, cur_page, max_page)
+      pagination = @pallet.setPagination('index', prev_func, next_func, cur_page, max_page)
+      pagination.append @pallet.setSorting(@)
+      @tab_content.append pagination
+    , {sort: @sort_type}
