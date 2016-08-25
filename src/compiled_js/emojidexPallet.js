@@ -312,7 +312,7 @@
   IndexTab = (function() {
     function IndexTab(pallet) {
       this.pallet = pallet;
-      this.tab_list = $("<li id='tab-index' class='active'><a href='#tab-content-index' data-toggle='pill'>Index</a></li>");
+      this.tab_list = $("<li id='tab-index' class='active'><a href='#tab-content-index' data-toggle='pill'><i class='emjdx-all'></a></li>");
       this.tab_content = $("<div class='tab-pane active' id='tab-content-index'></div>");
       this.setTabContent();
     }

@@ -1,6 +1,6 @@
 class IndexTab
   constructor: (@pallet) ->
-    @tab_list = $ "<li id='tab-index' class='active'><a href='#tab-content-index' data-toggle='pill'>Index</a></li>"
+    @tab_list = $ "<li id='tab-index' class='active'><a href='#tab-content-index' data-toggle='pill'><i class='emjdx-all'></a></li>"
     @tab_content = $ "<div class='tab-pane active' id='tab-content-index'></div>"
     @setTabContent()
 

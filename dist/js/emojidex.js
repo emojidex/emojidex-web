@@ -639,7 +639,7 @@ e=!1,s=!1,i=!1;var o=t.ui.keyCode;switch(n.keyCode){case o.PAGE_UP:e=!0,this._mo
   IndexTab = (function() {
     function IndexTab(pallet) {
       this.pallet = pallet;
-      this.tab_list = $("<li id='tab-index' class='active'><a href='#tab-content-index' data-toggle='pill'>Index</a></li>");
+      this.tab_list = $("<li id='tab-index' class='active'><a href='#tab-content-index' data-toggle='pill'><i class='emjdx-all'></a></li>");
       this.tab_content = $("<div class='tab-pane active' id='tab-content-index'></div>");
       this.setTabContent();
     }
