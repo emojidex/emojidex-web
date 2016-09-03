@@ -3,6 +3,7 @@ class AutoComplete
     @searching_num = 0
     @EC = new EmojidexClient
       onReady: (EC) =>
+        @EC.User.login('session')
         @setAutoComplete()
 
   setAutoComplete: ->

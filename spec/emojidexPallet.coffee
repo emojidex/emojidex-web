@@ -1,4 +1,3 @@
-# FIXME: require user_info specs
 describe "emojidexPallet", ->
   beforeAll (done) ->
     clearStorage()
@@ -24,41 +23,41 @@ describe "emojidexPallet", ->
     $('#pallet-btn').click()
 
   describe 'category tab', ->
-    it "change category", (done) ->
-      $('#tab-content-cosmos').watch
-        id: 'content_cosmos'
+    it "changes to a specific category", (done) ->
+      $('#tab-content-faces').watch
+        id: 'content_faces'
         properties: 'prop_innerHTML'
         watchChildren: true
         callback: (data, i) ->
           if data.vals[0].match /category-emoji-list/
-            expect($('#tab-content-cosmos').find('img').length).toBeTruthy()
-            remove_watch $('#tab-content-cosmos'), 'content_cosmos'
+            expect($('#tab-content-faces').find('img').length).toBeTruthy()
+            remove_watch $('#tab-content-faces'), 'content_faces'
             done()
 
-      $('#tab-cosmos a').click()
-      expect($('#tab-cosmos')).toHaveClass('active')
-      expect($('#tab-content-cosmos')).toHaveClass('active')
+      $('#tab-faces a').click()
+      expect($('#tab-faces')).toHaveClass('active')
+      expect($('#tab-content-faces')).toHaveClass('active')
 
-    it 'page next', (done) ->
-      $('#tab-content-cosmos').watch
-        id: "content_cosmos"
+    it 'switches to the next page', (done) ->
+      $('#tab-content-faces').watch
+        id: "content_faces"
         properties: 'prop_innerHTML'
         watchChildren: true
         callback: (data, i, mutations) ->
           expect($(data.vals[0]).find('ul.pagination li.disabled span').text().substr(0, 1)).toBe '2'
-          remove_watch $('#tab-content-cosmos'), 'content_cosmos'
+          remove_watch $('#tab-content-faces'), 'content_faces'
           done()
 
       $($('.pagination').find('.pallet-pager')[1]).click()
 
-    it 'page prev', (done) ->
-      $('#tab-content-cosmos').watch
-        id: "content_cosmos"
+    it 'switches to the previous page', (done) ->
+      $('#tab-content-faces').watch
+        id: "content_faces"
         properties: 'prop_innerHTML'
         watchChildren: true
         callback: (data, i, mutations) ->
           expect($(data.vals[0]).find('ul.pagination li.disabled span').text().substr(0, 1)).toBe '1'
-          remove_watch $('#tab-content-cosmos'), 'content_cosmos'
+          remove_watch $('#tab-content-faces'), 'content_faces'
           done()
 
       $($('.pagination').find('.pallet-pager')[0]).click()
@@ -94,7 +93,7 @@ describe "emojidexPallet", ->
         callback: (data, i) ->
           if data.vals[0].match /login-error/
             # TODO: english text
-            expect($('#login-error span').text()).toBe 'You failed to login.'
+            expect($('#login-error span').text()).toBe 'Login failed. Please check your username and password or login here.'
             remove_watch $('#tab-content-user'), 'content_user'
             done()
 
@@ -103,8 +102,8 @@ describe "emojidexPallet", ->
       $('#pallet-emoji-password-input').val('aaa')
       $('#pallet-emoji-login-submit').click()
 
-    it 'premium user login [Require premium user info]', (done) ->
-      pending() unless premium_user_info?
+    it 'premium user login [Requires a premium user account]', (done) ->
+      pending() unless user_info?
       $('#tab-content-user').watch
         id: 'content_user'
         properties: 'prop_innerHTML'
@@ -117,21 +116,21 @@ describe "emojidexPallet", ->
             done()
 
       $('#tab-user a').click()
-      $('#pallet-emoji-username-input').val(premium_user_info.username)
-      $('#pallet-emoji-password-input').val(premium_user_info.password)
+      $('#pallet-emoji-username-input').val(user_info.auth_user)
+      $('#pallet-emoji-password-input').val(user_info.password)
       $('#pallet-emoji-login-submit').click()
 
-    it 'premium user can see the newest/popular emoji', (done) ->
-      pending() unless premium_user_info?
-      timer_option =
-        callback: ->
-          if $('#tab-content-user-newest').length
-            $('#tab-user-newest a').click()
-            expect($('#tab-content-user-newest').find('img').length).toBeTruthy()
-            done()
-          else
-            spec_timer timer_option
-      spec_timer timer_option
+   # it 'premium user can see the newest/popular emoji', (done) ->
+   #   pending() unless premium_user_info?
+   #   timer_option =
+   #     callback: ->
+   #       if $('#tab-content-user-newest').length
+   #         $('#tab-user-newest a').click()
+   #         expect($('#tab-content-user-newest').find('img').length).toBeTruthy()
+   #         done()
+   #       else
+   #         spec_timer timer_option
+   #   spec_timer timer_option
 
     it 'logout', (done) ->
       pending() unless premium_user_info?
@@ -153,27 +152,27 @@ describe "emojidexPallet", ->
         properties: 'prop_innerHTML'
         watchChildren: true
         callback: (data, i) ->
-          if data.vals[0].match /history-emoji-list/
-            expect($('#tab-content-user-history').find('img').length).toBeTruthy()
+          if data.vals[0].match /favorite-emoji-list/
+            expect($('#tab-content-user-favorite').find('img').length).toBeTruthy()
             remove_watch $('#tab-content-user'), 'content_user'
             done()
 
       $('#tab-user a').click()
-      $('#pallet-emoji-username-input').val(user_info.username)
+      $('#pallet-emoji-username-input').val(user_info.auth_user)
       $('#pallet-emoji-password-input').val(user_info.password)
       $('#pallet-emoji-login-submit').click()
 
-    it 'general user can not see the newest/popular emoji', (done) ->
-      pending() unless user_info?
-      timer_option =
-        callback: ->
-          if $('#tab-content-user-newest').length
-            $('#tab-user-newest a').click()
-            expect($('#tab-content-user-newest').find('a').text()).toBe 'Premium/Pro user only.'
-            done()
-          else
-            spec_timer timer_option
-      spec_timer timer_option
+   # it 'general user can not see the newest/popular emoji', (done) ->
+   #   pending() unless user_info?
+   #   timer_option =
+   #     callback: ->
+   #       if $('#tab-content-user-newest').length
+   #         $('#tab-user-newest a').click()
+   #         expect($('#tab-content-user-newest').find('a').text()).toBe 'Premium/Pro user only.'
+   #         done()
+   #       else
+   #         spec_timer timer_option
+   #   spec_timer timer_option
 
   it 'close emojidexPallet', ->
     $('button.pull-right[aria-label="Close"]').click()
@@ -197,8 +196,8 @@ describe "emojidexPallet", ->
               properties: 'prop_innerHTML'
               watchChildren: true
               callback: (data, i) ->
-                if data.vals[0].match /history-emoji-list/
-                  expect($('#tab-content-user-history').find('img').length).toBeTruthy()
+                if data.vals[0].match /favorite-emoji-list/
+                  expect($('#tab-content-user-favorite').find('img').length).toBeTruthy()
                   $('button.pull-right[aria-label="Close"]').click()
                   remove_watch $('#tab-content-user'), 'content_user'
                   done()

@@ -2,7 +2,7 @@ class Pallet
   constructor: (@plugin) ->
     @active_input_area = null
     @EC = new EmojidexClient
-      storageHubPath: 'https://www.emojidex.com/hub?pallet'
+      limit: 66,
       onReady: (EC) =>
         # start main --------
         $('input, textarea, [contenteditable="true"]').on 'focus keyup mouseup', (e) =>
@@ -16,10 +16,11 @@ class Pallet
   createDialog: ->
     @dialog = $ '<div id="emojidex-dialog-content"></div>'
     @dialog.dialog
-      dialogClass: 'emojidex-ui-dialog'
+      classes:
+        'ui-dialog': 'emojidex-ui-dialog'
       autoOpen: false
-      width: 700
-      title: 'Emojidex Pallet'
+      width: 557
+      title: '<img src="http://assets.emojidex.com/logo-hdpi.png" alt="emojidex logo" />'
 
       create: (e) ->
         $('.ui-dialog-titlebar-close').hide()
@@ -44,18 +45,22 @@ class Pallet
         tab_content = $ '<div class="tab-content"></div>'
 
         @EC.Categories.sync (categories) =>
+          index_tab = new IndexTab @
+          tab_list.append index_tab.tab_list
+          tab_content.append index_tab.tab_content
+
           for category in categories
             category_tab = new CategoryTab @, category, tab_list[0].children.length
             tab_list.append category_tab.tab_list
             tab_content.append category_tab.tab_content
 
-          search_tab = new SearchTab @
-          tab_list.append search_tab.tab_list
-          tab_content.append search_tab.tab_content
-
           user_tab = new UserTab @
           tab_list.append user_tab.tab_list
           tab_content.append user_tab.tab_content
+
+          search_tab = new SearchTab @
+          tab_list.append search_tab.tab_list
+          tab_content.append search_tab.tab_content
 
           @emoji_pallet = $ '<div class="emoji-pallet"></div>'
           @emoji_pallet.append(tab_list.add tab_content)
@@ -65,9 +70,9 @@ class Pallet
           @openDialog()
           $("#tab-#{categories[0].code}").click()
 
-  setEmojiList: (kind, result_emoji) ->
-    emoji_list = $ "<div class='#{kind}-emoji-list clearfix'></div>"
-    for emoji in result_emoji
+  setEmojiList: (kind, emoji_list) ->
+    emoji_divs = $ "<div class='#{kind}-emoji-list clearfix'></div>"
+    for emoji in emoji_list
       emoji_button = $ '<button>',
         class: 'emoji-btn btn btn-default pull-left'
       emoji_button.prop 'emoji_data', emoji
@@ -81,15 +86,47 @@ class Pallet
       emoji_button.append emoji_button_image
       emoji_button.click (e)=>
         @insertEmojiAtCaret($(e.currentTarget).prop('emoji_data'))
-      emoji_list.append emoji_button
-    emoji_list
+      emoji_divs.append emoji_button
+    emoji_divs
 
-  mojiOrCode:(emoji) ->
+  setCodeList: (kind, code_list) ->
+    emoji_divs = $ "<div class='#{kind}-emoji-list clearfix'></div>"
+    for code in code_list
+      emoji_button = $ '<button>',
+        class: 'emoji-btn btn btn-default pull-left'
+      emoji_button_image = $ '<img>',
+        title: code
+        class: 'img-responsive center-block'
+        src: "#{@EC.cdn_url}px32/#{code.replace(/\s/g, '_')}.png"
+      emoji_button.prop 'emoji_data', {code: code}
+
+      emoji_button.append emoji_button_image
+      emoji_button.click (e)=>
+        @insertEmojiAtCaret($(e.currentTarget).prop('emoji_data'))
+      #TODO implement ↓ properly
+      #@EC.Search.find code, (ret)=>
+      #  @setButtonInfo(ret, emoji_button)
+
+      emoji_divs.append emoji_button
+
+    emoji_divs
+
+  #TODO implement ↓ properly
+  #setButtonInfo: (emoji, target) ->
+  #  target.prop 'emoji_data', emoji
+  #  target.unbind('click')
+  #  target.click (e)=>
+  #    @insertEmojiAtCaret($(e.currentTarget).prop('emoji_data'))
+
+  mojiOrCode: (emoji) ->
     if emoji.moji != null && emoji.moji != '' then emoji.moji else ":#{emoji.code}:"
 
   insertEmojiAtCaret: (emoji) ->
-    @clipboard.destroy() if @clipboard
     code = @mojiOrCode(emoji)
+    @clipboard.destroy() if @clipboard
+
+    if @EC.User.auth_info.token != null
+      @EC.User.History.set(emoji.code.replace /\s/g, '_')
 
     if @active_input_area is null
       @clipboard = new Clipboard '.emoji-btn',
@@ -102,12 +139,11 @@ class Pallet
       wrapper = $ '<img>',
         class: 'emojidex-emoji'
         src: "#{@EC.cdn_url}px32/#{emoji.code.replace /\s/g, '_'}.png"
-        alt: code
+        alt: emoji.code
       if emoji.link != null && emoji.link != ''
         link_wrapper = wrapper
         wrapper = $ '<a>',
           href: emoji.link
-          alt: ''
         wrapper = link_wrapper.append(wrapper)
 
       elem.focus()

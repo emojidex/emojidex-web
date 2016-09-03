@@ -1,6 +1,6 @@
 class UserTab
   constructor: (@pallet) ->
-    @tab_list = "<li id='tab-user'><a href='#tab-content-user' data-toggle='pill'>User</a></li>"
+    @tab_list = "<li id='tab-user' class='pull-right'><a href='#tab-content-user' data-toggle='pill'><i class='emjdx-user'></a></li>"
     @tab_content = @getTabContent()
 
   getTabContent: ->
@@ -35,8 +35,6 @@ class UserTab
         @setUserTab()
         @setHistory(auth_info)
         @setFavorite(auth_info)
-        @setNewest(auth_info)
-        @setPopular(auth_info)
       else
         @showError(auth_info)
 
@@ -46,8 +44,8 @@ class UserTab
       @pallet.EC.User.token_auth username, password, (auth_info) -> callback(auth_info)
 
   showError: (auth_info) ->
-    # TODO: error text
-    @tab_content.prepend $ '<div id="login-error"><span style="color:red">You failed to login.</span><div>'
+    # TODO: error text localization
+    @tab_content.prepend $ '<div id="login-error"><span style="color:red">Login failed. Please check your username and password or <a href="https://www.emojidex.com/users/sign_in">login here</a>.</span><div>'
 
   hideLoginForm: ->
     $('#pallet-emoji-username-input').val('')
@@ -63,10 +61,8 @@ class UserTab
 
   setUserTab: ->
     user_tab_list = $ '<ul class="nav nav-tabs mb-m mt-m" id="user_tab_list"></ul>'
-    user_tab_list.append $ '<li id="tab-user-history" class="active"><a href="#tab-content-user-history" data-toggle="tab">History</a></li>'
-    user_tab_list.append $ '<li id="tab-user-favorite"><a href="#tab-content-user-favorite" data-toggle="tab">Favorite</a></li>'
-    user_tab_list.append $ '<li id="tab-user-newest"><a href="#tab-content-user-newest" data-toggle="tab">Newest</a></li>'
-    user_tab_list.append $ '<li id="tab-user-popular"><a href="#tab-content-user-popular" data-toggle="tab">Popular</a></li>'
+    user_tab_list.append $ '<li id="tab-user-favorite" class="active"><a href="#tab-content-user-favorite" data-toggle="tab">Favorite</a></li>'
+    user_tab_list.append $ '<li id="tab-user-history"><a href="#tab-content-user-history" data-toggle="tab">History</a></li>'
 
     logout_btn = $ '<button class="btn btn-default btm-sm pull-right" id="pallet-emoji-logout">LogOut</button>'
     logout_btn.click =>
@@ -83,31 +79,30 @@ class UserTab
 
   setHistory: (auth_info) ->
     @pallet.EC.User.History.get (response) =>
-      @setData(response.history, response.meta, 'history')
+      @setDataByCodes((item.emoji_code for item in response.history), response.meta, 'history')
 
   setFavorite: (auth_info) ->
     @pallet.EC.User.Favorites.get (response) =>
       @setData(response.emoji, response.meta, 'favorite')
 
   setData: (data, meta, kind) ->
-    tab_pane = $ "<div class='tab-pane #{if kind is 'history' then 'active' else ''}' id='tab-content-user-#{kind}'></div>"
+    tab_pane = $ "<div class='tab-pane #{if kind is 'favorite' then 'active' else ''}' id='tab-content-user-#{kind}'></div>"
     tab_pane.append @pallet.setEmojiList(kind, data)
     @user_tab_content.append tab_pane
 
     # @setPagination(meta, tab_pane, kind)
 
-  setNewest: (auth_info) ->
-    @pallet.EC.User.Newest.get (response) =>
-      @setPremiumData(response, 'newest')
+  setDataByCodes: (data, meta, kind) ->
+    tab_pane = $ "<div class='tab-pane' id='tab-content-user-#{kind}'></div>"
+    tab_pane.append @pallet.setCodeList(kind, data)
+    @user_tab_content.append tab_pane
 
-  setPopular: (auth_info) ->
-    @pallet.EC.User.Popular.get (response) =>
-      @setPremiumData(response, 'popular')
+    # @setPagination(meta, tab_pane, kind)
 
   setPremiumData: (response, kind) ->
     tab_pane = $ "<div class='tab-pane' id='tab-content-user-#{kind}'></div>"
     if response.statusText is 'Payment Required'
-      # TODO: text
+      # TODO: text localization
       tab_pane.append $ '<p style="margin-top:15px;"><a class="btn btn-primary" href="https://www.emojidex.com/profile" target="_blank">Premium/Pro user only.</a></p>'
     else
       tab_pane.append @pallet.setEmojiList(kind, response.emoji)

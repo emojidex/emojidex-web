@@ -1,6 +1,6 @@
 class CategoryTab
   constructor: (@pallet, category, length) ->
-    @tab_list = $ "<li id='tab-#{category.code}' data-code='#{category.code}' class='#{if length is 0 then " active" else ""}'><a href='#tab-content-#{category.code}' data-toggle='pill'>#{category.name}</a></li>"
+    @tab_list = $ "<li id='tab-#{category.code}' data-code='#{category.code}'><a href='#tab-content-#{category.code}' data-toggle='pill'><i class='emjdx-#{category.code}'></a></li>"
     @tab_list.click (e) =>
       @setCategory $(e.currentTarget).data 'code'
 
