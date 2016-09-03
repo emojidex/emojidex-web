@@ -46,7 +46,7 @@
       this.plugin = plugin;
       this.active_input_area = null;
       this.EC = new EmojidexClient({
-        limit: 65,
+        limit: 66,
         onReady: (function(_this) {
           return function(EC) {
             var base;
@@ -68,7 +68,7 @@
           'ui-dialog': 'emojidex-ui-dialog'
         },
         autoOpen: false,
-        width: 700,
+        width: 557,
         title: '<img src="http://assets.emojidex.com/logo-hdpi.png" alt="emojidex logo" />',
         create: function(e) {
           var close_btn;
@@ -107,12 +107,12 @@
                 tab_list.append(category_tab.tab_list);
                 tab_content.append(category_tab.tab_content);
               }
-              search_tab = new SearchTab(_this);
-              tab_list.append(search_tab.tab_list);
-              tab_content.append(search_tab.tab_content);
               user_tab = new UserTab(_this);
               tab_list.append(user_tab.tab_list);
               tab_content.append(user_tab.tab_content);
+              search_tab = new SearchTab(_this);
+              tab_list.append(search_tab.tab_list);
+              tab_content.append(search_tab.tab_content);
               _this.emoji_pallet = $('<div class="emoji-pallet"></div>');
               _this.emoji_pallet.append(tab_list.add(tab_content));
               _this.emoji_pallet.find('ul').after('<hr>');
@@ -340,7 +340,7 @@
     function IndexTab(pallet) {
       this.pallet = pallet;
       this.sort_type = 'score';
-      this.tab_list = $("<li id='tab-index' class='active'><a href='#tab-content-index' data-toggle='pill'>Index</a></li>");
+      this.tab_list = $("<li id='tab-index' class='active'><a href='#tab-content-index' data-toggle='pill'><i class='emjdx-all'></a></li>");
       this.tab_content = $("<div class='tab-pane active' id='tab-content-index'></div>");
       this.setTabContent();
     }
@@ -381,7 +381,7 @@
     function SearchTab(pallet) {
       this.pallet = pallet;
       this.sort_type = 'score';
-      this.tab_list = "<li id='tab-search'><a href='#tab-content-search' data-toggle='pill'>Search</a></li>";
+      this.tab_list = "<li id='tab-search' class='pull-right'><a href='#tab-content-search' data-toggle='pill'><i class='emjdx-search'></a></li>";
       this.tab_content = this.getTabContent();
     }
 
@@ -452,7 +452,7 @@
   UserTab = (function() {
     function UserTab(pallet) {
       this.pallet = pallet;
-      this.tab_list = "<li id='tab-user'><a href='#tab-content-user' data-toggle='pill'>User</a></li>";
+      this.tab_list = "<li id='tab-user' class='pull-right'><a href='#tab-content-user' data-toggle='pill'><i class='emjdx-user'></a></li>";
       this.tab_content = this.getTabContent();
     }
 

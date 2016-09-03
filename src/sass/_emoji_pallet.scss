@@ -25,10 +25,33 @@
   // Utility classes
   @import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/utilities';
 
+  .emojidex-ui-dialog {
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .ui-dialog .ui-dialog-titlebar {
+    padding: 10px;
+  }
+  .ui-widget-header {
+    border: none;
+    background-color: #fff;
+    .btn.btn-default[aria-label=Close] {
+      border-radius: 50px;
+      width: 27px;
+      height: 27px;
+    }
+  }
   #emojidex-dialog-content {
-    .category-emoji-list {
-      // overflow-y: auto;
-      max-height: 256px;
+    padding: 10px;
+    [class*=-pagination] {
+      height: 35px;
+      margin-top: 10px;
+      ul.pagination {
+        margin: 0px;
+        .pallet-pager {
+          cursor: pointer;
+        }
+      }
     }
     .emoji-btn {
       border-radius: 3px;
@@ -38,16 +61,7 @@
     hr {
       margin-top: 10px;
       margin-bottom: 15px;
-      border-top: 1px solid #797979;
-    }
-  }
-
-  .search-pagination {
-    .pallet-pager {
-      // float: left;
-      &:hover {
-        cursor: pointer;
-      }
+      border-top: 1px solid #ddd;
     }
   }
 
@@ -56,19 +70,67 @@
     height: auto;
   }
 
-  .pallet-pager {
-    cursor: pointer;
-  }
 
-  .nav {
+  .nav.nav-pills {
     float: none;
     li {
       a {
+        padding: 3px 3px 1px 3px;
+        font-size: 25px;
         text-decoration: none;
         font-family: $font-family-base;
-        font-size: $font-size-base;
-        line-height: $line-height-base;
+        line-height: 1;
         height: auto;
+        .emjdx-search {
+          color: #888
+        }
+        .emjdx-user {
+          color: #888
+        }
+        .emjdx-all {
+          color: #999
+        }
+        .emjdx-abstract {
+          color: #f76e6e
+        }
+        .emjdx-cosmos {
+          color: #f7b36e
+        }
+        .emjdx-faces {
+          color: #f7d56e
+        }
+        .emjdx-food {
+          color: #b3f76e
+        }
+        .emjdx-gestures {
+          color: #6ef76e
+        }
+        .emjdx-nature {
+          color: #6ef7b3
+        }
+        .emjdx-objects {
+          color: #6ef7f7
+        }
+        .emjdx-people {
+          color: #6eb3f7
+        }
+        .emjdx-places {
+          color: #6e6ef7
+        }
+        .emjdx-symbols {
+          color: #b36ef7
+        }
+        .emjdx-tools {
+          color: #f76ef7
+        }
+        .emjdx-transportation {
+          color: #f76eb3
+        }
+      }
+      &.active {
+        a {
+          background-color: #ddd;
+        }
       }
     }
   }
