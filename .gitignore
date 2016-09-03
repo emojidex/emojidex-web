@@ -10,3 +10,4 @@ build
 .grunt
 .env
 tmp/*
+*.orig
