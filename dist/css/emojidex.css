@@ -1,4 +1,5 @@
 .atwho-view{position:absolute;top:0;left:0;display:none;margin-top:18px;background:#fff;color:#000;border:1px solid #DDD;border-radius:3px;box-shadow:0 0 5px rgba(0,0,0,.1);min-width:120px;z-index:11110!important}.atwho-view .cur{background:#36F;color:#fff}.atwho-view .cur small{color:#fff}.atwho-view strong{color:#36F}.atwho-view .cur strong{color:#fff;font:700}.atwho-view ul{list-style:none;padding:0;margin:auto}.atwho-view ul li{display:block;padding:5px 10px;border-bottom:1px solid #DDD;cursor:pointer}.atwho-view small{font-size:smaller;color:#777;font-weight:400}
+@charset "UTF-8";
 .mt-0 {
   margin-top: 0px; }
 
@@ -142,6 +143,69 @@
 
 .pl-xl {
   padding-left: 20px; }
+
+@font-face {
+  font-family: "emojidex-ui-icon";
+  src: url("http://assets.emojidex.com/scripts/fonts/emojidex-ui/emojidex-ui-icon.eot");
+  src: url("http://assets.emojidex.com/scripts/fonts/emojidex-ui/emojidex-ui-icon.eot?#iefix") format("embedded-opentype"), url("http://assets.emojidex.com/scripts/fonts/emojidex-ui/emojidex-ui-icon.woff") format("woff"), url("http://assets.emojidex.com/scripts/fonts/emojidex-ui/emojidex-ui-icon.ttf") format("truetype"), url("http://assets.emojidex.com/scripts/fonts/emojidex-ui/emojidex-ui-icon.svg#emojidex-ui-icon") format("svg");
+  font-weight: normal;
+  font-style: normal; }
+[class^="emjdx-"], [class*=" emjdx-"] {
+  font-family: "emojidex-ui-icon";
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  speak: none;
+  line-height: 1;
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; }
+
+.emjdx-user:before {
+  content: ""; }
+
+.emjdx-search:before {
+  content: ""; }
+
+.emjdx-all:before {
+  content: ""; }
+
+.emjdx-gestures:before {
+  content: ""; }
+
+.emjdx-places:before {
+  content: ""; }
+
+.emjdx-cosmos:before {
+  content: ""; }
+
+.emjdx-symbols:before {
+  content: ""; }
+
+.emjdx-people:before {
+  content: ""; }
+
+.emjdx-tools:before {
+  content: ""; }
+
+.emjdx-abstract:before {
+  content: ""; }
+
+.emjdx-food:before {
+  content: ""; }
+
+.emjdx-transportation:before {
+  content: ""; }
+
+.emjdx-objects:before {
+  content: ""; }
+
+.emjdx-faces:before {
+  content: ""; }
+
+.emjdx-nature:before {
+  content: ""; }
 
 img.emojidex-emoji {
   display: inline-block !important;
@@ -1516,7 +1580,6 @@ img.emojidex-emoji {
   #emojidex-emoji-pallet input[type="file"]:focus,
   #emojidex-emoji-pallet input[type="radio"]:focus,
   #emojidex-emoji-pallet input[type="checkbox"]:focus {
-    outline: thin dotted;
     outline: 5px auto -webkit-focus-ring-color;
     outline-offset: -2px; }
   #emojidex-emoji-pallet output {
@@ -1957,7 +2020,6 @@ img.emojidex-emoji {
       color: #23527c;
       text-decoration: underline; }
     #emojidex-emoji-pallet a:focus {
-      outline: thin dotted;
       outline: 5px auto -webkit-focus-ring-color;
       outline-offset: -2px; }
   #emojidex-emoji-pallet figure {
@@ -2027,7 +2089,6 @@ img.emojidex-emoji {
     -ms-user-select: none;
     user-select: none; }
     #emojidex-emoji-pallet .btn:focus, #emojidex-emoji-pallet .btn.focus, #emojidex-emoji-pallet .btn:active:focus, #emojidex-emoji-pallet .btn:active.focus, #emojidex-emoji-pallet .btn.active:focus, #emojidex-emoji-pallet .btn.active.focus {
-      outline: thin dotted;
       outline: 5px auto -webkit-focus-ring-color;
       outline-offset: -2px; }
     #emojidex-emoji-pallet .btn:hover, #emojidex-emoji-pallet .btn:focus, #emojidex-emoji-pallet .btn.focus {
@@ -2569,30 +2630,77 @@ img.emojidex-emoji {
     display: none !important; }
   #emojidex-emoji-pallet .affix {
     position: fixed; }
-  #emojidex-emoji-pallet #emojidex-dialog-content .category-emoji-list {
-    max-height: 256px; }
-  #emojidex-emoji-pallet #emojidex-dialog-content .emoji-btn {
-    border-radius: 3px;
-    padding: 5px;
-    margin: 2px; }
-  #emojidex-emoji-pallet #emojidex-dialog-content hr {
-    margin-top: 10px;
-    margin-bottom: 15px;
-    border-top: 1px solid #797979; }
-  #emojidex-emoji-pallet .search-pagination .pallet-pager:hover {
-    cursor: pointer; }
+  #emojidex-emoji-pallet .emojidex-ui-dialog {
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1); }
+  #emojidex-emoji-pallet .ui-dialog .ui-dialog-titlebar {
+    padding: 10px; }
+  #emojidex-emoji-pallet .ui-widget-header {
+    border: none;
+    background-color: #fff; }
+    #emojidex-emoji-pallet .ui-widget-header .btn.btn-default[aria-label=Close] {
+      border-radius: 50px;
+      width: 27px;
+      height: 27px; }
+  #emojidex-emoji-pallet #emojidex-dialog-content {
+    padding: 10px; }
+    #emojidex-emoji-pallet #emojidex-dialog-content [class*=-pagination] {
+      height: 35px;
+      margin-top: 10px; }
+      #emojidex-emoji-pallet #emojidex-dialog-content [class*=-pagination] ul.pagination {
+        margin: 0px; }
+        #emojidex-emoji-pallet #emojidex-dialog-content [class*=-pagination] ul.pagination .pallet-pager {
+          cursor: pointer; }
+    #emojidex-emoji-pallet #emojidex-dialog-content .emoji-btn {
+      border-radius: 3px;
+      padding: 5px;
+      margin: 2px; }
+    #emojidex-emoji-pallet #emojidex-dialog-content hr {
+      margin-top: 10px;
+      margin-bottom: 15px;
+      border-top: 1px solid #ddd; }
   #emojidex-emoji-pallet .search-emoji-list {
     margin-top: 10px;
     height: auto; }
-  #emojidex-emoji-pallet .pallet-pager {
-    cursor: pointer; }
-  #emojidex-emoji-pallet .nav {
+  #emojidex-emoji-pallet .nav.nav-pills {
     float: none; }
-    #emojidex-emoji-pallet .nav li a {
+    #emojidex-emoji-pallet .nav.nav-pills li a {
+      padding: 3px 3px 1px 3px;
+      font-size: 25px;
       text-decoration: none;
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      font-size: 14px;
-      line-height: 1.42857;
+      line-height: 1;
       height: auto; }
+      #emojidex-emoji-pallet .nav.nav-pills li a .emjdx-search {
+        color: #888; }
+      #emojidex-emoji-pallet .nav.nav-pills li a .emjdx-user {
+        color: #888; }
+      #emojidex-emoji-pallet .nav.nav-pills li a .emjdx-all {
+        color: #999; }
+      #emojidex-emoji-pallet .nav.nav-pills li a .emjdx-abstract {
+        color: #f76e6e; }
+      #emojidex-emoji-pallet .nav.nav-pills li a .emjdx-cosmos {
+        color: #f7b36e; }
+      #emojidex-emoji-pallet .nav.nav-pills li a .emjdx-faces {
+        color: #f7d56e; }
+      #emojidex-emoji-pallet .nav.nav-pills li a .emjdx-food {
+        color: #b3f76e; }
+      #emojidex-emoji-pallet .nav.nav-pills li a .emjdx-gestures {
+        color: #6ef76e; }
+      #emojidex-emoji-pallet .nav.nav-pills li a .emjdx-nature {
+        color: #6ef7b3; }
+      #emojidex-emoji-pallet .nav.nav-pills li a .emjdx-objects {
+        color: #6ef7f7; }
+      #emojidex-emoji-pallet .nav.nav-pills li a .emjdx-people {
+        color: #6eb3f7; }
+      #emojidex-emoji-pallet .nav.nav-pills li a .emjdx-places {
+        color: #6e6ef7; }
+      #emojidex-emoji-pallet .nav.nav-pills li a .emjdx-symbols {
+        color: #b36ef7; }
+      #emojidex-emoji-pallet .nav.nav-pills li a .emjdx-tools {
+        color: #f76ef7; }
+      #emojidex-emoji-pallet .nav.nav-pills li a .emjdx-transportation {
+        color: #f76eb3; }
+    #emojidex-emoji-pallet .nav.nav-pills li.active a {
+      background-color: #ddd; }
 
 /*# sourceMappingURL=emojidex.css.map */

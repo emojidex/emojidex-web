@@ -1,12 +1,32 @@
 module.exports = (grunt) ->
   path = require 'path'
 
-  dotenv = require 'dotenv'
-  dotenv.config()
+  if grunt.file.exists('.env')
+    grunt.log.writeln("*Found .env file; incorporating user auth data into specs.*")
+    grunt.log.writeln("NOTE: if your user is not Premium with R-18 enabled some specs will fail.")
+    dotenv = require 'dotenv'
+    dotenv.config()
 
-  data_path = process.env.DATA_PATH
-  unless data_path?
-    data_path = ''
+    output = """
+      this.user_info = {
+        auth_user: '#{process.env.USERNAME}',
+        email: '#{process.env.EMAIL}',
+        password: '#{process.env.PASSWORD}',
+        auth_token: '#{process.env.AUTH_TOKEN}'
+      };
+
+      this.premium_user_info = {
+        auth_user: '#{process.env.USERNAME}',
+        auth_token: '#{process.env.AUTH_TOKEN}'
+      };
+
+    """
+
+    grunt.file.write('tmp/authinfo.js', output)
+  else
+    grunt.log.writeln("*.env file not found; only some specs will run.*")
+    grunt.log.writeln("Check the '.env' secion in README.md for details on how to set .env")
+    grunt.file.write('tmp/authinfo.js', "")
 
   grunt.getLicense = (licenses_json) ->
     licenses = grunt.file.readJSON licenses_json
@@ -81,7 +101,9 @@ module.exports = (grunt) ->
           jasmine:
             prop: ['jasmine', 'esteWatch']
             value:
-              src: ['dist/js/*.min.js']
+              src: [
+                'dist/js/emojidex.js'
+              ]
 
         define_list =
           emojidex:
@@ -237,12 +259,12 @@ module.exports = (grunt) ->
         vendor:[
           'node_modules/jquery/dist/jquery.min.js'
           'node_modules/jquery-watch/jquery-watch.min.js'
-          'node_modules/promise-polyfill/promise.min.js'
+          # 'node_modules/promise-polyfill/promise.min.js'
         ]
         helpers:[
           'build/spec/helpers/method.js'
           'build/spec/helpers/data.js'
-          data_path
+          'tmp/authinfo.js'
           'node_modules/jasmine-jquery/lib/jasmine-jquery.js'
         ]
 
@@ -253,6 +275,7 @@ module.exports = (grunt) ->
         files:
           'src/compiled_js/emojidexReplace.js': [
             'src/coffee/emojidexReplace/main.coffee'
+            'src/coffee/emojidexReplace/components/replacer.coffee'
             'src/coffee/emojidexReplace/components/*.coffee'
           ]
 
@@ -328,15 +351,16 @@ module.exports = (grunt) ->
       emojidex_js:
         options:
           stripBanners: true
-          banner: '<%= meta.banner %><%= grunt.getLicense("build/licenses.json") %>\n */\n'
+          banner: '<%= meta.banner %>\n */\n'
         src: [
+          'src/vendor/jquery-ui-1.12.0/jquery-ui.min.js'
+          # 'src/vendor/jquery-ui-1.11.4.custom/jquery-ui.min.js'
+          'node_modules/emojidex-client/dist/js/*.min.js'
           'bower_components/Caret.js/dist/jquery.caret.min.js'
           'bower_components/At.js/dist/js/jquery.atwho.min.js'
-          'node_modules/emojidex-client/dist/js/*.min.js'
           'node_modules/clipboard/dist/clipboard.min.js'
           'node_modules/bootstrap-sass/assets/javascripts/bootstrap/tab.js'
           'src/compiled_js/**/*.js'
-          'src/vendor/jquery-ui-1.11.4.custom/jquery-ui.min.js'
         ]
         dest: 'dist/js/emojidex.js'
 
@@ -350,7 +374,7 @@ module.exports = (grunt) ->
     uglify:
       emojidex:
         options:
-          banner: '<%= meta.banner %><%= grunt.getLicense("build/licenses.json") %>\n */\n'
+          banner: '<%= meta.banner %>\n */\n'
           manglet: true
         src: ['dist/js/emojidex.js']
         dest: 'dist/js/emojidex.min.js'
@@ -368,16 +392,6 @@ module.exports = (grunt) ->
         src : ['src/compiled_css/document.css']
         dest : 'dist/css/document.min.css'
 
-    save_license:
-      dist:
-        src: [
-          'node_modules/emojidex-client/dist/js/emojidex-client.js'
-          'node_modules/clipboard/dist/clipboard.js'
-          'bower_components/Caret.js/dist/jquery.caret.js'
-          'bower_components/At.js/dist/js/jquery.atwho.js'
-        ]
-        dest: 'build/licenses.json'
-
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-concat'
   grunt.loadNpmTasks 'grunt-contrib-uglify'
@@ -387,11 +401,10 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-este-watch'
   grunt.loadNpmTasks 'grunt-contrib-copy'
   grunt.loadNpmTasks 'grunt-contrib-jasmine'
-  grunt.loadNpmTasks 'grunt-license-saver'
   grunt.loadNpmTasks 'grunt-contrib-cssmin'
   grunt.loadNpmTasks 'grunt-md2html'
   grunt.loadNpmTasks 'grunt-contrib-clean'
 
 
-  grunt.registerTask 'default', ['clean', 'save_license', 'coffee', 'sass', 'concat', 'uglify', 'cssmin', 'slim', 'copy', 'jasmine:coverage:build', 'md2html']
-  grunt.registerTask 'dev', ['connect', 'esteWatch']
+  grunt.registerTask 'default', ['clean', 'coffee', 'sass', 'concat', 'uglify', 'cssmin', 'slim', 'copy', 'jasmine:coverage:build', 'md2html']
+  grunt.registerTask 'dev', ['default', 'connect', 'esteWatch']

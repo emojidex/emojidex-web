@@ -26,8 +26,15 @@ class Replacer
             break
         child = child.nextSibling
 
-  getEmojiTag: (emoji_code) ->
-    "<img class='emojidex-emoji' src='#{@plugin.EC.cdn_url}#{@plugin.EC.size_code}/#{emoji_code}.png' title='#{@replaceUnderToSpace emoji_code}'></img>"
+  getEmojiTag: (emoji) ->
+    get_image_tag = (emoji_code) =>
+      "<img class='emojidex-emoji' src='#{@plugin.EC.cdn_url}#{@plugin.EC.size_code}/#{@replaceSpaceToUnder emoji_code}.png' title='#{@replaceUnderToSpace emoji_code}'></img>"
+
+    emoji_code = if emoji.code? then emoji.code else emoji
+    if emoji.link?
+      return "<a href='#{emoji.link}'>#{get_image_tag emoji_code}</a>"
+    else
+      return get_image_tag emoji_code
 
   getLoadingTag: (emoji_data, type) ->
     "<span class='emojidex-loading-icon' data-emoji='#{emoji_data}' data-type='#{type}'></span>"
@@ -61,12 +68,12 @@ class Replacer
       @getLoadingTag matched_string.replace(/:/g, ''), 'code'
     return replaced_text
 
-  fadeOutLoadingTag_fadeInEmojiTag: (element, emoji_code, match = true) ->
+  fadeOutLoadingTag_fadeInEmojiTag: (element, emoji, match = true) ->
     emoji_tag = undefined
     if match
-      emoji_tag = $(@getEmojiTag emoji_code).hide()
+      emoji_tag = $(@getEmojiTag emoji).hide()
     else
-      emoji_tag = ":#{emoji_code}:"
+      emoji_tag = ":#{emoji}:"
 
     return new Promise (resolve, reject) =>
       timeout = setTimeout ->

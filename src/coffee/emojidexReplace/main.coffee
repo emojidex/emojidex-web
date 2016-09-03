@@ -7,7 +7,7 @@
 * Licensed under the emojidex Open License
 * https://www.emojidex.com/emojidex/emojidex_open_license
 *
-* Copyright 2013 Genshin Souzou Kabushiki Kaisha
+* Copyright 2013 emojidex
 ###
 
 do ($ = jQuery, window, document) ->
@@ -30,6 +30,7 @@ do ($ = jQuery, window, document) ->
 
         @EC = new EmojidexClient
           onReady: (EC) =>
+            @EC.User.login('session')
             if @checkUpdate()
               $.ajax
                 url: @EC.api_url + 'moji_codes'
