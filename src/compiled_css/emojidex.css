@@ -161,6 +161,12 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale; }
 
+.emjdx-user:before {
+  content: ""; }
+
+.emjdx-search:before {
+  content: ""; }
+
 .emjdx-all:before {
   content: ""; }
 
@@ -2623,23 +2629,37 @@ img.emojidex-emoji {
     display: none !important; }
   #emojidex-emoji-pallet .affix {
     position: fixed; }
-  #emojidex-emoji-pallet #emojidex-dialog-content .category-emoji-list {
-    max-height: 256px; }
-  #emojidex-emoji-pallet #emojidex-dialog-content .emoji-btn {
-    border-radius: 3px;
-    padding: 5px;
-    margin: 2px; }
-  #emojidex-emoji-pallet #emojidex-dialog-content hr {
-    margin-top: 10px;
-    margin-bottom: 15px;
-    border-top: 1px solid #797979; }
-  #emojidex-emoji-pallet .search-pagination .pallet-pager:hover {
-    cursor: pointer; }
+  #emojidex-emoji-pallet .emojidex-ui-dialog {
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1); }
+  #emojidex-emoji-pallet .ui-dialog .ui-dialog-titlebar {
+    padding: 10px; }
+  #emojidex-emoji-pallet .ui-widget-header {
+    border: none;
+    background-color: #fff; }
+    #emojidex-emoji-pallet .ui-widget-header .btn.btn-default[aria-label=Close] {
+      border-radius: 50px;
+      width: 27px;
+      height: 27px; }
+  #emojidex-emoji-pallet #emojidex-dialog-content {
+    padding: 10px; }
+    #emojidex-emoji-pallet #emojidex-dialog-content [class*=-pagination] {
+      height: 35px;
+      margin-top: 10px; }
+      #emojidex-emoji-pallet #emojidex-dialog-content [class*=-pagination] ul.pagination {
+        margin: 0px; }
+        #emojidex-emoji-pallet #emojidex-dialog-content [class*=-pagination] ul.pagination .pallet-pager {
+          cursor: pointer; }
+    #emojidex-emoji-pallet #emojidex-dialog-content .emoji-btn {
+      border-radius: 3px;
+      padding: 5px;
+      margin: 2px; }
+    #emojidex-emoji-pallet #emojidex-dialog-content hr {
+      margin-top: 10px;
+      margin-bottom: 15px;
+      border-top: 1px solid #ddd; }
   #emojidex-emoji-pallet .search-emoji-list {
     margin-top: 10px;
     height: auto; }
-  #emojidex-emoji-pallet .pallet-pager {
-    cursor: pointer; }
   #emojidex-emoji-pallet .nav.nav-pills {
     float: none; }
     #emojidex-emoji-pallet .nav.nav-pills li a {
@@ -2649,6 +2669,10 @@ img.emojidex-emoji {
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
       line-height: 1;
       height: auto; }
+      #emojidex-emoji-pallet .nav.nav-pills li a .emjdx-search {
+        color: #888; }
+      #emojidex-emoji-pallet .nav.nav-pills li a .emjdx-user {
+        color: #888; }
       #emojidex-emoji-pallet .nav.nav-pills li a .emjdx-all {
         color: #999; }
       #emojidex-emoji-pallet .nav.nav-pills li a .emjdx-abstract {

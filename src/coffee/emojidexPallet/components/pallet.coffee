@@ -2,7 +2,7 @@ class Pallet
   constructor: (@plugin) ->
     @active_input_area = null
     @EC = new EmojidexClient
-      limit: 65,
+      limit: 66,
       onReady: (EC) =>
         # start main --------
         $('input, textarea, [contenteditable="true"]').on 'focus keyup mouseup', (e) =>
@@ -19,7 +19,7 @@ class Pallet
       classes:
         'ui-dialog': 'emojidex-ui-dialog'
       autoOpen: false
-      width: 700
+      width: 557
       title: '<img src="http://assets.emojidex.com/logo-hdpi.png" alt="emojidex logo" />'
 
       create: (e) ->
@@ -54,13 +54,13 @@ class Pallet
             tab_list.append category_tab.tab_list
             tab_content.append category_tab.tab_content
 
-          search_tab = new SearchTab @
-          tab_list.append search_tab.tab_list
-          tab_content.append search_tab.tab_content
-
           user_tab = new UserTab @
           tab_list.append user_tab.tab_list
           tab_content.append user_tab.tab_content
+
+          search_tab = new SearchTab @
+          tab_list.append search_tab.tab_list
+          tab_content.append search_tab.tab_content
 
           @emoji_pallet = $ '<div class="emoji-pallet"></div>'
           @emoji_pallet.append(tab_list.add tab_content)

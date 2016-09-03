@@ -1,6 +1,6 @@
 class UserTab
   constructor: (@pallet) ->
-    @tab_list = "<li id='tab-user'><a href='#tab-content-user' data-toggle='pill'>User</a></li>"
+    @tab_list = "<li id='tab-user' class='pull-right'><a href='#tab-content-user' data-toggle='pill'><i class='emjdx-user'></a></li>"
     @tab_content = @getTabContent()
 
   getTabContent: ->

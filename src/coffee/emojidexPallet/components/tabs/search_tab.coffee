@@ -1,6 +1,6 @@
 class SearchTab
   constructor: (@pallet) ->
-    @tab_list = "<li id='tab-search'><a href='#tab-content-search' data-toggle='pill'>Search</a></li>"
+    @tab_list = "<li id='tab-search' class='pull-right'><a href='#tab-content-search' data-toggle='pill'><i class='emjdx-search'></a></li>"
     @tab_content = @getTabContent()
 
   getTabContent: ->
