@@ -9,5 +9,5 @@ npm-debug.log
 build
 .grunt
 .env
-tmp/*
+tmp
 *.orig
