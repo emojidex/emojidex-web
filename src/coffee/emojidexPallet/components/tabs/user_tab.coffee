@@ -35,6 +35,7 @@ class UserTab
         @setUserTab()
         @setHistory(auth_info)
         @setFavorite(auth_info)
+        @pallet.toggleSorting()
       else
         @showError(auth_info)
 
@@ -70,6 +71,7 @@ class UserTab
       $('#user_tab_list').remove()
       $('#user_tab_content').remove()
       @showLoginForm()
+      @pallet.toggleSorting()
     user_tab_list.append logout_btn
 
     @user_tab_content = $ '<div class="tab-content" id="user_tab_content"></div>'
@@ -90,14 +92,14 @@ class UserTab
     tab_pane.append @pallet.setEmojiList(kind, data)
     @user_tab_content.append tab_pane
 
-    # @setPagination(meta, tab_pane, kind)
+    # @getPagination(meta, tab_pane, kind)
 
   setDataByCodes: (data, meta, kind) ->
     tab_pane = $ "<div class='tab-pane' id='tab-content-user-#{kind}'></div>"
     tab_pane.append @pallet.setCodeList(kind, data)
     @user_tab_content.append tab_pane
 
-    # @setPagination(meta, tab_pane, kind)
+    # @getPagination(meta, tab_pane, kind)
 
   setPremiumData: (response, kind) ->
     tab_pane = $ "<div class='tab-pane' id='tab-content-user-#{kind}'></div>"
@@ -108,11 +110,11 @@ class UserTab
       tab_pane.append @pallet.setEmojiList(kind, response.emoji)
     @user_tab_content.append tab_pane
 
-  setPagination: (meta, pane, kind) ->
+  getPagination: (meta, pane, kind) ->
     # TODO: limit, prev/next func
     cur_page = if meta.total_count is 0 then 0 else meta.page
     max_page = Math.floor meta.total_count / 50
     max_page++ if meta.total_count % 50 > 0
     prev_func = => console.log 'prev'
     next_func = => console.log 'next'
-    @user_tab_content.append (pane.append @pallet.setPagination(kind, prev_func, next_func, cur_page, max_page))
+    @user_tab_content.append (pane.append @pallet.getPagination(kind, prev_func, next_func, cur_page, max_page))

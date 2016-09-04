@@ -1,5 +1,6 @@
 class SearchTab
   constructor: (@pallet) ->
+    @initialized = false
     @sort_type = 'score'
     @tab_list = "<li id='tab-search' class='pull-right'><a href='#tab-content-search' data-toggle='pill'><i class='emjdx-search'></a></li>"
     @tab_content = @getTabContent()
@@ -18,6 +19,7 @@ class SearchTab
     tab_content
 
   searchEmojiInput: ->
+    @initialized = true
     search_word = $('#pallet-emoji-search-input').val()
     if search_word.length > 0
       @search(search_word)
@@ -34,10 +36,10 @@ class SearchTab
       max_page++ if @pallet.EC.Search.meta.total_count % @pallet.EC.options.limit > 0
       prev_func = => @pallet.EC.Search.prev()
       next_func = => @pallet.EC.Search.next()
-      pagination = @pallet.setPagination('search', prev_func, next_func, cur_page, max_page)
-      pagination.append @pallet.setSorting(@)
+      pagination = @pallet.getPagination('search', prev_func, next_func, cur_page, max_page)
+      pagination.append @pallet.getSorting(@)
       @tab_content.append pagination
     , {sort: @sort_type}
 
-  setTabContent: () ->
+  resetTabContent: () ->
     @search(@search_word)

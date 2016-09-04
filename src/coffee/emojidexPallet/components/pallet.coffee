@@ -1,6 +1,7 @@
 class Pallet
   constructor: (@plugin) ->
     @active_input_area = null
+    @tabs = []
     @EC = new EmojidexClient
       limit: 66,
       onReady: (EC) =>
@@ -45,22 +46,16 @@ class Pallet
         tab_content = $ '<div class="tab-content"></div>'
 
         @EC.Categories.sync (categories) =>
-          index_tab = new IndexTab @
-          tab_list.append index_tab.tab_list
-          tab_content.append index_tab.tab_content
-
+          @tabs.push(new IndexTab @)
           for category in categories
-            category_tab = new CategoryTab @, category, tab_list[0].children.length
-            tab_list.append category_tab.tab_list
-            tab_content.append category_tab.tab_content
+            @tabs.push(new CategoryTab @, category, tab_list[0].children.length)
 
-          user_tab = new UserTab @
-          tab_list.append user_tab.tab_list
-          tab_content.append user_tab.tab_content
+          @tabs.push(new UserTab @)
+          @tabs.push(new SearchTab @)
 
-          search_tab = new SearchTab @
-          tab_list.append search_tab.tab_list
-          tab_content.append search_tab.tab_content
+          for tab in @tabs
+            tab_list.append tab.tab_list
+            tab_content.append tab.tab_content
 
           @emoji_pallet = $ '<div class="emoji-pallet"></div>'
           @emoji_pallet.append(tab_list.add tab_content)
@@ -164,7 +159,7 @@ class Pallet
       elem.focus()
       elem.caret('pos', pos + code.length)
 
-  setPagination: (kind, prev_func, next_func, cur_page, max_page) ->
+  getPagination: (kind, prev_func, next_func, cur_page, max_page) ->
     pagination = $ "<div class='#{kind}-pagination text-center'><ul class='pagination mb-0'></ul></div>"
     pagination.find('.pagination').append $('<li class="pallet-pager"><span>&laquo;</span></li>').click =>
       prev_func()
@@ -174,17 +169,36 @@ class Pallet
 
     pagination
 
-  setSorting: (target_tab) ->
-    if @EC.User.auth_info.premium == true
-      sort_selector = $ '<select></select>'
-      sort_selector.append $('<option value="score">Score</option>')
-      sort_selector.append $('<option value="newest">Newest</option>')
-      sort_selector.append $('<option value="liked">Most Liked</option>')
-      sort_selector.val(target_tab.sort_type)
-      sort_selector.change ->
-        target_tab.sort_type = sort_selector.val()
-        target_tab.setTabContent()
-      sort_selector
+  toggleSorting: ->
+    if @EC.User.auth_info.premium
+      for tab in @getInitializedTabs()
+        unless tab.tab_content.find('#sort-selector').length
+          tab.tab_content.find('ul.pagination').after @getSorting tab
+    else
+      for tab in @getInitializedTabs()
+        @removeSorting tab
+
+  getInitializedTabs: ->
+    initialized_tabs = []
+    for tab in @tabs
+      initialized_tabs.push tab if tab.initialized
+    initialized_tabs
+
+  getSorting: (target_tab) ->
+    return '' unless @EC.User.auth_info.premium
+    sort_selector = $ '<select id="sort-selector" class="form-control pull-right"></select>'
+    sort_selector.append $('<option value="score">Score</option>')
+    sort_selector.append $('<option value="newest">Newest</option>')
+    sort_selector.append $('<option value="liked">Most Liked</option>')
+    sort_selector.val(target_tab.sort_type)
+    sort_selector.change ->
+      target_tab.sort_type = sort_selector.val()
+      target_tab.resetTabContent()
+    sort_selector
+
+  removeSorting: (target_tab) ->
+    target_tab.tab_content.find('#sort-selector').remove()
+    target_tab.resetTabContent()
 
   openDialog: ->
     @dialog.dialog 'open'

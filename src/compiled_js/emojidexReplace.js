@@ -409,7 +409,6 @@
                     return resolve();
                   });
                 } else if (emoji.r18 === true && _this.plugin.EC.User.auth_info.r18 === false) {
-                  console.log('emoji.r18:', emoji.r18);
                   return _this.fadeOutLoadingTag_fadeInEmojiTag($(loading_element), emoji.code, false).then(function() {
                     return resolve();
                   });

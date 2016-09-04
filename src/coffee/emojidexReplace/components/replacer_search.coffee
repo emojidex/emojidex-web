@@ -18,7 +18,6 @@ class ReplacerSearch extends Replacer
               @fadeOutLoadingTag_fadeInEmojiTag($(loading_element), emoji_code, false).then ->
                 resolve()
             else if emoji.r18 == true && @plugin.EC.User.auth_info.r18 == false
-              console.log 'emoji.r18:', emoji.r18
               @fadeOutLoadingTag_fadeInEmojiTag($(loading_element), emoji.code, false).then ->
                 resolve()
             else

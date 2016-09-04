@@ -18,7 +18,7 @@
   "devDependencies": {
     "bootstrap-sass": "^3.3.1",
     "dotenv": "^2.0.0",
-    "emojidex-client": "emojidex/emojidex-web-client#enhance_user",
+    "emojidex-client": "~0.9.1",
     "grunt": "~1.0.1",
     "grunt-cli": "~1.2.0",
     "grunt-contrib-clean": "^1.0.0",

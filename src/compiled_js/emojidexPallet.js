@@ -45,6 +45,7 @@
     function Pallet(plugin) {
       this.plugin = plugin;
       this.active_input_area = null;
+      this.tabs = [];
       this.EC = new EmojidexClient({
         limit: 66,
         onReady: (function(_this) {
@@ -97,22 +98,20 @@
             tab_list = $('<ul class="nav nav-pills"></ul>');
             tab_content = $('<div class="tab-content"></div>');
             return _this.EC.Categories.sync(function(categories) {
-              var category, category_tab, i, index_tab, len, search_tab, user_tab;
-              index_tab = new IndexTab(_this);
-              tab_list.append(index_tab.tab_list);
-              tab_content.append(index_tab.tab_content);
+              var category, i, j, len, len1, ref, tab;
+              _this.tabs.push(new IndexTab(_this));
               for (i = 0, len = categories.length; i < len; i++) {
                 category = categories[i];
-                category_tab = new CategoryTab(_this, category, tab_list[0].children.length);
-                tab_list.append(category_tab.tab_list);
-                tab_content.append(category_tab.tab_content);
+                _this.tabs.push(new CategoryTab(_this, category, tab_list[0].children.length));
               }
-              user_tab = new UserTab(_this);
-              tab_list.append(user_tab.tab_list);
-              tab_content.append(user_tab.tab_content);
-              search_tab = new SearchTab(_this);
-              tab_list.append(search_tab.tab_list);
-              tab_content.append(search_tab.tab_content);
+              _this.tabs.push(new UserTab(_this));
+              _this.tabs.push(new SearchTab(_this));
+              ref = _this.tabs;
+              for (j = 0, len1 = ref.length; j < len1; j++) {
+                tab = ref[j];
+                tab_list.append(tab.tab_list);
+                tab_content.append(tab.tab_content);
+              }
               _this.emoji_pallet = $('<div class="emoji-pallet"></div>');
               _this.emoji_pallet.append(tab_list.add(tab_content));
               _this.emoji_pallet.find('ul').after('<hr>');
@@ -235,7 +234,7 @@
       }
     };
 
-    Pallet.prototype.setPagination = function(kind, prev_func, next_func, cur_page, max_page) {
+    Pallet.prototype.getPagination = function(kind, prev_func, next_func, cur_page, max_page) {
       var pagination;
       pagination = $("<div class='" + kind + "-pagination text-center'><ul class='pagination mb-0'></ul></div>");
       pagination.find('.pagination').append($('<li class="pallet-pager"><span>&laquo;</span></li>').click((function(_this) {
@@ -252,20 +251,64 @@
       return pagination;
     };
 
-    Pallet.prototype.setSorting = function(target_tab) {
-      var sort_selector;
-      if (this.EC.User.auth_info.premium === true) {
-        sort_selector = $('<select></select>');
-        sort_selector.append($('<option value="score">Score</option>'));
-        sort_selector.append($('<option value="newest">Newest</option>'));
-        sort_selector.append($('<option value="liked">Most Liked</option>'));
-        sort_selector.val(target_tab.sort_type);
-        sort_selector.change(function() {
-          target_tab.sort_type = sort_selector.val();
-          return target_tab.setTabContent();
-        });
-        return sort_selector;
+    Pallet.prototype.toggleSorting = function() {
+      var i, j, len, len1, ref, ref1, results, results1, tab;
+      if (this.EC.User.auth_info.premium) {
+        ref = this.getInitializedTabs();
+        results = [];
+        for (i = 0, len = ref.length; i < len; i++) {
+          tab = ref[i];
+          if (!tab.tab_content.find('#sort-selector').length) {
+            results.push(tab.tab_content.find('ul.pagination').after(this.getSorting(tab)));
+          } else {
+            results.push(void 0);
+          }
+        }
+        return results;
+      } else {
+        ref1 = this.getInitializedTabs();
+        results1 = [];
+        for (j = 0, len1 = ref1.length; j < len1; j++) {
+          tab = ref1[j];
+          results1.push(this.removeSorting(tab));
+        }
+        return results1;
       }
+    };
+
+    Pallet.prototype.getInitializedTabs = function() {
+      var i, initialized_tabs, len, ref, tab;
+      initialized_tabs = [];
+      ref = this.tabs;
+      for (i = 0, len = ref.length; i < len; i++) {
+        tab = ref[i];
+        if (tab.initialized) {
+          initialized_tabs.push(tab);
+        }
+      }
+      return initialized_tabs;
+    };
+
+    Pallet.prototype.getSorting = function(target_tab) {
+      var sort_selector;
+      if (!this.EC.User.auth_info.premium) {
+        return '';
+      }
+      sort_selector = $('<select id="sort-selector" class="form-control pull-right"></select>');
+      sort_selector.append($('<option value="score">Score</option>'));
+      sort_selector.append($('<option value="newest">Newest</option>'));
+      sort_selector.append($('<option value="liked">Most Liked</option>'));
+      sort_selector.val(target_tab.sort_type);
+      sort_selector.change(function() {
+        target_tab.sort_type = sort_selector.val();
+        return target_tab.resetTabContent();
+      });
+      return sort_selector;
+    };
+
+    Pallet.prototype.removeSorting = function(target_tab) {
+      target_tab.tab_content.find('#sort-selector').remove();
+      return target_tab.resetTabContent();
     };
 
     Pallet.prototype.openDialog = function() {
@@ -279,8 +322,9 @@
   CategoryTab = (function() {
     function CategoryTab(pallet, category, length) {
       this.pallet = pallet;
+      this.initialized = false;
       this.sort_type = 'score';
-      this.category_name = 'faces';
+      this.category_name = category.code;
       this.tab_list = $("<li id='tab-" + category.code + "' data-code='" + category.code + "'><a href='#tab-content-" + category.code + "' data-toggle='pill'><i class='emjdx-" + category.code + "'></a></li>");
       this.tab_list.click((function(_this) {
         return function(e) {
@@ -299,13 +343,13 @@
     };
 
     CategoryTab.prototype.setCategoryTabContent = function(category_name) {
+      this.initialized = true;
       this.category_name = category_name;
       return this.pallet.EC.Categories.getEmoji(category_name, (function(_this) {
         return function(result_emoji, called_data) {
           var cur_page, max_page, next_func, pagination, prev_func;
           _this.tab_data = called_data;
-          _this.tab_content.find('.category-emoji-list').remove();
-          _this.tab_content.find('.category-pagination').remove();
+          _this.tab_content.children().remove();
           _this.tab_content.append(_this.pallet.setEmojiList('category', result_emoji));
           cur_page = _this.pallet.EC.Categories.meta.total_count === 0 ? 0 : _this.pallet.EC.Categories.cur_page;
           max_page = Math.floor(_this.pallet.EC.Categories.meta.total_count / _this.pallet.EC.options.limit);
@@ -318,8 +362,8 @@
           next_func = function() {
             return _this.pallet.EC.Categories.next();
           };
-          pagination = _this.pallet.setPagination('category', prev_func, next_func, cur_page, max_page);
-          pagination.append(_this.pallet.setSorting(_this));
+          pagination = _this.pallet.getPagination('category', prev_func, next_func, cur_page, max_page);
+          pagination.append(_this.pallet.getSorting(_this));
           return _this.tab_content.append(pagination);
         };
       })(this), {
@@ -327,7 +371,7 @@
       });
     };
 
-    CategoryTab.prototype.setTabContent = function() {
+    CategoryTab.prototype.resetTabContent = function() {
       return this.setCategoryTabContent(this.category_name);
     };
 
@@ -338,6 +382,7 @@
   IndexTab = (function() {
     function IndexTab(pallet) {
       this.pallet = pallet;
+      this.initialized = false;
       this.sort_type = 'score';
       this.tab_list = $("<li id='tab-index' class='active'><a href='#tab-content-index' data-toggle='pill'><i class='emjdx-all'></a></li>");
       this.tab_content = $("<div class='tab-pane active' id='tab-content-index'></div>");
@@ -345,12 +390,12 @@
     }
 
     IndexTab.prototype.setTabContent = function() {
+      this.initialized = true;
       return this.pallet.EC.Indexes.index((function(_this) {
         return function(result_emoji, called_data) {
           var cur_page, max_page, next_func, pagination, prev_func;
           _this.tab_data = called_data;
-          _this.tab_content.find('.index-emoji-list').remove();
-          _this.tab_content.find('.index-pagination').remove();
+          _this.tab_content.children().remove();
           _this.tab_content.append(_this.pallet.setEmojiList('index', result_emoji));
           cur_page = _this.pallet.EC.Indexes.meta.total_count === 0 ? 0 : _this.pallet.EC.Indexes.cur_page;
           max_page = Math.floor(_this.pallet.EC.Indexes.meta.total_count / _this.pallet.EC.options.limit);
@@ -363,13 +408,17 @@
           next_func = function() {
             return _this.pallet.EC.Indexes.next();
           };
-          pagination = _this.pallet.setPagination('index', prev_func, next_func, cur_page, max_page);
-          pagination.append(_this.pallet.setSorting(_this));
+          pagination = _this.pallet.getPagination('index', prev_func, next_func, cur_page, max_page);
+          pagination.append(_this.pallet.getSorting(_this));
           return _this.tab_content.append(pagination);
         };
       })(this), {
         sort: this.sort_type
       });
+    };
+
+    IndexTab.prototype.resetTabContent = function() {
+      return this.setTabContent();
     };
 
     return IndexTab;
@@ -379,6 +428,7 @@
   SearchTab = (function() {
     function SearchTab(pallet) {
       this.pallet = pallet;
+      this.initialized = false;
       this.sort_type = 'score';
       this.tab_list = "<li id='tab-search' class='pull-right'><a href='#tab-content-search' data-toggle='pill'><i class='emjdx-search'></a></li>";
       this.tab_content = this.getTabContent();
@@ -406,6 +456,7 @@
 
     SearchTab.prototype.searchEmojiInput = function() {
       var search_word;
+      this.initialized = true;
       search_word = $('#pallet-emoji-search-input').val();
       if (search_word.length > 0) {
         return this.search(search_word);
@@ -431,8 +482,8 @@
           next_func = function() {
             return _this.pallet.EC.Search.next();
           };
-          pagination = _this.pallet.setPagination('search', prev_func, next_func, cur_page, max_page);
-          pagination.append(_this.pallet.setSorting(_this));
+          pagination = _this.pallet.getPagination('search', prev_func, next_func, cur_page, max_page);
+          pagination.append(_this.pallet.getSorting(_this));
           return _this.tab_content.append(pagination);
         };
       })(this), {
@@ -440,7 +491,7 @@
       });
     };
 
-    SearchTab.prototype.setTabContent = function() {
+    SearchTab.prototype.resetTabContent = function() {
       return this.search(this.search_word);
     };
 
@@ -497,7 +548,8 @@
             _this.hideLoginForm();
             _this.setUserTab();
             _this.setHistory(auth_info);
-            return _this.setFavorite(auth_info);
+            _this.setFavorite(auth_info);
+            return _this.pallet.toggleSorting();
           } else {
             return _this.showError(auth_info);
           }
@@ -543,7 +595,8 @@
           _this.pallet.EC.User.logout();
           $('#user_tab_list').remove();
           $('#user_tab_content').remove();
-          return _this.showLoginForm();
+          _this.showLoginForm();
+          return _this.pallet.toggleSorting();
         };
       })(this));
       user_tab_list.append(logout_btn);
@@ -603,7 +656,7 @@
       return this.user_tab_content.append(tab_pane);
     };
 
-    UserTab.prototype.setPagination = function(meta, pane, kind) {
+    UserTab.prototype.getPagination = function(meta, pane, kind) {
       var cur_page, max_page, next_func, prev_func;
       cur_page = meta.total_count === 0 ? 0 : meta.page;
       max_page = Math.floor(meta.total_count / 50);
@@ -620,7 +673,7 @@
           return console.log('next');
         };
       })(this);
-      return this.user_tab_content.append(pane.append(this.pallet.setPagination(kind, prev_func, next_func, cur_page, max_page)));
+      return this.user_tab_content.append(pane.append(this.pallet.getPagination(kind, prev_func, next_func, cur_page, max_page)));
     };
 
     return UserTab;
