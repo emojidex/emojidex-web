@@ -444,8 +444,7 @@ e=!1,s=!1,i=!1;var o=t.ui.keyCode;switch(n.keyCode){case o.PAGE_UP:e=!0,this._mo
               _this.emoji_pallet.append(tab_list.add(tab_content));
               _this.emoji_pallet.find('ul').after('<hr>');
               _this.dialog.append(_this.emoji_pallet);
-              _this.openDialog();
-              return $("#tab-" + categories[0].code).click();
+              return _this.openDialog();
             });
           }
         };

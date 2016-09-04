@@ -68,7 +68,6 @@ class Pallet
 
           @dialog.append(@emoji_pallet)
           @openDialog()
-          $("#tab-#{categories[0].code}").click()
 
   setEmojiList: (kind, emoji_list) ->
     emoji_divs = $ "<div class='#{kind}-emoji-list clearfix'></div>"
