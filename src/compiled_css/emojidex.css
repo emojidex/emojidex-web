@@ -2649,6 +2649,9 @@ img.emojidex-emoji {
         margin: 0px; }
         #emojidex-emoji-pallet #emojidex-dialog-content [class*=-pagination] ul.pagination .pallet-pager {
           cursor: pointer; }
+      #emojidex-emoji-pallet #emojidex-dialog-content [class*=-pagination] #sort-selector {
+        width: 128px;
+        margin-left: -128px; }
     #emojidex-emoji-pallet #emojidex-dialog-content .emoji-btn {
       border-radius: 3px;
       padding: 5px;
