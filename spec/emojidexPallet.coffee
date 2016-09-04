@@ -48,7 +48,7 @@ describe "emojidexPallet", ->
           remove_watch $('#tab-content-faces'), 'content_faces'
           done()
 
-      $($('.pagination').find('.pallet-pager')[1]).click()
+      $('#tab-content-faces').find('.pagination .pallet-pager')[1].click()
 
     it 'switches to the previous page', (done) ->
       $('#tab-content-faces').watch
@@ -60,7 +60,7 @@ describe "emojidexPallet", ->
           remove_watch $('#tab-content-faces'), 'content_faces'
           done()
 
-      $($('.pagination').find('.pallet-pager')[0]).click()
+      $('#tab-content-faces').find('.pagination .pallet-pager')[0].click()
 
   # FIXME: this example isn't correct.
   # it 'emoji button click', ->
