@@ -117,7 +117,7 @@
       var ignore;
       this.promiseWaitTime = 5000;
       ignore = '\'":;@&#~{}<>\\r\\n\\[\\]\\!\\$\\+\\?\\%\\*\\/\\\\';
-      this.regexpCode = RegExp(":([^\\s" + ignore + "][^" + ignore + "]*[^\\s" + ignore + "]):|:([^\\s" + ignore + "]):", 'g');
+      this.regexpCode = RegExp(":([^\\s" + ignore + "][^" + ignore + "]*[^" + ignore + "]):|:([^" + ignore + "]):", 'g');
       this.targets = [];
       this.complete_num = 0;
     }
@@ -398,7 +398,7 @@
           replaceToEmojiIconOrRollback = function(loading_element) {
             return new Promise(function(resolve, reject) {
               var emoji_code, timeout;
-              emoji_code = _this.replaceSpaceToUnder(loading_element.dataset.emoji);
+              emoji_code = loading_element.dataset.emoji;
               timeout = setTimeout(function() {
                 _this.fadeOutLoadingTag_fadeInEmojiTag($(loading_element), emoji_code, false);
                 return reject(new Error('emojidex: replaceToEmojiIconOrRollback - Timeout'));

@@ -7,7 +7,7 @@ class ReplacerSearch extends Replacer
     searchEmoji_setEmojiTag = (element) =>
       replaceToEmojiIconOrRollback = (loading_element) =>
         return new Promise (resolve, reject) =>
-          emoji_code = @replaceSpaceToUnder loading_element.dataset.emoji
+          emoji_code = loading_element.dataset.emoji
           timeout = setTimeout =>
             @fadeOutLoadingTag_fadeInEmojiTag($(loading_element), emoji_code, false)
             reject new Error('emojidex: replaceToEmojiIconOrRollback - Timeout')

@@ -3,7 +3,7 @@ class Replacer
     @promiseWaitTime = 5000
 
     ignore = '\'":;@&#~{}<>\\r\\n\\[\\]\\!\\$\\+\\?\\%\\*\\/\\\\'
-    @regexpCode = RegExp ":([^\\s#{ignore}][^#{ignore}]*[^\\s#{ignore}]):|:([^\\s#{ignore}]):", 'g'
+    @regexpCode = RegExp ":([^\\s#{ignore}][^#{ignore}]*[^#{ignore}]):|:([^#{ignore}]):", 'g'
 
     @targets = []
     @complete_num = 0
