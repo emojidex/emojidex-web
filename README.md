@@ -59,7 +59,7 @@ UTF moji codes to emoji:
 
 ↓
 
-![emojidex replace image](http://emojidex.github.io/emojidex-web/img/emojidex_replace.png)
+![emojidex replace image](http://emojidex.github.io/emojidex-web/img/samples/emojidex_replace.png)
 
 ### Options
 #### Defaults
