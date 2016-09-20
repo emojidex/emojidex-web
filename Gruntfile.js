@@ -230,13 +230,13 @@ module.exports = function(grunt) {
           banner: '<%= meta.banner %>\n */\n'
         },
         src: [
-          'node_modules/babel-polyfill/dist/polyfill.min.js',
+          'node_modules/bootstrap-sass/assets/javascripts/bootstrap/tab.js',
+          //'node_modules/babel-polyfill/dist/polyfill.min.js', //Polyfill is already included in bootstrap
           'src/vendor/jquery-ui-1.12.0/jquery-ui.min.js',
           'node_modules/emojidex-client/dist/js/*.min.js',
           'bower_components/Caret.js/dist/jquery.caret.min.js',
           'bower_components/At.js/dist/js/jquery.atwho.min.js',
           'node_modules/clipboard/dist/clipboard.min.js',
-          'node_modules/bootstrap-sass/assets/javascripts/bootstrap/tab.js',
           'src/compiled_js/**/*.js',
           'build/js/**/*.js'
         ],
@@ -256,7 +256,7 @@ module.exports = function(grunt) {
       web: {
         src: ['dist/js/emojidex.js'],
         options: {
-          specs: ['spec/**/*.js'],
+          specs: ['spec/*.js'],
           helpers:[
             'spec/helpers/method.js',
             'spec/helpers/data.js',
