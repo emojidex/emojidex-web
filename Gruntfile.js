@@ -59,7 +59,15 @@ module.exports = function(grunt) {
     
     // Clean out old files / temporary files / build partials
     clean: {
-      spec: ['build/spec/*.js']
+      spec: ['build/spec/*.js'],
+      compiled: [
+        'src/compiled_js/**/*.js',
+        'src/compiled_js/**/*.map',
+        'src/compiled_css/**/*.css',
+        'src/compiled_css/**/*.map',
+        'build/js/**/*.js',
+        'build/js/**/*.map'
+        ]
     },
 
     // Pre-render the README.md file into part of the demo index
