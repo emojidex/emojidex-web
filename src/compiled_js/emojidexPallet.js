@@ -556,11 +556,11 @@
         };
       })(this);
       if (type === 'plain') {
-        return this.pallet.EC.User.plain_auth(username, password, function(auth_info) {
+        return this.pallet.EC.User.plainAuth(username, password, function(auth_info) {
           return callback(auth_info);
         });
       } else {
-        return this.pallet.EC.User.token_auth(username, password, function(auth_info) {
+        return this.pallet.EC.User.tokenAuth(username, password, function(auth_info) {
           return callback(auth_info);
         });
       }

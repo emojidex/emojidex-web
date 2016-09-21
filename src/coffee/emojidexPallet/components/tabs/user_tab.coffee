@@ -40,9 +40,9 @@ class UserTab
         @showError(auth_info)
 
     if type == 'plain'
-      @pallet.EC.User.plain_auth username, password, (auth_info) -> callback(auth_info)
+      @pallet.EC.User.plainAuth username, password, (auth_info) -> callback(auth_info)
     else
-      @pallet.EC.User.token_auth username, password, (auth_info) -> callback(auth_info)
+      @pallet.EC.User.tokenAuth username, password, (auth_info) -> callback(auth_info)
 
   showError: (auth_info) ->
     # TODO: error text localization
