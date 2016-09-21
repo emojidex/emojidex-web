@@ -342,677 +342,6 @@ left:"-999px"},b._getOrigin=function(a){var b,c,d;return b=document.createElemen
 }).call(this);
 
 (function() {
-  var CategoryTab, IndexTab, Pallet, SearchTab, UserTab;
-
-  (function($, window, document) {
-    var Plugin, defaults, pluginName;
-    pluginName = "emojidexPallet";
-    defaults = {
-      onComplete: void 0
-    };
-    Plugin = (function() {
-      function Plugin(element1, options) {
-        this.element = element1;
-        this.options = $.extend({}, defaults, options);
-        this._defaults = defaults;
-        this._name = pluginName;
-        this.pallet = new Pallet(this);
-      }
-
-      return Plugin;
-
-    })();
-    return $.fn[pluginName] = function(options) {
-      return this.each(function() {
-        if (!$.data(this, "plugin_" + pluginName)) {
-          return $.data(this, "plugin_" + pluginName, new Plugin(this, options));
-        }
-      });
-    };
-  })(jQuery, window, document);
-
-  Pallet = (function() {
-    function Pallet(plugin) {
-      this.plugin = plugin;
-      this.active_input_area = null;
-      this.tabs = [];
-      this.EC = new EmojidexClient({
-        limit: 66,
-        onReady: (function(_this) {
-          return function(EC) {
-            var base;
-            $('input, textarea, [contenteditable="true"]').on('focus keyup mouseup', function(e) {
-              return _this.active_input_area = $(e.currentTarget);
-            });
-            _this.createDialog();
-            _this.setPallet(_this.plugin.element);
-            return typeof (base = _this.plugin.options).onComplete === "function" ? base.onComplete() : void 0;
-          };
-        })(this)
-      });
-    }
-
-    Pallet.prototype.createDialog = function() {
-      this.dialog = $('<div id="emojidex-dialog-content"></div>');
-      return this.dialog.dialog({
-        classes: {
-          'ui-dialog': 'emojidex-ui-dialog'
-        },
-        autoOpen: false,
-        width: 557,
-        title: '<img src="http://assets.emojidex.com/logo-hdpi.png" alt="emojidex logo" />',
-        create: function(e) {
-          var close_btn;
-          $('.ui-dialog-titlebar-close').hide();
-          close_btn = $('<button type="button" class="btn btn-default btn-xs pull-right" aria-label="Close"><span aria-hidden="true">&times;</span></button>');
-          close_btn.click(function(e) {
-            return $('#emojidex-dialog-content').dialog('close');
-          });
-          $('.ui-dialog-titlebar').append(close_btn);
-          return $('.emojidex-ui-dialog').wrap('<span id="emojidex-emoji-pallet"></span>');
-        },
-        open: function(e) {
-          $('.ui-dialog :button').blur();
-          return $('.nav.nav-pills a').blur();
-        }
-      });
-    };
-
-    Pallet.prototype.setPallet = function(element) {
-      return $(element).click((function(_this) {
-        return function(e) {
-          var tab_content, tab_list;
-          if (_this.emoji_pallet != null) {
-            return _this.openDialog();
-          } else {
-            tab_list = $('<ul class="nav nav-pills"></ul>');
-            tab_content = $('<div class="tab-content"></div>');
-            return _this.EC.Categories.sync(function(categories) {
-              var category, i, j, len, len1, ref, tab;
-              _this.tabs.push(new IndexTab(_this));
-              for (i = 0, len = categories.length; i < len; i++) {
-                category = categories[i];
-                _this.tabs.push(new CategoryTab(_this, category, tab_list[0].children.length));
-              }
-              _this.tabs.push(new UserTab(_this));
-              _this.tabs.push(new SearchTab(_this));
-              ref = _this.tabs;
-              for (j = 0, len1 = ref.length; j < len1; j++) {
-                tab = ref[j];
-                tab_list.append(tab.tab_list);
-                tab_content.append(tab.tab_content);
-              }
-              _this.emoji_pallet = $('<div class="emoji-pallet"></div>');
-              _this.emoji_pallet.append(tab_list.add(tab_content));
-              _this.emoji_pallet.find('ul').after('<hr>');
-              _this.dialog.append(_this.emoji_pallet);
-              return _this.openDialog();
-            });
-          }
-        };
-      })(this));
-    };
-
-    Pallet.prototype.setEmojiList = function(kind, emoji_list) {
-      var emoji, emoji_button, emoji_button_image, emoji_divs, i, len;
-      emoji_divs = $("<div class='" + kind + "-emoji-list clearfix'></div>");
-      for (i = 0, len = emoji_list.length; i < len; i++) {
-        emoji = emoji_list[i];
-        emoji_button = $('<button>', {
-          "class": 'emoji-btn btn btn-default pull-left'
-        });
-        emoji_button.prop('emoji_data', emoji);
-        emoji_button_image = $('<img>', {
-          alt: "" + emoji.code,
-          title: "" + emoji.code,
-          "class": 'img-responsive center-block',
-          src: this.EC.cdn_url + "px32/" + (emoji.code.replace(/\s/g, '_')) + ".png"
-        });
-        emoji_button.append(emoji_button_image);
-        emoji_button.click((function(_this) {
-          return function(e) {
-            return _this.insertEmojiAtCaret($(e.currentTarget).prop('emoji_data'));
-          };
-        })(this));
-        emoji_divs.append(emoji_button);
-      }
-      return emoji_divs;
-    };
-
-    Pallet.prototype.setCodeList = function(kind, code_list) {
-      var code, emoji_button, emoji_button_image, emoji_divs, i, len;
-      emoji_divs = $("<div class='" + kind + "-emoji-list clearfix'></div>");
-      for (i = 0, len = code_list.length; i < len; i++) {
-        code = code_list[i];
-        emoji_button = $('<button>', {
-          "class": 'emoji-btn btn btn-default pull-left'
-        });
-        emoji_button_image = $('<img>', {
-          title: code,
-          "class": 'img-responsive center-block',
-          src: this.EC.cdn_url + "px32/" + (code.replace(/\s/g, '_')) + ".png"
-        });
-        emoji_button.prop('emoji_data', {
-          code: code
-        });
-        emoji_button.append(emoji_button_image);
-        emoji_button.click((function(_this) {
-          return function(e) {
-            return _this.insertEmojiAtCaret($(e.currentTarget).prop('emoji_data'));
-          };
-        })(this));
-        emoji_divs.append(emoji_button);
-      }
-      return emoji_divs;
-    };
-
-    Pallet.prototype.mojiOrCode = function(emoji) {
-      if (emoji.moji !== null && emoji.moji !== '') {
-        return emoji.moji;
-      } else {
-        return ":" + emoji.code + ":";
-      }
-    };
-
-    Pallet.prototype.insertEmojiAtCaret = function(emoji) {
-      var code, elem, link_wrapper, pos, range, selection, startTxt, stopTxt, txt, wrapper;
-      code = this.mojiOrCode(emoji);
-      if (this.clipboard) {
-        this.clipboard.destroy();
-      }
-      if (this.EC.User.auth_info.token !== null) {
-        this.EC.User.History.set(emoji.code.replace(/\s/g, '_'));
-      }
-      if (this.active_input_area === null) {
-        this.clipboard = new Clipboard('.emoji-btn', {
-          text: function(e) {
-            return code;
-          }
-        });
-        return;
-      }
-      elem = this.active_input_area;
-      if (elem.is('[contenteditable="true"]')) {
-        wrapper = $('<img>', {
-          "class": 'emojidex-emoji',
-          src: this.EC.cdn_url + "px32/" + (emoji.code.replace(/\s/g, '_')) + ".png",
-          alt: emoji.code
-        });
-        if (emoji.link !== null && emoji.link !== '') {
-          link_wrapper = wrapper;
-          wrapper = $('<a>', {
-            href: emoji.link
-          });
-          wrapper = link_wrapper.append(wrapper);
-        }
-        elem.focus();
-        selection = window.getSelection();
-        range = selection.getRangeAt(0);
-        range.insertNode(wrapper[0]);
-        range.collapse(false);
-        selection.removeAllRanges();
-        selection.addRange(range);
-        return elem.change();
-      } else {
-        pos = elem.caret('pos');
-        txt = elem.val();
-        startTxt = txt.substring(0, pos);
-        stopTxt = txt.substring(pos, txt.length);
-        elem.val(startTxt + code + stopTxt);
-        elem.focus();
-        return elem.caret('pos', pos + code.length);
-      }
-    };
-
-    Pallet.prototype.getPagination = function(kind, prev_func, next_func, cur_page, max_page) {
-      var pagination;
-      pagination = $("<div class='" + kind + "-pagination text-center'><ul class='pagination mb-0'></ul></div>");
-      pagination.find('.pagination').append($('<li class="pallet-pager"><span>&laquo;</span></li>').click((function(_this) {
-        return function() {
-          return prev_func();
-        };
-      })(this)));
-      pagination.find('.pagination').append($("<li class='disabled'><span>" + cur_page + " / " + max_page + "</span></li>"));
-      pagination.find('.pagination').append($('<li class="pallet-pager"><span>&raquo;</span></li>').click((function(_this) {
-        return function() {
-          return next_func();
-        };
-      })(this)));
-      return pagination;
-    };
-
-    Pallet.prototype.toggleSorting = function() {
-      var i, j, len, len1, ref, ref1, results, results1, tab;
-      if (this.EC.User.auth_info.premium) {
-        ref = this.getInitializedTabs();
-        results = [];
-        for (i = 0, len = ref.length; i < len; i++) {
-          tab = ref[i];
-          if (!tab.tab_content.find('#sort-selector').length) {
-            results.push(tab.tab_content.find('ul.pagination').after(this.getSorting(tab)));
-          } else {
-            results.push(void 0);
-          }
-        }
-        return results;
-      } else {
-        ref1 = this.getInitializedTabs();
-        results1 = [];
-        for (j = 0, len1 = ref1.length; j < len1; j++) {
-          tab = ref1[j];
-          results1.push(this.removeSorting(tab));
-        }
-        return results1;
-      }
-    };
-
-    Pallet.prototype.getInitializedTabs = function() {
-      var i, initialized_tabs, len, ref, tab;
-      initialized_tabs = [];
-      ref = this.tabs;
-      for (i = 0, len = ref.length; i < len; i++) {
-        tab = ref[i];
-        if (tab.initialized) {
-          initialized_tabs.push(tab);
-        }
-      }
-      return initialized_tabs;
-    };
-
-    Pallet.prototype.getSorting = function(target_tab) {
-      var sort_selector;
-      if (!this.EC.User.auth_info.premium) {
-        return '';
-      }
-      sort_selector = $('<select id="sort-selector" class="form-control pull-right"></select>');
-      sort_selector.append($('<option value="score">Score</option>'));
-      sort_selector.append($('<option value="newest">Newest</option>'));
-      sort_selector.append($('<option value="liked">Most Liked</option>'));
-      sort_selector.val(target_tab.sort_type);
-      sort_selector.change(function() {
-        target_tab.sort_type = sort_selector.val();
-        return target_tab.resetTabContent();
-      });
-      return sort_selector;
-    };
-
-    Pallet.prototype.removeSorting = function(target_tab) {
-      target_tab.tab_content.find('#sort-selector').remove();
-      return target_tab.resetTabContent();
-    };
-
-    Pallet.prototype.openDialog = function() {
-      return this.dialog.dialog('open');
-    };
-
-    return Pallet;
-
-  })();
-
-  CategoryTab = (function() {
-    function CategoryTab(pallet, category, length) {
-      this.pallet = pallet;
-      this.initialized = false;
-      this.sort_type = 'score';
-      this.category_name = category.code;
-      this.tab_list = $("<li id='tab-" + category.code + "' data-code='" + category.code + "'><a href='#tab-content-" + category.code + "' data-toggle='pill'><i class='emjdx-" + category.code + "'></a></li>");
-      this.tab_list.click((function(_this) {
-        return function(e) {
-          return _this.setCategory($(e.currentTarget).data('code'));
-        };
-      })(this));
-      this.tab_content = $("<div class='tab-pane " + (length === 0 ? " active" : "") + "' id='tab-content-" + category.code + "'></div>");
-    }
-
-    CategoryTab.prototype.setCategory = function(category_name) {
-      if (this.tab_data != null) {
-        return this.pallet.EC.Categories.called_data = this.tab_data;
-      } else {
-        return this.setCategoryTabContent(category_name);
-      }
-    };
-
-    CategoryTab.prototype.setCategoryTabContent = function(category_name) {
-      this.initialized = true;
-      this.category_name = category_name;
-      return this.pallet.EC.Categories.getEmoji(category_name, (function(_this) {
-        return function(result_emoji, called_data) {
-          var cur_page, max_page, next_func, pagination, prev_func;
-          _this.tab_data = called_data;
-          _this.tab_content.children().remove();
-          _this.tab_content.append(_this.pallet.setEmojiList('category', result_emoji));
-          cur_page = _this.pallet.EC.Categories.meta.total_count === 0 ? 0 : _this.pallet.EC.Categories.cur_page;
-          max_page = Math.floor(_this.pallet.EC.Categories.meta.total_count / _this.pallet.EC.options.limit);
-          if (_this.pallet.EC.Categories.meta.total_count % _this.pallet.EC.options.limit > 0) {
-            max_page++;
-          }
-          prev_func = function() {
-            return _this.pallet.EC.Categories.prev();
-          };
-          next_func = function() {
-            return _this.pallet.EC.Categories.next();
-          };
-          pagination = _this.pallet.getPagination('category', prev_func, next_func, cur_page, max_page);
-          pagination.append(_this.pallet.getSorting(_this));
-          return _this.tab_content.append(pagination);
-        };
-      })(this), {
-        sort: this.sort_type
-      });
-    };
-
-    CategoryTab.prototype.resetTabContent = function() {
-      return this.setCategoryTabContent(this.category_name);
-    };
-
-    return CategoryTab;
-
-  })();
-
-  IndexTab = (function() {
-    function IndexTab(pallet) {
-      this.pallet = pallet;
-      this.initialized = false;
-      this.sort_type = 'score';
-      this.tab_list = $("<li id='tab-index' class='active'><a href='#tab-content-index' data-toggle='pill'><i class='emjdx-all'></a></li>");
-      this.tab_content = $("<div class='tab-pane active' id='tab-content-index'></div>");
-      this.setTabContent();
-    }
-
-    IndexTab.prototype.setTabContent = function() {
-      this.initialized = true;
-      return this.pallet.EC.Indexes.index((function(_this) {
-        return function(result_emoji, called_data) {
-          var cur_page, max_page, next_func, pagination, prev_func;
-          _this.tab_data = called_data;
-          _this.tab_content.children().remove();
-          _this.tab_content.append(_this.pallet.setEmojiList('index', result_emoji));
-          cur_page = _this.pallet.EC.Indexes.meta.total_count === 0 ? 0 : _this.pallet.EC.Indexes.cur_page;
-          max_page = Math.floor(_this.pallet.EC.Indexes.meta.total_count / _this.pallet.EC.options.limit);
-          if (_this.pallet.EC.Indexes.meta.total_count % _this.pallet.EC.options.limit > 0) {
-            max_page++;
-          }
-          prev_func = function() {
-            return _this.pallet.EC.Indexes.prev();
-          };
-          next_func = function() {
-            return _this.pallet.EC.Indexes.next();
-          };
-          pagination = _this.pallet.getPagination('index', prev_func, next_func, cur_page, max_page);
-          pagination.append(_this.pallet.getSorting(_this));
-          return _this.tab_content.append(pagination);
-        };
-      })(this), {
-        sort: this.sort_type
-      });
-    };
-
-    IndexTab.prototype.resetTabContent = function() {
-      return this.setTabContent();
-    };
-
-    return IndexTab;
-
-  })();
-
-  SearchTab = (function() {
-    function SearchTab(pallet) {
-      this.pallet = pallet;
-      this.initialized = false;
-      this.sort_type = 'score';
-      this.tab_list = "<li id='tab-search' class='pull-right'><a href='#tab-content-search' data-toggle='pill'><i class='emjdx-search'></a></li>";
-      this.tab_content = this.getTabContent();
-    }
-
-    SearchTab.prototype.getTabContent = function() {
-      var search_btn, tab_content;
-      tab_content = $('<div class="tab-pane" id="tab-content-search"><div class="input-group"><input type="text" name="search" id="pallet-emoji-search-input" class="form-control" placeholder="Search emoji"><span class="input-group-btn"></span></div></div>');
-      tab_content.find('#pallet-emoji-search-input').keypress((function(_this) {
-        return function(e) {
-          if (e.keyCode === 13) {
-            return _this.searchEmojiInput();
-          }
-        };
-      })(this));
-      search_btn = $('<div class="btn btn-primary" id="pallet-emoji-search-submit"><span class="glyphicon glyphicon-search"></span></div>');
-      search_btn.click((function(_this) {
-        return function() {
-          return _this.searchEmojiInput();
-        };
-      })(this));
-      tab_content.find('.input-group-btn').append(search_btn);
-      return tab_content;
-    };
-
-    SearchTab.prototype.searchEmojiInput = function() {
-      var search_word;
-      this.initialized = true;
-      search_word = $('#pallet-emoji-search-input').val();
-      if (search_word.length > 0) {
-        return this.search(search_word);
-      }
-    };
-
-    SearchTab.prototype.search = function(search_word) {
-      this.search_word = search_word;
-      return this.pallet.EC.Search.search(search_word, (function(_this) {
-        return function(result_emoji) {
-          var cur_page, max_page, next_func, pagination, prev_func;
-          $('.search-emoji-list').remove();
-          $('.search-pagination').remove();
-          _this.tab_content.append(_this.pallet.setEmojiList('search', result_emoji));
-          cur_page = _this.pallet.EC.Search.meta.total_count === 0 ? 0 : _this.pallet.EC.Search.cur_page;
-          max_page = Math.floor(_this.pallet.EC.Search.meta.total_count / _this.pallet.EC.options.limit);
-          if (_this.pallet.EC.Search.meta.total_count % _this.pallet.EC.options.limit > 0) {
-            max_page++;
-          }
-          prev_func = function() {
-            return _this.pallet.EC.Search.prev();
-          };
-          next_func = function() {
-            return _this.pallet.EC.Search.next();
-          };
-          pagination = _this.pallet.getPagination('search', prev_func, next_func, cur_page, max_page);
-          pagination.append(_this.pallet.getSorting(_this));
-          return _this.tab_content.append(pagination);
-        };
-      })(this), {
-        sort: this.sort_type
-      });
-    };
-
-    SearchTab.prototype.resetTabContent = function() {
-      return this.search(this.search_word);
-    };
-
-    return SearchTab;
-
-  })();
-
-  UserTab = (function() {
-    function UserTab(pallet) {
-      this.pallet = pallet;
-      this.tab_list = "<li id='tab-user' class='pull-right'><a href='#tab-content-user' data-toggle='pill'><i class='emjdx-user'></a></li>";
-      this.tab_content = this.getTabContent();
-    }
-
-    UserTab.prototype.getTabContent = function() {
-      var auth_info, login_btn, ref, ref1, ref2, tab_content;
-      tab_content = $('<div class="tab-pane" id="tab-content-user"><input type="text" class="form-control" id="pallet-emoji-username-input" placeholder="Username"><input type="password" class="form-control mt-m" id="pallet-emoji-password-input" placeholder="Password"></div>');
-      tab_content.find('#pallet-emoji-password-input').keypress((function(_this) {
-        return function(e) {
-          if (e.keyCode === 13) {
-            return _this.checkInput();
-          }
-        };
-      })(this));
-      login_btn = $('<div class="btn btn-primary btn-block mt-m" id="pallet-emoji-login-submit">Login</div>');
-      login_btn.click((function(_this) {
-        return function() {
-          return _this.checkInput();
-        };
-      })(this));
-      tab_content.append(login_btn);
-      if (((ref = this.pallet.EC.Data.storage.hub_cache) != null ? (ref1 = ref.emojidex) != null ? (ref2 = ref1.auth_info) != null ? ref2.status : void 0 : void 0 : void 0) === 'verified') {
-        auth_info = this.pallet.EC.Data.storage.hub_cache.emojidex.auth_info;
-        this.login(auth_info.user, auth_info.token, 'token');
-      }
-      return tab_content;
-    };
-
-    UserTab.prototype.checkInput = function() {
-      var password, username;
-      $('#login-error').remove();
-      username = $('#pallet-emoji-username-input').val();
-      password = $('#pallet-emoji-password-input').val();
-      if (username.length > 0 && password.length > 0) {
-        return this.login(username, password, 'plain');
-      }
-    };
-
-    UserTab.prototype.login = function(username, password, type) {
-      var callback;
-      callback = (function(_this) {
-        return function(auth_info) {
-          if (auth_info.status === 'verified') {
-            _this.hideLoginForm();
-            _this.setUserTab();
-            _this.setHistory(auth_info);
-            _this.setFavorite(auth_info);
-            return _this.pallet.toggleSorting();
-          } else {
-            return _this.showError(auth_info);
-          }
-        };
-      })(this);
-      if (type === 'plain') {
-        return this.pallet.EC.User.plainAuth(username, password, function(auth_info) {
-          return callback(auth_info);
-        });
-      } else {
-        return this.pallet.EC.User.tokenAuth(username, password, function(auth_info) {
-          return callback(auth_info);
-        });
-      }
-    };
-
-    UserTab.prototype.showError = function(auth_info) {
-      return this.tab_content.prepend($('<div id="login-error"><span style="color:red">Login failed. Please check your username and password or <a href="https://www.emojidex.com/users/sign_in">login here</a>.</span><div>'));
-    };
-
-    UserTab.prototype.hideLoginForm = function() {
-      $('#pallet-emoji-username-input').val('');
-      $('#pallet-emoji-password-input').val('');
-      $('#pallet-emoji-username-input').hide();
-      $('#pallet-emoji-password-input').hide();
-      return $('#pallet-emoji-login-submit').hide();
-    };
-
-    UserTab.prototype.showLoginForm = function() {
-      $('#pallet-emoji-username-input').show();
-      $('#pallet-emoji-password-input').show();
-      return $('#pallet-emoji-login-submit').show();
-    };
-
-    UserTab.prototype.setUserTab = function() {
-      var logout_btn, user_tab_list;
-      user_tab_list = $('<ul class="nav nav-tabs mb-m mt-m" id="user_tab_list"></ul>');
-      user_tab_list.append($('<li id="tab-user-favorite" class="active"><a href="#tab-content-user-favorite" data-toggle="tab">Favorite</a></li>'));
-      user_tab_list.append($('<li id="tab-user-history"><a href="#tab-content-user-history" data-toggle="tab">History</a></li>'));
-      logout_btn = $('<button class="btn btn-default btm-sm pull-right" id="pallet-emoji-logout">LogOut</button>');
-      logout_btn.click((function(_this) {
-        return function() {
-          _this.pallet.EC.User.logout();
-          $('#user_tab_list').remove();
-          $('#user_tab_content').remove();
-          _this.showLoginForm();
-          return _this.pallet.toggleSorting();
-        };
-      })(this));
-      user_tab_list.append(logout_btn);
-      this.user_tab_content = $('<div class="tab-content" id="user_tab_content"></div>');
-      this.tab_content.append(user_tab_list);
-      return this.tab_content.append(this.user_tab_content);
-    };
-
-    UserTab.prototype.setHistory = function(auth_info) {
-      return this.pallet.EC.User.History.get((function(_this) {
-        return function(response) {
-          var item;
-          return _this.setDataByCodes((function() {
-            var i, len, ref, results;
-            ref = response.history;
-            results = [];
-            for (i = 0, len = ref.length; i < len; i++) {
-              item = ref[i];
-              results.push(item.emoji_code);
-            }
-            return results;
-          })(), response.meta, 'history');
-        };
-      })(this));
-    };
-
-    UserTab.prototype.setFavorite = function(auth_info) {
-      return this.pallet.EC.User.Favorites.get((function(_this) {
-        return function(response) {
-          return _this.setData(response.emoji, response.meta, 'favorite');
-        };
-      })(this));
-    };
-
-    UserTab.prototype.setData = function(data, meta, kind) {
-      var tab_pane;
-      tab_pane = $("<div class='tab-pane " + (kind === 'favorite' ? 'active' : '') + "' id='tab-content-user-" + kind + "'></div>");
-      tab_pane.append(this.pallet.setEmojiList(kind, data));
-      return this.user_tab_content.append(tab_pane);
-    };
-
-    UserTab.prototype.setDataByCodes = function(data, meta, kind) {
-      var tab_pane;
-      tab_pane = $("<div class='tab-pane' id='tab-content-user-" + kind + "'></div>");
-      tab_pane.append(this.pallet.setCodeList(kind, data));
-      return this.user_tab_content.append(tab_pane);
-    };
-
-    UserTab.prototype.setPremiumData = function(response, kind) {
-      var tab_pane;
-      tab_pane = $("<div class='tab-pane' id='tab-content-user-" + kind + "'></div>");
-      if (response.statusText === 'Payment Required') {
-        tab_pane.append($('<p style="margin-top:15px;"><a class="btn btn-primary" href="https://www.emojidex.com/profile" target="_blank">Premium/Pro user only.</a></p>'));
-      } else {
-        tab_pane.append(this.pallet.setEmojiList(kind, response.emoji));
-      }
-      return this.user_tab_content.append(tab_pane);
-    };
-
-    UserTab.prototype.getPagination = function(meta, pane, kind) {
-      var cur_page, max_page, next_func, prev_func;
-      cur_page = meta.total_count === 0 ? 0 : meta.page;
-      max_page = Math.floor(meta.total_count / 50);
-      if (meta.total_count % 50 > 0) {
-        max_page++;
-      }
-      prev_func = (function(_this) {
-        return function() {
-          return console.log('prev');
-        };
-      })(this);
-      next_func = (function(_this) {
-        return function() {
-          return console.log('next');
-        };
-      })(this);
-      return this.user_tab_content.append(pane.append(this.pallet.getPagination(kind, prev_func, next_func, cur_page, max_page)));
-    };
-
-    return UserTab;
-
-  })();
-
-}).call(this);
-
-(function() {
   var CountChecker, Observer, Replacer, ReplacerSearch,
     extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     hasProp = {}.hasOwnProperty;
@@ -1563,3 +892,792 @@ left:"-999px"},b._getOrigin=function(a){var b,c,d;return b=document.createElemen
   })(Replacer);
 
 }).call(this);
+
+'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Pallet = function () {
+  function Pallet(plugin) {
+    var _this = this;
+
+    _classCallCheck(this, Pallet);
+
+    this.plugin = plugin;
+    this.active_input_area = null;
+    this.tabs = [];
+    this.EC = new EmojidexClient({
+      limit: 66,
+      onReady: function onReady(EC) {
+        // start main --------
+        $('input, textarea, [contenteditable="true"]').on('focus keyup mouseup', function (e) {
+          return _this.active_input_area = $(e.currentTarget);
+        });
+
+        _this.createDialog();
+        _this.setPallet(_this.plugin.element);
+
+        return __guardFunc__(_this.plugin.options.onComplete, function (f) {
+          return f();
+        });
+      }
+    });
+  }
+
+  _createClass(Pallet, [{
+    key: 'createDialog',
+    value: function createDialog() {
+      this.dialog = $('<div id="emojidex-dialog-content"></div>');
+      return this.dialog.dialog({
+        classes: {
+          'ui-dialog': 'emojidex-ui-dialog'
+        },
+        autoOpen: false,
+        width: 557,
+        title: '<img src="http://assets.emojidex.com/logo-hdpi.png" alt="emojidex logo" />',
+
+        create: function create(e) {
+          $('.ui-dialog-titlebar-close').hide();
+
+          var close_btn = $('<button type="button" class="btn btn-default btn-xs pull-right" aria-label="Close"><span aria-hidden="true">&times;</span></button>');
+          close_btn.click(function (e) {
+            return $('#emojidex-dialog-content').dialog('close');
+          });
+
+          $('.ui-dialog-titlebar').append(close_btn);
+          return $('.emojidex-ui-dialog').wrap('<span id="emojidex-emoji-pallet"></span>');
+        },
+        open: function open(e) {
+          $('.ui-dialog :button').blur();
+          return $('.nav.nav-pills a').blur();
+        }
+      });
+    }
+  }, {
+    key: 'setPallet',
+    value: function setPallet(element) {
+      var _this2 = this;
+
+      return $(element).click(function (e) {
+        if (_this2.emoji_pallet != null) {
+          return _this2.openDialog();
+        } else {
+          var _ret = function () {
+            var tab_list = $('<ul class="nav nav-pills"></ul>');
+            var tab_content = $('<div class="tab-content"></div>');
+
+            return {
+              v: _this2.EC.Categories.sync(function (categories) {
+                _this2.tabs.push(new IndexTab(_this2));
+                for (var i = 0; i < categories.length; i++) {
+                  var category = categories[i];
+                  _this2.tabs.push(new CategoryTab(_this2, category, tab_list[0].children.length));
+                }
+
+                _this2.tabs.push(new UserTab(_this2));
+                _this2.tabs.push(new SearchTab(_this2));
+
+                for (var j = 0; j < _this2.tabs.length; j++) {
+                  var tab = _this2.tabs[j];
+                  tab_list.append(tab.tab_list);
+                  tab_content.append(tab.tab_content);
+                }
+
+                _this2.emoji_pallet = $('<div class="emoji-pallet"></div>');
+                _this2.emoji_pallet.append(tab_list.add(tab_content));
+                _this2.emoji_pallet.find('ul').after('<hr>');
+
+                _this2.dialog.append(_this2.emoji_pallet);
+                return _this2.openDialog();
+              })
+            };
+          }();
+
+          if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
+        }
+      });
+    }
+  }, {
+    key: 'setEmojiList',
+    value: function setEmojiList(kind, emoji_list) {
+      var _this3 = this;
+
+      var emoji_divs = $('<div class=\'' + kind + '-emoji-list clearfix\'></div>');
+      for (var i = 0; i < emoji_list.length; i++) {
+        var emoji = emoji_list[i];
+        var emoji_button = $('<button>', { class: 'emoji-btn btn btn-default pull-left' });
+        emoji_button.prop('emoji_data', emoji);
+
+        var emoji_button_image = $('<img>', {
+          alt: '' + emoji.code,
+          title: '' + emoji.code,
+          class: 'img-responsive center-block',
+          src: this.EC.cdn_url + 'px32/' + emoji.code.replace(/\s/g, '_') + '.png'
+        });
+
+        emoji_button.append(emoji_button_image);
+        emoji_button.click(function (e) {
+          return _this3.insertEmojiAtCaret($(e.currentTarget).prop('emoji_data'));
+        });
+        emoji_divs.append(emoji_button);
+      }
+      return emoji_divs;
+    }
+  }, {
+    key: 'setCodeList',
+    value: function setCodeList(kind, code_list) {
+      var _this4 = this;
+
+      var emoji_divs = $('<div class=\'' + kind + '-emoji-list clearfix\'></div>');
+      for (var i = 0; i < code_list.length; i++) {
+        var code = code_list[i];
+        var emoji_button = $('<button>', { class: 'emoji-btn btn btn-default pull-left' });
+        var emoji_button_image = $('<img>', {
+          title: code,
+          class: 'img-responsive center-block',
+          src: this.EC.cdn_url + 'px32/' + code.replace(/\s/g, '_') + '.png'
+        });
+        emoji_button.prop('emoji_data', { code: code });
+
+        emoji_button.append(emoji_button_image);
+        emoji_button.click(function (e) {
+          return _this4.insertEmojiAtCaret($(e.currentTarget).prop('emoji_data'));
+        });
+        //TODO implement ↓ properly
+        //@EC.Search.find code, (ret)=>
+        //  @setButtonInfo(ret, emoji_button)
+
+        emoji_divs.append(emoji_button);
+      }
+
+      return emoji_divs;
+    }
+
+    //TODO implement ↓ properly
+    //setButtonInfo: (emoji, target) ->
+    //  target.prop 'emoji_data', emoji
+    //  target.unbind('click')
+    //  target.click (e)=>
+    //    @insertEmojiAtCaret($(e.currentTarget).prop('emoji_data'))
+
+  }, {
+    key: 'mojiOrCode',
+    value: function mojiOrCode(emoji) {
+      if (emoji.moji !== null && emoji.moji !== '') {
+        return emoji.moji;
+      } else {
+        return ':' + emoji.code + ':';
+      }
+    }
+  }, {
+    key: 'insertEmojiAtCaret',
+    value: function insertEmojiAtCaret(emoji) {
+      var code = this.mojiOrCode(emoji);
+      if (this.clipboard) {
+        this.clipboard.destroy();
+      }
+
+      if (this.EC.User.auth_info.token !== null) {
+        this.EC.User.History.set(emoji.code.replace(/\s/g, '_'));
+      }
+
+      if (this.active_input_area === null) {
+        this.clipboard = new Clipboard('.emoji-btn', {
+          text: function text(e) {
+            return code;
+          }
+        });
+        return;
+      }
+
+      var elem = this.active_input_area;
+      if (elem.is('[contenteditable="true"]')) {
+        var wrapper = $('<img>', {
+          class: 'emojidex-emoji',
+          src: this.EC.cdn_url + 'px32/' + emoji.code.replace(/\s/g, '_') + '.png',
+          alt: emoji.code
+        });
+        if (emoji.link !== null && emoji.link !== '') {
+          var link_wrapper = wrapper;
+          wrapper = $('<a>', { href: emoji.link });
+          wrapper = link_wrapper.append(wrapper);
+        }
+
+        elem.focus();
+        var selection = window.getSelection();
+        var range = selection.getRangeAt(0);
+
+        range.insertNode(wrapper[0]);
+        range.collapse(false);
+        selection.removeAllRanges();
+        selection.addRange(range);
+
+        return elem.change();
+      } else {
+        var pos = elem.caret('pos');
+        var txt = elem.val();
+        var startTxt = txt.substring(0, pos);
+        var stopTxt = txt.substring(pos, txt.length);
+        elem.val(startTxt + code + stopTxt);
+        elem.focus();
+        return elem.caret('pos', pos + code.length);
+      }
+    }
+  }, {
+    key: 'getPagination',
+    value: function getPagination(kind, prev_func, next_func, cur_page, max_page) {
+      var pagination = $('<div class=\'' + kind + '-pagination text-center\'><ul class=\'pagination mb-0\'></ul></div>');
+      pagination.find('.pagination').append($('<li class="pallet-pager"><span>&laquo;</span></li>').click(function () {
+        return prev_func();
+      }));
+      pagination.find('.pagination').append($('<li class=\'disabled\'><span>' + cur_page + ' / ' + max_page + '</span></li>'));
+      pagination.find('.pagination').append($('<li class="pallet-pager"><span>&raquo;</span></li>').click(function () {
+        return next_func();
+      }));
+
+      return pagination;
+    }
+  }, {
+    key: 'toggleSorting',
+    value: function toggleSorting() {
+      var _this5 = this;
+
+      if (this.EC.User.auth_info.premium) {
+        return function () {
+          var result = [];
+          var iterable = _this5.getInitializedTabs();
+          for (var i = 0; i < iterable.length; i++) {
+            var tab = iterable[i];
+            var item = void 0;
+            if (!tab.tab_content.find('#sort-selector').length) {
+              item = tab.tab_content.find('ul.pagination').after(_this5.getSorting(tab));
+            }
+            result.push(item);
+          }
+          return result;
+        }();
+      } else {
+        return this.getInitializedTabs().map(function (tab) {
+          return _this5.removeSorting(tab);
+        });
+      }
+    }
+  }, {
+    key: 'getInitializedTabs',
+    value: function getInitializedTabs() {
+      var initialized_tabs = [];
+      for (var i = 0; i < this.tabs.length; i++) {
+        var tab = this.tabs[i];
+        if (tab.initialized) {
+          initialized_tabs.push(tab);
+        }
+      }
+      return initialized_tabs;
+    }
+  }, {
+    key: 'getSorting',
+    value: function getSorting(target_tab) {
+      if (!this.EC.User.auth_info.premium) {
+        return '';
+      }
+      var sort_selector = $('<select id="sort-selector" class="form-control pull-right"></select>');
+      sort_selector.append($('<option value="score">Score</option>'));
+      sort_selector.append($('<option value="newest">Newest</option>'));
+      sort_selector.append($('<option value="liked">Most Liked</option>'));
+      sort_selector.val(target_tab.sort_type);
+      sort_selector.change(function () {
+        target_tab.sort_type = sort_selector.val();
+        return target_tab.resetTabContent();
+      });
+      return sort_selector;
+    }
+  }, {
+    key: 'removeSorting',
+    value: function removeSorting(target_tab) {
+      target_tab.tab_content.find('#sort-selector').remove();
+      return target_tab.resetTabContent();
+    }
+  }, {
+    key: 'openDialog',
+    value: function openDialog() {
+      return this.dialog.dialog('open');
+    }
+  }]);
+
+  return Pallet;
+}();
+
+function __guardFunc__(func, transform) {
+  return typeof func === 'function' ? transform(func) : undefined;
+}
+//# sourceMappingURL=pallet.js.map
+
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var CategoryTab = function () {
+  function CategoryTab(pallet, category, length) {
+    var _this = this;
+
+    _classCallCheck(this, CategoryTab);
+
+    this.pallet = pallet;
+    this.initialized = false;
+    this.sort_type = 'score';
+    this.category_name = category.code;
+    this.tab_list = $('<li id=\'tab-' + category.code + '\' data-code=\'' + category.code + '\'><a href=\'#tab-content-' + category.code + '\' data-toggle=\'pill\'><i class=\'emjdx-' + category.code + '\'></a></li>');
+    this.tab_list.click(function (e) {
+      return _this.setCategory($(e.currentTarget).data('code'));
+    });
+
+    this.tab_content = $('<div class=\'tab-pane\' id=\'tab-content-' + category.code + '\'></div>');
+  }
+
+  _createClass(CategoryTab, [{
+    key: 'setCategory',
+    value: function setCategory(category_name) {
+      if (this.tab_data != null) {
+        return this.pallet.EC.Categories.called_data = this.tab_data;
+      } else {
+        return this.setCategoryTabContent(category_name);
+      }
+    }
+  }, {
+    key: 'setCategoryTabContent',
+    value: function setCategoryTabContent(category_name) {
+      var _this2 = this;
+
+      this.initialized = true;
+      this.category_name = category_name;
+      return this.pallet.EC.Categories.getEmoji(category_name, function (result_emoji, called_data) {
+        _this2.tab_data = called_data;
+        _this2.tab_content.children().remove();
+
+        _this2.tab_content.append(_this2.pallet.setEmojiList('category', result_emoji));
+
+        var cur_page = _this2.pallet.EC.Categories.meta.total_count === 0 ? 0 : _this2.pallet.EC.Categories.cur_page;
+        var max_page = Math.floor(_this2.pallet.EC.Categories.meta.total_count / _this2.pallet.EC.options.limit);
+        if (_this2.pallet.EC.Categories.meta.total_count % _this2.pallet.EC.options.limit > 0) {
+          max_page++;
+        }
+        var prev_func = function prev_func() {
+          return _this2.pallet.EC.Categories.prev();
+        };
+        var next_func = function next_func() {
+          return _this2.pallet.EC.Categories.next();
+        };
+        var pagination = _this2.pallet.getPagination('category', prev_func, next_func, cur_page, max_page);
+        pagination.append(_this2.pallet.getSorting(_this2));
+        return _this2.tab_content.append(pagination);
+      }, { sort: this.sort_type });
+    }
+  }, {
+    key: 'resetTabContent',
+    value: function resetTabContent() {
+      return this.setCategoryTabContent(this.category_name);
+    }
+  }]);
+
+  return CategoryTab;
+}();
+//# sourceMappingURL=category_tab.js.map
+
+"use strict";
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var IndexTab = function () {
+  function IndexTab(pallet) {
+    _classCallCheck(this, IndexTab);
+
+    this.pallet = pallet;
+    this.initialized = false;
+    this.sort_type = 'score';
+    this.tab_list = $("<li id='tab-index' class='active'><a href='#tab-content-index' data-toggle='pill'><i class='emjdx-all'></a></li>");
+    this.tab_content = $("<div class='tab-pane active' id='tab-content-index'></div>");
+    this.setTabContent();
+  }
+
+  _createClass(IndexTab, [{
+    key: "setTabContent",
+    value: function setTabContent() {
+      var _this = this;
+
+      this.initialized = true;
+      return this.pallet.EC.Indexes.index(function (result_emoji, called_data) {
+        _this.tab_data = called_data;
+        _this.tab_content.children().remove();
+
+        _this.tab_content.append(_this.pallet.setEmojiList('index', result_emoji));
+
+        var cur_page = _this.pallet.EC.Indexes.meta.total_count === 0 ? 0 : _this.pallet.EC.Indexes.cur_page;
+        var max_page = Math.floor(_this.pallet.EC.Indexes.meta.total_count / _this.pallet.EC.options.limit);
+        if (_this.pallet.EC.Indexes.meta.total_count % _this.pallet.EC.options.limit > 0) {
+          max_page++;
+        }
+        var prev_func = function prev_func() {
+          return _this.pallet.EC.Indexes.prev();
+        };
+        var next_func = function next_func() {
+          return _this.pallet.EC.Indexes.next();
+        };
+        var pagination = _this.pallet.getPagination('index', prev_func, next_func, cur_page, max_page);
+        pagination.append(_this.pallet.getSorting(_this));
+        return _this.tab_content.append(pagination);
+      }, { sort: this.sort_type });
+    }
+  }, {
+    key: "resetTabContent",
+    value: function resetTabContent() {
+      return this.setTabContent();
+    }
+  }]);
+
+  return IndexTab;
+}();
+//# sourceMappingURL=index_tab.js.map
+
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var SearchTab = function () {
+  function SearchTab(pallet) {
+    _classCallCheck(this, SearchTab);
+
+    this.pallet = pallet;
+    this.initialized = false;
+    this.sort_type = 'score';
+    this.tab_list = "<li id='tab-search' class='pull-right'><a href='#tab-content-search' data-toggle='pill'><i class='emjdx-search'></a></li>";
+    this.tab_content = this.getTabContent();
+  }
+
+  _createClass(SearchTab, [{
+    key: 'getTabContent',
+    value: function getTabContent() {
+      var _this = this;
+
+      var tab_content = $('<div class="tab-pane" id="tab-content-search"><div class="input-group"><input type="text" name="search" id="pallet-emoji-search-input" class="form-control" placeholder="Search emoji"><span class="input-group-btn"></span></div></div>');
+      tab_content.find('#pallet-emoji-search-input').keypress(function (e) {
+        if (e.keyCode === 13) {
+          return _this.searchEmojiInput();
+        }
+      });
+
+      var search_btn = $('<div class="btn btn-primary" id="pallet-emoji-search-submit"><span class="glyphicon glyphicon-search"></span></div>');
+      search_btn.click(function () {
+        return _this.searchEmojiInput();
+      });
+      tab_content.find('.input-group-btn').append(search_btn);
+
+      return tab_content;
+    }
+  }, {
+    key: 'searchEmojiInput',
+    value: function searchEmojiInput() {
+      this.initialized = true;
+      var search_word = $('#pallet-emoji-search-input').val();
+      if (search_word.length > 0) {
+        return this.search(search_word);
+      }
+    }
+  }, {
+    key: 'search',
+    value: function search(search_word) {
+      var _this2 = this;
+
+      this.search_word = search_word;
+      return this.pallet.EC.Search.search(search_word, function (result_emoji) {
+        $('.search-emoji-list').remove();
+        $('.search-pagination').remove();
+        _this2.tab_content.append(_this2.pallet.setEmojiList('search', result_emoji));
+
+        var cur_page = _this2.pallet.EC.Search.meta.total_count === 0 ? 0 : _this2.pallet.EC.Search.cur_page;
+        var max_page = Math.floor(_this2.pallet.EC.Search.meta.total_count / _this2.pallet.EC.options.limit);
+        if (_this2.pallet.EC.Search.meta.total_count % _this2.pallet.EC.options.limit > 0) {
+          max_page++;
+        }
+        var prev_func = function prev_func() {
+          return _this2.pallet.EC.Search.prev();
+        };
+        var next_func = function next_func() {
+          return _this2.pallet.EC.Search.next();
+        };
+        var pagination = _this2.pallet.getPagination('search', prev_func, next_func, cur_page, max_page);
+        pagination.append(_this2.pallet.getSorting(_this2));
+        return _this2.tab_content.append(pagination);
+      }, { sort: this.sort_type });
+    }
+  }, {
+    key: 'resetTabContent',
+    value: function resetTabContent() {
+      return this.search(this.search_word);
+    }
+  }]);
+
+  return SearchTab;
+}();
+//# sourceMappingURL=search_tab.js.map
+
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var UserTab = function () {
+  function UserTab(pallet) {
+    _classCallCheck(this, UserTab);
+
+    this.pallet = pallet;
+    this.tab_list = "<li id='tab-user' class='pull-right'><a href='#tab-content-user' data-toggle='pill'><i class='emjdx-user'></a></li>";
+    this.tab_content = this.getTabContent();
+  }
+
+  _createClass(UserTab, [{
+    key: 'getTabContent',
+    value: function getTabContent() {
+      var _this = this;
+
+      var tab_content = $('<div class="tab-pane" id="tab-content-user"><input type="text" class="form-control" id="pallet-emoji-username-input" placeholder="Username"><input type="password" class="form-control mt-m" id="pallet-emoji-password-input" placeholder="Password"></div>');
+      tab_content.find('#pallet-emoji-password-input').keypress(function (e) {
+        if (e.keyCode === 13) {
+          return _this.checkInput();
+        }
+      });
+
+      var login_btn = $('<div class="btn btn-primary btn-block mt-m" id="pallet-emoji-login-submit">Login</div>');
+      login_btn.click(function () {
+        return _this.checkInput();
+      });
+      tab_content.append(login_btn);
+
+      if (__guard__(__guard__(__guard__(this.pallet.EC.Data.storage.hub_cache, function (x2) {
+        return x2.emojidex;
+      }), function (x1) {
+        return x1.auth_info;
+      }), function (x) {
+        return x.status;
+      }) === 'verified') {
+        var auth_info = this.pallet.EC.Data.storage.hub_cache.emojidex.auth_info;
+
+        this.login(auth_info.user, auth_info.token, 'token');
+      }
+
+      return tab_content;
+    }
+  }, {
+    key: 'checkInput',
+    value: function checkInput() {
+      $('#login-error').remove();
+
+      var username = $('#pallet-emoji-username-input').val();
+      var password = $('#pallet-emoji-password-input').val();
+      if (username.length > 0 && password.length > 0) {
+        return this.login(username, password, 'plain');
+      }
+    }
+  }, {
+    key: 'login',
+    value: function login(username, password, type) {
+      var _this2 = this;
+
+      var callback = function callback(auth_info) {
+        if (auth_info.status === 'verified') {
+          _this2.hideLoginForm();
+          _this2.setUserTab();
+          _this2.setHistory(auth_info);
+          _this2.setFavorite(auth_info);
+          return _this2.pallet.toggleSorting();
+        } else {
+          return _this2.showError(auth_info);
+        }
+      };
+
+      if (type === 'plain') {
+        return this.pallet.EC.User.plainAuth(username, password, function (auth_info) {
+          return callback(auth_info);
+        });
+      } else {
+        return this.pallet.EC.User.tokenAuth(username, password, function (auth_info) {
+          return callback(auth_info);
+        });
+      }
+    }
+  }, {
+    key: 'showError',
+    value: function showError(auth_info) {
+      // TODO: error text localization
+      return this.tab_content.prepend($('<div id="login-error"><span style="color:red">Login failed. Please check your username and password or <a href="https://www.emojidex.com/users/sign_in">login here</a>.</span><div>'));
+    }
+  }, {
+    key: 'hideLoginForm',
+    value: function hideLoginForm() {
+      $('#pallet-emoji-username-input').val('');
+      $('#pallet-emoji-password-input').val('');
+      $('#pallet-emoji-username-input').hide();
+      $('#pallet-emoji-password-input').hide();
+      return $('#pallet-emoji-login-submit').hide();
+    }
+  }, {
+    key: 'showLoginForm',
+    value: function showLoginForm() {
+      $('#pallet-emoji-username-input').show();
+      $('#pallet-emoji-password-input').show();
+      return $('#pallet-emoji-login-submit').show();
+    }
+  }, {
+    key: 'setUserTab',
+    value: function setUserTab() {
+      var _this3 = this;
+
+      var user_tab_list = $('<ul class="nav nav-tabs mb-m mt-m" id="user_tab_list"></ul>');
+      user_tab_list.append($('<li id="tab-user-favorite" class="active"><a href="#tab-content-user-favorite" data-toggle="tab">Favorite</a></li>'));
+      user_tab_list.append($('<li id="tab-user-history"><a href="#tab-content-user-history" data-toggle="tab">History</a></li>'));
+
+      var logout_btn = $('<button class="btn btn-default btm-sm pull-right" id="pallet-emoji-logout">LogOut</button>');
+      logout_btn.click(function () {
+        _this3.pallet.EC.User.logout();
+        $('#user_tab_list').remove();
+        $('#user_tab_content').remove();
+        _this3.showLoginForm();
+        return _this3.pallet.toggleSorting();
+      });
+      user_tab_list.append(logout_btn);
+
+      this.user_tab_content = $('<div class="tab-content" id="user_tab_content"></div>');
+
+      this.tab_content.append(user_tab_list);
+      return this.tab_content.append(this.user_tab_content);
+    }
+  }, {
+    key: 'setHistory',
+    value: function setHistory(auth_info) {
+      var _this4 = this;
+
+      return this.pallet.EC.User.History.get(function (response) {
+        return _this4.setDataByCodes(response.history.map(function (item) {
+          return item.emoji_code;
+        }), response.meta, 'history');
+      });
+    }
+  }, {
+    key: 'setFavorite',
+    value: function setFavorite(auth_info) {
+      var _this5 = this;
+
+      return this.pallet.EC.User.Favorites.get(function (response) {
+        return _this5.setData(response.emoji, response.meta, 'favorite');
+      });
+    }
+  }, {
+    key: 'setData',
+    value: function setData(data, meta, kind) {
+      var tab_pane = $('<div class=\'tab-pane ' + (kind === 'favorite' ? 'active' : '') + '\' id=\'tab-content-user-' + kind + '\'></div>');
+      tab_pane.append(this.pallet.setEmojiList(kind, data));
+      return this.user_tab_content.append(tab_pane);
+    }
+
+    // @getPagination(meta, tab_pane, kind)
+
+  }, {
+    key: 'setDataByCodes',
+    value: function setDataByCodes(data, meta, kind) {
+      var tab_pane = $('<div class=\'tab-pane\' id=\'tab-content-user-' + kind + '\'></div>');
+      tab_pane.append(this.pallet.setCodeList(kind, data));
+      return this.user_tab_content.append(tab_pane);
+    }
+
+    // @getPagination(meta, tab_pane, kind)
+
+  }, {
+    key: 'setPremiumData',
+    value: function setPremiumData(response, kind) {
+      var tab_pane = $('<div class=\'tab-pane\' id=\'tab-content-user-' + kind + '\'></div>');
+      if (response.statusText === 'Payment Required') {
+        // TODO: text localization
+        tab_pane.append($('<p style="margin-top:15px;"><a class="btn btn-primary" href="https://www.emojidex.com/profile" target="_blank">Premium/Pro user only.</a></p>'));
+      } else {
+        tab_pane.append(this.pallet.setEmojiList(kind, response.emoji));
+      }
+      return this.user_tab_content.append(tab_pane);
+    }
+  }, {
+    key: 'getPagination',
+    value: function getPagination(meta, pane, kind) {
+      // TODO: limit, prev/next func
+      var cur_page = meta.total_count === 0 ? 0 : meta.page;
+      var max_page = Math.floor(meta.total_count / 50);
+      if (meta.total_count % 50 > 0) {
+        max_page++;
+      }
+      var prev_func = function prev_func() {
+        return console.log('prev');
+      };
+      var next_func = function next_func() {
+        return console.log('next');
+      };
+      return this.user_tab_content.append(pane.append(this.pallet.getPagination(kind, prev_func, next_func, cur_page, max_page)));
+    }
+  }]);
+
+  return UserTab;
+}();
+
+function __guard__(value, transform) {
+  return typeof value !== 'undefined' && value !== null ? transform(value) : undefined;
+}
+//# sourceMappingURL=user_tab.js.map
+
+"use strict";
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/*
+* emojidexPallet
+*
+* require: emojidex-client
+*
+* =LICENSE=
+* Licensed under the emojidex Open License
+* https://www.emojidex.com/emojidex/emojidex_open_license
+*
+* Copyright 2013 emojidex
+*/
+
+(function ($, window, document) {
+  var pluginName = "emojidexPallet";
+  var defaults = { onComplete: undefined };
+
+  var Plugin = function Plugin(element, options) {
+    _classCallCheck(this, Plugin);
+
+    this.element = element;
+    this.options = $.extend({}, defaults, options);
+    this._defaults = defaults;
+    this._name = pluginName;
+
+    // start: Plugin --------
+    this.pallet = new Pallet(this);
+  };
+
+  return $.fn[pluginName] = function (options) {
+    return this.each(function () {
+      if (!$.data(this, "plugin_" + pluginName)) {
+        return $.data(this, "plugin_" + pluginName, new Plugin(this, options));
+      }
+    });
+  };
+})(jQuery, window, document);
+//# sourceMappingURL=main.js.map
