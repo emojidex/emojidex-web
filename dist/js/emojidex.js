@@ -1096,19 +1096,6 @@ var Pallet = function () {
 
       var elem = this.active_input_area;
       if (elem.is('[contenteditable="true"]')) {
-        //let wrapper = $('<img>', {
-        //  class: 'emojidex-emoji',
-        //  src: `${this.EC.cdn_url}px32/${emoji.code.replace(/\s/g, '_')}.png`,
-        //  alt: emoji.code
-        //}
-        //);
-        //if (emoji.link !== null && emoji.link !== '') {
-        //  let link_wrapper = wrapper;
-        //  wrapper = $('<a>',
-        //    {href: emoji.link});
-        //  wrapper = link_wrapper.append(wrapper);
-        //}
-
         elem.focus();
         var selection = window.getSelection();
         var range = selection.getRangeAt(0);
