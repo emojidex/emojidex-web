@@ -9,8 +9,7 @@ class Pallet {
         // start main --------
         $('input, textarea, [contenteditable="true"]').on('focus keyup mouseup', e => {
           return this.active_input_area = $(e.currentTarget);
-        }
-        );
+        });
 
         this.createDialog();
         this.setPallet(this.plugin.element);
@@ -170,24 +169,25 @@ class Pallet {
 
     let elem = this.active_input_area;
     if (elem.is('[contenteditable="true"]')) {
-      let wrapper = $('<img>', {
-        class: 'emojidex-emoji',
-        src: `${this.EC.cdn_url}px32/${emoji.code.replace(/\s/g, '_')}.png`,
-        alt: emoji.code
-      }
-      );
-      if (emoji.link !== null && emoji.link !== '') {
-        let link_wrapper = wrapper;
-        wrapper = $('<a>',
-          {href: emoji.link});
-        wrapper = link_wrapper.append(wrapper);
-      }
+      //let wrapper = $('<img>', {
+      //  class: 'emojidex-emoji',
+      //  src: `${this.EC.cdn_url}px32/${emoji.code.replace(/\s/g, '_')}.png`,
+      //  alt: emoji.code
+      //}
+      //);
+      //if (emoji.link !== null && emoji.link !== '') {
+      //  let link_wrapper = wrapper;
+      //  wrapper = $('<a>',
+      //    {href: emoji.link});
+      //  wrapper = link_wrapper.append(wrapper);
+      //}
 
       elem.focus();
       let selection = window.getSelection();
       let range = selection.getRangeAt(0);
 
-      range.insertNode(wrapper[0]);
+      let tag = $.parseHTML(this.EC.Util.emojiToHTML(emoji))
+      range.insertNode(tag[0])
       range.collapse(false);
       selection.removeAllRanges();
       selection.addRange(range);
@@ -208,15 +208,11 @@ class Pallet {
     let pagination = $(`<div class='${kind}-pagination text-center'><ul class='pagination mb-0'></ul></div>`);
     pagination.find('.pagination').append($('<li class="pallet-pager"><span>&laquo;</span></li>').click(() => {
       return prev_func();
-    }
-    )
-    );
+    }));
     pagination.find('.pagination').append($(`<li class='disabled'><span>${cur_page} / ${max_page}</span></li>`));
     pagination.find('.pagination').append($('<li class="pallet-pager"><span>&raquo;</span></li>').click(() => {
       return next_func();
-    }
-    )
-    );
+    }));
 
     return pagination;
   }

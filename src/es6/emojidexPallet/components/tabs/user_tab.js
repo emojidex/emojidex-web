@@ -21,7 +21,7 @@ class UserTab {
     );
     tab_content.append(login_btn);
 
-    if (__guard__(__guard__(__guard__(this.pallet.EC.Data.storage.hub_cache, x2 => x2.emojidex), x1 => x1.auth_info), x => x.status) === 'verified') {
+    if (this.pallet.EC.Data.storage.hub_cache.emojidex.auth_info.status === 'verified') {
       let { auth_info } = this.pallet.EC.Data.storage.hub_cache.emojidex;
       this.login(auth_info.user, auth_info.token, 'token');
     }
@@ -150,8 +150,4 @@ class UserTab {
     let next_func = () => console.log('next');
     return this.user_tab_content.append((pane.append(this.pallet.getPagination(kind, prev_func, next_func, cur_page, max_page))));
   }
-}
-
-function __guard__(value, transform) {
-  return (typeof value !== 'undefined' && value !== null) ? transform(value) : undefined;
 }
