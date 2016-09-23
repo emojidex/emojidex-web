@@ -73,10 +73,10 @@
       setSearchedEmojiData = (function(_this) {
         return function(at_obj, match_string) {
           var num, updateAtwho;
-          updateAtwho = function(searched_data, at_bak) {
+          updateAtwho = function(search_results, at_bak) {
             var at_options;
             at_options = {
-              data: searched_data,
+              data: search_results,
               callbacks: {
                 highlighter: onHighlighter,
                 matcher: function(flag, subtext, should_startWithSpace) {
@@ -89,23 +89,19 @@
           };
           num = ++_this.searching_num;
           _this.EC.Search.search(match_string, function(response) {
-            var emoji, searched_data;
-            searched_data = (function() {
-              var i, len, ref, results;
-              ref = this.EC.Search.results;
-              results = [];
-              for (i = 0, len = ref.length; i < len; i++) {
-                emoji = ref[i];
-                results.push({
-                  code: emoji.code.replace(/\s/g, '_'),
-                  img_url: "" + this.EC.cdn_url + this.EC.size_code + "/" + (emoji.code.replace(/\s/g, '_')) + ".png"
-                });
-              }
-              return results;
-            }).call(_this);
+            var emoji, i, len, ref, search_results;
+            search_results = [];
+            ref = _this.EC.Search.results;
+            for (i = 0, len = ref.length; i < len; i++) {
+              emoji = ref[i];
+              search_results.push({
+                code: emoji.code.replace(/\s/g, '_'),
+                img_url: "" + _this.EC.cdn_url + _this.EC.size_code + "/" + (emoji.code.replace(/\s/g, '_')) + ".png"
+              });
+            }
             if (_this.searching_num === num) {
-              if (searched_data.length) {
-                updateAtwho(searched_data, at_obj);
+              if (search_results.length) {
+                updateAtwho(search_results, at_obj);
               }
               return _this.searching_num = 0;
             }

@@ -16,9 +16,9 @@ class AutoComplete
       @plugin.options.onComplete?()
 
     setSearchedEmojiData = (at_obj, match_string) =>
-      updateAtwho = (searched_data, at_bak) ->
+      updateAtwho = (search_results, at_bak) ->
         at_options =
-          data: searched_data
+          data: search_results
           callbacks:
             highlighter: onHighlighter
             matcher: (flag, subtext, should_startWithSpace) ->
@@ -30,12 +30,15 @@ class AutoComplete
       num = ++@searching_num
       @EC.Search.search(match_string, (response) =>
 
-        searched_data = for emoji in @EC.Search.results
-          code: emoji.code.replace(/\s/g, '_')
-          img_url: "#{@EC.cdn_url}#{@EC.size_code}/#{emoji.code.replace /\s/g, '_'}.png"
+        search_results = []
+        for emoji in @EC.Search.results
+          search_results.push({
+            code: emoji.code.replace(/\s/g, '_')
+            img_url: "#{@EC.cdn_url}#{@EC.size_code}/#{emoji.code.replace /\s/g, '_'}.png"
+          })
 
         if @searching_num == num
-          updateAtwho(searched_data, at_obj) if searched_data.length
+          updateAtwho(search_results, at_obj) if search_results.length
           @searching_num = 0
       )
 
