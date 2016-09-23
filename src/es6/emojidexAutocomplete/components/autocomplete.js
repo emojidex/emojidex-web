@@ -43,7 +43,8 @@ class AutoComplete {
           let emoji = this.EC.Search.results[i];
           search_results.push({
             code: emoji.code.replace(/\s/g, '_'),
-            img_url: `${this.EC.cdn_url}${this.EC.size_code}/${emoji.code.replace(/\s/g, '_')}.png`
+            img_url: `${this.EC.cdn_url}${this.EC.size_code}/${emoji.code.replace(/\s/g, '_')}.png`,
+            insert_tag: this.EC.Util.emojiToHTML(emoji)
           });
         }
 
@@ -58,13 +59,6 @@ class AutoComplete {
     };
 
     var getRegexp = function(flag, should_startWithSpace) {
-      // À & ÿ
-      let regexp;
-      let _a = decodeURI("%C3%80");
-      let _y = decodeURI("%C3%BF");
-
-      // flag = flag.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")
-      // flag = '(?:^|\\s)' + flag if should_startWithSpace
       return regexp = new RegExp(`[：${flag}]([^：:;@&#~\!\$\+\?\%\*\f\n\r\\\/]+)$`,'gi');
     };
 
@@ -87,7 +81,7 @@ class AutoComplete {
       limit: this.plugin.options.listLimit,
       search_key: "code",
       tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20'></img>${code}</li>",
-      insert_tpl: this.plugin.options.insertImg ? "<img src='${img_url}' height='20' width='20' />" : ":${code}:",
+      insert_tpl: this.plugin.options.insertImg ? "${insert_tag}" : ":${code}:",
       callbacks: {
         highlighter: onHighlighter,
         matcher(flag, subtext, should_startWithSpace) {
