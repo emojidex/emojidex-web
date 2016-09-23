@@ -191,153 +191,6 @@ left:"-999px"},b._getOrigin=function(a){var b,c,d;return b=document.createElemen
  */
 !function(t){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=t();else if("function"==typeof define&&define.amd)define([],t);else{var e;e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self?self:this,e.Clipboard=t()}}(function(){var t,e,n;return function t(e,n,o){function i(a,c){if(!n[a]){if(!e[a]){var s="function"==typeof require&&require;if(!c&&s)return s(a,!0);if(r)return r(a,!0);var l=new Error("Cannot find module '"+a+"'");throw l.code="MODULE_NOT_FOUND",l}var u=n[a]={exports:{}};e[a][0].call(u.exports,function(t){var n=e[a][1][t];return i(n?n:t)},u,u.exports,t,e,n,o)}return n[a].exports}for(var r="function"==typeof require&&require,a=0;a<o.length;a++)i(o[a]);return i}({1:[function(t,e,n){var o=t("matches-selector");e.exports=function(t,e,n){for(var i=n?t:t.parentNode;i&&i!==document;){if(o(i,e))return i;i=i.parentNode}}},{"matches-selector":5}],2:[function(t,e,n){function o(t,e,n,o,r){var a=i.apply(this,arguments);return t.addEventListener(n,a,r),{destroy:function(){t.removeEventListener(n,a,r)}}}function i(t,e,n,o){return function(n){n.delegateTarget=r(n.target,e,!0),n.delegateTarget&&o.call(t,n)}}var r=t("closest");e.exports=o},{closest:1}],3:[function(t,e,n){n.node=function(t){return void 0!==t&&t instanceof HTMLElement&&1===t.nodeType},n.nodeList=function(t){var e=Object.prototype.toString.call(t);return void 0!==t&&("[object NodeList]"===e||"[object HTMLCollection]"===e)&&"length"in t&&(0===t.length||n.node(t[0]))},n.string=function(t){return"string"==typeof t||t instanceof String},n.fn=function(t){var e=Object.prototype.toString.call(t);return"[object Function]"===e}},{}],4:[function(t,e,n){function o(t,e,n){if(!t&&!e&&!n)throw new Error("Missing required arguments");if(!c.string(e))throw new TypeError("Second argument must be a String");if(!c.fn(n))throw new TypeError("Third argument must be a Function");if(c.node(t))return i(t,e,n);if(c.nodeList(t))return r(t,e,n);if(c.string(t))return a(t,e,n);throw new TypeError("First argument must be a String, HTMLElement, HTMLCollection, or NodeList")}function i(t,e,n){return t.addEventListener(e,n),{destroy:function(){t.removeEventListener(e,n)}}}function r(t,e,n){return Array.prototype.forEach.call(t,function(t){t.addEventListener(e,n)}),{destroy:function(){Array.prototype.forEach.call(t,function(t){t.removeEventListener(e,n)})}}}function a(t,e,n){return s(document.body,t,e,n)}var c=t("./is"),s=t("delegate");e.exports=o},{"./is":3,delegate:2}],5:[function(t,e,n){function o(t,e){if(r)return r.call(t,e);for(var n=t.parentNode.querySelectorAll(e),o=0;o<n.length;++o)if(n[o]==t)return!0;return!1}var i=Element.prototype,r=i.matchesSelector||i.webkitMatchesSelector||i.mozMatchesSelector||i.msMatchesSelector||i.oMatchesSelector;e.exports=o},{}],6:[function(t,e,n){function o(t){var e;if("INPUT"===t.nodeName||"TEXTAREA"===t.nodeName)t.focus(),t.setSelectionRange(0,t.value.length),e=t.value;else{t.hasAttribute("contenteditable")&&t.focus();var n=window.getSelection(),o=document.createRange();o.selectNodeContents(t),n.removeAllRanges(),n.addRange(o),e=n.toString()}return e}e.exports=o},{}],7:[function(t,e,n){function o(){}o.prototype={on:function(t,e,n){var o=this.e||(this.e={});return(o[t]||(o[t]=[])).push({fn:e,ctx:n}),this},once:function(t,e,n){function o(){i.off(t,o),e.apply(n,arguments)}var i=this;return o._=e,this.on(t,o,n)},emit:function(t){var e=[].slice.call(arguments,1),n=((this.e||(this.e={}))[t]||[]).slice(),o=0,i=n.length;for(o;i>o;o++)n[o].fn.apply(n[o].ctx,e);return this},off:function(t,e){var n=this.e||(this.e={}),o=n[t],i=[];if(o&&e)for(var r=0,a=o.length;a>r;r++)o[r].fn!==e&&o[r].fn._!==e&&i.push(o[r]);return i.length?n[t]=i:delete n[t],this}},e.exports=o},{}],8:[function(e,n,o){!function(i,r){if("function"==typeof t&&t.amd)t(["module","select"],r);else if("undefined"!=typeof o)r(n,e("select"));else{var a={exports:{}};r(a,i.select),i.clipboardAction=a.exports}}(this,function(t,e){"use strict";function n(t){return t&&t.__esModule?t:{"default":t}}function o(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}var i=n(e),r="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol?"symbol":typeof t},a=function(){function t(t,e){for(var n=0;n<e.length;n++){var o=e[n];o.enumerable=o.enumerable||!1,o.configurable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(t,o.key,o)}}return function(e,n,o){return n&&t(e.prototype,n),o&&t(e,o),e}}(),c=function(){function t(e){o(this,t),this.resolveOptions(e),this.initSelection()}return t.prototype.resolveOptions=function t(){var e=arguments.length<=0||void 0===arguments[0]?{}:arguments[0];this.action=e.action,this.emitter=e.emitter,this.target=e.target,this.text=e.text,this.trigger=e.trigger,this.selectedText=""},t.prototype.initSelection=function t(){this.text?this.selectFake():this.target&&this.selectTarget()},t.prototype.selectFake=function t(){var e=this,n="rtl"==document.documentElement.getAttribute("dir");this.removeFake(),this.fakeHandlerCallback=function(){return e.removeFake()},this.fakeHandler=document.body.addEventListener("click",this.fakeHandlerCallback)||!0,this.fakeElem=document.createElement("textarea"),this.fakeElem.style.fontSize="12pt",this.fakeElem.style.border="0",this.fakeElem.style.padding="0",this.fakeElem.style.margin="0",this.fakeElem.style.position="absolute",this.fakeElem.style[n?"right":"left"]="-9999px",this.fakeElem.style.top=(window.pageYOffset||document.documentElement.scrollTop)+"px",this.fakeElem.setAttribute("readonly",""),this.fakeElem.value=this.text,document.body.appendChild(this.fakeElem),this.selectedText=(0,i.default)(this.fakeElem),this.copyText()},t.prototype.removeFake=function t(){this.fakeHandler&&(document.body.removeEventListener("click",this.fakeHandlerCallback),this.fakeHandler=null,this.fakeHandlerCallback=null),this.fakeElem&&(document.body.removeChild(this.fakeElem),this.fakeElem=null)},t.prototype.selectTarget=function t(){this.selectedText=(0,i.default)(this.target),this.copyText()},t.prototype.copyText=function t(){var e=void 0;try{e=document.execCommand(this.action)}catch(n){e=!1}this.handleResult(e)},t.prototype.handleResult=function t(e){e?this.emitter.emit("success",{action:this.action,text:this.selectedText,trigger:this.trigger,clearSelection:this.clearSelection.bind(this)}):this.emitter.emit("error",{action:this.action,trigger:this.trigger,clearSelection:this.clearSelection.bind(this)})},t.prototype.clearSelection=function t(){this.target&&this.target.blur(),window.getSelection().removeAllRanges()},t.prototype.destroy=function t(){this.removeFake()},a(t,[{key:"action",set:function t(){var e=arguments.length<=0||void 0===arguments[0]?"copy":arguments[0];if(this._action=e,"copy"!==this._action&&"cut"!==this._action)throw new Error('Invalid "action" value, use either "copy" or "cut"')},get:function t(){return this._action}},{key:"target",set:function t(e){if(void 0!==e){if(!e||"object"!==("undefined"==typeof e?"undefined":r(e))||1!==e.nodeType)throw new Error('Invalid "target" value, use a valid Element');if("copy"===this.action&&e.hasAttribute("disabled"))throw new Error('Invalid "target" attribute. Please use "readonly" instead of "disabled" attribute');if("cut"===this.action&&(e.hasAttribute("readonly")||e.hasAttribute("disabled")))throw new Error('Invalid "target" attribute. You can\'t cut text from elements with "readonly" or "disabled" attributes');this._target=e}},get:function t(){return this._target}}]),t}();t.exports=c})},{select:6}],9:[function(e,n,o){!function(i,r){if("function"==typeof t&&t.amd)t(["module","./clipboard-action","tiny-emitter","good-listener"],r);else if("undefined"!=typeof o)r(n,e("./clipboard-action"),e("tiny-emitter"),e("good-listener"));else{var a={exports:{}};r(a,i.clipboardAction,i.tinyEmitter,i.goodListener),i.clipboard=a.exports}}(this,function(t,e,n,o){"use strict";function i(t){return t&&t.__esModule?t:{"default":t}}function r(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}function a(t,e){if(!t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!e||"object"!=typeof e&&"function"!=typeof e?t:e}function c(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function, not "+typeof e);t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}}),e&&(Object.setPrototypeOf?Object.setPrototypeOf(t,e):t.__proto__=e)}function s(t,e){var n="data-clipboard-"+t;if(e.hasAttribute(n))return e.getAttribute(n)}var l=i(e),u=i(n),f=i(o),d=function(t){function e(n,o){r(this,e);var i=a(this,t.call(this));return i.resolveOptions(o),i.listenClick(n),i}return c(e,t),e.prototype.resolveOptions=function t(){var e=arguments.length<=0||void 0===arguments[0]?{}:arguments[0];this.action="function"==typeof e.action?e.action:this.defaultAction,this.target="function"==typeof e.target?e.target:this.defaultTarget,this.text="function"==typeof e.text?e.text:this.defaultText},e.prototype.listenClick=function t(e){var n=this;this.listener=(0,f.default)(e,"click",function(t){return n.onClick(t)})},e.prototype.onClick=function t(e){var n=e.delegateTarget||e.currentTarget;this.clipboardAction&&(this.clipboardAction=null),this.clipboardAction=new l.default({action:this.action(n),target:this.target(n),text:this.text(n),trigger:n,emitter:this})},e.prototype.defaultAction=function t(e){return s("action",e)},e.prototype.defaultTarget=function t(e){var n=s("target",e);return n?document.querySelector(n):void 0},e.prototype.defaultText=function t(e){return s("text",e)},e.prototype.destroy=function t(){this.listener.destroy(),this.clipboardAction&&(this.clipboardAction.destroy(),this.clipboardAction=null)},e}(u.default);t.exports=d})},{"./clipboard-action":8,"good-listener":4,"tiny-emitter":7}]},{},[9])(9)});
 (function() {
-  var AutoComplete;
-
-  (function($, window, document) {
-    var Plugin, defaults, pluginName;
-    pluginName = "emojidexAutocomplete";
-    defaults = {
-      onComplete: void 0,
-      listLimit: 10,
-      insertImg: true
-    };
-    Plugin = (function() {
-      function Plugin(element, options) {
-        this.element = element;
-        this.options = $.extend({}, defaults, options);
-        this._defaults = defaults;
-        this._name = pluginName;
-        this.autocomplete = new AutoComplete(this);
-      }
-
-      return Plugin;
-
-    })();
-    return $.fn[pluginName] = function(options) {
-      return this.each(function() {
-        if (!$.data(this, "plugin_" + pluginName)) {
-          return $.data(this, "plugin_" + pluginName, new Plugin(this, options));
-        }
-      });
-    };
-  })(jQuery, window, document);
-
-  AutoComplete = (function() {
-    function AutoComplete(plugin) {
-      this.plugin = plugin;
-      this.searching_num = 0;
-      this.EC = new EmojidexClient({
-        onReady: (function(_this) {
-          return function(EC) {
-            _this.EC.User.login('session');
-            return _this.setAutoComplete();
-          };
-        })(this)
-      });
-    }
-
-    AutoComplete.prototype.setAutoComplete = function() {
-      var at_init, getMatchString, getRegexp, onHighlighter, setAtwho, setSearchedEmojiData;
-      setAtwho = (function(_this) {
-        return function(at_options) {
-          var base;
-          $(_this.plugin.element).atwho(at_options).on('reposition.atwho', function(e) {
-            return $(e.currentTarget).atwho(at_options);
-          }).on('hidden.atwho', function(e) {
-            return $(e.currentTarget).atwho(at_options);
-          });
-          return typeof (base = _this.plugin.options).onComplete === "function" ? base.onComplete() : void 0;
-        };
-      })(this);
-      setSearchedEmojiData = (function(_this) {
-        return function(at_obj, match_string) {
-          var num, updateAtwho;
-          updateAtwho = function(search_results, at_bak) {
-            var at_options;
-            at_options = {
-              data: search_results,
-              callbacks: {
-                highlighter: onHighlighter,
-                matcher: function(flag, subtext, should_startWithSpace) {
-                  var match;
-                  return match = getMatchString(subtext, getRegexp(flag, should_startWithSpace));
-                }
-              }
-            };
-            return at_bak.$inputor.atwho('destroy').atwho($.extend({}, at_bak.setting, at_options)).atwho('run');
-          };
-          num = ++_this.searching_num;
-          _this.EC.Search.search(match_string, function(response) {
-            var emoji, i, len, ref, search_results;
-            search_results = [];
-            ref = _this.EC.Search.results;
-            for (i = 0, len = ref.length; i < len; i++) {
-              emoji = ref[i];
-              search_results.push({
-                code: emoji.code.replace(/\s/g, '_'),
-                img_url: "" + _this.EC.cdn_url + _this.EC.size_code + "/" + (emoji.code.replace(/\s/g, '_')) + ".png"
-              });
-            }
-            if (_this.searching_num === num) {
-              if (search_results.length) {
-                updateAtwho(search_results, at_obj);
-              }
-              return _this.searching_num = 0;
-            }
-          });
-          return match_string;
-        };
-      })(this);
-      getRegexp = function(flag, should_startWithSpace) {
-        var _a, _y, regexp;
-        _a = decodeURI("%C3%80");
-        _y = decodeURI("%C3%BF");
-        return regexp = new RegExp("[：" + flag + "]([^：:;@&#~\!\$\+\?\%\*\f\n\r\\\/]+)$", 'gi');
-      };
-      getMatchString = function(subtext, regexp) {
-        var match;
-        match = regexp.exec(subtext);
-        match = match ? match[2] || match[1] : null;
-        return match;
-      };
-      onHighlighter = function(li, query) {
-        var regexp;
-        if (!query) {
-          return li;
-        }
-        regexp = new RegExp(">\\s*([^:;@&#~\!\$\+\?\%\*\f\n\r\\\/]*?)(" + (query.replace(/(\(|\))/g, '\\$1')) + ")([^:;@&#~\!\$\+\?\%\*\f\n\r\\\/]*)\\s*<", 'ig');
-        return li.replace(regexp, function(str, $1, $2, $3) {
-          return "> " + $1 + "<strong>" + $2 + "</strong>" + $3 + " <";
-        });
-      };
-      at_init = {
-        at: ':',
-        suffix: '',
-        limit: this.plugin.options.listLimit,
-        search_key: "code",
-        tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20'></img>${code}</li>",
-        insert_tpl: this.plugin.options.insertImg ? "<img src='${img_url}' height='20' width='20' />" : ":${code}:",
-        callbacks: {
-          highlighter: onHighlighter,
-          matcher: function(flag, subtext, should_startWithSpace) {
-            var match;
-            match = getMatchString(subtext, getRegexp(flag, should_startWithSpace));
-            if (match) {
-              return setSearchedEmojiData(this, match);
-            }
-          }
-        }
-      };
-      return setAtwho(at_init);
-    };
-
-    return AutoComplete;
-
-  })();
-
-}).call(this);
-
-(function() {
   var CountChecker, Observer, Replacer, ReplacerSearch,
     extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     hasProp = {}.hasOwnProperty;
@@ -888,6 +741,189 @@ left:"-999px"},b._getOrigin=function(a){var b,c,d;return b=document.createElemen
   })(Replacer);
 
 }).call(this);
+
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var AutoComplete = function () {
+  function AutoComplete(plugin) {
+    var _this = this;
+
+    _classCallCheck(this, AutoComplete);
+
+    this.plugin = plugin;
+    this.searching_num = 0;
+    this.EC = new EmojidexClient({
+      onReady: function onReady(EC) {
+        _this.EC.User.login('session');
+        return _this.setAutoComplete();
+      }
+    });
+  }
+
+  _createClass(AutoComplete, [{
+    key: 'setAutoComplete',
+    value: function setAutoComplete() {
+      var _this2 = this;
+
+      var setAtwho = function setAtwho(at_options) {
+        $(_this2.plugin.element).atwho(at_options).on('reposition.atwho', function (e) {
+          return $(e.currentTarget).atwho(at_options);
+        }).on('hidden.atwho', function (e) {
+          return $(e.currentTarget).atwho(at_options);
+        });
+        return __guardFunc__(_this2.plugin.options.onComplete, function (f) {
+          return f();
+        });
+      };
+
+      var setSearchedEmojiData = function setSearchedEmojiData(at_obj, match_string) {
+        var updateAtwho = function updateAtwho(search_results, at_bak) {
+          var at_options = {
+            data: search_results,
+            callbacks: {
+              highlighter: onHighlighter,
+              matcher: function matcher(flag, subtext, should_startWithSpace) {
+                var match = void 0;
+                return match = getMatchString(subtext, getRegexp(flag, should_startWithSpace));
+              }
+            }
+          };
+
+          return at_bak.$inputor.atwho('destroy').atwho($.extend({}, at_bak.setting, at_options)).atwho('run');
+        };
+
+        // start: setSearchedEmojiData --------
+        var num = ++_this2.searching_num;
+        _this2.EC.Search.search(match_string, function (response) {
+
+          var search_results = [];
+          for (var i = 0; i < _this2.EC.Search.results.length; i++) {
+            var emoji = _this2.EC.Search.results[i];
+            search_results.push({
+              code: emoji.code.replace(/\s/g, '_'),
+              img_url: '' + _this2.EC.cdn_url + _this2.EC.size_code + '/' + emoji.code.replace(/\s/g, '_') + '.png'
+            });
+          }
+
+          if (_this2.searching_num === num) {
+            if (search_results.length) {
+              updateAtwho(search_results, at_obj);
+            }
+            return _this2.searching_num = 0;
+          }
+        });
+
+        return match_string;
+      };
+
+      var getRegexp = function getRegexp(flag, should_startWithSpace) {
+        // À & ÿ
+        var regexp = void 0;
+        var _a = decodeURI("%C3%80");
+        var _y = decodeURI("%C3%BF");
+
+        // flag = flag.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")
+        // flag = '(?:^|\\s)' + flag if should_startWithSpace
+        return regexp = new RegExp('[：' + flag + ']([^：:;@&#~!$+?%*\f\n\r\\/]+)$', 'gi');
+      };
+
+      var getMatchString = function getMatchString(subtext, regexp) {
+        var match = regexp.exec(subtext);
+        match = match ? match[2] || match[1] : null;
+        return match;
+      };
+
+      var onHighlighter = function onHighlighter(li, query) {
+        if (!query) {
+          return li;
+        }
+        var regexp = new RegExp('>\\s*([^:;@&#~!$+?%*\f\n\r\\/]*?)(' + query.replace(/(\(|\))/g, '\\$1') + ')([^:;@&#~!$+?%*\f\n\r\\/]*)\\s*<', 'ig');
+        return li.replace(regexp, function (str, $1, $2, $3) {
+          return '> ' + $1 + '<strong>' + $2 + '</strong>' + $3 + ' <';
+        });
+      };
+
+      // start: setAutoComplete --------
+      var at_init = {
+        at: ':',
+        suffix: '',
+        limit: this.plugin.options.listLimit,
+        search_key: "code",
+        tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20'></img>${code}</li>",
+        insert_tpl: this.plugin.options.insertImg ? "<img src='${img_url}' height='20' width='20' />" : ":${code}:",
+        callbacks: {
+          highlighter: onHighlighter,
+          matcher: function matcher(flag, subtext, should_startWithSpace) {
+            var match = getMatchString(subtext, getRegexp(flag, should_startWithSpace));
+            if (match) {
+              return setSearchedEmojiData(this, match);
+            }
+          }
+        }
+      };
+
+      return setAtwho(at_init);
+    }
+  }]);
+
+  return AutoComplete;
+}();
+
+function __guardFunc__(func, transform) {
+  return typeof func === 'function' ? transform(func) : undefined;
+}
+//# sourceMappingURL=autocomplete.js.map
+
+"use strict";
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/*
+* emojidexAutocomplete
+*
+* require: emojidex-client
+*
+* =LICENSE=
+* Licensed under the emojidex Open License
+* https://www.emojidex.com/emojidex/emojidex_open_license
+*
+* Copyright 2013 the emojidex project / K.K. GenSouSha
+*/
+
+(function ($, window, document) {
+  var pluginName = "emojidexAutocomplete";
+  var defaults = {
+    onComplete: undefined,
+    listLimit: 10,
+    insertImg: true
+  };
+
+  var Plugin = function Plugin(element, options) {
+    _classCallCheck(this, Plugin);
+
+    this.element = element;
+    this.options = $.extend({}, defaults, options);
+    this._defaults = defaults;
+    this._name = pluginName;
+
+    // start: Plugin --------
+    this.autocomplete = new AutoComplete(this);
+  };
+  // @autocomplete.setAutoComplete()
+
+  return $.fn[pluginName] = function (options) {
+    return this.each(function () {
+      if (!$.data(this, "plugin_" + pluginName)) {
+        return $.data(this, "plugin_" + pluginName, new Plugin(this, options));
+      }
+    });
+  };
+})(jQuery, window, document);
+//# sourceMappingURL=main.js.map
 
 'use strict';
 

@@ -228,6 +228,12 @@ module.exports = function(grunt) {
         cwd: 'node_modules/bootstrap-sass/assets/fonts/',
         src: '**/*',
         dest: 'dist/fonts/'
+      },
+      jquery: {
+        expand: true,
+        cwd: 'node_modules/jquery/dist/',
+        src: 'jquery.min.js',
+        dest: 'dist/js/'
       }
     },
 
