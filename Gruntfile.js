@@ -56,7 +56,7 @@ module.exports = function(grunt) {
     //=========================================================================
     // Grunt configurations for individual tasks
     //=========================================================================
-    
+
     // Clean out old files / temporary files / build partials
     clean: {
       spec: ['build/spec/*.js'],
@@ -66,8 +66,10 @@ module.exports = function(grunt) {
         'src/compiled_css/**/*.css',
         'src/compiled_css/**/*.map',
         'build/js/**/*.js',
-        'build/js/**/*.map'
-        ]
+        'build/js/**/*.map',
+        'dist',
+        'docs'
+      ]
     },
 
     // Pre-render the README.md file into part of the demo index
@@ -136,7 +138,7 @@ module.exports = function(grunt) {
       },
       dist: {
         files: [{
-          expand: true,  
+          expand: true,
           cwd: 'src/es6',
           src: ['**/*.js'],
           dest: 'build/js/',
@@ -203,7 +205,7 @@ module.exports = function(grunt) {
       },
       bootstrap: {
         src: ['node_modules/bootstrap-sass/assets/javascripts/bootstrap.js'],
-        dest: 'dist/js/bootstrap.min.js'
+        dest: 'dist/resources/bootstrap.min.js'
       }
     },
     cssmin: {
@@ -233,7 +235,13 @@ module.exports = function(grunt) {
         expand: true,
         cwd: 'node_modules/jquery/dist/',
         src: 'jquery.min.js',
-        dest: 'dist/js/'
+        dest: 'dist/resources/'
+      },
+      docs: {
+        expand: true,
+        cwd: 'dist/',
+        src: '**/*',
+        dest: 'docs/'
       }
     },
 
@@ -324,7 +332,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
 
 
-  grunt.registerTask('default', ['clean', 'slim', 'md2html', 'sass', 'cssmin', 'babel', 'coffee', 'concat', 'uglify', 'copy']);
+  grunt.registerTask('default', ['clean', 'slim', 'md2html', 'sass', 'babel', 'coffee', 'concat', 'uglify', 'cssmin', 'copy']);
   grunt.registerTask('spec', ['default', 'jasmine:web:build', 'jasmine']);
   grunt.registerTask('dev', ['default', 'jasmine:web:build', 'connect', 'watch']);
 };
