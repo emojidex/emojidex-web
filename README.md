@@ -20,9 +20,9 @@ Basic usage is simple.
 ```html
 <head>
   ...
-  <link href="http://assets.emojidex.com/scripts/css/emojidex-web.min.css" rel="stylesheet" />
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-  <script src="http://assets.emojidex.com/scripts/javascript/emojidex-web.min.js"></script>
+  <link href="http://cdn.emojidex.com/scripts/css/emojidex.min.css" rel="stylesheet" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="http://cdn.emojidex.com/scripts/javascript/emojidex.min.js"></script>
   ...
 </head>
 ```
