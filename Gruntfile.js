@@ -147,52 +147,6 @@ module.exports = function(grunt) {
       }
     },
 
-    // Compile Coffee sources (soon to be phased out)
-    coffee: {
-      emojidexReplace: {
-        options: {
-          join: true
-        },
-        files: {
-          'src/compiled_js/emojidexReplace.js': [
-            'src/coffee/emojidexReplace/main.coffee',
-            'src/coffee/emojidexReplace/components/replacer.coffee',
-            'src/coffee/emojidexReplace/components/*.coffee'
-          ]
-        }
-      },
-      emojidexAutocomplete: {
-        options: {
-          join: true
-        },
-        files: {
-          'src/compiled_js/emojidexAutocomplete.js': [
-            'src/coffee/emojidexAutocomplete/main.coffee',
-            'src/coffee/emojidexAutocomplete/components/*.coffee'
-          ]
-        }
-      },
-      emojidexPallet: {
-        options: {
-          join: true
-        },
-        files: {
-          'src/compiled_js/emojidexPallet.js': [
-            'src/coffee/emojidexPallet/main.coffee',
-            'src/coffee/emojidexPallet/components/*.coffee',
-            'src/coffee/emojidexPallet/components/tabs/*.coffee'
-          ]
-        }
-      },
-      spec: {
-        expand: true,
-        cwd: 'spec/',
-        src: ['**/*.coffee'],
-        dest: 'build/spec/',
-        ext: '.js'
-      }
-    },
-
     // Smash it all into a smaller file
     uglify: {
       emojidex: {
@@ -317,7 +271,6 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.loadNpmTasks('grunt-contrib-coffee');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-connect');
@@ -332,7 +285,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
 
 
-  grunt.registerTask('default', ['clean', 'slim', 'md2html', 'sass', 'babel', 'coffee', 'concat', 'uglify', 'cssmin', 'copy']);
+  grunt.registerTask('default', ['clean', 'slim', 'md2html', 'sass', 'babel', 'concat', 'uglify', 'cssmin', 'copy']);
   grunt.registerTask('spec', ['default', 'jasmine:web:build', 'jasmine']);
   grunt.registerTask('dev', ['default', 'jasmine:web:build', 'connect', 'watch']);
 };
