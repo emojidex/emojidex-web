@@ -232,7 +232,9 @@ module.exports = function(grunt) {
       web: {
         src: ['dist/js/emojidex.js'],
         options: {
-          specs: ['spec/*.js'],
+          specs: [
+            'spec/emojidexReplace.js'
+          ],
           helpers:[
             'spec/helpers/method.js',
             'spec/helpers/data.js',

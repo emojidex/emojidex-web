@@ -31,6 +31,7 @@
         this.EC = new EmojidexClient({
           onReady: EC => {
             this.EC.User.login('session');
+            this.replacer = new Replacer(this);
           }
         });
       }
@@ -42,7 +43,6 @@
         //this.observer = new Observer(this);
         //return this.observer.reloadEmoji();
       }
-      this.replacer = new Replacer(this, options);
     }
   }
 
