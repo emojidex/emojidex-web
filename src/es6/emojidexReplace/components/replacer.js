@@ -8,34 +8,27 @@ class Replacer {
   }
 
   replace(node) {
-    console.log("replace");
-    console.log(node);
-    if ($(node.nodeType).is(this.plugin.options.ignore)) {
-      console.log("ignored type");
-      return;
-    }
-    switch (node.nodeType) {
-      case Node.ELEMENT_NODE:
-        //if (child.isContentEditable) {
-        //  break;
-        //}
-        console.log("element");
-        break;
-      case Node.TEXT_NODE:
-        //if (child.data.indexOf('function(') === -1) {
-          //if (child.data.match(/\S/)) { this.targets.push(child); }
-        //}
-        console.log("text");
-        break;
+    if ($(node.nodeType).is(this.plugin.options.ignore)) { return; }
+    if (node.nodeType == Node.ELEMENT_NODE) {
+        element = $(node);
+        if (typeof element.text !== 'function' || element.text() === '') { return; }
+
+        // Perform replacement on node
+        this.plugin.EC.Util.emojifyToHTML(element.html()).then((new_text) => {
+          $(node).html(new_text);
+        });
     }
   }
 
   scanAndReplace(node) {
-    console.log("setting targets");
-    console.log(node);
-    for (child in node.children)
-      scanAndReplace(child);
+    var children = $(node).children();
+    if (children.length == 0) {
+      this.replace(node);
+      return;
+    }
 
-    this.replace(node);
+    for (var i = 0; i < children.length; i++) {
+      this.scanAndReplace(children[i]);
+    }
   }
 }

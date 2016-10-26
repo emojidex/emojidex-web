@@ -13,7 +13,7 @@
     "description": "Licensed under the emojidex Open License",
     "type": "emojiOL",
     "url": "https://www.emojidex.com/emojidex/emojidex_open_license",
-    "copyright": "Copyright 2013 emojidex"
+    "copyright": "Copyright 2013 the emojidex project / K.K. GenSouSha"
   },
   "devDependencies": {
     "emojidex-client": "emojidex/emojidex-web-client#fix_specs",
