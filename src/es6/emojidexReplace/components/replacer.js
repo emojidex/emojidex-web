@@ -11,7 +11,7 @@ class Replacer {
 
   replace(node) {
     if ($(node.nodeType).is(this.plugin.options.ignore)) { return; }
-    switch node.nodeType {
+    switch (node.nodeType) {
       case Node.ELEMENT_NODE:
         element = $(node);
         if (typeof element.text !== 'function' || element.text() === '') { return; }
