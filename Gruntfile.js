@@ -262,12 +262,12 @@ module.exports = function(grunt) {
         files: ['src/es6/**/*.js', 'spec/**/*.js'],
         tasks: [
           'babel',
-          'concat',
-          'uglify',
+          'concat:emojidex_js',
           'jasmine'
         ],
         options: {
-          spawn: false
+          spawn: false,
+          livereload: true
         }
       }
     }

@@ -2,43 +2,39 @@ class Replacer {
   constructor(plugin) {
     this.plugin = plugin;
 
-    // Initial replacement
-    if (typeof this.plugin.element !== null)
-      this.scanAndReplace(this.plugin.element);
-
-    console.log(this.plugin.element);
-  }
-
-  replace(node) {
-    if ($(node.nodeType).is(this.plugin.options.ignore)) { return; }
-    switch (node.nodeType) {
-      case Node.ELEMENT_NODE:
-        element = $(node);
-        if (typeof element.text !== 'function' || element.text() === '') { return; }
-
-        // Perform replacement on node
-        this.plugin.EC.Util.emojifyToHTML(element.html()).then((new_text) => {
-          $(node).html(new_text);
-        });
-        break;
-      case Node.TEXT_NODE:
-        element = $(node);
-        this.plugin.EC.Util.emojifyToHTML(element.text()).then((new_text) => {
-          $(node).html(new_text);
-        });
-        break;
+    if (typeof this.plugin.element !== null) {
+      this.scanAndReplace(this.plugin.element[0]);
     }
   }
+
 
   scanAndReplace(node) {
-    var children = $(node).children();
-    if (children.length == 0) {
-      this.replace(node);
-      return;
-    }
+    let child;
 
-    for (var i = 0; i < children.length; i++) {
-      this.scanAndReplace(children[i]);
+    if (!(node.parentNode && node.parentNode.isContentEditable)) {
+      child = node.firstChild;
+      while (child) {
+        switch (child.nodeType) {
+          case Node.ELEMENT_NODE:
+            if ($(child).is(this.plugin.options.ignore)) {
+              break;
+            }
+            if (child.isContentEditable) {
+              break;
+            }
+            this.scanAndReplace(child);
+            break;
+          case Node.TEXT_NODE:
+            if (child.data.match(/\S/)) {
+              const target = child;
+              this.plugin.EC.Util.emojifyToHTML(target.data).then((new_text) => {
+                $(target).replaceWith(new_text);
+              });
+            }
+            break;
+        }
+        child = child.nextSibling;
+      }
     }
   }
 }
