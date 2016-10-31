@@ -6,7 +6,6 @@ describe("emojidexReplace", function() {
   it('replace to emojidex-emoji', done =>
     $('body').emojidexReplace({
       onComplete(element) {
-        console.log(111)
         expect($('.emojidex_replace')).toContainElement('img.emojidex-emoji');
         done();
       }
