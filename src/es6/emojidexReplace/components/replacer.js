@@ -5,11 +5,14 @@ class Replacer {
     // Initial replacement
     if (typeof this.plugin.element !== null)
       this.scanAndReplace(this.plugin.element);
+
+    console.log(this.plugin.element);
   }
 
   replace(node) {
     if ($(node.nodeType).is(this.plugin.options.ignore)) { return; }
-    if (node.nodeType == Node.ELEMENT_NODE) {
+    switch node.nodeType {
+      case Node.ELEMENT_NODE:
         element = $(node);
         if (typeof element.text !== 'function' || element.text() === '') { return; }
 
@@ -17,6 +20,13 @@ class Replacer {
         this.plugin.EC.Util.emojifyToHTML(element.html()).then((new_text) => {
           $(node).html(new_text);
         });
+        break;
+      case Node.TEXT_NODE:
+        element = $(node);
+        this.plugin.EC.Util.emojifyToHTML(element.text()).then((new_text) => {
+          $(node).html(new_text);
+        });
+        break;
     }
   }
 
