@@ -30,7 +30,11 @@
         this.EC = new EmojidexClient({
           onReady: EC => {
             this.EC.User.login('session');
-            this.replacer = new Replacer(this);
+            this.replacer = new Replacer(this).then(() => {
+              if (typeof this.options.onComplete === "function") {
+                this.options.onComplete();
+              }
+            });
           }
         });
       }

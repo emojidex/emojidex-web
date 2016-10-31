@@ -1263,20 +1263,60 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var Replacer = function () {
   function Replacer(plugin) {
+    var _this = this;
+
     _classCallCheck(this, Replacer);
 
     this.plugin = plugin;
+    this.targets = [];
+    this.wip_count = 0;
 
-    if (typeof this.plugin.element !== null) {
-      this.scanAndReplace(this.plugin.element[0]);
-    }
+    return new Promise(function (resolve, reject) {
+      if (typeof _this.plugin.element !== null) {
+        _this.scanAndReplace(_this.plugin.element[0]);
+
+        _this.wip_count = _this.targets.length;
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+          var _loop = function _loop() {
+            target = _step.value;
+
+            var target_node = target;
+            _this.plugin.EC.Util.emojifyToHTML(target_node.data).then(function (new_text) {
+              $(target_node).replaceWith(new_text);
+              if (--_this.wip_count === 0) {
+                resolve();
+              }
+            });
+          };
+
+          for (var _iterator = _this.targets[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            _loop();
+          }
+        } catch (err) {
+          _didIteratorError = true;
+          _iteratorError = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion && _iterator.return) {
+              _iterator.return();
+            }
+          } finally {
+            if (_didIteratorError) {
+              throw _iteratorError;
+            }
+          }
+        }
+      }
+    });
   }
 
   _createClass(Replacer, [{
     key: "scanAndReplace",
     value: function scanAndReplace(node) {
-      var _this = this;
-
       var child = void 0;
 
       if (!(node.parentNode && node.parentNode.isContentEditable)) {
@@ -1294,12 +1334,7 @@ var Replacer = function () {
               break;
             case Node.TEXT_NODE:
               if (child.data.match(/\S/)) {
-                (function () {
-                  var target = child;
-                  _this.plugin.EC.Util.emojifyToHTML(target.data).then(function (new_text) {
-                    $(target).replaceWith(new_text);
-                  });
-                })();
+                this.targets.push(child);
               }
               break;
           }
@@ -1355,7 +1390,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         this.EC = new EmojidexClient({
           onReady: function onReady(EC) {
             _this.EC.User.login('session');
-            _this.replacer = new Replacer(_this);
+            _this.replacer = new Replacer(_this).then(function () {
+              if (typeof _this.options.onComplete === "function") {
+                _this.options.onComplete();
+              }
+            });
           }
         });
       }
