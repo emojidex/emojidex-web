@@ -231,7 +231,9 @@ module.exports = function(grunt) {
         src: ['dist/js/emojidex.js'],
         options: {
           specs: [
-            'spec/emojidexReplace.js'
+            'spec/emojidexReplace.js',
+            'spec/emojidexAutocomplete.js',
+            'spec/emojidexPallet.js'
           ],
           helpers:[
             'spec/helpers/method.js',
