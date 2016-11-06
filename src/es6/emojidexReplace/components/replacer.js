@@ -3,30 +3,37 @@ class Replacer {
     this.plugin = plugin;
     this.targets = [];
     this.wip_count = 0;
+  }
 
+  loadEmoji(element) {
+    if(element) {
+      this.setTargets(element);
+    } else if(typeof this.plugin.element !== null) {
+      this.setTargets(this.plugin.element[0]);
+    }
+    this.wip_count = this.targets.length;
     return new Promise((resolve, reject) => {
-      if (typeof this.plugin.element !== null) {
-        this.scanAndReplace(this.plugin.element[0]);
-
-        this.wip_count = this.targets.length;
-        for(target of this.targets) {
-          const target_node = target;
-          this.plugin.EC.Util.emojifyToHTML(target_node.data).then((new_text) => {
-            $(target_node).replaceWith(new_text);
-            if(--this.wip_count === 0) {
-              resolve()
-            }
-          });
-        }
+      if(this.wip_count === 0) { resolve() }
+      while(this.targets.length !== 0) {
+        const target_node = this.targets.pop();
+        this.plugin.EC.Util.emojifyToHTML(target_node.data).then((new_text) => {
+          $(target_node).replaceWith(new_text);
+          if(--this.wip_count === 0) {
+            resolve()
+          }
+        });
       }
+    }).catch(() => {
     });
   }
 
-
-  scanAndReplace(node) {
+  setTargets(node) {
     let child;
-
-    if (!(node.parentNode && node.parentNode.isContentEditable)) {
+    if(node.nodeType === Node.TEXT_NODE) {
+      if (node.data.match(/\S/)) {
+        this.targets.push(node);
+      }
+    } else if(!(node.parentNode && node.parentNode.isContentEditable)) {
       child = node.firstChild;
       while (child) {
         switch (child.nodeType) {
@@ -37,7 +44,7 @@ class Replacer {
             if (child.isContentEditable) {
               break;
             }
-            this.scanAndReplace(child);
+            this.setTargets(child);
             break;
           case Node.TEXT_NODE:
             if (child.data.match(/\S/)) {

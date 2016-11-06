@@ -30,11 +30,7 @@
         this.EC = new EmojidexClient({
           onReady: EC => {
             this.EC.User.login('session');
-            this.replacer = new Replacer(this).then(() => {
-              if (typeof this.options.onComplete === "function") {
-                this.options.onComplete();
-              }
-            });
+            this.replace()
           }
         });
       }
@@ -42,9 +38,13 @@
 
     replace() {
       if (this.options.autoUpdate) {
-        // TODO
-        //this.observer = new Observer(this);
-        //return this.observer.reloadEmoji();
+        this.replacer = new Observer(this).reloadEmoji();
+      } else {
+        this.replacer = new Replacer(this).loadEmoji().then(() => {
+          if (typeof this.options.onComplete === "function") {
+            this.options.onComplete();
+          }
+        });
       }
     }
   }

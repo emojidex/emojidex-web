@@ -17,7 +17,9 @@ html
         $("body").emojidexReplace
           onComplete: (element) ->
             console.log 'Completed emojidexReplace!!'
-
+        setInterval ->
+          $('#ajax_test').append(':heart::heart:💙💙')
+        , 3000;
   body
     #ajax_test
-      | :heart::hearteee:💙💙💙
+      | :heart::heart::heart::heartless:💙💙💙

@@ -13,11 +13,14 @@
       (function() {
         $(document).ready((function(_this) {
           return function() {
-            return $("body").emojidexReplace({
+            $("body").emojidexReplace({
               onComplete: function(element) {
                 return console.log('Completed emojidexReplace!!');
               }
             });
+            return setInterval(function() {
+              return $('#ajax_test').append(':heart::heart:💙💙');
+            }, 3000);
           };
         })(this));
       
@@ -27,7 +30,7 @@
   </head>
   <body>
     <div id="ajax_test">
-      :heart::hearteee:💙💙💙
+      :heart::heart::heart::heartless:💙💙💙
     </div>
   </body>
 </html>
