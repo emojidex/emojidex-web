@@ -1,5 +1,5 @@
 /*
-* emojidexPallet
+* emojidexPalette
 *
 * =LICENSE=
 * Licensed under the emojidex Open License
@@ -9,7 +9,7 @@
 */
 
 (function($, window, document) {
-  let pluginName = "emojidexPallet";
+  let pluginName = "emojidexPalette";
   let defaults =
     {onComplete: undefined};
 
@@ -21,7 +21,7 @@
       this._name = pluginName;
 
       // start: Plugin --------
-      this.pallet = new Pallet(this);
+      this.palette = new Palette(this);
     }
   }
 

@@ -22,7 +22,7 @@
             });
             $(".emojidex-plain_text").emojidexAutocomplete();
             $(".emojidex-content_editable").emojidexAutocomplete();
-            $("#pallet-btn").emojidexPallet();
+            $("#palette-btn").emojidexPalette();
           };
         })(this));
       
@@ -108,11 +108,11 @@
       <div class="row">
         <div class="col-md-12">
           <h3>
-            emojidexPallet :blush:
+            emojidexPalette :blush:
           </h3>
           <hr class="mt-s mb-m" />
-          <div class="emojidex_pallet mt-m">
-            <button class="btn btn-lg btn-primary" id="pallet-btn" type="button">Open emoji pallet</button>
+          <div class="emojidex_palette mt-m">
+            <button class="btn btn-lg btn-primary" id="palette-btn" type="button">Open emoji palette</button>
           </div>
         </div>
       </div>
@@ -222,10 +222,10 @@ and elements where <code>contenteditable=&quot;true&quot;</code>.  </p>
 <p>Type: <code>Boolean</code> Default: <code>true</code></p>
 <p>Defines the behavior of <code>contenteditable=&quot;true&quot;</code> elements. When true, codes are automatically
 converted to images. When false they remain as plain text.</p>
-<h3 id="-emojidexpallet-">.emojidexPallet()</h3>
-<p>Sets an element to open up an emoji pallet chooser when clicked.</p>
+<h3 id="-emojidexpalette-">.emojidexPalette()</h3>
+<p>Sets an element to open up an emoji palette chooser when clicked.</p>
 <p>emoji are copied to the clipboard when clicked.
-The pallet contains a tabbed index, search functionality, and displays history and favorites when
+The palette contains a tabbed index, search functionality, and displays history and favorites when
 a user is logged in.</p>
 <h3 id="options">Options</h3>
 <h4 id="default-options">Default options</h4>
@@ -235,7 +235,7 @@ a user is logged in.</p>
 </code></pre>
 <h4 id="options-oncomplete">options.onComplete</h4>
 <p>Type: <code>Function</code> Default: <code>undefined</code></p>
-<p>Calls the defined method after a pallet has been set to an element.</p>
+<p>Calls the defined method after a palette has been set to an element.</p>
 <h1 id="building">Building</h1>
 <p>You will need node with a usable npm, grunt and bower.</p>
 <h3 id="get-the-source">Get the source</h3>

@@ -1,4 +1,4 @@
-class Pallet {
+class Palette {
   constructor(plugin) {
     this.plugin = plugin;
     this.active_input_area = null;
@@ -12,7 +12,7 @@ class Pallet {
         });
 
         this.createDialog();
-        this.setPallet(this.plugin.element);
+        this.setPalette(this.plugin.element);
 
         return __guardFunc__(this.plugin.options.onComplete, f => f());
       }
@@ -36,7 +36,7 @@ class Pallet {
         close_btn.click(e => $('#emojidex-dialog-content').dialog('close'));
 
         $('.ui-dialog-titlebar').append(close_btn);
-        return $('.emojidex-ui-dialog').wrap('<span id="emojidex-emoji-pallet"></span>');
+        return $('.emojidex-ui-dialog').wrap('<span id="emojidex-emoji-palette"></span>');
       },
 
       open(e) {
@@ -46,9 +46,9 @@ class Pallet {
     });
   }
 
-  setPallet(element) {
+  setPalette(element) {
     return $(element).click(e => {
-      if (this.emoji_pallet != null) {
+      if (this.emoji_palette != null) {
         return this.openDialog();
       } else {
         let tab_list = $('<ul class="nav nav-pills"></ul>');
@@ -70,11 +70,11 @@ class Pallet {
             tab_content.append(tab.tab_content);
           }
 
-          this.emoji_pallet = $('<div class="emoji-pallet"></div>');
-          this.emoji_pallet.append(tab_list.add(tab_content));
-          this.emoji_pallet.find('ul').after('<hr>');
+          this.emoji_palette = $('<div class="emoji-palette"></div>');
+          this.emoji_palette.append(tab_list.add(tab_content));
+          this.emoji_palette.find('ul').after('<hr>');
 
-          this.dialog.append(this.emoji_pallet);
+          this.dialog.append(this.emoji_palette);
           return this.openDialog();
         }
         );
@@ -193,11 +193,11 @@ class Pallet {
 
   getPagination(kind, prev_func, next_func, cur_page, max_page) {
     let pagination = $(`<div class='${kind}-pagination text-center'><ul class='pagination mb-0'></ul></div>`);
-    pagination.find('.pagination').append($('<li class="pallet-pager"><span>&laquo;</span></li>').click(() => {
+    pagination.find('.pagination').append($('<li class="palette-pager"><span>&laquo;</span></li>').click(() => {
       return prev_func();
     }));
     pagination.find('.pagination').append($(`<li class='disabled'><span>${cur_page} / ${max_page}</span></li>`));
-    pagination.find('.pagination').append($('<li class="pallet-pager"><span>&raquo;</span></li>').click(() => {
+    pagination.find('.pagination').append($('<li class="palette-pager"><span>&raquo;</span></li>').click(() => {
       return next_func();
     }));
 

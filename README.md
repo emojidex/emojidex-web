@@ -137,11 +137,11 @@ Type: `Boolean` Default: `true`
 Defines the behavior of `contenteditable="true"` elements. When true, codes are automatically
 converted to images. When false they remain as plain text.
 
-### .emojidexPallet()
-Sets an element to open up an emoji pallet chooser when clicked.
+### .emojidexPalette()
+Sets an element to open up an emoji palette chooser when clicked.
 
 emoji are copied to the clipboard when clicked.
-The pallet contains a tabbed index, search functionality, and displays history and favorites when
+The palette contains a tabbed index, search functionality, and displays history and favorites when
 a user is logged in.
 
 ### Options
@@ -155,7 +155,7 @@ emojidexAutocomplete({
 #### options.onComplete
 Type: `Function` Default: `undefined`
 
-Calls the defined method after a pallet has been set to an element.
+Calls the defined method after a palette has been set to an element.
 
 Building
 ========

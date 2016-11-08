@@ -1,6 +1,6 @@
 class CategoryTab {
-  constructor(pallet, category, length) {
-    this.pallet = pallet;
+  constructor(palette, category, length) {
+    this.palette = palette;
     this.initialized = false;
     this.sort_type = 'score';
     this.category_name = category.code;
@@ -15,7 +15,7 @@ class CategoryTab {
 
   setCategory(category_name) {
     if (this.tab_data != null) {
-      return this.pallet.EC.Categories.called_data = this.tab_data;
+      return this.palette.EC.Categories.called_data = this.tab_data;
     } else {
       return this.setCategoryTabContent(category_name);
     }
@@ -24,21 +24,21 @@ class CategoryTab {
   setCategoryTabContent(category_name){
     this.initialized = true;
     this.category_name = category_name;
-    return this.pallet.EC.Categories.getEmoji(
+    return this.palette.EC.Categories.getEmoji(
       category_name,
       (result_emoji, called_data) => {
         this.tab_data = called_data;
         this.tab_content.children().remove();
 
-        this.tab_content.append(this.pallet.setEmojiList('category', result_emoji));
+        this.tab_content.append(this.palette.setEmojiList('category', result_emoji));
 
-        let cur_page = this.pallet.EC.Categories.meta.total_count === 0 ? 0 : this.pallet.EC.Categories.cur_page;
-        let max_page = Math.floor(this.pallet.EC.Categories.meta.total_count / this.pallet.EC.options.limit);
-        if (this.pallet.EC.Categories.meta.total_count % this.pallet.EC.options.limit > 0) { max_page++; }
-        let prev_func = () => this.pallet.EC.Categories.prev();
-        let next_func = () => this.pallet.EC.Categories.next();
-        let pagination = this.pallet.getPagination('category', prev_func, next_func, cur_page, max_page);
-        pagination.append(this.pallet.getSorting(this));
+        let cur_page = this.palette.EC.Categories.meta.total_count === 0 ? 0 : this.palette.EC.Categories.cur_page;
+        let max_page = Math.floor(this.palette.EC.Categories.meta.total_count / this.palette.EC.options.limit);
+        if (this.palette.EC.Categories.meta.total_count % this.palette.EC.options.limit > 0) { max_page++; }
+        let prev_func = () => this.palette.EC.Categories.prev();
+        let next_func = () => this.palette.EC.Categories.next();
+        let pagination = this.palette.getPagination('category', prev_func, next_func, cur_page, max_page);
+        pagination.append(this.palette.getSorting(this));
         return this.tab_content.append(pagination);
       }
       ,

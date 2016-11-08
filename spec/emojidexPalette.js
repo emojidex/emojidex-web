@@ -1,8 +1,8 @@
-describe("emojidexPallet", function() {
+describe("emojidexPalette", function() {
   beforeAll(function(done) {
     clearStorage();
     helperBefore();
-    $("#pallet-btn").emojidexPallet({
+    $("#palette-btn").emojidexPalette({
       onComplete: () => {
         done();
       }
@@ -11,7 +11,7 @@ describe("emojidexPallet", function() {
 
   afterAll(() => helperAfter());
 
-  it("show emojidexPallet", function(done) {
+  it("show emojidexPalette", function(done) {
     expect($('.ui-dialog')).toHaveCss({display: 'none'});
 
     $('.ui-dialog').watch({
@@ -23,7 +23,7 @@ describe("emojidexPallet", function() {
         done();
       }
     });
-    $('#pallet-btn').click();
+    $('#palette-btn').click();
   });
 
   describe('category tab', function() {
@@ -58,7 +58,7 @@ describe("emojidexPallet", function() {
         }
       });
 
-      $('#tab-content-faces').find('.pagination .pallet-pager')[1].click();
+      $('#tab-content-faces').find('.pagination .palette-pager')[1].click();
     });
 
     it('switches to the previous page', function(done) {
@@ -72,7 +72,7 @@ describe("emojidexPallet", function() {
           done();
         }
       });
-      $('#tab-content-faces').find('.pagination .pallet-pager')[0].click();
+      $('#tab-content-faces').find('.pagination .palette-pager')[0].click();
     });
   });
 
@@ -98,8 +98,8 @@ describe("emojidexPallet", function() {
     });
 
     $('#tab-search a').click();
-    $('#pallet-emoji-search-input').val('test');
-    return $('#pallet-emoji-search-submit').click();
+    $('#palette-emoji-search-input').val('test');
+    return $('#palette-emoji-search-submit').click();
   }
   );
 
@@ -120,9 +120,9 @@ describe("emojidexPallet", function() {
       });
 
       $('#tab-user a').click();
-      $('#pallet-emoji-username-input').val('aaa');
-      $('#pallet-emoji-password-input').val('aaa');
-      $('#pallet-emoji-login-submit').click();
+      $('#palette-emoji-username-input').val('aaa');
+      $('#palette-emoji-password-input').val('aaa');
+      $('#palette-emoji-login-submit').click();
     }
     );
 
@@ -143,9 +143,9 @@ describe("emojidexPallet", function() {
       });
 
       $('#tab-user a').click();
-      $('#pallet-emoji-username-input').val(user_info.auth_user);
-      $('#pallet-emoji-password-input').val(user_info.password);
-      $('#pallet-emoji-login-submit').click();
+      $('#palette-emoji-username-input').val(user_info.auth_user);
+      $('#palette-emoji-password-input').val(user_info.password);
+      $('#palette-emoji-login-submit').click();
     });
 
    // it 'premium user can see the newest/popular emoji', (done) ->
@@ -167,12 +167,12 @@ describe("emojidexPallet", function() {
         properties: 'prop_innerHTML',
         watchChildren: true,
         callback(data, i) {
-          expect($('#pallet-emoji-username-input')).toHaveCss({display: 'block'});
+          expect($('#palette-emoji-username-input')).toHaveCss({display: 'block'});
           remove_watch($('#tab-content-user'), 'content_user');
           done();
         }
       });
-      $('#pallet-emoji-logout').click();
+      $('#palette-emoji-logout').click();
     });
 
     it('general user login [Require user info]', function(done) {
@@ -190,9 +190,9 @@ describe("emojidexPallet", function() {
         }
       });
       $('#tab-user a').click();
-      $('#pallet-emoji-username-input').val(user_info.auth_user);
-      $('#pallet-emoji-password-input').val(user_info.password);
-      $('#pallet-emoji-login-submit').click();
+      $('#palette-emoji-username-input').val(user_info.auth_user);
+      $('#palette-emoji-password-input').val(user_info.password);
+      $('#palette-emoji-login-submit').click();
     });
   });
 
@@ -208,17 +208,17 @@ describe("emojidexPallet", function() {
    //         spec_timer timer_option
    //   spec_timer timer_option
 
-  it('close emojidexPallet', function() {
+  it('close emojidexPalette', function() {
     $('button.pull-right[aria-label="Close"]').click();
     expect($('.ui-dialog')).toHaveCss({display: 'none'});
   });
 
   it('login with storage data', function(done) {
     if (typeof user_info === 'undefined' || user_info === null) { pending(); }
-    $('#emojidex-emoji-pallet').remove();
-    $('#pallet-btn').removeData().unbind();
+    $('#emojidex-emoji-palette').remove();
+    $('#palette-btn').removeData().unbind();
 
-    $("#pallet-btn").emojidexPallet({
+    $("#palette-btn").emojidexPalette({
       onComplete: () => {
         $('.ui-dialog').watch({
           id: 'dialog_2',
@@ -242,7 +242,7 @@ describe("emojidexPallet", function() {
             $('#tab-user a').click();
           }
         });
-        $("#pallet-btn").click();
+        $("#palette-btn").click();
       }
     });
   });
