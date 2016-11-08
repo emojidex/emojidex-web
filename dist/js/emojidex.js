@@ -1298,10 +1298,11 @@ var Replacer = function () {
         while (child) {
           switch (child.nodeType) {
             case Node.ELEMENT_NODE:
-              if ($(child).is(this.plugin.options.ignore)) {
+              //check if node an ignored type [black-listed] and if not that it is in the selector list [white-listed]
+              if ($(child).is(this.plugin.options.ignore) || $(child).is(this.plugin.options.selector) == false) {
                 break;
               }
-              if (child.isContentEditable) {
+              if (this.plugin.options.ignoreContentEditable && child.isContentEditable) {
                 break;
               }
               this.setTargets(child);
@@ -1343,7 +1344,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     onComplete: undefined,
     useLoadingImg: true,
     autoUpdate: true,
-    ignore: 'script, noscript, canvas, img, style, iframe, input, textarea, pre, code'
+    selector: '*',
+    ignore: 'script, noscript, canvas, img, style, iframe, input, textarea, pre, code',
+    ignoreContentEditable: true
   };
 
   var Plugin = function () {

@@ -13,7 +13,9 @@
     onComplete: undefined,
     useLoadingImg: true,
     autoUpdate: true,
-    ignore: 'script, noscript, canvas, img, style, iframe, input, textarea, pre, code'
+    selector: '*',
+    ignore: 'script, noscript, canvas, img, style, iframe, input, textarea, pre, code',
+    ignoreContentEditable: true
   };
 
   class Plugin {
