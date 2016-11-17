@@ -2634,6 +2634,8 @@ img.emojidex-emoji {
     border-radius: 4px; }
   #emojidex-emoji-palette .ui-dialog .ui-dialog-titlebar {
     padding: 10px; }
+  #emojidex-emoji-palette .ui-dialog .ui-dialog-content {
+    height: auto !important; }
   #emojidex-emoji-palette .ui-widget-header {
     border: none;
     background-color: #fff; }

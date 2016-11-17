@@ -33,6 +33,10 @@
   .ui-dialog .ui-dialog-titlebar {
     padding: 10px;
   }
+
+  .ui-dialog .ui-dialog-content {
+    height: auto !important;
+  }
   .ui-widget-header {
     border: none;
     background-color: #fff;
