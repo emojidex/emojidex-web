@@ -18,7 +18,7 @@ img.emojidex-emoji {
 
 .emojidex-loading-icon {
   @include emoji;
-  background-image: url('http://assets.emojidex.com/scripts/image/emojidex-web_loading1.gif');
+  background-image: url('https://cdn.emojidex.com/scripts/image/emojidex-web_loading1.gif');
 }
 
 @import "emoji_palette"

@@ -146,8 +146,8 @@
 
 @font-face {
   font-family: "emojidex-ui-icon";
-  src: url("http://assets.emojidex.com/scripts/fonts/emojidex-ui/emojidex-ui-icon.eot");
-  src: url("http://assets.emojidex.com/scripts/fonts/emojidex-ui/emojidex-ui-icon.eot?#iefix") format("embedded-opentype"), url("http://assets.emojidex.com/scripts/fonts/emojidex-ui/emojidex-ui-icon.woff") format("woff"), url("http://assets.emojidex.com/scripts/fonts/emojidex-ui/emojidex-ui-icon.ttf") format("truetype"), url("http://assets.emojidex.com/scripts/fonts/emojidex-ui/emojidex-ui-icon.svg#emojidex-ui-icon") format("svg");
+  src: url("https://cdn.emojidex.com/scripts/fonts/emojidex-ui/emojidex-ui-icon.eot");
+  src: url("https://cdn.emojidex.com/scripts/fonts/emojidex-ui/emojidex-ui-icon.eot?#iefix") format("embedded-opentype"), url("https://cdn.emojidex.com/scripts/fonts/emojidex-ui/emojidex-ui-icon.woff") format("woff"), url("https://cdn.emojidex.com/scripts/fonts/emojidex-ui/emojidex-ui-icon.ttf") format("truetype"), url("https://cdn.emojidex.com/scripts/fonts/emojidex-ui/emojidex-ui-icon.svg#emojidex-ui-icon") format("svg");
   font-weight: normal;
   font-style: normal; }
 [class^="emjdx-"], [class*=" emjdx-"] {
@@ -226,7 +226,7 @@ img.emojidex-emoji {
   top: -0.1em;
   background-size: 100%;
   background-repeat: no-repeat;
-  background-image: url("http://assets.emojidex.com/scripts/image/emojidex-web_loading1.gif"); }
+  background-image: url("https://cdn.emojidex.com/scripts/image/emojidex-web_loading1.gif"); }
 
 #emojidex-emoji-palette {
   /*! jQuery UI - v1.11.4 - 2015-12-24
