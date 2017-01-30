@@ -15,7 +15,9 @@ class AutoComplete {
       $(this.plugin.element).atwho(at_options).on('reposition.atwho', e => $(e.currentTarget).atwho(at_options)
       ).on('hidden.atwho', e => $(e.currentTarget).atwho(at_options)
       );
-      return __guardFunc__(this.plugin.options.onComplete, f => f());
+      if (typeof this.plugin.options.onComplete === "function") {
+        return this.plugin.options.onComplete(this.plugin.element);
+      }
     };
 
     let setSearchedEmojiData = (at_obj, match_string) => {
@@ -93,8 +95,4 @@ class AutoComplete {
 
     return setAtwho(at_init);
   }
-}
-
-function __guardFunc__(func, transform) {
-  return typeof func === 'function' ? transform(func) : undefined;
 }

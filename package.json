@@ -1,6 +1,6 @@
 {
   "name": "emojidex",
-  "version": "0.14.4",
+  "version": "0.14.5",
   "title": "jQuery emojidex",
   "description": "emojidex plugin for jQuery/Zepto and compatible",
   "author": "emojidex",
@@ -16,7 +16,7 @@
     "copyright": "Copyright 2013 the emojidex project / K.K. GenSouSha"
   },
   "devDependencies": {
-    "emojidex-client": "^0.13.6",
+    "emojidex-client": "^0.13.7",
     "babel-cli": "^6.14.0",
     "babel-polyfill": "^6.13.0",
     "babel-preset-es2015": "^6.14.0",
