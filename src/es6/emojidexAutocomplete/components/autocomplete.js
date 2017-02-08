@@ -3,42 +3,41 @@ class AutoComplete {
     this.plugin = plugin;
     this.searching_num = 0;
     this.EC = new EmojidexClient({
-      onReady: EC => {
+      onReady: (EC) => {
         this.EC.User.login('session');
-        return this.setAutoComplete();
+        this.setAutoComplete();
       }
     });
   }
 
   setAutoComplete() {
-    let setAtwho = at_options => {
-      $(this.plugin.element).atwho(at_options).on('reposition.atwho', e => $(e.currentTarget).atwho(at_options)
-      ).on('hidden.atwho', e => $(e.currentTarget).atwho(at_options)
-      );
+    let setAtwho = (at_options) => {
+      $(this.plugin.element).atwho(at_options)
+        .on('reposition.atwho', (e) => { $(e.currentTarget).atwho(at_options) })
+        .on('hidden.atwho', (e) => { $(e.currentTarget).atwho(at_options) });
       if (typeof this.plugin.options.onComplete === "function") {
-        return this.plugin.options.onComplete(this.plugin.element);
+        this.plugin.options.onComplete(this.plugin.element);
       }
     };
 
     let setSearchedEmojiData = (at_obj, match_string) => {
-      let updateAtwho = function(search_results, at_bak) {
+      let updateAtwho = (search_results, at_bak) => {
         let at_options = {
           data: search_results,
           callbacks: {
             highlighter: onHighlighter,
-            matcher(flag, subtext, should_startWithSpace) {
-              let match;
-              return match = getMatchString(subtext, getRegexp(flag, should_startWithSpace));
+            matcher: function(flag, subtext, should_startWithSpace) {
+              return getMatchString(subtext, getRegexp(flag, should_startWithSpace));
             }
           }
         };
 
-        return at_bak.$inputor.atwho('destroy').atwho($.extend({}, at_bak.setting, at_options)).atwho('run');
+        at_bak.$inputor.atwho('destroy').atwho($.extend({}, at_bak.setting, at_options)).atwho('run');
       };
 
       // start: setSearchedEmojiData --------
       let num = ++this.searching_num;
-      this.EC.Search.search(match_string, response => {
+      this.EC.Search.search(match_string, (response) => {
 
         let search_results = [];
         for (let i = 0; i < this.EC.Search.results.length; i++) {
@@ -52,16 +51,15 @@ class AutoComplete {
 
         if (this.searching_num === num) {
           if (search_results.length) { updateAtwho(search_results, at_obj); }
-          return this.searching_num = 0;
+          this.searching_num = 0;
         }
-      }
-      );
+      });
 
       return match_string;
     };
 
     var getRegexp = function(flag, should_startWithSpace) {
-      return regexp = new RegExp(`[：${flag}]([^：:;@&#~\!\$\+\?\%\*\f\n\r\\\/]+)$`,'gi');
+      return new RegExp(`[：${flag}]([^：:;@&#~\!\$\+\?\%\*\f\n\r\\\/]+)$`,'gi');
     };
 
     var getMatchString = function(subtext, regexp) {
@@ -86,13 +84,13 @@ class AutoComplete {
       insertTpl: this.plugin.options.insertImg ? "${insert_tag}" : ":${code}:",
       callbacks: {
         highlighter: onHighlighter,
-        matcher(flag, subtext, should_startWithSpace) {
+        matcher: function(flag, subtext, should_startWithSpace) {
           let match = getMatchString(subtext, getRegexp(flag, should_startWithSpace));
           if (match) { return setSearchedEmojiData(this, match); }
         }
       }
     };
 
-    return setAtwho(at_init);
+    setAtwho(at_init);
   }
 }
