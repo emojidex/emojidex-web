@@ -81,9 +81,9 @@ class AutoComplete {
       at: ':',
       suffix: '',
       limit: this.plugin.options.listLimit,
-      search_key: "code",
-      tpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20'></img>${code}</li>",
-      insert_tpl: this.plugin.options.insertImg ? "${insert_tag}" : ":${code}:",
+      searchKey: "code",
+      displayTpl: "<li data-value=':${code}:'><img src='${img_url}' height='20' width='20'></img>${code}</li>",
+      insertTpl: this.plugin.options.insertImg ? "${insert_tag}" : ":${code}:",
       callbacks: {
         highlighter: onHighlighter,
         matcher(flag, subtext, should_startWithSpace) {
