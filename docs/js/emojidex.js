@@ -419,10 +419,10 @@ var Palette = function () {
           });
 
           $('.ui-dialog-titlebar').append(close_btn);
+          $('.ui-dialog-title').html('<a target="_blank" href="https://www.emojidex.com"><img src="https://cdn.emojidex.com/logo-hdpi.png" alt="emojidex" /></a>');
           return $('.emojidex-ui-dialog').wrap('<span id="emojidex-emoji-palette"></span>');
         },
         open: function open(e) {
-          $(e).select('#ui-id-1 .ui-dialog-title').innerHTML('<a target="_blank" href="https://www.emojidex.com"><img src="https://cdn.emojidex.com/logo-hdpi.png" alt="emojidex" /></a>');
           $('.ui-dialog :button').blur();
           return $('.nav.nav-pills a').blur();
         }
