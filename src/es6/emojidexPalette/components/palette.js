@@ -27,7 +27,7 @@ class Palette {
       },
       autoOpen: false,
       width: 557,
-      title: '<img src="https://cdn.emojidex.com/logo-hdpi.png" alt="emojidex logo" />',
+      title: '<a target="_blank" href="https://www.emojidex.com"><img src="https://cdn.emojidex.com/logo-hdpi.png" alt="emojidex" /></a>',
 
       create(e) {
         $('.ui-dialog-titlebar-close').hide();
