@@ -27,7 +27,7 @@ class Palette {
       },
       autoOpen: false,
       width: 557,
-      title: '<a target="_blank" href="https://www.emojidex.com"><img src="https://cdn.emojidex.com/logo-hdpi.png" alt="emojidex" /></a>',
+      title: 'emojidex',
 
       create(e) {
         $('.ui-dialog-titlebar-close').hide();
@@ -36,6 +36,7 @@ class Palette {
         close_btn.click(e => $('#emojidex-dialog-content').dialog('close'));
 
         $('.ui-dialog-titlebar').append(close_btn);
+        $('.ui-dialog-title').html('<a target="_blank" href="https://www.emojidex.com"><img src="https://cdn.emojidex.com/logo-hdpi.png" alt="emojidex" /></a>');
         return $('.emojidex-ui-dialog').wrap('<span id="emojidex-emoji-palette"></span>');
       },
 

@@ -408,7 +408,7 @@ var Palette = function () {
         },
         autoOpen: false,
         width: 557,
-        title: '<a target="_blank" href="https://www.emojidex.com"><img src="https://cdn.emojidex.com/logo-hdpi.png" alt="emojidex" /></a>',
+        title: 'emojidex',
 
         create: function create(e) {
           $('.ui-dialog-titlebar-close').hide();
@@ -419,6 +419,7 @@ var Palette = function () {
           });
 
           $('.ui-dialog-titlebar').append(close_btn);
+          $('.ui-dialog-title').html('<a target="_blank" href="https://www.emojidex.com"><img src="https://cdn.emojidex.com/logo-hdpi.png" alt="emojidex" /></a>');
           return $('.emojidex-ui-dialog').wrap('<span id="emojidex-emoji-palette"></span>');
         },
         open: function open(e) {
