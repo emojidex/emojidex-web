@@ -14,7 +14,9 @@ class Palette {
         this.createDialog();
         this.setPalette(this.plugin.element);
 
-        return __guardFunc__(this.plugin.options.onComplete, f => f());
+        if (typeof this.plugin.options.onComplete === "function") {
+          this.plugin.options.onComplete();
+        }
       }
     });
   }
@@ -257,8 +259,4 @@ class Palette {
   openDialog() {
     return this.dialog.dialog('open');
   }
-}
-
-function __guardFunc__(func, transform) {
-  return typeof func === 'function' ? transform(func) : undefined;
 }
