@@ -334,16 +334,23 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 (function ($, window, document) {
   var pluginName = "emojidexAutocomplete";
-  var defaults = {
+  var content_editable_defaults = {
     onComplete: undefined,
     listLimit: 10,
     insertImg: true
   };
+  var textarea_defaults = {
+    onComplete: undefined,
+    listLimit: 10,
+    insertImg: false
+  };
+  var defaults = void 0;
 
   var Plugin = function Plugin(element, options) {
     _classCallCheck(this, Plugin);
 
     this.element = element;
+    defaults = element.type === 'textarea' ? textarea_defaults : content_editable_defaults;
     this.options = $.extend({}, defaults, options);
     this._defaults = defaults;
     this._name = pluginName;
@@ -364,8 +371,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 //# sourceMappingURL=main.js.map
 
 'use strict';
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -437,38 +442,32 @@ var Palette = function () {
         if (_this2.emoji_palette != null) {
           return _this2.openDialog();
         } else {
-          var _ret = function () {
-            var tab_list = $('<ul class="nav nav-pills"></ul>');
-            var tab_content = $('<div class="tab-content"></div>');
+          var tab_list = $('<ul class="nav nav-pills"></ul>');
+          var tab_content = $('<div class="tab-content"></div>');
 
-            return {
-              v: _this2.EC.Categories.sync(function (categories) {
-                _this2.tabs.push(new IndexTab(_this2));
-                for (var i = 0; i < categories.length; i++) {
-                  var category = categories[i];
-                  _this2.tabs.push(new CategoryTab(_this2, category, tab_list[0].children.length));
-                }
+          return _this2.EC.Categories.sync(function (categories) {
+            _this2.tabs.push(new IndexTab(_this2));
+            for (var i = 0; i < categories.length; i++) {
+              var category = categories[i];
+              _this2.tabs.push(new CategoryTab(_this2, category, tab_list[0].children.length));
+            }
 
-                _this2.tabs.push(new UserTab(_this2));
-                _this2.tabs.push(new SearchTab(_this2));
+            _this2.tabs.push(new UserTab(_this2));
+            _this2.tabs.push(new SearchTab(_this2));
 
-                for (var j = 0; j < _this2.tabs.length; j++) {
-                  var tab = _this2.tabs[j];
-                  tab_list.append(tab.tab_list);
-                  tab_content.append(tab.tab_content);
-                }
+            for (var j = 0; j < _this2.tabs.length; j++) {
+              var tab = _this2.tabs[j];
+              tab_list.append(tab.tab_list);
+              tab_content.append(tab.tab_content);
+            }
 
-                _this2.emoji_palette = $('<div class="emoji-palette"></div>');
-                _this2.emoji_palette.append(tab_list.add(tab_content));
-                _this2.emoji_palette.find('ul').after('<hr>');
+            _this2.emoji_palette = $('<div class="emoji-palette"></div>');
+            _this2.emoji_palette.append(tab_list.add(tab_content));
+            _this2.emoji_palette.find('ul').after('<hr>');
 
-                _this2.dialog.append(_this2.emoji_palette);
-                return _this2.openDialog();
-              })
-            };
-          }();
-
-          if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
+            _this2.dialog.append(_this2.emoji_palette);
+            return _this2.openDialog();
+          });
         }
       });
     }
@@ -1161,20 +1160,18 @@ var Observer = function () {
             return resolve();
           });
         } else {
-          (function () {
-            var queue_limit = 100;
-            var checkComplete = function checkComplete() {
-              if (_this.queues.length > 0 && queue_limit-- > 0) {
-                var queue = _this.queues.pop();
-                _this.replacer.loadEmoji(queue).then(function () {
-                  checkComplete();
-                });
-              } else {
-                resolve();
-              }
-            };
-            checkComplete();
-          })();
+          var queue_limit = 100;
+          var checkComplete = function checkComplete() {
+            if (_this.queues.length > 0 && queue_limit-- > 0) {
+              var queue = _this.queues.pop();
+              _this.replacer.loadEmoji(queue).then(function () {
+                checkComplete();
+              });
+            } else {
+              resolve();
+            }
+          };
+          checkComplete();
         }
       });
     }
