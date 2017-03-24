@@ -79,22 +79,22 @@ class UserTab {
   }
 
   setUserTab() {
-    let user_tab_list = $('<ul class="nav nav-tabs mb-m mt-m" id="user_tab_list"></ul>');
+    let user_tab_list = $('<ul class="nav nav-tabs mb-m mt-m" id="user-tab-list"></ul>');
     user_tab_list.append($('<li id="tab-user-favorite" class="active"><a href="#tab-content-user-favorite" data-toggle="tab">Favorite</a></li>'));
     user_tab_list.append($('<li id="tab-user-history"><a href="#tab-content-user-history" data-toggle="tab">History</a></li>'));
 
     let logout_btn = $('<button class="btn btn-default btm-sm pull-right" id="palette-emoji-logout">LogOut</button>');
     logout_btn.click(() => {
       this.palette.EC.User.logout();
-      $('#user_tab_list').remove();
-      $('#user_tab_content').remove();
+      $('#user-tab-list').remove();
+      $('#user-tab-content').remove();
       this.showLoginForm();
       return this.palette.toggleSorting();
     }
     );
     user_tab_list.append(logout_btn);
 
-    this.user_tab_content = $('<div class="tab-content" id="user_tab_content"></div>');
+    this.user_tab_content = $('<div class="tab-content mt-m" id="user-tab-content"></div>');
 
     this.tab_content.append(user_tab_list);
     return this.tab_content.append(this.user_tab_content);
@@ -102,14 +102,14 @@ class UserTab {
 
   setHistory(auth_info) {
     return this.palette.EC.User.History.get(response => {
-      return this.setDataByCodes((response.history.map((item) => item.emoji_code)), response.meta, 'history');
+      return this.setDataByCodes((response.map((item) => item.emoji_code)), this.palette.EC.User.History.meta, 'history');
     }
     );
   }
 
   setFavorite(auth_info) {
     return this.palette.EC.User.Favorites.get(response => {
-      return this.setData(response.emoji, response.meta, 'favorite');
+      return this.setData(response, this.palette.EC.User.Favorites.meta, 'favorite');
     }
     );
   }
@@ -117,18 +117,16 @@ class UserTab {
   setData(data, meta, kind) {
     let tab_pane = $(`<div class='tab-pane ${kind === 'favorite' ? 'active' : ''}' id='tab-content-user-${kind}'></div>`);
     tab_pane.append(this.palette.setEmojiList(kind, data));
-    return this.user_tab_content.append(tab_pane);
+    this.user_tab_content.append(tab_pane);
+    return this.getPagination(meta, tab_pane, kind)
   }
 
-    // @getPagination(meta, tab_pane, kind)
-
-  setDataByCodes(data, meta, kind) {
-    let tab_pane = $(`<div class='tab-pane' id='tab-content-user-${kind}'></div>`);
+  setDataByCodes(data, meta, kind, active = false) {
+    let tab_pane = $(`<div class='tab-pane ${active ? 'active' : ''}' id='tab-content-user-${kind}'></div>`);
     tab_pane.append(this.palette.setCodeList(kind, data));
-    return this.user_tab_content.append(tab_pane);
+    this.user_tab_content.append(tab_pane);
+    return this.getPagination(meta, tab_pane, kind)
   }
-
-    // @getPagination(meta, tab_pane, kind)
 
   setPremiumData(response, kind) {
     let tab_pane = $(`<div class='tab-pane' id='tab-content-user-${kind}'></div>`);
@@ -136,18 +134,34 @@ class UserTab {
       // TODO: text localization
       tab_pane.append($('<p style="margin-top:15px;"><a class="btn btn-primary" href="https://www.emojidex.com/profile" target="_blank">Premium/Pro user only.</a></p>'));
     } else {
-      tab_pane.append(this.palette.setEmojiList(kind, response.emoji));
+      tab_pane.append(this.palette.setEmojiList(kind, response));
     }
     return this.user_tab_content.append(tab_pane);
   }
 
   getPagination(meta, pane, kind) {
-    // TODO: limit, prev/next func
     let cur_page = meta.total_count === 0 ? 0 : meta.page;
-    let max_page = Math.floor(meta.total_count / 50);
-    if (meta.total_count % 50 > 0) { max_page++; }
-    let prev_func = () => console.log('prev');
-    let next_func = () => console.log('next');
+    let max_page = Math.ceil(meta.total_count / this.palette.EC.limit);
+
+    if (cur_page === 0 || max_page === 1) return;
+
+    let prev_func;
+    let next_func;
+    if (kind === 'favorite') {
+      let callback = response => {
+        $('#tab-content-user-favorite').remove();
+        return this.setData(response, this.palette.EC.User.Favorites.meta, kind);
+      }
+      prev_func = () => this.palette.EC.User.Favorites.prev(callback);
+      next_func = () => this.palette.EC.User.Favorites.next(callback)
+    } else {
+      let callback = response => {
+        $('#tab-content-user-history').remove();
+        return this.setDataByCodes((response.map((item) => item.emoji_code)), this.palette.EC.User.History.meta, kind, true);
+      }
+      prev_func = () => this.palette.EC.User.History.prev(callback);
+      next_func = () => this.palette.EC.User.History.next(callback);
+    }
     return this.user_tab_content.append((pane.append(this.palette.getPagination(kind, prev_func, next_func, cur_page, max_page))));
   }
 }
