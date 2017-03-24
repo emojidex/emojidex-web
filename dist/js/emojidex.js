@@ -334,16 +334,23 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 (function ($, window, document) {
   var pluginName = "emojidexAutocomplete";
-  var defaults = {
+  var content_editable_defaults = {
     onComplete: undefined,
     listLimit: 10,
     insertImg: true
   };
+  var textarea_defaults = {
+    onComplete: undefined,
+    listLimit: 10,
+    insertImg: false
+  };
+  var defaults = void 0;
 
   var Plugin = function Plugin(element, options) {
     _classCallCheck(this, Plugin);
 
     this.element = element;
+    defaults = element.type === 'textarea' ? textarea_defaults : content_editable_defaults;
     this.options = $.extend({}, defaults, options);
     this._defaults = defaults;
     this._name = pluginName;
