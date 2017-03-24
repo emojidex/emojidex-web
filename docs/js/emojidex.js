@@ -398,9 +398,9 @@ var Palette = function () {
         _this.createDialog();
         _this.setPalette(_this.plugin.element);
 
-        return __guardFunc__(_this.plugin.options.onComplete, function (f) {
-          return f();
-        });
+        if (typeof _this.plugin.options.onComplete === "function") {
+          _this.plugin.options.onComplete();
+        }
       }
     });
   }
@@ -679,10 +679,6 @@ var Palette = function () {
 
   return Palette;
 }();
-
-function __guardFunc__(func, transform) {
-  return typeof func === 'function' ? transform(func) : undefined;
-}
 //# sourceMappingURL=palette.js.map
 
 'use strict';
