@@ -14,11 +14,39 @@ import jasmine from 'gulp-jasmine-browser';
 import webpack from 'webpack-stream';
 import watch from 'gulp-watch';
 import fs from 'fs';
-import markdown from 'gulp-markdown';
-import md2html from 'gulp-md2html';
+import markdownDocs from 'gulp-markdown-docs';
 import sass from 'gulp-sass';
 import slim from 'gulp-slim';
-import cssmin from 'gulp-cssmin'
+import cssmin from 'gulp-cssmin';
+import strip from 'gulp-strip-banner';
+import sourceMaps from 'gulp-sourcemaps';
+
+gulp.task('env', () => {
+  fs.stat('.env', (err, stat) => {
+    if (err === null) {
+      console.log("*Found .env file; incorporating user auth data into specs.*");
+      console.log("NOTE: if your user is not Premium with R-18 enabled some specs will fail.");
+      require('dotenv').config();
+      let output = `
+        this.user_info = {
+          auth_user: '${process.env.USERNAME}',
+          email: '${process.env.EMAIL}',
+          password: '${process.env.PASSWORD}',
+          auth_token: '${process.env.AUTH_TOKEN}'
+        };
+        this.premium_user_info = {
+          auth_user: '${process.env.USERNAME}',
+          auth_token: '${process.env.AUTH_TOKEN}'
+        };
+      `;
+      fs.writeFileSync('tmp/authinfo.js', output);
+    } else {
+      console.log("*.env file not found; only some specs will run.*");
+      console.log("Check the '.env' secion in README.md for details on how to set .env");
+      fs.writeFileSync('tmp/authinfo.js', '');
+    }
+  });
+});
 
 let banner =
   '/*\n' +
@@ -37,37 +65,69 @@ let banner =
   ' *\n' +
   ' *\n' +
   ' * Includes:\n' +
-  ' * --------------------------------';
+  ' * --------------------------------\n' +
+  '*/\n';
 
-gulp.task('clean', () => {
+gulp.task('clean-spec', () => {
+  del.sync('build/spec/**/*.js');
+});
+gulp.task('clean-compiled', () => {
   del.sync([
-    'build/**/*.js',
-    'dist/**/*.js',
-    'docs/**/*.*',
-    'src/compiled_css/**/*.*']);
+    'src/compiled_js/**/*',
+    'src/compiled_css/**/*',
+    'build/js/**/*',
+    'dist',
+    'docs'
+    ]);
+});
+gulp.task('clean', (cb) => {
+  return runSequence(['clean-spec', 'clean-compiled'], cb);
 });
 
-// TODO:
 gulp.task('md2html', () => {
-  return gulp.src(['README.md'])
-    .pipe(md2html())
+  return gulp
+    .src(['README.md'])
+    .pipe(markdownDocs('index.html', {
+      layoutStylesheetUrl: '',
+      templatePath: 'dist/index.html'
+    }))
     .pipe(gulp.dest('dist'));
 });
+gulp.task('test', (cb) => {
+  return runSequence('clean', 'slim', 'md2html', cb);
+});
 
-// TODO:
 gulp.task('sass', () => {
   return gulp.src(['src/sass/*.sass', 'src/sass/*.scss'])
+    .pipe(sourceMaps.init())
     .pipe(sass())
+    .pipe(sourceMaps.write('.'))
     .pipe(gulp.dest('src/compiled_css'));
 });
 
-// TODO:
-gulp.task('slim', () => {
-  return gulp.src(['src/slim'])
-    .pipe(slim())
+gulp.task('slim-dist', () => {
+  return gulp.src(['src/slim/*.slim'])
+    .pipe(slim({ pretty: true }))
     .pipe(gulp.dest('dist'));
 });
+gulp.task('slim-spec', () => {
+  return gulp.src(['spec/fixture/*.slim'])
+    .pipe(slim({ pretty: true }))
+    .pipe(gulp.dest('build/spec/fixture'));
+});
+gulp.task('slim', (cb) => {
+  return runSequence(['slim-dist', 'slim-spec'], cb);
+});
 
+gulp.task('babel', () => {
+  return gulp
+    .src(['src/es6/**/*.js'])
+    .pipe(sourceMaps.init())
+    .pipe(babel({ presets: ['es2015'] }))
+    .pipe(sourceMaps.write('.'))
+    .pipe(gulp.dest('build/js'))
+});
+// TODO: webpack
 // gulp.task('webpack', function () {
 //   let webpack_p = require('webpack-stream').webpack
 //   return gulp.src(['src/es6/client.js'])
@@ -95,73 +155,116 @@ gulp.task('slim', () => {
 //     .pipe(gulp.dest('dist/js/'));
 // });
 
+gulp.task('uglify-emojidex', () => {
+  return gulp
+    .src('dist/js/emojidex.js')
+    .pipe(uglify())
+    .pipe(rename({ suffix: '.min' }))
+    .pipe(gulp.dest('dist/js'));
+});
+gulp.task('uglify-bootstrap', (cb) => {
+  return gulp
+    .src('node_modules/bootstrap-sass/assets/javascripts/bootstrap.js')
+    .pipe(uglify())
+    .pipe(rename({ suffix: '.min' }))
+    .pipe(gulp.dest('dist/resources'));
+});
 gulp.task('uglify', (cb) => {
-  pump([
-      gulp.src('dist/js/emojidex.js'),
-      rename('emojidex.min.js'),
-      uglify(),
-      gulp.dest('dist/js/')
-    ],
-    cb
-  );
+  return runSequence(['uglify-emojidex', 'uglify-bootstrap'], cb);
 });
 
 gulp.task('banner', () => {
   return gulp
     .src('dist/js/*.js')
-    .pipe(header(banner, {pkg: pkg}))
+    .pipe(header(banner, { pkg: pkg }))
     .pipe(gulp.dest('dist/js/'));
 });
 
-// TODO:
-gulp.task('cssmin', () => {
-  gulp.src(['dist/css/emojidex.css', 'src/compiled_css/document.css'])
+gulp.task('cssmin-emojidex', () => {
+  gulp.src('dist/css/emojidex.css')
     .pipe(cssmin())
-    .pipe(rename({suffix: '.min'}))
+    .pipe(rename({ suffix: '.min' }))
     .pipe(gulp.dest('dist/css'));
 });
-
-// gulp.task('copy', function () {
-//   return gulp
-//     .src('src/html/hub.html')
-//     .pipe(gulp.dest('build'));
-// });
-
-gulp.task('env', () => {
-  fs.stat('.env', (err, stat) => {
-    if (err === null) {
-      require('dotenv').config();
-      let output = `
-        this.user_info = {
-          auth_user: '${process.env.USERNAME}',
-          email: '${process.env.EMAIL}',
-          password: '${process.env.PASSWORD}',
-          auth_token: '${process.env.AUTH_TOKEN}'
-        };
-        this.premium_user_info = {
-          auth_user: '${process.env.USERNAME}',
-          auth_token: '${process.env.AUTH_TOKEN}'
-        };
-      `;
-      fs.writeFileSync('tmp/authinfo.js', output);
-    }
-  });
+gulp.task('cssmin-document', () => {
+  gulp.src('src/compiled_css/document.css')
+    .pipe(cssmin())
+    .pipe(rename({ suffix: '.min' }))
+    .pipe(gulp.dest('dist/css'));
+});
+gulp.task('cssmin', (cb) => {
+  return runSequence(['cssmin-emojidex', 'cssmin-document'], cb);
 });
 
-// gulp.task('jasmine', () => {
-//   let testFiles = [
-//     'node_modules/jquery/dist/jquery.js',
-//     'node_modules/cross-storage/lib/client.js',
-//     'dist/js/emojidex-client.js',
-//     'spec/helpers/*.js',
-//     'tmp/authinfo.js',
-//     'spec/**/*.spec.js'
-//   ];
-//   return gulp.src(testFiles)
-//     .pipe(watch(testFiles))
-//     .pipe(jasmine.specRunner())
-//     .pipe(jasmine.server());
-// });
+gulp.task('copy-img', () => {
+  return gulp
+    .src('src/img/**/*')
+    .pipe(gulp.dest('dist/img'));
+});
+gulp.task('copy-bootstrap', () => {
+  return gulp
+    .src('node_modules/bootstrap-sass/assets/fonts/**/*')
+    .pipe(gulp.dest('dist/fonts'));
+});
+gulp.task('copy-jquery', () => {
+  return gulp
+    .src('node_modules/jquery/dist/jquery.min.js')
+    .pipe(gulp.dest('dist/resources'));
+});
+gulp.task('copy-docs', () => {
+  return gulp
+    .src('dist/**/*')
+    .pipe(gulp.dest('docs'));
+});
+gulp.task('copy', (cb) => {
+  return runSequence(['copy-img', 'copy-bootstrap', 'copy-jquery', 'copy-docs'], cb);
+});
+
+gulp.task('concat-js', () => {
+  return gulp
+    .src([
+      'node_modules/bootstrap-sass/assets/javascripts/bootstrap/tab.js',
+      'src/vendor/jquery-ui-1.12.1/jquery-ui.min.js',
+      'node_modules/emojidex-client/dist/js/emojidex-client.min.js',
+      'bower_components/Caret.js/dist/jquery.caret.min.js',
+      'bower_components/At.js/dist/js/jquery.atwho.min.js',
+      'node_modules/clipboard/dist/clipboard.min.js',
+      'build/js/**/*.js'
+    ])
+    .pipe(concat('emojidex.js'))
+    .pipe(strip())
+    .pipe(gulp.dest('dist/js'));
+});
+gulp.task('concat-css', () => {
+  return gulp
+    .src([
+      'bower_components/At.js/dist/css/jquery.atwho.min.css',
+      'src/compiled_css/emojidex.css'
+    ])
+    .pipe(concat('emojidex.css'))
+    .pipe(gulp.dest('dist/css'));
+});
+gulp.task('concat', (cb) => {
+  return runSequence(['concat-js', 'concat-css'], cb);
+});
+
+// TODO:
+gulp.task('jasmine', () => {
+  let testFiles = [
+    'node_modules/cross-storage/dist/client.js',
+    'node_modules/jasmine-jquery/lib/jasmine-jquery.js',
+    'node_modules/jquery/dist/jquery.js',
+    'node_modules/jquery-watch/jquery-watch.js',
+    'dist/js/emojidex.js',
+    'spec/helpers/*.js',
+    'tmp/authinfo.js',
+    'spec/*.js'
+  ];
+  return gulp.src(testFiles)
+    .pipe(watch(testFiles))
+    .pipe(jasmine.specRunner())
+    .pipe(jasmine.server());
+});
 
 gulp.task('lint', () => {
   return gulp.src(['src/es6/**/*.js','!node_modules/**'])
@@ -170,24 +273,32 @@ gulp.task('lint', () => {
     .pipe(eslint.failAfterError());
 });
 
-gulp.task('watch', function () {
-  gulp.watch('src/es6/**/*.js', ['onWatch']);
-  gulp.watch('spec/**/*.js', ['onWatch']);
+gulp.task('watch', () => {
+  gulp.watch(['src/es6/**/*.js', 'spec/**/*.js'], ['watch-js']);
+  gulp.watch('src/slim/**/*.slim', ['watch-slim']);
 });
 
-gulp.task('default', function (cb) {
-  runSequence("clean", ["copy", "webpack"], "uglify", "banner", cb);
-});
-
-gulp.task('onWatch', function (cb) {
-  runSequence(["copy", "webpack"], "uglify", "banner", cb);
+gulp.task('default', (cb) => {
+  runSequence('clean', 'slim', 'md2html', 'sass', 'babel', 'concat', 'uglify', 'cssmin', 'copy', 'banner', cb);
 });
 
 // TODO: lint
-gulp.task('spec', function (cb) {
-  runSequence("default", "env", "jasmine", cb/*, "lint"*/);
+gulp.task('spec', (cb) => {
+  runSequence('default', 'env', 'jasmine', cb/*, 'lint'*/);
 });
 
-gulp.task('dev', function (cb) {
-  runSequence("default", "watch", cb);
+gulp.task('spec', (cb) => {
+  runSequence('default', 'env', 'jasmine', cb);
+});
+
+gulp.task('dev', (cb) => {
+  runSequence('default', 'watch', cb);
+});
+
+gulp.task('watch-js', (cb) => {
+  runSequence('babel', 'concat-js', cb);
+});
+
+gulp.task('watch-slim', (cb) => {
+  runSequence('slim', 'md2html', cb);
 });
