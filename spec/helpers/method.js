@@ -4,7 +4,9 @@ function helperBefore() {
   // jasmine.getFixtures().fixturesPath = 'build/spec/fixture/';
   // $('body').append(`<div id='spec-wrap'>${readFixtures('index.html')}</div>`);
 
-  $('body').append(`<div>${html}</div>`);
+  if ($('#spec-wrap').length === 0) {
+    $('body').append(`<div id='spec-wrap'>${html}</div>`);
+  }
 }
 
 function helperAfter() {

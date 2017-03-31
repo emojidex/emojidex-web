@@ -269,7 +269,8 @@ gulp.task('jasmine', () => {
     'dist/css/document.min.css',
     'dist/css/emojidex.min.css',
     // 'spec/emojidexReplace.js'
-    'spec/emojidexAutocomplete.js'
+    'spec/emojidexAutocomplete.js',
+    // 'spec/emojidexPalette.js'
     // 'spec/*.js'
   ];
   return gulp.src(testFiles)

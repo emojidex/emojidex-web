@@ -28,7 +28,7 @@ describe("emojidexAutocomplete", function() {
     $($('.atwho-view ul li')[0]).click();
     expect($('textarea.emojidex-plain_text').val()).toBe(text);
 
-    $('#atwho-container').remove();
+    $('.atwho-container').remove();
   });
 
   it('inserts an emoji image in an element marked as emojidex-content_editable', function(done) {
