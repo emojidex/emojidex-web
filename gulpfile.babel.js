@@ -93,9 +93,6 @@ gulp.task('md2html', () => {
     }))
     .pipe(gulp.dest('dist'));
 });
-gulp.task('test', (cb) => {
-  return runSequence('clean', 'slim', 'md2html', cb);
-});
 
 gulp.task('sass', () => {
   return gulp.src(['src/sass/*.sass', 'src/sass/*.scss'])
@@ -248,17 +245,32 @@ gulp.task('concat', (cb) => {
   return runSequence(['concat-js', 'concat-css'], cb);
 });
 
+gulp.task('concat-spec', () => {
+  let file = fs.readFileSync('build/spec/fixture/index.html', 'utf8');
+  fs.writeFileSync('build/spec/fixture/html.js', `var html = \`${file}\``);
+  return gulp
+    .src([ 'spec/helpers/method.js', 'build/spec/fixture/html.js'])
+    .pipe(concat('html_in_method.js'))
+    .pipe(gulp.dest('build/spec/fixture'));
+});
+
 // TODO:
 gulp.task('jasmine', () => {
   let testFiles = [
     'node_modules/cross-storage/dist/client.js',
-    'node_modules/jasmine-jquery/lib/jasmine-jquery.js',
     'node_modules/jquery/dist/jquery.js',
+    'node_modules/jasmine-jquery/lib/jasmine-jquery.js',
     'node_modules/jquery-watch/jquery-watch.js',
     'dist/js/emojidex.js',
-    'spec/helpers/*.js',
+    'spec/helpers/data.js',
+    'build/spec/fixture/html_in_method.js',
     'tmp/authinfo.js',
-    'spec/*.js'
+    'dist/img/logo.png',
+    'dist/css/document.min.css',
+    'dist/css/emojidex.min.css',
+    // 'spec/emojidexReplace.js'
+    'spec/emojidexAutocomplete.js'
+    // 'spec/*.js'
   ];
   return gulp.src(testFiles)
     .pipe(watch(testFiles))
@@ -288,7 +300,7 @@ gulp.task('spec', (cb) => {
 });
 
 gulp.task('spec', (cb) => {
-  runSequence('default', 'env', 'jasmine', cb);
+  runSequence('default', 'env', 'concat-spec', 'jasmine', cb);
 });
 
 gulp.task('dev', (cb) => {
