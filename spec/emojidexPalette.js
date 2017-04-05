@@ -151,6 +151,83 @@ describe("emojidexPalette", function() {
       $('#palette-emoji-login-submit').click();
     });
 
+    it('switches to the next page [Requires a premium user account and many favorites]', function(done) {
+      $('#user-tab-content').watch({
+        id: "content_user_next",
+        properties: 'prop_innerHTML',
+        watchChildren: true,
+        callback(data, i, mutations) {
+          expect($(data.vals[0]).find('.favorite-pagination ul.pagination li.palette-num span').text().substr(0, 1)).toBe('2');
+          remove_watch($('#user-tab-content'), 'content_user_next');
+          done();
+        }
+      });
+
+      $('#tab-content-user-favorite').find('.pagination .palette-pager')[1].click();
+    });
+
+    it('switches to the previous page [Requires a premium user account and many favorites]', function(done) {
+      $('#user-tab-content').watch({
+        id: "content_user_prev",
+        properties: 'prop_innerHTML',
+        watchChildren: true,
+        callback(data, i, mutations) {
+          expect($(data.vals[0]).find('.favorite-pagination ul.pagination li.palette-num span').text().substr(0, 1)).toBe('1');
+          remove_watch($('#user-tab-content'), 'content_user_prev');
+          done();
+        }
+      });
+      $('#tab-content-user-favorite').find('.pagination .palette-pager')[0].click();
+    });
+
+    it('show history tab [Requires a premium user account]', function(done) {
+      if (typeof user_info === 'undefined' || user_info === null) { pending(); }
+      $('#tab-content-user').watch({
+        id: 'content_user_history',
+        properties: 'prop_innerHTML',
+        watchChildren: true,
+        callback(data, i) {
+          if (data.vals[0].match(/history-emoji-list/)) {
+            expect($('#tab-content-user-history').find('img').length).toBeTruthy();
+            remove_watch($('#tab-content-user'), 'content_user_history');
+            done();
+          }
+        }
+      });
+
+      $('#tab-user-history a').click();
+    });
+
+    it('switches to the next page [Requires a premium user account and many history]', function(done) {
+      $('#user-tab-content').watch({
+        id: "content_user_history_next",
+        properties: 'prop_innerHTML',
+        watchChildren: true,
+        callback(data, i, mutations) {
+          expect($(data.vals[0]).find('.history-pagination ul.pagination li.palette-num span').text().substr(0, 1)).toBe('2');
+          remove_watch($('#user-tab-content'), 'content_user_history_next');
+          done();
+        }
+      });
+
+      $('#tab-content-user-history').find('.pagination .palette-pager')[1].click();
+    });
+
+    it('switches to the previous page [Requires a premium user account and many history]', function(done) {
+      $('#user-tab-content').watch({
+        id: "content_user_history_prev",
+        properties: 'prop_innerHTML',
+        watchChildren: true,
+        callback(data, i, mutations) {
+          expect($(data.vals[0]).find('.history-pagination ul.pagination li.palette-num span').text().substr(0, 1)).toBe('1');
+          remove_watch($('#user-tab-content'), 'content_user_history_prev');
+          done();
+        }
+      });
+
+      $('#tab-content-user-history').find('.pagination .palette-pager')[0].click();
+    });
+
    // it 'premium user can see the newest/popular emoji', (done) ->
    //   pending() unless premium_user_info?
    //   timer_option =
