@@ -201,7 +201,7 @@ class Palette {
       .append($(`<li class="palette-pager${(cur_page > 1) ? '' : ' disabled'}"><span>&laquo;</span></li>`).click(() => {
         if (cur_page > 1) return prev_func();
     }));
-    pagination.find('.pagination').append($(`<li class='disabled'><span>${cur_page} / ${max_page}</span></li>`));
+    pagination.find('.pagination').append($(`<li class='palette-num disabled'><span>${cur_page} / ${max_page}</span></li>`));
     pagination.find('.pagination')
       .append($(`<li class="palette-pager${(cur_page < max_page) ? ' ' : 'disabled'}"><span>&raquo;</span></li>`).click(() => {
         if (cur_page < max_page) return next_func();

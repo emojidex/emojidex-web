@@ -21,7 +21,8 @@ class UserTab {
     );
     tab_content.append(login_btn);
 
-    if (this.palette.EC.Data.storage.hub_cache.emojidex.auth_info.status === 'verified') {
+    if (this.palette.EC.Data.storage.hub_cache.emojidex.auth_info !== undefined &&
+      this.palette.EC.Data.storage.hub_cache.emojidex.auth_info.status === 'verified') {
       let { auth_info } = this.palette.EC.Data.storage.hub_cache.emojidex;
       this.login(auth_info.user, auth_info.token, 'token');
     }

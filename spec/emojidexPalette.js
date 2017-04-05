@@ -23,7 +23,10 @@ describe("emojidexPalette", function() {
         done();
       }
     });
-    $('#palette-btn').click();
+    spec_timer({
+      time: 1000,
+      callback: () => { $('#palette-btn').click(); }
+    })
   });
 
   describe('category tab', function() {
@@ -67,7 +70,7 @@ describe("emojidexPalette", function() {
         properties: 'prop_innerHTML',
         watchChildren: true,
         callback(data, i, mutations) {
-          expect($(data.vals[0]).find('ul.pagination li.disabled span').text().substr(0, 1)).toBe('1');
+          expect($(data.vals[0]).find('ul.pagination li.palette-num span').text().substr(0, 1)).toBe('1');
           remove_watch($('#tab-content-faces'), 'content_faces');
           done();
         }
@@ -220,29 +223,34 @@ describe("emojidexPalette", function() {
 
     $("#palette-btn").emojidexPalette({
       onComplete: () => {
-        $('.ui-dialog').watch({
-          id: 'dialog_2',
-          properties: 'display',
-          callback() {
-            remove_watch($('.ui-dialog'), 'dialog_2');
+        spec_timer({
+          time: 1000,
+          callback: () => {
+            $('.ui-dialog').watch({
+              id: 'dialog_2',
+              properties: 'display',
+              callback() {
+                remove_watch($('.ui-dialog'), 'dialog_2');
 
-            $('#tab-content-user').watch({
-              id: 'content_user',
-              properties: 'prop_innerHTML',
-              watchChildren: true,
-              callback(data, i) {
-                if (data.vals[0].match(/favorite-emoji-list/)) {
-                  expect($('#tab-content-user-favorite').find('img').length).toBeTruthy();
-                  $('button.pull-right[aria-label="Close"]').click();
-                  remove_watch($('#tab-content-user'), 'content_user');
-                  return done();
-                }
+                $('#tab-content-user').watch({
+                  id: 'content_user',
+                  properties: 'prop_innerHTML',
+                  watchChildren: true,
+                  callback(data, i) {
+                    if (data.vals[0].match(/favorite-emoji-list/)) {
+                      expect($('#tab-content-user-favorite').find('img').length).toBeTruthy();
+                      $('button.pull-right[aria-label="Close"]').click();
+                      remove_watch($('#tab-content-user'), 'content_user');
+                      return done();
+                    }
+                  }
+                });
+                $('#tab-user a').click();
               }
             });
-            $('#tab-user a').click();
+            $("#palette-btn").click();
           }
-        });
-        $("#palette-btn").click();
+        })
       }
     });
   });
