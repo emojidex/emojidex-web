@@ -942,9 +942,9 @@ ee-first@1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/ee-first/-/ee-first-1.1.1.tgz#590c61156b0ae2f4f0255732a158b266bc56b21d"
 
-emojidex-client@^0.13.7:
-  version "0.13.7"
-  resolved "https://registry.yarnpkg.com/emojidex-client/-/emojidex-client-0.13.7.tgz#35337dc7ed3cdcad6afe5384547c1479de43881b"
+emojidex-client@^0.14.0:
+  version "0.14.0"
+  resolved "https://registry.yarnpkg.com/emojidex-client/-/emojidex-client-0.14.0.tgz#3fee5d8249e8f6c3a4888e86658d6f6355d942ba"
 
 encodeurl@~1.0.1:
   version "1.0.1"
