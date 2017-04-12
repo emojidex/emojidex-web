@@ -1,3 +1,21 @@
+/*
+ * jQuery emojidex - v0.15.0
+ * emojidex plugin for jQuery/Zepto and compatible
+ * https://github.com/emojidex/emojidex-web
+ *
+ * Includes:
+ *   emojidexReplace, emojidexAutocomplete
+ *
+ * =LICENSE=
+ * Licensed under the emojidex Open License
+ * https://www.emojidex.com/emojidex/emojidex_open_license
+ *
+ * Copyright 2013 the emojidex project / K.K. GenSouSha
+ *
+ *
+ * Includes:
+ * --------------------------------
+*/
 
 +function ($) {
   'use strict';
