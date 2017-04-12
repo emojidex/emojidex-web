@@ -292,15 +292,11 @@ gulp.task('default', (cb) => {
   runSequence('clean', 'slim', 'md2html', 'sass', 'babel', 'concat', 'uglify', 'cssmin', 'copy', 'banner', cb);
 });
 
-// TODO: lint
-gulp.task('spec', (cb) => {
-  runSequence('default', 'env', 'jasmine', cb/*, 'lint'*/);
-});
-
 gulp.task('spec', (cb) => {
   runSequence('default', 'env', 'concat-spec', 'jasmine', cb);
 });
 
+// TODO: lint
 gulp.task('dev', (cb) => {
   runSequence('default', 'watch', cb);
 });
