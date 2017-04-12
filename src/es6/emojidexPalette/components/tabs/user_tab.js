@@ -142,9 +142,7 @@ class UserTab {
 
   getPagination(meta, pane, kind) {
     let cur_page = meta.total_count === 0 ? 0 : meta.page;
-    let max_page = Math.ceil(meta.total_count / this.palette.EC.limit);
-
-    if (cur_page === 0 || max_page === 1) return;
+    let max_page = cur_page === 0 ? 0 : Math.ceil(meta.total_count / this.palette.EC.limit);
 
     let prev_func;
     let next_func;

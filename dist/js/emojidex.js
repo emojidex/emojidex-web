@@ -688,7 +688,7 @@ var Palette = function () {
         if (cur_page > 1) return prev_func();
       }));
       pagination.find('.pagination').append($('<li class=\'palette-num disabled\'><span>' + cur_page + ' / ' + max_page + '</span></li>'));
-      pagination.find('.pagination').append($('<li class="palette-pager' + (cur_page < max_page ? ' ' : 'disabled') + '"><span>&raquo;</span></li>').click(function () {
+      pagination.find('.pagination').append($('<li class="palette-pager' + (cur_page < max_page ? ' ' : ' disabled') + '"><span>&raquo;</span></li>').click(function () {
         if (cur_page < max_page) return next_func();
       }));
 
@@ -1346,9 +1346,7 @@ var UserTab = function () {
       var _this6 = this;
 
       var cur_page = meta.total_count === 0 ? 0 : meta.page;
-      var max_page = Math.ceil(meta.total_count / this.palette.EC.limit);
-
-      if (cur_page === 0 || max_page === 1) return;
+      var max_page = cur_page === 0 ? 0 : Math.ceil(meta.total_count / this.palette.EC.limit);
 
       var prev_func = void 0;
       var next_func = void 0;
