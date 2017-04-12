@@ -1,7 +1,12 @@
 function helperBefore() {
   jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
-  jasmine.getFixtures().fixturesPath = '../build/spec/fixture/';
-  $('body').append(`<div id='spec-wrap'>${readFixtures('index.html')}</div>`);
+  // TODO: fixtureの読み込み方法
+  // jasmine.getFixtures().fixturesPath = 'build/spec/fixture/';
+  // $('body').append(`<div id='spec-wrap'>${readFixtures('index.html')}</div>`);
+
+  if ($('#spec-wrap').length === 0) {
+    $('body').append(`<div id='spec-wrap'>${html}</div>`);
+  }
 }
 
 function helperAfter() {

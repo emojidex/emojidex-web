@@ -14,7 +14,9 @@ class Palette {
         this.createDialog();
         this.setPalette(this.plugin.element);
 
-        return __guardFunc__(this.plugin.options.onComplete, f => f());
+        if (typeof this.plugin.options.onComplete === "function") {
+          this.plugin.options.onComplete();
+        }
       }
     });
   }
@@ -194,12 +196,15 @@ class Palette {
 
   getPagination(kind, prev_func, next_func, cur_page, max_page) {
     let pagination = $(`<div class='${kind}-pagination text-center'><ul class='pagination mb-0'></ul></div>`);
-    pagination.find('.pagination').append($('<li class="palette-pager"><span>&laquo;</span></li>').click(() => {
-      return prev_func();
+
+    pagination.find('.pagination')
+      .append($(`<li class="palette-pager${(cur_page > 1) ? '' : ' disabled'}"><span>&laquo;</span></li>`).click(() => {
+        if (cur_page > 1) return prev_func();
     }));
-    pagination.find('.pagination').append($(`<li class='disabled'><span>${cur_page} / ${max_page}</span></li>`));
-    pagination.find('.pagination').append($('<li class="palette-pager"><span>&raquo;</span></li>').click(() => {
-      return next_func();
+    pagination.find('.pagination').append($(`<li class='palette-num disabled'><span>${cur_page} / ${max_page}</span></li>`));
+    pagination.find('.pagination')
+      .append($(`<li class="palette-pager${(cur_page < max_page) ? ' ' : ' disabled'}"><span>&raquo;</span></li>`).click(() => {
+        if (cur_page < max_page) return next_func();
     }));
 
     return pagination;
@@ -257,8 +262,4 @@ class Palette {
   openDialog() {
     return this.dialog.dialog('open');
   }
-}
-
-function __guardFunc__(func, transform) {
-  return typeof func === 'function' ? transform(func) : undefined;
 }

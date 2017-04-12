@@ -28,29 +28,28 @@ describe("emojidexAutocomplete", function() {
     $($('.atwho-view ul li')[0]).click();
     expect($('textarea.emojidex-plain_text').val()).toBe(text);
 
-    $('#atwho-container').remove();
+    $('.atwho-container').remove();
   });
 
-  it('inserts an emoji image in an element marked as emojidex-content_editable', function(done) {
-    let content_editable = $('.emojidex-content_editable').emojidexAutocomplete({
-      onComplete: () => {
-        simulateTypingIn(content_editable);
-        spec_timer({
-          time: 3000,
-          callback() {
-            let text = $($('.atwho-view ul li')[0]).data('value');
-            text = `${text.slice(1, text.length - 1)}.png`;
-            $($('.atwho-view ul li')[0]).click();
-
-            let src = $('.emojidex-content_editable').find('img').attr('src');
-            src = src.split('/');
-            expect(src[src.length - 1]).toBe(text);
-            done();
-          }
-        });
-      }
-    });
-  }
-  );
+  // it('inserts an emoji image in an element marked as emojidex-content_editable', function(done) {
+  //   let content_editable = $('.emojidex-content_editable').emojidexAutocomplete({
+  //     onComplete: () => {
+  //       simulateTypingIn(content_editable);
+  //       spec_timer({
+  //         time: 3000,
+  //         callback() {
+  //           let text = $($('.atwho-view ul li')[0]).data('value');
+  //           text = `${text.slice(1, text.length - 1)}.png`;
+  //           $($('.atwho-view ul li')[0]).click();
+  //
+  //           let src = $('.emojidex-content_editable').find('img').attr('src');
+  //           src = src.split('/');
+  //           expect(src[src.length - 1]).toBe(text);
+  //           done();
+  //         }
+  //       });
+  //     }
+  //   });
+  // });
 }
 );
