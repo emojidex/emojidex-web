@@ -152,6 +152,7 @@ describe("emojidexPalette", function() {
     });
 
     it('switches to the next page [Requires a premium user account and many favorites]', function(done) {
+      if (typeof user_info === 'undefined' || user_info === null) { pending(); }
       $('#user-tab-content').watch({
         id: "content_user_next",
         properties: 'prop_innerHTML',
@@ -167,6 +168,7 @@ describe("emojidexPalette", function() {
     });
 
     it('switches to the previous page [Requires a premium user account and many favorites]', function(done) {
+      if (typeof user_info === 'undefined' || user_info === null) { pending(); }
       $('#user-tab-content').watch({
         id: "content_user_prev",
         properties: 'prop_innerHTML',
@@ -199,6 +201,7 @@ describe("emojidexPalette", function() {
     });
 
     it('switches to the next page [Requires a premium user account and many history]', function(done) {
+      if (typeof user_info === 'undefined' || user_info === null) { pending(); }
       $('#user-tab-content').watch({
         id: "content_user_history_next",
         properties: 'prop_innerHTML',
@@ -214,6 +217,7 @@ describe("emojidexPalette", function() {
     });
 
     it('switches to the previous page [Requires a premium user account and many history]', function(done) {
+      if (typeof user_info === 'undefined' || user_info === null) { pending(); }
       $('#user-tab-content').watch({
         id: "content_user_history_prev",
         properties: 'prop_innerHTML',
