@@ -214,14 +214,14 @@ gulp.task('copy-docs', () => {
     .pipe(gulp.dest('docs'));
 });
 gulp.task('copy', (cb) => {
-  return runSequence(['copy-img', 'copy-bootstrap', 'copy-jquery', 'copy-docs'], cb);
+  return runSequence(['copy-img', 'copy-bootstrap', 'copy-jquery'], 'copy-docs', cb);
 });
 
 gulp.task('concat-js', () => {
   return gulp
     .src([
       'node_modules/bootstrap-sass/assets/javascripts/bootstrap/tab.js',
-      'src/vendor/jquery-ui-1.12.1/jquery-ui.min.js',
+      'src/vendor/jquery-ui-1.12.1.custom/jquery-ui.min.js',
       'node_modules/emojidex-client/dist/js/emojidex-client.min.js',
       'bower_components/Caret.js/dist/jquery.caret.min.js',
       'bower_components/At.js/dist/js/jquery.atwho.min.js',

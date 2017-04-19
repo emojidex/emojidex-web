@@ -1,6 +1,7 @@
 #emojidex-emoji-palette {
   // jquery-ui --------
-  @import 'jquery-ui';
+  @import '../../src/vendor/jquery-ui-1.12.1.custom/jquery-ui.min';
+  // @import 'jquery-ui';
 
   // bootstrap --------
   // Core variables and mixins
@@ -28,10 +29,19 @@
   .emojidex-ui-dialog {
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
     border-radius: 4px;
+    background-color: #fff;
   }
 
   .ui-dialog .ui-dialog-titlebar {
     padding: 10px;
+    .ui-dialog-title {
+      a > img {
+        width: 116px;
+        height: 27px;
+        margin: 0;
+        padding: 0;
+      }
+    }
   }
 
   .ui-dialog .ui-dialog-content {
@@ -39,7 +49,6 @@
   }
   .ui-widget-header {
     border: none;
-    background-color: #fff;
     .btn.btn-default[aria-label=Close] {
       border-radius: 50px;
       width: 27px;
@@ -66,6 +75,13 @@
       border-radius: 4px;
       padding: 5px;
       margin: 2px;
+
+      img {
+        width: 32px;
+        height: 32px;
+        margin: 0;
+        padding: 0;
+      }
     }
     hr {
       margin-top: 8px;
