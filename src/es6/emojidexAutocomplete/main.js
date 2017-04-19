@@ -27,16 +27,17 @@
   class Plugin {
     constructor(element, options) {
       this.element = element;
-      defaults = (element.type === 'textarea') ? textarea_defaults : content_editable_defaults;
+      defaults = element.contentEditable === 'true' ? content_editable_defaults : textarea_defaults;
       this.options = $.extend({}, defaults, options);
       this._defaults = defaults;
       this._name = pluginName;
 
       // start: Plugin --------
+      // TODO: content_editableだと入力がバグるためライブラリを変更するまで無効化する。
+      if (element.contentEditable === 'true') return;
       this.autocomplete = new AutoComplete(this);
     }
   }
-      // @autocomplete.setAutoComplete()
 
   return $.fn[pluginName] = function(options) {
     return this.each(function() {
