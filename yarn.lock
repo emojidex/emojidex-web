@@ -1247,9 +1247,9 @@ ee-first@1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/ee-first/-/ee-first-1.1.1.tgz#590c61156b0ae2f4f0255732a158b266bc56b21d"
 
-emojidex-client@^0.14.0:
-  version "0.14.0"
-  resolved "https://registry.yarnpkg.com/emojidex-client/-/emojidex-client-0.14.0.tgz#3fee5d8249e8f6c3a4888e86658d6f6355d942ba"
+emojidex-client@^0.14.1:
+  version "0.14.1"
+  resolved "https://registry.yarnpkg.com/emojidex-client/-/emojidex-client-0.14.1.tgz#3b0164e43559c1acfa85d3b40d563b72b0211724"
 
 emojis-list@^2.0.0:
   version "2.1.0"

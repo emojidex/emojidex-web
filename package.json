@@ -1,6 +1,6 @@
 {
   "name": "emojidex",
-  "version": "0.15.1",
+  "version": "0.15.2",
   "title": "jQuery emojidex",
   "description": "emojidex plugin for jQuery/Zepto and compatible",
   "author": "emojidex",
@@ -24,7 +24,7 @@
     "cross-storage": "^1.0.0",
     "del": "^2.2.2",
     "dotenv": "^4.0.0",
-    "emojidex-client": "^0.14.0",
+    "emojidex-client": "^0.14.1",
     "eslint": "^3.15.0",
     "eslint-config-airbnb-base": "^11.1.0",
     "eslint-plugin-import": "^2.2.0",
