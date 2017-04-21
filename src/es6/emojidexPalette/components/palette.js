@@ -3,6 +3,7 @@ class Palette {
     this.plugin = plugin;
     this.active_input_area = null;
     this.tabs = [];
+    this.palette_button = null;
     this.EC = new EmojidexClient({
       limit: 66,
       onReady: EC => {
@@ -13,6 +14,12 @@ class Palette {
 
         this.createDialog();
         this.setPalette(this.plugin.element);
+        this.createButton();
+        if ($(this.plugin.element).attr('type') === 'text' || $(this.plugin.element).prop('tagName') === 'TEXTAREA') {
+          this.addButtonToRight(this.plugin.element);
+        } else {
+          this.addButton(this.plugin.element);
+        }
 
         if (typeof this.plugin.options.onComplete === "function") {
           this.plugin.options.onComplete();
@@ -22,6 +29,8 @@ class Palette {
   }
 
   createDialog() {
+    if ($('#emojidex-dialog-content').length !== 0) return
+
     this.dialog = $('<div id="emojidex-dialog-content"></div>');
     return this.dialog.dialog({
       classes: {
@@ -50,40 +59,33 @@ class Palette {
   }
 
   setPalette(element) {
-    return $(element).click(e => {
-      if (this.emoji_palette != null) {
-        return this.openDialog();
-      } else {
-        let tab_list = $('<ul class="nav nav-pills"></ul>');
-        let tab_content = $('<div class="tab-content"></div>');
+    if ($('#emoji-palette').length !== 0) return;
 
-        return this.EC.Categories.sync(categories => {
-          this.tabs.push(new IndexTab(this));
-          for (let i = 0; i < categories.length; i++) {
-            let category = categories[i];
-            this.tabs.push(new CategoryTab(this, category, tab_list[0].children.length));
-          }
+    let tab_list = $('<ul class="nav nav-pills"></ul>');
+    let tab_content = $('<div class="tab-content"></div>');
 
-          this.tabs.push(new UserTab(this));
-          this.tabs.push(new SearchTab(this));
-
-          for (let j = 0; j < this.tabs.length; j++) {
-            let tab = this.tabs[j];
-            tab_list.append(tab.tab_list);
-            tab_content.append(tab.tab_content);
-          }
-
-          this.emoji_palette = $('<div class="emoji-palette"></div>');
-          this.emoji_palette.append(tab_list.add(tab_content));
-          this.emoji_palette.find('ul').after('<hr>');
-
-          this.dialog.append(this.emoji_palette);
-          return this.openDialog();
-        }
-        );
+    return this.EC.Categories.sync(categories => {
+      this.tabs.push(new IndexTab(this));
+      for (let i = 0; i < categories.length; i++) {
+        let category = categories[i];
+        this.tabs.push(new CategoryTab(this, category, tab_list[0].children.length));
       }
-    }
-    );
+
+      this.tabs.push(new UserTab(this));
+      this.tabs.push(new SearchTab(this));
+
+      for (let j = 0; j < this.tabs.length; j++) {
+        let tab = this.tabs[j];
+        tab_list.append(tab.tab_list);
+        tab_content.append(tab.tab_content);
+      }
+
+      this.emoji_palette = $('<div id="emoji-palette" class="emoji-palette"></div>');
+      this.emoji_palette.append(tab_list.add(tab_content));
+      this.emoji_palette.find('ul').after('<hr>');
+
+      return this.dialog.append(this.emoji_palette);
+    });
   }
 
   setEmojiList(kind, emoji_list) {
@@ -260,6 +262,23 @@ class Palette {
   }
 
   openDialog() {
-    return this.dialog.dialog('open');
+    return $('#emojidex-dialog-content').dialog('open');
+  }
+
+  createButton() {
+    this.palette_button = $('<a class="emojidex-palette-button"><i class="emjdx-faces"></a>');
+    return this.palette_button.click(() => { this.openDialog(); });
+  }
+
+  addButtonToRight(element) {
+    let div = $('<div class="emojidex-palette-wrapper"></div>');
+    let right_div = $('<div class="pull-right emojidex-palette-div"></div>');
+    right_div.append(this.palette_button);
+    $(element).wrap(div);
+    return $(element).parent().append(right_div);
+  }
+
+  addButton(element) {
+    return $(element).append(this.palette_button);
   }
 }

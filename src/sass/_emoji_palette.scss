@@ -95,7 +95,6 @@
     height: auto;
   }
 
-
   .nav.nav-pills {
     float: none;
     li {
@@ -165,4 +164,19 @@
   line-height: $line-height-base;
   color: $text-color;
   background-color: $body-bg;
+}
+
+.emojidex-palette-wrapper {
+  display: flex;
+  .emojidex-palette-div {
+    margin: 0px 0px -30px -25px;
+  }
+}
+
+.emojidex-palette-button:hover { text-decoration: none; }
+.emojidex-palette-button {
+  i {
+    font-size: 25px;
+    color: #ccc;
+  }
 }
