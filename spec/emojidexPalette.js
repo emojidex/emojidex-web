@@ -2,9 +2,9 @@ describe("emojidexPalette", function() {
   beforeAll(function(done) {
     clearStorage();
     helperBefore();
-    $(".emojidex-palette").emojidexPalette({
+    $("#palette-btn").emojidexPalette({
       onComplete: () => {
-        $(".emojidex-input").emojidexPalette({
+        $("#palette-input").emojidexPalette({
           onComplete: () => { done(); }
         });
       }
@@ -13,8 +13,8 @@ describe("emojidexPalette", function() {
 
   afterAll(() => helperAfter());
 
-  it("created emojidexPalette button", (done) => {
-    expect($('.emojidex-palette-button').length).toBe(2);
+  it("created emojidexPalette button in input", (done) => {
+    expect($('.emojidex-palette-button').length).toBe(1);
     done();
   })
 
@@ -306,11 +306,10 @@ describe("emojidexPalette", function() {
 
   it('login with storage data', function(done) {
     if (typeof user_info === 'undefined' || user_info === null) { pending(); }
-    $('.emojidex-palette').removeData().unbind();
+    $('#palette-btn').removeData().unbind();
     $('#emojidex-emoji-palette, .emojidex-palette-div').remove();
-    $('.emojidex-palette').empty();
 
-    $(".emojidex-palette").emojidexPalette({
+    $("#palette-btn").emojidexPalette({
       onComplete: () => {
         spec_timer({
           time: 1000,
@@ -337,7 +336,7 @@ describe("emojidexPalette", function() {
                 $('#tab-user a').click();
               }
             });
-            $(".emojidex-palette-button")[0].click();
+            $("#palette-btn").click();
           }
         })
       }

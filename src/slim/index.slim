@@ -23,8 +23,8 @@ html
         $(".emojidex-plain_text").emojidexAutocomplete()
         $(".emojidex-content_editable").emojidexAutocomplete()
 
-        $(".emojidex-palette").emojidexPalette()
-        $(".emojidex-input").emojidexPalette()
+        $("#palette-btn").emojidexPalette()
+        $("#palette-input").emojidexPalette()
         return
 
   body
@@ -109,11 +109,13 @@ html
           h3 emojidexPalette :blush:
           hr.mt-s.mb-m
           h4
-            | add palette button to div.
+            | add palette to element. (ex: button)
           .emojidex-palette.mt-m
+            button type="button" class="btn btn-lg btn-primary" id="palette-btn"
+              | Open emoji palette
           h4
             | add palette button to the right-top of input.
-          input type="text" class="emojidex-input form-control"
+          input type="text" class="emojidex-input form-control" id="palette-input"
 
       .row style='margin-top: 64px'
         .col-md-12

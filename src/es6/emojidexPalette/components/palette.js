@@ -3,7 +3,6 @@ class Palette {
     this.plugin = plugin;
     this.active_input_area = null;
     this.tabs = [];
-    this.palette_button = null;
     this.EC = new EmojidexClient({
       limit: 66,
       onReady: EC => {
@@ -14,11 +13,10 @@ class Palette {
 
         this.createDialog();
         this.setPalette(this.plugin.element);
-        this.createButton();
         if ($(this.plugin.element).attr('type') === 'text' || $(this.plugin.element).prop('tagName') === 'TEXTAREA') {
-          this.addButtonToRight(this.plugin.element);
-        } else {
           this.addButton(this.plugin.element);
+        } else {
+          this.addPaletteToElement(this.plugin.element);
         }
 
         if (typeof this.plugin.options.onComplete === "function") {
@@ -265,20 +263,18 @@ class Palette {
     return $('#emojidex-dialog-content').dialog('open');
   }
 
-  createButton() {
-    this.palette_button = $('<a class="emojidex-palette-button"><i class="emjdx-faces"></a>');
-    return this.palette_button.click(() => { this.openDialog(); });
-  }
+  addButton(element) {
+    let palette_button = $('<a class="emojidex-palette-button"><i class="emjdx-faces"></a>');
+    palette_button.click(() => { this.openDialog(); });
 
-  addButtonToRight(element) {
     let div = $('<div class="emojidex-palette-wrapper"></div>');
     let right_div = $('<div class="pull-right emojidex-palette-div"></div>');
-    right_div.append(this.palette_button);
+    right_div.append(palette_button);
     $(element).wrap(div);
     return $(element).parent().append(right_div);
   }
 
-  addButton(element) {
-    return $(element).append(this.palette_button);
+  addPaletteToElement(element) {
+    return $(element).click(() => { this.openDialog(); });
   }
 }
