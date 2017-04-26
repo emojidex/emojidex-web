@@ -29,7 +29,7 @@ class Palette {
   }
 
   createDialog() {
-    if ($('#emojidex-dialog-content').length !== 0) return
+    if ($('#emojidex-dialog-content').length !== 0) return;
 
     this.dialog = $('<div id="emojidex-dialog-content"></div>');
     return this.dialog.dialog({
