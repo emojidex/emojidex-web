@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" />
+    <title>emojidex-web</title>
+    <meta content="" name="description" />
+    <meta content="width=device-width" name="viewport" />
+    <link href="../../dist/css/document.min.css" rel="stylesheet" />
+    <link href="../../dist/css/emojidex.min.css" rel="stylesheet" />
+    <link href="../vendor/jquery-autocomplete/styles.css" rel="stylesheet" />
+    <script src="../../node_modules/jquery/dist/jquery.js"></script>
+    <script src="../../dist/resources/bootstrap.min.js"></script>
+    <!-- <script src="../../dist/js/emojidex.js"></script> -->
+    <script src="../vendor/jquery-autocomplete/jquery.autocomplete.js"></script>
+
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 mt-m">
+          <input type="text" id="autocomplete" class="form-control">
+        </div>
+        <div class="col-md-12 mt-m">
+          <input type="text" id="autocomplete2" class="form-control" value="">
+        </div>
+      </div>
+    </div>
+  </body>
+
+  <script type="text/javascript">
+  var res;
+    $(function() {
+      $('#autocomplete2').autocomplete({
+        serviceUrl: 'https://www.emojidex.com/api/v1/search/emoji',
+        paramName: 'code_cont',
+        transformResult: function(response) {
+          response = JSON.parse(response);
+          return {
+            suggestions: $.map(response.emoji, function(dataItem) {
+              return { value: `:${dataItem.code.replace(/\s/g, '_')}:` };
+            })
+          };
+        },
+        formatResult: function(suggestion, currentValue) {
+          var code = suggestion.value.replace(/:/g, '');
+          return `${code} <img src="https://cdn.emojidex.com/emoji/mdpi/${code}.png">`;
+        }
+      });
+
+      var countries = [
+        { value: 'Andorra', data: 'AD' },
+        { value: 'Zimbabwe', data: 'ZZ' }
+      ];
+      $('#autocomplete').autocomplete({
+        lookup: countries,
+        onSelect: function (suggestion) {
+          alert('You selected: ' + suggestion.value + ', ' + suggestion.data);
+        }
+      });
+    });
+  </script>
+</html>
