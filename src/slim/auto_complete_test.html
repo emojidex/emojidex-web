@@ -32,18 +32,22 @@
   var res;
     $(function() {
       $('#autocomplete2').autocomplete({
+        insertImage: false, // custom param
         serviceUrl: 'https://www.emojidex.com/api/v1/search/emoji',
         paramName: 'code_cont',
         transformResult: function(response) {
           response = JSON.parse(response);
+          var insert = this.insertImage;
           return {
             suggestions: $.map(response.emoji, function(dataItem) {
-              return { value: `:${dataItem.code.replace(/\s/g, '_')}:` };
+              var code = dataItem.code.replace(/\s/g, '_');
+              var tag = `<img src='https://cdn.emojidex.com/emoji/mdpi/${code}.png' height='20' width='20'></img>`
+              return { value: insert ? tag : `:${code}:`, code: dataItem.code };
             })
           };
         },
         formatResult: function(suggestion, currentValue) {
-          var code = suggestion.value.replace(/:/g, '');
+          var code = suggestion.code.replace(/\s/g, '_');
           return `${code} <img src="https://cdn.emojidex.com/emoji/mdpi/${code}.png">`;
         }
       });
