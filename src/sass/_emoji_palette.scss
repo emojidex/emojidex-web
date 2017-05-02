@@ -166,17 +166,27 @@
   background-color: $body-bg;
 }
 
-.emojidex-palette-wrapper {
-  display: flex;
-  .emojidex-palette-div {
-    margin: 0px 0px -30px -25px;
+.emojidex-palette-button {
+  opacity: 0;
+  position: absolute;
+  height: 25px;
+  width: 25px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #ccc;
+  -webkit-transition: all 0.25s;
+  -moz-transition: all 0.25s;
+  -ms-transition: all 0.25s;
+  -o-transition: all 0.25s;
+  transition: all 0.25s;
+  &:hover {
+    opacity: 1;
   }
 }
-
-.emojidex-palette-button:hover { text-decoration: none; }
-.emojidex-palette-button {
-  i {
-    font-size: 25px;
-    color: #ccc;
+.with-emojidex-palette {
+  &:hover, &:focus {
+    & + .emojidex-palette-button {
+      opacity: 1;
+    }
   }
 }

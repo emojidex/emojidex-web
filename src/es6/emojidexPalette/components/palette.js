@@ -264,14 +264,23 @@ class Palette {
   }
 
   addButton(element) {
-    let palette_button = $('<a class="emojidex-palette-button"><i class="emjdx-faces"></a>');
+    const reposition = (e) => {
+      margin = 5;
+      position = $(element).position();
+      position.top += margin;
+      position.left += $(element).width() - margin;
+      palette_button.css(position);
+    }
+
+    let palette_button = $('<i class="emojidex-palette-button emjdx-faces">');
     palette_button.click(() => { this.openDialog(); });
 
-    let div = $('<div class="emojidex-palette-wrapper"></div>');
-    let right_div = $('<div class="pull-right emojidex-palette-div"></div>');
-    right_div.append(palette_button);
-    $(element).wrap(div);
-    return $(element).parent().append(right_div);
+    $(element).addClass('with-emojidex-palette');
+    $(element).hover(reposition);
+    $(element).focus(reposition);
+    reposition();
+
+    return $(element).after(palette_button);
   }
 
   addPaletteToElement(element) {
