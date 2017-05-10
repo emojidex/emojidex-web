@@ -13,7 +13,7 @@ import eslint from 'gulp-eslint';
 import jasmine from 'gulp-jasmine-browser';
 import webpack from 'webpack-stream';
 import watch from 'gulp-watch';
-import fs from 'fs';
+import fs from 'fs-extra';
 import markdownDocs from 'gulp-markdown-docs';
 import sass from 'gulp-sass';
 import slim from 'gulp-slim';
@@ -26,7 +26,11 @@ gulp.task('env', () => {
     if (err === null) {
       console.log("*Found .env file; incorporating user auth data into specs.*");
       console.log("NOTE: if your user is not Premium with R-18 enabled some specs will fail.");
-      require('dotenv').config();
+      const dotenv = require('dotenv')
+      const envConfig = dotenv.parse(fs.readFileSync('.env'))
+      for (var k in envConfig) {
+        process.env[k] = envConfig[k]
+      }
       let output = `
         this.user_info = {
           auth_user: '${process.env.USERNAME}',
@@ -39,10 +43,12 @@ gulp.task('env', () => {
           auth_token: '${process.env.AUTH_TOKEN}'
         };
       `;
+      fs.ensureFileSync('tmp/authinfo.js');
       fs.writeFileSync('tmp/authinfo.js', output);
     } else {
       console.log("*.env file not found; only some specs will run.*");
       console.log("Check the '.env' secion in README.md for details on how to set .env");
+      fs.ensureFileSync('tmp/authinfo.js');
       fs.writeFileSync('tmp/authinfo.js', '');
     }
   });

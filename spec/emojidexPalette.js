@@ -4,12 +4,19 @@ describe("emojidexPalette", function() {
     helperBefore();
     $("#palette-btn").emojidexPalette({
       onComplete: () => {
-        done();
+        $("#palette-input").emojidexPalette({
+          onComplete: () => { done(); }
+        });
       }
     });
   });
 
   afterAll(() => helperAfter());
+
+  it("created emojidexPalette button in input", (done) => {
+    expect($('.emojidex-palette-button').length).toBe(1);
+    done();
+  })
 
   it("show emojidexPalette", function(done) {
     expect($('.ui-dialog')).toHaveCss({display: 'none'});
@@ -25,7 +32,7 @@ describe("emojidexPalette", function() {
     });
     spec_timer({
       time: 1000,
-      callback: () => { $('#palette-btn').click(); }
+      callback: () => { $('.emojidex-palette-button')[0].click(); }
     })
   });
 
@@ -299,8 +306,8 @@ describe("emojidexPalette", function() {
 
   it('login with storage data', function(done) {
     if (typeof user_info === 'undefined' || user_info === null) { pending(); }
-    $('#emojidex-emoji-palette').remove();
     $('#palette-btn').removeData().unbind();
+    $('#emojidex-emoji-palette, .emojidex-palette-div').remove();
 
     $("#palette-btn").emojidexPalette({
       onComplete: () => {

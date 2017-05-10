@@ -23,6 +23,7 @@
             $(".emojidex-plain_text").emojidexAutocomplete();
             $(".emojidex-content_editable").emojidexAutocomplete();
             $("#palette-btn").emojidexPalette();
+            $("#palette-input").emojidexPalette();
           };
         })(this));
       
@@ -218,9 +219,16 @@ Orginal Style from ethanschoonover.com/solarized (c) Jeremy Hull <sourdrums@gmai
             emojidexPalette :blush:
           </h3>
           <hr class="mt-s mb-m">
-          <div class="emojidex_palette mt-m">
+          <h4>
+            add palette to element. (ex: button)
+          </h4>
+          <div class="emojidex-palette mt-m">
             <button class="btn btn-lg btn-primary" id="palette-btn" type="button">Open emoji palette</button>
           </div>
+          <h4>
+            add palette button to the right-top of input.
+          </h4>
+          <input class="emojidex-input form-control" id="palette-input" type="text">
         </div>
       </div>
       <div class="row" style="margin-top: 64px">
