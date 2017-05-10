@@ -268,7 +268,7 @@ class Palette {
       margin = 5;
       position = $(element).position();
       position.top += margin;
-      position.left += $(element).width() - margin;
+      position.left += $(element).outerWidth() - palette_button.outerWidth() - margin;
       palette_button.css(position);
     }
 
