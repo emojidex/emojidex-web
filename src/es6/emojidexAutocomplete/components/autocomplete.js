@@ -38,5 +38,8 @@ class AutoComplete {
         maxCount: this.plugin.options.listLimit
       }
     );
+    if (typeof this.plugin.options.onComplete === "function") {
+      this.plugin.options.onComplete(this.plugin.element);
+    }
   }
 }

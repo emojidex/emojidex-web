@@ -14,6 +14,7 @@
   let pluginName = "emojidexAutocomplete";
   let default_options = {
     listLimit: 10,
+    onComplete: undefined,
     content_editable: {
       insertImg: true
     }

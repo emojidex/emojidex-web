@@ -31,8 +31,8 @@ function remove_watch(object, id) {
 function simulateTypingIn($inputor, pos=22) {
   let oDocument = $inputor[0].ownerDocument;
   let oWindow = oDocument.defaultView || oDocument.parentWindow;
+  $inputor.focus();
   if ($inputor.attr('contentEditable') === 'true' && oWindow.getSelection) {
-    $inputor.focus();
     let sel = oWindow.getSelection();
     let range = oDocument.createRange();
     range.setStart($inputor.contents().get(0), pos);
