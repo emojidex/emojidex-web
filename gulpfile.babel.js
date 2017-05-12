@@ -289,6 +289,7 @@ gulp.task('lint', () => {
 });
 
 gulp.task('watch', () => {
+  gulp.watch('src/sass/*', ['watch-sass']);
   gulp.watch(['src/es6/**/*.js', 'spec/**/*.js'], ['watch-js']);
   gulp.watch('src/slim/**/*.slim', ['watch-slim']);
 });
@@ -313,3 +314,7 @@ gulp.task('watch-js', (cb) => {
 gulp.task('watch-slim', (cb) => {
   runSequence('slim', 'md2html', cb);
 });
+
+gulp.task('watch-sass', (cb) => {
+  runSequence('sass', 'concat-css', cb);
+})
