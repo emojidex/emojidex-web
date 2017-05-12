@@ -229,8 +229,7 @@ gulp.task('concat-js', () => {
       'node_modules/bootstrap-sass/assets/javascripts/bootstrap/tab.js',
       'src/vendor/jquery-ui-1.12.1.custom/jquery-ui.min.js',
       'node_modules/emojidex-client/dist/js/emojidex-client.min.js',
-      'bower_components/Caret.js/dist/jquery.caret.min.js',
-      'bower_components/At.js/dist/js/jquery.atwho.min.js',
+      'node_modules/jquery-textcomplete/dist/jquery.textcomplete.min.js',
       'node_modules/clipboard/dist/clipboard.min.js',
       'build/js/**/*.js'
     ])
