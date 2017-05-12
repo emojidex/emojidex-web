@@ -2646,6 +2646,10 @@ jodid25519@^1.0.0:
   dependencies:
     jsbn "~0.1.0"
 
+jquery-textcomplete@^1.8.0:
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/jquery-textcomplete/-/jquery-textcomplete-1.8.0.tgz#7c750fde843fb785a9ac083f599172bd867183d3"
+
 jquery-watch@^1.21.0:
   version "1.21.0"
   resolved "https://registry.yarnpkg.com/jquery-watch/-/jquery-watch-1.21.0.tgz#bc93eee46f7674811ff36e0e9cd2351d11ae69b6"
