@@ -27,6 +27,10 @@ class Replacer {
     });
   }
 
+  tagEscape(string) {
+    return string.replace('<', '&lt;').replace('>', '&gt;');
+  }
+
   setTargets(node) {
     let child;
     if (node.nodeType === Node.TEXT_NODE) {
@@ -49,6 +53,7 @@ class Replacer {
             break;
           case Node.TEXT_NODE:
             if (child.data.match(/\S/)) {
+              child.data = this.tagEscape(child.data);
               this.targets.push(child);
             }
             break;
