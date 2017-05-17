@@ -28,7 +28,7 @@ class Replacer {
   }
 
   tagEscape(string) {
-    return string.replace('<', '&lt;').replace('>', '&gt;');
+    return string.replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
 
   setTargets(node) {
