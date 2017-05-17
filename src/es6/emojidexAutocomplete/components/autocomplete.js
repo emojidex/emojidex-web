@@ -26,7 +26,7 @@ class AutoComplete {
         },
         replace: (value) => {
           value = value.replace(/\s/g, '_');
-          if (this.plugin.element.contentEditable === 'true' && this.plugin.options.content_editable.insertImage) {
+          if (this.plugin.element.contentEditable === 'true' && this.plugin.options.content_editable.insertImg) {
             return `<img src='https://cdn.emojidex.com/emoji/mdpi/${value}.png'></img>`;
           } else {
             return `:${value}:`;
