@@ -207,6 +207,18 @@
 .emjdx-nature:before {
   content: "\e60b"; }
 
+.dropdown-menu {
+  padding: 0; }
+  .dropdown-menu > .textcomplete-item {
+    border-bottom: 1px solid #ccc; }
+    .dropdown-menu > .textcomplete-item:last-child {
+      border-bottom: none; }
+    .dropdown-menu > .textcomplete-item > a {
+      padding: 8px;
+      cursor: pointer; }
+      .dropdown-menu > .textcomplete-item > a img {
+        margin-right: 2px; }
+
 img.emojidex-emoji {
   display: inline-block !important;
   position: relative;
@@ -3481,6 +3493,7 @@ img.emojidex-emoji {
   text-decoration: none;
   font-size: 25px;
   color: #ccc;
+  cursor: pointer;
   -webkit-transition: all 0.25s;
   -moz-transition: all 0.25s;
   -ms-transition: all 0.25s;
