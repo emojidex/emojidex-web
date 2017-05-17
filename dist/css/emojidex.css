@@ -207,17 +207,40 @@
 .emjdx-nature:before {
   content: "\e60b"; }
 
-.dropdown-menu {
-  padding: 0; }
-  .dropdown-menu > .textcomplete-item {
-    border-bottom: 1px solid #ccc; }
-    .dropdown-menu > .textcomplete-item:last-child {
+ul[id^="textcomplete-dropdown-"] {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  display: none;
+  float: left;
+  min-width: 160px;
+  margin: 2px 0 0;
+  list-style: none;
+  font-size: 14px;
+  text-align: left;
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+  box-shadow: rgba(0, 0, 0, 0.176) 0px 6px 12px;
+  background-clip: padding-box;
+  padding: 0px; }
+  ul[id^="textcomplete-dropdown-"] > .textcomplete-item {
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    cursor: pointer; }
+    ul[id^="textcomplete-dropdown-"] > .textcomplete-item:last-child {
       border-bottom: none; }
-    .dropdown-menu > .textcomplete-item > a {
-      padding: 8px;
-      cursor: pointer; }
-      .dropdown-menu > .textcomplete-item > a img {
+    ul[id^="textcomplete-dropdown-"] > .textcomplete-item > a {
+      padding: 8px; }
+      ul[id^="textcomplete-dropdown-"] > .textcomplete-item > a img {
+        vertical-align: middle;
         margin-right: 2px; }
+    ul[id^="textcomplete-dropdown-"] > .textcomplete-item.active {
+      background-color: #337ab7; }
+      ul[id^="textcomplete-dropdown-"] > .textcomplete-item.active a, ul[id^="textcomplete-dropdown-"] > .textcomplete-item.active a:hover, ul[id^="textcomplete-dropdown-"] > .textcomplete-item.active a:focus {
+        color: white;
+        text-decoration: none;
+        outline: 0; }
 
 img.emojidex-emoji {
   display: inline-block !important;

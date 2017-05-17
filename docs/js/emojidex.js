@@ -185,7 +185,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 (function ($, window, document) {
   var pluginName = "emojidexAutocomplete";
   var default_options = {
-    listLimit: 10,
+    listLimit: 15,
     onComplete: undefined,
     content_editable: {
       insertImg: true
@@ -867,7 +867,7 @@ var Replacer = function () {
   }, {
     key: 'tagEscape',
     value: function tagEscape(string) {
-      return string.replace('<', '&lt;').replace('>', '&gt;');
+      return string.replace(/</g, '&lt;').replace(/>/g, '&gt;');
     }
   }, {
     key: 'setTargets',
