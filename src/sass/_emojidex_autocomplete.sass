@@ -1,11 +1,38 @@
-.dropdown-menu
-  padding: 0
+ul[id^="textcomplete-dropdown-"]
+  position: absolute
+  top: 100%
+  left: 0
+  display: none
+  float: left
+  min-width: 160px
+  margin: 2px 0 0
+  list-style: none
+  font-size: 14px
+  text-align: left
+  background-color: white
+  border: 1px solid rgba(0, 0, 0, 0.15)
+  border-radius: 4px
+  box-shadow: rgba(0, 0, 0, 0.176) 0px 6px 12px
+  background-clip: padding-box
+  padding: 0px
   & > .textcomplete-item
     border-bottom: 1px solid #ccc
+    display: flex
+    cursor: pointer
     &:last-child
       border-bottom: none
     & > a
       padding: 8px
-      cursor: pointer
       img
-         margin-right: 2px 
+        vertical-align: middle
+        margin-right: 2px
+
+    &.active
+      background-color: #337ab7
+      a
+        &,
+        &:hover,
+        &:focus
+          color: white
+          text-decoration: none
+          outline: 0
