@@ -12,29 +12,23 @@
 
 (function($, window, document) {
   let pluginName = "emojidexAutocomplete";
-  let content_editable_defaults = {
-    onComplete: undefined,
+  let default_options = {
     listLimit: 10,
-    insertImg: true
-  };
-  let textarea_defaults = {
     onComplete: undefined,
-    listLimit: 10,
-    insertImg: false
+    content_editable: {
+      insertImg: true
+    }
   };
   let defaults;
 
   class Plugin {
     constructor(element, options) {
       this.element = element;
-      defaults = element.contentEditable === 'true' ? content_editable_defaults : textarea_defaults;
-      this.options = $.extend({}, defaults, options);
-      this._defaults = defaults;
+      this.options = $.extend({}, default_options, options);
+      this._defaults = default_options;
       this._name = pluginName;
 
       // start: Plugin --------
-      // TODO: content_editableだと入力がバグるためライブラリを変更するまで無効化する。
-      if (element.contentEditable === 'true') return;
       this.autocomplete = new AutoComplete(this);
     }
   }

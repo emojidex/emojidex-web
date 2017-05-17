@@ -28,11 +28,22 @@ function remove_watch(object, id) {
   object.removeData(id);
 }
 
-function simulateTypingIn($inputor, pos=22) {
+function simulateMouseEvent(target) {
+  let mde = document.createEvent("MouseEvents");
+  mde.initMouseEvent("mousedown", true, true, window, 1, 0, 0, 0, 0, false, false, false, false, 0, null);
+  target.dispatchEvent(mde);
+}
+
+function simulateTypingIn($inputor, pos) {
+  if (pos === undefined) {
+    let text = $inputor[0].innerText || $inputor[0].innerHTML;
+    pos = $inputor[0].innerHTML.lastIndexOf(text[text.length -1]) + 1;
+  }
+
   let oDocument = $inputor[0].ownerDocument;
   let oWindow = oDocument.defaultView || oDocument.parentWindow;
+  $inputor.focus();
   if ($inputor.attr('contentEditable') === 'true' && oWindow.getSelection) {
-    $inputor.focus();
     let sel = oWindow.getSelection();
     let range = oDocument.createRange();
     range.setStart($inputor.contents().get(0), pos);

@@ -59,6 +59,7 @@
     "test": "gulp && gulp jasmine"
   },
   "dependencies": {
-    "clipboard": "^1.5.5"
+    "clipboard": "^1.5.5",
+    "jquery-textcomplete": "^1.8.0"
   }
 }
