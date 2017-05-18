@@ -60,6 +60,7 @@
   },
   "dependencies": {
     "clipboard": "^1.5.5",
-    "jquery-textcomplete": "^1.8.0"
+    "jquery-textcomplete": "^1.8.0",
+    "jquery.caret": "^0.3.1"
   }
 }

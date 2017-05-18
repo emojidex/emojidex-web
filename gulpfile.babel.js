@@ -231,7 +231,7 @@ gulp.task('concat-js', () => {
       'node_modules/emojidex-client/dist/js/emojidex-client.min.js',
       'node_modules/jquery-textcomplete/dist/jquery.textcomplete.min.js',
       'node_modules/clipboard/dist/clipboard.min.js',
-      'bower_components/Caret.js/dist/jquery.caret.min.js',
+      'node_modules/jquery.caret/dist/jquery.caret.min.js',
       'build/js/**/*.js'
     ])
     .pipe(concat('emojidex.js'))
@@ -241,7 +241,6 @@ gulp.task('concat-js', () => {
 gulp.task('concat-css', () => {
   return gulp
     .src([
-      'bower_components/At.js/dist/css/jquery.atwho.min.css',
       'src/compiled_css/emojidex.css'
     ])
     .pipe(concat('emojidex.css'))
