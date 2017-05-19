@@ -347,20 +347,23 @@ var AutoComplete = function () {
         search: function search(term, callback) {
           _this2.EC.Search.search(term, function (response) {
             callback($.map(response, function (emoji) {
-              return emoji.code.indexOf(term) !== -1 ? emoji.code : null;
+              return emoji.code.indexOf(term) !== -1 ? emoji : null;
             }));
           });
         },
-        template: function template(value) {
-          value = value.replace(/\s/g, '_');
-          return '<img src=\'https://cdn.emojidex.com/emoji/mdpi/' + value + '.png\'></img> ' + value;
+        template: function template(emoji) {
+          var emoji_tag_string = _this2.EC.Util.emojiToHTML(emoji, 'mdpi');
+          var emoji_tag = $(emoji_tag_string)[0];
+          if (emoji_tag.nodeName == 'A') {
+            emoji_tag_string = emoji_tag.innerHTML;
+          }
+          return emoji_tag_string + ' ' + emoji.code.replace(/\s/g, '_');
         },
-        replace: function replace(value) {
-          value = value.replace(/\s/g, '_');
+        replace: function replace(emoji) {
           if (_this2.plugin.element.contentEditable === 'true' && _this2.plugin.options.content_editable.insertImg) {
-            return '<img src=\'https://cdn.emojidex.com/emoji/mdpi/' + value + '.png\'></img>';
+            return _this2.EC.Util.emojiToHTML(emoji, 'mdpi');
           } else {
-            return ':' + value + ':';
+            return ':' + emoji.code.replace(/\s/g, '_') + ':';
           }
         },
         index: 1
