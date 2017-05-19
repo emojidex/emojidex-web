@@ -16,20 +16,23 @@ class AutoComplete {
         search: (term, callback) => {
           this.EC.Search.search(term, (response) => {
             callback($.map(response, (emoji) => {
-              return emoji.code.indexOf(term) !== -1 ? emoji.code : null;
+              return emoji.code.indexOf(term) !== -1 ? emoji : null;
             }));
           });
         },
-        template: (value) => {
-          value = value.replace(/\s/g, '_');
-          return `<img src='https://cdn.emojidex.com/emoji/mdpi/${value}.png'></img> ${value}`;
+        template: (emoji) => {
+          let emoji_tag_string = this.EC.Util.emojiToHTML(emoji, 'mdpi')
+          let emoji_tag = $(emoji_tag_string)[0];
+          if(emoji_tag.nodeName == 'A') {
+            emoji_tag_string = emoji_tag.innerHTML;
+          }
+          return `${emoji_tag_string} ${emoji.code.replace(/\s/g, '_')}`;
         },
-        replace: (value) => {
-          value = value.replace(/\s/g, '_');
+        replace: (emoji) => {
           if (this.plugin.element.contentEditable === 'true' && this.plugin.options.content_editable.insertImg) {
-            return `<img src='https://cdn.emojidex.com/emoji/mdpi/${value}.png'></img>`;
+            return this.EC.Util.emojiToHTML(emoji, 'mdpi');
           } else {
-            return `:${value}:`;
+            return `:${emoji.code.replace(/\s/g, '_')}:`;
           }
         },
         index: 1,
