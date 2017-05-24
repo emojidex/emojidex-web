@@ -30,7 +30,7 @@ class AutoComplete {
         },
         replace: (emoji) => {
           if (this.plugin.element.contentEditable === 'true' && this.plugin.options.content_editable.insertImg) {
-            return ` ${this.EC.Util.emojiToHTML(emoji, 'mdpi')} `
+            return ` ${this.EC.Util.emojiToHTML(emoji)} `
           } else {
             return ` :${emoji.code.replace(/\s/g, '_')}: `;
           }
