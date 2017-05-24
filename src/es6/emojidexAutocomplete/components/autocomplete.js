@@ -12,7 +12,7 @@ class AutoComplete {
   setAutoComplete() {
     $(this.plugin.element).textcomplete(
       [{
-        match: /\B:([\-+\w]*)$/,
+        match: /\B\s:([\-+\w]*)$/,
         search: (term, callback) => {
           this.EC.Search.search(term, (response) => {
             callback($.map(response, (emoji) => {
@@ -30,9 +30,9 @@ class AutoComplete {
         },
         replace: (emoji) => {
           if (this.plugin.element.contentEditable === 'true' && this.plugin.options.content_editable.insertImg) {
-            return this.EC.Util.emojiToHTML(emoji, 'mdpi');
+            return ` ${this.EC.Util.emojiToHTML(emoji, 'mdpi')} `
           } else {
-            return `:${emoji.code.replace(/\s/g, '_')}:`;
+            return ` :${emoji.code.replace(/\s/g, '_')}: `;
           }
         },
         index: 1,
