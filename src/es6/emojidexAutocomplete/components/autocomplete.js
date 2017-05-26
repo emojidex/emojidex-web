@@ -12,7 +12,8 @@ class AutoComplete {
   setAutoComplete() {
     $(this.plugin.element).textcomplete(
       [{
-        match: /\B\s:([\-+\w]*)$/,
+        // match: /\B\s:([\-+\w]*)$/,
+        match: /[：:]([^：:;@&#~\!\$\+\?\%\*\f\n\r\\\/]+)$/,
         search: (term, callback) => {
           this.EC.Search.search(term, (response) => {
             callback($.map(response, (emoji) => {
