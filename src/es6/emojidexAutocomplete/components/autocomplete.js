@@ -12,8 +12,7 @@ class AutoComplete {
   setAutoComplete() {
     $(this.plugin.element).textcomplete(
       [{
-        // match: /\B\s:([\-+\w]*)$/,
-        match: /[：:]([^：:;@&#~\!\$\+\?\%\*\f\n\r\\\/]+)$/,
+        match: /[：:]([^ ：:;@&#~\/\!\$\+\?\%\*\f\n\r]+)$/,
         search: (term, callback) => {
           this.EC.Search.search(term, (response) => {
             callback($.map(response, (emoji) => {
@@ -22,7 +21,7 @@ class AutoComplete {
           });
         },
         template: (emoji) => {
-          let emoji_tag_string = this.EC.Util.emojiToHTML(emoji, 'mdpi')
+          let emoji_tag_string = this.EC.Util.emojiToHTML(emoji)
           let emoji_tag = $(emoji_tag_string)[0];
           if(emoji_tag.nodeName == 'A') {
             emoji_tag_string = emoji_tag.innerHTML;
@@ -31,9 +30,9 @@ class AutoComplete {
         },
         replace: (emoji) => {
           if (this.plugin.element.contentEditable === 'true' && this.plugin.options.content_editable.insertImg) {
-            return ` ${this.EC.Util.emojiToHTML(emoji)} `
+            return `${this.EC.Util.emojiToHTML(emoji)} `
           } else {
-            return ` :${emoji.code.replace(/\s/g, '_')}: `;
+            return `:${emoji.code.replace(/\s/g, '_')}:`;
           }
         },
         index: 1,
