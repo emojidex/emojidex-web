@@ -15,8 +15,9 @@ class AutoComplete {
         match: /[：:]([^ ：:;@&#~\/\!\$\+\?\%\*\f\n\r]+)$/,
         search: (term, callback) => {
           this.EC.Search.search(term, (response) => {
+            let replaced_term = term.replace(/_/g, ' ');
             callback($.map(response, (emoji) => {
-              return emoji.code.indexOf(term) !== -1 ? emoji : null;
+              return emoji.code.indexOf(replaced_term) !== -1 ? emoji : null;
             }));
           });
         },
