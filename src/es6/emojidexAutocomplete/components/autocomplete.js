@@ -30,6 +30,12 @@ class AutoComplete {
           return `${emoji_tag_string} ${emoji.code.replace(/\s/g, '_')}`;
         },
         replace: (emoji) => {
+          this.EC.Data.storage.update_cache('emojidex').then(() => {
+            if (this.EC.Data.storage.get('emojidex.auth_info') != null) {
+              this.EC.User.syncUserData();
+              this.EC.User.History.set(emoji.code.replace(/\s/g, '_'));
+            }
+          })
           if (this.plugin.element.contentEditable === 'true' && this.plugin.options.content_editable.insertImg) {
             return `${this.EC.Util.emojiToHTML(emoji)} `
           } else {
