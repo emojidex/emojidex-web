@@ -1,5 +1,5 @@
 /*
- * jQuery emojidex - v0.16.4
+ * jQuery emojidex - v0.16.5
  * emojidex plugin for jQuery/Zepto and compatible
  * https://github.com/emojidex/emojidex-web
  *
@@ -379,6 +379,12 @@ var AutoComplete = function () {
           return emoji_tag_string + ' ' + emoji.code.replace(/\s/g, '_');
         },
         replace: function replace(emoji) {
+          _this2.EC.Data.storage.update_cache('emojidex').then(function () {
+            if (_this2.EC.Data.storage.get('emojidex.auth_info') != null) {
+              _this2.EC.User.syncUserData();
+              _this2.EC.User.History.set(emoji.code.replace(/\s/g, '_'));
+            }
+          });
           if (_this2.plugin.element.contentEditable === 'true' && _this2.plugin.options.content_editable.insertImg) {
             return _this2.EC.Util.emojiToHTML(emoji) + ' ';
           } else {
