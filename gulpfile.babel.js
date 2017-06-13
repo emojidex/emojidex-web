@@ -32,13 +32,13 @@ gulp.task('env', () => {
         process.env[k] = envConfig[k]
       }
       let output = `
-        this.user_info = {
+        let user_info = {
           auth_user: '${process.env.USERNAME}',
           email: '${process.env.EMAIL}',
           password: '${process.env.PASSWORD}',
           auth_token: '${process.env.AUTH_TOKEN}'
         };
-        this.premium_user_info = {
+        let premium_user_info = {
           auth_user: '${process.env.USERNAME}',
           auth_token: '${process.env.AUTH_TOKEN}'
         };
