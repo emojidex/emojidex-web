@@ -3,6 +3,8 @@ class UserTab {
     this.palette = palette;
     this.tab_list = "<li id='tab-user' class='pull-right'><a href='#tab-content-user' data-toggle='pill'><i class='emjdx-user'></a></li>";
     this.tab_content = this.getTabContent();
+    this.historyTab = new HistoryTab(this);
+    this.favoriteTab = new FavoriteTab(this);
   }
 
   getTabContent() {
@@ -11,14 +13,12 @@ class UserTab {
       if (e.keyCode === 13) {
         return this.checkInput();
       }
-    }
-    );
+    });
 
     let login_btn = $('<div class="btn btn-primary btn-block mt-m" id="palette-emoji-login-submit">Login</div>');
     login_btn.click(() => {
       return this.checkInput();
-    }
-    );
+    });
     tab_content.append(login_btn);
 
     if (this.palette.EC.Data.storage.hub_cache.emojidex.auth_info !== undefined &&
@@ -45,8 +45,8 @@ class UserTab {
       if (auth_info.status === 'verified') {
         this.hideLoginForm();
         this.setUserTab();
-        this.setHistory(auth_info);
-        this.setFavorite(auth_info);
+        this.setHistoryTab();
+        this.setFavoriteTab();
         return this.palette.toggleSorting();
       } else {
         return this.showError(auth_info);
@@ -101,32 +101,16 @@ class UserTab {
     return this.tab_content.append(this.user_tab_content);
   }
 
-  setHistory(auth_info) {
-    return this.palette.EC.User.History.get(response => {
-      return this.setDataByCodes((response.map((item) => item.emoji_code)), this.palette.EC.User.History.meta, 'history');
-    }
-    );
+  setHistoryTab() {
+    return this.historyTab.createTabContent().then((content) => {
+      return this.user_tab_content.append(content);
+    });
   }
 
-  setFavorite(auth_info) {
-    return this.palette.EC.User.Favorites.get(response => {
-      return this.setData(response, this.palette.EC.User.Favorites.meta, 'favorite');
-    }
-    );
-  }
-
-  setData(data, meta, kind) {
-    let tab_pane = $(`<div class='tab-pane ${kind === 'favorite' ? 'active' : ''}' id='tab-content-user-${kind}'></div>`);
-    tab_pane.append(this.palette.setEmojiList(kind, data));
-    this.user_tab_content.append(tab_pane);
-    return this.getPagination(meta, tab_pane, kind)
-  }
-
-  setDataByCodes(data, meta, kind, active = false) {
-    let tab_pane = $(`<div class='tab-pane ${active ? 'active' : ''}' id='tab-content-user-${kind}'></div>`);
-    tab_pane.append(this.palette.setCodeList(kind, data));
-    this.user_tab_content.append(tab_pane);
-    return this.getPagination(meta, tab_pane, kind)
+  setFavoriteTab() {
+    return this.favoriteTab.createTabContent().then((content) => {
+      return this.user_tab_content.append(content);
+    })
   }
 
   setPremiumData(response, kind) {
@@ -138,29 +122,5 @@ class UserTab {
       tab_pane.append(this.palette.setEmojiList(kind, response));
     }
     return this.user_tab_content.append(tab_pane);
-  }
-
-  getPagination(meta, pane, kind) {
-    let cur_page = meta.total_count === 0 ? 0 : meta.page;
-    let max_page = cur_page === 0 ? 0 : Math.ceil(meta.total_count / this.palette.EC.limit);
-
-    let prev_func;
-    let next_func;
-    if (kind === 'favorite') {
-      let callback = response => {
-        $('#tab-content-user-favorite').remove();
-        return this.setData(response, this.palette.EC.User.Favorites.meta, kind);
-      }
-      prev_func = () => this.palette.EC.User.Favorites.prev(callback);
-      next_func = () => this.palette.EC.User.Favorites.next(callback)
-    } else {
-      let callback = response => {
-        $('#tab-content-user-history').remove();
-        return this.setDataByCodes((response.map((item) => item.emoji_code)), this.palette.EC.User.History.meta, kind, true);
-      }
-      prev_func = () => this.palette.EC.User.History.prev(callback);
-      next_func = () => this.palette.EC.User.History.next(callback);
-    }
-    return this.user_tab_content.append((pane.append(this.palette.getPagination(kind, prev_func, next_func, cur_page, max_page))));
   }
 }
