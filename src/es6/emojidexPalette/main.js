@@ -10,8 +10,10 @@
 
 (function($, window, document) {
   let pluginName = "emojidexPalette";
-  let defaults =
-    {onComplete: undefined};
+  let defaults = {
+    onComplete: undefined,
+    paletteEmojisLimit: 66
+  };
 
   class Plugin {
     constructor(element, options) {

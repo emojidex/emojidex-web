@@ -4,7 +4,7 @@ class Palette {
     this.active_input_area = null;
     this.tabs = [];
     this.EC = new EmojidexClient({
-      limit: 66,
+      limit: this.plugin.options.paletteEmojisLimit,
       onReady: EC => {
         // start main --------
         $('input, textarea, [contenteditable="true"]').on('focus keyup mouseup', e => {

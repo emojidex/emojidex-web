@@ -1,13 +1,17 @@
 describe("emojidexPalette", function() {
   beforeAll(function(done) {
-    clearStorage();
-    helperBefore();
-    $("#palette-btn").emojidexPalette({
-      onComplete: () => {
-        $("#palette-input").emojidexPalette({
-          onComplete: () => { done(); }
-        });
-      }
+    clearStorage().then(() => {
+      helperBefore();
+      let limitForSpec = 5;
+      $("#palette-btn").emojidexPalette({
+        paletteEmojisLimit: limitForSpec,
+        onComplete: () => {
+          $("#palette-input").emojidexPalette({
+            paletteEmojisLimit: limitForSpec,
+            onComplete: () => { done(); }
+          });
+        }
+      });
     });
   });
 
