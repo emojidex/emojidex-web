@@ -91,8 +91,7 @@ class UserTab {
       $('#user-tab-content').remove();
       this.showLoginForm();
       return this.palette.toggleSorting();
-    }
-    );
+    });
     user_tab_list.append(logout_btn);
 
     this.user_tab_content = $('<div class="tab-content mt-m" id="user-tab-content"></div>');
@@ -110,7 +109,7 @@ class UserTab {
   setFavoriteTab() {
     return this.favoriteTab.createTabContent().then((content) => {
       return this.user_tab_content.append(content);
-    })
+    });
   }
 
   setPremiumData(response, kind) {
