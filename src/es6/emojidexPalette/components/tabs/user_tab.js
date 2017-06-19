@@ -5,6 +5,7 @@ class UserTab {
     this.tab_content = this.getTabContent();
     this.historyTab = new HistoryTab(this);
     this.favoriteTab = new FavoriteTab(this);
+    this.followingTab = new FollowingTab(this);
   }
 
   getTabContent() {
@@ -47,6 +48,7 @@ class UserTab {
         this.setUserTab();
         this.setHistoryTab();
         this.setFavoriteTab();
+        this.setFollowingTab();
         return this.palette.toggleSorting();
       } else {
         return this.showError(auth_info);
@@ -83,6 +85,7 @@ class UserTab {
     let user_tab_list = $('<ul class="nav nav-tabs mb-m mt-m" id="user-tab-list"></ul>');
     user_tab_list.append($('<li id="tab-user-favorite" class="active"><a href="#tab-content-user-favorite" data-toggle="tab">Favorite</a></li>'));
     user_tab_list.append($('<li id="tab-user-history"><a href="#tab-content-user-history" data-toggle="tab">History</a></li>'));
+    user_tab_list.append($('<li id="tab-user-Following"><a href="#follow-following" data-toggle="tab">Following</a></li>'));
 
     let logout_btn = $('<button class="btn btn-default btm-sm pull-right" id="palette-emoji-logout">LogOut</button>');
     logout_btn.click(() => {
@@ -110,6 +113,11 @@ class UserTab {
     return this.favoriteTab.createTabContent().then((content) => {
       return this.user_tab_content.append(content);
     });
+  }
+
+  setFollowingTab() {
+    this.user_tab_content.append(this.followingTab.tab_pane);
+    this.followingTab.addClickEvents();
   }
 
   setPremiumData(response, kind) {
