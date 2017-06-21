@@ -112,42 +112,6 @@ class Palette {
     return emoji_divs;
   }
 
-  setCodeList(kind, code_list) {
-    let emoji_divs = $(`<div class='${kind}-emoji-list clearfix'></div>`);
-    for (let i = 0; i < code_list.length; i++) {
-      let code = code_list[i];
-      let emoji_button = $('<button>',
-        {class: 'emoji-btn btn btn-default pull-left'});
-      let emoji_button_image = $('<img>', {
-        title: code,
-        class: 'img-responsive center-block',
-        src: `${this.EC.cdn_url}px32/${code.replace(/\s/g, '_')}.png`
-      }
-      );
-      emoji_button.prop('emoji_data', {code});
-
-      emoji_button.append(emoji_button_image);
-      emoji_button.click(e=> {
-        return this.insertEmojiAtCaret($(e.currentTarget).prop('emoji_data'));
-      }
-      );
-      //TODO implement ↓ properly
-      //@EC.Search.find code, (ret)=>
-      //  @setButtonInfo(ret, emoji_button)
-
-      emoji_divs.append(emoji_button);
-    }
-
-    return emoji_divs;
-  }
-
-  //TODO implement ↓ properly
-  //setButtonInfo: (emoji, target) ->
-  //  target.prop 'emoji_data', emoji
-  //  target.unbind('click')
-  //  target.click (e)=>
-  //    @insertEmojiAtCaret($(e.currentTarget).prop('emoji_data'))
-
   mojiOrCode(emoji) {
     if (emoji.moji !== null && emoji.moji !== '') { return emoji.moji; } else { return `:${emoji.code}:`; }
   }

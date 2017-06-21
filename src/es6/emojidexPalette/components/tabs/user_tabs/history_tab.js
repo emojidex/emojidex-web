@@ -7,12 +7,12 @@ class HistoryTab {
 
   createTabContent() {
     return this.EC.User.History.get().then(response => {
-      return this.setHistoryEmoji(response.history.map((item) => item.emoji_code));
+      return this.setHistoryEmoji(response);
     });
   }
 
   setHistoryEmoji(history) {
-    this.tab_pane.append(this.palette.setCodeList('history', history));
+    this.tab_pane.append(this.palette.setEmojiList('history', history));
     return this.createPagination()
   }
 
