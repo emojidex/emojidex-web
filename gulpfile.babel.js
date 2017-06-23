@@ -316,5 +316,5 @@ gulp.task('watch-slim', (cb) => {
 });
 
 gulp.task('watch-sass', (cb) => {
-  runSequence('sass', 'concat-css', cb);
+  runSequence('sass', 'concat-css', 'cssmin', cb);
 })

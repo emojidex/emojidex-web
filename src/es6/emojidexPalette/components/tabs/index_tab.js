@@ -15,6 +15,7 @@ class IndexTab {
         this.tab_data = called_data;
         this.tab_content.children().remove();
 
+        this.tab_content.append(`<div class="emojidex-category-name emjdx-all">Index</div>`);
         this.tab_content.append(this.palette.setEmojiList('index', result_emoji));
 
         let cur_page = this.palette.EC.Indexes.meta.total_count === 0 ? 0 : this.palette.EC.Indexes.cur_page;
