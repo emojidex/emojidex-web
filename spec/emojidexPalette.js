@@ -169,9 +169,14 @@ describe("emojidexPalette", function() {
         properties: 'prop_innerHTML',
         watchChildren: true,
         callback(data, i, mutations) {
-          expect($(data.vals[0]).find('.favorite-pagination ul.pagination li.palette-num span').text().substr(0, 1)).toBe('2');
-          remove_watch($('#user-tab-content'), 'content_user_next');
-          done();
+          spec_timer({
+            time: 1000,
+            callback() {
+              expect($(data.vals[0]).find('.favorite-pagination ul.pagination li.palette-num span').text().substr(0, 1)).toBe('2');
+              remove_watch($('#user-tab-content'), 'content_user_next');
+              done();
+            }
+          });
         }
       });
 
@@ -185,9 +190,14 @@ describe("emojidexPalette", function() {
         properties: 'prop_innerHTML',
         watchChildren: true,
         callback(data, i, mutations) {
-          expect($(data.vals[0]).find('.favorite-pagination ul.pagination li.palette-num span').text().substr(0, 1)).toBe('1');
-          remove_watch($('#user-tab-content'), 'content_user_prev');
-          done();
+          spec_timer({
+            time: 1000,
+            callback() {
+              expect($(data.vals[0]).find('.favorite-pagination ul.pagination li.palette-num span').text().substr(0, 1)).toBe('1');
+              remove_watch($('#user-tab-content'), 'content_user_prev');
+              done();
+            }
+          });
         }
       });
       $('#tab-content-user-favorite').find('.pagination .palette-pager')[0].click();
@@ -218,9 +228,14 @@ describe("emojidexPalette", function() {
         properties: 'prop_innerHTML',
         watchChildren: true,
         callback(data, i, mutations) {
-          expect($(data.vals[0]).find('.history-pagination ul.pagination li.palette-num span').text().substr(0, 1)).toBe('2');
-          remove_watch($('#user-tab-content'), 'content_user_history_next');
-          done();
+          spec_timer({
+            time: 1000,
+            callback() {
+              expect($(data.vals[0]).find('.history-pagination ul.pagination li.palette-num span').text().substr(0, 1)).toBe('2');
+              remove_watch($('#user-tab-content'), 'content_user_history_next');
+              done();
+            }
+          });
         }
       });
 
@@ -234,9 +249,14 @@ describe("emojidexPalette", function() {
         properties: 'prop_innerHTML',
         watchChildren: true,
         callback(data, i, mutations) {
-          expect($(data.vals[0]).find('.history-pagination ul.pagination li.palette-num span').text().substr(0, 1)).toBe('1');
-          remove_watch($('#user-tab-content'), 'content_user_history_prev');
-          done();
+          spec_timer({
+            time: 1000,
+            callback() {
+              expect($(data.vals[0]).find('.history-pagination ul.pagination li.palette-num span').text().substr(0, 1)).toBe('1');
+              remove_watch($('#user-tab-content'), 'content_user_history_prev');
+              done();
+            }
+          });
         }
       });
 

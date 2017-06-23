@@ -26,7 +26,7 @@ class HistoryTab {
 
     let callback = response => {
       this.tab_pane.children().remove();
-      this.tab_pane.append(this.setHistoryEmoji(response.map((item) => item.emoji_code)));
+      this.tab_pane.append(this.setHistoryEmoji(response));
     }
     let prev_func = () => this.EC.User.History.prev(callback);
     let next_func = () => this.EC.User.History.next(callback);
