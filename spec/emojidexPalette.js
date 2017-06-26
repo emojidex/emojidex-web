@@ -2,7 +2,7 @@ describe("emojidexPalette", function() {
   beforeAll(function(done) {
     clearStorage().then(() => {
       helperBefore();
-      let limitForSpec = 5;
+      let limitForSpec = 1;
       $("#palette-btn").emojidexPalette({
         paletteEmojisLimit: limitForSpec,
         onComplete: () => {
