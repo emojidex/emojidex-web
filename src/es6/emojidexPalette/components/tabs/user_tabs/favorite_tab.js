@@ -7,7 +7,7 @@ class FavoriteTab {
 
   createTabContent() {
     return this.EC.User.Favorites.get().then(response => {
-      return this.setFavoriteEmoji(response.emoji);
+      return this.setFavoriteEmoji(response);
     });
   }
 
