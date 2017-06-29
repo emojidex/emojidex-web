@@ -12,6 +12,7 @@ class HistoryTab {
   }
 
   setHistoryEmoji(history) {
+    this.tab_pane.children().remove();
     this.tab_pane.append(this.palette.setEmojiList('history', history));
     return this.createPagination()
   }

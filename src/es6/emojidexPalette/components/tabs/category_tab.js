@@ -7,8 +7,7 @@ class CategoryTab {
     this.tab_list = $(`<li id='tab-${category.code}' data-code='${category.code}'><a href='#tab-content-${category.code}' data-toggle='pill'><i class='emjdx-${category.code}'></a></li>`);
     this.tab_list.click(e => {
       return this.setCategory($(e.currentTarget).data('code'));
-    }
-    );
+    });
 
     this.tab_content = $(`<div class='tab-pane' id='tab-content-${category.code}'></div>`);
   }
@@ -30,6 +29,8 @@ class CategoryTab {
         this.tab_data = called_data;
         this.tab_content.children().remove();
 
+        let capitalized_category = this.palette.capitalize(this.category_name);
+        this.tab_content.append(`<div class="emojidex-category-name emjdx-${this.category_name}">${capitalized_category}</div>`);
         this.tab_content.append(this.palette.setEmojiList('category', result_emoji));
 
         let cur_page = this.palette.EC.Categories.meta.total_count === 0 ? 0 : this.palette.EC.Categories.cur_page;

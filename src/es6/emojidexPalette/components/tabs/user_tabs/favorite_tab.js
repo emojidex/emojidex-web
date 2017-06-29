@@ -12,6 +12,7 @@ class FavoriteTab {
   }
 
   setFavoriteEmoji(favorites) {
+    this.tab_pane.children().remove();
     this.tab_pane.append(this.palette.setEmojiList('favorite', favorites));
     return this.createPagination()
   }

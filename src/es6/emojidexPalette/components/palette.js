@@ -35,7 +35,7 @@ class Palette {
         'ui-dialog': 'emojidex-ui-dialog'
       },
       autoOpen: false,
-      width: 557,
+      width: 500,
       title: 'emojidex',
 
       create(e) {
@@ -50,6 +50,7 @@ class Palette {
       },
 
       open(e) {
+        $('.emojidex-ui-dialog').css('min-height', 445);  // height style is ignored, set here.
         $('.ui-dialog :button').blur();
         return $('.nav.nav-pills a').blur();
       }
@@ -159,7 +160,7 @@ class Palette {
   }
 
   getPagination(kind, prev_func, next_func, cur_page, max_page) {
-    let pagination = $(`<div class='${kind}-pagination text-center'><ul class='pagination mb-0'></ul></div>`);
+    let pagination = $(`<div class='${kind}-pagination text-center pagination-container'><ul class='pagination mb-0'></ul></div>`);
 
     pagination.find('.pagination')
       .append($(`<li class="palette-pager${(cur_page > 1) ? '' : ' disabled'}"><span>&laquo;</span></li>`).click(() => {
@@ -249,5 +250,9 @@ class Palette {
 
   addPaletteToElement(element) {
     return $(element).click(() => { this.openDialog(); });
+  }
+
+  capitalize(text) {
+    return text.charAt(0).toUpperCase() + text.slice(1);
   }
 }
