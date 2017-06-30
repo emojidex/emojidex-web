@@ -1,196 +1,177 @@
-#emojidex-emoji-palette {
-  // jquery-ui --------
-  @import '../../src/vendor/jquery-ui-1.12.1.custom/jquery-ui.min';
-  // @import 'jquery-ui';
+// jquery-ui --------
+@import '../../src/vendor/jquery-ui-1.12.1.custom/jquery-ui.min';
+// @import 'jquery-ui';
 
-  // bootstrap --------
-  // Core variables and mixins
-  @import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/variables';
-  @import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins';
+// bootstrap --------
+// Core variables and mixins
+@import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/variables';
+@import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins';
 
-  // Reset and dependencies
-  @import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/normalize';
-  @import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/glyphicons';
+// Reset and dependencies
+@import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/normalize';
+@import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/glyphicons';
 
-  // Core CSS
-  @import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/type';
-  @import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/forms';
-  @import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/scaffolding';
-  @import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/buttons';
+// Core CSS
+@import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/type';
+@import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/forms';
+@import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/scaffolding';
+@import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/buttons';
 
-  // Components
-  @import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/navs';
-  @import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/pagination';
-  @import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/input-groups';
+// Components
+@import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/navs';
+@import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/pagination';
+@import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/input-groups';
 
-  // Utility classes
-  @import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/utilities';
+// Utility classes
+@import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/utilities';
 
-  .emojidex-ui-dialog {
-    min-height: 397px;
-    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
-    border-radius: 4px;
-    background-color: #fff;
-    outline: none;
-  }
+.emojidex-ui-dialog {
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  background-color: #fff;
+  outline: none;
+}
 
-  .ui-dialog .ui-dialog-titlebar {
-    padding: 10px;
-    .ui-dialog-title {
-      a > img {
-        width: 116px;
-        height: 27px;
-        margin: 0;
-        padding: 0;
-      }
-    }
-  }
-
-  .ui-dialog .ui-dialog-content {
-    height: auto !important;
-  }
-  .ui-widget-header {
-    border: none;
-    .btn.btn-default[aria-label=Close] {
-      border-radius: 50px;
-      width: 27px;
+.ui-dialog .ui-dialog-titlebar {
+  padding: 10px;
+  .ui-dialog-title {
+    a > img {
+      width: 116px;
       height: 27px;
+      margin: 0;
+      padding: 0;
     }
   }
-  #emojidex-dialog-content {
-    padding: 5px 10px 10px;
-    [class*=-pagination] {
-      height: 35px;
-      margin-top: 10px;
-      ul.pagination {
-        margin: 0px;
-        .palette-pager {
-          cursor: pointer;
-        }
-      }
-      #sort-selector {
-        width: 128px;
-        margin-left: -128px;
-      }
-    }
-    .emoji-btn {
-      border-radius: 4px;
-      padding: 5px;
-      margin: 2px;
+}
 
-      img {
-        width: 32px;
-        height: 32px;
-        margin: 0;
-        padding: 0;
-      }
-    }
-    hr {
-      margin-top: 8px;
-      margin-bottom: 10px;
-      border-top: 1px solid #ddd;
-    }
+.ui-dialog .ui-dialog-content {
+  height: auto !important;
+}
+.ui-widget-header {
+  border: none;
+  .btn.btn-default[aria-label=Close] {
+    border-radius: 50px;
+    width: 27px;
+    height: 27px;
   }
-
-  .search-emoji-list {
+}
+#emojidex-dialog-content {
+  padding: 5px 10px 10px;
+  [class*=-pagination] {
+    height: 35px;
     margin-top: 10px;
-    height: auto;
+    ul.pagination {
+      margin: 0px;
+      .palette-pager {
+        cursor: pointer;
+      }
+    }
+    #sort-selector {
+      width: 128px;
+      margin-left: -128px;
+    }
   }
+  .emoji-btn {
+    border-radius: 4px;
+    padding: 5px;
+    margin: 2px;
 
-  .nav.nav-pills {
-    float: none;
-    li {
+    img {
+      width: 32px;
+      height: 32px;
+      margin: 0;
+      padding: 0;
+    }
+  }
+  hr {
+    margin-top: 8px;
+    margin-bottom: 10px;
+    border-top: 1px solid #ddd;
+  }
+}
+
+.search-emoji-list {
+  margin-top: 10px;
+  height: auto;
+}
+
+.emjdx-search {
+  color: #888
+}
+.emjdx-user {
+  color: #888
+}
+.emjdx-all {
+  color: #999
+}
+.emjdx-abstract {
+  color: #f76e6e
+}
+.emjdx-cosmos {
+  color: #f7b36e
+}
+.emjdx-faces {
+  color: #f7d56e
+}
+.emjdx-food {
+  color: #b3f76e
+}
+.emjdx-gestures {
+  color: #6ef76e
+}
+.emjdx-nature {
+  color: #6ef7b3
+}
+.emjdx-objects {
+  color: #6ef7f7
+}
+.emjdx-people {
+  color: #6eb3f7
+}
+.emjdx-places {
+  color: #6e6ef7
+}
+.emjdx-symbols {
+  color: #b36ef7
+}
+.emjdx-tools {
+  color: #f76ef7
+}
+.emjdx-transportation {
+  color: #f76eb3
+}
+
+.nav.nav-pills {
+  float: none;
+  li {
+    a {
+      padding: 3px 2px 1px 2px;
+      font-size: 25px;
+      text-decoration: none;
+      font-family: $font-family-base;
+      line-height: 1;
+      height: auto;
+    }
+    &.active {
       a {
-        padding: 3px 3px 1px 3px;
-        font-size: 25px;
-        text-decoration: none;
-        font-family: $font-family-base;
-        line-height: 1;
-        height: auto;
-        .emjdx-search {
-          color: #888
-        }
-        .emjdx-user {
-          color: #888
-        }
-        .emjdx-all {
-          color: #999
-        }
-        .emjdx-abstract {
-          color: #f76e6e
-        }
-        .emjdx-cosmos {
-          color: #f7b36e
-        }
-        .emjdx-faces {
-          color: #f7d56e
-        }
-        .emjdx-food {
-          color: #b3f76e
-        }
-        .emjdx-gestures {
-          color: #6ef76e
-        }
-        .emjdx-nature {
-          color: #6ef7b3
-        }
-        .emjdx-objects {
-          color: #6ef7f7
-        }
-        .emjdx-people {
-          color: #6eb3f7
-        }
-        .emjdx-places {
-          color: #6e6ef7
-        }
-        .emjdx-symbols {
-          color: #b36ef7
-        }
-        .emjdx-tools {
-          color: #f76ef7
-        }
-        .emjdx-transportation {
-          color: #f76eb3
-        }
-      }
-      &.active {
-        a {
-          background-color: #ddd;
-        }
+        background-color: #ddd;
       }
     }
   }
-
-  font-family: $font-family-base;
-  font-size: $font-size-base;
-  line-height: $line-height-base;
-  color: $text-color;
-  background-color: $body-bg;
 }
 
-.emojidex-palette-button {
-  opacity: 0;
+.pagination-container {
   position: absolute;
-  height: 25px;
-  width: 25px;
-  text-decoration: none;
-  font-size: 25px;
-  color: #ccc;
-  cursor: pointer;
-  -webkit-transition: all 0.25s;
-  -moz-transition: all 0.25s;
-  -ms-transition: all 0.25s;
-  -o-transition: all 0.25s;
-  transition: all 0.25s;
-  &:hover {
-    opacity: 1;
-  }
+  bottom: 10px;
+  width: 480px;
 }
-.with-emojidex-palette {
-  &:hover, &:focus {
-    & + .emojidex-palette-button {
-      opacity: 1;
-    }
+
+.emojidex-category-name {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 19px 0px;
+  &:before {
+    margin-right: 4px;
   }
 }
 

@@ -35,7 +35,7 @@ class Palette {
         'ui-dialog': 'emojidex-ui-dialog'
       },
       autoOpen: false,
-      width: 557,
+      width: 500,
       title: 'emojidex',
 
       create(e) {
@@ -50,6 +50,7 @@ class Palette {
       },
 
       open(e) {
+        $('.emojidex-ui-dialog').css('min-height', 445);  // height style is ignored, set here.
         $('.ui-dialog :button').blur();
         return $('.nav.nav-pills a').blur();
       }
@@ -112,42 +113,6 @@ class Palette {
     return emoji_divs;
   }
 
-  setCodeList(kind, code_list) {
-    let emoji_divs = $(`<div class='${kind}-emoji-list clearfix'></div>`);
-    for (let i = 0; i < code_list.length; i++) {
-      let code = code_list[i];
-      let emoji_button = $('<button>',
-        {class: 'emoji-btn btn btn-default pull-left'});
-      let emoji_button_image = $('<img>', {
-        title: code,
-        class: 'img-responsive center-block',
-        src: `${this.EC.cdn_url}px32/${code.replace(/\s/g, '_')}.png`
-      }
-      );
-      emoji_button.prop('emoji_data', {code});
-
-      emoji_button.append(emoji_button_image);
-      emoji_button.click(e=> {
-        return this.insertEmojiAtCaret($(e.currentTarget).prop('emoji_data'));
-      }
-      );
-      //TODO implement ↓ properly
-      //@EC.Search.find code, (ret)=>
-      //  @setButtonInfo(ret, emoji_button)
-
-      emoji_divs.append(emoji_button);
-    }
-
-    return emoji_divs;
-  }
-
-  //TODO implement ↓ properly
-  //setButtonInfo: (emoji, target) ->
-  //  target.prop 'emoji_data', emoji
-  //  target.unbind('click')
-  //  target.click (e)=>
-  //    @insertEmojiAtCaret($(e.currentTarget).prop('emoji_data'))
-
   mojiOrCode(emoji) {
     if (emoji.moji !== null && emoji.moji !== '') { return emoji.moji; } else { return `:${emoji.code}:`; }
   }
@@ -195,7 +160,7 @@ class Palette {
   }
 
   getPagination(kind, prev_func, next_func, cur_page, max_page) {
-    let pagination = $(`<div class='${kind}-pagination text-center'><ul class='pagination mb-0'></ul></div>`);
+    let pagination = $(`<div class='${kind}-pagination text-center pagination-container'><ul class='pagination mb-0'></ul></div>`);
 
     pagination.find('.pagination')
       .append($(`<li class="palette-pager${(cur_page > 1) ? '' : ' disabled'}"><span>&laquo;</span></li>`).click(() => {
@@ -285,5 +250,9 @@ class Palette {
 
   addPaletteToElement(element) {
     return $(element).click(() => { this.openDialog(); });
+  }
+
+  capitalize(text) {
+    return text.charAt(0).toUpperCase() + text.slice(1);
   }
 }

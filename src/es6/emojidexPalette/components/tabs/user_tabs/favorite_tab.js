@@ -7,11 +7,12 @@ class FavoriteTab {
 
   createTabContent() {
     return this.EC.User.Favorites.get().then(response => {
-      return this.setFavoriteEmoji(response.emoji);
+      return this.setFavoriteEmoji(response);
     });
   }
 
   setFavoriteEmoji(favorites) {
+    this.tab_pane.children().remove();
     this.tab_pane.append(this.palette.setEmojiList('favorite', favorites));
     return this.createPagination()
   }

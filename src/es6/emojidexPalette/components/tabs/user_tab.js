@@ -90,7 +90,10 @@ class UserTab {
     let logout_btn = $('<button class="btn btn-default btm-sm pull-right" id="palette-emoji-logout">LogOut</button>');
     logout_btn.click(() => {
       this.palette.EC.User.logout();
+
       $('#user-tab-list').remove();
+      $('#user-tab-content').children().removeClass('active');
+      this.favoriteTab.tab_pane.addClass('active');
       $('#user-tab-content').remove();
       this.showLoginForm();
       return this.palette.toggleSorting();
