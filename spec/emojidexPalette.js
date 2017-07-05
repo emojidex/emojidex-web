@@ -296,7 +296,7 @@ describe("emojidexPalette", function() {
 
     it('show following user emoji next [Requires a user account and following user]', function(done) {
       if (typeof user_info === 'undefined' || user_info === null) { pending(); }
-      const selectorCurrentUserInfo= '#follow-following .user-info.on';
+      const selectorCurrentUserInfo = '#follow-following .user-info.on';
       $(selectorCurrentUserInfo).watch({
         id: "watcher",
         properties: 'prop_innerHTML',
@@ -313,7 +313,7 @@ describe("emojidexPalette", function() {
 
     it('show following user emoji previous [Requires a user account and following user]', function(done) {
       if (typeof user_info === 'undefined' || user_info === null) { pending(); }
-      const selectorCurrentUserInfo= '#follow-following .user-info.on';
+      const selectorCurrentUserInfo = '#follow-following .user-info.on';
       $(selectorCurrentUserInfo).watch({
         id: "watcher",
         properties: 'prop_innerHTML',
@@ -361,7 +361,7 @@ describe("emojidexPalette", function() {
 
     it('show followers user emoji next [Requires premium a user account and followers user]', function(done) {
       if (typeof user_info === 'undefined' || user_info === null) { pending(); }
-      const selectorCurrentUserInfo= '#follow-followers .user-info.on';
+      const selectorCurrentUserInfo = '#follow-followers .user-info.on';
       $(selectorCurrentUserInfo).watch({
         id: "watcher",
         properties: 'prop_innerHTML',
@@ -378,7 +378,7 @@ describe("emojidexPalette", function() {
 
     it('show followers user emoji previous [Requires a premium user account and followers user]', function(done) {
       if (typeof user_info === 'undefined' || user_info === null) { pending(); }
-      const selectorCurrentUserInfo= '#follow-followers .user-info.on';
+      const selectorCurrentUserInfo = '#follow-followers .user-info.on';
       $(selectorCurrentUserInfo).watch({
         id: "watcher",
         properties: 'prop_innerHTML',
