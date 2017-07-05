@@ -2,51 +2,89 @@ class FollowingTab {
   constructor(user_tab) {
     this.EC = user_tab.palette.EC;
     this.palette = user_tab.palette;
+
+    this.selector_tab_pane = '#emojidex-emoji-palette #follow-following';
+    this.selector_users = `${this.selector_tab_pane} > .users`;
+
     this.tab_pane = $(
       `<div id='follow-following' class='tab-pane'>
-        <div class='users'>
-          <div class='btn btn-default'>user1</div>
-          <div class='btn btn-default'>user2</div>
-        </div>
-        <div class='wrapper'>
-          <div id='user1' class='user-info'>
-            <div class='user-name'>User1</div>
-            <div class='btn-close'aria-hidden='true'>X</div>
-            <div class="clearfix"/>
-            <hr>
-            <div class="user-emoji-list clearfix">
-              <button class="emoji-btn btn btn-default pull-left"><img alt="bat" title="bat" class="img-responsive center-block" src="https://cdn.emojidex.com/emoji/px32/bat.png"></button>
-              <button class="emoji-btn btn btn-default pull-left"><img alt="bat" title="bat" class="img-responsive center-block" src="https://cdn.emojidex.com/emoji/px32/bat.png"></button>
-              <button class="emoji-btn btn btn-default pull-left"><img alt="bat" title="bat" class="img-responsive center-block" src="https://cdn.emojidex.com/emoji/px32/bat.png"></button>
-            </div>
-          </div>
-          <div id='user2' class='user-info'>
-            <div class='user-name'>user2</div>
-            <div class='btn-close'aria-hidden='true'>X</div>
-            <div class="clearfix"/>
-            <hr>
-            <div class="user-emoji-list clearfix">
-              <button class="emoji-btn btn btn-default pull-left"><img alt="bgok" title="bgok" class="img-responsive center-block" src="https://cdn.emojidex.com/emoji/px32/bgok.png"></button>
-              <button class="emoji-btn btn btn-default pull-left"><img alt="bgok" title="bgok" class="img-responsive center-block" src="https://cdn.emojidex.com/emoji/px32/bgok.png"></button>
-              <button class="emoji-btn btn btn-default pull-left"><img alt="bgok" title="bgok" class="img-responsive center-block" src="https://cdn.emojidex.com/emoji/px32/bgok.png"></button>
-            </div>
-          </div>
-        </div>
+        <div class='users'></div>
       </div>`
-    );
+    )
   }
 
-  addClickEvents() {
-    $('#follow-following > .users > .btn').click((e) => {
-      $('#follow-following > .wrapper').find(`#${$(e.currentTarget).text()}`).addBack().addClass('on')
-    })
+  init() {
+    $(this.selector_users).children().remove();
+    $(`${this.selector_tab_pane} > .user-info`).remove();
 
-    $('#follow-following > .wrapper').find('.user-info > .btn-close').addBack().click(() => {
-      $('#follow-following > .wrapper').find('*').addBack().removeClass('on')
+    this.EC.User.Follow.getFollowing(following => {
+      for(let user_name of following) {
+        this.setUserButton(user_name);
+        this.setUserInfo(user_name);
+      }
     })
+  }
 
-    $('#follow-following > .wrapper > .user-info').click((e) => {
+  setUserButton(user_name) {
+    let user_button = $(`<div class='btn btn-default'>${user_name}</div>`).click(e => {
+      $(this.selector_tab_pane).find(`#${$(e.currentTarget).text()}`).addClass('on')
+    })
+    $(this.selector_users).append(user_button);
+  }
+
+  setUserInfo(user_name) {
+    let user_info = $(`
+      <div id='${user_name}' class='user-info'>
+        <div class='btn-close' aria-hidden='true'><i class='emjdx-abstract flip-vertical'></i></div>
+        <div class='user-name'>${user_name}</div>
+        <div class="clearfix"/>
+        <hr>
+        <div class="user-emoji-list clearfix">
+        </div>
+      </div>
+    `).click(e => {
       e.stopPropagation();
     })
+    user_info.find('.btn-close').click(() => {
+      $(this.selector_tab_pane).find('*').removeClass('on');
+    });
+    $(this.selector_tab_pane).append(user_info);
+
+    this.setUserEmojisInfo(user_info)
+  }
+
+  setUserEmojisInfo(user_info, option = {}) {
+    const user_name = user_info.attr('id')
+    return this.EC.Indexes.user(user_name, undefined, option).then((response) => {
+      user_info.data(response.meta);
+      user_info.data({user_name: user_name, max_page: Math.ceil(response.meta.total_count / this.EC.limit ? response.meta.total_count / this.EC.limit : 1)});
+
+      user_info.find('.user-emoji-list').children().remove()
+      user_info.find('.following-pagination').remove()
+
+      user_info.find('.user-emoji-list').append(this.palette.setEmojiList('following', response.emoji))
+      this.setPagination(user_info)
+    })
+  }
+
+  setPagination(user_info) {
+    let meta = user_info.data();
+    if (!this.EC.User.auth_info.premium) {
+      meta.max_page = 1;
+    }
+
+    const prev_func = () => {
+      option = {page: meta.page - 1};
+      if(option.page > 0) {
+        this.setUserEmojisInfo(user_info, option);
+      }
+    }
+    const next_func = () => {
+      option = {page: meta.page + 1};
+      if(option.page <= meta.max_page) {
+        this.setUserEmojisInfo(user_info, option);
+      }
+    }
+    user_info.append(this.palette.getPagination('following', prev_func, next_func, meta.page, meta.max_page))
   }
 }
