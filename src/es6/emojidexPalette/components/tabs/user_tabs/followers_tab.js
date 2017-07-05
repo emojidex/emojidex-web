@@ -1,13 +1,13 @@
-class FollowingTab {
+class FollowersTab {
   constructor(user_tab) {
     this.EC = user_tab.palette.EC;
     this.palette = user_tab.palette;
 
-    this.selector_tab_pane = '#emojidex-emoji-palette #follow-following';
+    this.selector_tab_pane = '#emojidex-emoji-palette #follow-followers';
     this.selector_users = `${this.selector_tab_pane} > .users`;
 
     this.tab_pane = $(`
-      <div id='follow-following' class='tab-pane'>
+      <div id='follow-followers' class='tab-pane'>
         <div class='users'></div>
       </div>
     `);
@@ -17,8 +17,8 @@ class FollowingTab {
     $(this.selector_users).children().remove();
     $(`${this.selector_tab_pane} > .user-info`).remove();
 
-    this.EC.User.Follow.getFollowing(following => {
-      for(let user_name of following) {
+    this.EC.User.Follow.getFollowers(followers => {
+      for(let user_name of followers) {
         this.setUserButton(user_name);
         this.setUserInfo(user_name);
       }
@@ -60,9 +60,9 @@ class FollowingTab {
       user_info.data({user_name: user_name, max_page: Math.ceil(response.meta.total_count / this.EC.limit ? response.meta.total_count / this.EC.limit : 1)});
 
       user_info.find('.user-emoji-list').children().remove();
-      user_info.find('.following-pagination').remove();
+      user_info.find('.followers-pagination').remove();
 
-      user_info.find('.user-emoji-list').append(this.palette.setEmojiList('following', response.emoji));
+      user_info.find('.user-emoji-list').append(this.palette.setEmojiList('followers', response.emoji));
       this.setPagination(user_info);
     });
   }
@@ -85,6 +85,6 @@ class FollowingTab {
         this.setUserEmojisInfo(user_info, option);
       }
     }
-    user_info.append(this.palette.getPagination('following', prev_func, next_func, meta.page, meta.max_page));
+    user_info.append(this.palette.getPagination('followers', prev_func, next_func, meta.page, meta.max_page));
   }
 }
