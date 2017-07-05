@@ -328,6 +328,71 @@ describe("emojidexPalette", function() {
       $($(`${selectorCurrentUserInfo} .palette-pager`)[0]).click();
     });
 
+    // followers tab --------
+    it('show followers tab [Requires a premium user account and followers user]', function(done) {
+      if (typeof user_info === 'undefined' || user_info === null) { pending(); }
+      $('#follow-followers').watch({
+        id: "watcher",
+        properties: 'attr_class',
+        callback(data, i) {
+          expect($('#follow-followers .users .btn').length).toBeTruthy();
+          removeWatch($('#follow-followers'), 'watcher');
+          done();
+        }
+      });
+
+      $('#tab-user-followers a').click();
+    });
+
+    it('show followers user info [Requires a premium user account and followers user]', function(done) {
+      if (typeof user_info === 'undefined' || user_info === null) { pending(); }
+      $('#follow-followers .user-info').watch({
+        id: "watcher",
+        properties: 'attr_class',
+        callback(data, i) {
+          expect($('#follow-followers .user-info.on .emoji-btn').length).toBeTruthy();
+          removeWatch($('.user-info'), 'watcher');
+          done();
+        }
+      });
+
+      $($('#follow-followers .users .btn')[0]).click();
+    });
+
+    it('show followers user emoji next [Requires premium a user account and followers user]', function(done) {
+      if (typeof user_info === 'undefined' || user_info === null) { pending(); }
+      const selectorCurrentUserInfo= '#follow-followers .user-info.on';
+      $(selectorCurrentUserInfo).watch({
+        id: "watcher",
+        properties: 'prop_innerHTML',
+        watchChildren: true,
+        callback(data, i) {
+          expect($(`${selectorCurrentUserInfo} .palette-num span`).text().charAt(0)).toBe('2');
+          removeWatch($('.user-info'), 'watcher');
+          done();
+        }
+      });
+
+      $($(`${selectorCurrentUserInfo} .palette-pager`)[1]).click();
+    });
+
+    it('show followers user emoji previous [Requires a premium user account and followers user]', function(done) {
+      if (typeof user_info === 'undefined' || user_info === null) { pending(); }
+      const selectorCurrentUserInfo= '#follow-followers .user-info.on';
+      $(selectorCurrentUserInfo).watch({
+        id: "watcher",
+        properties: 'prop_innerHTML',
+        watchChildren: true,
+        callback(data, i) {
+          expect($(`${selectorCurrentUserInfo} .palette-num span`).text().charAt(0)).toBe('1');
+          removeWatch($('.user-info'), 'watcher');
+          done();
+        }
+      });
+
+      $($(`${selectorCurrentUserInfo} .palette-pager`)[0]).click();
+    });
+
    // it 'premium user can see the newest/popular emoji', (done) ->
    //   pending() unless premium_user_info?
    //   timer_option =
