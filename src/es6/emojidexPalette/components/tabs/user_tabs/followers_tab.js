@@ -6,11 +6,11 @@ class FollowersTab {
     this.selector_tab_pane = '#emojidex-emoji-palette #follow-followers';
     this.selector_users = `${this.selector_tab_pane} > .users`;
 
-    this.tab_pane = $(
-      `<div id='follow-followers' class='tab-pane'>
+    this.tab_pane = $(`
+      <div id='follow-followers' class='tab-pane'>
         <div class='users'></div>
-      </div>`
-    )
+      </div>
+    `)
   }
 
   init() {
