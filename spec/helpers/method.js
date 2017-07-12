@@ -23,6 +23,12 @@ function spec_timer(option) {
   if (default_option.callback != null) { return setTimeout(default_option.callback, default_option.time); }
 }
 
+function specTimer(time) {
+  return new Promise((resolve, reject) => {
+    setTimeout(resolve, time);
+  });
+}
+
 function removeWatch(object, id) {
   object.unwatch(id);
   object.removeData(id);
@@ -63,4 +69,10 @@ function clearStorage() {
   return CSC.onConnect().then(() => {
     return CSC.clear();
   });
+}
+
+function closePalette() {
+  // $('#spec-wrap').remove(); してもパレットが残ることがあるため
+  $('button.pull-right[aria-label="Close"]').click();
+  $('#emojidex-emoji-palette').remove();
 }

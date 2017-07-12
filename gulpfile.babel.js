@@ -273,7 +273,7 @@ gulp.task('jasmine', () => {
     'dist/img/logo.png',
     'dist/css/document.min.css',
     'dist/css/emojidex.min.css',
-    'spec/*.js'
+    'spec/**/*.js'
   ];
   return gulp.src(testFiles)
     .pipe(watch(testFiles))
