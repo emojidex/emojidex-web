@@ -30,7 +30,7 @@ describe("emojidexPalette", function() {
       properties: 'display',
       callback() {
         expect($('.ui-dialog')).toHaveCss({display: 'block'});
-        remove_watch($('.ui-dialog'), 'dialog');
+        removeWatch($('.ui-dialog'), 'dialog');
         done();
       }
     });
@@ -49,7 +49,7 @@ describe("emojidexPalette", function() {
         callback(data, i) {
           if (data.vals[0].match(/category-emoji-list/)) {
             expect($('#tab-content-faces').find('img').length).toBeTruthy();
-            remove_watch($('#tab-content-faces'), 'content_faces');
+            removeWatch($('#tab-content-faces'), 'content_faces');
             done();
           }
         }
@@ -67,7 +67,7 @@ describe("emojidexPalette", function() {
         watchChildren: true,
         callback(data, i, mutations) {
           expect($(data.vals[0]).find('ul.pagination li.disabled span').text().substr(0, 1)).toBe('2');
-          remove_watch($('#tab-content-faces'), 'content_faces');
+          removeWatch($('#tab-content-faces'), 'content_faces');
           done();
         }
       });
@@ -82,7 +82,7 @@ describe("emojidexPalette", function() {
         watchChildren: true,
         callback(data, i, mutations) {
           expect($(data.vals[0]).find('ul.pagination li.palette-num span').text().substr(0, 1)).toBe('1');
-          remove_watch($('#tab-content-faces'), 'content_faces');
+          removeWatch($('#tab-content-faces'), 'content_faces');
           done();
         }
       });
@@ -105,7 +105,7 @@ describe("emojidexPalette", function() {
       callback(data, i) {
         if (data.vals[0].match(/search-emoji-list/)) {
           expect($($('#tab-content-search').find('img')[0]).attr('title')).toContain('test');
-          remove_watch($('#tab-content-search'), 'content_search');
+          removeWatch($('#tab-content-search'), 'content_search');
           done();
         }
       }
@@ -127,7 +127,7 @@ describe("emojidexPalette", function() {
           if (data.vals[0].match(/login-error/)) {
             // TODO: english text
             expect($('#login-error span').text()).toBe('Login failed. Please check your username and password or login here.');
-            remove_watch($('#tab-content-user'), 'content_user');
+            removeWatch($('#tab-content-user'), 'content_user');
             done();
           }
         }
@@ -150,7 +150,7 @@ describe("emojidexPalette", function() {
           if (data.vals[0].match(/favorite-emoji-list/)) {
             $('#tab-user-favorite a').click();
             expect($('#tab-content-user-favorite').find('img').length).toBeTruthy();
-            remove_watch($('#tab-content-user'), 'content_user');
+            removeWatch($('#tab-content-user'), 'content_user');
             done();
           }
         }
@@ -173,7 +173,7 @@ describe("emojidexPalette", function() {
             time: 1000,
             callback() {
               expect($(data.vals[0]).find('.favorite-pagination ul.pagination li.palette-num span').text().substr(0, 1)).toBe('2');
-              remove_watch($('#user-tab-content'), 'content_user_next');
+              removeWatch($('#user-tab-content'), 'content_user_next');
               done();
             }
           });
@@ -194,7 +194,7 @@ describe("emojidexPalette", function() {
             time: 1000,
             callback() {
               expect($(data.vals[0]).find('.favorite-pagination ul.pagination li.palette-num span').text().substr(0, 1)).toBe('1');
-              remove_watch($('#user-tab-content'), 'content_user_prev');
+              removeWatch($('#user-tab-content'), 'content_user_prev');
               done();
             }
           });
@@ -212,7 +212,7 @@ describe("emojidexPalette", function() {
         callback(data, i) {
           if (data.vals[0].match(/history-emoji-list/)) {
             expect($('#tab-content-user-history').find('img').length).toBeTruthy();
-            remove_watch($('#tab-content-user'), 'content_user_history');
+            removeWatch($('#tab-content-user'), 'content_user_history');
             done();
           }
         }
@@ -232,7 +232,7 @@ describe("emojidexPalette", function() {
             time: 1000,
             callback() {
               expect($(data.vals[0]).find('.history-pagination ul.pagination li.palette-num span').text().substr(0, 1)).toBe('2');
-              remove_watch($('#user-tab-content'), 'content_user_history_next');
+              removeWatch($('#user-tab-content'), 'content_user_history_next');
               done();
             }
           });
@@ -253,7 +253,7 @@ describe("emojidexPalette", function() {
             time: 1000,
             callback() {
               expect($(data.vals[0]).find('.history-pagination ul.pagination li.palette-num span').text().substr(0, 1)).toBe('1');
-              remove_watch($('#user-tab-content'), 'content_user_history_prev');
+              removeWatch($('#user-tab-content'), 'content_user_history_prev');
               done();
             }
           });
@@ -261,6 +261,136 @@ describe("emojidexPalette", function() {
       });
 
       $('#tab-content-user-history').find('.pagination .palette-pager')[0].click();
+    });
+
+    // following tab --------
+    it('show following tab [Requires a user account and following user]', function(done) {
+      if (typeof user_info === 'undefined' || user_info === null) { pending(); }
+      $('#follow-following').watch({
+        id: "watcher",
+        properties: 'attr_class',
+        callback(data, i) {
+          expect($('#follow-following .users .btn').length).toBeTruthy();
+          removeWatch($('#follow-following'), 'watcher');
+          done();
+        }
+      });
+
+      $('#tab-user-following a').click();
+    });
+
+    it('show following user info [Requires a user account and following user]', function(done) {
+      if (typeof user_info === 'undefined' || user_info === null) { pending(); }
+      $('#follow-following .user-info').watch({
+        id: "watcher",
+        properties: 'attr_class',
+        callback(data, i) {
+          expect($('#follow-following .user-info.on .emoji-btn').length).toBeTruthy();
+          removeWatch($('.user-info'), 'watcher');
+          done();
+        }
+      });
+
+      $($('#follow-following .users .btn')[0]).click();
+    });
+
+    it('show following user emoji next [Requires a user account and following user]', function(done) {
+      if (typeof user_info === 'undefined' || user_info === null) { pending(); }
+      const selectorCurrentUserInfo = '#follow-following .user-info.on';
+      $(selectorCurrentUserInfo).watch({
+        id: "watcher",
+        properties: 'prop_innerHTML',
+        watchChildren: true,
+        callback(data, i) {
+          expect($(`${selectorCurrentUserInfo} .palette-num span`).text().charAt(0)).toBe('2');
+          removeWatch($('.user-info'), 'watcher');
+          done();
+        }
+      });
+
+      $($(`${selectorCurrentUserInfo} .palette-pager`)[1]).click();
+    });
+
+    it('show following user emoji previous [Requires a user account and following user]', function(done) {
+      if (typeof user_info === 'undefined' || user_info === null) { pending(); }
+      const selectorCurrentUserInfo = '#follow-following .user-info.on';
+      $(selectorCurrentUserInfo).watch({
+        id: "watcher",
+        properties: 'prop_innerHTML',
+        watchChildren: true,
+        callback(data, i) {
+          expect($(`${selectorCurrentUserInfo} .palette-num span`).text().charAt(0)).toBe('1');
+          removeWatch($('.user-info'), 'watcher');
+          done();
+        }
+      });
+
+      $($(`${selectorCurrentUserInfo} .palette-pager`)[0]).click();
+    });
+
+    // followers tab --------
+    it('show followers tab [Requires a premium user account and followers user]', function(done) {
+      if (typeof user_info === 'undefined' || user_info === null) { pending(); }
+      $('#follow-followers').watch({
+        id: "watcher",
+        properties: 'attr_class',
+        callback(data, i) {
+          expect($('#follow-followers .users .btn').length).toBeTruthy();
+          removeWatch($('#follow-followers'), 'watcher');
+          done();
+        }
+      });
+
+      $('#tab-user-followers a').click();
+    });
+
+    it('show followers user info [Requires a premium user account and followers user]', function(done) {
+      if (typeof user_info === 'undefined' || user_info === null) { pending(); }
+      $('#follow-followers .user-info').watch({
+        id: "watcher",
+        properties: 'attr_class',
+        callback(data, i) {
+          expect($('#follow-followers .user-info.on .emoji-btn').length).toBeTruthy();
+          removeWatch($('.user-info'), 'watcher');
+          done();
+        }
+      });
+
+      $($('#follow-followers .users .btn')[0]).click();
+    });
+
+    it('show followers user emoji next [Requires premium a user account and followers user]', function(done) {
+      if (typeof user_info === 'undefined' || user_info === null) { pending(); }
+      const selectorCurrentUserInfo = '#follow-followers .user-info.on';
+      $(selectorCurrentUserInfo).watch({
+        id: "watcher",
+        properties: 'prop_innerHTML',
+        watchChildren: true,
+        callback(data, i) {
+          expect($(`${selectorCurrentUserInfo} .palette-num span`).text().charAt(0)).toBe('2');
+          removeWatch($('.user-info'), 'watcher');
+          done();
+        }
+      });
+
+      $($(`${selectorCurrentUserInfo} .palette-pager`)[1]).click();
+    });
+
+    it('show followers user emoji previous [Requires a premium user account and followers user]', function(done) {
+      if (typeof user_info === 'undefined' || user_info === null) { pending(); }
+      const selectorCurrentUserInfo = '#follow-followers .user-info.on';
+      $(selectorCurrentUserInfo).watch({
+        id: "watcher",
+        properties: 'prop_innerHTML',
+        watchChildren: true,
+        callback(data, i) {
+          expect($(`${selectorCurrentUserInfo} .palette-num span`).text().charAt(0)).toBe('1');
+          removeWatch($('.user-info'), 'watcher');
+          done();
+        }
+      });
+
+      $($(`${selectorCurrentUserInfo} .palette-pager`)[0]).click();
     });
 
    // it 'premium user can see the newest/popular emoji', (done) ->
@@ -283,7 +413,7 @@ describe("emojidexPalette", function() {
         watchChildren: true,
         callback(data, i) {
           expect($('#palette-emoji-username-input')).toHaveCss({display: 'block'});
-          remove_watch($('#tab-content-user'), 'content_user');
+          removeWatch($('#tab-content-user'), 'content_user');
           done();
         }
       });
@@ -299,7 +429,7 @@ describe("emojidexPalette", function() {
         callback(data, i) {
           if (data.vals[0].match(/favorite-emoji-list/)) {
             expect($('#tab-content-user-favorite').find('img').length).toBeTruthy();
-            remove_watch($('#tab-content-user'), 'content_user');
+            removeWatch($('#tab-content-user'), 'content_user');
             done();
           }
         }
@@ -342,7 +472,7 @@ describe("emojidexPalette", function() {
               id: 'dialog_2',
               properties: 'display',
               callback() {
-                remove_watch($('.ui-dialog'), 'dialog_2');
+                removeWatch($('.ui-dialog'), 'dialog_2');
 
                 $('#tab-content-user').watch({
                   id: 'content_user',
@@ -352,7 +482,7 @@ describe("emojidexPalette", function() {
                     if (data.vals[0].match(/favorite-emoji-list/)) {
                       expect($('#tab-content-user-favorite').find('img').length).toBeTruthy();
                       $('button.pull-right[aria-label="Close"]').click();
-                      remove_watch($('#tab-content-user'), 'content_user');
+                      removeWatch($('#tab-content-user'), 'content_user');
                       return done();
                     }
                   }

@@ -23,7 +23,7 @@ function spec_timer(option) {
   if (default_option.callback != null) { return setTimeout(default_option.callback, default_option.time); }
 }
 
-function remove_watch(object, id) {
+function removeWatch(object, id) {
   object.unwatch(id);
   object.removeData(id);
 }

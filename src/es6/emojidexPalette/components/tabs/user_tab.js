@@ -5,6 +5,8 @@ class UserTab {
     this.tab_content = this.getTabContent();
     this.historyTab = new HistoryTab(this);
     this.favoriteTab = new FavoriteTab(this);
+    this.followingTab = new FollowingTab(this);
+    this.followersTab = new FollowersTab(this);
   }
 
   getTabContent() {
@@ -44,9 +46,13 @@ class UserTab {
     let callback = auth_info => {
       if (auth_info.status === 'verified') {
         this.hideLoginForm();
-        this.setUserTab();
+        this.setUserTab(auth_info);
         this.setHistoryTab();
         this.setFavoriteTab();
+        this.setFollowingTab();
+        if(auth_info.premium) {
+          this.setFollowersTab();
+        }
         return this.palette.toggleSorting();
       } else {
         return this.showError(auth_info);
@@ -79,10 +85,14 @@ class UserTab {
     return $('#palette-emoji-login-submit').show();
   }
 
-  setUserTab() {
+  setUserTab(auth_info) {
     let user_tab_list = $('<ul class="nav nav-tabs mb-m mt-m" id="user-tab-list"></ul>');
     user_tab_list.append($('<li id="tab-user-favorite" class="active"><a href="#tab-content-user-favorite" data-toggle="tab">Favorite</a></li>'));
     user_tab_list.append($('<li id="tab-user-history"><a href="#tab-content-user-history" data-toggle="tab">History</a></li>'));
+    user_tab_list.append($('<li id="tab-user-following"><a href="#follow-following" data-toggle="tab">Following</a></li>'));
+    if(auth_info.premium) {
+      user_tab_list.append($('<li id="tab-user-followers"><a href="#follow-followers" data-toggle="tab">Followers</a></li>'));
+    }
 
     let logout_btn = $('<button class="btn btn-default btm-sm pull-right" id="palette-emoji-logout">LogOut</button>');
     logout_btn.click(() => {
@@ -94,8 +104,7 @@ class UserTab {
       $('#user-tab-content').remove();
       this.showLoginForm();
       return this.palette.toggleSorting();
-    }
-    );
+    });
     user_tab_list.append(logout_btn);
 
     this.user_tab_content = $('<div class="tab-content mt-m" id="user-tab-content"></div>');
@@ -113,7 +122,17 @@ class UserTab {
   setFavoriteTab() {
     return this.favoriteTab.createTabContent().then((content) => {
       return this.user_tab_content.append(content);
-    })
+    });
+  }
+
+  setFollowingTab() {
+    this.user_tab_content.append(this.followingTab.tab_pane);
+    this.followingTab.init();
+  }
+
+  setFollowersTab() {
+    this.user_tab_content.append(this.followersTab.tab_pane);
+    this.followersTab.init();
   }
 
   setPremiumData(response, kind) {

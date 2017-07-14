@@ -1122,6 +1122,8 @@ var UserTab = function () {
     this.tab_content = this.getTabContent();
     this.historyTab = new HistoryTab(this);
     this.favoriteTab = new FavoriteTab(this);
+    this.followingTab = new FollowingTab(this);
+    this.followersTab = new FollowersTab(this);
   }
 
   _createClass(UserTab, [{
@@ -1169,9 +1171,13 @@ var UserTab = function () {
       var callback = function callback(auth_info) {
         if (auth_info.status === 'verified') {
           _this2.hideLoginForm();
-          _this2.setUserTab();
+          _this2.setUserTab(auth_info);
           _this2.setHistoryTab();
           _this2.setFavoriteTab();
+          _this2.setFollowingTab();
+          if (auth_info.premium) {
+            _this2.setFollowersTab();
+          }
           return _this2.palette.toggleSorting();
         } else {
           return _this2.showError(auth_info);
@@ -1212,12 +1218,16 @@ var UserTab = function () {
     }
   }, {
     key: 'setUserTab',
-    value: function setUserTab() {
+    value: function setUserTab(auth_info) {
       var _this3 = this;
 
       var user_tab_list = $('<ul class="nav nav-tabs mb-m mt-m" id="user-tab-list"></ul>');
       user_tab_list.append($('<li id="tab-user-favorite" class="active"><a href="#tab-content-user-favorite" data-toggle="tab">Favorite</a></li>'));
       user_tab_list.append($('<li id="tab-user-history"><a href="#tab-content-user-history" data-toggle="tab">History</a></li>'));
+      user_tab_list.append($('<li id="tab-user-following"><a href="#follow-following" data-toggle="tab">Following</a></li>'));
+      if (auth_info.premium) {
+        user_tab_list.append($('<li id="tab-user-followers"><a href="#follow-followers" data-toggle="tab">Followers</a></li>'));
+      }
 
       var logout_btn = $('<button class="btn btn-default btm-sm pull-right" id="palette-emoji-logout">LogOut</button>');
       logout_btn.click(function () {
@@ -1254,6 +1264,18 @@ var UserTab = function () {
       return this.favoriteTab.createTabContent().then(function (content) {
         return _this5.user_tab_content.append(content);
       });
+    }
+  }, {
+    key: 'setFollowingTab',
+    value: function setFollowingTab() {
+      this.user_tab_content.append(this.followingTab.tab_pane);
+      this.followingTab.init();
+    }
+  }, {
+    key: 'setFollowersTab',
+    value: function setFollowersTab() {
+      this.user_tab_content.append(this.followersTab.tab_pane);
+      this.followersTab.init();
     }
   }, {
     key: 'setPremiumData',
@@ -1334,6 +1356,264 @@ var FavoriteTab = function () {
   return FavoriteTab;
 }();
 //# sourceMappingURL=favorite_tab.js.map
+
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var FollowersTab = function () {
+  function FollowersTab(user_tab) {
+    _classCallCheck(this, FollowersTab);
+
+    this.EC = user_tab.palette.EC;
+    this.palette = user_tab.palette;
+
+    this.selector_tab_pane = '#emojidex-emoji-palette #follow-followers';
+    this.selector_users = this.selector_tab_pane + ' > .users';
+
+    this.tab_pane = $('\n      <div id=\'follow-followers\' class=\'tab-pane\'>\n        <div class=\'users\'></div>\n      </div>\n    ');
+  }
+
+  _createClass(FollowersTab, [{
+    key: 'init',
+    value: function init() {
+      var _this = this;
+
+      $(this.selector_users).children().remove();
+      $(this.selector_tab_pane + ' > .user-info').remove();
+
+      this.EC.User.Follow.getFollowers(function (followers) {
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+          for (var _iterator = followers[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var user_name = _step.value;
+
+            _this.setUserButton(user_name);
+            _this.setUserInfo(user_name);
+          }
+        } catch (err) {
+          _didIteratorError = true;
+          _iteratorError = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion && _iterator.return) {
+              _iterator.return();
+            }
+          } finally {
+            if (_didIteratorError) {
+              throw _iteratorError;
+            }
+          }
+        }
+      });
+    }
+  }, {
+    key: 'setUserButton',
+    value: function setUserButton(user_name) {
+      var _this2 = this;
+
+      var user_button = $('<div class=\'btn btn-default\'>' + user_name + '</div>').click(function (e) {
+        $(_this2.selector_tab_pane).find('#' + $(e.currentTarget).text()).addClass('on');
+      });
+      $(this.selector_users).append(user_button);
+    }
+  }, {
+    key: 'setUserInfo',
+    value: function setUserInfo(user_name) {
+      var _this3 = this;
+
+      var user_info = $('\n      <div id=\'' + user_name + '\' class=\'user-info\'>\n        <div class=\'btn-close\' aria-hidden=\'true\'><i class=\'emjdx-abstract flip-vertical\'></i></div>\n        <div class=\'user-name\'>' + user_name + '</div>\n        <div class="clearfix"/>\n        <hr>\n        <div class="user-emoji-list clearfix">\n        </div>\n      </div>\n    ').click(function (e) {
+        e.stopPropagation();
+      });
+      user_info.find('.btn-close').click(function () {
+        $(_this3.selector_tab_pane).find('*').removeClass('on');
+      });
+      $(this.selector_tab_pane).append(user_info);
+
+      this.setUserEmojisInfo(user_info);
+    }
+  }, {
+    key: 'setUserEmojisInfo',
+    value: function setUserEmojisInfo(user_info) {
+      var _this4 = this;
+
+      var option = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+      var user_name = user_info.attr('id');
+      return this.EC.Indexes.user(user_name, undefined, option).then(function (response) {
+        user_info.data(response.meta);
+        user_info.data({ user_name: user_name, max_page: Math.ceil(response.meta.total_count / _this4.EC.limit ? response.meta.total_count / _this4.EC.limit : 1) });
+
+        user_info.find('.user-emoji-list').children().remove();
+        user_info.find('.followers-pagination').remove();
+
+        user_info.find('.user-emoji-list').append(_this4.palette.setEmojiList('followers', response.emoji));
+        _this4.setPagination(user_info);
+      });
+    }
+  }, {
+    key: 'setPagination',
+    value: function setPagination(user_info) {
+      var _this5 = this;
+
+      var meta = user_info.data();
+      if (!this.EC.User.auth_info.premium) {
+        meta.max_page = 1;
+      }
+
+      var prev_func = function prev_func() {
+        option = { page: meta.page - 1 };
+        if (option.page > 0) {
+          _this5.setUserEmojisInfo(user_info, option);
+        }
+      };
+      var next_func = function next_func() {
+        option = { page: meta.page + 1 };
+        if (option.page <= meta.max_page) {
+          _this5.setUserEmojisInfo(user_info, option);
+        }
+      };
+      user_info.append(this.palette.getPagination('followers', prev_func, next_func, meta.page, meta.max_page));
+    }
+  }]);
+
+  return FollowersTab;
+}();
+//# sourceMappingURL=followers_tab.js.map
+
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var FollowingTab = function () {
+  function FollowingTab(user_tab) {
+    _classCallCheck(this, FollowingTab);
+
+    this.EC = user_tab.palette.EC;
+    this.palette = user_tab.palette;
+
+    this.selector_tab_pane = '#emojidex-emoji-palette #follow-following';
+    this.selector_users = this.selector_tab_pane + ' > .users';
+
+    this.tab_pane = $('\n      <div id=\'follow-following\' class=\'tab-pane\'>\n        <div class=\'users\'></div>\n      </div>\n    ');
+  }
+
+  _createClass(FollowingTab, [{
+    key: 'init',
+    value: function init() {
+      var _this = this;
+
+      $(this.selector_users).children().remove();
+      $(this.selector_tab_pane + ' > .user-info').remove();
+
+      this.EC.User.Follow.getFollowing(function (following) {
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+          for (var _iterator = following[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var user_name = _step.value;
+
+            _this.setUserButton(user_name);
+            _this.setUserInfo(user_name);
+          }
+        } catch (err) {
+          _didIteratorError = true;
+          _iteratorError = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion && _iterator.return) {
+              _iterator.return();
+            }
+          } finally {
+            if (_didIteratorError) {
+              throw _iteratorError;
+            }
+          }
+        }
+      });
+    }
+  }, {
+    key: 'setUserButton',
+    value: function setUserButton(user_name) {
+      var _this2 = this;
+
+      var user_button = $('<div class=\'btn btn-default\'>' + user_name + '</div>').click(function (e) {
+        $(_this2.selector_tab_pane).find('#' + $(e.currentTarget).text()).addClass('on');
+      });
+      $(this.selector_users).append(user_button);
+    }
+  }, {
+    key: 'setUserInfo',
+    value: function setUserInfo(user_name) {
+      var _this3 = this;
+
+      var user_info = $('\n      <div id=\'' + user_name + '\' class=\'user-info\'>\n        <div class=\'btn-close\' aria-hidden=\'true\'><i class=\'emjdx-abstract flip-vertical\'></i></div>\n        <div class=\'user-name\'>' + user_name + '</div>\n        <div class="clearfix"/>\n        <hr>\n        <div class="user-emoji-list clearfix">\n        </div>\n      </div>\n    ').click(function (e) {
+        e.stopPropagation();
+      });
+      user_info.find('.btn-close').click(function () {
+        $(_this3.selector_tab_pane).find('*').removeClass('on');
+      });
+      $(this.selector_tab_pane).append(user_info);
+
+      this.setUserEmojisInfo(user_info);
+    }
+  }, {
+    key: 'setUserEmojisInfo',
+    value: function setUserEmojisInfo(user_info) {
+      var _this4 = this;
+
+      var option = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+      var user_name = user_info.attr('id');
+      return this.EC.Indexes.user(user_name, undefined, option).then(function (response) {
+        user_info.data(response.meta);
+        user_info.data({ user_name: user_name, max_page: Math.ceil(response.meta.total_count / _this4.EC.limit ? response.meta.total_count / _this4.EC.limit : 1) });
+
+        user_info.find('.user-emoji-list').children().remove();
+        user_info.find('.following-pagination').remove();
+
+        user_info.find('.user-emoji-list').append(_this4.palette.setEmojiList('following', response.emoji));
+        _this4.setPagination(user_info);
+      });
+    }
+  }, {
+    key: 'setPagination',
+    value: function setPagination(user_info) {
+      var _this5 = this;
+
+      var meta = user_info.data();
+      if (!this.EC.User.auth_info.premium) {
+        meta.max_page = 1;
+      }
+
+      var prev_func = function prev_func() {
+        option = { page: meta.page - 1 };
+        if (option.page > 0) {
+          _this5.setUserEmojisInfo(user_info, option);
+        }
+      };
+      var next_func = function next_func() {
+        option = { page: meta.page + 1 };
+        if (option.page <= meta.max_page) {
+          _this5.setUserEmojisInfo(user_info, option);
+        }
+      };
+      user_info.append(this.palette.getPagination('following', prev_func, next_func, meta.page, meta.max_page));
+    }
+  }]);
+
+  return FollowingTab;
+}();
+//# sourceMappingURL=following_tab.js.map
 
 'use strict';
 
