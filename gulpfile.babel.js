@@ -273,9 +273,9 @@ gulp.task('jasmine', () => {
     'dist/img/logo.png',
     'dist/css/document.min.css',
     'dist/css/emojidex.min.css',
+    'spec/emojidexAutocomplete.js',
     'spec/palette/user_login.js',
     'spec/palette/*.js',
-    'spec/emojidexAutocomplete.js',
     'spec/emojidexReplace.js'
   ];
   return gulp.src(testFiles)

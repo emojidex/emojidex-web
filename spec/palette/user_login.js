@@ -91,10 +91,7 @@ describe("emojidexPalette:User:Login", () => {
         }
       }
     });
-    $('#tab-user a').click();
-    $('#palette-emoji-username-input').val(user_info.auth_user);
-    $('#palette-emoji-password-input').val(user_info.password);
-    $('#palette-emoji-login-submit').click();
+    loginUser(user_info.auth_user, user_info.password);
   });
 
    // it 'general user can not see the newest/popular emoji', (done) ->
