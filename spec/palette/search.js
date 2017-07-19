@@ -2,16 +2,7 @@ describe("emojidexPalette:Search", () => {
   beforeAll(done => {
     clearStorage().then(() => {
       helperBefore();
-      let limitForSpec = 1;
-      $("#palette-btn").emojidexPalette({
-        paletteEmojisLimit: limitForSpec,
-        onComplete: () => {
-          $("#palette-input").emojidexPalette({
-            paletteEmojisLimit: limitForSpec,
-            onComplete: () => { done(); }
-          });
-        }
-      });
+      preparePaletteButtons(done);
     });
   });
 
@@ -34,17 +25,10 @@ describe("emojidexPalette:Search", () => {
       }
     });
 
-    $('.ui-dialog').watch({
-      id: 'dialog',
-      properties: 'display',
-      callback() {
-        removeWatch($('.ui-dialog'), 'dialog');
-
-        $('#tab-search a').click();
-        $('#palette-emoji-search-input').val('test');
-        $('#palette-emoji-search-submit').click();
-      }
+    showPalette(() => {
+      $('#tab-search a').click();
+      $('#palette-emoji-search-input').val('test');
+      $('#palette-emoji-search-submit').click();
     });
-    $('.emojidex-palette-button')[0].click();
   });
 });

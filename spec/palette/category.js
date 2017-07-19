@@ -2,16 +2,7 @@ describe("emojidexPalette:Category", () => {
   beforeAll(done => {
     clearStorage().then(() => {
       helperBefore();
-      let limitForSpec = 1;
-      $("#palette-btn").emojidexPalette({
-        paletteEmojisLimit: limitForSpec,
-        onComplete: () => {
-          $("#palette-input").emojidexPalette({
-            paletteEmojisLimit: limitForSpec,
-            onComplete: () => { done(); }
-          });
-        }
-      });
+      preparePaletteButtons(done);
     });
   });
 
@@ -37,15 +28,9 @@ describe("emojidexPalette:Category", () => {
         }
       });
 
-      $('.ui-dialog').watch({
-        id: 'dialog',
-        properties: 'display',
-        callback() {
-          removeWatch($('.ui-dialog'), 'dialog');
-          $('#tab-faces a').click();
-        }
+      showPalette(() => {
+        $('#tab-faces a').click();
       });
-      $('.emojidex-palette-button')[0].click();
     });
 
     it('switches to the next page', done => {

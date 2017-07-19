@@ -2,16 +2,7 @@ describe("emojidexPalette:User:History", () => {
   beforeAll(done => {
     clearStorage().then(() => {
       helperBefore();
-      let limitForSpec = 1;
-      $("#palette-btn").emojidexPalette({
-        paletteEmojisLimit: limitForSpec,
-        onComplete: () => {
-          $("#palette-input").emojidexPalette({
-            paletteEmojisLimit: limitForSpec,
-            onComplete: () => { done(); }
-          });
-        }
-      });
+      preparePaletteButtons(done);
     });
   });
 
@@ -48,19 +39,9 @@ describe("emojidexPalette:User:History", () => {
         }
       });
 
-      $('.ui-dialog').watch({
-        id: 'dialog',
-        properties: 'display',
-        callback() {
-          removeWatch($('.ui-dialog'), 'dialog');
-
-          $('#tab-user a').click();
-          $('#palette-emoji-username-input').val(user_info.auth_user);
-          $('#palette-emoji-password-input').val(user_info.password);
-          $('#palette-emoji-login-submit').click();
-        }
+      showPalette(() => {
+        loginUser(user_info.auth_user, user_info.password);
       });
-      $('.emojidex-palette-button')[0].click();
     });
 
     it('switches to the next page [Requires a premium user account and many history]', done => {

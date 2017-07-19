@@ -2,16 +2,7 @@ describe("emojidexPalette:User:Login", () => {
   beforeAll(done => {
     clearStorage().then(() => {
       helperBefore();
-      let limitForSpec = 1;
-      $("#palette-btn").emojidexPalette({
-        paletteEmojisLimit: limitForSpec,
-        onComplete: () => {
-          $("#palette-input").emojidexPalette({
-            paletteEmojisLimit: limitForSpec,
-            onComplete: () => { done(); }
-          });
-        }
-      });
+      preparePaletteButtons(done);
     });
   });
 
@@ -36,19 +27,9 @@ describe("emojidexPalette:User:Login", () => {
         }
       });
 
-      $('.ui-dialog').watch({
-        id: 'dialog',
-        properties: 'display',
-        callback() {
-          removeWatch($('.ui-dialog'), 'dialog');
-
-          $('#tab-user a').click();
-          $('#palette-emoji-username-input').val('aaa');
-          $('#palette-emoji-password-input').val('aaa');
-          $('#palette-emoji-login-submit').click();
-        }
+      showPalette(() => {
+        loginUser('aaa', 'aaa');
       });
-      $('.emojidex-palette-button')[0].click();
     });
 
     it('premium user login [Requires a premium user account]', done => {
@@ -67,10 +48,7 @@ describe("emojidexPalette:User:Login", () => {
         }
       });
 
-      $('#tab-user a').click();
-      $('#palette-emoji-username-input').val(user_info.auth_user);
-      $('#palette-emoji-password-input').val(user_info.password);
-      $('#palette-emoji-login-submit').click();
+      loginUser(user_info.auth_user, user_info.password);
     });
 
    // it 'premium user can see the newest/popular emoji', (done) ->

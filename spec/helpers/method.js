@@ -66,3 +66,39 @@ function closePalette() {
   $('button.pull-right[aria-label="Close"]').click();
   $('#emojidex-emoji-palette').remove();
 }
+
+function showPalette(callback) {
+  $('.ui-dialog').watch({
+    id: 'dialog',
+    properties: 'display',
+    callback() {
+      removeWatch($('.ui-dialog'), 'dialog');
+      callback();
+    }
+  });
+  specTimer(1000).then(() => {
+    $('.emojidex-palette-button')[0].click();
+  });
+}
+
+function preparePaletteButtons(done) {
+  let limitForSpec = 1;
+  $("#palette-btn").emojidexPalette({
+    paletteEmojisLimit: limitForSpec,
+    onComplete: () => {
+      $("#palette-input").emojidexPalette({
+        paletteEmojisLimit: limitForSpec,
+        onComplete: () => { done(); }
+      });
+    }
+  });
+}
+
+function loginUser(user, password) {
+  specTimer(1000).then(() => {
+    $('#tab-user a').click();
+    $('#palette-emoji-username-input').val(user);
+    $('#palette-emoji-password-input').val(password);
+    $('#palette-emoji-login-submit').click();
+  });
+}

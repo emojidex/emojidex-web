@@ -2,16 +2,7 @@ describe("emojidexPalette:User:Followers", () => {
   beforeAll(done => {
     clearStorage().then(() => {
       helperBefore();
-      let limitForSpec = 1;
-      $("#palette-btn").emojidexPalette({
-        paletteEmojisLimit: limitForSpec,
-        onComplete: () => {
-          $("#palette-input").emojidexPalette({
-            paletteEmojisLimit: limitForSpec,
-            onComplete: () => { done(); }
-          });
-        }
-      });
+      preparePaletteButtons(done);
     });
   });
 
@@ -46,19 +37,9 @@ describe("emojidexPalette:User:Followers", () => {
       }
     });
 
-    $('.ui-dialog').watch({
-      id: 'dialog',
-      properties: 'display',
-      callback() {
-        removeWatch($('.ui-dialog'), 'dialog');
-
-        $('#tab-user a').click();
-        $('#palette-emoji-username-input').val(user_info.auth_user);
-        $('#palette-emoji-password-input').val(user_info.password);
-        $('#palette-emoji-login-submit').click();
-      }
+    showPalette(() => {
+      loginUser(user_info.auth_user, user_info.password);
     });
-    $('.emojidex-palette-button')[0].click();
   });
 
   it('show followers user info [Requires a premium user account and followers user]', done => {
@@ -95,7 +76,7 @@ describe("emojidexPalette:User:Followers", () => {
     $($(`${selectorCurrentUserInfo} .palette-pager`)[1]).click();
   });
 
-  it('show followers user emoji previous [Requires a premium user account and followers user]', done =>) {
+  it('show followers user emoji previous [Requires a premium user account and followers user]', done => {
     if (typeof user_info === 'undefined' || user_info === null) { pending(); }
     const selectorCurrentUserInfo = '#follow-followers .user-info.on';
     $(selectorCurrentUserInfo).watch({
