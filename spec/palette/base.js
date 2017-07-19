@@ -1,5 +1,5 @@
-describe("emojidexPalette:Base", function() {
-  beforeAll(function(done) {
+describe("emojidexPalette:Base", () => {
+  beforeAll(done => {
     clearStorage().then(() => {
       helperBefore();
       let limitForSpec = 1;
@@ -17,12 +17,12 @@ describe("emojidexPalette:Base", function() {
 
   afterAll(() => helperAfter());
 
-  it("created emojidexPalette button in input", (done) => {
+  it("created emojidexPalette button in input", done => {
     expect($('.emojidex-palette-button').length).toBe(1);
     done();
   })
 
-  it("show emojidexPalette", function(done) {
+  it("show emojidexPalette", done => {
     expect($('.ui-dialog')).toHaveCss({display: 'none'});
 
     $('.ui-dialog').watch({
@@ -34,9 +34,8 @@ describe("emojidexPalette:Base", function() {
         done();
       }
     });
-    spec_timer({
-      time: 1000,
-      callback: () => { $('.emojidex-palette-button')[0].click(); }
+    specTimer(1000).then(() => {
+      $('.emojidex-palette-button')[0].click();
     })
   });
 
@@ -47,7 +46,7 @@ describe("emojidexPalette:Base", function() {
   //   $($('#tab-content-cosmos').find('.emoji-btn')[0]).click()
   //   expect(clipboard.clipboardAction.selectedText).toBe clipboard_text
 
-  it('close emojidexPalette', function() {
+  it('close emojidexPalette', () => {
     $('button.pull-right[aria-label="Close"]').click();
     expect($('.ui-dialog')).toHaveCss({display: 'none'});
   });

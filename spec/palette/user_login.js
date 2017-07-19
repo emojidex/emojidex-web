@@ -1,5 +1,5 @@
-describe("emojidexPalette:User:Login", function() {
-  beforeAll(function(done) {
+describe("emojidexPalette:User:Login", () => {
+  beforeAll(done => {
     clearStorage().then(() => {
       helperBefore();
       let limitForSpec = 1;
@@ -20,8 +20,8 @@ describe("emojidexPalette:User:Login", function() {
     helperAfter();
   });
 
-  describe('user tab', function() {
-    it('login (Failure)', function(done) {
+  describe('user tab', () => {
+    it('login (Failure)', done => {
       $('#tab-content-user').watch({
         id: 'content_user',
         properties: 'prop_innerHTML',
@@ -51,7 +51,7 @@ describe("emojidexPalette:User:Login", function() {
       $('.emojidex-palette-button')[0].click();
     });
 
-    it('premium user login [Requires a premium user account]', function(done) {
+    it('premium user login [Requires a premium user account]', done => {
       if (typeof user_info === 'undefined' || user_info === null) { pending(); }
       $('#tab-content-user').watch({
         id: 'content_user',
@@ -85,7 +85,7 @@ describe("emojidexPalette:User:Login", function() {
    //         spec_timer timer_option
    //   spec_timer timer_option
 
-    it('logout', function(done) {
+    it('logout', done => {
       if (typeof premium_user_info === 'undefined' || premium_user_info === null) { pending(); }
       $('#tab-content-user').watch({
         id: 'content_user',
@@ -100,7 +100,7 @@ describe("emojidexPalette:User:Login", function() {
       $('#palette-emoji-logout').click();
     });
 
-    it('general user login [Require user info]', function(done) {
+    it('general user login [Require user info]', done => {
       if (typeof user_info === 'undefined' || user_info === null) { pending(); }
       $('#tab-content-user').watch({
         id: 'content_user',
@@ -133,40 +133,37 @@ describe("emojidexPalette:User:Login", function() {
    //         spec_timer timer_option
    //   spec_timer timer_option
 
-  it('login with storage data', function(done) {
+  it('login with storage data', done => {
     if (typeof user_info === 'undefined' || user_info === null) { pending(); }
     $('#palette-btn').removeData().unbind();
     $('#emojidex-emoji-palette, .emojidex-palette-div').remove();
 
     $("#palette-btn").emojidexPalette({
       onComplete: () => {
-        spec_timer({
-          time: 1000,
-          callback: () => {
-            $('.ui-dialog').watch({
-              id: 'dialog_2',
-              properties: 'display',
-              callback() {
-                removeWatch($('.ui-dialog'), 'dialog_2');
+        specTimer(1000).then(() => {
+          $('.ui-dialog').watch({
+            id: 'dialog_2',
+            properties: 'display',
+            callback() {
+              removeWatch($('.ui-dialog'), 'dialog_2');
 
-                $('#tab-content-user').watch({
-                  id: 'content_user',
-                  properties: 'prop_innerHTML',
-                  watchChildren: true,
-                  callback(data, i) {
-                    if (data.vals[0].match(/favorite-emoji-list/)) {
-                      expect($('#tab-content-user-favorite').find('img').length).toBeTruthy();
-                      $('button.pull-right[aria-label="Close"]').click();
-                      removeWatch($('#tab-content-user'), 'content_user');
-                      return done();
-                    }
+              $('#tab-content-user').watch({
+                id: 'content_user',
+                properties: 'prop_innerHTML',
+                watchChildren: true,
+                callback(data, i) {
+                  if (data.vals[0].match(/favorite-emoji-list/)) {
+                    expect($('#tab-content-user-favorite').find('img').length).toBeTruthy();
+                    $('button.pull-right[aria-label="Close"]').click();
+                    removeWatch($('#tab-content-user'), 'content_user');
+                    return done();
                   }
-                });
-                $('#tab-user a').click();
-              }
-            });
-            $("#palette-btn").click();
-          }
+                }
+              });
+              $('#tab-user a').click();
+            }
+          });
+          $("#palette-btn").click();
         })
       }
     });

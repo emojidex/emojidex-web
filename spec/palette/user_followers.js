@@ -1,5 +1,5 @@
-describe("emojidexPalette:User:Followers", function() {
-  beforeAll(function(done) {
+describe("emojidexPalette:User:Followers", () => {
+  beforeAll(done => {
     clearStorage().then(() => {
       helperBefore();
       let limitForSpec = 1;
@@ -20,7 +20,7 @@ describe("emojidexPalette:User:Followers", function() {
     helperAfter();
   });
 
-  it('show followers tab [Requires a premium user account and followers user]', function(done) {
+  it('show followers tab [Requires a premium user account and followers user]', done => {
     if (typeof user_info === 'undefined' || user_info === null) { pending(); }
 
     $('#tab-content-user').watch({
@@ -28,23 +28,20 @@ describe("emojidexPalette:User:Followers", function() {
       properties: 'prop_innerHTML',
       watchChildren: true,
       callback(data, i) {
-        spec_timer({
-          time: 1000,
-          callback() {
-            removeWatch($('#tab-content-user'), 'watcher');
+        specTimer(1000).then(() => {
+          removeWatch($('#tab-content-user'), 'watcher');
 
-            $('#follow-followers').watch({
-              id: "watcher",
-              properties: 'attr_class',
-              callback(data, i) {
-                expect($('#follow-followers .users .btn').length).toBeTruthy();
-                removeWatch($('#follow-followers'), 'watcher');
-                done();
-              }
-            });
+          $('#follow-followers').watch({
+            id: "watcher",
+            properties: 'attr_class',
+            callback(data, i) {
+              expect($('#follow-followers .users .btn').length).toBeTruthy();
+              removeWatch($('#follow-followers'), 'watcher');
+              done();
+            }
+          });
 
-            $('#tab-user-followers a').click();
-          }
+          $('#tab-user-followers a').click();
         });
       }
     });
@@ -64,7 +61,7 @@ describe("emojidexPalette:User:Followers", function() {
     $('.emojidex-palette-button')[0].click();
   });
 
-  it('show followers user info [Requires a premium user account and followers user]', function(done) {
+  it('show followers user info [Requires a premium user account and followers user]', done => {
     if (typeof user_info === 'undefined' || user_info === null) { pending(); }
     $('#follow-followers .user-info').watch({
       id: "watcher",
@@ -81,7 +78,7 @@ describe("emojidexPalette:User:Followers", function() {
     });
   });
 
-  it('show followers user emoji next [Requires premium a user account and followers user]', function(done) {
+  it('show followers user emoji next [Requires premium a user account and followers user]', done => {
     if (typeof user_info === 'undefined' || user_info === null) { pending(); }
     const selectorCurrentUserInfo = '#follow-followers .user-info.on';
     $(selectorCurrentUserInfo).watch({
@@ -98,7 +95,7 @@ describe("emojidexPalette:User:Followers", function() {
     $($(`${selectorCurrentUserInfo} .palette-pager`)[1]).click();
   });
 
-  it('show followers user emoji previous [Requires a premium user account and followers user]', function(done) {
+  it('show followers user emoji previous [Requires a premium user account and followers user]', done =>) {
     if (typeof user_info === 'undefined' || user_info === null) { pending(); }
     const selectorCurrentUserInfo = '#follow-followers .user-info.on';
     $(selectorCurrentUserInfo).watch({

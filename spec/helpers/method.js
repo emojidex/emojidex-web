@@ -13,16 +13,6 @@ function helperAfter() {
   $('#spec-wrap').remove();
 }
 
-function spec_timer(option) {
-  let default_option = {
-    time: 100,
-    callback: undefined
-  };
-  $.extend(default_option, option);
-
-  if (default_option.callback != null) { return setTimeout(default_option.callback, default_option.time); }
-}
-
 function specTimer(time) {
   return new Promise((resolve, reject) => {
     setTimeout(resolve, time);

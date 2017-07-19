@@ -1,5 +1,5 @@
-describe("emojidexPalette:Search", function() {
-  beforeAll(function(done) {
+describe("emojidexPalette:Search", () => {
+  beforeAll(done => {
     clearStorage().then(() => {
       helperBefore();
       let limitForSpec = 1;
@@ -20,7 +20,7 @@ describe("emojidexPalette:Search", function() {
     helperAfter();
   });
 
-  it('search tab', function(done){
+  it('search tab', done => {
     $('#tab-content-search').watch({
       id: 'content_search',
       properties: 'prop_innerHTML',

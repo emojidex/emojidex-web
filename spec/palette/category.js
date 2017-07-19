@@ -1,5 +1,5 @@
-describe("emojidexPalette:Category", function() {
-  beforeAll(function(done) {
+describe("emojidexPalette:Category", () => {
+  beforeAll(done => {
     clearStorage().then(() => {
       helperBefore();
       let limitForSpec = 1;
@@ -20,8 +20,8 @@ describe("emojidexPalette:Category", function() {
     helperAfter();
   });
 
-  describe('category tab', function() {
-    it("changes to a specific category", function(done) {
+  describe('category tab', () => {
+    it("changes to a specific category", done => {
       $('#tab-content-faces').watch({
         id: 'content_faces',
         properties: 'prop_innerHTML',
@@ -48,7 +48,7 @@ describe("emojidexPalette:Category", function() {
       $('.emojidex-palette-button')[0].click();
     });
 
-    it('switches to the next page', function(done) {
+    it('switches to the next page', done => {
       $('#tab-content-faces').watch({
         id: "content_faces",
         properties: 'prop_innerHTML',
@@ -62,7 +62,7 @@ describe("emojidexPalette:Category", function() {
       $('#tab-content-faces').find('.pagination .palette-pager')[1].click();
     });
 
-    it('switches to the previous page', function(done) {
+    it('switches to the previous page', done => {
       $('#tab-content-faces').watch({
         id: "content_faces",
         properties: 'prop_innerHTML',
