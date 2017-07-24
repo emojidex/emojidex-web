@@ -10,7 +10,7 @@ import concat from 'gulp-concat';
 import uglify from 'gulp-uglify';
 import copy from 'gulp-copy';
 import eslint from 'gulp-eslint';
-import jasmine from 'gulp-jasmine-browser';
+import jasmineBrowser from 'gulp-jasmine-browser';
 import webpack from 'webpack-stream';
 import watch from 'gulp-watch';
 import fs from 'fs-extra';
@@ -280,8 +280,8 @@ gulp.task('jasmine', () => {
   ];
   return gulp.src(testFiles)
     .pipe(watch(testFiles))
-    .pipe(jasmine.specRunner())
-    .pipe(jasmine.server());
+    .pipe(jasmineBrowser.specRunner())
+    .pipe(jasmineBrowser.server());
 });
 
 gulp.task('lint', () => {

@@ -1,6 +1,6 @@
 {
   "name": "emojidex",
-  "version": "0.17.1",
+  "version": "0.17.2",
   "title": "jQuery emojidex",
   "description": "emojidex plugin for jQuery/Zepto and compatible",
   "author": "emojidex",
@@ -38,7 +38,7 @@
     "gulp-dotenv": "^0.2.1",
     "gulp-eslint": "^3.0.1",
     "gulp-header": "^1.8.8",
-    "gulp-jasmine-browser": "^1.7.1",
+    "gulp-jasmine-browser": "1.8.1",
     "gulp-markdown-docs": "^0.1.5",
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^3.1.0",
