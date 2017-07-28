@@ -304,7 +304,7 @@ gulp.task('browser-sync', () => {
       baseDir: './dist',
       index: 'index.html'
     },
-    browser: ['google chrome', 'firefox']
+    browser: ['google chrome', 'google-chrome', 'firefox']
   });
 });
 
