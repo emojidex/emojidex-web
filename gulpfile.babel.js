@@ -20,6 +20,7 @@ import slim from 'gulp-slim';
 import cssmin from 'gulp-cssmin';
 import strip from 'gulp-strip-banner';
 import sourceMaps from 'gulp-sourcemaps';
+import browserSync from 'browser-sync'
 
 gulp.task('env', () => {
   fs.stat('.env', (err, stat) => {
@@ -297,6 +298,20 @@ gulp.task('watch', () => {
   gulp.watch('src/slim/**/*.slim', ['watch-slim']);
 });
 
+gulp.task('browser-sync', () => {
+  browserSync.init({
+    server: {
+      baseDir: './dist',
+      index: 'index.html'
+    },
+    browser: ['google chrome', 'google-chrome', 'firefox']
+  });
+});
+
+gulp.task('browser-reload', () => {
+  browserSync.reload();
+});
+
 gulp.task('default', (cb) => {
   runSequence('clean', 'slim', 'md2html', 'sass', 'babel', 'concat', 'uglify', 'cssmin', 'copy', 'banner', cb);
 });
@@ -307,17 +322,17 @@ gulp.task('spec', (cb) => {
 
 // TODO: lint
 gulp.task('dev', (cb) => {
-  runSequence('default', 'watch', cb);
+  runSequence('default', 'watch', 'browser-sync', cb);
 });
 
 gulp.task('watch-js', (cb) => {
-  runSequence('babel', 'concat-js', cb);
+  runSequence('babel', 'concat-js', 'browser-reload', cb);
 });
 
 gulp.task('watch-slim', (cb) => {
-  runSequence('slim', 'md2html', cb);
+  runSequence('slim', 'md2html', 'browser-reload', cb);
 });
 
 gulp.task('watch-sass', (cb) => {
-  runSequence('sass', 'concat-css', 'cssmin', cb);
+  runSequence('sass', 'concat-css', 'cssmin', 'browser-reload', cb);
 })
