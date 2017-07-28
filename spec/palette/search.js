@@ -1,17 +1,8 @@
-describe("emojidexPalette:Search", function() {
-  beforeAll(function(done) {
+describe("emojidexPalette:Search", () => {
+  beforeAll(done => {
     clearStorage().then(() => {
       helperBefore();
-      let limitForSpec = 1;
-      $("#palette-btn").emojidexPalette({
-        paletteEmojisLimit: limitForSpec,
-        onComplete: () => {
-          $("#palette-input").emojidexPalette({
-            paletteEmojisLimit: limitForSpec,
-            onComplete: () => { done(); }
-          });
-        }
-      });
+      preparePaletteButtons(done);
     });
   });
 
@@ -20,7 +11,7 @@ describe("emojidexPalette:Search", function() {
     helperAfter();
   });
 
-  it('search tab', function(done){
+  it('search tab', done => {
     $('#tab-content-search').watch({
       id: 'content_search',
       properties: 'prop_innerHTML',
@@ -34,17 +25,10 @@ describe("emojidexPalette:Search", function() {
       }
     });
 
-    $('.ui-dialog').watch({
-      id: 'dialog',
-      properties: 'display',
-      callback() {
-        removeWatch($('.ui-dialog'), 'dialog');
-
-        $('#tab-search a').click();
-        $('#palette-emoji-search-input').val('test');
-        $('#palette-emoji-search-submit').click();
-      }
+    showPalette(() => {
+      $('#tab-search a').click();
+      $('#palette-emoji-search-input').val('test');
+      $('#palette-emoji-search-submit').click();
     });
-    $('.emojidex-palette-button')[0].click();
   });
 });
