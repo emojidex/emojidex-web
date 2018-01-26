@@ -100,14 +100,25 @@ class Palette {
         title: `${emoji.code}`,
         class: 'img-responsive center-block',
         src: `${this.EC.cdn_url}px32/${emoji.code.replace(/\s/g, '_')}.png`
-      }
-      );
+      });
 
-      emoji_button.append(emoji_button_image);
-      emoji_button.click(e=> {
-        return this.insertEmojiAtCaret($(e.currentTarget).prop('emoji_data'));
+      let click_func;
+      if (typeof this.plugin.options.onEmojiButonnClicked === "function") {
+        click_func = () => {
+          return this.plugin.options.onEmojiButonnClicked(
+            {
+              imageTag: emoji_button_image.attr('class', 'emojidex-emoji').prop('outerHTML'),
+              emojiCode: `:${emoji.code}:`
+            }
+          );
+        }
+      } else {
+        click_func = e => {
+          return this.insertEmojiAtCaret($(e.currentTarget).prop('emoji_data'));
+        }
       }
-      );
+      emoji_button.append(emoji_button_image);
+      emoji_button.click(click_func);
       emoji_divs.append(emoji_button);
     }
     return emoji_divs;

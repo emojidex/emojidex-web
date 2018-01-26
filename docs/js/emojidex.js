@@ -223,6 +223,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
   var pluginName = "emojidexPalette";
   var defaults = {
     onComplete: undefined,
+    onEmojiButonnClicked: undefined,
     paletteEmojisLimit: 50
   };
 
@@ -500,7 +501,8 @@ var Palette = function () {
       var _this3 = this;
 
       var emoji_divs = $('<div class=\'' + kind + '-emoji-list clearfix\'></div>');
-      for (var i = 0; i < emoji_list.length; i++) {
+
+      var _loop = function _loop(i) {
         var emoji = emoji_list[i];
         var emoji_button = $('<button>', { class: 'emoji-btn btn btn-default pull-left' });
         emoji_button.prop('emoji_data', emoji);
@@ -509,14 +511,29 @@ var Palette = function () {
           alt: '' + emoji.code,
           title: '' + emoji.code,
           class: 'img-responsive center-block',
-          src: this.EC.cdn_url + 'px32/' + emoji.code.replace(/\s/g, '_') + '.png'
+          src: _this3.EC.cdn_url + 'px32/' + emoji.code.replace(/\s/g, '_') + '.png'
         });
 
+        var click_func = void 0;
+        if (typeof _this3.plugin.options.onEmojiButonnClicked === "function") {
+          click_func = function click_func() {
+            return _this3.plugin.options.onEmojiButonnClicked({
+              imageTag: emoji_button_image.attr('class', 'emojidex-emoji').prop('outerHTML'),
+              emojiCode: ':' + emoji.code + ':'
+            });
+          };
+        } else {
+          click_func = function click_func(e) {
+            return _this3.insertEmojiAtCaret($(e.currentTarget).prop('emoji_data'));
+          };
+        }
         emoji_button.append(emoji_button_image);
-        emoji_button.click(function (e) {
-          return _this3.insertEmojiAtCaret($(e.currentTarget).prop('emoji_data'));
-        });
+        emoji_button.click(click_func);
         emoji_divs.append(emoji_button);
+      };
+
+      for (var i = 0; i < emoji_list.length; i++) {
+        _loop(i);
       }
       return emoji_divs;
     }

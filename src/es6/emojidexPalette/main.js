@@ -12,6 +12,7 @@
   let pluginName = "emojidexPalette";
   let defaults = {
     onComplete: undefined,
+    onEmojiButonnClicked: undefined,
     paletteEmojisLimit: 50
   };
 
