@@ -103,9 +103,9 @@ class Palette {
       });
 
       let click_func;
-      if (typeof this.plugin.options.onEmojiButonnClicked === "function") {
+      if (typeof this.plugin.options.onEmojiButtonClicked === "function") {
         click_func = () => {
-          return this.plugin.options.onEmojiButonnClicked(
+          return this.plugin.options.onEmojiButtonClicked(
             {
               imageTag: emoji_button_image.attr('class', 'emojidex-emoji').prop('outerHTML'),
               emojiCode: `:${emoji.code}:`
