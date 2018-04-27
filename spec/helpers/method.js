@@ -81,10 +81,11 @@ function showPalette(callback) {
   });
 }
 
-function preparePaletteButtons(done) {
+function preparePaletteButtons(done, options) {
   let limitForSpec = 1;
   $("#palette-btn").emojidexPalette({
     paletteEmojisLimit: limitForSpec,
+    onEmojiButtonClicked: options && options.onEmojiButtonClicked ? options.onEmojiButtonClicked : undefined,
     onComplete: () => {
       $("#palette-input").emojidexPalette({
         paletteEmojisLimit: limitForSpec,
