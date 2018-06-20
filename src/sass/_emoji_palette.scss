@@ -35,6 +35,8 @@
 .ui-dialog .ui-dialog-titlebar {
   padding: 10px;
   .ui-dialog-title {
+    margin-bottom: 5px;
+    line-height: unset;
     a > img {
       width: 116px;
       height: 27px;
@@ -57,6 +59,7 @@
 }
 #emojidex-dialog-content {
   padding: 5px 10px 10px;
+  float: left;
   [class*=-pagination] {
     height: 35px;
     margin-top: 10px;
