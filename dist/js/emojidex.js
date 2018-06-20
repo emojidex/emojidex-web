@@ -1,5 +1,5 @@
 /*
- * jQuery emojidex - v0.18.0
+ * jQuery emojidex - v0.18.1
  * emojidex plugin for jQuery/Zepto and compatible
  * https://github.com/emojidex/emojidex-web
  *
