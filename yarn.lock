@@ -1437,9 +1437,9 @@ emitter-steward@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/emitter-steward/-/emitter-steward-1.0.0.tgz#f3411ade9758a7565df848b2da0cbbd1b46cbd64"
 
-emojidex-client@^0.16.0:
-  version "0.16.1"
-  resolved "https://registry.yarnpkg.com/emojidex-client/-/emojidex-client-0.16.1.tgz#5f6cc79159ac5a0faa5bb574be9d686c404075d6"
+emojidex-client@^0.17.0:
+  version "0.17.0"
+  resolved "https://registry.yarnpkg.com/emojidex-client/-/emojidex-client-0.17.0.tgz#128edf1987ca2c92bc124beb97b0e57c0dde0ef4"
 
 emojis-list@^2.0.0:
   version "2.1.0"

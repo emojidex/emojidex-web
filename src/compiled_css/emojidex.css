@@ -2397,27 +2397,49 @@ img.emojidex-emoji {
     #emojidex-emoji-palette input[type="datetime-local"].form-control,
     #emojidex-emoji-palette input[type="month"].form-control {
       line-height: 34px; }
-    #emojidex-emoji-palette input[type="date"].input-sm, #emojidex-emoji-palette .input-group-sm > input[type="date"].form-control, #emojidex-emoji-palette .input-group-sm > input[type="date"].input-group-addon, #emojidex-emoji-palette .input-group-sm > .input-group-btn > input[type="date"].btn,
+    #emojidex-emoji-palette input[type="date"].input-sm, #emojidex-emoji-palette .input-group-sm > input.form-control[type="date"],
+    #emojidex-emoji-palette .input-group-sm > input.input-group-addon[type="date"],
+    #emojidex-emoji-palette .input-group-sm > .input-group-btn > input.btn[type="date"],
     .input-group-sm #emojidex-emoji-palette input[type="date"],
-    #emojidex-emoji-palette input[type="time"].input-sm, #emojidex-emoji-palette .input-group-sm > input[type="time"].form-control, #emojidex-emoji-palette .input-group-sm > input[type="time"].input-group-addon, #emojidex-emoji-palette .input-group-sm > .input-group-btn > input[type="time"].btn,
+    #emojidex-emoji-palette input[type="time"].input-sm,
+    #emojidex-emoji-palette .input-group-sm > input.form-control[type="time"],
+    #emojidex-emoji-palette .input-group-sm > input.input-group-addon[type="time"],
+    #emojidex-emoji-palette .input-group-sm > .input-group-btn > input.btn[type="time"],
     .input-group-sm
     #emojidex-emoji-palette input[type="time"],
-    #emojidex-emoji-palette input[type="datetime-local"].input-sm, #emojidex-emoji-palette .input-group-sm > input[type="datetime-local"].form-control, #emojidex-emoji-palette .input-group-sm > input[type="datetime-local"].input-group-addon, #emojidex-emoji-palette .input-group-sm > .input-group-btn > input[type="datetime-local"].btn,
+    #emojidex-emoji-palette input[type="datetime-local"].input-sm,
+    #emojidex-emoji-palette .input-group-sm > input.form-control[type="datetime-local"],
+    #emojidex-emoji-palette .input-group-sm > input.input-group-addon[type="datetime-local"],
+    #emojidex-emoji-palette .input-group-sm > .input-group-btn > input.btn[type="datetime-local"],
     .input-group-sm
     #emojidex-emoji-palette input[type="datetime-local"],
-    #emojidex-emoji-palette input[type="month"].input-sm, #emojidex-emoji-palette .input-group-sm > input[type="month"].form-control, #emojidex-emoji-palette .input-group-sm > input[type="month"].input-group-addon, #emojidex-emoji-palette .input-group-sm > .input-group-btn > input[type="month"].btn,
+    #emojidex-emoji-palette input[type="month"].input-sm,
+    #emojidex-emoji-palette .input-group-sm > input.form-control[type="month"],
+    #emojidex-emoji-palette .input-group-sm > input.input-group-addon[type="month"],
+    #emojidex-emoji-palette .input-group-sm > .input-group-btn > input.btn[type="month"],
     .input-group-sm
     #emojidex-emoji-palette input[type="month"] {
       line-height: 30px; }
-    #emojidex-emoji-palette input[type="date"].input-lg, #emojidex-emoji-palette .input-group-lg > input[type="date"].form-control, #emojidex-emoji-palette .input-group-lg > input[type="date"].input-group-addon, #emojidex-emoji-palette .input-group-lg > .input-group-btn > input[type="date"].btn,
+    #emojidex-emoji-palette input[type="date"].input-lg, #emojidex-emoji-palette .input-group-lg > input.form-control[type="date"],
+    #emojidex-emoji-palette .input-group-lg > input.input-group-addon[type="date"],
+    #emojidex-emoji-palette .input-group-lg > .input-group-btn > input.btn[type="date"],
     .input-group-lg #emojidex-emoji-palette input[type="date"],
-    #emojidex-emoji-palette input[type="time"].input-lg, #emojidex-emoji-palette .input-group-lg > input[type="time"].form-control, #emojidex-emoji-palette .input-group-lg > input[type="time"].input-group-addon, #emojidex-emoji-palette .input-group-lg > .input-group-btn > input[type="time"].btn,
+    #emojidex-emoji-palette input[type="time"].input-lg,
+    #emojidex-emoji-palette .input-group-lg > input.form-control[type="time"],
+    #emojidex-emoji-palette .input-group-lg > input.input-group-addon[type="time"],
+    #emojidex-emoji-palette .input-group-lg > .input-group-btn > input.btn[type="time"],
     .input-group-lg
     #emojidex-emoji-palette input[type="time"],
-    #emojidex-emoji-palette input[type="datetime-local"].input-lg, #emojidex-emoji-palette .input-group-lg > input[type="datetime-local"].form-control, #emojidex-emoji-palette .input-group-lg > input[type="datetime-local"].input-group-addon, #emojidex-emoji-palette .input-group-lg > .input-group-btn > input[type="datetime-local"].btn,
+    #emojidex-emoji-palette input[type="datetime-local"].input-lg,
+    #emojidex-emoji-palette .input-group-lg > input.form-control[type="datetime-local"],
+    #emojidex-emoji-palette .input-group-lg > input.input-group-addon[type="datetime-local"],
+    #emojidex-emoji-palette .input-group-lg > .input-group-btn > input.btn[type="datetime-local"],
     .input-group-lg
     #emojidex-emoji-palette input[type="datetime-local"],
-    #emojidex-emoji-palette input[type="month"].input-lg, #emojidex-emoji-palette .input-group-lg > input[type="month"].form-control, #emojidex-emoji-palette .input-group-lg > input[type="month"].input-group-addon, #emojidex-emoji-palette .input-group-lg > .input-group-btn > input[type="month"].btn,
+    #emojidex-emoji-palette input[type="month"].input-lg,
+    #emojidex-emoji-palette .input-group-lg > input.form-control[type="month"],
+    #emojidex-emoji-palette .input-group-lg > input.input-group-addon[type="month"],
+    #emojidex-emoji-palette .input-group-lg > .input-group-btn > input.btn[type="month"],
     .input-group-lg
     #emojidex-emoji-palette input[type="month"] {
       line-height: 46px; } }
@@ -2483,20 +2505,33 @@ img.emojidex-emoji {
     padding-bottom: 7px;
     margin-bottom: 0;
     min-height: 34px; }
-    #emojidex-emoji-palette .form-control-static.input-lg, #emojidex-emoji-palette .input-group-lg > .form-control-static.form-control, #emojidex-emoji-palette .input-group-lg > .form-control-static.input-group-addon, #emojidex-emoji-palette .input-group-lg > .input-group-btn > .form-control-static.btn, #emojidex-emoji-palette .form-control-static.input-sm, #emojidex-emoji-palette .input-group-sm > .form-control-static.form-control, #emojidex-emoji-palette .input-group-sm > .form-control-static.input-group-addon, #emojidex-emoji-palette .input-group-sm > .input-group-btn > .form-control-static.btn {
+    #emojidex-emoji-palette .form-control-static.input-lg, #emojidex-emoji-palette .input-group-lg > .form-control-static.form-control,
+    #emojidex-emoji-palette .input-group-lg > .form-control-static.input-group-addon,
+    #emojidex-emoji-palette .input-group-lg > .input-group-btn > .form-control-static.btn, #emojidex-emoji-palette .form-control-static.input-sm, #emojidex-emoji-palette .input-group-sm > .form-control-static.form-control,
+    #emojidex-emoji-palette .input-group-sm > .form-control-static.input-group-addon,
+    #emojidex-emoji-palette .input-group-sm > .input-group-btn > .form-control-static.btn {
       padding-left: 0;
       padding-right: 0; }
-  #emojidex-emoji-palette .input-sm, #emojidex-emoji-palette .input-group-sm > .form-control, #emojidex-emoji-palette .input-group-sm > .input-group-addon, #emojidex-emoji-palette .input-group-sm > .input-group-btn > .btn {
+  #emojidex-emoji-palette .input-sm, #emojidex-emoji-palette .input-group-sm > .form-control,
+  #emojidex-emoji-palette .input-group-sm > .input-group-addon,
+  #emojidex-emoji-palette .input-group-sm > .input-group-btn > .btn {
     height: 30px;
     padding: 5px 10px;
     font-size: 12px;
     line-height: 1.5;
     border-radius: 3px; }
-  #emojidex-emoji-palette select.input-sm, #emojidex-emoji-palette .input-group-sm > select.form-control, #emojidex-emoji-palette .input-group-sm > select.input-group-addon, #emojidex-emoji-palette .input-group-sm > .input-group-btn > select.btn {
+  #emojidex-emoji-palette select.input-sm, #emojidex-emoji-palette .input-group-sm > select.form-control,
+  #emojidex-emoji-palette .input-group-sm > select.input-group-addon,
+  #emojidex-emoji-palette .input-group-sm > .input-group-btn > select.btn {
     height: 30px;
     line-height: 30px; }
-  #emojidex-emoji-palette textarea.input-sm, #emojidex-emoji-palette .input-group-sm > textarea.form-control, #emojidex-emoji-palette .input-group-sm > textarea.input-group-addon, #emojidex-emoji-palette .input-group-sm > .input-group-btn > textarea.btn,
-  #emojidex-emoji-palette select[multiple].input-sm, #emojidex-emoji-palette .input-group-sm > select[multiple].form-control, #emojidex-emoji-palette .input-group-sm > select[multiple].input-group-addon, #emojidex-emoji-palette .input-group-sm > .input-group-btn > select[multiple].btn {
+  #emojidex-emoji-palette textarea.input-sm, #emojidex-emoji-palette .input-group-sm > textarea.form-control,
+  #emojidex-emoji-palette .input-group-sm > textarea.input-group-addon,
+  #emojidex-emoji-palette .input-group-sm > .input-group-btn > textarea.btn,
+  #emojidex-emoji-palette select[multiple].input-sm,
+  #emojidex-emoji-palette .input-group-sm > select.form-control[multiple],
+  #emojidex-emoji-palette .input-group-sm > select.input-group-addon[multiple],
+  #emojidex-emoji-palette .input-group-sm > .input-group-btn > select.btn[multiple] {
     height: auto; }
   #emojidex-emoji-palette .form-group-sm .form-control {
     height: 30px;
@@ -2516,17 +2551,26 @@ img.emojidex-emoji {
     padding: 6px 10px;
     font-size: 12px;
     line-height: 1.5; }
-  #emojidex-emoji-palette .input-lg, #emojidex-emoji-palette .input-group-lg > .form-control, #emojidex-emoji-palette .input-group-lg > .input-group-addon, #emojidex-emoji-palette .input-group-lg > .input-group-btn > .btn {
+  #emojidex-emoji-palette .input-lg, #emojidex-emoji-palette .input-group-lg > .form-control,
+  #emojidex-emoji-palette .input-group-lg > .input-group-addon,
+  #emojidex-emoji-palette .input-group-lg > .input-group-btn > .btn {
     height: 46px;
     padding: 10px 16px;
     font-size: 18px;
     line-height: 1.33333;
     border-radius: 6px; }
-  #emojidex-emoji-palette select.input-lg, #emojidex-emoji-palette .input-group-lg > select.form-control, #emojidex-emoji-palette .input-group-lg > select.input-group-addon, #emojidex-emoji-palette .input-group-lg > .input-group-btn > select.btn {
+  #emojidex-emoji-palette select.input-lg, #emojidex-emoji-palette .input-group-lg > select.form-control,
+  #emojidex-emoji-palette .input-group-lg > select.input-group-addon,
+  #emojidex-emoji-palette .input-group-lg > .input-group-btn > select.btn {
     height: 46px;
     line-height: 46px; }
-  #emojidex-emoji-palette textarea.input-lg, #emojidex-emoji-palette .input-group-lg > textarea.form-control, #emojidex-emoji-palette .input-group-lg > textarea.input-group-addon, #emojidex-emoji-palette .input-group-lg > .input-group-btn > textarea.btn,
-  #emojidex-emoji-palette select[multiple].input-lg, #emojidex-emoji-palette .input-group-lg > select[multiple].form-control, #emojidex-emoji-palette .input-group-lg > select[multiple].input-group-addon, #emojidex-emoji-palette .input-group-lg > .input-group-btn > select[multiple].btn {
+  #emojidex-emoji-palette textarea.input-lg, #emojidex-emoji-palette .input-group-lg > textarea.form-control,
+  #emojidex-emoji-palette .input-group-lg > textarea.input-group-addon,
+  #emojidex-emoji-palette .input-group-lg > .input-group-btn > textarea.btn,
+  #emojidex-emoji-palette select[multiple].input-lg,
+  #emojidex-emoji-palette .input-group-lg > select.form-control[multiple],
+  #emojidex-emoji-palette .input-group-lg > select.input-group-addon[multiple],
+  #emojidex-emoji-palette .input-group-lg > .input-group-btn > select.btn[multiple] {
     height: auto; }
   #emojidex-emoji-palette .form-group-lg .form-control {
     height: 46px;
@@ -2739,7 +2783,7 @@ img.emojidex-emoji {
     box-sizing: border-box; }
   #emojidex-emoji-palette html {
     font-size: 10px;
-    -webkit-tap-highlight-color: transparent; }
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0); }
   #emojidex-emoji-palette body {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 14px;
@@ -3199,16 +3243,20 @@ img.emojidex-emoji {
       margin-right: 0;
       border-radius: 4px; }
     #emojidex-emoji-palette .nav-tabs-justified > .active > a, #emojidex-emoji-palette .nav-tabs.nav-justified > .active > a,
-    #emojidex-emoji-palette .nav-tabs-justified > .active > a:hover, #emojidex-emoji-palette .nav-tabs.nav-justified > .active > a:hover,
-    #emojidex-emoji-palette .nav-tabs-justified > .active > a:focus, #emojidex-emoji-palette .nav-tabs.nav-justified > .active > a:focus {
+    #emojidex-emoji-palette .nav-tabs-justified > .active > a:hover,
+    #emojidex-emoji-palette .nav-tabs.nav-justified > .active > a:hover,
+    #emojidex-emoji-palette .nav-tabs-justified > .active > a:focus,
+    #emojidex-emoji-palette .nav-tabs.nav-justified > .active > a:focus {
       border: 1px solid #ddd; }
     @media (min-width: 768px) {
       #emojidex-emoji-palette .nav-tabs-justified > li > a, #emojidex-emoji-palette .nav-tabs.nav-justified > li > a {
         border-bottom: 1px solid #ddd;
         border-radius: 4px 4px 0 0; }
       #emojidex-emoji-palette .nav-tabs-justified > .active > a, #emojidex-emoji-palette .nav-tabs.nav-justified > .active > a,
-      #emojidex-emoji-palette .nav-tabs-justified > .active > a:hover, #emojidex-emoji-palette .nav-tabs.nav-justified > .active > a:hover,
-      #emojidex-emoji-palette .nav-tabs-justified > .active > a:focus, #emojidex-emoji-palette .nav-tabs.nav-justified > .active > a:focus {
+      #emojidex-emoji-palette .nav-tabs-justified > .active > a:hover,
+      #emojidex-emoji-palette .nav-tabs.nav-justified > .active > a:hover,
+      #emojidex-emoji-palette .nav-tabs-justified > .active > a:focus,
+      #emojidex-emoji-palette .nav-tabs.nav-justified > .active > a:focus {
         border-bottom-color: #fff; } }
   #emojidex-emoji-palette .tab-content > .tab-pane {
     display: none; }
@@ -3336,11 +3384,15 @@ img.emojidex-emoji {
     background-color: #eeeeee;
     border: 1px solid #ccc;
     border-radius: 4px; }
-    #emojidex-emoji-palette .input-group-addon.input-sm, #emojidex-emoji-palette .input-group-sm > .input-group-addon, #emojidex-emoji-palette .input-group-sm > .input-group-btn > .input-group-addon.btn {
+    #emojidex-emoji-palette .input-group-addon.input-sm,
+    #emojidex-emoji-palette .input-group-sm > .input-group-addon,
+    #emojidex-emoji-palette .input-group-sm > .input-group-btn > .input-group-addon.btn {
       padding: 5px 10px;
       font-size: 12px;
       border-radius: 3px; }
-    #emojidex-emoji-palette .input-group-addon.input-lg, #emojidex-emoji-palette .input-group-lg > .input-group-addon, #emojidex-emoji-palette .input-group-lg > .input-group-btn > .input-group-addon.btn {
+    #emojidex-emoji-palette .input-group-addon.input-lg,
+    #emojidex-emoji-palette .input-group-lg > .input-group-addon,
+    #emojidex-emoji-palette .input-group-lg > .input-group-btn > .input-group-addon.btn {
       padding: 10px 16px;
       font-size: 18px;
       border-radius: 6px; }
@@ -3422,11 +3474,14 @@ img.emojidex-emoji {
     outline: none; }
   #emojidex-emoji-palette .ui-dialog .ui-dialog-titlebar {
     padding: 10px; }
-    #emojidex-emoji-palette .ui-dialog .ui-dialog-titlebar .ui-dialog-title a > img {
-      width: 116px;
-      height: 27px;
-      margin: 0;
-      padding: 0; }
+    #emojidex-emoji-palette .ui-dialog .ui-dialog-titlebar .ui-dialog-title {
+      margin-bottom: 5px;
+      line-height: unset; }
+      #emojidex-emoji-palette .ui-dialog .ui-dialog-titlebar .ui-dialog-title a > img {
+        width: 116px;
+        height: 27px;
+        margin: 0;
+        padding: 0; }
   #emojidex-emoji-palette .ui-dialog .ui-dialog-content {
     height: auto !important; }
   #emojidex-emoji-palette .ui-widget-header {
@@ -3436,7 +3491,8 @@ img.emojidex-emoji {
       width: 27px;
       height: 27px; }
   #emojidex-emoji-palette #emojidex-dialog-content {
-    padding: 5px 10px 10px; }
+    padding: 5px 10px 10px;
+    float: left; }
     #emojidex-emoji-palette #emojidex-dialog-content [class*=-pagination] {
       height: 35px;
       margin-top: 10px; }
