@@ -3473,15 +3473,14 @@ img.emojidex-emoji {
     background-color: #fff;
     outline: none; }
   #emojidex-emoji-palette .ui-dialog .ui-dialog-titlebar {
-    padding: 10px; }
-    #emojidex-emoji-palette .ui-dialog .ui-dialog-titlebar .ui-dialog-title {
-      margin-bottom: 5px;
-      line-height: unset; }
-      #emojidex-emoji-palette .ui-dialog .ui-dialog-titlebar .ui-dialog-title a > img {
-        width: 116px;
-        height: 27px;
-        margin: 0;
-        padding: 0; }
+    padding: 10px;
+    margin-bottom: 5px;
+    line-height: unset; }
+    #emojidex-emoji-palette .ui-dialog .ui-dialog-titlebar .ui-dialog-title a > img {
+      width: 116px;
+      height: 27px;
+      margin: 0;
+      padding: 0; }
   #emojidex-emoji-palette .ui-dialog .ui-dialog-content {
     height: auto !important; }
   #emojidex-emoji-palette .ui-widget-header {

@@ -177,11 +177,18 @@ gulp.task('uglify', (cb) => {
   return runSequence(['uglify-emojidex', 'uglify-bootstrap'], cb);
 });
 
-gulp.task('banner', () => {
+gulp.task('banner-js', () => {
   return gulp
     .src('dist/js/*.js')
     .pipe(header(banner, { pkg: pkg }))
     .pipe(gulp.dest('dist/js/'));
+});
+
+gulp.task('banner-css', () => {
+  return gulp
+    .src('dist/css/*.css')
+    .pipe(header(banner, { pkg: pkg }))
+    .pipe(gulp.dest('dist/css/'));
 });
 
 gulp.task('cssmin-emojidex', () => {
@@ -313,7 +320,7 @@ gulp.task('browser-reload', () => {
 });
 
 gulp.task('default', (cb) => {
-  runSequence('clean', 'slim', 'md2html', 'sass', 'babel', 'concat', 'uglify', 'cssmin', 'copy', 'banner', cb);
+  runSequence('clean', 'slim', 'md2html', 'sass', 'babel', 'concat', 'uglify', 'cssmin', 'copy', 'banner-js', 'banner-css', cb);
 });
 
 gulp.task('spec', (cb) => {

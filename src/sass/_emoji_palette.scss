@@ -34,9 +34,9 @@
 
 .ui-dialog .ui-dialog-titlebar {
   padding: 10px;
+  margin-bottom: 5px;
+  line-height: unset;
   .ui-dialog-title {
-    margin-bottom: 5px;
-    line-height: unset;
     a > img {
       width: 116px;
       height: 27px;
