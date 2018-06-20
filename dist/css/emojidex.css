@@ -1,3 +1,21 @@
+/*
+ * jQuery emojidex - v0.18.1
+ * emojidex plugin for jQuery/Zepto and compatible
+ * https://github.com/emojidex/emojidex-web
+ *
+ * Includes:
+ *   emojidexReplace, emojidexAutocomplete
+ *
+ * =LICENSE=
+ * Licensed under the emojidex Open License
+ * https://www.emojidex.com/emojidex/emojidex_open_license
+ *
+ * Copyright 2013 the emojidex project / K.K. GenSouSha
+ *
+ *
+ * Includes:
+ * --------------------------------
+*/
 .mt-0 {
   margin-top: 0px; }
 
@@ -3473,15 +3491,14 @@ img.emojidex-emoji {
     background-color: #fff;
     outline: none; }
   #emojidex-emoji-palette .ui-dialog .ui-dialog-titlebar {
-    padding: 10px; }
-    #emojidex-emoji-palette .ui-dialog .ui-dialog-titlebar .ui-dialog-title {
-      margin-bottom: 5px;
-      line-height: unset; }
-      #emojidex-emoji-palette .ui-dialog .ui-dialog-titlebar .ui-dialog-title a > img {
-        width: 116px;
-        height: 27px;
-        margin: 0;
-        padding: 0; }
+    padding: 10px;
+    margin-bottom: 5px;
+    line-height: unset; }
+    #emojidex-emoji-palette .ui-dialog .ui-dialog-titlebar .ui-dialog-title a > img {
+      width: 116px;
+      height: 27px;
+      margin: 0;
+      padding: 0; }
   #emojidex-emoji-palette .ui-dialog .ui-dialog-content {
     height: auto !important; }
   #emojidex-emoji-palette .ui-widget-header {
