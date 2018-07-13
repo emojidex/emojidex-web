@@ -52,7 +52,11 @@ emojidexに対応した絵文字が無い場合は、元のテキストがその
 emojidexReplace :kissing_heart:
 
 UTF moji codes to emoji:
-❤🛅😄😡💌😈👍#️⃣
+❤🛅😄😡💌💌😈👍💩
+💙💙💙
+
+Acknowledged ZWJ emoji:
+👨‍👩‍👦
 
 :code: to emoji:
 ❤:octopus::boar::frog:\:hand_salute: no_match:😄::no match::heart eyes(wh):

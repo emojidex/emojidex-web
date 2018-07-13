@@ -51,7 +51,11 @@ UTF code and the text remains unchanged.
 emojidexReplace :kissing_heart:
 
 UTF moji codes to emoji:
-❤🛅😄😡💌😈👍#️⃣
+❤🛅😄😡💌💌😈👍💩
+💙💙💙
+
+Acknowledged ZWJ emoji:
+👨‍👩‍👦
 
 :code: to emoji:
 ❤:octopus::boar::frog:\:hand_salute: no_match:😄::no match::heart eyes(wh):
@@ -191,16 +195,16 @@ A live version of the latest build will be available at
 Testing
 =======
 There are two types of specs: regular specs that use the test account and specs that require a
-premium account with R-18 enabled. As a developer you are eligable to receive a complimentary 
-upgrade to a premium account if you are working on either an emojidex package or module or 
-integration of emojidex in your own software. Simply contact info@emojidex.com with the subject 
+premium account with R-18 enabled. As a developer you are eligable to receive a complimentary
+upgrade to a premium account if you are working on either an emojidex package or module or
+integration of emojidex in your own software. Simply contact info@emojidex.com with the subject
 "Developer Account" and list the following details:
 1. Your username on emojidex
 2. The project(s) you intend to work on
 
 .env (optional)
 ---------------
-After obtaining a permium account you can use it for testing. To do this you need to create a 
+After obtaining a permium account you can use it for testing. To do this you need to create a
 file named '.env' with the following information:
 ```
 USERNAME=Your_UserName
@@ -208,9 +212,9 @@ EMAIL=your@email.com
 PASSWORD=YourPassword123
 AUTH_TOKEN=0123456789abcdef
 ```
-replacing the Your_UserName and 0123456789abcdef etc. with your actual username and auth_token... 
-The quickest way to find your auth_token is to log in on your browser, open up your user 
-settings by clicking on your username in the top right, and scrolling down to the Auth Token 
+replacing the Your_UserName and 0123456789abcdef etc. with your actual username and auth_token...
+The quickest way to find your auth_token is to log in on your browser, open up your user
+settings by clicking on your username in the top right, and scrolling down to the Auth Token
 field (or to do an auth request with CURL as in the developer.emojidex.com documentation).
 
 License
