@@ -25,7 +25,7 @@
     "cross-storage": "^1.0.0",
     "del": "^2.2.2",
     "dotenv": "^4.0.0",
-    "emojidex-client": "^0.17.0",
+    "emojidex-client": "^0.18.2",
     "eslint": "^3.15.0",
     "eslint-config-airbnb-base": "^11.1.0",
     "eslint-plugin-import": "^2.2.0",

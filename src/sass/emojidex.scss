@@ -17,6 +17,13 @@ img.emojidex-emoji {
   @include emoji;
 }
 
+.zwj-emoji img.emojidex-emoji {
+  margin-left: -1.2em;
+  &:first-child {
+    margin-left: 0;
+  }
+}
+
 .emojidex-loading-icon {
   @include emoji;
   background-image: url('https://cdn.emojidex.com/scripts/image/emojidex-web_loading1.gif');

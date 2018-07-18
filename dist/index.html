@@ -169,6 +169,10 @@ Orginal Style from ethanschoonover.com/solarized (c) Jeremy Hull <sourdrums@gmai
             </h5>
             &#x2764;&#x1F6C5;&#x1F604;&#x1F621;&#x1F48C;&#x1F48C;&#x1F608;&#x1F44D;&#x1F4A9;<br>&#x1F499;&#x1F499;&#x1F499;
             <h5 class="mt-xl">
+              Acknowledged ZWJ emoji:
+            </h5>
+            &#x1F468;&#x200D;&#x1F469;&#x200D;&#x1F466;
+            <h5 class="mt-xl">
               :code: to emoji:
             </h5>
             &#x2764;:octopus::boar:: boar::frog:\:hand_salute: no_match:&#x1F604;::no match::heart eyes(wh)::1234:
@@ -277,13 +281,17 @@ with other components of your site or app.  </p>
 <p>Scans text in the specified element and replaces any colon &quot;:&quot; encased short codes
 (eg: <code>:smile:</code>) or any UTF emoji (eg: <code>&#x1F604;</code>) with emojidex emoji images.<br>No conversion occurs when no emoji on emojidex is found that corresponds to the short code or
 UTF code and the text remains unchanged.</p>
-<pre><code><span class="hljs-attribute">emojidexReplace </span>:<span class="hljs-attribute">kissing_heart</span>:
+<pre><code><span class="hljs-string">emojidexReplace :</span><span class="hljs-string">kissing_heart:</span>
 
-UTF moji codes to <span class="hljs-attribute">emoji</span>:
-&#x2764;&#x1F6C5;&#x1F604;&#x1F621;&#x1F48C;&#x1F608;&#x1F44D;#&#xFE0F;&#x20E3;
+UTF moji codes to <span class="hljs-string">emoji:</span>
+&#x2764;&#x1F6C5;&#x1F604;&#x1F621;&#x1F48C;&#x1F48C;&#x1F608;&#x1F44D;&#x1F4A9;
+&#x1F499;&#x1F499;&#x1F499;
 
-:<span class="hljs-attribute">code</span>: to <span class="hljs-attribute">emoji</span>:
-&#x2764;:<span class="hljs-attribute">octopus</span>::<span class="hljs-attribute">boar</span>::<span class="hljs-attribute">frog</span>:\:<span class="hljs-attribute">hand_salute</span>: <span class="hljs-attribute">no_match</span>:&#x1F604;::no <span class="hljs-attribute">match</span>::heart <span class="hljs-function">eyes</span>(wh):
+Acknowledged ZWJ <span class="hljs-string">emoji:</span>
+&#x1F468;&#x200D;&#x1F469;&#x200D;&#x1F466;
+
+:<span class="hljs-string">code:</span> to <span class="hljs-string">emoji:</span>
+&#x2764;:<span class="hljs-string">octopus:</span>:<span class="hljs-string">boar:</span>:<span class="hljs-string">frog:</span>\:<span class="hljs-string">hand_salute:</span> <span class="hljs-string">no_match:</span>&#x1F604;::no <span class="hljs-string">match:</span>:heart eyes(wh):
 </code></pre><p>&#x2193;</p>
 <p><img src="http://emojidex.github.io/emojidex-web/img/samples/emojidex_replace.png" alt="emojidex replace image"></p>
 <h3 id="options">Options</h3>
@@ -375,24 +383,24 @@ bower <span class="hljs-keyword">install</span>
 <a href="http://localhost:8000/dist/">http://localhost:8000/dist/</a>.</p>
 <h1 id="testing">Testing</h1>
 <p>There are two types of specs: regular specs that use the test account and specs that require a
-premium account with R-18 enabled. As a developer you are eligable to receive a complimentary 
-upgrade to a premium account if you are working on either an emojidex package or module or 
-integration of emojidex in your own software. Simply contact info@emojidex.com with the subject 
+premium account with R-18 enabled. As a developer you are eligable to receive a complimentary
+upgrade to a premium account if you are working on either an emojidex package or module or
+integration of emojidex in your own software. Simply contact info@emojidex.com with the subject
 &quot;Developer Account&quot; and list the following details:</p>
 <ol>
 <li>Your username on emojidex</li>
 <li>The project(s) you intend to work on</li>
 </ol>
 <h2 id="-env-optional-">.env (optional)</h2>
-<p>After obtaining a permium account you can use it for testing. To do this you need to create a 
+<p>After obtaining a permium account you can use it for testing. To do this you need to create a
 file named &apos;.env&apos; with the following information:</p>
 <pre><code><span class="hljs-setting">USERNAME=<span class="hljs-value">Your_UserName</span></span>
 <span class="hljs-setting">EMAIL=<span class="hljs-value">your@email.com</span></span>
 <span class="hljs-setting">PASSWORD=<span class="hljs-value">YourPassword123</span></span>
 <span class="hljs-setting">AUTH_TOKEN=<span class="hljs-value"><span class="hljs-number">0123456789</span>abcdef</span></span>
-</code></pre><p>replacing the Your_UserName and 0123456789abcdef etc. with your actual username and auth_token... 
-The quickest way to find your auth_token is to log in on your browser, open up your user 
-settings by clicking on your username in the top right, and scrolling down to the Auth Token 
+</code></pre><p>replacing the Your_UserName and 0123456789abcdef etc. with your actual username and auth_token...
+The quickest way to find your auth_token is to log in on your browser, open up your user
+settings by clicking on your username in the top right, and scrolling down to the Auth Token
 field (or to do an auth request with CURL as in the developer.emojidex.com documentation).</p>
 <h1 id="license">License</h1>
 <p>emojidex and emojidex tools are licensed under the <a href="https://www.emojidex.com/emojidex/emojidex_open_license">emojidex Open License</a>.</p>
