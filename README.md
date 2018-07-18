@@ -71,10 +71,10 @@ Acknowledged ZWJ emoji:
 emojidexReplace({
   onComplete: undefined,
   useLoadingImg: true,
-  ignore: 'script, noscript, canvas, style, iframe, input, textarea, pre, code'
-
-  // this option is beta --------
-  autoUpdate: false
+  autoUpdate: true,
+  selector: '*',
+  ignore: 'script, noscript, canvas, img, style, iframe, input, textarea, pre, code',
+  ignoreContentEditable: true
 });
 ```
 
@@ -98,15 +98,26 @@ Type: `Boolean` Default: `true`
 
 Specifies weather or not to show the loading image [specified in the CSS] while downloading emoji.
 
+#### options.autoUpdate
+Type: `Boolean` Default: `true`
+
+Automatically run conversions on AJAX events.
+
+#### options.selector
+Type: `String` Default: `*`
+
+Set tags to permission the contents of during blanket conversions.　\*Judge after options.ignore.
+
 #### options.ignore
 Type: `String` Default: `script, noscript, canvas, img, style, iframe, input, textarea, pre, code`
 
 Set tags to ignore the contents of during blanket conversions.
 
-#### options.autoUpdate
+#### options.ignoreContentEditable
 Type: `Boolean` Default: `true`
 
-Automatically run conversions on AJAX events.
+Defines the behavior of `contenteditable="true"` elements. When true, ignore convert.
+
 
 ### .emojidexAutocomplete()
 Enables the autocomplete pop when a `:` colon is entered for `input`, `textarea`,
@@ -119,27 +130,30 @@ For `contenteditable="true"` elements the codes are converted immediately into e
 #### Default options
 ```js
 emojidexAutocomplete({
+  listLimit: 15,
   onComplete: undefined,
-  listLimit: 10,
-  insertImg: true
+  content_editable: {
+    insertImg: true
+  }
 });
 ```
+
+#### options.listLimit
+Type: `Int` Default: `15`
+
+The maximum number of items displayed in a pop list.
 
 #### options.onComplete
 Type: `Function` Default: `undefined`
 
 Sets a function to run when an autocomplete finishes.
 
-#### options.listLimit
-Type: `Int` Default: `10`
-
-The maximum number of items displayed in a pop list.
-
-#### options.insertImg
+#### options.content_editable.insertImg
 Type: `Boolean` Default: `true`
 
 Defines the behavior of `contenteditable="true"` elements. When true, codes are automatically
 converted to images. When false they remain as plain text.
+
 
 ### .emojidexPalette()
 Sets an element to open up an emoji palette chooser when clicked.
@@ -151,8 +165,10 @@ a user is logged in.
 ### Options
 #### Default options
 ```js
-emojidexAutocomplete({
+emojidexPalette({
   onComplete: undefined,
+  onEmojiButtonClicked: undefined,
+  paletteEmojisLimit: 50
 });
 ```
 
@@ -161,9 +177,21 @@ Type: `Function` Default: `undefined`
 
 Calls the defined method after a palette has been set to an element.
 
+#### options.onEmojiButtonClicked
+Type: `Function({imageTag: Img tag of clicked emoji, emojiCode: Code of clicked emoji})` Default: `undefined`
+
+Calls the defined method when click an emoji button on the palette.
+
+#### options.paletteEmojisLimit
+Type: `Int` Default: `50`
+
+The maximum number of items displayed in a palette.
+
+
+
 Building
 ========
-You will need node with a usable npm, grunt and bower.
+You will need node with a usable npm and yarn.
 
 ### Get the source
 First off we need the actual source to build. Clone this repository if you haven't already:
@@ -174,20 +202,19 @@ cd emojidex-web
 
 ### Install Packages and Obtain Required Sources
 ```shell
-npm install
-bower install
+yarn install
 ```
 
 ### Build
 For a regular one-off build:
 ```shell
-grunt
+yarn gulp
 ```
 Modules will be built in the dist directory.
 
 For development mode with dynamic compilation and dev server:
 ```shell
-grunt dev
+yarn gulp dev
 ```
 A live version of the latest build will be available at
 [http://localhost:8000/dist/](http://localhost:8000/dist/).

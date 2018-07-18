@@ -64,7 +64,7 @@ Acknowledged ZWJ emoji:
 
 ↓
 
-![emojidex replace image](http://emojidex.github.io/emojidex-web/img/emojidex_replace.png)
+![emojidex replace image](http://emojidex.github.io/emojidex-web/img/samples/emojidex_replace.png)
 
 ### Options
 #### Defaults
@@ -72,10 +72,10 @@ Acknowledged ZWJ emoji:
 emojidexReplace({
   onComplete: undefined,
   useLoadingImg: true,
-  ignore: 'script, noscript, canvas, style, iframe, input, textarea, pre, code'
-
-  // this option is beta --------
-  autoUpdate: false
+  autoUpdate: true,
+  selector: '*',
+  ignore: 'script, noscript, canvas, img, style, iframe, input, textarea, pre, code',
+  ignoreContentEditable: true
 });
 ```
 
@@ -99,15 +99,26 @@ Type: `Boolean` Default: `true`
 
 置換実行中に[CSSに指定されている]ローディング画像を表示するか、しないかを設定出来ます。
 
+#### options.autoUpdate
+Type: `Boolean` Default: `true`
+
+Ajax処理等で、動的に追加された要素に対しても置換処理を行うかを`Boolean`で指定出来ます。
+
+#### options.selector
+Type: `String` Default: `*`
+
+置換処理を許可する要素を文字列で指定出来ます。　※options.ignoreの後に判定します。
+
 #### options.ignore
 Type: `String` Default: `script, noscript, canvas, img, style, iframe, input, textarea, pre, code`
 
 置換処理を除外する要素を文字列で指定出来ます。
 
-#### options.autoUpdate
+#### options.ignoreContentEditable
 Type: `Boolean` Default: `true`
 
-Ajax処理等で、動的に追加された要素に対しても置換処理を行うかを`Boolean`で指定出来ます。
+[contenteditable="true"]の要素の置換を無視するかどうかを設定出来ます。
+
 
 ### .emojidexAutocomplete()
 input, textarea, [contenteditable="true"]で「:」から始まる文字列を使ってemojidexの対応絵文字検索し、
@@ -120,23 +131,25 @@ input, textareaでは候補を選択すると「:【対応する絵文字コー�
 #### Default options
 ```js
 emojidexAutocomplete({
+  listLimit: 15,
   onComplete: undefined,
-  listLimit: 10,
-  insertImg: true
+  content_editable: {
+    insertImg: true
+  }
 });
 ```
+
+#### options.listLimit
+Type: `Int` Default: `15`
+
+候補リストの最大数を設定出来ます。
 
 #### options.onComplete
 Type: `Function` Default: `undefined`
 
 オートコンプリートの設置が完了した際に実行される関数を設定する事が出来ます。
 
-#### options.listLimit
-Type: `Int` Default: `10`
-
-候補リストの最大数を設定出来ます。
-
-#### options.insertImg
+#### options.content_editable.insertImg
 Type: `Boolean` Default: `true`
 
 ターゲットが[contenteditable="true"]の時に画像挿入するか、プレーンテキストを挿入するかの設定が
@@ -153,8 +166,10 @@ Type: `Boolean` Default: `true`
 ### Options
 #### Default options
 ```js
-emojidexAutocomplete({
+emojidexPalette({
   onComplete: undefined,
+  onEmojiButtonClicked: undefined,
+  paletteEmojisLimit: 50
 });
 ```
 
@@ -163,11 +178,21 @@ Type: `Function` Default: `undefined`
 
 パレットの設置が完了した際に実行される関数を設定する事が出来ます。
 
+#### options.onEmojiButtonClicked
+Type: `Function({imageTag: クリックした絵文字のimgタグ, emojiCode: クリックした絵文字のcode})` Default: `undefined`
+
+パレットの絵文字ボタンをクリックした時に実行される関数を設定することが出来ます。
+
+#### options.paletteEmojisLimit
+Type: `Int` Default: `50`
+
+パレットに一度に表示する絵文字の上限を設定する事が出来ます。
+
 
 
 ビルドの仕方
 ------------
-nodeにnpmとgruntとbowerが必要です。
+nodeにnpmとyarnが必要です。
 
 ### ソースの取得
 まだクローンしていなければ、以下を実行する事でクローンが出来ます。
@@ -178,24 +203,66 @@ cd emojidex-web
 
 ### パッケージの取得
 ```shell
-npm install
-bower install
+yarn install
 ```
 
 ### ビルド
 一発ビルド:
 ```shell
-grunt
+yarn gulp
 ```
 distフォルダ内に出力されます。
 
 開発用の動的ビルド:
 ```shell
-grunt dev
+yarn gulp dev
 ```
 編集の際に再コンパイルされ、
 [http://localhost:8000/dist/](http://localhost:8000/dist/)
 から確認出来ます。
+
+
+プレミアムアカウントへの無料アップグレード
+=============================
+あなたが開発者としてemojidexのパッケージやモジュールを使用している場合、プレミアムアカウントへの無料アップグレードをすることが出来ます。
+
+件名を「開発者アカウント」にして以下を記載して、info@emojidex.comにご連絡ください。
+1. あなたのemojidexでのユーザー名
+2. あなたが取り組もうとしているプロジェクト
+
+
+テスト
+==========
+specには2種類あります。
+1つはテストアカウントを使用したもの、もう1つはR-18を有効にしたプレミアムアカウントを使用したものです。
+
+テストアカウントを使用したテスト
+-----------------------
+`emojidex-web`のディレクトリ内で下記のコマンドを実行してください。
+
+```shell
+yarn gulp spec
+```
+
+プレミアムアカウントを使用したテスト
+---------------
+プレミアムアカウントを取得した後、下記の情報を含むファイル`.env`を`emojidex-web`のディレクトリ内に作成します。
+
+例：
+```
+USERNAME=Your_UserName
+EMAIL=your@email.com
+PASSWORD=YourPassword123
+AUTH_TOKEN=0123456789abcdef
+```
+各値はあなたのものに変更してください。
+`AUTH_TOKEN`は[ユーザー情報ページ](https://emojidex.com/profile)の一番下、「認証トークンの表示」をクリックすることで確認できます（要ログイン）。
+
+上記ファイル作成後、`emojidex-web`のディレクトリ内で下記のコマンドを実行してください。
+
+```shell
+yarn gulp spec
+```
 
 ライセンス
 ==========

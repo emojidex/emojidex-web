@@ -215,43 +215,6 @@ function(e){var t,n,r,i,o,a,s,u,c,l,f,p,h,d,v,g,m,y,x,_="sizzle"+1*new Date,b=e.
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 (function ($, window, document) {
-  var pluginName = "emojidexAutocomplete";
-  var default_options = {
-    listLimit: 15,
-    onComplete: undefined,
-    content_editable: {
-      insertImg: true
-    }
-  };
-  var defaults = void 0;
-
-  var Plugin = function Plugin(element, options) {
-    _classCallCheck(this, Plugin);
-
-    this.element = element;
-    this.options = $.extend({}, default_options, options);
-    this._defaults = default_options;
-    this._name = pluginName;
-
-    // start: Plugin --------
-    this.autocomplete = new AutoComplete(this);
-  };
-
-  return $.fn[pluginName] = function (options) {
-    return this.each(function () {
-      if (!$.data(this, "plugin_" + pluginName)) {
-        return $.data(this, "plugin_" + pluginName, new Plugin(this, options));
-      }
-    });
-  };
-})(jQuery, window, document);
-//# sourceMappingURL=main.js.map
-
-"use strict";
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-(function ($, window, document) {
   var pluginName = "emojidexPalette";
   var defaults = {
     onComplete: undefined,
@@ -352,76 +315,42 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 })(jQuery, window, document);
 //# sourceMappingURL=main.js.map
 
-'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+"use strict";
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var AutoComplete = function () {
-  function AutoComplete(plugin) {
-    var _this = this;
+(function ($, window, document) {
+  var pluginName = "emojidexAutocomplete";
+  var default_options = {
+    listLimit: 15,
+    onComplete: undefined,
+    content_editable: {
+      insertImg: true
+    }
+  };
+  var defaults = void 0;
 
-    _classCallCheck(this, AutoComplete);
+  var Plugin = function Plugin(element, options) {
+    _classCallCheck(this, Plugin);
 
-    this.plugin = plugin;
-    this.EC = new EmojidexClient({
-      onReady: function onReady(EC) {
-        _this.EC.User.login('session');
-        _this.setAutoComplete();
+    this.element = element;
+    this.options = $.extend({}, default_options, options);
+    this._defaults = default_options;
+    this._name = pluginName;
+
+    // start: Plugin --------
+    this.autocomplete = new AutoComplete(this);
+  };
+
+  return $.fn[pluginName] = function (options) {
+    return this.each(function () {
+      if (!$.data(this, "plugin_" + pluginName)) {
+        return $.data(this, "plugin_" + pluginName, new Plugin(this, options));
       }
     });
-  }
-
-  _createClass(AutoComplete, [{
-    key: 'setAutoComplete',
-    value: function setAutoComplete() {
-      var _this2 = this;
-
-      $(this.plugin.element).textcomplete([{
-        match: /[：:]([^ ：:;@&#~\/\!\$\+\?\%\*\f\n\r]+)$/,
-        search: function search(term, callback) {
-          _this2.EC.Search.search(term, function (response) {
-            var replaced_term = term.replace(/_/g, ' ');
-            callback($.map(response, function (emoji) {
-              return emoji.code.indexOf(replaced_term) !== -1 ? emoji : null;
-            }));
-          });
-        },
-        template: function template(emoji) {
-          var emoji_tag_string = _this2.EC.Util.emojiToHTML(emoji);
-          var emoji_tag = $(emoji_tag_string)[0];
-          if (emoji_tag.nodeName == 'A') {
-            emoji_tag_string = emoji_tag.innerHTML;
-          }
-          return emoji_tag_string + ' ' + emoji.code.replace(/\s/g, '_');
-        },
-        replace: function replace(emoji) {
-          _this2.EC.Data.storage.update_cache('emojidex').then(function () {
-            if (_this2.EC.Data.storage.get('emojidex.auth_info') != null) {
-              _this2.EC.User.syncUserData();
-              _this2.EC.User.History.set(emoji.code.replace(/\s/g, '_'));
-            }
-          });
-          if (_this2.plugin.element.contentEditable === 'true' && _this2.plugin.options.content_editable.insertImg) {
-            return _this2.EC.Util.emojiToHTML(emoji) + ' ';
-          } else {
-            return ':' + emoji.code.replace(/\s/g, '_') + ':';
-          }
-        },
-        index: 1
-      }], {
-        maxCount: this.plugin.options.listLimit
-      });
-      if (typeof this.plugin.options.onComplete === "function") {
-        this.plugin.options.onComplete(this.plugin.element);
-      }
-    }
-  }]);
-
-  return AutoComplete;
-}();
-//# sourceMappingURL=autocomplete.js.map
+  };
+})(jQuery, window, document);
+//# sourceMappingURL=main.js.map
 
 'use strict';
 
@@ -913,8 +842,8 @@ var Replacer = function () {
         while (child) {
           switch (child.nodeType) {
             case Node.ELEMENT_NODE:
-              //check if node an ignored type [black-listed] and if not that it is in the selector list [white-listed]
-              if ($(child).is(this.plugin.options.ignore) || $(child).is(this.plugin.options.selector) == false) {
+              // check if node an ignored type [black-listed] and if not that it is in the selector list [white-listed]
+              if ($(child).is(this.plugin.options.ignore) || !$(child).is(this.plugin.options.selector)) {
                 break;
               }
               if (this.plugin.options.ignoreContentEditable && child.isContentEditable) {
@@ -938,6 +867,77 @@ var Replacer = function () {
   return Replacer;
 }();
 //# sourceMappingURL=replacer.js.map
+
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var AutoComplete = function () {
+  function AutoComplete(plugin) {
+    var _this = this;
+
+    _classCallCheck(this, AutoComplete);
+
+    this.plugin = plugin;
+    this.EC = new EmojidexClient({
+      onReady: function onReady(EC) {
+        _this.EC.User.login('session');
+        _this.setAutoComplete();
+      }
+    });
+  }
+
+  _createClass(AutoComplete, [{
+    key: 'setAutoComplete',
+    value: function setAutoComplete() {
+      var _this2 = this;
+
+      $(this.plugin.element).textcomplete([{
+        match: /[：:]([^ ：:;@&#~\/\!\$\+\?\%\*\f\n\r]+)$/,
+        search: function search(term, callback) {
+          _this2.EC.Search.search(term, function (response) {
+            var replaced_term = term.replace(/_/g, ' ');
+            callback($.map(response, function (emoji) {
+              return emoji.code.indexOf(replaced_term) !== -1 ? emoji : null;
+            }));
+          });
+        },
+        template: function template(emoji) {
+          var emoji_tag_string = _this2.EC.Util.emojiToHTML(emoji);
+          var emoji_tag = $(emoji_tag_string)[0];
+          if (emoji_tag.nodeName == 'A') {
+            emoji_tag_string = emoji_tag.innerHTML;
+          }
+          return emoji_tag_string + ' ' + emoji.code.replace(/\s/g, '_');
+        },
+        replace: function replace(emoji) {
+          _this2.EC.Data.storage.update_cache('emojidex').then(function () {
+            if (_this2.EC.Data.storage.get('emojidex.auth_info') != null) {
+              _this2.EC.User.syncUserData();
+              _this2.EC.User.History.set(emoji.code.replace(/\s/g, '_'));
+            }
+          });
+          if (_this2.plugin.element.contentEditable === 'true' && _this2.plugin.options.content_editable.insertImg) {
+            return _this2.EC.Util.emojiToHTML(emoji) + ' ';
+          } else {
+            return ':' + emoji.code.replace(/\s/g, '_') + ':';
+          }
+        },
+        index: 1
+      }], {
+        maxCount: this.plugin.options.listLimit
+      });
+      if (typeof this.plugin.options.onComplete === "function") {
+        this.plugin.options.onComplete(this.plugin.element);
+      }
+    }
+  }]);
+
+  return AutoComplete;
+}();
+//# sourceMappingURL=autocomplete.js.map
 
 'use strict';
 

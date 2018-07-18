@@ -42,8 +42,8 @@ class Replacer {
       while (child) {
         switch (child.nodeType) {
           case Node.ELEMENT_NODE:
-            //check if node an ignored type [black-listed] and if not that it is in the selector list [white-listed]
-            if ($(child).is(this.plugin.options.ignore) || ($(child).is(this.plugin.options.selector) == false)) {
+            // check if node an ignored type [black-listed] and if not that it is in the selector list [white-listed]
+            if ($(child).is(this.plugin.options.ignore) || !$(child).is(this.plugin.options.selector)) {
               break;
             }
             if (this.plugin.options.ignoreContentEditable && child.isContentEditable) {
