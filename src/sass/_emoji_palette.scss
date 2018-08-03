@@ -58,6 +58,7 @@
   }
 }
 #emojidex-dialog-content {
+  width: 520px !important;
   padding: 5px 10px 10px;
   float: left;
   [class*=-pagination] {
@@ -77,7 +78,7 @@
   .emoji-btn {
     border-radius: 4px;
     padding: 5px;
-    margin: 2px;
+    margin: 3px;
 
     img {
       width: 32px;
@@ -142,6 +143,10 @@
 }
 .emjdx-transportation {
   color: #f76eb3
+}
+
+.emjdx-customization {
+  color: #888
 }
 
 .nav.nav-pills {
