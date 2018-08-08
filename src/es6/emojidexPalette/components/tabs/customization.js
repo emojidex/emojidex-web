@@ -39,12 +39,65 @@ class CustomizationTab {
   }
 
   createEditView(emoji) {
-    this.tab_content.append(`<div class="user-info on">
+    const content = $(`<div class="customization-info on">
       <div class="btn-close" aria-hidden="true"><i class="emjdx-abstract flip-vertical"></i></div>
-      <div class="user-name">${emoji.base}</div>
+      <div class="emoji-name">${emoji.base}</div>
       <div class="clearfix"></div>
       <hr>
-      <div class="customization-emoji-list clearfix">aaa</div>
+      <div class="customization-emoji mt-m">
+        <div class="customization-preview pull-left text-center"><span class="zwj-emoji"></span></div>
+        <div class="customization-select pull-right"></div>
+        <div class="clearfix"></div>
+        <div class="text-center mt-m"><button class="insert-button btn btn-default">Insert</button></div>
+      </div>
     </div>`);
+
+    content.find('.insert-button').click(() => {
+      if ($('.customization-preview > .zwj-emoji').children()) {
+        // TODO:
+        console.log('!!!!!')
+      }
+    });
+    content.find('.btn-close').click(() => {
+      $('.customization-info').remove();
+    });
+
+    this.tab_content.append(content);
+    this.createSelect(emoji);
+  }
+
+  createSelect(emoji) {
+    const components = emoji.customizations[0].components;
+    const selectPromises = [];
+    for (let i = 0; i < components.length; i++) {
+      selectPromises.push(new Promise((selectResolve, selectReject) => {
+        const component = components[i];
+        const optionPromises = [];
+        for (let j = 0; j < component.length; j++ ) {
+          if (component[j]) {
+            optionPromises.push(new Promise((optionResolve, optionReject) => {
+              this.palette.EC.Search.find(component[j], (result) => {
+                optionResolve($(`<option value="${result.code}" data-moji="${result.moji}">${result.code}</option>`));
+              });
+            }));
+          }
+        }
+
+        Promise.all(optionPromises).then((options) => {
+          const select = $('<select class="form-control"></select>');
+          select.append($(`<option></option>`));
+          select.append(options);
+          select.change((e) => {
+            // TODO:
+            $('.customization-preview > .zwj-emoji').append('<div>test</div>');
+          });
+          selectResolve($(`<div class="mt-s"></div>`).append(select));
+        });
+      }));
+    }
+
+    Promise.all(selectPromises).then((selects) => {
+      $('.customization-select').append(selects);
+    });
   }
 }

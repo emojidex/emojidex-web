@@ -183,6 +183,46 @@
   }
 }
 
+@mixin detail-view {
+  position: relative;
+  background-color: rgba(255, 255, 255, 1);
+  margin-top: -36px;
+  display: none;
+  width: 100%;
+  border-radius: 4px;
+
+  .user-name, .emoji-name {
+    float: left;
+    line-height: 22px;
+    margin-left: 8px;
+    padding-left: 12px;
+    border-left: 1px #ddd solid;
+  }
+
+  .btn-close {
+    -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=2, mirror=1)";
+    -webkit-transform: scale(-1, 1);
+    -ms-transform: scale(-1, 1);
+    transform: scale(-1, 1);
+    float: left;
+    cursor: pointer;
+    i {
+      color: #ddd;
+      font-size: 20px;
+      line-height: 20px;
+    }
+    &:hover {
+      i {
+        color: #bbb;
+      }
+    }
+  }
+
+  .pagination-container {
+    bottom: 0px;
+  }
+}
+
 #follow-following, #follow-followers {
   .users {
     .btn {
@@ -191,47 +231,41 @@
   }
 
   .user-info {
-    position: relative;
-    background-color: rgba(255, 255, 255, 1);
-    margin-top: -36px;
-    display: none;
-    width: 100%;
+    @include detail-view;
     height: 327px;
-    border-radius: 4px;
-
-    .user-name {
-      float: left;
-      line-height: 22px;
-      margin-left: 8px;
-      padding-left: 12px;
-      border-left: 1px #ddd solid;
-    }
-
-    .btn-close {
-      -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=2, mirror=1)";
-      -webkit-transform: scale(-1, 1);
-      -ms-transform: scale(-1, 1);
-      transform: scale(-1, 1);
-      float: left;
-      cursor: pointer;
-      i {
-        color: #ddd;
-        font-size: 20px;
-        line-height: 20px;
-      }
-      &:hover {
-        i {
-          color: #bbb;
-        }
-      }
-    }
-
-    .pagination-container {
-      bottom: 0px;
-    }
 
     &.on {
       display: block;
+    }
+  }
+}
+
+#tab-content-customization {
+  .customization-info {
+    @include detail-view;
+    height: 305px;
+
+    &.on {
+      display: inline-block;
+      padding-top: 15px;
+      margin-top: -60px;
+    }
+
+    .customization-preview {
+      width: 245px;
+      height: 195px;
+      padding-top: 5px;
+      padding-left: 190px;
+      .zwj-emoji img {
+        width: 190px;
+        height: 190px;
+        margin-left: -190px;
+      }
+    }
+
+    .customization-select {
+      width: 245px;
+      height: 195px;
     }
   }
 }
