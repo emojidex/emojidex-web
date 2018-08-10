@@ -45,7 +45,7 @@ class CustomizationTab {
       <div class="clearfix"></div>
       <hr>
       <div class="customization-emoji mt-m">
-        <div class="customization-preview pull-left text-center"><span class="zwj-emoji"></span></div>
+        <div class="customization-preview pull-left text-center"></div>
         <div class="customization-select pull-right"></div>
         <div class="clearfix"></div>
         <div class="text-center mt-m"><button class="insert-button btn btn-default">Insert</button></div>
@@ -53,14 +53,12 @@ class CustomizationTab {
     </div>`);
 
     content.find('.insert-button').click(() => {
-      if ($('.customization-preview > .zwj-emoji').children()) {
+      if ($('.customization-preview').children()) {
         // TODO:
         console.log('!!!!!')
       }
     });
-    content.find('.btn-close').click(() => {
-      $('.customization-info').remove();
-    });
+    content.find('.btn-close').click(() => { $('.customization-info').remove(); });
 
     this.tab_content.append(content);
     this.createSelect(emoji);
@@ -71,33 +69,49 @@ class CustomizationTab {
     const selectPromises = [];
     for (let i = 0; i < components.length; i++) {
       selectPromises.push(new Promise((selectResolve, selectReject) => {
+        // create options
         const component = components[i];
         const optionPromises = [];
         for (let j = 0; j < component.length; j++ ) {
           if (component[j]) {
             optionPromises.push(new Promise((optionResolve, optionReject) => {
               this.palette.EC.Search.find(component[j], (result) => {
-                optionResolve($(`<option value="${result.code}" data-moji="${result.moji}">${result.code}</option>`));
+                optionResolve({ order: j, element: $(`<option value="${result.moji}">${result.code}</option>`) });
               });
+            }));
+          } else {
+            optionPromises.push(new Promise((optionResolve, optionReject) => {
+              optionResolve({ order: j, element: $(`<option></option>`) });
             }));
           }
         }
 
+        // set options to select-tag
         Promise.all(optionPromises).then((options) => {
-          const select = $('<select class="form-control"></select>');
-          select.append($(`<option></option>`));
-          select.append(options);
-          select.change((e) => {
-            // TODO:
-            $('.customization-preview > .zwj-emoji').append('<div>test</div>');
-          });
-          selectResolve($(`<div class="mt-s"></div>`).append(select));
+          const select = $('<select class="form-control zwj-selects"></select>');
+          options.sort((a, b) => { return a.order < b.order ? -1 : 1; });
+          options.forEach((option) => { select.append(option.element); });
+          select.change((e) => { this.setZWJEmojis(); });
+          selectResolve({ order: i, element: $(`<div class="mt-s"></div>`).append(select) });
         });
       }));
     }
 
+    // set selects to div-tag
     Promise.all(selectPromises).then((selects) => {
-      $('.customization-select').append(selects);
+      selects.sort((a, b) => { return a.order < b.order ? -1 : 1; });
+      selects.forEach((select) => { $('.customization-select').append(select.element); });
+      this.setZWJEmojis();
+    });
+  }
+
+  setZWJEmojis() {
+    $('.customization-preview').empty();
+
+    const values = [];
+    $('.zwj-selects').each((i, select) => { values.push($(select).val()); });
+    this.palette.EC.Util.emojifyToHTML(values.join('\u{200d}')).then((result) => {
+      $('.customization-preview').append(result);
     });
   }
 }
