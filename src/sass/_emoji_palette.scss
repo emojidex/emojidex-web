@@ -1,5 +1,5 @@
 // jquery-ui --------
-@import '../../src/vendor/jquery-ui-1.12.1.custom/jquery-ui.min';
+// @import '../../src/vendor/jquery-ui-1.12.1.custom/jquery-ui.min';
 // @import 'jquery-ui';
 
 // bootstrap --------
@@ -267,5 +267,50 @@
       width: 245px;
       height: 195px;
     }
+  }
+
+  // override
+  @import '../vendor/jquery-ui-1.12.1.custom/jquery-ui';
+  .ui-selectmenu-button.ui-button {
+    width: 16em;
+  }
+  .ui-icon {
+    text-indent: 0;
+  }
+  .ui-menu-item .ui-menu-item-wrapper {
+    height: 32px;
+    padding: 6px 1em 3px 3em;
+    span.ui-icon {
+      width: 32px;
+      height: 32px;
+    }
+  }
+  .ui-icon,
+  .ui-widget-content .ui-icon {
+  	background-image: none;
+  }
+  .ui-widget-header .ui-icon {
+  	background-image: none;
+  }
+  .ui-state-hover .ui-icon,
+  .ui-state-focus .ui-icon,
+  .ui-button:hover .ui-icon,
+  .ui-button:focus .ui-icon {
+  	background-image: none;
+  }
+  .ui-state-active .ui-icon,
+  .ui-button:active .ui-icon {
+  	background-image: none;
+  }
+  .ui-state-highlight .ui-icon,
+  .ui-button .ui-state-highlight.ui-icon {
+  	background-image: none;
+  }
+  .ui-state-error .ui-icon,
+  .ui-state-error-text .ui-icon {
+  	background-image: none;
+  }
+  .ui-button .ui-icon {
+  	background-image: none;
   }
 }

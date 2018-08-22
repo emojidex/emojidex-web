@@ -41,7 +41,7 @@ class CustomizationTab {
   createEditView(emoji) {
     const content = $(`<div class="customization-info on">
       <div class="btn-close" aria-hidden="true"><i class="emjdx-abstract flip-vertical"></i></div>
-      <div class="emoji-name">${emoji.base}</div>
+      <div class="emoji-name">${emoji.customizations[0].base}</div>
       <div class="clearfix"></div>
       <hr>
       <div class="customization-emoji mt-m">
@@ -76,7 +76,8 @@ class CustomizationTab {
           if (component[j]) {
             optionPromises.push(new Promise((optionResolve, optionReject) => {
               this.palette.EC.Search.find(component[j], (result) => {
-                optionResolve({ order: j, element: $(`<option value="${result.moji}">${result.code}</option>`) });
+                const url = `https://${this.palette.EC.env.cdn_addr}/emoji/px32/${emoji.customizations[0].base}/${i}/${this.palette.EC.Util.escapeTerm(result.code)}.png`;
+                optionResolve({ order: j, element: $(`<option value="${result.moji}" data-url="${url}">${result.code}</option>`) });
               });
             }));
           } else {
@@ -91,8 +92,7 @@ class CustomizationTab {
           const select = $('<select class="form-control zwj-selects"></select>');
           options.sort((a, b) => { return a.order < b.order ? -1 : 1; });
           options.forEach((option) => { select.append(option.element); });
-          select.change((e) => { this.setZWJEmojis(); });
-          selectResolve({ order: i, element: $(`<div class="mt-s"></div>`).append(select) });
+          selectResolve({ order: i, element: $(`<div class="mt-m"></div>`).append(select) });
         });
       }));
     }
@@ -102,6 +102,7 @@ class CustomizationTab {
       selects.sort((a, b) => { return a.order < b.order ? -1 : 1; });
       selects.forEach((select) => { $('.customization-select').append(select.element); });
       this.setZWJEmojis();
+      this.setIconSelectMenu();
     });
   }
 
@@ -112,6 +113,28 @@ class CustomizationTab {
     $('.zwj-selects').each((i, select) => { values.push($(select).val()); });
     this.palette.EC.Util.emojifyToHTML(values.join('\u{200d}')).then((result) => {
       $('.customization-preview').append(result);
+    });
+  }
+
+  setIconSelectMenu() {
+    $.widget('custom.iconselectmenu', $.ui.selectmenu, {
+      _renderItem: function( ul, item ) {
+        const span = $('<span class="ui-icon"></span>');
+        if (item.element.data('url')) span.append(`<img src=${item.element.data('url')} />`);
+
+        const wrapper = $('<div>', { text: item.label });
+        wrapper.append(span);
+
+        return $('<li>').append(wrapper).appendTo(ul);
+      }
+    });
+
+    $('.zwj-selects').each((i, element) => {
+      $(element).iconselectmenu({
+        appendTo: '#tab-content-customization',
+        change: (event, ui) => { this.setZWJEmojis(); }
+      }).iconselectmenu('menuWidget')
+        .addClass('ui-menu-icons');
     });
   }
 }
