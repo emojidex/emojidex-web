@@ -54,8 +54,7 @@ class CustomizationTab {
 
     content.find('.insert-button').click(() => {
       if ($('.customization-preview').children()) {
-        // TODO:
-        console.log('!!!!!')
+        this.insertEmoji();
       }
     });
     content.find('.btn-close').click(() => { $('.customization-info').remove(); });
@@ -109,17 +108,22 @@ class CustomizationTab {
   setZWJEmojis() {
     $('.customization-preview').empty();
 
-    const values = [];
-    $('.zwj-selects').each((i, select) => { values.push($(select).val()); });
-    this.palette.EC.Util.emojifyToHTML(values.join('\u{200d}')).then((result) => {
+    this.palette.EC.Util.emojifyToHTML(this.getZWJEmojis()).then((result) => {
       $('.customization-preview').append(result);
     });
+  }
+
+  getZWJEmojis() {
+    let values = [];
+    $('.zwj-selects').each((i, select) => { values.push($(select).val()); });
+    values = values.filter(v => v);
+    return values.join('\u{200d}');
   }
 
   setIconSelectMenu() {
     $.widget('custom.iconselectmenu', $.ui.selectmenu, {
       _renderItem: function( ul, item ) {
-        const span = $('<span class="ui-icon"></span>');
+        const span = $(`<span class="${item.element.data('url') ? 'ui-icon' : ''}"></span>`);
         if (item.element.data('url')) span.append(`<img src=${item.element.data('url')} />`);
 
         const wrapper = $('<div>', { text: item.label });
@@ -136,5 +140,38 @@ class CustomizationTab {
       }).iconselectmenu('menuWidget')
         .addClass('ui-menu-icons');
     });
+  }
+
+  insertEmoji() {
+    const codes = this.getZWJEmojis();
+
+    if (this.palette.active_input_area === null) {
+      this.clipboard = new Clipboard('.insert-button', {
+        text: (e) => { return codes; }
+      });
+      return;
+    }
+
+    const elem = this.palette.active_input_area;
+    if (elem.is('[contenteditable="true"]')) {
+      elem.focus();
+      const selection = window.getSelection();
+      const range = selection.getRangeAt(0);
+
+      range.insertNode($($('.customization-preview').children()[0]).clone()[0]);
+      range.collapse(false);
+      selection.removeAllRanges();
+      selection.addRange(range);
+
+      return elem.change();
+    } else {
+      const pos = elem.caret('pos');
+      const txt = elem.val();
+      const startTxt = txt.substring(0,  pos);
+      const stopTxt = txt.substring(pos, txt.length);
+      elem.val(startTxt + codes + stopTxt);
+      elem.focus();
+      return elem.caret('pos', pos + codes.length);
+    }
   }
 }

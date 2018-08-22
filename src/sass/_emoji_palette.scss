@@ -280,9 +280,12 @@
   .ui-menu-item .ui-menu-item-wrapper {
     height: 32px;
     padding: 6px 1em 3px 3em;
+    margin: 5px 0px;
     span.ui-icon {
-      width: 32px;
-      height: 32px;
+      width: 34px;
+      height: 34px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
     }
   }
   .ui-icon,
