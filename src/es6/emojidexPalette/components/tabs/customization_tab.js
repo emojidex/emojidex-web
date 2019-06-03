@@ -40,7 +40,7 @@ class CustomizationTab {
   createEditView(emoji) {
     const content = $(`<div class="customization-info on">
       <div class="btn-close" aria-hidden="true"><i class="emjdx-abstract flip-vertical"></i></div>
-      <div class="emoji-name">${emoji.customizations[0].base}</div>
+      <div class="emoji-name">${emoji.code}</div>
       <div class="clearfix"></div>
       <hr>
       <div class="customization-emoji mt-m">
@@ -107,8 +107,10 @@ class CustomizationTab {
   setZWJEmojis() {
     $('.customization-preview').empty();
 
+    const reg = new RegExp(`${this.palette.EC.defaults.cdn_url}[a-z0-9]+/`, 'g');
+    const size = `${this.palette.EC.defaults.cdn_url}seal/`;
     this.palette.EC.Util.emojifyToHTML(this.getZWJEmojis()).then((result) => {
-      $('.customization-preview').append(result);
+      $('.customization-preview').append(result.replace(reg, size));
     });
   }
 
