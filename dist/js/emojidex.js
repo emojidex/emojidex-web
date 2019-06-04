@@ -299,6 +299,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 "use strict";
 
+require("core-js/modules/es.object.define-property");
+
+require("core-js/modules/es.regexp.exec");
+
+require("core-js/modules/es.string.replace");
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -372,6 +378,20 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 //# sourceMappingURL=main.js.map
 
 "use strict";
+
+require("core-js/modules/es.array.concat");
+
+require("core-js/modules/es.array.index-of");
+
+require("core-js/modules/es.array.map");
+
+require("core-js/modules/es.object.define-property");
+
+require("core-js/modules/es.regexp.exec");
+
+require("core-js/modules/es.string.replace");
+
+require("core-js/modules/es.string.search");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -453,6 +473,20 @@ function () {
 //# sourceMappingURL=autocomplete.js.map
 
 "use strict";
+
+require("core-js/modules/es.array.concat");
+
+require("core-js/modules/es.array.find");
+
+require("core-js/modules/es.array.map");
+
+require("core-js/modules/es.array.slice");
+
+require("core-js/modules/es.object.define-property");
+
+require("core-js/modules/es.regexp.exec");
+
+require("core-js/modules/es.string.replace");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -791,6 +825,14 @@ function () {
 
 "use strict";
 
+require("core-js/modules/es.array.index-of");
+
+require("core-js/modules/es.object.define-property");
+
+require("core-js/modules/es.object.to-string");
+
+require("core-js/modules/es.promise");
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -908,6 +950,18 @@ function () {
 
 "use strict";
 
+require("core-js/modules/es.object.define-property");
+
+require("core-js/modules/es.object.to-string");
+
+require("core-js/modules/es.promise");
+
+require("core-js/modules/es.regexp.exec");
+
+require("core-js/modules/es.string.match");
+
+require("core-js/modules/es.string.replace");
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -1011,6 +1065,10 @@ function () {
 
 "use strict";
 
+require("core-js/modules/es.array.concat");
+
+require("core-js/modules/es.object.define-property");
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -1098,6 +1156,8 @@ function () {
 
 "use strict";
 
+require("core-js/modules/es.object.define-property");
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -1167,6 +1227,14 @@ function () {
 //# sourceMappingURL=index_tab.js.map
 
 "use strict";
+
+require("core-js/modules/es.array.find");
+
+require("core-js/modules/es.object.define-property");
+
+require("core-js/modules/es.regexp.exec");
+
+require("core-js/modules/es.string.search");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1261,6 +1329,10 @@ function () {
 //# sourceMappingURL=search_tab.js.map
 
 "use strict";
+
+require("core-js/modules/es.array.find");
+
+require("core-js/modules/es.object.define-property");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1462,6 +1534,8 @@ function () {
 
 "use strict";
 
+require("core-js/modules/es.object.define-property");
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -1530,6 +1604,26 @@ function () {
 //# sourceMappingURL=favorite_tab.js.map
 
 "use strict";
+
+require("core-js/modules/es.symbol");
+
+require("core-js/modules/es.symbol.description");
+
+require("core-js/modules/es.symbol.iterator");
+
+require("core-js/modules/es.array.concat");
+
+require("core-js/modules/es.array.find");
+
+require("core-js/modules/es.array.iterator");
+
+require("core-js/modules/es.object.define-property");
+
+require("core-js/modules/es.object.to-string");
+
+require("core-js/modules/es.string.iterator");
+
+require("core-js/modules/web.dom-collections.iterator");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1670,6 +1764,26 @@ function () {
 
 "use strict";
 
+require("core-js/modules/es.symbol");
+
+require("core-js/modules/es.symbol.description");
+
+require("core-js/modules/es.symbol.iterator");
+
+require("core-js/modules/es.array.concat");
+
+require("core-js/modules/es.array.find");
+
+require("core-js/modules/es.array.iterator");
+
+require("core-js/modules/es.object.define-property");
+
+require("core-js/modules/es.object.to-string");
+
+require("core-js/modules/es.string.iterator");
+
+require("core-js/modules/web.dom-collections.iterator");
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -1808,6 +1922,8 @@ function () {
 //# sourceMappingURL=following_tab.js.map
 
 "use strict";
+
+require("core-js/modules/es.object.define-property");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 

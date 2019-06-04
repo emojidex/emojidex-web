@@ -72,10 +72,11 @@ let banner =
   ' * --------------------------------\n' +
   '*/\n';
 
-gulp.task('clean-spec', () => {
+gulp.task('clean-spec', (done) => {
   del.sync('build/spec/**/*.js');
+  done();
 });
-gulp.task('clean-compiled', () => {
+gulp.task('clean-compiled', (done) => {
   del.sync([
     'src/compiled_js/**/*',
     'src/compiled_css/**/*',
@@ -83,10 +84,11 @@ gulp.task('clean-compiled', () => {
     'dist',
     'docs'
     ]);
+  done();
 });
-gulp.task('clean', () => {
-  return gulp.parallel('clean-spec', 'clean-compiled');
-});
+gulp.task('clean',
+  gulp.parallel('clean-spec', 'clean-compiled')
+);
 
 gulp.task('md2html', () => {
   return gulp
@@ -116,24 +118,15 @@ gulp.task('slim-spec', () => {
     .pipe(slim({ pretty: true }))
     .pipe(gulp.dest('build/spec/fixture'));
 });
-gulp.task('slim', () => {
-  return gulp.parallel('slim-dist', 'slim-spec');
-});
+gulp.task('slim',
+  gulp.parallel('slim-dist', 'slim-spec')
+);
 
 gulp.task('babel', () => {
   return gulp
     .src(['src/es6/**/*.js'])
     .pipe(sourceMaps.init())
-    .pipe(babel({
-      "presets": [
-        [
-          "@babel/preset-env",
-          {
-            "useBuiltIns": "entry"
-          }
-        ]
-      ]
-    }))
+    .pipe(babel())
     .pipe(sourceMaps.write('.'))
     .pipe(gulp.dest('build/js'))
 });
@@ -179,9 +172,9 @@ gulp.task('uglify-bootstrap', () => {
     .pipe(rename({ suffix: '.min' }))
     .pipe(gulp.dest('dist/resources'));
 });
-gulp.task('uglify', () => {
-  return gulp.parallel('uglify-emojidex', 'uglify-bootstrap');
-});
+gulp.task('uglify',
+  gulp.parallel('uglify-emojidex', 'uglify-bootstrap')
+)
 
 gulp.task('banner-js', () => {
   return gulp
@@ -198,20 +191,20 @@ gulp.task('banner-css', () => {
 });
 
 gulp.task('cssmin-emojidex', () => {
-  gulp.src('dist/css/emojidex.css')
+  return gulp.src('dist/css/emojidex.css')
     .pipe(cssmin())
     .pipe(rename({ suffix: '.min' }))
     .pipe(gulp.dest('dist/css'));
 });
 gulp.task('cssmin-document', () => {
-  gulp.src('src/compiled_css/document.css')
+  return gulp.src('src/compiled_css/document.css')
     .pipe(cssmin())
     .pipe(rename({ suffix: '.min' }))
     .pipe(gulp.dest('dist/css'));
 });
-gulp.task('cssmin', () => {
-  return gulp.parallel('cssmin-emojidex', 'cssmin-document');
-});
+gulp.task('cssmin',
+  gulp.parallel('cssmin-emojidex', 'cssmin-document')
+);
 
 gulp.task('copy-img', () => {
   return gulp
@@ -233,9 +226,9 @@ gulp.task('copy-docs', () => {
     .src('dist/**/*')
     .pipe(gulp.dest('docs'));
 });
-gulp.task('copy', () => {
-  return gulp.series(gulp.parallel('copy-img', 'copy-bootstrap', 'copy-jquery'), 'copy-docs');
-});
+gulp.task('copy',
+  gulp.series(gulp.parallel('copy-img', 'copy-bootstrap', 'copy-jquery'), 'copy-docs')
+);
 
 gulp.task('concat-js', () => {
   return gulp
@@ -260,9 +253,9 @@ gulp.task('concat-css', () => {
     .pipe(concat('emojidex.css'))
     .pipe(gulp.dest('dist/css'));
 });
-gulp.task('concat', () => {
-  return gulp.parallel('concat-js', 'concat-css');
-});
+gulp.task('concat',
+  gulp.parallel('concat-js', 'concat-css')
+);
 
 gulp.task('concat-spec', () => {
   let file = fs.readFileSync('build/spec/fixture/index.html', 'utf8');
@@ -325,27 +318,27 @@ gulp.task('browser-reload', () => {
   browserSync.reload();
 });
 
-gulp.task('default', () => {
-  gulp.series('clean', 'slim', 'md2html', 'sass', 'babel', 'concat', 'uglify', 'cssmin', 'copy', 'banner-js', 'banner-css');
-});
+gulp.task('default',
+  gulp.series('clean', 'slim', 'md2html', 'sass', 'babel', 'concat', 'uglify', 'cssmin', 'copy', 'banner-js', 'banner-css')
+);
 
-gulp.task('spec', () => {
-  gulp.series('default', 'env', 'concat-spec', 'jasmine');
-});
+gulp.task('spec',
+  gulp.series('default', 'env', 'concat-spec', 'jasmine')
+);
 
 // TODO: lint
-gulp.task('dev', () => {
-  gulp.series('default', 'watch', 'browser-sync');
-});
+gulp.task('dev',
+  gulp.series('default', 'watch', 'browser-sync')
+);
 
-gulp.task('watch-js', () => {
-  gulp.series('babel', 'concat-js', 'browser-reload');
-});
+gulp.task('watch-js',
+  gulp.series('babel', 'concat-js', 'browser-reload')
+);
 
-gulp.task('watch-slim', () => {
-  gulp.series('slim', 'md2html', 'browser-reload');
-});
+gulp.task('watch-slim',
+  gulp.series('slim', 'md2html', 'browser-reload')
+);
 
-gulp.task('watch-sass', () => {
-  gulp.series('sass', 'concat-css', 'cssmin', 'browser-reload');
-})
+gulp.task('watch-sass',
+  gulp.series('sass', 'concat-css', 'cssmin', 'browser-reload')
+);
