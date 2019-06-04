@@ -34,7 +34,6 @@
     "gulp-babel": "^6.1.2",
     "gulp-clean": "^0.3.2",
     "gulp-concat": "^2.6.1",
-    "gulp-copy": "^1.0.0",
     "gulp-cssmin": "^0.1.7",
     "gulp-dotenv": "^0.2.1",
     "gulp-eslint": "^3.0.1",
@@ -51,9 +50,7 @@
     "jasmine-jquery": "^2.1.1",
     "jquery": "^3.1.0",
     "jquery-watch": "^1.21.0",
-    "pump": "^1.0.2",
-    "run-sequence": "^1.2.2",
-    "webpack-stream": "^3.2.0"
+    "run-sequence": "^1.2.2"
   },
   "scripts": {
     "test": "gulp spec"
