@@ -223,7 +223,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       insertImg: true
     }
   };
-  var defaults = void 0;
+  var defaults;
 
   var Plugin = function Plugin(element, options) {
     _classCallCheck(this, Plugin);
@@ -231,16 +231,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     this.element = element;
     this.options = $.extend({}, default_options, options);
     this._defaults = default_options;
-    this._name = pluginName;
+    this._name = pluginName; // start: Plugin --------
 
-    // start: Plugin --------
     this.autocomplete = new AutoComplete(this);
   };
 
   return $.fn[pluginName] = function (options) {
     return this.each(function () {
-      if (!$.data(this, "plugin_" + pluginName)) {
-        return $.data(this, "plugin_" + pluginName, new Plugin(this, options));
+      if (!$.data(this, "plugin_".concat(pluginName))) {
+        return $.data(this, "plugin_".concat(pluginName), new Plugin(this, options));
       }
     });
   };
@@ -265,27 +264,28 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     this.element = element;
     this.options = $.extend({}, defaults, options);
     this._defaults = defaults;
-    this._name = pluginName;
+    this._name = pluginName; // start: Plugin --------
 
-    // start: Plugin --------
     this.palette = new Palette(this);
   };
 
   return $.fn[pluginName] = function (options) {
     return this.each(function () {
-      if (!$.data(this, "plugin_" + pluginName)) {
-        return $.data(this, "plugin_" + pluginName, new Plugin(this, options));
+      if (!$.data(this, "plugin_".concat(pluginName))) {
+        return $.data(this, "plugin_".concat(pluginName), new Plugin(this, options));
       }
     });
   };
 })(jQuery, window, document);
 //# sourceMappingURL=main.js.map
 
-'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+"use strict";
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 (function ($, window, document) {
   var pluginName = 'emojidexReplace';
@@ -298,24 +298,25 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     ignoreContentEditable: true
   };
 
-  var Plugin = function () {
+  var Plugin =
+    function () {
     function Plugin(element, options) {
       var _this = this;
 
       _classCallCheck(this, Plugin);
 
       this.element = element;
+
       if (!window.emojidexReplacerOnce) {
         window.emojidexReplacerOnce = true;
-
         this.element = $(this.element);
         this.options = $.extend({}, defaults, options);
         this._defaults = defaults;
         this._name = pluginName;
-
         this.EC = new EmojidexClient({
           onReady: function onReady(EC) {
             _this.EC.User.login('session');
+
             _this.replace();
           }
         });
@@ -323,7 +324,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     }
 
     _createClass(Plugin, [{
-      key: 'replace',
+      key: "replace",
       value: function replace() {
         var _this2 = this;
 
@@ -344,21 +345,24 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
   return $.fn[pluginName] = function (options) {
     return this.each(function () {
-      if (!$.data(this, 'plugin_' + pluginName)) {
-        return $.data(this, 'plugin_' + pluginName, new Plugin(this, options));
+      if (!$.data(this, "plugin_".concat(pluginName))) {
+        return $.data(this, "plugin_".concat(pluginName), new Plugin(this, options));
       }
     });
   };
 })(jQuery, window, document);
 //# sourceMappingURL=main.js.map
 
-'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+"use strict";
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var AutoComplete = function () {
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var AutoComplete =
+function () {
   function AutoComplete(plugin) {
     var _this = this;
 
@@ -368,13 +372,14 @@ var AutoComplete = function () {
     this.EC = new EmojidexClient({
       onReady: function onReady(EC) {
         _this.EC.User.login('session');
+
         _this.setAutoComplete();
       }
     });
   }
 
   _createClass(AutoComplete, [{
-    key: 'setAutoComplete',
+    key: "setAutoComplete",
     value: function setAutoComplete() {
       var _this2 = this;
 
@@ -390,29 +395,35 @@ var AutoComplete = function () {
         },
         template: function template(emoji) {
           var emoji_tag_string = _this2.EC.Util.emojiToHTML(emoji);
+
           var emoji_tag = $(emoji_tag_string)[0];
+
           if (emoji_tag.nodeName == 'A') {
             emoji_tag_string = emoji_tag.innerHTML;
           }
-          return emoji_tag_string + ' ' + emoji.code.replace(/\s/g, '_');
+
+          return "".concat(emoji_tag_string, " ").concat(emoji.code.replace(/\s/g, '_'));
         },
         replace: function replace(emoji) {
           _this2.EC.Data.storage.update_cache('emojidex').then(function () {
             if (_this2.EC.Data.storage.get('emojidex.auth_info') != null) {
               _this2.EC.User.syncUserData();
+
               _this2.EC.User.History.set(emoji.code.replace(/\s/g, '_'));
             }
           });
+
           if (_this2.plugin.element.contentEditable === 'true' && _this2.plugin.options.content_editable.insertImg) {
-            return _this2.EC.Util.emojiToHTML(emoji) + ' ';
+            return "".concat(_this2.EC.Util.emojiToHTML(emoji), " ");
           } else {
-            return ':' + emoji.code.replace(/\s/g, '_') + ':';
+            return ":".concat(emoji.code.replace(/\s/g, '_'), ":");
           }
         },
         index: 1
       }], {
         maxCount: this.plugin.options.listLimit
       });
+
       if (typeof this.plugin.options.onComplete === "function") {
         this.plugin.options.onComplete(this.plugin.element);
       }
@@ -423,13 +434,16 @@ var AutoComplete = function () {
 }();
 //# sourceMappingURL=autocomplete.js.map
 
-'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+"use strict";
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Palette = function () {
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Palette =
+function () {
   function Palette(plugin) {
     var _this = this;
 
@@ -447,7 +461,9 @@ var Palette = function () {
         });
 
         _this.createDialog();
+
         _this.setPalette(_this.plugin.element);
+
         if ($(_this.plugin.element).attr('type') === 'text' || $(_this.plugin.element).prop('tagName') === 'TEXTAREA') {
           _this.addButton(_this.plugin.element);
         } else {
@@ -462,10 +478,9 @@ var Palette = function () {
   }
 
   _createClass(Palette, [{
-    key: 'createDialog',
+    key: "createDialog",
     value: function createDialog() {
       if ($('#emojidex-dialog-content').length !== 0) return;
-
       this.dialog = $('<div id="emojidex-dialog-content"></div>');
       return this.dialog.dialog({
         classes: {
@@ -474,44 +489,43 @@ var Palette = function () {
         autoOpen: false,
         width: 500,
         title: 'emojidex',
-
         create: function create(e) {
           $('.ui-dialog-titlebar-close').hide();
-
           var close_btn = $('<button type="button" class="btn btn-default btn-xs pull-right" aria-label="Close"><span aria-hidden="true">&times;</span></button>');
           close_btn.click(function (e) {
             return $('#emojidex-dialog-content').dialog('close');
           });
-
           $('.ui-dialog-titlebar').append(close_btn);
           $('.ui-dialog-title').html('<a target="_blank" href="https://www.emojidex.com"><img src="https://cdn.emojidex.com/logo-hdpi.png" alt="emojidex" /></a>');
           return $('.emojidex-ui-dialog').wrap('<span id="emojidex-emoji-palette"></span>');
         },
         open: function open(e) {
           $('.emojidex-ui-dialog').css('min-height', 445); // height style is ignored, set here.
+
           $('.ui-dialog :button').blur();
           return $('.nav.nav-pills a').blur();
         }
       });
     }
   }, {
-    key: 'setPalette',
+    key: "setPalette",
     value: function setPalette(element) {
       var _this2 = this;
 
       if ($('#emoji-palette').length !== 0) return;
-
       var tab_list = $('<ul class="nav nav-pills"></ul>');
       var tab_content = $('<div class="tab-content"></div>');
-
       return this.EC.Categories.sync(function (categories) {
         _this2.tabs.push(new IndexTab(_this2));
+
         for (var i = 0; i < categories.length; i++) {
           var category = categories[i];
+
           _this2.tabs.push(new CategoryTab(_this2, category, tab_list[0].children.length));
         }
 
         _this2.tabs.push(new UserTab(_this2));
+
         _this2.tabs.push(new SearchTab(_this2));
 
         for (var j = 0; j < _this2.tabs.length; j++) {
@@ -521,37 +535,40 @@ var Palette = function () {
         }
 
         _this2.emoji_palette = $('<div id="emoji-palette" class="emoji-palette"></div>');
+
         _this2.emoji_palette.append(tab_list.add(tab_content));
+
         _this2.emoji_palette.find('ul').after('<hr>');
 
         return _this2.dialog.append(_this2.emoji_palette);
       });
     }
   }, {
-    key: 'setEmojiList',
+    key: "setEmojiList",
     value: function setEmojiList(kind, emoji_list) {
       var _this3 = this;
 
-      var emoji_divs = $('<div class=\'' + kind + '-emoji-list clearfix\'></div>');
+      var emoji_divs = $("<div class='".concat(kind, "-emoji-list clearfix'></div>"));
 
       var _loop = function _loop(i) {
         var emoji = emoji_list[i];
-        var emoji_button = $('<button>', { class: 'emoji-btn btn btn-default pull-left' });
-        emoji_button.prop('emoji_data', emoji);
-
-        var emoji_button_image = $('<img>', {
-          alt: '' + emoji.code,
-          title: '' + emoji.code,
-          class: 'img-responsive center-block',
-          src: _this3.EC.cdn_url + 'px32/' + emoji.code.replace(/\s/g, '_') + '.png'
+        var emoji_button = $('<button>', {
+          "class": 'emoji-btn btn btn-default pull-left'
         });
-
+        emoji_button.prop('emoji_data', emoji);
+        var emoji_button_image = $('<img>', {
+          alt: "".concat(emoji.code),
+          title: "".concat(emoji.code),
+          "class": 'img-responsive center-block',
+          src: "".concat(_this3.EC.cdn_url, "px32/").concat(emoji.code.replace(/\s/g, '_'), ".png")
+        });
         var click_func = void 0;
+
         if (typeof _this3.plugin.options.onEmojiButtonClicked === "function") {
           click_func = function click_func() {
             return _this3.plugin.options.onEmojiButtonClicked({
               imageTag: emoji_button_image.attr('class', 'emojidex-emoji').prop('outerHTML'),
-              emojiCode: ':' + emoji.code + ':'
+              emojiCode: ":".concat(emoji.code, ":")
             });
           };
         } else {
@@ -559,6 +576,7 @@ var Palette = function () {
             return _this3.insertEmojiAtCaret($(e.currentTarget).prop('emoji_data'));
           };
         }
+
         emoji_button.append(emoji_button_image);
         emoji_button.click(click_func);
         emoji_divs.append(emoji_button);
@@ -567,21 +585,23 @@ var Palette = function () {
       for (var i = 0; i < emoji_list.length; i++) {
         _loop(i);
       }
+
       return emoji_divs;
     }
   }, {
-    key: 'mojiOrCode',
+    key: "mojiOrCode",
     value: function mojiOrCode(emoji) {
       if (emoji.moji !== null && emoji.moji !== '') {
         return emoji.moji;
       } else {
-        return ':' + emoji.code + ':';
+        return ":".concat(emoji.code, ":");
       }
     }
   }, {
-    key: 'insertEmojiAtCaret',
+    key: "insertEmojiAtCaret",
     value: function insertEmojiAtCaret(emoji) {
       var code = this.mojiOrCode(emoji);
+
       if (this.clipboard) {
         this.clipboard.destroy();
       }
@@ -600,17 +620,16 @@ var Palette = function () {
       }
 
       var elem = this.active_input_area;
+
       if (elem.is('[contenteditable="true"]')) {
         elem.focus();
         var selection = window.getSelection();
         var range = selection.getRangeAt(0);
-
         var tag = $.parseHTML(this.EC.Util.emojiToHTML(emoji));
         range.insertNode(tag[0]);
         range.collapse(false);
         selection.removeAllRanges();
         selection.addRange(range);
-
         return elem.change();
       } else {
         var pos = elem.caret('pos');
@@ -623,37 +642,40 @@ var Palette = function () {
       }
     }
   }, {
-    key: 'getPagination',
+    key: "getPagination",
     value: function getPagination(kind, prev_func, next_func, cur_page, max_page) {
-      var pagination = $('<div class=\'' + kind + '-pagination text-center pagination-container\'><ul class=\'pagination mb-0\'></ul></div>');
-
-      pagination.find('.pagination').append($('<li class="palette-pager' + (cur_page > 1 ? '' : ' disabled') + '"><span>&laquo;</span></li>').click(function () {
+      var pagination = $("<div class='".concat(kind, "-pagination text-center pagination-container'><ul class='pagination mb-0'></ul></div>"));
+      pagination.find('.pagination').append($("<li class=\"palette-pager".concat(cur_page > 1 ? '' : ' disabled', "\"><span>&laquo;</span></li>")).click(function () {
         if (cur_page > 1) return prev_func();
       }));
-      pagination.find('.pagination').append($('<li class=\'palette-num disabled\'><span>' + cur_page + ' / ' + max_page + '</span></li>'));
-      pagination.find('.pagination').append($('<li class="palette-pager' + (cur_page < max_page ? ' ' : ' disabled') + '"><span>&raquo;</span></li>').click(function () {
+      pagination.find('.pagination').append($("<li class='palette-num disabled'><span>".concat(cur_page, " / ").concat(max_page, "</span></li>")));
+      pagination.find('.pagination').append($("<li class=\"palette-pager".concat(cur_page < max_page ? ' ' : ' disabled', "\"><span>&raquo;</span></li>")).click(function () {
         if (cur_page < max_page) return next_func();
       }));
-
       return pagination;
     }
   }, {
-    key: 'toggleSorting',
+    key: "toggleSorting",
     value: function toggleSorting() {
       var _this4 = this;
 
       if (this.EC.User.auth_info.premium) {
         return function () {
           var result = [];
+
           var iterable = _this4.getInitializedTabs();
+
           for (var i = 0; i < iterable.length; i++) {
             var tab = iterable[i];
             var item = void 0;
+
             if (!tab.tab_content.find('#sort-selector').length) {
               item = tab.tab_content.find('ul.pagination').after(_this4.getSorting(tab));
             }
+
             result.push(item);
           }
+
           return result;
         }();
       } else {
@@ -663,23 +685,27 @@ var Palette = function () {
       }
     }
   }, {
-    key: 'getInitializedTabs',
+    key: "getInitializedTabs",
     value: function getInitializedTabs() {
       var initialized_tabs = [];
+
       for (var i = 0; i < this.tabs.length; i++) {
         var tab = this.tabs[i];
+
         if (tab.initialized) {
           initialized_tabs.push(tab);
         }
       }
+
       return initialized_tabs;
     }
   }, {
-    key: 'getSorting',
+    key: "getSorting",
     value: function getSorting(target_tab) {
       if (!this.EC.User.auth_info.premium) {
         return '';
       }
+
       var sort_selector = $('<select id="sort-selector" class="form-control pull-right"></select>');
       sort_selector.append($('<option value="score">Score</option>'));
       sort_selector.append($('<option value="newest">Newest</option>'));
@@ -692,18 +718,18 @@ var Palette = function () {
       return sort_selector;
     }
   }, {
-    key: 'removeSorting',
+    key: "removeSorting",
     value: function removeSorting(target_tab) {
       target_tab.tab_content.find('#sort-selector').remove();
       return target_tab.resetTabContent();
     }
   }, {
-    key: 'openDialog',
+    key: "openDialog",
     value: function openDialog() {
       return $('#emojidex-dialog-content').dialog('open');
     }
   }, {
-    key: 'addButton',
+    key: "addButton",
     value: function addButton(element) {
       var _this5 = this;
 
@@ -719,16 +745,14 @@ var Palette = function () {
       palette_button.click(function () {
         _this5.openDialog();
       });
-
       $(element).addClass('with-emojidex-palette');
       $(element).hover(reposition);
       $(element).focus(reposition);
       reposition();
-
       return $(element).after(palette_button);
     }
   }, {
-    key: 'addPaletteToElement',
+    key: "addPaletteToElement",
     value: function addPaletteToElement(element) {
       var _this6 = this;
 
@@ -737,7 +761,7 @@ var Palette = function () {
       });
     }
   }, {
-    key: 'capitalize',
+    key: "capitalize",
     value: function capitalize(text) {
       return text.charAt(0).toUpperCase() + text.slice(1);
     }
@@ -747,13 +771,16 @@ var Palette = function () {
 }();
 //# sourceMappingURL=palette.js.map
 
-'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+"use strict";
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Observer = function () {
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Observer =
+function () {
   function Observer(plugin) {
     _classCallCheck(this, Observer);
 
@@ -765,22 +792,26 @@ var Observer = function () {
   }
 
   _createClass(Observer, [{
-    key: 'doQueue',
+    key: "doQueue",
     value: function doQueue() {
       var _this = this;
 
       return new Promise(function (resolve, reject) {
         var body = $('body')[0];
+
         if (_this.queues.indexOf(body) !== -1) {
           _this.queues = [];
+
           _this.replacer.loadEmoji($(body)).then(function () {
             return resolve();
           });
         } else {
           var queue_limit = 100;
+
           var checkComplete = function checkComplete() {
             if (_this.queues.length > 0 && queue_limit-- > 0) {
               var queue = _this.queues.pop();
+
               _this.replacer.loadEmoji(queue).then(function () {
                 checkComplete();
               });
@@ -788,12 +819,13 @@ var Observer = function () {
               resolve();
             }
           };
+
           checkComplete();
         }
       });
     }
   }, {
-    key: 'domObserve',
+    key: "domObserve",
     value: function domObserve() {
       var config = {
         childList: true,
@@ -803,12 +835,12 @@ var Observer = function () {
       return this.dom_observer.observe(this.plugin.element[0], config);
     }
   }, {
-    key: 'disconnect',
+    key: "disconnect",
     value: function disconnect() {
       this.dom_observer.disconnect();
     }
   }, {
-    key: 'reloadEmoji',
+    key: "reloadEmoji",
     value: function reloadEmoji() {
       var _this2 = this;
 
@@ -820,13 +852,17 @@ var Observer = function () {
         _this2.dom_observer = new MutationObserver(function (mutations) {
           if (_this2.flagReEntry) {
             _this2.disconnect();
+
             _this2.flagReEntry = false;
+
             for (var i = 0; i < mutations.length; i++) {
               var mutation = mutations[i];
+
               if (mutation.type === 'childList') {
                 if (mutation.addedNodes) {
                   for (var j = 0; j < mutation.addedNodes.length; j++) {
                     var addedNode = mutation.addedNodes[j];
+
                     if (_this2.queues.indexOf(addedNode) === -1) {
                       _this2.queues.push(addedNode);
                     }
@@ -834,12 +870,15 @@ var Observer = function () {
                 }
               }
             }
+
             _this2.doQueue().then(function () {
               _this2.flagReEntry = true;
+
               _this2.domObserve();
             });
           }
         });
+
         _this2.domObserve();
       });
     }
@@ -849,13 +888,16 @@ var Observer = function () {
 }();
 //# sourceMappingURL=observer.js.map
 
-'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+"use strict";
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Replacer = function () {
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Replacer =
+function () {
   function Replacer(plugin) {
     _classCallCheck(this, Replacer);
 
@@ -865,7 +907,7 @@ var Replacer = function () {
   }
 
   _createClass(Replacer, [{
-    key: 'loadEmoji',
+    key: "loadEmoji",
     value: function loadEmoji(element) {
       var _this = this;
 
@@ -874,6 +916,7 @@ var Replacer = function () {
       } else if (typeof this.plugin.element !== null) {
         this.setTargets(this.plugin.element[0]);
       }
+
       this.wip_count = this.targets.length;
       return new Promise(function (resolve, reject) {
         if (_this.wip_count === 0) {
@@ -882,8 +925,10 @@ var Replacer = function () {
 
         var _loop = function _loop() {
           var target_node = _this.targets.pop();
+
           _this.plugin.EC.Util.emojifyToHTML(target_node.data).then(function (new_text) {
             $(target_node).replaceWith(new_text);
+
             if (--_this.wip_count === 0) {
               resolve();
             }
@@ -893,23 +938,25 @@ var Replacer = function () {
         while (_this.targets.length !== 0) {
           _loop();
         }
-      }).catch(function () {});
+      })["catch"](function () {});
     }
   }, {
-    key: 'tagEscape',
+    key: "tagEscape",
     value: function tagEscape(string) {
       return string.replace(/</g, '&lt;').replace(/>/g, '&gt;');
     }
   }, {
-    key: 'setTargets',
+    key: "setTargets",
     value: function setTargets(node) {
-      var child = void 0;
+      var child;
+
       if (node.nodeType === Node.TEXT_NODE) {
         if (node.data.match(/\S/)) {
           this.targets.push(node);
         }
       } else if (!(node.parentNode && node.parentNode.isContentEditable)) {
         child = node.firstChild;
+
         while (child) {
           switch (child.nodeType) {
             case Node.ELEMENT_NODE:
@@ -917,18 +964,23 @@ var Replacer = function () {
               if ($(child).is(this.plugin.options.ignore) || !$(child).is(this.plugin.options.selector)) {
                 break;
               }
+
               if (this.plugin.options.ignoreContentEditable && child.isContentEditable) {
                 break;
               }
+
               this.setTargets(child);
               break;
+
             case Node.TEXT_NODE:
               if (child.data.match(/\S/)) {
                 child.data = this.tagEscape(child.data);
                 this.targets.push(child);
               }
+
               break;
           }
+
           child = child.nextSibling;
         }
       }
@@ -939,13 +991,16 @@ var Replacer = function () {
 }();
 //# sourceMappingURL=replacer.js.map
 
-'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+"use strict";
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var CategoryTab = function () {
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var CategoryTab =
+function () {
   function CategoryTab(palette, category, length) {
     var _this = this;
 
@@ -955,16 +1010,15 @@ var CategoryTab = function () {
     this.initialized = false;
     this.sort_type = 'score';
     this.category_name = category.code;
-    this.tab_list = $('<li id=\'tab-' + category.code + '\' data-code=\'' + category.code + '\'><a href=\'#tab-content-' + category.code + '\' data-toggle=\'pill\'><i class=\'emjdx-' + category.code + '\'></a></li>');
+    this.tab_list = $("<li id='tab-".concat(category.code, "' data-code='").concat(category.code, "'><a href='#tab-content-").concat(category.code, "' data-toggle='pill'><i class='emjdx-").concat(category.code, "'></a></li>"));
     this.tab_list.click(function (e) {
       return _this.setCategory($(e.currentTarget).data('code'));
     });
-
-    this.tab_content = $('<div class=\'tab-pane\' id=\'tab-content-' + category.code + '\'></div>');
+    this.tab_content = $("<div class='tab-pane' id='tab-content-".concat(category.code, "'></div>"));
   }
 
   _createClass(CategoryTab, [{
-    key: 'setCategory',
+    key: "setCategory",
     value: function setCategory(category_name) {
       if (this.tab_data != null) {
         return this.palette.EC.Categories.called_data = this.tab_data;
@@ -973,7 +1027,7 @@ var CategoryTab = function () {
       }
     }
   }, {
-    key: 'setCategoryTabContent',
+    key: "setCategoryTabContent",
     value: function setCategoryTabContent(category_name) {
       var _this2 = this;
 
@@ -981,30 +1035,40 @@ var CategoryTab = function () {
       this.category_name = category_name;
       return this.palette.EC.Categories.getEmoji(category_name, function (result_emoji, called_data) {
         _this2.tab_data = called_data;
+
         _this2.tab_content.children().remove();
 
         var capitalized_category = _this2.palette.capitalize(_this2.category_name);
-        _this2.tab_content.append('<div class="emojidex-category-name emjdx-' + _this2.category_name + '">' + capitalized_category + '</div>');
+
+        _this2.tab_content.append("<div class=\"emojidex-category-name emjdx-".concat(_this2.category_name, "\">").concat(capitalized_category, "</div>"));
+
         _this2.tab_content.append(_this2.palette.setEmojiList('category', result_emoji));
 
         var cur_page = _this2.palette.EC.Categories.meta.total_count === 0 ? 0 : _this2.palette.EC.Categories.cur_page;
         var max_page = Math.floor(_this2.palette.EC.Categories.meta.total_count / _this2.palette.EC.options.limit);
+
         if (_this2.palette.EC.Categories.meta.total_count % _this2.palette.EC.options.limit > 0) {
           max_page++;
         }
+
         var prev_func = function prev_func() {
           return _this2.palette.EC.Categories.prev();
         };
+
         var next_func = function next_func() {
           return _this2.palette.EC.Categories.next();
         };
+
         var pagination = _this2.palette.getPagination('category', prev_func, next_func, cur_page, max_page);
+
         pagination.append(_this2.palette.getSorting(_this2));
         return _this2.tab_content.append(pagination);
-      }, { sort: this.sort_type });
+      }, {
+        sort: this.sort_type
+      });
     }
   }, {
-    key: 'resetTabContent',
+    key: "resetTabContent",
     value: function resetTabContent() {
       return this.setCategoryTabContent(this.category_name);
     }
@@ -1016,11 +1080,14 @@ var CategoryTab = function () {
 
 "use strict";
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var IndexTab = function () {
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var IndexTab =
+function () {
   function IndexTab(palette) {
     _classCallCheck(this, IndexTab);
 
@@ -1040,26 +1107,35 @@ var IndexTab = function () {
       this.initialized = true;
       return this.palette.EC.Indexes.index(function (result_emoji, called_data) {
         _this.tab_data = called_data;
+
         _this.tab_content.children().remove();
 
         _this.tab_content.append("<div class=\"emojidex-category-name emjdx-all\">Index</div>");
+
         _this.tab_content.append(_this.palette.setEmojiList('index', result_emoji));
 
         var cur_page = _this.palette.EC.Indexes.meta.total_count === 0 ? 0 : _this.palette.EC.Indexes.cur_page;
         var max_page = Math.floor(_this.palette.EC.Indexes.meta.total_count / _this.palette.EC.options.limit);
+
         if (_this.palette.EC.Indexes.meta.total_count % _this.palette.EC.options.limit > 0) {
           max_page++;
         }
+
         var prev_func = function prev_func() {
           return _this.palette.EC.Indexes.prev();
         };
+
         var next_func = function next_func() {
           return _this.palette.EC.Indexes.next();
         };
+
         var pagination = _this.palette.getPagination('index', prev_func, next_func, cur_page, max_page);
+
         pagination.append(_this.palette.getSorting(_this));
         return _this.tab_content.append(pagination);
-      }, { sort: this.sort_type });
+      }, {
+        sort: this.sort_type
+      });
     }
   }, {
     key: "resetTabContent",
@@ -1072,13 +1148,16 @@ var IndexTab = function () {
 }();
 //# sourceMappingURL=index_tab.js.map
 
-'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+"use strict";
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var SearchTab = function () {
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var SearchTab =
+function () {
   function SearchTab(palette) {
     _classCallCheck(this, SearchTab);
 
@@ -1090,7 +1169,7 @@ var SearchTab = function () {
   }
 
   _createClass(SearchTab, [{
-    key: 'getTabContent',
+    key: "getTabContent",
     value: function getTabContent() {
       var _this = this;
 
@@ -1100,26 +1179,25 @@ var SearchTab = function () {
           return _this.searchEmojiInput();
         }
       });
-
       var search_btn = $('<div class="btn btn-primary" id="palette-emoji-search-submit"><span class="glyphicon glyphicon-search"></span></div>');
       search_btn.click(function () {
         return _this.searchEmojiInput();
       });
       tab_content.find('.input-group-btn').append(search_btn);
-
       return tab_content;
     }
   }, {
-    key: 'searchEmojiInput',
+    key: "searchEmojiInput",
     value: function searchEmojiInput() {
       this.initialized = true;
       var search_word = $('#palette-emoji-search-input').val();
+
       if (search_word.length > 0) {
         return this.search(search_word);
       }
     }
   }, {
-    key: 'search',
+    key: "search",
     value: function search(search_word) {
       var _this2 = this;
 
@@ -1127,26 +1205,34 @@ var SearchTab = function () {
       return this.palette.EC.Search.search(search_word, function (result_emoji) {
         $('.search-emoji-list').remove();
         $('.search-pagination').remove();
+
         _this2.tab_content.append(_this2.palette.setEmojiList('search', result_emoji));
 
         var cur_page = _this2.palette.EC.Search.meta.total_count === 0 ? 0 : _this2.palette.EC.Search.cur_page;
         var max_page = Math.floor(_this2.palette.EC.Search.meta.total_count / _this2.palette.EC.options.limit);
+
         if (_this2.palette.EC.Search.meta.total_count % _this2.palette.EC.options.limit > 0) {
           max_page++;
         }
+
         var prev_func = function prev_func() {
           return _this2.palette.EC.Search.prev();
         };
+
         var next_func = function next_func() {
           return _this2.palette.EC.Search.next();
         };
+
         var pagination = _this2.palette.getPagination('search', prev_func, next_func, cur_page, max_page);
+
         pagination.append(_this2.palette.getSorting(_this2));
         return _this2.tab_content.append(pagination);
-      }, { sort: this.sort_type });
+      }, {
+        sort: this.sort_type
+      });
     }
   }, {
-    key: 'resetTabContent',
+    key: "resetTabContent",
     value: function resetTabContent() {
       return this.search(this.search_word);
     }
@@ -1156,13 +1242,16 @@ var SearchTab = function () {
 }();
 //# sourceMappingURL=search_tab.js.map
 
-'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+"use strict";
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var UserTab = function () {
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var UserTab =
+function () {
   function UserTab(palette) {
     _classCallCheck(this, UserTab);
 
@@ -1176,7 +1265,7 @@ var UserTab = function () {
   }
 
   _createClass(UserTab, [{
-    key: 'getTabContent',
+    key: "getTabContent",
     value: function getTabContent() {
       var _this = this;
 
@@ -1186,7 +1275,6 @@ var UserTab = function () {
           return _this.checkInput();
         }
       });
-
       var login_btn = $('<div class="btn btn-primary btn-block mt-m" id="palette-emoji-login-submit">Login</div>');
       login_btn.click(function () {
         return _this.checkInput();
@@ -1195,38 +1283,43 @@ var UserTab = function () {
 
       if (this.palette.EC.Data.storage.hub_cache.emojidex.auth_info !== undefined && this.palette.EC.Data.storage.hub_cache.emojidex.auth_info.status === 'verified') {
         var auth_info = this.palette.EC.Data.storage.hub_cache.emojidex.auth_info;
-
         this.login(auth_info.user, auth_info.token, 'token');
       }
 
       return tab_content;
     }
   }, {
-    key: 'checkInput',
+    key: "checkInput",
     value: function checkInput() {
       $('#login-error').remove();
-
       var username = $('#palette-emoji-username-input').val();
       var password = $('#palette-emoji-password-input').val();
+
       if (username.length > 0 && password.length > 0) {
         return this.login(username, password, 'plain');
       }
     }
   }, {
-    key: 'login',
+    key: "login",
     value: function login(username, password, type) {
       var _this2 = this;
 
       var callback = function callback(auth_info) {
         if (auth_info.status === 'verified') {
           _this2.hideLoginForm();
+
           _this2.setUserTab(auth_info);
+
           _this2.setHistoryTab();
+
           _this2.setFavoriteTab();
+
           _this2.setFollowingTab();
+
           if (auth_info.premium) {
             _this2.setFollowersTab();
           }
+
           return _this2.palette.toggleSorting();
         } else {
           return _this2.showError(auth_info);
@@ -1244,13 +1337,13 @@ var UserTab = function () {
       }
     }
   }, {
-    key: 'showError',
+    key: "showError",
     value: function showError(auth_info) {
       // TODO: error text localization
       return this.tab_content.prepend($('<div id="login-error"><span style="color:red">Login failed. Please check your username and password or <a href="https://www.emojidex.com/users/sign_in">login here</a>.</span><div>'));
     }
   }, {
-    key: 'hideLoginForm',
+    key: "hideLoginForm",
     value: function hideLoginForm() {
       $('#palette-emoji-username-input').val('');
       $('#palette-emoji-password-input').val('');
@@ -1259,14 +1352,14 @@ var UserTab = function () {
       return $('#palette-emoji-login-submit').hide();
     }
   }, {
-    key: 'showLoginForm',
+    key: "showLoginForm",
     value: function showLoginForm() {
       $('#palette-emoji-username-input').show();
       $('#palette-emoji-password-input').show();
       return $('#palette-emoji-login-submit').show();
     }
   }, {
-    key: 'setUserTab',
+    key: "setUserTab",
     value: function setUserTab(auth_info) {
       var _this3 = this;
 
@@ -1274,6 +1367,7 @@ var UserTab = function () {
       user_tab_list.append($('<li id="tab-user-favorite" class="active"><a href="#tab-content-user-favorite" data-toggle="tab">Favorite</a></li>'));
       user_tab_list.append($('<li id="tab-user-history"><a href="#tab-content-user-history" data-toggle="tab">History</a></li>'));
       user_tab_list.append($('<li id="tab-user-following"><a href="#follow-following" data-toggle="tab">Following</a></li>'));
+
       if (auth_info.premium) {
         user_tab_list.append($('<li id="tab-user-followers"><a href="#follow-followers" data-toggle="tab">Followers</a></li>'));
       }
@@ -1284,20 +1378,22 @@ var UserTab = function () {
 
         $('#user-tab-list').remove();
         $('#user-tab-content').children().removeClass('active');
+
         _this3.favoriteTab.tab_pane.addClass('active');
+
         $('#user-tab-content').remove();
+
         _this3.showLoginForm();
+
         return _this3.palette.toggleSorting();
       });
       user_tab_list.append(logout_btn);
-
       this.user_tab_content = $('<div class="tab-content mt-m" id="user-tab-content"></div>');
-
       this.tab_content.append(user_tab_list);
       return this.tab_content.append(this.user_tab_content);
     }
   }, {
-    key: 'setHistoryTab',
+    key: "setHistoryTab",
     value: function setHistoryTab() {
       var _this4 = this;
 
@@ -1306,7 +1402,7 @@ var UserTab = function () {
       });
     }
   }, {
-    key: 'setFavoriteTab',
+    key: "setFavoriteTab",
     value: function setFavoriteTab() {
       var _this5 = this;
 
@@ -1315,27 +1411,29 @@ var UserTab = function () {
       });
     }
   }, {
-    key: 'setFollowingTab',
+    key: "setFollowingTab",
     value: function setFollowingTab() {
       this.user_tab_content.append(this.followingTab.tab_pane);
       this.followingTab.init();
     }
   }, {
-    key: 'setFollowersTab',
+    key: "setFollowersTab",
     value: function setFollowersTab() {
       this.user_tab_content.append(this.followersTab.tab_pane);
       this.followersTab.init();
     }
   }, {
-    key: 'setPremiumData',
+    key: "setPremiumData",
     value: function setPremiumData(response, kind) {
-      var tab_pane = $('<div class=\'tab-pane\' id=\'tab-content-user-' + kind + '\'></div>');
+      var tab_pane = $("<div class='tab-pane' id='tab-content-user-".concat(kind, "'></div>"));
+
       if (response.statusText === 'Payment Required') {
         // TODO: text localization
         tab_pane.append($('<p style="margin-top:15px;"><a class="btn btn-primary" href="https://www.emojidex.com/profile" target="_blank">Premium/Pro user only.</a></p>'));
       } else {
         tab_pane.append(this.palette.setEmojiList(kind, response));
       }
+
       return this.user_tab_content.append(tab_pane);
     }
   }]);
@@ -1344,23 +1442,26 @@ var UserTab = function () {
 }();
 //# sourceMappingURL=user_tab.js.map
 
-'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+"use strict";
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var FavoriteTab = function () {
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var FavoriteTab =
+function () {
   function FavoriteTab(user_tab) {
     _classCallCheck(this, FavoriteTab);
 
     this.EC = user_tab.palette.EC;
     this.palette = user_tab.palette;
-    this.tab_pane = $('<div class=\'tab-pane active\' id=\'tab-content-user-favorite\'></div>');
+    this.tab_pane = $("<div class='tab-pane active' id='tab-content-user-favorite'></div>");
   }
 
   _createClass(FavoriteTab, [{
-    key: 'createTabContent',
+    key: "createTabContent",
     value: function createTabContent() {
       var _this = this;
 
@@ -1369,31 +1470,35 @@ var FavoriteTab = function () {
       });
     }
   }, {
-    key: 'setFavoriteEmoji',
+    key: "setFavoriteEmoji",
     value: function setFavoriteEmoji(favorites) {
       this.tab_pane.children().remove();
       this.tab_pane.append(this.palette.setEmojiList('favorite', favorites));
       return this.createPagination();
     }
   }, {
-    key: 'createPagination',
+    key: "createPagination",
     value: function createPagination() {
       var _this2 = this;
 
       var meta = this.EC.User.Favorites.meta;
       var cur_page = meta.total_count === 0 ? 0 : meta.page;
       var max_page = cur_page === 0 ? 0 : Math.ceil(meta.total_count / this.EC.limit);
+
       if (!this.EC.User.auth_info.premium) {
         max_page = 1;
       }
 
       var callback = function callback(response) {
         _this2.tab_pane.children().remove();
+
         _this2.tab_pane.append(_this2.setFavoriteEmoji(response));
       };
+
       var prev_func = function prev_func() {
         return _this2.EC.User.Favorites.prev(callback);
       };
+
       var next_func = function next_func() {
         return _this2.EC.User.Favorites.next(callback);
       };
@@ -1406,33 +1511,33 @@ var FavoriteTab = function () {
 }();
 //# sourceMappingURL=favorite_tab.js.map
 
-'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+"use strict";
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var FollowersTab = function () {
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var FollowersTab =
+function () {
   function FollowersTab(user_tab) {
     _classCallCheck(this, FollowersTab);
 
     this.EC = user_tab.palette.EC;
     this.palette = user_tab.palette;
-
     this.selector_tab_pane = '#emojidex-emoji-palette #follow-followers';
-    this.selector_users = this.selector_tab_pane + ' > .users';
-
-    this.tab_pane = $('\n      <div id=\'follow-followers\' class=\'tab-pane\'>\n        <div class=\'users\'></div>\n      </div>\n    ');
+    this.selector_users = "".concat(this.selector_tab_pane, " > .users");
+    this.tab_pane = $("\n      <div id='follow-followers' class='tab-pane'>\n        <div class='users'></div>\n      </div>\n    ");
   }
 
   _createClass(FollowersTab, [{
-    key: 'init',
+    key: "init",
     value: function init() {
       var _this = this;
 
       $(this.selector_users).children().remove();
-      $(this.selector_tab_pane + ' > .user-info').remove();
-
+      $("".concat(this.selector_tab_pane, " > .user-info")).remove();
       this.EC.User.Follow.getFollowers(function (followers) {
         var _iteratorNormalCompletion = true;
         var _didIteratorError = false;
@@ -1443,6 +1548,7 @@ var FollowersTab = function () {
             var user_name = _step.value;
 
             _this.setUserButton(user_name);
+
             _this.setUserInfo(user_name);
           }
         } catch (err) {
@@ -1450,8 +1556,8 @@ var FollowersTab = function () {
           _iteratorError = err;
         } finally {
           try {
-            if (!_iteratorNormalCompletion && _iterator.return) {
-              _iterator.return();
+            if (!_iteratorNormalCompletion && _iterator["return"] != null) {
+              _iterator["return"]();
             }
           } finally {
             if (_didIteratorError) {
@@ -1462,71 +1568,80 @@ var FollowersTab = function () {
       });
     }
   }, {
-    key: 'setUserButton',
+    key: "setUserButton",
     value: function setUserButton(user_name) {
       var _this2 = this;
 
-      var user_button = $('<div class=\'btn btn-default\'>' + user_name + '</div>').click(function (e) {
-        $(_this2.selector_tab_pane).find('#' + $(e.currentTarget).text()).addClass('on');
+      var user_button = $("<div class='btn btn-default'>".concat(user_name, "</div>")).click(function (e) {
+        $(_this2.selector_tab_pane).find("#".concat($(e.currentTarget).text())).addClass('on');
       });
       $(this.selector_users).append(user_button);
     }
   }, {
-    key: 'setUserInfo',
+    key: "setUserInfo",
     value: function setUserInfo(user_name) {
       var _this3 = this;
 
-      var user_info = $('\n      <div id=\'' + user_name + '\' class=\'user-info\'>\n        <div class=\'btn-close\' aria-hidden=\'true\'><i class=\'emjdx-abstract flip-vertical\'></i></div>\n        <div class=\'user-name\'>' + user_name + '</div>\n        <div class="clearfix"/>\n        <hr>\n        <div class="user-emoji-list clearfix">\n        </div>\n      </div>\n    ').click(function (e) {
+      var user_info = $("\n      <div id='".concat(user_name, "' class='user-info'>\n        <div class='btn-close' aria-hidden='true'><i class='emjdx-abstract flip-vertical'></i></div>\n        <div class='user-name'>").concat(user_name, "</div>\n        <div class=\"clearfix\"/>\n        <hr>\n        <div class=\"user-emoji-list clearfix\">\n        </div>\n      </div>\n    ")).click(function (e) {
         e.stopPropagation();
       });
       user_info.find('.btn-close').click(function () {
         $(_this3.selector_tab_pane).find('*').removeClass('on');
       });
       $(this.selector_tab_pane).append(user_info);
-
       this.setUserEmojisInfo(user_info);
     }
   }, {
-    key: 'setUserEmojisInfo',
+    key: "setUserEmojisInfo",
     value: function setUserEmojisInfo(user_info) {
       var _this4 = this;
 
       var option = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
       var user_name = user_info.attr('id');
       return this.EC.Indexes.user(user_name, undefined, option).then(function (response) {
         user_info.data(response.meta);
-        user_info.data({ user_name: user_name, max_page: Math.ceil(response.meta.total_count / _this4.EC.limit ? response.meta.total_count / _this4.EC.limit : 1) });
-
+        user_info.data({
+          user_name: user_name,
+          max_page: Math.ceil(response.meta.total_count / _this4.EC.limit ? response.meta.total_count / _this4.EC.limit : 1)
+        });
         user_info.find('.user-emoji-list').children().remove();
         user_info.find('.followers-pagination').remove();
-
         user_info.find('.user-emoji-list').append(_this4.palette.setEmojiList('followers', response.emoji));
+
         _this4.setPagination(user_info);
       });
     }
   }, {
-    key: 'setPagination',
+    key: "setPagination",
     value: function setPagination(user_info) {
       var _this5 = this;
 
       var meta = user_info.data();
+
       if (!this.EC.User.auth_info.premium) {
         meta.max_page = 1;
       }
 
       var prev_func = function prev_func() {
-        option = { page: meta.page - 1 };
+        option = {
+          page: meta.page - 1
+        };
+
         if (option.page > 0) {
           _this5.setUserEmojisInfo(user_info, option);
         }
       };
+
       var next_func = function next_func() {
-        option = { page: meta.page + 1 };
+        option = {
+          page: meta.page + 1
+        };
+
         if (option.page <= meta.max_page) {
           _this5.setUserEmojisInfo(user_info, option);
         }
       };
+
       user_info.append(this.palette.getPagination('followers', prev_func, next_func, meta.page, meta.max_page));
     }
   }]);
@@ -1535,33 +1650,33 @@ var FollowersTab = function () {
 }();
 //# sourceMappingURL=followers_tab.js.map
 
-'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+"use strict";
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var FollowingTab = function () {
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var FollowingTab =
+function () {
   function FollowingTab(user_tab) {
     _classCallCheck(this, FollowingTab);
 
     this.EC = user_tab.palette.EC;
     this.palette = user_tab.palette;
-
     this.selector_tab_pane = '#emojidex-emoji-palette #follow-following';
-    this.selector_users = this.selector_tab_pane + ' > .users';
-
-    this.tab_pane = $('\n      <div id=\'follow-following\' class=\'tab-pane\'>\n        <div class=\'users\'></div>\n      </div>\n    ');
+    this.selector_users = "".concat(this.selector_tab_pane, " > .users");
+    this.tab_pane = $("\n      <div id='follow-following' class='tab-pane'>\n        <div class='users'></div>\n      </div>\n    ");
   }
 
   _createClass(FollowingTab, [{
-    key: 'init',
+    key: "init",
     value: function init() {
       var _this = this;
 
       $(this.selector_users).children().remove();
-      $(this.selector_tab_pane + ' > .user-info').remove();
-
+      $("".concat(this.selector_tab_pane, " > .user-info")).remove();
       this.EC.User.Follow.getFollowing(function (following) {
         var _iteratorNormalCompletion = true;
         var _didIteratorError = false;
@@ -1572,6 +1687,7 @@ var FollowingTab = function () {
             var user_name = _step.value;
 
             _this.setUserButton(user_name);
+
             _this.setUserInfo(user_name);
           }
         } catch (err) {
@@ -1579,8 +1695,8 @@ var FollowingTab = function () {
           _iteratorError = err;
         } finally {
           try {
-            if (!_iteratorNormalCompletion && _iterator.return) {
-              _iterator.return();
+            if (!_iteratorNormalCompletion && _iterator["return"] != null) {
+              _iterator["return"]();
             }
           } finally {
             if (_didIteratorError) {
@@ -1591,71 +1707,80 @@ var FollowingTab = function () {
       });
     }
   }, {
-    key: 'setUserButton',
+    key: "setUserButton",
     value: function setUserButton(user_name) {
       var _this2 = this;
 
-      var user_button = $('<div class=\'btn btn-default\'>' + user_name + '</div>').click(function (e) {
-        $(_this2.selector_tab_pane).find('#' + $(e.currentTarget).text()).addClass('on');
+      var user_button = $("<div class='btn btn-default'>".concat(user_name, "</div>")).click(function (e) {
+        $(_this2.selector_tab_pane).find("#".concat($(e.currentTarget).text())).addClass('on');
       });
       $(this.selector_users).append(user_button);
     }
   }, {
-    key: 'setUserInfo',
+    key: "setUserInfo",
     value: function setUserInfo(user_name) {
       var _this3 = this;
 
-      var user_info = $('\n      <div id=\'' + user_name + '\' class=\'user-info\'>\n        <div class=\'btn-close\' aria-hidden=\'true\'><i class=\'emjdx-abstract flip-vertical\'></i></div>\n        <div class=\'user-name\'>' + user_name + '</div>\n        <div class="clearfix"/>\n        <hr>\n        <div class="user-emoji-list clearfix">\n        </div>\n      </div>\n    ').click(function (e) {
+      var user_info = $("\n      <div id='".concat(user_name, "' class='user-info'>\n        <div class='btn-close' aria-hidden='true'><i class='emjdx-abstract flip-vertical'></i></div>\n        <div class='user-name'>").concat(user_name, "</div>\n        <div class=\"clearfix\"/>\n        <hr>\n        <div class=\"user-emoji-list clearfix\">\n        </div>\n      </div>\n    ")).click(function (e) {
         e.stopPropagation();
       });
       user_info.find('.btn-close').click(function () {
         $(_this3.selector_tab_pane).find('*').removeClass('on');
       });
       $(this.selector_tab_pane).append(user_info);
-
       this.setUserEmojisInfo(user_info);
     }
   }, {
-    key: 'setUserEmojisInfo',
+    key: "setUserEmojisInfo",
     value: function setUserEmojisInfo(user_info) {
       var _this4 = this;
 
       var option = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
       var user_name = user_info.attr('id');
       return this.EC.Indexes.user(user_name, undefined, option).then(function (response) {
         user_info.data(response.meta);
-        user_info.data({ user_name: user_name, max_page: Math.ceil(response.meta.total_count / _this4.EC.limit ? response.meta.total_count / _this4.EC.limit : 1) });
-
+        user_info.data({
+          user_name: user_name,
+          max_page: Math.ceil(response.meta.total_count / _this4.EC.limit ? response.meta.total_count / _this4.EC.limit : 1)
+        });
         user_info.find('.user-emoji-list').children().remove();
         user_info.find('.following-pagination').remove();
-
         user_info.find('.user-emoji-list').append(_this4.palette.setEmojiList('following', response.emoji));
+
         _this4.setPagination(user_info);
       });
     }
   }, {
-    key: 'setPagination',
+    key: "setPagination",
     value: function setPagination(user_info) {
       var _this5 = this;
 
       var meta = user_info.data();
+
       if (!this.EC.User.auth_info.premium) {
         meta.max_page = 1;
       }
 
       var prev_func = function prev_func() {
-        option = { page: meta.page - 1 };
+        option = {
+          page: meta.page - 1
+        };
+
         if (option.page > 0) {
           _this5.setUserEmojisInfo(user_info, option);
         }
       };
+
       var next_func = function next_func() {
-        option = { page: meta.page + 1 };
+        option = {
+          page: meta.page + 1
+        };
+
         if (option.page <= meta.max_page) {
           _this5.setUserEmojisInfo(user_info, option);
         }
       };
+
       user_info.append(this.palette.getPagination('following', prev_func, next_func, meta.page, meta.max_page));
     }
   }]);
@@ -1664,23 +1789,26 @@ var FollowingTab = function () {
 }();
 //# sourceMappingURL=following_tab.js.map
 
-'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+"use strict";
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var HistoryTab = function () {
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var HistoryTab =
+function () {
   function HistoryTab(user_tab) {
     _classCallCheck(this, HistoryTab);
 
     this.EC = user_tab.palette.EC;
     this.palette = user_tab.palette;
-    this.tab_pane = $('<div class=\'tab-pane\' id=\'tab-content-user-history\'></div>');
+    this.tab_pane = $("<div class='tab-pane' id='tab-content-user-history'></div>");
   }
 
   _createClass(HistoryTab, [{
-    key: 'createTabContent',
+    key: "createTabContent",
     value: function createTabContent() {
       var _this = this;
 
@@ -1689,31 +1817,35 @@ var HistoryTab = function () {
       });
     }
   }, {
-    key: 'setHistoryEmoji',
+    key: "setHistoryEmoji",
     value: function setHistoryEmoji(history) {
       this.tab_pane.children().remove();
       this.tab_pane.append(this.palette.setEmojiList('history', history));
       return this.createPagination();
     }
   }, {
-    key: 'createPagination',
+    key: "createPagination",
     value: function createPagination() {
       var _this2 = this;
 
       var meta = this.EC.User.History.meta;
       var cur_page = meta.total_count === 0 ? 0 : meta.page;
       var max_page = cur_page === 0 ? 0 : Math.ceil(meta.total_count / this.EC.limit);
+
       if (!this.EC.User.auth_info.premium) {
         max_page = 1;
       }
 
       var callback = function callback(response) {
         _this2.tab_pane.children().remove();
+
         _this2.tab_pane.append(_this2.setHistoryEmoji(response));
       };
+
       var prev_func = function prev_func() {
         return _this2.EC.User.History.prev(callback);
       };
+
       var next_func = function next_func() {
         return _this2.EC.User.History.next(callback);
       };

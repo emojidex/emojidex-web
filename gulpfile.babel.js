@@ -84,8 +84,8 @@ gulp.task('clean-compiled', () => {
     'docs'
     ]);
 });
-gulp.task('clean', (cb) => {
-  return runSequence(['clean-spec', 'clean-compiled'], cb);
+gulp.task('clean', () => {
+  return gulp.parallel('clean-spec', 'clean-compiled');
 });
 
 gulp.task('md2html', () => {
@@ -116,15 +116,24 @@ gulp.task('slim-spec', () => {
     .pipe(slim({ pretty: true }))
     .pipe(gulp.dest('build/spec/fixture'));
 });
-gulp.task('slim', (cb) => {
-  return runSequence(['slim-dist', 'slim-spec'], cb);
+gulp.task('slim', () => {
+  return gulp.parallel('slim-dist', 'slim-spec');
 });
 
 gulp.task('babel', () => {
   return gulp
     .src(['src/es6/**/*.js'])
     .pipe(sourceMaps.init())
-    .pipe(babel({ presets: ['es2015'] }))
+    .pipe(babel({
+      "presets": [
+        [
+          "@babel/preset-env",
+          {
+            "useBuiltIns": "entry"
+          }
+        ]
+      ]
+    }))
     .pipe(sourceMaps.write('.'))
     .pipe(gulp.dest('build/js'))
 });
@@ -163,15 +172,15 @@ gulp.task('uglify-emojidex', () => {
     .pipe(rename({ suffix: '.min' }))
     .pipe(gulp.dest('dist/js'));
 });
-gulp.task('uglify-bootstrap', (cb) => {
+gulp.task('uglify-bootstrap', () => {
   return gulp
     .src('node_modules/bootstrap-sass/assets/javascripts/bootstrap.js')
     .pipe(uglify())
     .pipe(rename({ suffix: '.min' }))
     .pipe(gulp.dest('dist/resources'));
 });
-gulp.task('uglify', (cb) => {
-  return runSequence(['uglify-emojidex', 'uglify-bootstrap'], cb);
+gulp.task('uglify', () => {
+  return gulp.parallel('uglify-emojidex', 'uglify-bootstrap');
 });
 
 gulp.task('banner-js', () => {
@@ -200,8 +209,8 @@ gulp.task('cssmin-document', () => {
     .pipe(rename({ suffix: '.min' }))
     .pipe(gulp.dest('dist/css'));
 });
-gulp.task('cssmin', (cb) => {
-  return runSequence(['cssmin-emojidex', 'cssmin-document'], cb);
+gulp.task('cssmin', () => {
+  return gulp.parallel('cssmin-emojidex', 'cssmin-document');
 });
 
 gulp.task('copy-img', () => {
@@ -224,8 +233,8 @@ gulp.task('copy-docs', () => {
     .src('dist/**/*')
     .pipe(gulp.dest('docs'));
 });
-gulp.task('copy', (cb) => {
-  return runSequence(['copy-img', 'copy-bootstrap', 'copy-jquery'], 'copy-docs', cb);
+gulp.task('copy', () => {
+  return gulp.series(gulp.parallel('copy-img', 'copy-bootstrap', 'copy-jquery'), 'copy-docs');
 });
 
 gulp.task('concat-js', () => {
@@ -251,8 +260,8 @@ gulp.task('concat-css', () => {
     .pipe(concat('emojidex.css'))
     .pipe(gulp.dest('dist/css'));
 });
-gulp.task('concat', (cb) => {
-  return runSequence(['concat-js', 'concat-css'], cb);
+gulp.task('concat', () => {
+  return gulp.parallel('concat-js', 'concat-css');
 });
 
 gulp.task('concat-spec', () => {
@@ -316,27 +325,27 @@ gulp.task('browser-reload', () => {
   browserSync.reload();
 });
 
-gulp.task('default', (cb) => {
-  runSequence('clean', 'slim', 'md2html', 'sass', 'babel', 'concat', 'uglify', 'cssmin', 'copy', 'banner-js', 'banner-css', cb);
+gulp.task('default', () => {
+  gulp.series('clean', 'slim', 'md2html', 'sass', 'babel', 'concat', 'uglify', 'cssmin', 'copy', 'banner-js', 'banner-css');
 });
 
-gulp.task('spec', (cb) => {
-  runSequence('default', 'env', 'concat-spec', 'jasmine', cb);
+gulp.task('spec', () => {
+  gulp.series('default', 'env', 'concat-spec', 'jasmine');
 });
 
 // TODO: lint
-gulp.task('dev', (cb) => {
-  runSequence('default', 'watch', 'browser-sync', cb);
+gulp.task('dev', () => {
+  gulp.series('default', 'watch', 'browser-sync');
 });
 
-gulp.task('watch-js', (cb) => {
-  runSequence('babel', 'concat-js', 'browser-reload', cb);
+gulp.task('watch-js', () => {
+  gulp.series('babel', 'concat-js', 'browser-reload');
 });
 
-gulp.task('watch-slim', (cb) => {
-  runSequence('slim', 'md2html', 'browser-reload', cb);
+gulp.task('watch-slim', () => {
+  gulp.series('slim', 'md2html', 'browser-reload');
 });
 
-gulp.task('watch-sass', (cb) => {
-  runSequence('sass', 'concat-css', 'cssmin', 'browser-reload', cb);
+gulp.task('watch-sass', () => {
+  gulp.series('sass', 'concat-css', 'cssmin', 'browser-reload');
 })
