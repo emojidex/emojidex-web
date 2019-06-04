@@ -8,7 +8,7 @@ import babel from 'gulp-babel';
 import concat from 'gulp-concat';
 import uglify from 'gulp-uglify';
 import eslint from 'gulp-eslint';
-import jasmineBrowser from 'gulp-jasmine-browser';
+import * as jasmineBrowser from 'gulp-jasmine-browser';
 import watch from 'gulp-watch';
 import fs from 'fs-extra';
 import markdownDocs from 'gulp-markdown-docs';
@@ -17,9 +17,9 @@ import slim from 'gulp-slim';
 import cssmin from 'gulp-cssmin';
 import strip from 'gulp-strip-banner';
 import sourceMaps from 'gulp-sourcemaps';
-import browserSync from 'browser-sync'
+import browserSync from 'browser-sync';
 
-gulp.task('env', () => {
+gulp.task('env', (done) => {
   fs.stat('.env', (err, stat) => {
     if (err === null) {
       console.log("*Found .env file; incorporating user auth data into specs.*");
@@ -50,6 +50,7 @@ gulp.task('env', () => {
       fs.writeFileSync('tmp/authinfo.js', '');
     }
   });
+  done();
 });
 
 let banner =
@@ -299,9 +300,9 @@ gulp.task('lint', () => {
 });
 
 gulp.task('watch', () => {
-  gulp.watch('src/sass/*', ['watch-sass']);
-  gulp.watch(['src/es6/**/*.js', 'spec/**/*.js'], ['watch-js']);
-  gulp.watch('src/slim/**/*.slim', ['watch-slim']);
+  gulp.watch('src/sass/*', gulp.series('watch-sass'));
+  gulp.watch(['src/es6/**/*.js', 'spec/**/*.js'], gulp.series('watch-js'));
+  gulp.watch('src/slim/**/*.slim', gulp.series('watch-slim'));
 });
 
 gulp.task('browser-sync', () => {
