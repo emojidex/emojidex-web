@@ -1461,6 +1461,13 @@ browser-sync-ui@v1.0.1:
     socket.io-client "2.0.4"
     stream-throttle "^0.1.3"
 
+browser-sync-webpack-plugin@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/browser-sync-webpack-plugin/-/browser-sync-webpack-plugin-2.2.2.tgz#46092da62ff36354a50bf0e2903e78a6974fea54"
+  integrity sha512-x92kl8LdBi4dp6YVXYqrSoDkOCOLCeBOrYSY0h9Sk1VcCDSoZC1Vc62eae6TfC2ljN4/L+aYlkzE46kirHzbgA==
+  dependencies:
+    lodash "^4"
+
 browser-sync@^2.18.13:
   version "2.24.5"
   resolved "https://registry.yarnpkg.com/browser-sync/-/browser-sync-2.24.5.tgz#2b32c00cd85958be570c20fae557b0dc0ccd3818"
@@ -5063,14 +5070,14 @@ lodash@^3.10.0, lodash@^3.10.1, lodash@^3.2.0:
   version "3.10.1"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-3.10.1.tgz#5bf45e8e49ba4189e17d482789dfd15bd140b7b6"
 
-lodash@^4.0.0, lodash@^4.3.0, lodash@~4.17.4:
-  version "4.17.4"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
-
-lodash@^4.17.11:
+lodash@^4, lodash@^4.17.11:
   version "4.17.11"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"
   integrity sha512-cQKh8igo5QUhZ7lg38DYWAxMvjSAKG0A8wGSVimP07SIUEK2UO+arSRKbRZWtelMtN5V0Hkwh5ryOto/SshYIg==
+
+lodash@^4.0.0, lodash@^4.3.0, lodash@~4.17.4:
+  version "4.17.4"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
 
 lodash@^4.17.4:
   version "4.17.10"

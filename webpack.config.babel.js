@@ -1,5 +1,6 @@
 import path from 'path'
 import webpack from 'webpack'
+import BrowserSyncPlugin from 'browser-sync-webpack-plugin'
 
 module.exports = (env, argv) => ({
   entry: {
@@ -12,7 +13,7 @@ module.exports = (env, argv) => ({
   },
   output: {
     filename: `emojidex.${argv.mode === 'production' ? 'min.' : ''}js`,
-    path: path.join(__dirname, './dist/js'),
+    path: path.join(__dirname, './docs/js'),
     libraryTarget: 'umd'
   },
   module: {
@@ -24,12 +25,17 @@ module.exports = (env, argv) => ({
       }
     ]
   },
-  // plugins: [
-  //   new webpack.ProvidePlugin({
-  //     $: 'jquery',
-  //     'window.$': 'jquery'
-  //   })
-  // ],
+  plugins: [
+    new BrowserSyncPlugin({
+      host: 'localhost',
+      port: 8080,
+      server: { baseDir: ['docs'] }
+    })
+    // new webpack.ProvidePlugin({
+    //   $: 'jquery',
+    //   'window.$': 'jquery'
+    // })
+  ],
   node: {
     fs: 'empty'
   }
