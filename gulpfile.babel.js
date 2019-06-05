@@ -131,33 +131,6 @@ gulp.task('babel', () => {
     .pipe(sourceMaps.write('.'))
     .pipe(gulp.dest('build/js'))
 });
-// TODO: webpack
-// gulp.task('webpack', function () {
-//   let webpack_p = require('webpack-stream').webpack
-//   return gulp.src(['src/es6/client.js'])
-//     .pipe(webpack({
-//       output: {
-//         filename: 'emojidex-client.js',
-//         library: 'EmojidexClient'
-//       },
-//       module: {
-//         loaders: [
-//           {
-//             test: /\.js$/,
-//             exclude: /node_modules/,
-//             loader: 'babel-loader'
-//           }
-//         ]
-//       },
-//       plugins: [
-//         new webpack_p.ProvidePlugin({
-//           $: 'jquery',
-//           'window.$': 'jquery'
-//         })
-//       ]
-//     }))
-//     .pipe(gulp.dest('dist/js/'));
-// });
 
 gulp.task('uglify-emojidex', () => {
   return gulp

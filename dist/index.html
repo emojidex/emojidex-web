@@ -15,20 +15,21 @@
       (function() {
         $(document).ready((function(_this) {
           return function() {
+            console.log(111)
             $("body").emojidexReplace({
               onComplete: function(element) {
                 return console.log('Completed emojidexReplace!!');
               }
             });
-            $(".emojidex-plain_text").emojidexAutocomplete();
-            $(".emojidex-content_editable").emojidexAutocomplete();
-            $("#palette-btn").emojidexPalette();
-            $("#palette-input").emojidexPalette();
+            // $(".emojidex-plain_text").emojidexAutocomplete();
+            // $(".emojidex-content_editable").emojidexAutocomplete();
+            // $("#palette-btn").emojidexPalette();
+            // $("#palette-input").emojidexPalette();
           };
         })(this));
-      
+
       }).call(this);
-      
+
     </script>
   <style>/*
 

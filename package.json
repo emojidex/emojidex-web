@@ -23,10 +23,9 @@
     "babel-loader": "^8.0.6",
     "bootstrap-sass": "^3.3.1",
     "browser-sync": "^2.18.13",
-    "cross-storage": "^1.0.0",
     "del": "^2.2.2",
     "dotenv": "^4.0.0",
-    "emojidex-client": "^0.18.2",
+    "emojidex-client": "../emojidex-web-client",
     "eslint": "^3.15.0",
     "eslint-config-airbnb-base": "^11.1.0",
     "eslint-plugin-import": "^2.2.0",
@@ -58,13 +57,16 @@
     "webpack": "^4.32.2",
     "webpack-cli": "^3.3.2"
   },
-  "scripts": {
-    "test": "gulp spec"
-  },
   "dependencies": {
     "clipboard": "^1.5.5",
     "core-js": "3",
     "jquery-textcomplete": "^1.8.0",
     "jquery.caret": "^0.3.1"
+  },
+  "scripts": {
+    "build": "gulp clean; webpack --mode development; webpack --mode production; gulp",
+    "dev": "webpack --mode development -w",
+    "test": "webpack --mode development; webpack --mode production; gulp spec"
   }
+
 }
