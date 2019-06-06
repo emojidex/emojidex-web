@@ -13,7 +13,7 @@ import watch from 'gulp-watch';
 import fs from 'fs-extra';
 import markdownDocs from 'gulp-markdown-docs';
 import sass from 'gulp-sass';
-import slim from 'gulp-slim';
+// import slim from 'gulp-slim';
 import cssmin from 'gulp-cssmin';
 import strip from 'gulp-strip-banner';
 import sourceMaps from 'gulp-sourcemaps';
@@ -109,18 +109,18 @@ gulp.task('sass', () => {
     .pipe(gulp.dest('src/compiled_css'));
 });
 
-gulp.task('slim-dist', () => {
-  return gulp.src(['src/slim/*.slim'])
-    .pipe(slim({ pretty: true }))
-    .pipe(gulp.dest('dist'));
-});
-gulp.task('slim-spec', () => {
-  return gulp.src(['spec/fixture/*.slim'])
-    .pipe(slim({ pretty: true }))
-    .pipe(gulp.dest('build/spec/fixture'));
-});
+// gulp.task('slim-dist', () => {
+//   return gulp.src(['src/slim/*.slim'])
+//     .pipe(slim({ pretty: true }))
+//     .pipe(gulp.dest('dist'));
+// });
+// gulp.task('slim-spec', () => {
+//   return gulp.src(['spec/fixture/*.slim'])
+//     .pipe(slim({ pretty: true }))
+//     .pipe(gulp.dest('build/spec/fixture'));
+// });
 gulp.task('slim',
-  gulp.parallel('slim-dist', 'slim-spec')
+  // gulp.parallel('slim-dist', 'slim-spec')
 );
 
 gulp.task('babel', () => {
