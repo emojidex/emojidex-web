@@ -1,0 +1,39 @@
+/*
+* emojidexAutocomplete
+*
+* require: emojidex-client
+*
+* =LICENSE=
+* Licensed under the emojidex Open License
+* https://www.emojidex.com/emojidex/emojidex_open_license
+*
+* Copyright 2013 the emojidex project / K.K. GenSouSha
+*/
+
+import AutoComplete from './components/autocomplete'
+
+const pluginName = "emojidexAutocomplete";
+const defaults = {
+  listLimit: 15,
+  onComplete: undefined,
+  content_editable: {
+    insertImg: true
+  }
+};
+
+export default class EmojidexAutocomplete {
+  constructor(element, options) {
+    this.element = element;
+    this.options = $.extend({}, defaults, options);
+    this._defaults = defaults;
+    this._name = pluginName;
+
+    // start: Plugin --------
+    this.autocomplete = new AutoComplete(this);
+  }
+  
+  static getName() {
+    return pluginName;
+  }
+}
+

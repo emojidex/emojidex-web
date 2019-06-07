@@ -1,4 +1,6 @@
-class AutoComplete {
+import EmojidexClient from 'emojidex-client/src/es6/client.js'
+
+export default class AutoComplete {
   constructor(plugin) {
     this.plugin = plugin;
     this.EC = new EmojidexClient({
