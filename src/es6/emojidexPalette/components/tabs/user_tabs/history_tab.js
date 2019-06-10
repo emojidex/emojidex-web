@@ -1,4 +1,4 @@
-class HistoryTab {
+export default class HistoryTab {
   constructor(user_tab) {
     this.EC = user_tab.palette.EC;
     this.palette = user_tab.palette;

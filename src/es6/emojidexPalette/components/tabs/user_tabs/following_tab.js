@@ -1,4 +1,4 @@
-class FollowingTab {
+export default class FollowingTab {
   constructor(user_tab) {
     this.EC = user_tab.palette.EC;
     this.palette = user_tab.palette;
