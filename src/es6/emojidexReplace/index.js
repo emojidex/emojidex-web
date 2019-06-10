@@ -52,4 +52,8 @@ export default class EmojidexReplace {
       });
     }
   }
+  
+  static getName() {
+    return pluginName;
+  }
 }

@@ -1,4 +1,8 @@
-class AutoComplete {
+import EmojidexClient from 'emojidex-client/src/es6/client.js'
+import { Textcomplete, Textarea } from 'textcomplete'
+import Contenteditable from 'textcomplete.contenteditable'
+
+export default class AutoComplete {
   constructor(plugin) {
     this.plugin = plugin;
     this.EC = new EmojidexClient({
@@ -10,7 +14,27 @@ class AutoComplete {
   }
 
   setAutoComplete() {
-    $(this.plugin.element).textcomplete(
+    let editor;
+    if (this.plugin.element.contentEditable === 'true') {
+      editor = new Contenteditable(this.plugin.element);
+      editor.applySearchResult = function(searchResult) {
+        const before = this.getBeforeCursor();
+        const after = this.getAfterCursor();
+        if (before != null && after != null) {
+          const replace = searchResult.replace(before, after);
+          if (Array.isArray(replace)) {
+            const range = this.getRange();
+            range.selectNode(range.startContainer);
+            this.document.execCommand('insertHTML', false, replace[0] + replace[1]);
+            range.collapse(false);
+          }
+        }
+      }
+    } else {
+      editor = new Textarea(this.plugin.element);
+    }
+    const textcomplete = new Textcomplete(editor);
+    textcomplete.register(
       [{
         match: /[：:]([^ ：:;@&#~\/\!\$\+\?\%\*\f\n\r]+)$/,
         search: (term, callback) => {

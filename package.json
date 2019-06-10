@@ -64,8 +64,9 @@
   "dependencies": {
     "clipboard": "^1.5.5",
     "core-js": "3",
-    "jquery-textcomplete": "^1.8.0",
-    "jquery.caret": "^0.3.1"
+    "jquery.caret": "^0.3.1",
+    "textcomplete": "^0.17.1",
+    "textcomplete.contenteditable": "^0.1.1"
   },
   "scripts": {
     "build": "gulp clean; webpack --mode development; webpack --mode production; gulp",
