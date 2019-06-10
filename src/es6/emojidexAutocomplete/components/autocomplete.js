@@ -17,6 +17,19 @@ export default class AutoComplete {
     let editor;
     if (this.plugin.element.contentEditable === 'true') {
       editor = new Contenteditable(this.plugin.element);
+      editor.applySearchResult = function(searchResult) {
+        const before = this.getBeforeCursor();
+        const after = this.getAfterCursor();
+        if (before != null && after != null) {
+          const replace = searchResult.replace(before, after);
+          if (Array.isArray(replace)) {
+            const range = this.getRange();
+            range.selectNode(range.startContainer);
+            this.document.execCommand('insertHTML', false, replace[0] + replace[1]);
+            range.collapse(false);
+          }
+        }
+      }
     } else {
       editor = new Textarea(this.plugin.element);
     }
