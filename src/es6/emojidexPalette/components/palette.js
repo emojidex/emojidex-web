@@ -249,8 +249,8 @@ export default class Palette {
 
   addButton(element) {
     const reposition = (e) => {
-      margin = 5;
-      position = $(element).position();
+      let margin = 5;
+      let position = $(element).position();
       position.top += margin;
       position.left += $(element).outerWidth() - palette_button.outerWidth() - margin;
       palette_button.css(position);
