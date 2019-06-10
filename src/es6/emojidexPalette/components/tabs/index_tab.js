@@ -1,4 +1,4 @@
-class IndexTab {
+export default class IndexTab {
   constructor(palette) {
     this.palette = palette;
     this.initialized = false;
