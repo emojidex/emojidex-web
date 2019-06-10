@@ -58,6 +58,7 @@
     "pug": "^2.0.3",
     "pug-loader": "^2.4.0",
     "run-sequence": "^2.2.1",
+    "script-loader": "^0.7.2",
     "webpack": "^4.32.2",
     "webpack-cli": "^3.3.2"
   },
