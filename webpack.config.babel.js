@@ -30,6 +30,10 @@ module.exports = (env, argv) => ({
         options: {
           pretty: true
         }
+      },
+      {
+        test: /(jquery-ui\.min|jquery\.caret\.min)\.js$/,
+        use: ['script-loader']
       }
     ]
   },
@@ -48,7 +52,7 @@ module.exports = (env, argv) => ({
       host: 'localhost',
       port: 8080,
       server: { baseDir: ['docs'] }
-    })
+    }),
     // new webpack.ProvidePlugin({
     //   $: 'jquery',
     //   'window.$': 'jquery'

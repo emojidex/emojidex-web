@@ -1,4 +1,12 @@
-class Palette {
+import Clipboard from 'clipboard'
+import EmojidexClient from 'emojidex-client/src/es6/client.js'
+
+import CategoryTab from './tabs/category_tab'
+import IndexTab from './tabs/index_tab'
+import SearchTab from './tabs/search_tab'
+import UserTab from './tabs/user_tab'
+
+export default class Palette {
   constructor(plugin) {
     this.plugin = plugin;
     this.active_input_area = null;
@@ -241,8 +249,8 @@ class Palette {
 
   addButton(element) {
     const reposition = (e) => {
-      margin = 5;
-      position = $(element).position();
+      let margin = 5;
+      let position = $(element).position();
       position.top += margin;
       position.left += $(element).outerWidth() - palette_button.outerWidth() - margin;
       palette_button.css(position);

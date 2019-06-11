@@ -1,4 +1,9 @@
-class UserTab {
+import FavoriteTab from './user_tabs/favorite_tab'
+import FollowersTab from './user_tabs/followers_tab'
+import FollowingTab from './user_tabs/following_tab'
+import HistoryTab from './user_tabs/history_tab'
+
+export default class UserTab {
   constructor(palette) {
     this.palette = palette;
     this.tab_list = "<li id='tab-user' class='pull-right'><a href='#tab-content-user' data-toggle='pill'><i class='emjdx-user'></a></li>";

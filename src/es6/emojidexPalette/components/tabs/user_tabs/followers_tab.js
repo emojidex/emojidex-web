@@ -1,4 +1,4 @@
-class FollowersTab {
+export default class FollowersTab {
   constructor(user_tab) {
     this.EC = user_tab.palette.EC;
     this.palette = user_tab.palette;
