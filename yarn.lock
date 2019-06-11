@@ -2291,6 +2291,10 @@ cross-spawn@^6.0.0, cross-spawn@^6.0.5:
     shebang-command "^1.2.0"
     which "^1.2.9"
 
+"cross-storage@https://github.com/snowsunny/cross-storage.git":
+  version "1.0.0"
+  resolved "https://github.com/snowsunny/cross-storage.git#9703e9b0f6d98a185fe3ed8d859102ed2a78e8b9"
+
 cryptiles@2.x.x:
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/cryptiles/-/cryptiles-2.0.5.tgz#3bdfecdc608147c1c67202fa291e7dca59eaa3b8"
@@ -2730,8 +2734,12 @@ elliptic@^6.0.0:
     minimalistic-assert "^1.0.0"
     minimalistic-crypto-utils "^1.0.0"
 
-emojidex-client@../emojidex-web-client:
-  version "0.18.3"
+emojidex-client@^0.19.0:
+  version "0.19.0"
+  resolved "https://registry.yarnpkg.com/emojidex-client/-/emojidex-client-0.19.0.tgz#50195a097ba42a8011f943f578dde616f5eea328"
+  integrity sha512-gp0l8KbPV4Jd+BxwIPl6SiRcLSh2KxQz+FEXM+mV/iHMbFzIVLowMUbpvb+l90vF07jU3G+/8ulvYc+pHbBpjA==
+  dependencies:
+    cross-storage "https://github.com/snowsunny/cross-storage.git"
 
 emojis-list@^2.0.0:
   version "2.1.0"

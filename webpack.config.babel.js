@@ -48,6 +48,11 @@ module.exports = (env, argv) => ({
       template: 'src/pug/ajax_test.pug',
       inject: false
     }),
+    new HtmlWebpackPlugin({
+      filename: '../build/spec/fixture/index.html',
+      template: 'spec/fixture/index.pug',
+      inject: false
+    }),
     new BrowserSyncPlugin({
       host: 'localhost',
       port: 8080,
