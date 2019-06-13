@@ -248,6 +248,7 @@ gulp.task('jasmine', () => {
     'node_modules/jquery/dist/jquery.js',
     'node_modules/jasmine-jquery/lib/jasmine-jquery.js',
     'node_modules/jquery-watch/jquery-watch.js',
+    'node_modules/keysim/dist/keysim.js',
     'docs/js/emojidex.js',
     'spec/helpers/data.js',
     'build/spec/fixture/html_in_method.js',

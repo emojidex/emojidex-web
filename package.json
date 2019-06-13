@@ -53,6 +53,7 @@
     "jasmine-jquery": "^2.1.1",
     "jquery": "^3.1.0",
     "jquery-watch": "^1.21.0",
+    "keysim": "^2.1.0",
     "plugin-error": "^1.0.1",
     "pug": "^2.0.3",
     "pug-loader": "^2.4.0",
