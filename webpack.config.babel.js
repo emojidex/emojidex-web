@@ -1,11 +1,16 @@
 import path from 'path'
-import webpack from 'webpack'
 import BrowserSyncPlugin from 'browser-sync-webpack-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
+import MiniCssExtractPlugin from 'mini-css-extract-plugin'
+import FixStyleOnlyEntriesPlugin from 'webpack-fix-style-only-entries'
+
+const devMode = process.env.NODE_ENV !== 'production';
 
 module.exports = (env, argv) => ({
   entry: {
-    'emojidex': './src/es6/index.js',
+    'js/emojidex': './src/es6/index.js',
+    'css/emojidex': './src/sass/emojidex.scss',
+    'css/document': './src/sass/document.scss'
   },
   resolve: {
     modules: [
@@ -13,7 +18,7 @@ module.exports = (env, argv) => ({
     ]
   },
   output: {
-    filename: `js/emojidex.${argv.mode === 'production' ? 'min.' : ''}js`,
+    filename: `[name].${argv.mode === 'production' ? 'min.' : ''}js`,
     path: path.join(__dirname, './docs'),
     libraryTarget: 'umd'
   },
@@ -32,6 +37,26 @@ module.exports = (env, argv) => ({
         }
       },
       {
+        test: /\.(ttf|woff2|woff|eot|svg|png)$/i,
+        use: [
+          'url-loader',
+        ],
+      },
+      {
+        test: /\.(sa|sc)ss$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              hmr: process.env.NODE_ENV === 'development',
+            },
+          },
+          'css-loader',
+          'resolve-url-loader',
+          'sass-loader',
+        ],
+      },
+      {
         test: /(jquery-ui\.min|jquery\.caret\.min)\.js$/,
         use: ['script-loader']
       }
@@ -48,6 +73,10 @@ module.exports = (env, argv) => ({
       template: 'src/pug/ajax_test.pug',
       inject: false
     }),
+    new FixStyleOnlyEntriesPlugin({
+      extensions: ['sass', 'scss']
+    }),
+    new MiniCssExtractPlugin(),
     new BrowserSyncPlugin({
       host: 'localhost',
       port: 8080,
