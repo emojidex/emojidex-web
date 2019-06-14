@@ -256,15 +256,16 @@ gulp.task('jasmine', () => {
     'docs/img/logo.png',
     'docs/css/document.min.css',
     'docs/css/emojidex.min.css',
-    'spec/emojidexAutocomplete.js',
-    // 'spec/palette/user_login.js',
+    // 'spec/emojidexAutocomplete.js',
+    'spec/palette/category.js',
     // 'spec/palette/*.js',
     // 'spec/emojidexReplace.js'
   ];
   return gulp.src(testFiles)
     .pipe(watch(testFiles))
     .pipe(jasmineBrowser.specRunner())
-    .pipe(jasmineBrowser.server());
+    // Require random flag, ex: localhost:8888/?random=false
+    .pipe(jasmineBrowser.server())
 });
 
 gulp.task('lint', () => {

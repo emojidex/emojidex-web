@@ -56,7 +56,7 @@ function simulateTypingIn($inputor, pos) {
 function clearStorage() {
   let CSC = new CrossStorageClient('https://www.emojidex.com/hub',
     {frameId: 'emojidex-client-storage-hub'});
-  return CSC.onConnect().then(() => {
+  return CSC.onReadyFrame().then(() => {
     return CSC.clear();
   });
 }
