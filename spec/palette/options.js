@@ -1,14 +1,10 @@
 describe("emojidexPalette:Options", () => {
   beforeAll(done => {
-    clearStorage().then(() => {
-      helperBefore();
-      done();
-    });
+    beforePalette(done)
   });
 
-  afterAll(() => {
-    closePalette();
-    helperAfter();
+  afterAll(done =>{
+    afterPalette(done)
   });
 
   it("check onEmojiButtonClicked option", done => {

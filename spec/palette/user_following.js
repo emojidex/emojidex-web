@@ -1,14 +1,10 @@
 describe("emojidexPalette:User:Following", () => {
   beforeAll(done => {
-    clearStorage().then(() => {
-      helperBefore();
-      preparePaletteButtons(done);
-    });
+    beforePalette(done)
   });
 
-  afterAll(() => {
-    closePalette();
-    helperAfter();
+  afterAll(done =>{
+    afterPalette(done)
   });
 
   it('show following tab [Requires a user account and following user]', done => {
