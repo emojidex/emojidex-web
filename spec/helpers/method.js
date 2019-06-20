@@ -115,7 +115,6 @@ function loginUser(user, password) {
 }
 
 function beforePalette(done) {
-  console.log('ready palette ---')
   clearStorage().then(() => {
     return helperBefore();
   }).then(() => {
