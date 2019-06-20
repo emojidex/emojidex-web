@@ -2347,9 +2347,9 @@ cross-spawn@^6.0.0, cross-spawn@^6.0.5:
     shebang-command "^1.2.0"
     which "^1.2.9"
 
-"cross-storage@git+https://github.com/snowsunny/cross-storage.git":
+"cross-storage@https://github.com/snowsunny/cross-storage.git":
   version "1.0.0"
-  resolved "git+https://github.com/snowsunny/cross-storage.git#9703e9b0f6d98a185fe3ed8d859102ed2a78e8b9"
+  resolved "https://github.com/snowsunny/cross-storage.git#9703e9b0f6d98a185fe3ed8d859102ed2a78e8b9"
 
 crypto-browserify@^3.11.0:
   version "3.12.0"

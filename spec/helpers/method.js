@@ -1,5 +1,5 @@
 function helperBefore() {
-  jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
+  jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
   // TODO: fixtureの読み込み方法
   // jasmine.getFixtures().fixturesPath = 'build/spec/fixture/';
   // $('body').append(`<div id='spec-wrap'>${readFixtures('index.html')}</div>`);
@@ -14,7 +14,10 @@ function helperBefore() {
 }
 
 function helperAfter() {
-  $('#spec-wrap').remove();
+  return new Promise((resolve) => {
+    $('#spec-wrap').remove();
+    resolve()
+  })
 }
 
 function specTimer(time) {
@@ -67,8 +70,11 @@ function clearStorage() {
 
 function closePalette() {
   // $('#spec-wrap').remove(); してもパレットが残ることがあるため
-  $('button.pull-right[aria-label="Close"]').click();
-  $('#emojidex-emoji-palette').remove();
+  return new Promise((resolve) => {
+    $('button.pull-right[aria-label="Close"]').click();
+    $('#emojidex-emoji-palette').remove();
+    resolve()
+  })
 }
 
 function showPalette(callback) {
@@ -118,7 +124,9 @@ function beforePalette(done) {
 }
 
 function afterPalette(done) {
-  closePalette();
-  helperAfter();
-  done();
+  closePalette().then(() => {
+    return helperAfter();
+  }).then(() => {
+    done();
+  })
 }

@@ -30,7 +30,9 @@ describe("emojidexPalette:User:Followers", () => {
             }
           });
 
-          $('#tab-user-followers a').click();
+          specTimer(1000).then(() => {
+            $('#tab-user-followers a').click();
+          })
         });
       }
     });
