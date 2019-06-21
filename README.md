@@ -229,6 +229,8 @@ integration of emojidex in your own software. Simply contact info@emojidex.com w
 1. Your username on emojidex
 2. The project(s) you intend to work on
 
+__Testing URL: localhost:8888/?random=false__
+
 .env (optional)
 ---------------
 After obtaining a permium account you can use it for testing. To do this you need to create a

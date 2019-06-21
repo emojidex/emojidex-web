@@ -74,13 +74,13 @@ export default class FollowersTab {
     }
 
     const prev_func = () => {
-      option = {page: meta.page - 1};
+      let option = {page: meta.page - 1};
       if(option.page > 0) {
         this.setUserEmojisInfo(user_info, option);
       }
     }
     const next_func = () => {
-      option = {page: meta.page + 1};
+      let option = {page: meta.page + 1};
       if(option.page <= meta.max_page) {
         this.setUserEmojisInfo(user_info, option);
       }
