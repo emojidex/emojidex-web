@@ -299,7 +299,7 @@ gulp.task('default',
 );
 
 gulp.task('spec',
-  gulp.series('clean-spec', 'sass', 'concat-css', 'uglify-bootstrap', 'cssmin', 'copy', 'env', 'concat-spec', 'jasmine')
+  gulp.series('clean-spec', 'copy', 'env', 'concat-spec', 'jasmine')
 );
 
 // TODO: lint
