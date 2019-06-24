@@ -15,7 +15,9 @@ export default class AutoComplete {
 
   setAutoComplete() {
     let editor;
+    let className = "dropdown-menu textcomplete-dropdown ";
     if (this.plugin.element.contentEditable === 'true') {
+      className += 'dropdown-contenteditable';
       editor = new Contenteditable(this.plugin.element);
       editor.applySearchResult = function(searchResult) {
         const before = this.getBeforeCursor();
@@ -31,9 +33,10 @@ export default class AutoComplete {
         }
       }
     } else {
+      className += 'dropdown-textarea';
       editor = new Textarea(this.plugin.element);
     }
-    const textcomplete = new Textcomplete(editor);
+    const textcomplete = new Textcomplete(editor, { dropdown: { className: className } });
     textcomplete.register(
       [{
         match: /[：:]([^ ：:;@&#~\/\!\$\+\?\%\*\f\n\r]+)$/,

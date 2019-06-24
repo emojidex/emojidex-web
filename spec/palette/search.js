@@ -1,14 +1,10 @@
 describe("emojidexPalette:Search", () => {
   beforeAll(done => {
-    clearStorage().then(() => {
-      helperBefore();
-      preparePaletteButtons(done);
-    });
+    beforePalette(done)
   });
 
-  afterAll(() => {
-    closePalette();
-    helperAfter();
+  afterAll(done =>{
+    afterPalette(done)
   });
 
   it('search tab', done => {

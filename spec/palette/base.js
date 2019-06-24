@@ -1,12 +1,11 @@
 describe("emojidexPalette:Base", () => {
   beforeAll(done => {
-    clearStorage().then(() => {
-      helperBefore();
-      preparePaletteButtons(done);
-    });
+    beforePalette(done)
   });
 
-  afterAll(() => helperAfter());
+  afterAll(done =>{
+    afterPalette(done)
+  });
 
   it("created emojidexPalette button in input", done => {
     expect($('.emojidex-palette-button').length).toBe(1);
