@@ -1,8 +1,9 @@
 $navbar-logo-space: 15px;
 $navbar-height: 60px;
 $navbar-logo-fix: 10px;
+$icon-font-path: '~bootstrap-sass/assets/fonts/bootstrap/';
 
-@import "../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap";
 @import "fix-space";
 
 @media (max-width: $screen-xs-max) {

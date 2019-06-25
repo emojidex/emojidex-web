@@ -1,5 +1,4 @@
 function helperBefore() {
-  jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
   // TODO: fixtureの読み込み方法
   // jasmine.getFixtures().fixturesPath = 'build/spec/fixture/';
   // $('body').append(`<div id='spec-wrap'>${readFixtures('index.html')}</div>`);
@@ -99,7 +98,9 @@ function preparePaletteButtons(done, options) {
     onComplete: () => {
       $("#palette-input").emojidexPalette({
         paletteEmojisLimit: limitForSpec,
-        onComplete: () => { done(); }
+        onComplete: () => {
+          specTimer(3000).then(() => {done()})
+        }
       });
     }
   });

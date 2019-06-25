@@ -15,24 +15,14 @@ describe("emojidexPalette:User:Followers", () => {
       properties: 'prop_innerHTML',
       watchChildren: true,
       callback(data, i) {
-        specTimer(1000).then(() => {
-          removeWatch($('#tab-content-user'), 'watcher');
+        removeWatch($('#tab-content-user'), 'watcher');
 
-          $('#follow-followers').watch({
-            id: "watcher",
-            properties: 'attr_class',
-            callback(data, i) {
-              specTimer(500).then(() => {
-                expect($('#follow-followers .users .btn').length).toBeTruthy();
-                removeWatch($('#follow-followers'), 'watcher');
-                done();
-              });
-            }
-          });
-
-          specTimer(1000).then(() => {
-            $('#tab-user-followers a').click();
-          })
+        specTimer(3000).then(() => {
+          $('#tab-user-followers a').click();
+          return specTimer(1000)
+        }).then(() => {
+          expect($('#follow-followers .users .btn').length).toBeTruthy();
+          done();
         });
       }
     });
