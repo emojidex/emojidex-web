@@ -102,7 +102,8 @@ module.exports = (env, argv) => ({
     new BrowserSyncPlugin({
       host: 'localhost',
       port: 8080,
-      server: { baseDir: ['docs'] }
+      server: { baseDir: ['docs'] },
+      // browser: ['google chrome', 'google-chrome', 'firefox']
     }),
     // new webpack.ProvidePlugin({
     //   $: 'jquery',
