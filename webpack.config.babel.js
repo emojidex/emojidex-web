@@ -3,6 +3,8 @@ import BrowserSyncPlugin from 'browser-sync-webpack-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import FixStyleOnlyEntriesPlugin from 'webpack-fix-style-only-entries'
+import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin'
+import TerserPlugin from 'terser-webpack-plugin'
 
 const devMode = process.env.NODE_ENV !== 'production';
 
@@ -16,6 +18,9 @@ module.exports = (env, argv) => ({
     modules: [
       'node_modules'
     ]
+  },
+  optimization: {
+    minimizer: [new TerserPlugin({}), new OptimizeCSSAssetsPlugin({})],
   },
   output: {
     filename: `[name].${argv.mode === 'production' ? 'min.' : ''}js`,
@@ -52,7 +57,17 @@ module.exports = (env, argv) => ({
             },
           },
           'css-loader',
-          'resolve-url-loader',
+          {
+            loader: 'postcss-loader',
+            options: {
+              ident: 'postcss',
+              plugins: [
+                require('autoprefixer')({
+                  overrideBrowserslist: ['cover 99.5%']
+                }),
+              ]
+            }
+          },
           'sass-loader',
         ],
       },
@@ -81,7 +96,9 @@ module.exports = (env, argv) => ({
     new FixStyleOnlyEntriesPlugin({
       extensions: ['sass', 'scss']
     }),
-    new MiniCssExtractPlugin(),
+    new MiniCssExtractPlugin({
+      filename: `[name].${argv.mode === 'production' ? 'min.' : ''}css`
+    }),
     new BrowserSyncPlugin({
       host: 'localhost',
       port: 8080,
