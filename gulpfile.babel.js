@@ -66,15 +66,8 @@ gulp.task('clean-spec', (done) => {
   del.sync('build/spec/**/*.js');
   done();
 });
-gulp.task('clean-compiled', (done) => {
-  del.sync([
-    'build/js/**/*',
-    'docs'
-    ]);
-  done();
-});
 gulp.task('clean',
-  gulp.parallel('clean-spec', 'clean-compiled')
+  gulp.parallel('clean-spec')
 );
 
 gulp.task('md2html', () => {
@@ -82,9 +75,9 @@ gulp.task('md2html', () => {
     .src(['README.md'])
     .pipe(markdownDocs('index.html', {
       layoutStylesheetUrl: '',
-      templatePath: 'dist/index.html'
+      templatePath: 'docs/index.html'
     }))
-    .pipe(gulp.dest('dist'));
+    .pipe(gulp.dest('docs'));
 });
 
 gulp.task('banner-js', () => {

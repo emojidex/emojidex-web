@@ -6,7 +6,7 @@ import FixStyleOnlyEntriesPlugin from 'webpack-fix-style-only-entries'
 import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin'
 import TerserPlugin from 'terser-webpack-plugin'
 
-const devMode = process.env.NODE_ENV !== 'production';
+const DEV_MODE = process.env.NODE_ENV !== 'production';
 
 module.exports = (env, argv) => ({
   entry: {
