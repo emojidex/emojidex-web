@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <title>emojidex-web</title>
-    <meta content="" name="description">
+    <meta content name="description">
     <meta content="width=device-width" name="viewport">
     <link href="css/document.css" rel="stylesheet">
     <link href="css/emojidex.css" rel="stylesheet">
@@ -29,7 +29,114 @@
       }).call(this);
       
     </script>
-  </head>
+  <style>/*
+
+Orginal Style from ethanschoonover.com/solarized (c) Jeremy Hull <sourdrums@gmail.com>
+
+*/
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 0.5em;
+  background: #002b36;
+  color: #839496;
+  -webkit-text-size-adjust: none;
+}
+
+.hljs-comment,
+.diff .hljs-header,
+.hljs-doctype,
+.hljs-pi,
+.lisp .hljs-string {
+  color: #586e75;
+}
+
+/* Solarized Green */
+.hljs-keyword,
+.hljs-winutils,
+.method,
+.hljs-addition,
+.css .hljs-tag,
+.hljs-request,
+.hljs-status,
+.nginx .hljs-title {
+  color: #859900;
+}
+
+/* Solarized Cyan */
+.hljs-number,
+.hljs-command,
+.hljs-string,
+.hljs-tag .hljs-value,
+.hljs-rule .hljs-value,
+.hljs-doctag,
+.tex .hljs-formula,
+.hljs-regexp,
+.hljs-hexcolor,
+.hljs-link_url {
+  color: #2aa198;
+}
+
+/* Solarized Blue */
+.hljs-title,
+.hljs-localvars,
+.hljs-chunk,
+.hljs-decorator,
+.hljs-built_in,
+.hljs-identifier,
+.vhdl .hljs-literal,
+.hljs-id,
+.css .hljs-function,
+.hljs-name {
+  color: #268bd2;
+}
+
+/* Solarized Yellow */
+.hljs-attribute,
+.hljs-variable,
+.lisp .hljs-body,
+.smalltalk .hljs-number,
+.hljs-constant,
+.hljs-class .hljs-title,
+.hljs-parent,
+.hljs-type,
+.hljs-link_reference {
+  color: #b58900;
+}
+
+/* Solarized Orange */
+.hljs-preprocessor,
+.hljs-preprocessor .hljs-keyword,
+.hljs-pragma,
+.hljs-shebang,
+.hljs-symbol,
+.hljs-symbol .hljs-string,
+.diff .hljs-change,
+.hljs-special,
+.hljs-attr_selector,
+.hljs-subst,
+.hljs-cdata,
+.css .hljs-pseudo,
+.hljs-header {
+  color: #cb4b16;
+}
+
+/* Solarized Red */
+.hljs-deletion,
+.hljs-important {
+  color: #dc322f;
+}
+
+/* Solarized Violet */
+.hljs-link_label {
+  color: #6c71c4;
+}
+
+.tex .hljs-formula {
+  background: #073642;
+}
+</style></head>
   <body>
     <div class="container">
       <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -51,9 +158,9 @@
           <h3>emojidexReplace :kissing_heart:</h3>
           <hr class="mt-s mb-m">
           <div class="emojidex_replace">Auto Replace examples.<br>(Check the<a href="https://github.com/emojidex/emojidex-web/blob/master/dist/index.html" target="_blank">HTML</a> or<a href="https://github.com/emojidex/emojidex-web/blob/master/src/slim/index.slim" target="_blank">SLIM</a> sources)<br><br>
-            <h5>UTF moji codes to emoji:</h5>❤🛅😄😡💌💌😈👍💩<br>💙💙💙
-            <h5 class="mt-xl">Acknowledged ZWJ emoji:</h5>👨‍👩‍👦
-            <h5 class="mt-xl">:code: to emoji:</h5>❤:octopus::boar:: boar::frog:\:hand_salute: no_match:😄::no match::heart eyes(wh)::1234:
+            <h5>UTF moji codes to emoji:</h5>&#x2764;&#x1F6C5;&#x1F604;&#x1F621;&#x1F48C;&#x1F48C;&#x1F608;&#x1F44D;&#x1F4A9;<br>&#x1F499;&#x1F499;&#x1F499;
+            <h5 class="mt-xl">Acknowledged ZWJ emoji:</h5>&#x1F468;&#x200D;&#x1F469;&#x200D;&#x1F466;
+            <h5 class="mt-xl">:code: to emoji:</h5>&#x2764;:octopus::boar:: boar::frog:\:hand_salute: no_match:&#x1F604;::no match::heart eyes(wh)::1234:
             <h5 class="mt-xl">R-18 checks (should not load when not logged in)</h5>:breasts(bk):
             <h5 class="mt-xl">emoji with link enabled</h5>:emojidex:
           </div>
@@ -68,7 +175,7 @@
               <h4>:right wing:Plain Text:left wing:</h4>
               <form role="form">
                 <div class="form-group">
-                  <textarea class="emojidex-plain_text form-control" rows="5">Try typing a colon and the start of a word to start a code search, like ":tes".</textarea>
+                  <textarea class="emojidex-plain_text form-control" rows="5">Try typing a colon and the start of a word to start a code search, like &quot;:tes&quot;.</textarea>
                 </div>
               </form>
             </div>
@@ -76,7 +183,7 @@
           <div class="row">
             <div class="col-md-12">
               <h4>:86 taillight(left):Content Editable:86 taillight(right):</h4>
-              <div class="emojidex-content_editable inputor" contenteditable="true">Try typing a colon and the start of a word to start a code search, like ":tes".</div>
+              <div class="emojidex-content_editable inputor" contenteditable="true">Try typing a colon and the start of a word to start a code search, like &quot;:tes&quot;.</div>
             </div>
           </div>
         </div>
@@ -96,14 +203,186 @@
       <div class="row mt-xl">
         <div class="col-md-12">
           <h3>HOW TO: use emojidex web on your site :movie_camera:</h3>
-          <iframe allowfullscreen="" frameborder="0" height="315" src="https://www.youtube.com/embed/sco-oKNM8MI" width="560"></iframe>
+          <iframe allowfullscreen frameborder="0" height="315" src="https://www.youtube.com/embed/sco-oKNM8MI" width="560"></iframe>
         </div>
       </div>
       <div class="row" style="margin-top: 64px">
         <div class="col-md-12">
           <h3>README :robot face:</h3>
           <hr class="mt-s mb-m">
-          <section class="doc-content"></section>
+          <section class="doc-content"><section class="doc-section"><article class="doc-article"><a class="doc-nav-anchor" name="undefined"></a><p>By default all emoji assets are dynamically loaded from the emojidex CDN and dynamically
+cached by the client. There is no need to store any assets on your own server or bundle
+them with your app. The module is self contained and enclosed and should not interfere
+with other components of your site or app.  </p>
+<p>Check out the demo at:
+<a href="http://emojidex.github.io/emojidex-web">http://emojidex.github.io/emojidex-web</a></p>
+<h1 id="usage">Usage</h1>
+<p>Basic usage is simple.</p>
+<p>1. First off load up the stylesheets and scripts:</p>
+<pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-title">head</span>&gt;</span>
+  ...
+  <span class="hljs-tag">&lt;<span class="hljs-title">link</span> <span class="hljs-attribute">href</span>=<span class="hljs-value">&quot;https://cdn.emojidex.com/scripts/css/emojidex.min.css&quot;</span> <span class="hljs-attribute">rel</span>=<span class="hljs-value">&quot;stylesheet&quot;</span> /&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-title">script</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">&quot;https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js&quot;</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-title">script</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-title">script</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">&quot;https://cdn.emojidex.com/scripts/javascript/emojidex.min.js&quot;</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-title">script</span>&gt;</span>
+  ...
+<span class="hljs-tag">&lt;/<span class="hljs-title">head</span>&gt;</span>
+</code></pre>
+<p>2. Set emojidex-web<br>In JavaScript / in a script tag</p>
+<pre><code class="lang-js">$(<span class="hljs-built_in">document</span>).ready(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  ...
+  $(<span class="hljs-string">&quot;body&quot;</span>).emojidexReplace();
+  $(<span class="hljs-string">&quot;.emojidex-plain_text&quot;</span>).emojidexAutocomplete();
+  $(<span class="hljs-string">&quot;.emojidex-content_editable&quot;</span>).emojidexAutocomplete();
+  ...
+});
+</code></pre>
+<p>And you&apos;re all set!</p>
+<h1 id="features">Features</h1>
+<h3 id="-emojidexreplace-">.emojidexReplace()</h3>
+<p>Scans text in the specified element and replaces any colon &quot;:&quot; encased short codes
+(eg: <code>:smile:</code>) or any UTF emoji (eg: <code>&#x1F604;</code>) with emojidex emoji images.<br>No conversion occurs when no emoji on emojidex is found that corresponds to the short code or
+UTF code and the text remains unchanged.</p>
+<pre><code><span class="hljs-string">emojidexReplace :</span><span class="hljs-string">kissing_heart:</span>
+
+UTF moji codes to <span class="hljs-string">emoji:</span>
+&#x2764;&#x1F6C5;&#x1F604;&#x1F621;&#x1F48C;&#x1F48C;&#x1F608;&#x1F44D;&#x1F4A9;
+&#x1F499;&#x1F499;&#x1F499;
+
+Acknowledged ZWJ <span class="hljs-string">emoji:</span>
+&#x1F468;&#x200D;&#x1F469;&#x200D;&#x1F466;
+
+:<span class="hljs-string">code:</span> to <span class="hljs-string">emoji:</span>
+&#x2764;:<span class="hljs-string">octopus:</span>:<span class="hljs-string">boar:</span>:<span class="hljs-string">frog:</span>\:<span class="hljs-string">hand_salute:</span> <span class="hljs-string">no_match:</span>&#x1F604;::no <span class="hljs-string">match:</span>:heart eyes(wh):
+</code></pre><p>&#x2193;</p>
+<p><img src="http://emojidex.github.io/emojidex-web/img/samples/emojidex_replace.png" alt="emojidex replace image"></p>
+<h3 id="options">Options</h3>
+<h4 id="defaults">Defaults</h4>
+<pre><code class="lang-js"><span class="hljs-tag">emojidexReplace</span>({
+  <span class="hljs-attribute">onComplete</span>: undefined,
+  <span class="hljs-attribute">useLoadingImg</span>: true,
+  <span class="hljs-attribute">autoUpdate</span>: true,
+  <span class="hljs-attribute">selector</span>: <span class="hljs-string">&apos;*&apos;</span>,
+  <span class="hljs-attribute">ignore</span>: <span class="hljs-string">&apos;script, noscript, canvas, img, style, iframe, input, textarea, pre, code&apos;</span>,
+  <span class="hljs-attribute">ignoreContentEditable</span>: true
+});
+</code></pre>
+<h4 id="options-oncomplete">options.onComplete</h4>
+<p>Type: <code>Function(jQuery element)</code> Default: <code>undefined</code></p>
+<p>Specifies a method to be run after a code has been converted into an emoji.<br>A jQuery element reference is passed as an argument to the assigned method.  </p>
+<p>Example:</p>
+<pre><code class="lang-js">$(<span class="hljs-string">&quot;body&quot;</span>).emojidexReplace({
+  onComplete: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">element</span>) </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;Completed emojidexReplace!!&apos;</span>);
+  }
+});
+</code></pre>
+<h4 id="options-useloadingimg">options.useLoadingImg</h4>
+<p>Type: <code>Boolean</code> Default: <code>true</code></p>
+<p>Specifies weather or not to show the loading image [specified in the CSS] while downloading emoji.</p>
+<h4 id="options-autoupdate">options.autoUpdate</h4>
+<p>Type: <code>Boolean</code> Default: <code>true</code></p>
+<p>Automatically run conversions on AJAX events.</p>
+<h4 id="options-selector">options.selector</h4>
+<p>Type: <code>String</code> Default: <code>*</code></p>
+<p>Set tags to permission the contents of during blanket conversions.&#x3000;*Judge after options.ignore.</p>
+<h4 id="options-ignore">options.ignore</h4>
+<p>Type: <code>String</code> Default: <code>script, noscript, canvas, img, style, iframe, input, textarea, pre, code</code></p>
+<p>Set tags to ignore the contents of during blanket conversions.</p>
+<h4 id="options-ignorecontenteditable">options.ignoreContentEditable</h4>
+<p>Type: <code>Boolean</code> Default: <code>true</code></p>
+<p>Defines the behavior of <code>contenteditable=&quot;true&quot;</code> elements. When true, ignore convert.</p>
+<h3 id="-emojidexautocomplete-">.emojidexAutocomplete()</h3>
+<p>Enables the autocomplete pop when a <code>:</code> colon is entered for <code>input</code>, <code>textarea</code>,
+and elements where <code>contenteditable=&quot;true&quot;</code>.  </p>
+<p>For <code>input</code>s and , <code>textarea</code>s colon enclosed shortcodes are shown as plain text.<br>For <code>contenteditable=&quot;true&quot;</code> elements the codes are converted immediately into emoji images.</p>
+<h3 id="options">Options</h3>
+<h4 id="default-options">Default options</h4>
+<pre><code class="lang-js"><span class="hljs-tag">emojidexAutocomplete</span>({
+  <span class="hljs-tag">listLimit</span>: <span class="hljs-tag">15</span>,
+  <span class="hljs-tag">onComplete</span>: <span class="hljs-tag">undefined</span>,
+  <span class="hljs-tag">content_editable</span>: {
+    <span class="hljs-attribute">insertImg</span>: true
+  }
+});
+</code></pre>
+<h4 id="options-listlimit">options.listLimit</h4>
+<p>Type: <code>Int</code> Default: <code>15</code></p>
+<p>The maximum number of items displayed in a pop list.</p>
+<h4 id="options-oncomplete">options.onComplete</h4>
+<p>Type: <code>Function</code> Default: <code>undefined</code></p>
+<p>Sets a function to run when an autocomplete finishes.</p>
+<h4 id="options-content_editable-insertimg">options.content_editable.insertImg</h4>
+<p>Type: <code>Boolean</code> Default: <code>true</code></p>
+<p>Defines the behavior of <code>contenteditable=&quot;true&quot;</code> elements. When true, codes are automatically
+converted to images. When false they remain as plain text.</p>
+<h3 id="-emojidexpalette-">.emojidexPalette()</h3>
+<p>Sets an element to open up an emoji palette chooser when clicked.</p>
+<p>emoji are copied to the clipboard when clicked.
+The palette contains a tabbed index, search functionality, and displays history and favorites when
+a user is logged in.</p>
+<h3 id="options">Options</h3>
+<h4 id="default-options">Default options</h4>
+<pre><code class="lang-js"><span class="hljs-tag">emojidexPalette</span>({
+  <span class="hljs-attribute">onComplete</span>: undefined,
+  <span class="hljs-attribute">onEmojiButtonClicked</span>: undefined,
+  <span class="hljs-attribute">paletteEmojisLimit</span>: <span class="hljs-number">50</span>
+});
+</code></pre>
+<h4 id="options-oncomplete">options.onComplete</h4>
+<p>Type: <code>Function</code> Default: <code>undefined</code></p>
+<p>Calls the defined method after a palette has been set to an element.</p>
+<h4 id="options-onemojibuttonclicked">options.onEmojiButtonClicked</h4>
+<p>Type: <code>Function({imageTag: Img tag of clicked emoji, emojiCode: Code of clicked emoji})</code> Default: <code>undefined</code></p>
+<p>Calls the defined method when click an emoji button on the palette.</p>
+<h4 id="options-paletteemojislimit">options.paletteEmojisLimit</h4>
+<p>Type: <code>Int</code> Default: <code>50</code></p>
+<p>The maximum number of items displayed in a palette.</p>
+<h1 id="building">Building</h1>
+<p>You will need node with a usable npm and yarn.</p>
+<h3 id="get-the-source">Get the source</h3>
+<p>First off we need the actual source to build. Clone this repository if you haven&apos;t already:</p>
+<pre><code class="lang-shell">git clone git@github<span class="hljs-class">.com</span>:emojidex/emojidex-web<span class="hljs-class">.git</span>
+cd emojidex-web
+</code></pre>
+<h3 id="install-packages-and-obtain-required-sources">Install Packages and Obtain Required Sources</h3>
+<pre><code class="lang-shell">yarn <span class="hljs-keyword">install</span>
+</code></pre>
+<h3 id="build">Build</h3>
+<p>For a regular one-off build:</p>
+<pre><code class="lang-shell"><span class="hljs-title">yarn</span> gulp
+</code></pre>
+<p>Modules will be built in the dist directory.</p>
+<p>For development mode with dynamic compilation and dev server:</p>
+<pre><code class="lang-shell"><span class="hljs-title">yarn</span> gulp dev
+</code></pre>
+<p>A live version of the latest build will be available at
+<a href="http://localhost:8000/dist/">http://localhost:8000/dist/</a>.</p>
+<h1 id="testing">Testing</h1>
+<p>There are two types of specs: regular specs that use the test account and specs that require a
+premium account with R-18 enabled. As a developer you are eligable to receive a complimentary
+upgrade to a premium account if you are working on either an emojidex package or module or
+integration of emojidex in your own software. Simply contact <a href="mailto:info@emojidex.com">info@emojidex.com</a> with the subject
+&quot;Developer Account&quot; and list the following details:</p>
+<ol>
+<li>Your username on emojidex</li>
+<li>The project(s) you intend to work on</li>
+</ol>
+<p><strong>Testing URL: localhost:8888/?random=false</strong></p>
+<h2 id="-env-optional-">.env (optional)</h2>
+<p>After obtaining a permium account you can use it for testing. To do this you need to create a
+file named &apos;.env&apos; with the following information:</p>
+<pre><code><span class="hljs-setting">USERNAME=<span class="hljs-value">Your_UserName</span></span>
+<span class="hljs-setting">EMAIL=<span class="hljs-value">your@email.com</span></span>
+<span class="hljs-setting">PASSWORD=<span class="hljs-value">YourPassword123</span></span>
+<span class="hljs-setting">AUTH_TOKEN=<span class="hljs-value"><span class="hljs-number">0123456789</span>abcdef</span></span>
+</code></pre><p>replacing the Your_UserName and 0123456789abcdef etc. with your actual username and auth_token...
+The quickest way to find your auth_token is to log in on your browser, open up your user
+settings by clicking on your username in the top right, and scrolling down to the Auth Token
+field (or to do an auth request with CURL as in the developer.emojidex.com documentation).</p>
+<h1 id="license">License</h1>
+<p>emojidex and emojidex tools are licensed under the <a href="https://www.emojidex.com/emojidex/emojidex_open_license">emojidex Open License</a>.</p>
+<p>&#xA9;2013 the emojidex project / K.K. GenSouSha</p>
+</article></section></section>
         </div>
       </div>
     </div>

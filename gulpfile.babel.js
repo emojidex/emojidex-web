@@ -6,7 +6,6 @@ import concat from 'gulp-concat';
 import * as jasmineBrowser from 'gulp-jasmine-browser';
 import fs from 'fs-extra';
 import markdownDocs from 'gulp-markdown-docs';
-import strip from 'gulp-strip-banner';
 
 gulp.task('env', (done) => {
   fs.stat('.env', (err, stat) => {
@@ -61,25 +60,6 @@ let banner =
   ' * Includes:\n' +
   ' * --------------------------------\n' +
   '*/\n';
-
-gulp.task('clean-spec', (done) => {
-  del.sync('build/spec/**/*.js');
-  done();
-});
-gulp.task('clean',
-  gulp.parallel('clean-spec')
-);
-
-gulp.task('md2html', () => {
-  return gulp
-    .src(['README.md'])
-    .pipe(markdownDocs('index.html', {
-      layoutStylesheetUrl: '',
-      templatePath: 'docs/index.html'
-    }))
-    .pipe(gulp.dest('docs'));
-});
-
 gulp.task('banner-js', () => {
   return gulp
     .src('docs/js/*.js')
@@ -92,13 +72,37 @@ gulp.task('banner-css', () => {
     .pipe(header(banner, { pkg: pkg }))
     .pipe(gulp.dest('docs/css/'));
 });
+gulp.task('banner',
+  gulp.series(gulp.parallel('banner-js', 'banner-css'))
+);
+
+gulp.task('clean-docs', (done) => {
+  del.sync('docs/**/*');
+  done();
+});
+gulp.task('clean-spec', (done) => {
+  del.sync('build/spec/**/*.js');
+  done();
+});
+gulp.task('clean',
+  gulp.parallel('clean-docs', 'clean-spec')
+);
+
+gulp.task('md2html', () => {
+  return gulp
+    .src(['README.md'])
+    .pipe(markdownDocs('index.html', {
+      layoutStylesheetUrl: '',
+      templatePath: 'docs/index.html'
+    }))
+    .pipe(gulp.dest('docs'));
+});
 
 gulp.task('copy-img', () => {
   return gulp
     .src('src/img/**/*')
     .pipe(gulp.dest('docs/img'));
 });
-
 gulp.task('copy',
   gulp.series(gulp.parallel('copy-img'))
 );
@@ -136,10 +140,10 @@ gulp.task('jasmine', () => {
     .pipe(jasmineBrowser.server())
 });
 
-gulp.task('default',
-  gulp.series('clean', 'md2html', 'copy', 'banner-js', 'banner-css')
+gulp.task('build',
+  gulp.series('md2html', 'copy', 'banner')
 );
 
 gulp.task('spec',
-  gulp.series('clean-spec', 'copy', 'env', 'concat-spec', 'jasmine')
+  gulp.series('md2html', 'copy', 'banner', 'env', 'concat-spec', 'jasmine')
 );

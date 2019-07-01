@@ -41,7 +41,6 @@
     "gulp-header": "^2.0.0",
     "gulp-jasmine-browser": "^4.1.0",
     "gulp-markdown-docs": "^0.1.5",
-    "gulp-strip-banner": "^0.0.2",
     "html-webpack-plugin": "^3.2.0",
     "jasmine-core": "^3.4.0",
     "jasmine-jquery": "^2.1.1",
@@ -72,8 +71,10 @@
     "textcomplete.contenteditable": "^0.1.1"
   },
   "scripts": {
-    "build": "gulp clean; webpack --mode development; webpack --mode production; gulp",
+    "build": "gulp clean-docs; webpack --mode development; webpack --mode production; gulp build",
+    "build-show": "yarn build; yarn show",
     "dev": "webpack --mode development -w",
-    "test": "webpack --mode development; webpack --mode production; gulp spec"
+    "show": "browser-sync start -s 'docs' --port 8080",
+    "test": "gulp clean; webpack --mode development; webpack --mode production; gulp spec"
   }
 }
