@@ -1,4 +1,4 @@
-class CustomizationTab {
+export default class CustomizationTab {
   constructor(palette) {
     this.palette = palette;
     this.initialized = false;

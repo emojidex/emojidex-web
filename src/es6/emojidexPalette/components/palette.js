@@ -5,6 +5,7 @@ import CategoryTab from './tabs/category_tab'
 import IndexTab from './tabs/index_tab'
 import SearchTab from './tabs/search_tab'
 import UserTab from './tabs/user_tab'
+import CustomizationTab from './tabs/customization_tab'
 
 export default class Palette {
   constructor(plugin) {

@@ -1,14 +1,10 @@
 describe('emojidexPalette:Customization', () => {
   beforeAll(done => {
-    clearStorage().then(() => {
-      helperBefore();
-      preparePaletteButtons(done);
-    });
+    beforePalette(done)
   });
 
   afterAll(() => {
-    closePalette();
-    helperAfter();
+    afterPalette(done)
   });
 
   it('changes to a customization tab', done => {
