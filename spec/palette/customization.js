@@ -3,7 +3,7 @@ describe('emojidexPalette:Customization', () => {
     beforePalette(done)
   });
 
-  afterAll(() => {
+  afterAll(done => {
     afterPalette(done)
   });
 

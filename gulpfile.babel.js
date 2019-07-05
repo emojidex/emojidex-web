@@ -6,6 +6,7 @@ import concat from 'gulp-concat';
 import * as jasmineBrowser from 'gulp-jasmine-browser';
 import fs from 'fs-extra';
 import markdownDocs from 'gulp-markdown-docs';
+import watch from 'gulp-watch';
 
 gulp.task('env', (done) => {
   fs.stat('.env', (err, stat) => {
@@ -135,6 +136,7 @@ gulp.task('jasmine', () => {
     'spec/emojidexReplace.js'
   ];
   return gulp.src(testFiles)
+    .pipe(watch(testFiles))
     .pipe(jasmineBrowser.specRunner())
     // Require random flag, ex: localhost:8888/?random=false
     .pipe(jasmineBrowser.server())

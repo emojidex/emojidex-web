@@ -7,7 +7,7 @@ describe("emojidexPalette:Options", () => {
     });
   });
 
-  afterAll(done =>{
+  afterAll(done => {
     afterPalette(done)
   });
 
