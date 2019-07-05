@@ -1,5 +1,5 @@
 // jquery-ui --------
-@import '../../src/vendor/jquery-ui-1.12.1.custom/jquery-ui.min';
+// @import '../../src/vendor/jquery-ui-1.12.1.custom/jquery-ui.min';
 // @import 'jquery-ui';
 
 // bootstrap --------
@@ -58,6 +58,7 @@
   }
 }
 #emojidex-dialog-content {
+  width: 520px !important;
   padding: 5px 10px 10px;
   float: left;
   [class*=-pagination] {
@@ -77,7 +78,7 @@
   .emoji-btn {
     border-radius: 4px;
     padding: 5px;
-    margin: 2px;
+    margin: 3px;
 
     img {
       width: 32px;
@@ -144,6 +145,10 @@
   color: #f76eb3
 }
 
+.emjdx-customization {
+  color: #888
+}
+
 .nav.nav-pills {
   float: none;
   li {
@@ -178,6 +183,46 @@
   }
 }
 
+@mixin detail-view {
+  position: relative;
+  background-color: rgba(255, 255, 255, 1);
+  margin-top: -36px;
+  display: none;
+  width: 100%;
+  border-radius: 4px;
+
+  .user-name, .emoji-name {
+    float: left;
+    line-height: 22px;
+    margin-left: 8px;
+    padding-left: 12px;
+    border-left: 1px #ddd solid;
+  }
+
+  .btn-close {
+    -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=2, mirror=1)";
+    -webkit-transform: scale(-1, 1);
+    -ms-transform: scale(-1, 1);
+    transform: scale(-1, 1);
+    float: left;
+    cursor: pointer;
+    i {
+      color: #ddd;
+      font-size: 20px;
+      line-height: 20px;
+    }
+    &:hover {
+      i {
+        color: #bbb;
+      }
+    }
+  }
+
+  .pagination-container {
+    bottom: 0px;
+  }
+}
+
 #follow-following, #follow-followers {
   .users {
     .btn {
@@ -186,47 +231,89 @@
   }
 
   .user-info {
-    position: relative;
-    background-color: rgba(255, 255, 255, 1);
-    margin-top: -36px;
-    display: none;
-    width: 100%;
+    @include detail-view;
     height: 327px;
-    border-radius: 4px;
-
-    .user-name {
-      float: left;
-      line-height: 22px;
-      margin-left: 8px;
-      padding-left: 12px;
-      border-left: 1px #ddd solid;
-    }
-
-    .btn-close {
-      -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=2, mirror=1)";
-      -webkit-transform: scale(-1, 1);
-      -ms-transform: scale(-1, 1);
-      transform: scale(-1, 1);
-      float: left;
-      cursor: pointer;
-      i {
-        color: #ddd;
-        font-size: 20px;
-        line-height: 20px;
-      }
-      &:hover {
-        i {
-          color: #bbb;
-        }
-      }
-    }
-
-    .pagination-container {
-      bottom: 0px;
-    }
 
     &.on {
       display: block;
     }
+  }
+}
+
+#tab-content-customization {
+  .customization-info {
+    @include detail-view;
+    height: 305px;
+
+    &.on {
+      display: inline-block;
+      padding-top: 15px;
+      margin-top: -60px;
+    }
+
+    .customization-preview {
+      width: 245px;
+      height: 195px;
+      padding-top: 5px;
+      padding-left: 190px;
+      .zwj-emoji img {
+        width: 190px;
+        height: 190px;
+        margin-left: -190px;
+      }
+    }
+
+    .customization-select {
+      width: 245px;
+      height: 195px;
+    }
+  }
+
+  // override
+  @import '../vendor/jquery-ui-1.12.1.custom/jquery-ui';
+  .ui-selectmenu-button.ui-button {
+    width: 16em;
+  }
+  .ui-icon {
+    text-indent: 0;
+  }
+  .ui-menu-item .ui-menu-item-wrapper {
+    height: 32px;
+    padding: 6px 1em 3px 3em;
+    margin: 5px 0px;
+    span.ui-icon {
+      width: 34px;
+      height: 34px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
+  }
+  .ui-icon,
+  .ui-widget-content .ui-icon {
+  	background-image: none;
+  }
+  .ui-widget-header .ui-icon {
+  	background-image: none;
+  }
+  .ui-state-hover .ui-icon,
+  .ui-state-focus .ui-icon,
+  .ui-button:hover .ui-icon,
+  .ui-button:focus .ui-icon {
+  	background-image: none;
+  }
+  .ui-state-active .ui-icon,
+  .ui-button:active .ui-icon {
+  	background-image: none;
+  }
+  .ui-state-highlight .ui-icon,
+  .ui-button .ui-state-highlight.ui-icon {
+  	background-image: none;
+  }
+  .ui-state-error .ui-icon,
+  .ui-state-error-text .ui-icon {
+  	background-image: none;
+  }
+  .ui-button .ui-icon {
+  	background-image: none;
   }
 }

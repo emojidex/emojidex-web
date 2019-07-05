@@ -5,6 +5,7 @@ import CategoryTab from './tabs/category_tab'
 import IndexTab from './tabs/index_tab'
 import SearchTab from './tabs/search_tab'
 import UserTab from './tabs/user_tab'
+import CustomizationTab from './tabs/customization_tab'
 
 export default class Palette {
   constructor(plugin) {
@@ -43,7 +44,7 @@ export default class Palette {
         'ui-dialog': 'emojidex-ui-dialog'
       },
       autoOpen: false,
-      width: 500,
+      width: 520,
       title: 'emojidex',
 
       create(e) {
@@ -58,7 +59,7 @@ export default class Palette {
       },
 
       open(e) {
-        $('.emojidex-ui-dialog').css('min-height', 445);  // height style is ignored, set here.
+        $('.emojidex-ui-dialog').css('min-height', 455);  // height style is ignored, set here.
         $('.ui-dialog :button').blur();
         return $('.nav.nav-pills a').blur();
       }
@@ -80,6 +81,7 @@ export default class Palette {
 
       this.tabs.push(new UserTab(this));
       this.tabs.push(new SearchTab(this));
+      this.tabs.push(new CustomizationTab(this));
 
       for (let j = 0; j < this.tabs.length; j++) {
         let tab = this.tabs[j];
