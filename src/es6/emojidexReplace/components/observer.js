@@ -1,80 +1,82 @@
 import Replacer from './replacer'
 
 export default class Observer {
-  constructor(plugin){
-    this.plugin = plugin;
-    this.dom_observer = undefined;
-    this.queues = [];
-    this.replacer = new Replacer(plugin);
-    this.flagReEntry = true;
+  constructor(plugin) {
+    this.plugin = plugin
+    this.domObserver = undefined
+    this.queues = []
+    this.replacer = new Replacer(plugin)
+    this.flagReEntry = true
   }
 
   doQueue() {
-    return new Promise((resolve, reject) => {
-      let body = $('body')[0];
-      if (this.queues.indexOf(body) !== -1) {
-        this.queues = [];
-        this.replacer.loadEmoji($(body)).then(() => resolve());
-      } else {
-        let queue_limit = 100;
-        let checkComplete = () => {
-          if (this.queues.length > 0 && queue_limit-- > 0) {
-            let queue = this.queues.pop();
+    return new Promise(resolve => {
+      const body = $('body')[0] // eslint-disable-line no-undef
+      if (this.queues.indexOf(body) === -1) {
+        let queueLimit = 100
+        const checkComplete = () => {
+          if (this.queues.length > 0 && queueLimit-- > 0) {
+            const queue = this.queues.pop()
             this.replacer.loadEmoji(queue).then(() => {
               checkComplete()
-            });
+            })
           } else {
-            resolve();
+            resolve()
           }
-        };
-        checkComplete();
+        }
+
+        checkComplete()
+      } else {
+        this.queues = []
+        this.replacer.loadEmoji($(body)).then(() => resolve()) // eslint-disable-line no-undef
       }
-    });
+    })
   }
 
   domObserve() {
-    let config = {
+    const config = {
       childList: true,
       subtree: true,
       characterData: true
-    };
-    return this.dom_observer.observe(this.plugin.element[0], config);
+    }
+    return this.domObserver.observe(this.plugin.element[0], config)
   }
 
   disconnect() {
-    this.dom_observer.disconnect();
+    this.domObserver.disconnect()
   }
 
   reloadEmoji() {
     this.replacer.loadEmoji().then(() => {
-      if (typeof this.plugin.options.onComplete === "function") {
-        this.plugin.options.onComplete(this.plugin.element);
+      if (typeof this.plugin.options.onComplete === 'function') {
+        this.plugin.options.onComplete(this.plugin.element)
       }
 
-      this.dom_observer = new MutationObserver(mutations => {
-        if(this.flagReEntry) {
-          this.disconnect();
-          this.flagReEntry = false;
+      this.domObserver = new MutationObserver(mutations => {
+        if (this.flagReEntry) {
+          this.disconnect()
+          this.flagReEntry = false
           for (let i = 0; i < mutations.length; i++) {
-            let mutation = mutations[i];
+            const mutation = mutations[i]
             if (mutation.type === 'childList') {
               if (mutation.addedNodes) {
                 for (let j = 0; j < mutation.addedNodes.length; j++) {
-                  let addedNode = mutation.addedNodes[j];
+                  const addedNode = mutation.addedNodes[j]
                   if (this.queues.indexOf(addedNode) === -1) {
-                    this.queues.push(addedNode);
+                    this.queues.push(addedNode)
                   }
                 }
               }
             }
           }
+
           this.doQueue().then(() => {
-            this.flagReEntry = true;
-            this.domObserve();
-          });
+            this.flagReEntry = true
+            this.domObserve()
+          })
         }
-      });
-      this.domObserve();
-    });
+      })
+      this.domObserve()
+    })
   }
 }
