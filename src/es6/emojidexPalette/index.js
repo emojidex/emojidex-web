@@ -10,25 +10,25 @@
 
 import Palette from './components/palette'
 
-const pluginName = "emojidexPalette";
+const pluginName = 'emojidexPalette'
 const defaults = {
   onComplete: undefined,
   onEmojiButtonClicked: undefined,
   paletteEmojisLimit: 50
-};
+}
 
 export default class EmojidexPalette {
   constructor(element, options) {
-    this.element = element;
-    this.options = $.extend({}, defaults, options);
-    this._defaults = defaults;
-    this._name = pluginName;
+    this.element = element
+    this.options = $.extend({}, defaults, options) // eslint-disable-line no-undef
+    this._defaults = defaults
+    this._name = pluginName
 
     // start: Plugin --------
-    this.palette = new Palette(this);
+    this.palette = new Palette(this)
   }
-  
+
   static getName() {
-    return pluginName;
+    return pluginName
   }
 }
