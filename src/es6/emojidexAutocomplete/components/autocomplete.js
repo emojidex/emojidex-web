@@ -4,79 +4,81 @@ import Contenteditable from 'textcomplete.contenteditable'
 
 export default class AutoComplete {
   constructor(plugin) {
-    this.plugin = plugin;
+    this.plugin = plugin
     this.EC = new EmojidexClient({
-      onReady: (EC) => {
-        this.EC.User.login('session');
-        this.setAutoComplete();
+      onReady: () => {
+        this.EC.User.login('session')
+        this.setAutoComplete()
       }
-    });
+    })
   }
 
   setAutoComplete() {
-    let editor;
-    let className = "dropdown-menu textcomplete-dropdown ";
-    if (this.plugin.element.contentEditable === 'true') {
-      className += 'dropdown-contenteditable';
-      editor = new Contenteditable(this.plugin.element);
-      editor.applySearchResult = function(searchResult) {
-        const before = this.getBeforeCursor();
-        const after = this.getAfterCursor();
-        if (before != null && after != null) {
-          const replace = searchResult.replace(before, after);
+    let editor
+    let className = 'dropdown-menu textcomplete-dropdown '
+    if (this.plugin.element.content_editable === 'true') { // eslint-disable-line camelcase
+      className += 'dropdown-contenteditable'
+      editor = new Contenteditable(this.plugin.element)
+      editor.applySearchResult = function (searchResult) {
+        const before = this.getBeforeCursor()
+        const after = this.getAfterCursor()
+        if (before !== null && after !== null) {
+          const replace = searchResult.replace(before, after)
           if (Array.isArray(replace)) {
-            const range = this.getRange();
-            range.selectNode(range.startContainer);
-            this.document.execCommand('insertHTML', false, replace[0] + replace[1]);
-            range.collapse(false);
+            const range = this.getRange()
+            range.selectNode(range.startContainer)
+            this.document.execCommand('insertHTML', false, replace[0] + replace[1])
+            range.collapse(false)
           }
         }
       }
     } else {
-      className += 'dropdown-textarea';
-      editor = new Textarea(this.plugin.element);
+      className += 'dropdown-textarea'
+      editor = new Textarea(this.plugin.element)
     }
-    const textcomplete = new Textcomplete(editor, { dropdown: { className: className } });
+
+    const textcomplete = new Textcomplete(editor, { dropdown: { className } })
     textcomplete.register(
       [{
         match: /[：:]([^ ：:;@&#~\/\!\$\+\?\%\*\f\n\r]+)$/,
         search: (term, callback) => {
-          this.EC.Search.search(term, (response) => {
-            let replaced_term = term.replace(/_/g, ' ');
-            callback($.map(response, (emoji) => {
-              return emoji.code.indexOf(replaced_term) !== -1 ? emoji : null;
-            }));
-          });
+          this.EC.Search.search(term, response => {
+            const replacedTerm = term.replace(/_/g, ' ')
+            callback($.map(response, emoji => { // eslint-disable-line no-undef
+              return emoji.code.indexOf(replacedTerm) === -1 ? null : emoji
+            }))
+          })
         },
-        template: (emoji) => {
-          let emoji_tag_string = this.EC.Util.emojiToHTML(emoji)
-          let emoji_tag = $(emoji_tag_string)[0];
-          if(emoji_tag.nodeName == 'A') {
-            emoji_tag_string = emoji_tag.innerHTML;
+        template: emoji => {
+          let emojiTagString = this.EC.Util.emojiToHTML(emoji)
+          const emojiTag = $(emojiTagString)[0] // eslint-disable-line no-undef
+          if (emojiTag.nodeName === 'A') {
+            emojiTagString = emojiTag.innerHTML
           }
-          return `${emoji_tag_string} ${emoji.code.replace(/\s/g, '_')}`;
+
+          return `${emojiTagString} ${emoji.code.replace(/\s/g, '_')}`
         },
-        replace: (emoji) => {
+        replace: emoji => {
           this.EC.Data.storage.update_cache('emojidex').then(() => {
-            if (this.EC.Data.storage.get('emojidex.auth_info') != null) {
-              this.EC.User.syncUserData();
-              this.EC.User.History.set(emoji.code.replace(/\s/g, '_'));
+            if (this.EC.Data.storage.get('emojidex.auth_info') !== null) {
+              this.EC.User.syncUserData()
+              this.EC.User.History.set(emoji.code.replace(/\s/g, '_'))
             }
           })
-          if (this.plugin.element.contentEditable === 'true' && this.plugin.options.content_editable.insertImg) {
+          if (this.plugin.element.content_editable === 'true' && this.plugin.options.contentEditable.insertImg) { // eslint-disable-line camelcase
             return `${this.EC.Util.emojiToHTML(emoji)} `
-          } else {
-            return `:${emoji.code.replace(/\s/g, '_')}:`;
           }
+
+          return `:${emoji.code.replace(/\s/g, '_')}:`
         },
-        index: 1,
+        index: 1
       }],
       {
         maxCount: this.plugin.options.listLimit
       }
-    );
-    if (typeof this.plugin.options.onComplete === "function") {
-      this.plugin.options.onComplete(this.plugin.element);
+    )
+    if (typeof this.plugin.options.onComplete === 'function') {
+      this.plugin.options.onComplete(this.plugin.element)
     }
   }
 }
