@@ -66,7 +66,16 @@ describe('emojidexPalette:Customization', () => {
           expect($(data.vals[0]).find('.customization-preview').length).toBeTruthy();
           expect($(data.vals[0]).find('.customization-select').length).toBeTruthy();
           removeWatch($('#tab-content-customization'), 'content_customization');
-          done();
+          $('.customization-preview').watch({
+            id: 'customization_preview',
+            properties: 'prop_innerHTML',
+            watchChildren: true,
+            callback(data) {
+              expect($(data.vals[0]).find('img').length).toBeTruthy();
+              removeWatch($('.customization-preview'), 'customization_preview');
+              done();
+            }
+          })
         }
       }
     });
