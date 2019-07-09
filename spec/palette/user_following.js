@@ -1,85 +1,98 @@
-describe("emojidexPalette:User:Following", () => {
+/* eslint-disable no-undef */
+describe('emojidexPalette:User:Following', () => {
   beforeAll(done => {
     beforePalette(done)
-  });
+  })
 
-  afterAll(done =>{
+  afterAll(done => {
     afterPalette(done)
-  });
+  })
 
   it('show following tab [Requires a user account and following user]', done => {
-    if (typeof user_info === 'undefined' || user_info === null) { pending(); }
+    if (typeof userInfo === 'undefined' || userInfo === null) {
+      pending()
+    }
 
     $('#tab-content-user').watch({
       id: 'watcher',
       properties: 'prop_innerHTML',
       watchChildren: true,
-      callback(data, i) {
-        removeWatch($('#tab-content-user'), 'watcher');
+      callback() {
+        removeWatch($('#tab-content-user'), 'watcher')
 
         specTimer(3000).then(() => {
-          $('#tab-user-following a').click();
+          $('#tab-user-following a').click()
           return specTimer(1000)
         }).then(() => {
-          expect($('#follow-following .users .btn').length).toBeTruthy();
-          done();
-        });
+          expect($('#follow-following .users .btn').length).toBeTruthy()
+          done()
+        })
       }
-    });
+    })
 
     showPalette(() => {
-      loginUser(user_info.auth_user, user_info.password);
-    });
-  });
+      loginUser(userInfo.auth_user, userInfo.password)
+    })
+  })
 
   it('show following user info [Requires a user account and following user]', done => {
-    if (typeof user_info === 'undefined' || user_info === null) { pending(); }
+    if (typeof userInfo === 'undefined' || userInfo === null) {
+      pending()
+    }
+
     $('#follow-following .user-info').watch({
-      id: "watcher",
+      id: 'watcher',
       properties: 'attr_class',
-      callback(data, i) {
-        expect($('#follow-following .user-info.on .emoji-btn').length).toBeTruthy();
-        removeWatch($('.user-info'), 'watcher');
-        done();
+      callback() {
+        expect($('#follow-following .user-info.on .emoji-btn').length).toBeTruthy()
+        removeWatch($('.user-info'), 'watcher')
+        done()
       }
-    });
+    })
 
     specTimer(1000).then(() => {
-      $($('#follow-following .users .btn')[0]).click();
-    });
-  });
+      $($('#follow-following .users .btn')[0]).click()
+    })
+  })
 
   it('show following user emoji next [Requires a user account and following user]', done => {
-    if (typeof user_info === 'undefined' || user_info === null) { pending(); }
-    const selectorCurrentUserInfo = '#follow-following .user-info.on';
+    if (typeof userInfo === 'undefined' || userInfo === null) {
+      pending()
+    }
+
+    const selectorCurrentUserInfo = '#follow-following .user-info.on'
     $(selectorCurrentUserInfo).watch({
-      id: "watcher",
+      id: 'watcher',
       properties: 'prop_innerHTML',
       watchChildren: true,
-      callback(data, i) {
-        expect($(`${selectorCurrentUserInfo} .palette-num span`).text().charAt(0)).toBe('2');
-        removeWatch($('.user-info'), 'watcher');
-        done();
+      callback() {
+        expect($(`${selectorCurrentUserInfo} .palette-num span`).text().charAt(0)).toBe('2')
+        removeWatch($('.user-info'), 'watcher')
+        done()
       }
-    });
+    })
 
-    $($(`${selectorCurrentUserInfo} .palette-pager`)[1]).click();
-  });
+    $($(`${selectorCurrentUserInfo} .palette-pager`)[1]).click()
+  })
 
   it('show following user emoji previous [Requires a user account and following user]', done => {
-    if (typeof user_info === 'undefined' || user_info === null) { pending(); }
-    const selectorCurrentUserInfo = '#follow-following .user-info.on';
+    if (typeof userInfo === 'undefined' || userInfo === null) {
+      pending()
+    }
+
+    const selectorCurrentUserInfo = '#follow-following .user-info.on'
     $(selectorCurrentUserInfo).watch({
-      id: "watcher",
+      id: 'watcher',
       properties: 'prop_innerHTML',
       watchChildren: true,
-      callback(data, i) {
-        expect($(`${selectorCurrentUserInfo} .palette-num span`).text().charAt(0)).toBe('1');
-        removeWatch($('.user-info'), 'watcher');
-        done();
+      callback() {
+        expect($(`${selectorCurrentUserInfo} .palette-num span`).text().charAt(0)).toBe('1')
+        removeWatch($('.user-info'), 'watcher')
+        done()
       }
-    });
+    })
 
-    $($(`${selectorCurrentUserInfo} .palette-pager`)[0]).click();
-  });
-});
+    $($(`${selectorCurrentUserInfo} .palette-pager`)[0]).click()
+  })
+})
+/* eslint-enable no-undef */
