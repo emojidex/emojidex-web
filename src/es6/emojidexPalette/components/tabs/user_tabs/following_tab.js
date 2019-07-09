@@ -1,4 +1,4 @@
-class FollowingTab {
+export default class FollowingTab {
   constructor(user_tab) {
     this.EC = user_tab.palette.EC;
     this.palette = user_tab.palette;
@@ -74,13 +74,13 @@ class FollowingTab {
     }
 
     const prev_func = () => {
-      option = {page: meta.page - 1};
+      let option = {page: meta.page - 1};
       if(option.page > 0) {
         this.setUserEmojisInfo(user_info, option);
       }
     }
     const next_func = () => {
-      option = {page: meta.page + 1};
+      let option = {page: meta.page + 1};
       if(option.page <= meta.max_page) {
         this.setUserEmojisInfo(user_info, option);
       }

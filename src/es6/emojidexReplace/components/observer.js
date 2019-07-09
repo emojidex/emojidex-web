@@ -1,4 +1,6 @@
-class Observer {
+import Replacer from './replacer'
+
+export default class Observer {
   constructor(plugin){
     this.plugin = plugin;
     this.dom_observer = undefined;

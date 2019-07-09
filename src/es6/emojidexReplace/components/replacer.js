@@ -1,4 +1,4 @@
-class Replacer {
+export default class Replacer {
   constructor(plugin) {
     this.plugin = plugin;
     this.targets = [];

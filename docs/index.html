@@ -4,12 +4,12 @@
     <meta charset="utf-8">
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <title>emojidex-web</title>
-    <meta content="" name="description">
+    <meta content name="description">
     <meta content="width=device-width" name="viewport">
-    <link href="css/document.min.css" rel="stylesheet">
+    <link href="css/document.css" rel="stylesheet">
     <link href="css/emojidex.css" rel="stylesheet">
-    <script src="resources/jquery.min.js"></script>
-    <script src="resources/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
     <script src="js/emojidex.js"></script>
     <script>
       (function() {
@@ -26,7 +26,6 @@
             $("#palette-input").emojidexPalette();
           };
         })(this));
-      
       }).call(this);
       
     </script>
@@ -142,8 +141,8 @@ Orginal Style from ethanschoonover.com/solarized (c) Jeremy Hull <sourdrums@gmai
     <div class="container">
       <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container">
-          <div class="navbar-header">
-            <a href="#"><img src="img/logo.png"></a><button class="navbar-toggle collapsed" data-target="#navbar-top" data-toggle="collapse" type="button"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+          <div class="navbar-header"><a href="#"><img src="img/logo.png"></a>
+            <button class="navbar-toggle collapsed" data-target="#navbar-top" data-toggle="collapse" type="button"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
           </div>
         </div>
       </nav>
@@ -151,55 +150,31 @@ Orginal Style from ethanschoonover.com/solarized (c) Jeremy Hull <sourdrums@gmai
     <div class="container">
       <div class="row">
         <div class="col-md-12">
-          <h1>
-            emojidex-web examples
-          </h1>
+          <h1>emojidex-web examples</h1>
         </div>
       </div>
       <div class="row">
         <div class="col-md-12">
-          <h3>
-            emojidexReplace :kissing_heart:
-          </h3>
+          <h3>emojidexReplace :kissing_heart:</h3>
           <hr class="mt-s mb-m">
-          <div class="emojidex_replace">
-            Auto Replace examples.<br>(Check the <a href="https://github.com/emojidex/emojidex-web/blob/master/dist/index.html" target="_blank">HTML</a> or <a href="https://github.com/emojidex/emojidex-web/blob/master/src/slim/index.slim" target="_blank">SLIM</a> sources)<br><br>
-            <h5>
-              UTF moji codes to emoji:
-            </h5>
-            &#x2764;&#x1F6C5;&#x1F604;&#x1F621;&#x1F48C;&#x1F48C;&#x1F608;&#x1F44D;&#x1F4A9;<br>&#x1F499;&#x1F499;&#x1F499;
-            <h5 class="mt-xl">
-              Acknowledged ZWJ emoji:
-            </h5>
-            &#x1F468;&#x200D;&#x1F469;&#x200D;&#x1F466;
-            <h5 class="mt-xl">
-              :code: to emoji:
-            </h5>
-            &#x2764;:octopus::boar:: boar::frog:\:hand_salute: no_match:&#x1F604;::no match::heart eyes(wh)::1234:
-            <h5 class="mt-xl">
-              R-18 checks (should not load when not logged in)
-            </h5>
-            :breasts(bk):
-            <h5 class="mt-xl">
-              emoji with link enabled
-            </h5>
-            :emojidex:
+          <div class="emojidex_replace">Auto Replace examples.<br>(Check the<a href="https://github.com/emojidex/emojidex-web/blob/master/dist/index.html" target="_blank">HTML</a> or<a href="https://github.com/emojidex/emojidex-web/blob/master/src/slim/index.slim" target="_blank">SLIM</a> sources)<br><br>
+            <h5>UTF moji codes to emoji:</h5>&#x2764;&#x1F6C5;&#x1F604;&#x1F621;&#x1F48C;&#x1F48C;&#x1F608;&#x1F44D;&#x1F4A9;<br>&#x1F499;&#x1F499;&#x1F499;
+            <h5 class="mt-xl">Acknowledged ZWJ emoji:</h5>&#x1F468;&#x200D;&#x1F469;&#x200D;&#x1F466;
+            <h5 class="mt-xl">:code: to emoji:</h5>&#x2764;:octopus::boar:: boar::frog:\:hand_salute: no_match:&#x1F604;::no match::heart eyes(wh)::1234:
+            <h5 class="mt-xl">R-18 checks (should not load when not logged in)</h5>:breasts(bk):
+            <h5 class="mt-xl">emoji with link enabled</h5>:emojidex:
           </div>
         </div>
       </div>
       <div class="row mt-xl">
         <div class="col-md-12">
-          <h3>
-            emojidexAutocomplete :laughing:
-          </h3>
-          <hr class="mt-s mb-m&#xDF;">
+          <h3>emojidexAutocomplete :laughing:</h3>
+          <hr class="mt-s mb-m">
           <div class="row mt-m">
             <div class="col-md-12">
-              <h4>
-                :right wing:Plain Text:left wing:
-              </h4>
+              <h4>:right wing:Plain Text:left wing:</h4>
               <form role="form">
-                <div class="form-group&#xDF;">
+                <div class="form-group">
                   <textarea class="emojidex-plain_text form-control" rows="5">Try typing a colon and the start of a word to start a code search, like &quot;:tes&quot;.</textarea>
                 </div>
               </form>
@@ -207,47 +182,33 @@ Orginal Style from ethanschoonover.com/solarized (c) Jeremy Hull <sourdrums@gmai
           </div>
           <div class="row">
             <div class="col-md-12">
-              <h4>
-                :86 taillight(left):Content Editable:86 taillight(right):
-              </h4>
-              <div class="emojidex-content_editable inputor" contenteditable="true">
-                Try typing a colon and the start of a word to start a code search, like &quot;:tes&quot;.
-              </div>
+              <h4>:86 taillight(left):Content Editable:86 taillight(right):</h4>
+              <div class="emojidex-content_editable inputor" contenteditable="true">Try typing a colon and the start of a word to start a code search, like &quot;:tes&quot;.</div>
             </div>
           </div>
         </div>
       </div>
       <div class="row mt-xl">
         <div class="col-md-12">
-          <h3>
-            emojidexPalette :blush:
-          </h3>
+          <h3>emojidexPalette :blush:</h3>
           <hr class="mt-s mb-m">
-          <h4>
-            add palette to element. (ex: button)
-          </h4>
+          <h4>add palette to element. (ex: button)</h4>
           <div class="emojidex-palette mt-m">
             <button class="btn btn-lg btn-primary" id="palette-btn" type="button">Open emoji palette</button>
           </div>
-          <h4>
-            add palette button to the right-top of input.
-          </h4>
+          <h4>add palette button to the right-top of input.</h4>
           <input class="emojidex-input form-control" id="palette-input" type="text">
         </div>
       </div>
       <div class="row mt-xl">
         <div class="col-md-12">
-          <h3>
-            HOW TO: use emojidex web on your site :movie_camera:
-          </h3>
+          <h3>HOW TO: use emojidex web on your site :movie_camera:</h3>
           <iframe allowfullscreen frameborder="0" height="315" src="https://www.youtube.com/embed/sco-oKNM8MI" width="560"></iframe>
         </div>
       </div>
       <div class="row" style="margin-top: 64px">
         <div class="col-md-12">
-          <h3>
-            README :robot face:
-          </h3>
+          <h3>README :robot face:</h3>
           <hr class="mt-s mb-m">
           <section class="doc-content"><section class="doc-section"><article class="doc-article"><a class="doc-nav-anchor" name="undefined"></a><p>By default all emoji assets are dynamically loaded from the emojidex CDN and dynamically
 cached by the client. There is no need to store any assets on your own server or bundle
@@ -400,12 +361,13 @@ cd emojidex-web
 <p>There are two types of specs: regular specs that use the test account and specs that require a
 premium account with R-18 enabled. As a developer you are eligable to receive a complimentary
 upgrade to a premium account if you are working on either an emojidex package or module or
-integration of emojidex in your own software. Simply contact info@emojidex.com with the subject
+integration of emojidex in your own software. Simply contact <a href="mailto:info@emojidex.com">info@emojidex.com</a> with the subject
 &quot;Developer Account&quot; and list the following details:</p>
 <ol>
 <li>Your username on emojidex</li>
 <li>The project(s) you intend to work on</li>
 </ol>
+<p><strong>Testing URL: localhost:8888/?random=false</strong></p>
 <h2 id="-env-optional-">.env (optional)</h2>
 <p>After obtaining a permium account you can use it for testing. To do this you need to create a
 file named &apos;.env&apos; with the following information:</p>

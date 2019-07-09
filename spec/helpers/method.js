@@ -1,16 +1,22 @@
 function helperBefore() {
-  jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
   // TODO: fixtureの読み込み方法
   // jasmine.getFixtures().fixturesPath = 'build/spec/fixture/';
   // $('body').append(`<div id='spec-wrap'>${readFixtures('index.html')}</div>`);
-
-  if ($('#spec-wrap').length === 0) {
-    $('body').append(`<div id='spec-wrap'>${html}</div>`);
-  }
+  return new Promise((resolve) => {
+    if ($('#spec-wrap').length === 0) {
+      $('body').append(`<div id='spec-wrap'>${html}</div>`);
+      resolve()
+    } else {
+      resolve()
+    }
+  })
 }
 
 function helperAfter() {
-  $('#spec-wrap').remove();
+  return new Promise((resolve) => {
+    $('#spec-wrap').remove();
+    resolve()
+  })
 }
 
 function specTimer(time) {
@@ -56,15 +62,18 @@ function simulateTypingIn($inputor, pos) {
 function clearStorage() {
   let CSC = new CrossStorageClient('https://www.emojidex.com/hub',
     {frameId: 'emojidex-client-storage-hub'});
-  return CSC.onConnect().then(() => {
+  return CSC.onReadyFrame().then(() => {
     return CSC.clear();
   });
 }
 
 function closePalette() {
   // $('#spec-wrap').remove(); してもパレットが残ることがあるため
-  $('button.pull-right[aria-label="Close"]').click();
-  $('#emojidex-emoji-palette').remove();
+  return new Promise((resolve) => {
+    $('button.pull-right[aria-label="Close"]').click();
+    $('#emojidex-emoji-palette').remove();
+    resolve()
+  })
 }
 
 function showPalette(callback) {
@@ -89,7 +98,9 @@ function preparePaletteButtons(done, options) {
     onComplete: () => {
       $("#palette-input").emojidexPalette({
         paletteEmojisLimit: limitForSpec,
-        onComplete: () => { done(); }
+        onComplete: () => {
+          specTimer(3000).then(() => {done()})
+        }
       });
     }
   });
@@ -102,4 +113,20 @@ function loginUser(user, password) {
     $('#palette-emoji-password-input').val(password);
     $('#palette-emoji-login-submit').click();
   });
+}
+
+function beforePalette(done) {
+  clearStorage().then(() => {
+    return helperBefore();
+  }).then(() => {
+    preparePaletteButtons(done);
+  });
+}
+
+function afterPalette(done) {
+  closePalette().then(() => {
+    return helperAfter();
+  }).then(() => {
+    done();
+  })
 }

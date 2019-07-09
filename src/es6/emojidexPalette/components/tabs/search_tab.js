@@ -1,4 +1,4 @@
-class SearchTab {
+export default class SearchTab {
   constructor(palette) {
     this.palette = palette;
     this.initialized = false;

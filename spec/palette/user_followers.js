@@ -1,14 +1,10 @@
 describe("emojidexPalette:User:Followers", () => {
   beforeAll(done => {
-    clearStorage().then(() => {
-      helperBefore();
-      preparePaletteButtons(done);
-    });
+    beforePalette(done)
   });
 
-  afterAll(() => {
-    closePalette();
-    helperAfter();
+  afterAll(done =>{
+    afterPalette(done)
   });
 
   it('show followers tab [Requires a premium user account and followers user]', done => {
@@ -19,20 +15,14 @@ describe("emojidexPalette:User:Followers", () => {
       properties: 'prop_innerHTML',
       watchChildren: true,
       callback(data, i) {
-        specTimer(1000).then(() => {
-          removeWatch($('#tab-content-user'), 'watcher');
+        removeWatch($('#tab-content-user'), 'watcher');
 
-          $('#follow-followers').watch({
-            id: "watcher",
-            properties: 'attr_class',
-            callback(data, i) {
-              expect($('#follow-followers .users .btn').length).toBeTruthy();
-              removeWatch($('#follow-followers'), 'watcher');
-              done();
-            }
-          });
-
+        specTimer(3000).then(() => {
           $('#tab-user-followers a').click();
+          return specTimer(1000)
+        }).then(() => {
+          expect($('#follow-followers .users .btn').length).toBeTruthy();
+          done();
         });
       }
     });

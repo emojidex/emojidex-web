@@ -1,4 +1,4 @@
-class CategoryTab {
+export default class CategoryTab {
   constructor(palette, category, length) {
     this.palette = palette;
     this.initialized = false;

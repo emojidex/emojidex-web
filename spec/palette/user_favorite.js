@@ -1,14 +1,10 @@
 describe("emojidexPalette:User:Favorite", () => {
   beforeAll(done => {
-    clearStorage().then(() => {
-      helperBefore();
-      preparePaletteButtons(done);
-    });
+    beforePalette(done)
   });
 
-  afterAll(() => {
-    closePalette();
-    helperAfter();
+  afterAll(done =>{
+    afterPalette(done)
   });
 
   it('show favorite tab [Requires a premium user account]', done => {
