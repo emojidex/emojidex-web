@@ -1,5 +1,5 @@
 export default class CategoryTab {
-  constructor(palette, category,) {
+  constructor(palette, category) {
     this.palette = palette
     this.initialized = false
     this.sortType = 'score'
@@ -13,7 +13,7 @@ export default class CategoryTab {
   }
 
   setCategory(categoryName) {
-    if (this.tabData !== null) {
+    if (this.tabData) {
       this.palette.EC.Categories.calledData = this.tabData
       return this.palette.EC.Categories.calledData
     }
@@ -45,8 +45,7 @@ export default class CategoryTab {
         const pagination = this.palette.getPagination('category', prevFunc, nextFunc, curPage, maxPage)
         pagination.append(this.palette.getSorting(this))
         return this.tabContent.append(pagination)
-      }
-      ,
+      },
       { sort: this.sortType }
     )
   }

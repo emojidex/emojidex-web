@@ -20,10 +20,7 @@ export default class HistoryTab {
   createPagination() {
     const { meta } = this.EC.User.History
     const curPage = meta.total_count === 0 ? 0 : meta.page
-    let maxPage = curPage === 0 ? 0 : Math.ceil(meta.total_count / this.EC.limit)
-    if (!this.EC.User.authInfo.premium) {
-      maxPage = 1
-    }
+    const maxPage = curPage === 0 ? 0 : Math.ceil(meta.total_count / this.EC.limit)
 
     const callback = response => {
       this.tabPane.children().remove()

@@ -14,14 +14,12 @@ export default class SearchTab {
       if (e.keyCode === 13) {
         return this.searchEmojiInput()
       }
-    }
-    )
+    })
 
     const searchButton = $('<div class="btn btn-primary" id="palette-emoji-search-submit"><span class="glyphicon glyphicon-search"></span></div>')
     searchButton.click(() => {
       return this.searchEmojiInput()
-    }
-    )
+    })
     tabContent.find('.input-group-btn').append(searchButton)
 
     return tabContent

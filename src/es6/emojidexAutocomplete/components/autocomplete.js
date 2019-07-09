@@ -16,7 +16,7 @@ export default class AutoComplete {
   setAutoComplete() {
     let editor
     let className = 'dropdown-menu textcomplete-dropdown '
-    if (this.plugin.element.content_editable === 'true') { // eslint-disable-line camelcase
+    if (this.plugin.element.isContentEditable) {
       className += 'dropdown-contenteditable'
       editor = new Contenteditable(this.plugin.element)
       editor.applySearchResult = function (searchResult) {
@@ -40,7 +40,7 @@ export default class AutoComplete {
     const textcomplete = new Textcomplete(editor, { dropdown: { className } })
     textcomplete.register(
       [{
-        match: /[：:]([^ ：:;@&#~\/\!\$\+\?\%\*\f\n\r]+)$/,
+        match: /[：:]([^ ：:;@&#~\/\!\$\+\?\%\*\f\n\r]+)$/, // eslint-disable-line no-useless-escape
         search: (term, callback) => {
           this.EC.Search.search(term, response => {
             const replacedTerm = term.replace(/_/g, ' ')
@@ -59,13 +59,14 @@ export default class AutoComplete {
           return `${emojiTagString} ${emoji.code.replace(/\s/g, '_')}`
         },
         replace: emoji => {
-          this.EC.Data.storage.update_cache('emojidex').then(() => {
-            if (this.EC.Data.storage.get('emojidex.auth_info') !== null) {
+          this.EC.Data.storage.updateCache('emojidex').then(() => {
+            const authInfo = this.EC.Data.storage.get('emojidex.auth_info')
+            if (authInfo !== null && authInfo.token !== null) {
               this.EC.User.syncUserData()
               this.EC.User.History.set(emoji.code.replace(/\s/g, '_'))
             }
           })
-          if (this.plugin.element.content_editable === 'true' && this.plugin.options.contentEditable.insertImg) { // eslint-disable-line camelcase
+          if (this.plugin.element.isContentEditable && this.plugin.options.contentEditable.insertImg) {
             return `${this.EC.Util.emojiToHTML(emoji)} `
           }
 

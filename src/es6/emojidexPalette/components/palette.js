@@ -115,7 +115,7 @@ export default class Palette {
         alt: `${emoji.code}`,
         title: `${emoji.code}`,
         class: 'img-responsive center-block',
-        src: `${this.EC.cdn_url}px32/${emoji.code.replace(/\s/g, '_')}.png`
+        src: `${this.EC.cdnUrl}px32/${emoji.code.replace(/\s/g, '_')}.png`
       })
 
       let clickFunc
@@ -214,26 +214,23 @@ export default class Palette {
   }
 
   toggleSorting() {
-    if (this.EC.User.authInfo.premium) {
-      return (() => {
-        const result = []
-        const iterable = this.getInitializedTabs()
-        for (let i = 0; i < iterable.length; i++) {
-          const tab = iterable[i]
-          let item
-          if (!tab.tabContent.find('#sort-selector').length) {
-            item = tab.tabContent.find('ul.pagination').after(this.getSorting(tab))
-          }
-
-          result.push(item)
+    if (this.EC.User.authInfo.premium || this.EC.User.authInfo.pro) {
+      const result = []
+      const iterable = this.getInitializedTabs()
+      for (let i = 0; i < iterable.length; i++) {
+        const tab = iterable[i]
+        let item
+        if (!tab.tabContent.find('#sort-selector').length) {
+          item = tab.tabContent.find('ul.pagination').after(this.getSorting(tab))
         }
 
-        return result
-      })()
+        result.push(item)
+      }
+
+      return result
     }
 
-    return this.getInitializedTabs().map(tab =>
-      this.removeSorting(tab))
+    return this.getInitializedTabs().map(tab => this.removeSorting(tab))
   }
 
   getInitializedTabs() {
@@ -249,7 +246,7 @@ export default class Palette {
   }
 
   getSorting(targetTab) {
-    if (!this.EC.User.authInfo.premium) {
+    if (!this.EC.User.authInfo.premium && !this.EC.User.authInfo.pro) {
       return ''
     }
 

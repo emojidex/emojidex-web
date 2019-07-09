@@ -70,9 +70,6 @@ export default class FollowersTab {
 
   setPagination(userInfo) {
     const meta = userInfo.data()
-    if (!this.EC.User.authInfo.premium) {
-      meta.maxPage = 1
-    }
 
     const prevFunc = () => {
       const option = { page: meta.page - 1 }

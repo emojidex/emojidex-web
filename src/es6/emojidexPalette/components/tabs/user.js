@@ -29,9 +29,9 @@ export default class UserTab {
     })
     tabContent.append(loginButton)
 
-    if (this.palette.EC.Data.storage.hub_cache.emojidex.auth_info !== undefined &&
-      this.palette.EC.Data.storage.hub_cache.emojidex.auth_info.status === 'verified') {
-      const { authInfo } = this.palette.EC.Data.storage.hub_cache.emojidex
+    if (this.palette.EC.Data.storage.hubCache.emojidex.auth_info !== undefined &&
+      this.palette.EC.Data.storage.hubCache.emojidex.auth_info.status === 'verified') {
+      const authInfo = this.palette.EC.Data.storage.hubCache.emojidex.auth_info
       this.login(authInfo.user, authInfo.token, 'token')
     }
 

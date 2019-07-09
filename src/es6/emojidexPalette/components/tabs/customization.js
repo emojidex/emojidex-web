@@ -79,7 +79,7 @@ export default class CustomizationTab {
           if (component[j]) {
             optionPromises.push(new Promise(optionResolve => {
               this.palette.EC.Search.find(component[j], result => {
-                const url = `https://${this.palette.EC.env.cdn_addr}/emoji/px32/${emoji.customizations[0].base}/${i}/${this.palette.EC.Util.escapeTerm(result.code)}.png`
+                const url = `https://${this.palette.EC.env.cdnAddr}/emoji/px32/${emoji.customizations[0].base}/${i}/${this.palette.EC.Util.escapeTerm(result.code)}.png`
                 optionResolve({ order: j, element: $(`<option value="${result.moji}" data-url="${url}">${result.code}</option>`) })
               })
             }))
@@ -120,8 +120,8 @@ export default class CustomizationTab {
   setZWJEmojis() {
     $('.customization-preview').empty()
 
-    const reg = new RegExp(`${this.palette.EC.defaults.cdn_url}[a-z0-9]+/`, 'g')
-    const size = `${this.palette.EC.defaults.cdn_url}seal/`
+    const reg = new RegExp(`${this.palette.EC.defaults.cdnUrl}[a-z0-9]+/`, 'g')
+    const size = `${this.palette.EC.defaults.cdnUrl}seal/`
     this.palette.EC.Util.emojifyToHTML(this.getZWJEmojis()).then(result => {
       $('.customization-preview').append(result.replace(reg, size))
     })
