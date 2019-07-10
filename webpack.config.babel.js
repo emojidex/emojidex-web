@@ -74,6 +74,12 @@ module.exports = (env, argv) => {
         {
           test: /(jquery-ui\.min|jquery\.caret\.min)\.js$/,
           use: ['script-loader']
+        },
+        {
+          enforce: 'pre',
+          test: /\.js$/,
+          exclude: /(node_modules|src\/vendor)/,
+          use: 'eslint-loader'
         }
       ]
     },

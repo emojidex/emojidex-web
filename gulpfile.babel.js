@@ -19,13 +19,13 @@ gulp.task('env', (done) => {
         process.env[k] = envConfig[k]
       }
       let output = `
-        let user_info = {
+        let userInfo = {
           auth_user: '${process.env.USERNAME}',
           email: '${process.env.EMAIL}',
           password: '${process.env.PASSWORD}',
           auth_token: '${process.env.AUTH_TOKEN}'
         };
-        let premium_user_info = {
+        let premiumUserInfo = {
           auth_user: '${process.env.USERNAME}',
           auth_token: '${process.env.AUTH_TOKEN}'
         };
@@ -131,9 +131,9 @@ gulp.task('jasmine', () => {
     'docs/img/logo.png',
     'docs/css/document.min.css',
     'docs/css/emojidex.min.css',
-    'spec/emojidexAutocomplete.js',
+    'spec/emojidex-autocomplete.js',
     'spec/palette/*.js',
-    'spec/emojidexReplace.js'
+    'spec/emojidex-replace.js'
   ];
   return gulp.src(testFiles)
     .pipe(watch(testFiles))

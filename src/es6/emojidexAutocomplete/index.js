@@ -12,28 +12,28 @@
 
 import AutoComplete from './components/autocomplete'
 
-const pluginName = "emojidexAutocomplete";
+const pluginName = 'emojidexAutocomplete'
 const defaults = {
   listLimit: 15,
   onComplete: undefined,
-  content_editable: {
+  contentEditable: {
     insertImg: true
   }
-};
+}
 
 export default class EmojidexAutocomplete {
   constructor(element, options) {
-    this.element = element;
-    this.options = $.extend({}, defaults, options);
-    this._defaults = defaults;
-    this._name = pluginName;
+    this.element = element
+    this.options = $.extend({}, defaults, options) // eslint-disable-line no-undef
+    this._defaults = defaults
+    this._name = pluginName
 
     // start: Plugin --------
-    this.autocomplete = new AutoComplete(this);
+    this.autocomplete = new AutoComplete(this)
   }
-  
+
   static getName() {
-    return pluginName;
+    return pluginName
   }
 }
 
