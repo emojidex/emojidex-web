@@ -149,3 +149,7 @@ gulp.task('build',
 gulp.task('spec',
   gulp.series('md2html', 'copy', 'banner', 'env', 'concat-spec', 'jasmine')
 );
+
+gulp.task('test-prepare',
+  gulp.series('md2html', 'copy', 'banner', 'env', 'concat-spec')
+);
