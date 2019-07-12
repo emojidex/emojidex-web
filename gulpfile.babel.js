@@ -26,8 +26,10 @@ gulp.task('env', (done) => {
           auth_token: '${process.env.AUTH_TOKEN}'
         };
         let premiumUserInfo = {
-          auth_user: '${process.env.USERNAME}',
-          auth_token: '${process.env.AUTH_TOKEN}'
+          auth_user: '${process.env.PREMIUM_USERNAME}',
+          email: '${process.env.PREMIUM_EMAIL}',
+          password: '${process.env.PREMIUM_PASSWORD}',
+          auth_token: '${process.env.PREMIUM_AUTH_TOKEN}'
         };
       `;
       fs.ensureFileSync('tmp/authinfo.js');
