@@ -1,5 +1,8 @@
+import EmojidexClientIndexes from 'emojidex-client/src/es6/components/indexes'
+
 export default class IndexTab {
   constructor(palette) {
+    this.ECI = new EmojidexClientIndexes(palette.EC)
     this.palette = palette
     this.initialized = false
     this.sortType = 'score'
@@ -10,22 +13,21 @@ export default class IndexTab {
 
   setTabContent() {
     this.initialized = true
-    return this.palette.EC.Indexes.index(
-      (resultEmoji, calledData) => {
-        this.tabData = calledData
+    return this.ECI.index(
+      resultEmoji => {
         this.tabContent.children().remove()
 
         this.tabContent.append('<div class="emojidex-category-name emjdx-all">Index</div>')
         this.tabContent.append(this.palette.setEmojiList('index', resultEmoji))
 
-        const curPage = this.palette.EC.Indexes.meta.total_count === 0 ? 0 : this.palette.EC.Indexes.curPage
-        let maxPage = Math.floor(this.palette.EC.Indexes.meta.total_count / this.palette.EC.options.limit)
-        if (this.palette.EC.Indexes.meta.total_count % this.palette.EC.options.limit > 0) {
+        const curPage = this.ECI.meta.total_count === 0 ? 0 : this.ECI.curPage
+        let maxPage = Math.floor(this.ECI.meta.total_count / this.palette.EC.options.limit)
+        if (this.ECI.meta.total_count % this.palette.EC.options.limit > 0) {
           maxPage++
         }
 
-        const prevFunc = () => this.palette.EC.Indexes.prev()
-        const nextFunc = () => this.palette.EC.Indexes.next()
+        const prevFunc = () => this.ECI.prev()
+        const nextFunc = () => this.ECI.next()
         const pagination = this.palette.getPagination('index', prevFunc, nextFunc, curPage, maxPage)
         pagination.append(this.palette.getSorting(this))
         return this.tabContent.append(pagination)
