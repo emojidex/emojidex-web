@@ -8,77 +8,34 @@ describe('emojidexPalette:User:Favorite', () => {
     afterPalette(done)
   })
 
-  it('show favorite tab [Requires a premium user account]', done => {
-    if (typeof userInfo === 'undefined' || userInfo === null) {
-      pending()
-    }
-
-    $('#tab-content-user').watch({
-      id: 'content_user_favorite',
-      properties: 'prop_innerHTML',
-      watchChildren: true,
-      callback(data) {
-        if (data.vals[0].match(/favorite-emoji-list/)) {
-          expect($('#tab-content-user-favorite').find('img').length).toBeTruthy()
-          removeWatch($('#tab-content-user'), 'content_user_favorite')
-          done()
-        }
-      }
-    })
-
-    $('#tab-content-user').watch({
-      id: 'content_user',
-      properties: 'prop_innerHTML',
-      watchChildren: true,
-      callback() {
-        removeWatch($('#tab-content-user'), 'content_user')
-        $('#tab-user-favorite a').click()
-      }
-    })
-
-    showPalette(() => {
-      loginUser(userInfo.auth_user, userInfo.password)
-    })
-  })
-
-  it('switches to the next page [Requires a premium user account and many favorites]', done => {
-    if (typeof userInfo === 'undefined' || userInfo === null) {
-      pending()
-    }
-
-    $('#user-tab-content').watch({
-      id: 'content_user_next',
-      properties: 'prop_innerHTML',
-      watchChildren: true,
-      callback(data) {
-        specTimer(1000).then(() => {
-          expect($(data.vals[0]).find('.favorite-pagination ul.pagination li.palette-num span').text().substr(0, 1)).toBe('2')
-          removeWatch($('#user-tab-content'), 'content_user_next')
-          done()
+  if (premiumUserInfo) {
+    it('show favorite tab [Requires a premium user account]', done => {
+      showPalette().then(() => {
+        return watchDOM('#emoji-palette', {trigger: () => {
+            tryLoginUser(premiumUserInfo.auth_user, premiumUserInfo.password)
+          }, regex: /favorite-emoji-list/
         })
-      }
+      }).then(() => {
+        expect($('#tab-content-user-favorite').find('img').length).toBeTruthy()
+        done()
+      })
     })
-    $('#tab-content-user-favorite').find('.pagination .palette-pager')[1].click()
-  })
 
-  it('switches to the previous page [Requires a premium user account and many favorites]', done => {
-    if (typeof userInfo === 'undefined' || userInfo === null) {
-      pending()
-    }
-
-    $('#user-tab-content').watch({
-      id: 'content_user_prev',
-      properties: 'prop_innerHTML',
-      watchChildren: true,
-      callback(data) {
-        specTimer(1000).then(() => {
-          expect($(data.vals[0]).find('.favorite-pagination ul.pagination li.palette-num span').text().substr(0, 1)).toBe('1')
-          removeWatch($('#user-tab-content'), 'content_user_prev')
-          done()
-        })
-      }
+    it('switches to the next page [Requires a premium user account and many favorites]', done => {
+      watchDOM('#tab-content-user-favorite', {regex: /palette-num/}).then(() => {
+        expect($('.favorite-pagination ul.pagination li.palette-num span').text().substr(0, 1)).toBe('2')
+        done()
+      })
+      $('#tab-content-user-favorite').find('.pagination .palette-pager')[1].click()
     })
-    $('#tab-content-user-favorite').find('.pagination .palette-pager')[0].click()
-  })
+
+    it('switches to the previous page [Requires a premium user account and many favorites]', done => {
+      watchDOM('#tab-content-user-favorite', {regex: /palette-num/}).then(() => {
+        expect($('.favorite-pagination ul.pagination li.palette-num span').text().substr(0, 1)).toBe('1')
+        done()
+      })
+      $('#tab-content-user-favorite').find('.pagination .palette-pager')[0].click()
+    })
+  }
 })
 /* eslint-enable no-undef */

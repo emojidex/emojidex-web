@@ -8,91 +8,48 @@ describe('emojidexPalette:User:Following', () => {
     afterPalette(done)
   })
 
-  it('show following tab [Requires a user account and following user]', done => {
-    if (typeof userInfo === 'undefined' || userInfo === null) {
-      pending()
-    }
-
-    $('#tab-content-user').watch({
-      id: 'watcher',
-      properties: 'prop_innerHTML',
-      watchChildren: true,
-      callback() {
-        removeWatch($('#tab-content-user'), 'watcher')
-
-        specTimer(3000).then(() => {
-          $('#tab-user-following a').click()
-          return specTimer(1000)
-        }).then(() => {
-          expect($('#follow-following .users .btn').length).toBeTruthy()
-          done()
+  if (premiumUserInfo) {
+    it('show following tab [Requires a user account and following user]', done => {
+      showPalette().then(() => {
+        return watchDOM('#emoji-palette', {trigger: () => {
+            tryLoginUser(premiumUserInfo.auth_user, premiumUserInfo.password)
+          }, regex: /favorite-emoji-list/
         })
-      }
-    })
-
-    showPalette(() => {
-      loginUser(userInfo.auth_user, userInfo.password)
-    })
-  })
-
-  it('show following user info [Requires a user account and following user]', done => {
-    if (typeof userInfo === 'undefined' || userInfo === null) {
-      pending()
-    }
-
-    $('#follow-following .user-info').watch({
-      id: 'watcher',
-      properties: 'attr_class',
-      callback() {
-        expect($('#follow-following .user-info.on .emoji-btn').length).toBeTruthy()
-        removeWatch($('.user-info'), 'watcher')
+      }).then(() => {
+        return watchDOM('#follow-following', {trigger: () => {
+          $('#tab-user-following a').click()
+        }, regex: /btn btn-default/})
+      }).then(() => {
+        expect($('#follow-following .users .btn').length).toBeTruthy()
         done()
-      }
+      })
     })
 
-    specTimer(1000).then(() => {
+    it('show following user info [Requires a user account and following user]', done => {
+      watchDOM('#follow-following .user-info', {regex: /emoji-btn btn btn-default/}).then((data) => {
+        expect($('#follow-following .user-info.on .emoji-btn').length).toBeTruthy()
+        done()
+      })
       $($('#follow-following .users .btn')[0]).click()
     })
-  })
 
-  it('show following user emoji next [Requires a user account and following user]', done => {
-    if (typeof userInfo === 'undefined' || userInfo === null) {
-      pending()
-    }
-
-    const selectorCurrentUserInfo = '#follow-following .user-info.on'
-    $(selectorCurrentUserInfo).watch({
-      id: 'watcher',
-      properties: 'prop_innerHTML',
-      watchChildren: true,
-      callback() {
+    it('show following user emoji next [Requires a user account and following user]', done => {
+      const selectorCurrentUserInfo = '#follow-following .user-info.on'
+      watchDOM(selectorCurrentUserInfo).then(() => {
         expect($(`${selectorCurrentUserInfo} .palette-num span`).text().charAt(0)).toBe('2')
-        removeWatch($('.user-info'), 'watcher')
         done()
-      }
+      })
+      $($(`${selectorCurrentUserInfo} .palette-pager`)[1]).click()
     })
 
-    $($(`${selectorCurrentUserInfo} .palette-pager`)[1]).click()
-  })
-
-  it('show following user emoji previous [Requires a user account and following user]', done => {
-    if (typeof userInfo === 'undefined' || userInfo === null) {
-      pending()
-    }
-
-    const selectorCurrentUserInfo = '#follow-following .user-info.on'
-    $(selectorCurrentUserInfo).watch({
-      id: 'watcher',
-      properties: 'prop_innerHTML',
-      watchChildren: true,
-      callback() {
+    it('show following user emoji previous [Requires a user account and following user]', done => {
+      const selectorCurrentUserInfo = '#follow-following .user-info.on'
+      watchDOM(selectorCurrentUserInfo).then(() => {
         expect($(`${selectorCurrentUserInfo} .palette-num span`).text().charAt(0)).toBe('1')
-        removeWatch($('.user-info'), 'watcher')
         done()
-      }
+      })
+      $($(`${selectorCurrentUserInfo} .palette-pager`)[0]).click()
     })
-
-    $($(`${selectorCurrentUserInfo} .palette-pager`)[0]).click()
-  })
+  }
 })
 /* eslint-enable no-undef */

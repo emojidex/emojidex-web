@@ -81,7 +81,7 @@ function closePalette() {
 
 function showPalette() {
   return new Promise(done => {
-    watchDOM('.ui-dialog', undefined, 'display').then(() => {
+    watchDOM('.ui-dialog', {properties: 'display'}).then(() => {
       done()
     })
     specTimer(1000).then(() => {
@@ -108,15 +108,16 @@ function preparePaletteButtons(done, options) {
   })
 }
 
-function watchDOM(selector, regex = undefined, properties = 'prop_innerHTML') {
+function watchDOM(selector, options = {}) {
+  options.properties = options.properties || 'prop_innerHTML'
   return new Promise(done => {
     $(selector).watch({
       id: 'watchDOM',
-      properties: properties,
+      properties: options.properties,
       watchChildren: true,
       callback(data) {
-        if(regex) {
-          if (data.vals[0].match(regex)) {
+        if(options.regex) {
+          if (data.vals[0].match(options.regex)) {
             removeWatch($(selector), 'watchDOM')
             done(data)
           }
@@ -126,6 +127,7 @@ function watchDOM(selector, regex = undefined, properties = 'prop_innerHTML') {
         }
       }
     })
+    options.trigger && options.trigger()
   })
 }
 
@@ -147,7 +149,7 @@ function tryLoginUser(user, password) {
 }
 
 function logout() {
-  return new Promise(done => {    
+  return new Promise(done => {
     watchDOM('#tab-content-user').then(() => {
       specTimer(1000).then(() => {
         done()

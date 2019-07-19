@@ -24,7 +24,7 @@ describe('emojidexPalette:User:Login', () => {
         done()
       })
     })
-    
+
     it('logout', done => {
       logout().then(() => {
         expect($('#palette-emoji-username-input')).toHaveCss({ display: 'block' })
@@ -32,7 +32,7 @@ describe('emojidexPalette:User:Login', () => {
       })
     })
   }
-  
+
   // it 'general user can not see the newest/popular emoji', (done) ->
   //   pending() unless userInfo?
   //   timer_option =
@@ -52,7 +52,7 @@ describe('emojidexPalette:User:Login', () => {
         done()
       })
     })
-    
+
     it('logout', done => {
       logout().then(() => {
         expect($('#palette-emoji-username-input')).toHaveCss({ display: 'block' })
@@ -60,7 +60,7 @@ describe('emojidexPalette:User:Login', () => {
       })
     })
   }
-  
+
   // it 'premium user can see the newest/popular emoji', (done) ->
   //   pending() unless premiumUserInfo?
   //   timer_option =
@@ -72,19 +72,20 @@ describe('emojidexPalette:User:Login', () => {
   //       else
   //         spec_timer timer_option
   //   spec_timer timer_option
-  
+
   if (userInfo || premiumUserInfo) {
-    let user = userInfo ? userInfo : premiumUserInfo    
+    let user = userInfo ? userInfo : premiumUserInfo
     it('login with storage data', done => {
       tryLoginUser(user.auth_user, user.password).then(() => {
         $('#palette-btn').removeData().unbind()
-        $('#emojidex-emoji-palette, .emojidex-palette-div').remove()      
+        $('#emojidex-emoji-palette, .emojidex-palette-div').remove()
 
         $('#palette-btn').emojidexPalette({
           onComplete: () => {
             showPalette().then(() => {
-              $('#tab-user a').click()
-              return watchDOM('#tab-content-user')
+              return watchDOM('#tab-content-user', {trigger: () => {
+                $('#tab-user a').click()
+              }})
             }).then(() => {
               expect($('#tab-user-favorite').length).toBeTruthy()
               done()

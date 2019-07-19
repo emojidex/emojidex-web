@@ -9,23 +9,15 @@ describe('emojidexPalette:Search', () => {
   })
 
   it('search tab', done => {
-    $('#tab-content-search').watch({
-      id: 'content_search',
-      properties: 'prop_innerHTML',
-      watchChildren: true,
-      callback(data) {
-        if (data.vals[0].match(/search-emoji-list/)) {
-          expect($($('#tab-content-search').find('img')[0]).attr('title')).toContain('test')
-          removeWatch($('#tab-content-search'), 'content_search')
-          done()
-        }
-      }
-    })
-
-    showPalette(() => {
+    showPalette().then(() => {
       $('#tab-search a').click()
       $('#palette-emoji-search-input').val('test')
-      $('#palette-emoji-search-submit').click()
+      return watchDOM('#tab-content-search', {trigger: () => {
+        $('#palette-emoji-search-submit').click()
+      }, regex: /search-emoji-list/})
+    }).then(() => {
+      expect($($('#tab-content-search').find('img')[0]).attr('title')).toContain('test')
+      done()
     })
   })
 })
