@@ -45,7 +45,7 @@ describe('emojidexPalette:User:Login', () => {
   //         spec_timer timer_option
   //   spec_timer timer_option
 
-  if (premiumUserInfo) {
+  if (hasPremiumAccount) {
     it('premium user login [Require a premium user info]', done => {
       tryLoginUser(premiumUserInfo.auth_user, premiumUserInfo.password).then(() => {
         expect($('#tab-user-favorite').length).toBeTruthy()

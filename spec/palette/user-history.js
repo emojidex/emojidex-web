@@ -8,7 +8,7 @@ describe('emojidexPalette:User:History', () => {
     afterPalette(done)
   })
 
-  if (premiumUserInfo) {
+  if (hasPremiumAccount) {
     it('show history tab [Requires a premium user account]', done => {
       showPalette().then(() => {
         return watchDOM('#emoji-palette', {trigger: () => {

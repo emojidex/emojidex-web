@@ -8,7 +8,7 @@ describe('emojidexPalette:User:Favorite', () => {
     afterPalette(done)
   })
 
-  if (premiumUserInfo) {
+  if (hasPremiumAccount) {
     it('show favorite tab [Requires a premium user account]', done => {
       showPalette().then(() => {
         return watchDOM('#emoji-palette', {trigger: () => {

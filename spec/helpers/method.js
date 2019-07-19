@@ -175,5 +175,9 @@ function afterPalette(done) {
     done()
   })
 }
+
+function hasPremiumAccount() {
+  return typeof premiumUserInfo !== undefined && premiumUserInfo !== null
+}
 /* eslint-enable no-unused-vars */
 /* eslint-enable no-undef */
