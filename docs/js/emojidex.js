@@ -1908,6 +1908,556 @@ eval("var closest = __webpack_require__(/*! ./closest */ \"./node_modules/delega
 
 /***/ }),
 
+/***/ "./node_modules/emojidex-client/node_modules/lodash/_Symbol.js":
+/*!*********************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/_Symbol.js ***!
+  \*********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("var root = __webpack_require__(/*! ./_root */ \"./node_modules/emojidex-client/node_modules/lodash/_root.js\");\n\n/** Built-in value references. */\nvar Symbol = root.Symbol;\n\nmodule.exports = Symbol;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/_Symbol.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/_apply.js":
+/*!********************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/_apply.js ***!
+  \********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("/**\n * A faster alternative to `Function#apply`, this function invokes `func`\n * with the `this` binding of `thisArg` and the arguments of `args`.\n *\n * @private\n * @param {Function} func The function to invoke.\n * @param {*} thisArg The `this` binding of `func`.\n * @param {Array} args The arguments to invoke `func` with.\n * @returns {*} Returns the result of `func`.\n */\nfunction apply(func, thisArg, args) {\n  switch (args.length) {\n    case 0: return func.call(thisArg);\n    case 1: return func.call(thisArg, args[0]);\n    case 2: return func.call(thisArg, args[0], args[1]);\n    case 3: return func.call(thisArg, args[0], args[1], args[2]);\n  }\n  return func.apply(thisArg, args);\n}\n\nmodule.exports = apply;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/_apply.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/_arrayLikeKeys.js":
+/*!****************************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/_arrayLikeKeys.js ***!
+  \****************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("var baseTimes = __webpack_require__(/*! ./_baseTimes */ \"./node_modules/emojidex-client/node_modules/lodash/_baseTimes.js\"),\n    isArguments = __webpack_require__(/*! ./isArguments */ \"./node_modules/emojidex-client/node_modules/lodash/isArguments.js\"),\n    isArray = __webpack_require__(/*! ./isArray */ \"./node_modules/emojidex-client/node_modules/lodash/isArray.js\"),\n    isBuffer = __webpack_require__(/*! ./isBuffer */ \"./node_modules/emojidex-client/node_modules/lodash/isBuffer.js\"),\n    isIndex = __webpack_require__(/*! ./_isIndex */ \"./node_modules/emojidex-client/node_modules/lodash/_isIndex.js\"),\n    isTypedArray = __webpack_require__(/*! ./isTypedArray */ \"./node_modules/emojidex-client/node_modules/lodash/isTypedArray.js\");\n\n/** Used for built-in method references. */\nvar objectProto = Object.prototype;\n\n/** Used to check objects for own properties. */\nvar hasOwnProperty = objectProto.hasOwnProperty;\n\n/**\n * Creates an array of the enumerable property names of the array-like `value`.\n *\n * @private\n * @param {*} value The value to query.\n * @param {boolean} inherited Specify returning inherited property names.\n * @returns {Array} Returns the array of property names.\n */\nfunction arrayLikeKeys(value, inherited) {\n  var isArr = isArray(value),\n      isArg = !isArr && isArguments(value),\n      isBuff = !isArr && !isArg && isBuffer(value),\n      isType = !isArr && !isArg && !isBuff && isTypedArray(value),\n      skipIndexes = isArr || isArg || isBuff || isType,\n      result = skipIndexes ? baseTimes(value.length, String) : [],\n      length = result.length;\n\n  for (var key in value) {\n    if ((inherited || hasOwnProperty.call(value, key)) &&\n        !(skipIndexes && (\n           // Safari 9 has enumerable `arguments.length` in strict mode.\n           key == 'length' ||\n           // Node.js 0.10 has enumerable non-index properties on buffers.\n           (isBuff && (key == 'offset' || key == 'parent')) ||\n           // PhantomJS 2 has enumerable non-index properties on typed arrays.\n           (isType && (key == 'buffer' || key == 'byteLength' || key == 'byteOffset')) ||\n           // Skip index properties.\n           isIndex(key, length)\n        ))) {\n      result.push(key);\n    }\n  }\n  return result;\n}\n\nmodule.exports = arrayLikeKeys;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/_arrayLikeKeys.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/_assignValue.js":
+/*!**************************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/_assignValue.js ***!
+  \**************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("var baseAssignValue = __webpack_require__(/*! ./_baseAssignValue */ \"./node_modules/emojidex-client/node_modules/lodash/_baseAssignValue.js\"),\n    eq = __webpack_require__(/*! ./eq */ \"./node_modules/emojidex-client/node_modules/lodash/eq.js\");\n\n/** Used for built-in method references. */\nvar objectProto = Object.prototype;\n\n/** Used to check objects for own properties. */\nvar hasOwnProperty = objectProto.hasOwnProperty;\n\n/**\n * Assigns `value` to `key` of `object` if the existing value is not equivalent\n * using [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)\n * for equality comparisons.\n *\n * @private\n * @param {Object} object The object to modify.\n * @param {string} key The key of the property to assign.\n * @param {*} value The value to assign.\n */\nfunction assignValue(object, key, value) {\n  var objValue = object[key];\n  if (!(hasOwnProperty.call(object, key) && eq(objValue, value)) ||\n      (value === undefined && !(key in object))) {\n    baseAssignValue(object, key, value);\n  }\n}\n\nmodule.exports = assignValue;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/_assignValue.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/_baseAssignValue.js":
+/*!******************************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/_baseAssignValue.js ***!
+  \******************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("var defineProperty = __webpack_require__(/*! ./_defineProperty */ \"./node_modules/emojidex-client/node_modules/lodash/_defineProperty.js\");\n\n/**\n * The base implementation of `assignValue` and `assignMergeValue` without\n * value checks.\n *\n * @private\n * @param {Object} object The object to modify.\n * @param {string} key The key of the property to assign.\n * @param {*} value The value to assign.\n */\nfunction baseAssignValue(object, key, value) {\n  if (key == '__proto__' && defineProperty) {\n    defineProperty(object, key, {\n      'configurable': true,\n      'enumerable': true,\n      'value': value,\n      'writable': true\n    });\n  } else {\n    object[key] = value;\n  }\n}\n\nmodule.exports = baseAssignValue;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/_baseAssignValue.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/_baseGetTag.js":
+/*!*************************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/_baseGetTag.js ***!
+  \*************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("var Symbol = __webpack_require__(/*! ./_Symbol */ \"./node_modules/emojidex-client/node_modules/lodash/_Symbol.js\"),\n    getRawTag = __webpack_require__(/*! ./_getRawTag */ \"./node_modules/emojidex-client/node_modules/lodash/_getRawTag.js\"),\n    objectToString = __webpack_require__(/*! ./_objectToString */ \"./node_modules/emojidex-client/node_modules/lodash/_objectToString.js\");\n\n/** `Object#toString` result references. */\nvar nullTag = '[object Null]',\n    undefinedTag = '[object Undefined]';\n\n/** Built-in value references. */\nvar symToStringTag = Symbol ? Symbol.toStringTag : undefined;\n\n/**\n * The base implementation of `getTag` without fallbacks for buggy environments.\n *\n * @private\n * @param {*} value The value to query.\n * @returns {string} Returns the `toStringTag`.\n */\nfunction baseGetTag(value) {\n  if (value == null) {\n    return value === undefined ? undefinedTag : nullTag;\n  }\n  return (symToStringTag && symToStringTag in Object(value))\n    ? getRawTag(value)\n    : objectToString(value);\n}\n\nmodule.exports = baseGetTag;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/_baseGetTag.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/_baseIsArguments.js":
+/*!******************************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/_baseIsArguments.js ***!
+  \******************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("var baseGetTag = __webpack_require__(/*! ./_baseGetTag */ \"./node_modules/emojidex-client/node_modules/lodash/_baseGetTag.js\"),\n    isObjectLike = __webpack_require__(/*! ./isObjectLike */ \"./node_modules/emojidex-client/node_modules/lodash/isObjectLike.js\");\n\n/** `Object#toString` result references. */\nvar argsTag = '[object Arguments]';\n\n/**\n * The base implementation of `_.isArguments`.\n *\n * @private\n * @param {*} value The value to check.\n * @returns {boolean} Returns `true` if `value` is an `arguments` object,\n */\nfunction baseIsArguments(value) {\n  return isObjectLike(value) && baseGetTag(value) == argsTag;\n}\n\nmodule.exports = baseIsArguments;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/_baseIsArguments.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/_baseIsNative.js":
+/*!***************************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/_baseIsNative.js ***!
+  \***************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("var isFunction = __webpack_require__(/*! ./isFunction */ \"./node_modules/emojidex-client/node_modules/lodash/isFunction.js\"),\n    isMasked = __webpack_require__(/*! ./_isMasked */ \"./node_modules/emojidex-client/node_modules/lodash/_isMasked.js\"),\n    isObject = __webpack_require__(/*! ./isObject */ \"./node_modules/emojidex-client/node_modules/lodash/isObject.js\"),\n    toSource = __webpack_require__(/*! ./_toSource */ \"./node_modules/emojidex-client/node_modules/lodash/_toSource.js\");\n\n/**\n * Used to match `RegExp`\n * [syntax characters](http://ecma-international.org/ecma-262/7.0/#sec-patterns).\n */\nvar reRegExpChar = /[\\\\^$.*+?()[\\]{}|]/g;\n\n/** Used to detect host constructors (Safari). */\nvar reIsHostCtor = /^\\[object .+?Constructor\\]$/;\n\n/** Used for built-in method references. */\nvar funcProto = Function.prototype,\n    objectProto = Object.prototype;\n\n/** Used to resolve the decompiled source of functions. */\nvar funcToString = funcProto.toString;\n\n/** Used to check objects for own properties. */\nvar hasOwnProperty = objectProto.hasOwnProperty;\n\n/** Used to detect if a method is native. */\nvar reIsNative = RegExp('^' +\n  funcToString.call(hasOwnProperty).replace(reRegExpChar, '\\\\$&')\n  .replace(/hasOwnProperty|(function).*?(?=\\\\\\()| for .+?(?=\\\\\\])/g, '$1.*?') + '$'\n);\n\n/**\n * The base implementation of `_.isNative` without bad shim checks.\n *\n * @private\n * @param {*} value The value to check.\n * @returns {boolean} Returns `true` if `value` is a native function,\n *  else `false`.\n */\nfunction baseIsNative(value) {\n  if (!isObject(value) || isMasked(value)) {\n    return false;\n  }\n  var pattern = isFunction(value) ? reIsNative : reIsHostCtor;\n  return pattern.test(toSource(value));\n}\n\nmodule.exports = baseIsNative;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/_baseIsNative.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/_baseIsTypedArray.js":
+/*!*******************************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/_baseIsTypedArray.js ***!
+  \*******************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("var baseGetTag = __webpack_require__(/*! ./_baseGetTag */ \"./node_modules/emojidex-client/node_modules/lodash/_baseGetTag.js\"),\n    isLength = __webpack_require__(/*! ./isLength */ \"./node_modules/emojidex-client/node_modules/lodash/isLength.js\"),\n    isObjectLike = __webpack_require__(/*! ./isObjectLike */ \"./node_modules/emojidex-client/node_modules/lodash/isObjectLike.js\");\n\n/** `Object#toString` result references. */\nvar argsTag = '[object Arguments]',\n    arrayTag = '[object Array]',\n    boolTag = '[object Boolean]',\n    dateTag = '[object Date]',\n    errorTag = '[object Error]',\n    funcTag = '[object Function]',\n    mapTag = '[object Map]',\n    numberTag = '[object Number]',\n    objectTag = '[object Object]',\n    regexpTag = '[object RegExp]',\n    setTag = '[object Set]',\n    stringTag = '[object String]',\n    weakMapTag = '[object WeakMap]';\n\nvar arrayBufferTag = '[object ArrayBuffer]',\n    dataViewTag = '[object DataView]',\n    float32Tag = '[object Float32Array]',\n    float64Tag = '[object Float64Array]',\n    int8Tag = '[object Int8Array]',\n    int16Tag = '[object Int16Array]',\n    int32Tag = '[object Int32Array]',\n    uint8Tag = '[object Uint8Array]',\n    uint8ClampedTag = '[object Uint8ClampedArray]',\n    uint16Tag = '[object Uint16Array]',\n    uint32Tag = '[object Uint32Array]';\n\n/** Used to identify `toStringTag` values of typed arrays. */\nvar typedArrayTags = {};\ntypedArrayTags[float32Tag] = typedArrayTags[float64Tag] =\ntypedArrayTags[int8Tag] = typedArrayTags[int16Tag] =\ntypedArrayTags[int32Tag] = typedArrayTags[uint8Tag] =\ntypedArrayTags[uint8ClampedTag] = typedArrayTags[uint16Tag] =\ntypedArrayTags[uint32Tag] = true;\ntypedArrayTags[argsTag] = typedArrayTags[arrayTag] =\ntypedArrayTags[arrayBufferTag] = typedArrayTags[boolTag] =\ntypedArrayTags[dataViewTag] = typedArrayTags[dateTag] =\ntypedArrayTags[errorTag] = typedArrayTags[funcTag] =\ntypedArrayTags[mapTag] = typedArrayTags[numberTag] =\ntypedArrayTags[objectTag] = typedArrayTags[regexpTag] =\ntypedArrayTags[setTag] = typedArrayTags[stringTag] =\ntypedArrayTags[weakMapTag] = false;\n\n/**\n * The base implementation of `_.isTypedArray` without Node.js optimizations.\n *\n * @private\n * @param {*} value The value to check.\n * @returns {boolean} Returns `true` if `value` is a typed array, else `false`.\n */\nfunction baseIsTypedArray(value) {\n  return isObjectLike(value) &&\n    isLength(value.length) && !!typedArrayTags[baseGetTag(value)];\n}\n\nmodule.exports = baseIsTypedArray;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/_baseIsTypedArray.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/_baseKeysIn.js":
+/*!*************************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/_baseKeysIn.js ***!
+  \*************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("var isObject = __webpack_require__(/*! ./isObject */ \"./node_modules/emojidex-client/node_modules/lodash/isObject.js\"),\n    isPrototype = __webpack_require__(/*! ./_isPrototype */ \"./node_modules/emojidex-client/node_modules/lodash/_isPrototype.js\"),\n    nativeKeysIn = __webpack_require__(/*! ./_nativeKeysIn */ \"./node_modules/emojidex-client/node_modules/lodash/_nativeKeysIn.js\");\n\n/** Used for built-in method references. */\nvar objectProto = Object.prototype;\n\n/** Used to check objects for own properties. */\nvar hasOwnProperty = objectProto.hasOwnProperty;\n\n/**\n * The base implementation of `_.keysIn` which doesn't treat sparse arrays as dense.\n *\n * @private\n * @param {Object} object The object to query.\n * @returns {Array} Returns the array of property names.\n */\nfunction baseKeysIn(object) {\n  if (!isObject(object)) {\n    return nativeKeysIn(object);\n  }\n  var isProto = isPrototype(object),\n      result = [];\n\n  for (var key in object) {\n    if (!(key == 'constructor' && (isProto || !hasOwnProperty.call(object, key)))) {\n      result.push(key);\n    }\n  }\n  return result;\n}\n\nmodule.exports = baseKeysIn;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/_baseKeysIn.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/_baseRest.js":
+/*!***********************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/_baseRest.js ***!
+  \***********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("var identity = __webpack_require__(/*! ./identity */ \"./node_modules/emojidex-client/node_modules/lodash/identity.js\"),\n    overRest = __webpack_require__(/*! ./_overRest */ \"./node_modules/emojidex-client/node_modules/lodash/_overRest.js\"),\n    setToString = __webpack_require__(/*! ./_setToString */ \"./node_modules/emojidex-client/node_modules/lodash/_setToString.js\");\n\n/**\n * The base implementation of `_.rest` which doesn't validate or coerce arguments.\n *\n * @private\n * @param {Function} func The function to apply a rest parameter to.\n * @param {number} [start=func.length-1] The start position of the rest parameter.\n * @returns {Function} Returns the new function.\n */\nfunction baseRest(func, start) {\n  return setToString(overRest(func, start, identity), func + '');\n}\n\nmodule.exports = baseRest;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/_baseRest.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/_baseSetToString.js":
+/*!******************************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/_baseSetToString.js ***!
+  \******************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("var constant = __webpack_require__(/*! ./constant */ \"./node_modules/emojidex-client/node_modules/lodash/constant.js\"),\n    defineProperty = __webpack_require__(/*! ./_defineProperty */ \"./node_modules/emojidex-client/node_modules/lodash/_defineProperty.js\"),\n    identity = __webpack_require__(/*! ./identity */ \"./node_modules/emojidex-client/node_modules/lodash/identity.js\");\n\n/**\n * The base implementation of `setToString` without support for hot loop shorting.\n *\n * @private\n * @param {Function} func The function to modify.\n * @param {Function} string The `toString` result.\n * @returns {Function} Returns `func`.\n */\nvar baseSetToString = !defineProperty ? identity : function(func, string) {\n  return defineProperty(func, 'toString', {\n    'configurable': true,\n    'enumerable': false,\n    'value': constant(string),\n    'writable': true\n  });\n};\n\nmodule.exports = baseSetToString;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/_baseSetToString.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/_baseTimes.js":
+/*!************************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/_baseTimes.js ***!
+  \************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("/**\n * The base implementation of `_.times` without support for iteratee shorthands\n * or max array length checks.\n *\n * @private\n * @param {number} n The number of times to invoke `iteratee`.\n * @param {Function} iteratee The function invoked per iteration.\n * @returns {Array} Returns the array of results.\n */\nfunction baseTimes(n, iteratee) {\n  var index = -1,\n      result = Array(n);\n\n  while (++index < n) {\n    result[index] = iteratee(index);\n  }\n  return result;\n}\n\nmodule.exports = baseTimes;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/_baseTimes.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/_baseUnary.js":
+/*!************************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/_baseUnary.js ***!
+  \************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("/**\n * The base implementation of `_.unary` without support for storing metadata.\n *\n * @private\n * @param {Function} func The function to cap arguments for.\n * @returns {Function} Returns the new capped function.\n */\nfunction baseUnary(func) {\n  return function(value) {\n    return func(value);\n  };\n}\n\nmodule.exports = baseUnary;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/_baseUnary.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/_copyObject.js":
+/*!*************************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/_copyObject.js ***!
+  \*************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("var assignValue = __webpack_require__(/*! ./_assignValue */ \"./node_modules/emojidex-client/node_modules/lodash/_assignValue.js\"),\n    baseAssignValue = __webpack_require__(/*! ./_baseAssignValue */ \"./node_modules/emojidex-client/node_modules/lodash/_baseAssignValue.js\");\n\n/**\n * Copies properties of `source` to `object`.\n *\n * @private\n * @param {Object} source The object to copy properties from.\n * @param {Array} props The property identifiers to copy.\n * @param {Object} [object={}] The object to copy properties to.\n * @param {Function} [customizer] The function to customize copied values.\n * @returns {Object} Returns `object`.\n */\nfunction copyObject(source, props, object, customizer) {\n  var isNew = !object;\n  object || (object = {});\n\n  var index = -1,\n      length = props.length;\n\n  while (++index < length) {\n    var key = props[index];\n\n    var newValue = customizer\n      ? customizer(object[key], source[key], key, object, source)\n      : undefined;\n\n    if (newValue === undefined) {\n      newValue = source[key];\n    }\n    if (isNew) {\n      baseAssignValue(object, key, newValue);\n    } else {\n      assignValue(object, key, newValue);\n    }\n  }\n  return object;\n}\n\nmodule.exports = copyObject;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/_copyObject.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/_coreJsData.js":
+/*!*************************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/_coreJsData.js ***!
+  \*************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("var root = __webpack_require__(/*! ./_root */ \"./node_modules/emojidex-client/node_modules/lodash/_root.js\");\n\n/** Used to detect overreaching core-js shims. */\nvar coreJsData = root['__core-js_shared__'];\n\nmodule.exports = coreJsData;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/_coreJsData.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/_createAssigner.js":
+/*!*****************************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/_createAssigner.js ***!
+  \*****************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("var baseRest = __webpack_require__(/*! ./_baseRest */ \"./node_modules/emojidex-client/node_modules/lodash/_baseRest.js\"),\n    isIterateeCall = __webpack_require__(/*! ./_isIterateeCall */ \"./node_modules/emojidex-client/node_modules/lodash/_isIterateeCall.js\");\n\n/**\n * Creates a function like `_.assign`.\n *\n * @private\n * @param {Function} assigner The function to assign values.\n * @returns {Function} Returns the new assigner function.\n */\nfunction createAssigner(assigner) {\n  return baseRest(function(object, sources) {\n    var index = -1,\n        length = sources.length,\n        customizer = length > 1 ? sources[length - 1] : undefined,\n        guard = length > 2 ? sources[2] : undefined;\n\n    customizer = (assigner.length > 3 && typeof customizer == 'function')\n      ? (length--, customizer)\n      : undefined;\n\n    if (guard && isIterateeCall(sources[0], sources[1], guard)) {\n      customizer = length < 3 ? undefined : customizer;\n      length = 1;\n    }\n    object = Object(object);\n    while (++index < length) {\n      var source = sources[index];\n      if (source) {\n        assigner(object, source, index, customizer);\n      }\n    }\n    return object;\n  });\n}\n\nmodule.exports = createAssigner;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/_createAssigner.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/_defineProperty.js":
+/*!*****************************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/_defineProperty.js ***!
+  \*****************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("var getNative = __webpack_require__(/*! ./_getNative */ \"./node_modules/emojidex-client/node_modules/lodash/_getNative.js\");\n\nvar defineProperty = (function() {\n  try {\n    var func = getNative(Object, 'defineProperty');\n    func({}, '', {});\n    return func;\n  } catch (e) {}\n}());\n\nmodule.exports = defineProperty;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/_defineProperty.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/_freeGlobal.js":
+/*!*************************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/_freeGlobal.js ***!
+  \*************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("/* WEBPACK VAR INJECTION */(function(global) {/** Detect free variable `global` from Node.js. */\nvar freeGlobal = typeof global == 'object' && global && global.Object === Object && global;\n\nmodule.exports = freeGlobal;\n\n/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../webpack/buildin/global.js */ \"./node_modules/webpack/buildin/global.js\")))\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/_freeGlobal.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/_getNative.js":
+/*!************************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/_getNative.js ***!
+  \************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("var baseIsNative = __webpack_require__(/*! ./_baseIsNative */ \"./node_modules/emojidex-client/node_modules/lodash/_baseIsNative.js\"),\n    getValue = __webpack_require__(/*! ./_getValue */ \"./node_modules/emojidex-client/node_modules/lodash/_getValue.js\");\n\n/**\n * Gets the native function at `key` of `object`.\n *\n * @private\n * @param {Object} object The object to query.\n * @param {string} key The key of the method to get.\n * @returns {*} Returns the function if it's native, else `undefined`.\n */\nfunction getNative(object, key) {\n  var value = getValue(object, key);\n  return baseIsNative(value) ? value : undefined;\n}\n\nmodule.exports = getNative;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/_getNative.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/_getRawTag.js":
+/*!************************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/_getRawTag.js ***!
+  \************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("var Symbol = __webpack_require__(/*! ./_Symbol */ \"./node_modules/emojidex-client/node_modules/lodash/_Symbol.js\");\n\n/** Used for built-in method references. */\nvar objectProto = Object.prototype;\n\n/** Used to check objects for own properties. */\nvar hasOwnProperty = objectProto.hasOwnProperty;\n\n/**\n * Used to resolve the\n * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)\n * of values.\n */\nvar nativeObjectToString = objectProto.toString;\n\n/** Built-in value references. */\nvar symToStringTag = Symbol ? Symbol.toStringTag : undefined;\n\n/**\n * A specialized version of `baseGetTag` which ignores `Symbol.toStringTag` values.\n *\n * @private\n * @param {*} value The value to query.\n * @returns {string} Returns the raw `toStringTag`.\n */\nfunction getRawTag(value) {\n  var isOwn = hasOwnProperty.call(value, symToStringTag),\n      tag = value[symToStringTag];\n\n  try {\n    value[symToStringTag] = undefined;\n    var unmasked = true;\n  } catch (e) {}\n\n  var result = nativeObjectToString.call(value);\n  if (unmasked) {\n    if (isOwn) {\n      value[symToStringTag] = tag;\n    } else {\n      delete value[symToStringTag];\n    }\n  }\n  return result;\n}\n\nmodule.exports = getRawTag;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/_getRawTag.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/_getValue.js":
+/*!***********************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/_getValue.js ***!
+  \***********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("/**\n * Gets the value at `key` of `object`.\n *\n * @private\n * @param {Object} [object] The object to query.\n * @param {string} key The key of the property to get.\n * @returns {*} Returns the property value.\n */\nfunction getValue(object, key) {\n  return object == null ? undefined : object[key];\n}\n\nmodule.exports = getValue;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/_getValue.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/_isIndex.js":
+/*!**********************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/_isIndex.js ***!
+  \**********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("/** Used as references for various `Number` constants. */\nvar MAX_SAFE_INTEGER = 9007199254740991;\n\n/** Used to detect unsigned integer values. */\nvar reIsUint = /^(?:0|[1-9]\\d*)$/;\n\n/**\n * Checks if `value` is a valid array-like index.\n *\n * @private\n * @param {*} value The value to check.\n * @param {number} [length=MAX_SAFE_INTEGER] The upper bounds of a valid index.\n * @returns {boolean} Returns `true` if `value` is a valid index, else `false`.\n */\nfunction isIndex(value, length) {\n  var type = typeof value;\n  length = length == null ? MAX_SAFE_INTEGER : length;\n\n  return !!length &&\n    (type == 'number' ||\n      (type != 'symbol' && reIsUint.test(value))) &&\n        (value > -1 && value % 1 == 0 && value < length);\n}\n\nmodule.exports = isIndex;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/_isIndex.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/_isIterateeCall.js":
+/*!*****************************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/_isIterateeCall.js ***!
+  \*****************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("var eq = __webpack_require__(/*! ./eq */ \"./node_modules/emojidex-client/node_modules/lodash/eq.js\"),\n    isArrayLike = __webpack_require__(/*! ./isArrayLike */ \"./node_modules/emojidex-client/node_modules/lodash/isArrayLike.js\"),\n    isIndex = __webpack_require__(/*! ./_isIndex */ \"./node_modules/emojidex-client/node_modules/lodash/_isIndex.js\"),\n    isObject = __webpack_require__(/*! ./isObject */ \"./node_modules/emojidex-client/node_modules/lodash/isObject.js\");\n\n/**\n * Checks if the given arguments are from an iteratee call.\n *\n * @private\n * @param {*} value The potential iteratee value argument.\n * @param {*} index The potential iteratee index or key argument.\n * @param {*} object The potential iteratee object argument.\n * @returns {boolean} Returns `true` if the arguments are from an iteratee call,\n *  else `false`.\n */\nfunction isIterateeCall(value, index, object) {\n  if (!isObject(object)) {\n    return false;\n  }\n  var type = typeof index;\n  if (type == 'number'\n        ? (isArrayLike(object) && isIndex(index, object.length))\n        : (type == 'string' && index in object)\n      ) {\n    return eq(object[index], value);\n  }\n  return false;\n}\n\nmodule.exports = isIterateeCall;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/_isIterateeCall.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/_isMasked.js":
+/*!***********************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/_isMasked.js ***!
+  \***********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("var coreJsData = __webpack_require__(/*! ./_coreJsData */ \"./node_modules/emojidex-client/node_modules/lodash/_coreJsData.js\");\n\n/** Used to detect methods masquerading as native. */\nvar maskSrcKey = (function() {\n  var uid = /[^.]+$/.exec(coreJsData && coreJsData.keys && coreJsData.keys.IE_PROTO || '');\n  return uid ? ('Symbol(src)_1.' + uid) : '';\n}());\n\n/**\n * Checks if `func` has its source masked.\n *\n * @private\n * @param {Function} func The function to check.\n * @returns {boolean} Returns `true` if `func` is masked, else `false`.\n */\nfunction isMasked(func) {\n  return !!maskSrcKey && (maskSrcKey in func);\n}\n\nmodule.exports = isMasked;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/_isMasked.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/_isPrototype.js":
+/*!**************************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/_isPrototype.js ***!
+  \**************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("/** Used for built-in method references. */\nvar objectProto = Object.prototype;\n\n/**\n * Checks if `value` is likely a prototype object.\n *\n * @private\n * @param {*} value The value to check.\n * @returns {boolean} Returns `true` if `value` is a prototype, else `false`.\n */\nfunction isPrototype(value) {\n  var Ctor = value && value.constructor,\n      proto = (typeof Ctor == 'function' && Ctor.prototype) || objectProto;\n\n  return value === proto;\n}\n\nmodule.exports = isPrototype;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/_isPrototype.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/_nativeKeysIn.js":
+/*!***************************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/_nativeKeysIn.js ***!
+  \***************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("/**\n * This function is like\n * [`Object.keys`](http://ecma-international.org/ecma-262/7.0/#sec-object.keys)\n * except that it includes inherited enumerable properties.\n *\n * @private\n * @param {Object} object The object to query.\n * @returns {Array} Returns the array of property names.\n */\nfunction nativeKeysIn(object) {\n  var result = [];\n  if (object != null) {\n    for (var key in Object(object)) {\n      result.push(key);\n    }\n  }\n  return result;\n}\n\nmodule.exports = nativeKeysIn;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/_nativeKeysIn.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/_nodeUtil.js":
+/*!***********************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/_nodeUtil.js ***!
+  \***********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("/* WEBPACK VAR INJECTION */(function(module) {var freeGlobal = __webpack_require__(/*! ./_freeGlobal */ \"./node_modules/emojidex-client/node_modules/lodash/_freeGlobal.js\");\n\n/** Detect free variable `exports`. */\nvar freeExports =  true && exports && !exports.nodeType && exports;\n\n/** Detect free variable `module`. */\nvar freeModule = freeExports && typeof module == 'object' && module && !module.nodeType && module;\n\n/** Detect the popular CommonJS extension `module.exports`. */\nvar moduleExports = freeModule && freeModule.exports === freeExports;\n\n/** Detect free variable `process` from Node.js. */\nvar freeProcess = moduleExports && freeGlobal.process;\n\n/** Used to access faster Node.js helpers. */\nvar nodeUtil = (function() {\n  try {\n    // Use `util.types` for Node.js 10+.\n    var types = freeModule && freeModule.require && freeModule.require('util').types;\n\n    if (types) {\n      return types;\n    }\n\n    // Legacy `process.binding('util')` for Node.js < 10.\n    return freeProcess && freeProcess.binding && freeProcess.binding('util');\n  } catch (e) {}\n}());\n\nmodule.exports = nodeUtil;\n\n/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../webpack/buildin/module.js */ \"./node_modules/webpack/buildin/module.js\")(module)))\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/_nodeUtil.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/_objectToString.js":
+/*!*****************************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/_objectToString.js ***!
+  \*****************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("/** Used for built-in method references. */\nvar objectProto = Object.prototype;\n\n/**\n * Used to resolve the\n * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)\n * of values.\n */\nvar nativeObjectToString = objectProto.toString;\n\n/**\n * Converts `value` to a string using `Object.prototype.toString`.\n *\n * @private\n * @param {*} value The value to convert.\n * @returns {string} Returns the converted string.\n */\nfunction objectToString(value) {\n  return nativeObjectToString.call(value);\n}\n\nmodule.exports = objectToString;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/_objectToString.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/_overRest.js":
+/*!***********************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/_overRest.js ***!
+  \***********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("var apply = __webpack_require__(/*! ./_apply */ \"./node_modules/emojidex-client/node_modules/lodash/_apply.js\");\n\n/* Built-in method references for those with the same name as other `lodash` methods. */\nvar nativeMax = Math.max;\n\n/**\n * A specialized version of `baseRest` which transforms the rest array.\n *\n * @private\n * @param {Function} func The function to apply a rest parameter to.\n * @param {number} [start=func.length-1] The start position of the rest parameter.\n * @param {Function} transform The rest array transform.\n * @returns {Function} Returns the new function.\n */\nfunction overRest(func, start, transform) {\n  start = nativeMax(start === undefined ? (func.length - 1) : start, 0);\n  return function() {\n    var args = arguments,\n        index = -1,\n        length = nativeMax(args.length - start, 0),\n        array = Array(length);\n\n    while (++index < length) {\n      array[index] = args[start + index];\n    }\n    index = -1;\n    var otherArgs = Array(start + 1);\n    while (++index < start) {\n      otherArgs[index] = args[index];\n    }\n    otherArgs[start] = transform(array);\n    return apply(func, this, otherArgs);\n  };\n}\n\nmodule.exports = overRest;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/_overRest.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/_root.js":
+/*!*******************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/_root.js ***!
+  \*******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("var freeGlobal = __webpack_require__(/*! ./_freeGlobal */ \"./node_modules/emojidex-client/node_modules/lodash/_freeGlobal.js\");\n\n/** Detect free variable `self`. */\nvar freeSelf = typeof self == 'object' && self && self.Object === Object && self;\n\n/** Used as a reference to the global object. */\nvar root = freeGlobal || freeSelf || Function('return this')();\n\nmodule.exports = root;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/_root.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/_setToString.js":
+/*!**************************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/_setToString.js ***!
+  \**************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("var baseSetToString = __webpack_require__(/*! ./_baseSetToString */ \"./node_modules/emojidex-client/node_modules/lodash/_baseSetToString.js\"),\n    shortOut = __webpack_require__(/*! ./_shortOut */ \"./node_modules/emojidex-client/node_modules/lodash/_shortOut.js\");\n\n/**\n * Sets the `toString` method of `func` to return `string`.\n *\n * @private\n * @param {Function} func The function to modify.\n * @param {Function} string The `toString` result.\n * @returns {Function} Returns `func`.\n */\nvar setToString = shortOut(baseSetToString);\n\nmodule.exports = setToString;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/_setToString.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/_shortOut.js":
+/*!***********************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/_shortOut.js ***!
+  \***********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("/** Used to detect hot functions by number of calls within a span of milliseconds. */\nvar HOT_COUNT = 800,\n    HOT_SPAN = 16;\n\n/* Built-in method references for those with the same name as other `lodash` methods. */\nvar nativeNow = Date.now;\n\n/**\n * Creates a function that'll short out and invoke `identity` instead\n * of `func` when it's called `HOT_COUNT` or more times in `HOT_SPAN`\n * milliseconds.\n *\n * @private\n * @param {Function} func The function to restrict.\n * @returns {Function} Returns the new shortable function.\n */\nfunction shortOut(func) {\n  var count = 0,\n      lastCalled = 0;\n\n  return function() {\n    var stamp = nativeNow(),\n        remaining = HOT_SPAN - (stamp - lastCalled);\n\n    lastCalled = stamp;\n    if (remaining > 0) {\n      if (++count >= HOT_COUNT) {\n        return arguments[0];\n      }\n    } else {\n      count = 0;\n    }\n    return func.apply(undefined, arguments);\n  };\n}\n\nmodule.exports = shortOut;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/_shortOut.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/_toSource.js":
+/*!***********************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/_toSource.js ***!
+  \***********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("/** Used for built-in method references. */\nvar funcProto = Function.prototype;\n\n/** Used to resolve the decompiled source of functions. */\nvar funcToString = funcProto.toString;\n\n/**\n * Converts `func` to its source code.\n *\n * @private\n * @param {Function} func The function to convert.\n * @returns {string} Returns the source code.\n */\nfunction toSource(func) {\n  if (func != null) {\n    try {\n      return funcToString.call(func);\n    } catch (e) {}\n    try {\n      return (func + '');\n    } catch (e) {}\n  }\n  return '';\n}\n\nmodule.exports = toSource;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/_toSource.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/assignIn.js":
+/*!**********************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/assignIn.js ***!
+  \**********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("var copyObject = __webpack_require__(/*! ./_copyObject */ \"./node_modules/emojidex-client/node_modules/lodash/_copyObject.js\"),\n    createAssigner = __webpack_require__(/*! ./_createAssigner */ \"./node_modules/emojidex-client/node_modules/lodash/_createAssigner.js\"),\n    keysIn = __webpack_require__(/*! ./keysIn */ \"./node_modules/emojidex-client/node_modules/lodash/keysIn.js\");\n\n/**\n * This method is like `_.assign` except that it iterates over own and\n * inherited source properties.\n *\n * **Note:** This method mutates `object`.\n *\n * @static\n * @memberOf _\n * @since 4.0.0\n * @alias extend\n * @category Object\n * @param {Object} object The destination object.\n * @param {...Object} [sources] The source objects.\n * @returns {Object} Returns `object`.\n * @see _.assign\n * @example\n *\n * function Foo() {\n *   this.a = 1;\n * }\n *\n * function Bar() {\n *   this.c = 3;\n * }\n *\n * Foo.prototype.b = 2;\n * Bar.prototype.d = 4;\n *\n * _.assignIn({ 'a': 0 }, new Foo, new Bar);\n * // => { 'a': 1, 'b': 2, 'c': 3, 'd': 4 }\n */\nvar assignIn = createAssigner(function(object, source) {\n  copyObject(source, keysIn(source), object);\n});\n\nmodule.exports = assignIn;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/assignIn.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/constant.js":
+/*!**********************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/constant.js ***!
+  \**********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("/**\n * Creates a function that returns `value`.\n *\n * @static\n * @memberOf _\n * @since 2.4.0\n * @category Util\n * @param {*} value The value to return from the new function.\n * @returns {Function} Returns the new constant function.\n * @example\n *\n * var objects = _.times(2, _.constant({ 'a': 1 }));\n *\n * console.log(objects);\n * // => [{ 'a': 1 }, { 'a': 1 }]\n *\n * console.log(objects[0] === objects[1]);\n * // => true\n */\nfunction constant(value) {\n  return function() {\n    return value;\n  };\n}\n\nmodule.exports = constant;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/constant.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/eq.js":
+/*!****************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/eq.js ***!
+  \****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("/**\n * Performs a\n * [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)\n * comparison between two values to determine if they are equivalent.\n *\n * @static\n * @memberOf _\n * @since 4.0.0\n * @category Lang\n * @param {*} value The value to compare.\n * @param {*} other The other value to compare.\n * @returns {boolean} Returns `true` if the values are equivalent, else `false`.\n * @example\n *\n * var object = { 'a': 1 };\n * var other = { 'a': 1 };\n *\n * _.eq(object, object);\n * // => true\n *\n * _.eq(object, other);\n * // => false\n *\n * _.eq('a', 'a');\n * // => true\n *\n * _.eq('a', Object('a'));\n * // => false\n *\n * _.eq(NaN, NaN);\n * // => true\n */\nfunction eq(value, other) {\n  return value === other || (value !== value && other !== other);\n}\n\nmodule.exports = eq;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/eq.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/extend.js":
+/*!********************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/extend.js ***!
+  \********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("module.exports = __webpack_require__(/*! ./assignIn */ \"./node_modules/emojidex-client/node_modules/lodash/assignIn.js\");\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/extend.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/identity.js":
+/*!**********************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/identity.js ***!
+  \**********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("/**\n * This method returns the first argument it receives.\n *\n * @static\n * @since 0.1.0\n * @memberOf _\n * @category Util\n * @param {*} value Any value.\n * @returns {*} Returns `value`.\n * @example\n *\n * var object = { 'a': 1 };\n *\n * console.log(_.identity(object) === object);\n * // => true\n */\nfunction identity(value) {\n  return value;\n}\n\nmodule.exports = identity;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/identity.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/isArguments.js":
+/*!*************************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/isArguments.js ***!
+  \*************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("var baseIsArguments = __webpack_require__(/*! ./_baseIsArguments */ \"./node_modules/emojidex-client/node_modules/lodash/_baseIsArguments.js\"),\n    isObjectLike = __webpack_require__(/*! ./isObjectLike */ \"./node_modules/emojidex-client/node_modules/lodash/isObjectLike.js\");\n\n/** Used for built-in method references. */\nvar objectProto = Object.prototype;\n\n/** Used to check objects for own properties. */\nvar hasOwnProperty = objectProto.hasOwnProperty;\n\n/** Built-in value references. */\nvar propertyIsEnumerable = objectProto.propertyIsEnumerable;\n\n/**\n * Checks if `value` is likely an `arguments` object.\n *\n * @static\n * @memberOf _\n * @since 0.1.0\n * @category Lang\n * @param {*} value The value to check.\n * @returns {boolean} Returns `true` if `value` is an `arguments` object,\n *  else `false`.\n * @example\n *\n * _.isArguments(function() { return arguments; }());\n * // => true\n *\n * _.isArguments([1, 2, 3]);\n * // => false\n */\nvar isArguments = baseIsArguments(function() { return arguments; }()) ? baseIsArguments : function(value) {\n  return isObjectLike(value) && hasOwnProperty.call(value, 'callee') &&\n    !propertyIsEnumerable.call(value, 'callee');\n};\n\nmodule.exports = isArguments;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/isArguments.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/isArray.js":
+/*!*********************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/isArray.js ***!
+  \*********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("/**\n * Checks if `value` is classified as an `Array` object.\n *\n * @static\n * @memberOf _\n * @since 0.1.0\n * @category Lang\n * @param {*} value The value to check.\n * @returns {boolean} Returns `true` if `value` is an array, else `false`.\n * @example\n *\n * _.isArray([1, 2, 3]);\n * // => true\n *\n * _.isArray(document.body.children);\n * // => false\n *\n * _.isArray('abc');\n * // => false\n *\n * _.isArray(_.noop);\n * // => false\n */\nvar isArray = Array.isArray;\n\nmodule.exports = isArray;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/isArray.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/isArrayLike.js":
+/*!*************************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/isArrayLike.js ***!
+  \*************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("var isFunction = __webpack_require__(/*! ./isFunction */ \"./node_modules/emojidex-client/node_modules/lodash/isFunction.js\"),\n    isLength = __webpack_require__(/*! ./isLength */ \"./node_modules/emojidex-client/node_modules/lodash/isLength.js\");\n\n/**\n * Checks if `value` is array-like. A value is considered array-like if it's\n * not a function and has a `value.length` that's an integer greater than or\n * equal to `0` and less than or equal to `Number.MAX_SAFE_INTEGER`.\n *\n * @static\n * @memberOf _\n * @since 4.0.0\n * @category Lang\n * @param {*} value The value to check.\n * @returns {boolean} Returns `true` if `value` is array-like, else `false`.\n * @example\n *\n * _.isArrayLike([1, 2, 3]);\n * // => true\n *\n * _.isArrayLike(document.body.children);\n * // => true\n *\n * _.isArrayLike('abc');\n * // => true\n *\n * _.isArrayLike(_.noop);\n * // => false\n */\nfunction isArrayLike(value) {\n  return value != null && isLength(value.length) && !isFunction(value);\n}\n\nmodule.exports = isArrayLike;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/isArrayLike.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/isBuffer.js":
+/*!**********************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/isBuffer.js ***!
+  \**********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("/* WEBPACK VAR INJECTION */(function(module) {var root = __webpack_require__(/*! ./_root */ \"./node_modules/emojidex-client/node_modules/lodash/_root.js\"),\n    stubFalse = __webpack_require__(/*! ./stubFalse */ \"./node_modules/emojidex-client/node_modules/lodash/stubFalse.js\");\n\n/** Detect free variable `exports`. */\nvar freeExports =  true && exports && !exports.nodeType && exports;\n\n/** Detect free variable `module`. */\nvar freeModule = freeExports && typeof module == 'object' && module && !module.nodeType && module;\n\n/** Detect the popular CommonJS extension `module.exports`. */\nvar moduleExports = freeModule && freeModule.exports === freeExports;\n\n/** Built-in value references. */\nvar Buffer = moduleExports ? root.Buffer : undefined;\n\n/* Built-in method references for those with the same name as other `lodash` methods. */\nvar nativeIsBuffer = Buffer ? Buffer.isBuffer : undefined;\n\n/**\n * Checks if `value` is a buffer.\n *\n * @static\n * @memberOf _\n * @since 4.3.0\n * @category Lang\n * @param {*} value The value to check.\n * @returns {boolean} Returns `true` if `value` is a buffer, else `false`.\n * @example\n *\n * _.isBuffer(new Buffer(2));\n * // => true\n *\n * _.isBuffer(new Uint8Array(2));\n * // => false\n */\nvar isBuffer = nativeIsBuffer || stubFalse;\n\nmodule.exports = isBuffer;\n\n/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../webpack/buildin/module.js */ \"./node_modules/webpack/buildin/module.js\")(module)))\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/isBuffer.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/isFunction.js":
+/*!************************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/isFunction.js ***!
+  \************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("var baseGetTag = __webpack_require__(/*! ./_baseGetTag */ \"./node_modules/emojidex-client/node_modules/lodash/_baseGetTag.js\"),\n    isObject = __webpack_require__(/*! ./isObject */ \"./node_modules/emojidex-client/node_modules/lodash/isObject.js\");\n\n/** `Object#toString` result references. */\nvar asyncTag = '[object AsyncFunction]',\n    funcTag = '[object Function]',\n    genTag = '[object GeneratorFunction]',\n    proxyTag = '[object Proxy]';\n\n/**\n * Checks if `value` is classified as a `Function` object.\n *\n * @static\n * @memberOf _\n * @since 0.1.0\n * @category Lang\n * @param {*} value The value to check.\n * @returns {boolean} Returns `true` if `value` is a function, else `false`.\n * @example\n *\n * _.isFunction(_);\n * // => true\n *\n * _.isFunction(/abc/);\n * // => false\n */\nfunction isFunction(value) {\n  if (!isObject(value)) {\n    return false;\n  }\n  // The use of `Object#toString` avoids issues with the `typeof` operator\n  // in Safari 9 which returns 'object' for typed arrays and other constructors.\n  var tag = baseGetTag(value);\n  return tag == funcTag || tag == genTag || tag == asyncTag || tag == proxyTag;\n}\n\nmodule.exports = isFunction;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/isFunction.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/isLength.js":
+/*!**********************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/isLength.js ***!
+  \**********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("/** Used as references for various `Number` constants. */\nvar MAX_SAFE_INTEGER = 9007199254740991;\n\n/**\n * Checks if `value` is a valid array-like length.\n *\n * **Note:** This method is loosely based on\n * [`ToLength`](http://ecma-international.org/ecma-262/7.0/#sec-tolength).\n *\n * @static\n * @memberOf _\n * @since 4.0.0\n * @category Lang\n * @param {*} value The value to check.\n * @returns {boolean} Returns `true` if `value` is a valid length, else `false`.\n * @example\n *\n * _.isLength(3);\n * // => true\n *\n * _.isLength(Number.MIN_VALUE);\n * // => false\n *\n * _.isLength(Infinity);\n * // => false\n *\n * _.isLength('3');\n * // => false\n */\nfunction isLength(value) {\n  return typeof value == 'number' &&\n    value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;\n}\n\nmodule.exports = isLength;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/isLength.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/isObject.js":
+/*!**********************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/isObject.js ***!
+  \**********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("/**\n * Checks if `value` is the\n * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)\n * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)\n *\n * @static\n * @memberOf _\n * @since 0.1.0\n * @category Lang\n * @param {*} value The value to check.\n * @returns {boolean} Returns `true` if `value` is an object, else `false`.\n * @example\n *\n * _.isObject({});\n * // => true\n *\n * _.isObject([1, 2, 3]);\n * // => true\n *\n * _.isObject(_.noop);\n * // => true\n *\n * _.isObject(null);\n * // => false\n */\nfunction isObject(value) {\n  var type = typeof value;\n  return value != null && (type == 'object' || type == 'function');\n}\n\nmodule.exports = isObject;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/isObject.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/isObjectLike.js":
+/*!**************************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/isObjectLike.js ***!
+  \**************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("/**\n * Checks if `value` is object-like. A value is object-like if it's not `null`\n * and has a `typeof` result of \"object\".\n *\n * @static\n * @memberOf _\n * @since 4.0.0\n * @category Lang\n * @param {*} value The value to check.\n * @returns {boolean} Returns `true` if `value` is object-like, else `false`.\n * @example\n *\n * _.isObjectLike({});\n * // => true\n *\n * _.isObjectLike([1, 2, 3]);\n * // => true\n *\n * _.isObjectLike(_.noop);\n * // => false\n *\n * _.isObjectLike(null);\n * // => false\n */\nfunction isObjectLike(value) {\n  return value != null && typeof value == 'object';\n}\n\nmodule.exports = isObjectLike;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/isObjectLike.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/isTypedArray.js":
+/*!**************************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/isTypedArray.js ***!
+  \**************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("var baseIsTypedArray = __webpack_require__(/*! ./_baseIsTypedArray */ \"./node_modules/emojidex-client/node_modules/lodash/_baseIsTypedArray.js\"),\n    baseUnary = __webpack_require__(/*! ./_baseUnary */ \"./node_modules/emojidex-client/node_modules/lodash/_baseUnary.js\"),\n    nodeUtil = __webpack_require__(/*! ./_nodeUtil */ \"./node_modules/emojidex-client/node_modules/lodash/_nodeUtil.js\");\n\n/* Node.js helper references. */\nvar nodeIsTypedArray = nodeUtil && nodeUtil.isTypedArray;\n\n/**\n * Checks if `value` is classified as a typed array.\n *\n * @static\n * @memberOf _\n * @since 3.0.0\n * @category Lang\n * @param {*} value The value to check.\n * @returns {boolean} Returns `true` if `value` is a typed array, else `false`.\n * @example\n *\n * _.isTypedArray(new Uint8Array);\n * // => true\n *\n * _.isTypedArray([]);\n * // => false\n */\nvar isTypedArray = nodeIsTypedArray ? baseUnary(nodeIsTypedArray) : baseIsTypedArray;\n\nmodule.exports = isTypedArray;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/isTypedArray.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/keysIn.js":
+/*!********************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/keysIn.js ***!
+  \********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("var arrayLikeKeys = __webpack_require__(/*! ./_arrayLikeKeys */ \"./node_modules/emojidex-client/node_modules/lodash/_arrayLikeKeys.js\"),\n    baseKeysIn = __webpack_require__(/*! ./_baseKeysIn */ \"./node_modules/emojidex-client/node_modules/lodash/_baseKeysIn.js\"),\n    isArrayLike = __webpack_require__(/*! ./isArrayLike */ \"./node_modules/emojidex-client/node_modules/lodash/isArrayLike.js\");\n\n/**\n * Creates an array of the own and inherited enumerable property names of `object`.\n *\n * **Note:** Non-object values are coerced to objects.\n *\n * @static\n * @memberOf _\n * @since 3.0.0\n * @category Object\n * @param {Object} object The object to query.\n * @returns {Array} Returns the array of property names.\n * @example\n *\n * function Foo() {\n *   this.a = 1;\n *   this.b = 2;\n * }\n *\n * Foo.prototype.c = 3;\n *\n * _.keysIn(new Foo);\n * // => ['a', 'b', 'c'] (iteration order is not guaranteed)\n */\nfunction keysIn(object) {\n  return isArrayLike(object) ? arrayLikeKeys(object, true) : baseKeysIn(object);\n}\n\nmodule.exports = keysIn;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/keysIn.js?");
+
+/***/ }),
+
+/***/ "./node_modules/emojidex-client/node_modules/lodash/stubFalse.js":
+/*!***********************************************************************!*\
+  !*** ./node_modules/emojidex-client/node_modules/lodash/stubFalse.js ***!
+  \***********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("/**\n * This method returns `false`.\n *\n * @static\n * @memberOf _\n * @since 4.13.0\n * @category Util\n * @returns {boolean} Returns `false`.\n * @example\n *\n * _.times(2, _.stubFalse);\n * // => [false, false]\n */\nfunction stubFalse() {\n  return false;\n}\n\nmodule.exports = stubFalse;\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/node_modules/lodash/stubFalse.js?");
+
+/***/ }),
+
 /***/ "./node_modules/emojidex-client/src/es6/client.js":
 /*!********************************************************!*\
   !*** ./node_modules/emojidex-client/src/es6/client.js ***!
@@ -1916,7 +2466,7 @@ eval("var closest = __webpack_require__(/*! ./closest */ \"./node_modules/delega
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return EmojidexClient; });\n/* harmony import */ var _components_categories__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/categories */ \"./node_modules/emojidex-client/src/es6/components/categories.js\");\n/* harmony import */ var _components_customizations__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/customizations */ \"./node_modules/emojidex-client/src/es6/components/customizations.js\");\n/* harmony import */ var _components_data__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/data */ \"./node_modules/emojidex-client/src/es6/components/data.js\");\n/* harmony import */ var _components_emoji__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/emoji */ \"./node_modules/emojidex-client/src/es6/components/emoji.js\");\n/* harmony import */ var _components_indexes__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/indexes */ \"./node_modules/emojidex-client/src/es6/components/indexes.js\");\n/* harmony import */ var _components_search__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/search */ \"./node_modules/emojidex-client/src/es6/components/search.js\");\n/* harmony import */ var _components_user__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/user */ \"./node_modules/emojidex-client/src/es6/components/user.js\");\n/* harmony import */ var _components_util__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/util */ \"./node_modules/emojidex-client/src/es6/components/util.js\");\n/* harmony import */ var lodash_extend__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! lodash/extend */ \"./node_modules/lodash/extend.js\");\n/* harmony import */ var lodash_extend__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(lodash_extend__WEBPACK_IMPORTED_MODULE_8__);\n// emojidex client\n// * Provides search, index caching and combining and asset URI resolution\n//\n// =LICENSE=\n// Licensed under the emojidex Open License\n// https://www.emojidex.com/emojidex/emojidex_open_license\n//\n// Copyright 2013 the emojidex project / K.K. GenSouSha\n\n\n\n\n\n\n\n\n\n\n\nclass EmojidexClient {\n  constructor(options) {\n    this.env = {\n      apiVer: 1,\n      cdnAddr: 'cdn.emojidex.com',\n      sCdnAddr: 'cdn.emojidex.com',\n      assetAddr: 'assets.emojidex.com',\n      sAssetAddr: ''\n    }\n\n    // sets global default value\n    this.defaults = {\n      locale: 'en',\n      apiUrl: 'https://www.emojidex.com/api/v1/',\n      cdnUrl: 'https://cdn.emojidex.com/emoji/',\n      closedNet: false,\n      minQueryLen: 4,\n      sizeCode: 'xhdpi',\n      detailed: false,\n      limit: 32,\n      onReady: () => ({})\n    }\n\n    this.options = lodash_extend__WEBPACK_IMPORTED_MODULE_8___default()({}, this.defaults, options)\n\n    // set closed network flag (for OSS distrobutions, intranet/private neworks, or closed license)\n    // DO NOT set to true unless permitted by an emojidex License\n    this.closedNet = this.options.closedNet\n\n    // set end points\n    this.apiUrl = this.options.apiUrl\n    this.cdnUrl = this.options.cdnUrl\n    this.sizeCode = this.options.sizeCode\n\n    // common @options\n    this.detailed = this.options.detailed\n    this.limit = this.options.limit\n    this.locale = this.options.locale\n\n    // new Emojidex modules\n    this.Data = new _components_data__WEBPACK_IMPORTED_MODULE_2__[\"default\"](this, this.options).then(() => {\n      this.Customizations = new _components_customizations__WEBPACK_IMPORTED_MODULE_1__[\"default\"](this)\n      this.Util = new _components_util__WEBPACK_IMPORTED_MODULE_7__[\"default\"](this)\n      this.User = new _components_user__WEBPACK_IMPORTED_MODULE_6__[\"default\"](this)\n      this.Indexes = new _components_indexes__WEBPACK_IMPORTED_MODULE_4__[\"default\"](this)\n      this.Search = new _components_search__WEBPACK_IMPORTED_MODULE_5__[\"default\"](this)\n      this.Emoji = new _components_emoji__WEBPACK_IMPORTED_MODULE_3__[\"default\"](this)\n      this.Categories = new _components_categories__WEBPACK_IMPORTED_MODULE_0__[\"default\"](this)\n      return this.Categories\n    }).then(() => {\n      this.options.onReady(this)\n    }).catch(error => {\n      console.error(error)\n    })\n  }\n}\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/src/es6/client.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return EmojidexClient; });\n/* harmony import */ var _components_categories__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/categories */ \"./node_modules/emojidex-client/src/es6/components/categories.js\");\n/* harmony import */ var _components_customizations__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/customizations */ \"./node_modules/emojidex-client/src/es6/components/customizations.js\");\n/* harmony import */ var _components_data__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/data */ \"./node_modules/emojidex-client/src/es6/components/data.js\");\n/* harmony import */ var _components_emoji__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/emoji */ \"./node_modules/emojidex-client/src/es6/components/emoji.js\");\n/* harmony import */ var _components_indexes__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/indexes */ \"./node_modules/emojidex-client/src/es6/components/indexes.js\");\n/* harmony import */ var _components_search__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/search */ \"./node_modules/emojidex-client/src/es6/components/search.js\");\n/* harmony import */ var _components_user__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/user */ \"./node_modules/emojidex-client/src/es6/components/user.js\");\n/* harmony import */ var _components_util__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/util */ \"./node_modules/emojidex-client/src/es6/components/util.js\");\n/* harmony import */ var lodash_extend__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! lodash/extend */ \"./node_modules/emojidex-client/node_modules/lodash/extend.js\");\n/* harmony import */ var lodash_extend__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(lodash_extend__WEBPACK_IMPORTED_MODULE_8__);\n// emojidex client\n// * Provides search, index caching and combining and asset URI resolution\n//\n// =LICENSE=\n// Licensed under the emojidex Open License\n// https://www.emojidex.com/emojidex/emojidex_open_license\n//\n// Copyright 2013 the emojidex project / K.K. GenSouSha\n\n\n\n\n\n\n\n\n\n\n\nclass EmojidexClient {\n  constructor(options) {\n    this.env = {\n      apiVer: 1,\n      cdnAddr: 'cdn.emojidex.com',\n      sCdnAddr: 'cdn.emojidex.com',\n      assetAddr: 'assets.emojidex.com',\n      sAssetAddr: ''\n    }\n\n    // sets global default value\n    this.defaults = {\n      locale: 'en',\n      apiUrl: 'https://www.emojidex.com/api/v1/',\n      cdnUrl: 'https://cdn.emojidex.com/emoji/',\n      closedNet: false,\n      minQueryLen: 4,\n      sizeCode: 'xhdpi',\n      detailed: false,\n      limit: 32,\n      onReady: () => ({})\n    }\n\n    this.options = lodash_extend__WEBPACK_IMPORTED_MODULE_8___default()({}, this.defaults, options)\n\n    // set closed network flag (for OSS distrobutions, intranet/private neworks, or closed license)\n    // DO NOT set to true unless permitted by an emojidex License\n    this.closedNet = this.options.closedNet\n\n    // set end points\n    this.apiUrl = this.options.apiUrl\n    this.cdnUrl = this.options.cdnUrl\n    this.sizeCode = this.options.sizeCode\n\n    // common @options\n    this.detailed = this.options.detailed\n    this.limit = this.options.limit\n    this.locale = this.options.locale\n\n    // new Emojidex modules\n    this.Data = new _components_data__WEBPACK_IMPORTED_MODULE_2__[\"default\"](this, this.options).then(() => {\n      this.Customizations = new _components_customizations__WEBPACK_IMPORTED_MODULE_1__[\"default\"](this)\n      this.Util = new _components_util__WEBPACK_IMPORTED_MODULE_7__[\"default\"](this)\n      this.User = new _components_user__WEBPACK_IMPORTED_MODULE_6__[\"default\"](this)\n      this.Indexes = new _components_indexes__WEBPACK_IMPORTED_MODULE_4__[\"default\"](this)\n      this.Search = new _components_search__WEBPACK_IMPORTED_MODULE_5__[\"default\"](this)\n      this.Emoji = new _components_emoji__WEBPACK_IMPORTED_MODULE_3__[\"default\"](this)\n      this.Categories = new _components_categories__WEBPACK_IMPORTED_MODULE_0__[\"default\"](this)\n      return this.Categories\n    }).then(() => {\n      this.options.onReady(this)\n    }).catch(error => {\n      console.error(error)\n    })\n  }\n}\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/src/es6/client.js?");
 
 /***/ }),
 
@@ -1928,7 +2478,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return EmojidexCategories; });\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ \"./node_modules/axios/index.js\");\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var lodash_extend__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash/extend */ \"./node_modules/lodash/extend.js\");\n/* harmony import */ var lodash_extend__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash_extend__WEBPACK_IMPORTED_MODULE_1__);\n\n\n\nclass EmojidexCategories {\n  constructor(EC) {\n    this.EC = EC\n    this._categories = this.EC.Data.categories()\n    this.local = this.EC.options.locale\n    return this.sync(null, this.locale).then(() => {\n      this.EC.Categories = this\n      return this.EC.Categories\n    })\n  }\n\n  _categoriesAPI(categoryName, callback, opts, calledFunc) {\n    const param = {\n      page: 1,\n      limit: this.EC.limit,\n      detailed: this.EC.detailed\n    }\n    if (this.EC.User.authInfo.token) {\n      lodash_extend__WEBPACK_IMPORTED_MODULE_1___default()(param, { auth_token: this.EC.User.authInfo.token }) // eslint-disable-line camelcase\n    }\n\n    lodash_extend__WEBPACK_IMPORTED_MODULE_1___default()(param, opts)\n\n    this.calledFunc = calledFunc\n    this.calledData = {\n      categoryName,\n      callback,\n      param\n    }\n\n    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(`${this.EC.apiUrl}emoji`, {\n      params: param\n    }).then(response => {\n      this.meta = response.data.meta\n      this.results = response.data.emoji\n      this.curPage = response.data.meta.page\n      this.count = response.data.meta.count\n      return this.EC.Emoji.combine(response.data.emoji).then(() => {\n        if (typeof callback === 'function') {\n          callback(response.data.emoji, {\n            categoryName,\n            callback,\n            param\n          })\n        } else {\n          return response.data\n        }\n      })\n    }).catch(error => {\n      console.error(error)\n    })\n  }\n\n  getEmoji(categoryName, callback, opts) {\n    const param = { category: categoryName }\n    lodash_extend__WEBPACK_IMPORTED_MODULE_1___default()(param, opts)\n    return this._categoriesAPI(categoryName, callback, param, this.getEmoji)\n  }\n\n  next() {\n    if (this.count === this.calledData.param.limit) {\n      this.calledData.param.page++\n    }\n\n    return this.calledFunc(this.calledData.categoryName, this.calledData.callback, this.calledData.param)\n  }\n\n  prev() {\n    if (this.calledData.param.page > 1) {\n      this.calledData.param.page--\n    }\n\n    return this.calledFunc(this.calledData.categoryName, this.calledData.callback, this.calledData.param)\n  }\n\n  // Gets the full list of caetgories available\n  sync(callback, locale = this.locale) {\n    if (typeof this._categories !== 'undefined' && typeof this._categories.length !== 'undefined' && this._categories.length !== 0) {\n      if (this.locale === locale) {\n        return new Promise(resolve => {\n          if (typeof callback === 'function') {\n            callback(this._categories)\n          }\n\n          return resolve(this._categories)\n        })\n      }\n\n      return this._getCategory(callback, locale)\n    }\n\n    if (typeof locale === 'undefined' || locale === null) {\n      ({ locale } = this.EC)\n    }\n\n    return this._getCategory(callback, locale)\n  }\n\n  _getCategory(callback, locale) {\n    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(`${this.EC.apiUrl}categories`, {\n      params: { locale }\n    }).then(response => {\n      this._categories = response.data.categories\n      return this.EC.Data.categories(response.data.categories).then(() => {\n        if (typeof callback === 'function') {\n          callback(this._categories)\n        } else {\n          return this._categories\n        }\n      })\n    }).catch(error => {\n      console.error(error)\n    })\n  }\n\n  all(callback) {\n    if (this._categories) {\n      if (typeof callback === 'function') {\n        callback(this._categories)\n      } else {\n        return this._categories\n      }\n    } else {\n      return setTimeout((() => {\n        return this.all(callback)\n      }), 500)\n    }\n  }\n}\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/src/es6/components/categories.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return EmojidexCategories; });\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ \"./node_modules/axios/index.js\");\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var lodash_extend__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash/extend */ \"./node_modules/emojidex-client/node_modules/lodash/extend.js\");\n/* harmony import */ var lodash_extend__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash_extend__WEBPACK_IMPORTED_MODULE_1__);\n\n\n\nclass EmojidexCategories {\n  constructor(EC) {\n    this.EC = EC\n    this._categories = this.EC.Data.categories()\n    this.local = this.EC.options.locale\n    return this.sync(null, this.locale).then(() => {\n      this.EC.Categories = this\n      return this.EC.Categories\n    })\n  }\n\n  _categoriesAPI(categoryName, callback, opts, calledFunc) {\n    const param = {\n      page: 1,\n      limit: this.EC.limit,\n      detailed: this.EC.detailed\n    }\n    if (this.EC.User.authInfo.token) {\n      lodash_extend__WEBPACK_IMPORTED_MODULE_1___default()(param, { auth_token: this.EC.User.authInfo.token }) // eslint-disable-line camelcase\n    }\n\n    lodash_extend__WEBPACK_IMPORTED_MODULE_1___default()(param, opts)\n\n    this.calledFunc = calledFunc\n    this.calledData = {\n      categoryName,\n      callback,\n      param\n    }\n\n    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(`${this.EC.apiUrl}emoji`, {\n      params: param\n    }).then(response => {\n      this.meta = response.data.meta\n      this.results = response.data.emoji\n      this.curPage = response.data.meta.page\n      this.count = response.data.meta.count\n      return this.EC.Emoji.combine(response.data.emoji).then(() => {\n        if (typeof callback === 'function') {\n          callback(response.data.emoji, {\n            categoryName,\n            callback,\n            param\n          })\n        } else {\n          return response.data\n        }\n      })\n    }).catch(error => {\n      console.error(error)\n    })\n  }\n\n  getEmoji(categoryName, callback, opts) {\n    const param = { category: categoryName }\n    lodash_extend__WEBPACK_IMPORTED_MODULE_1___default()(param, opts)\n    return this._categoriesAPI(categoryName, callback, param, this.getEmoji)\n  }\n\n  next() {\n    if (this.count === this.calledData.param.limit) {\n      this.calledData.param.page++\n    }\n\n    return this.calledFunc(this.calledData.categoryName, this.calledData.callback, this.calledData.param)\n  }\n\n  prev() {\n    if (this.calledData.param.page > 1) {\n      this.calledData.param.page--\n    }\n\n    return this.calledFunc(this.calledData.categoryName, this.calledData.callback, this.calledData.param)\n  }\n\n  // Gets the full list of caetgories available\n  sync(callback, locale = this.locale) {\n    if (typeof this._categories !== 'undefined' && typeof this._categories.length !== 'undefined' && this._categories.length !== 0) {\n      if (this.locale === locale) {\n        return new Promise(resolve => {\n          if (typeof callback === 'function') {\n            callback(this._categories)\n          }\n\n          return resolve(this._categories)\n        })\n      }\n\n      return this._getCategory(callback, locale)\n    }\n\n    if (typeof locale === 'undefined' || locale === null) {\n      ({ locale } = this.EC)\n    }\n\n    return this._getCategory(callback, locale)\n  }\n\n  _getCategory(callback, locale) {\n    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(`${this.EC.apiUrl}categories`, {\n      params: { locale }\n    }).then(response => {\n      this._categories = response.data.categories\n      return this.EC.Data.categories(response.data.categories).then(() => {\n        if (typeof callback === 'function') {\n          callback(this._categories)\n        } else {\n          return this._categories\n        }\n      })\n    }).catch(error => {\n      console.error(error)\n    })\n  }\n\n  all(callback) {\n    if (this._categories) {\n      if (typeof callback === 'function') {\n        callback(this._categories)\n      } else {\n        return this._categories\n      }\n    } else {\n      return setTimeout((() => {\n        return this.all(callback)\n      }), 500)\n    }\n  }\n}\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/src/es6/components/categories.js?");
 
 /***/ }),
 
@@ -1940,7 +2490,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return EmojidexCustomizations; });\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ \"./node_modules/axios/index.js\");\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var lodash_extend__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash/extend */ \"./node_modules/lodash/extend.js\");\n/* harmony import */ var lodash_extend__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash_extend__WEBPACK_IMPORTED_MODULE_1__);\n\n\n\nclass EmojidexCustomizations {\n  constructor(EC) {\n    this.EC = EC\n    this.results = []\n    this.curPage = 1\n  }\n\n  _customizationsAPI(callback, opts, calledFunc) {\n    const param = {\n      page: 1,\n      limit: this.EC.limit,\n      detailed: this.EC.detailed\n    }\n    lodash_extend__WEBPACK_IMPORTED_MODULE_1___default()(param, opts)\n\n    this.customizedFunc = calledFunc\n    this.customized = {\n      callback,\n      param\n    }\n\n    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(`${this.EC.apiUrl}emoji/customizations`, {\n      params: param\n    }).then(response => {\n      if (response.data.emoji) {\n        this.meta = response.data.meta\n        this.results = response.data.emoji\n        this.curPage = response.data.meta.page\n        this.maxPage = Math.ceil(response.data.meta.total_count / this.EC.limit)\n        if (typeof callback === 'function') {\n          callback(response.data.emoji)\n        } else {\n          return response.data\n        }\n      } else {\n        this.results = []\n        this.curPage = 0\n        if (typeof callback === 'function') {\n          callback([])\n        } else {\n          return []\n        }\n      }\n    }).catch(error => {\n      this.results = []\n      this.curPage = 0\n      if (typeof callback === 'function') {\n        callback([])\n      } else {\n        console.error(error)\n        return []\n      }\n    })\n  }\n\n  get(callback, opts) {\n    return this._customizationsAPI(callback, opts, this.get)\n  }\n\n  next() {\n    if (this.maxPage > this.curPage) {\n      this.customized.param.page++\n    }\n\n    return this.customizedFunc(this.customized.callback, this.customized.param)\n  }\n\n  prev() {\n    if (this.curPage > 1) {\n      this.customized.param.page--\n    }\n\n    return this.customizedFunc(this.customized.callback, this.customized.param)\n  }\n}\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/src/es6/components/customizations.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return EmojidexCustomizations; });\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ \"./node_modules/axios/index.js\");\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var lodash_extend__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash/extend */ \"./node_modules/emojidex-client/node_modules/lodash/extend.js\");\n/* harmony import */ var lodash_extend__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash_extend__WEBPACK_IMPORTED_MODULE_1__);\n\n\n\nclass EmojidexCustomizations {\n  constructor(EC) {\n    this.EC = EC\n    this.results = []\n    this.curPage = 1\n  }\n\n  _customizationsAPI(callback, opts, calledFunc) {\n    const param = {\n      page: 1,\n      limit: this.EC.limit,\n      detailed: this.EC.detailed\n    }\n    lodash_extend__WEBPACK_IMPORTED_MODULE_1___default()(param, opts)\n\n    this.customizedFunc = calledFunc\n    this.customized = {\n      callback,\n      param\n    }\n\n    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(`${this.EC.apiUrl}emoji/customizations`, {\n      params: param\n    }).then(response => {\n      if (response.data.emoji) {\n        this.meta = response.data.meta\n        this.results = response.data.emoji\n        this.curPage = response.data.meta.page\n        this.maxPage = Math.ceil(response.data.meta.total_count / this.EC.limit)\n        if (typeof callback === 'function') {\n          callback(response.data.emoji)\n        } else {\n          return response.data\n        }\n      } else {\n        this.results = []\n        this.curPage = 0\n        if (typeof callback === 'function') {\n          callback([])\n        } else {\n          return []\n        }\n      }\n    }).catch(error => {\n      this.results = []\n      this.curPage = 0\n      if (typeof callback === 'function') {\n        callback([])\n      } else {\n        console.error(error)\n        return []\n      }\n    })\n  }\n\n  get(callback, opts) {\n    return this._customizationsAPI(callback, opts, this.get)\n  }\n\n  next() {\n    if (this.maxPage > this.curPage) {\n      this.customized.param.page++\n    }\n\n    return this.customizedFunc(this.customized.callback, this.customized.param)\n  }\n\n  prev() {\n    if (this.curPage > 1) {\n      this.customized.param.page--\n    }\n\n    return this.customizedFunc(this.customized.callback, this.customized.param)\n  }\n}\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/src/es6/components/customizations.js?");
 
 /***/ }),
 
@@ -1964,7 +2514,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return EmojidexDataStorage; });\n/* harmony import */ var cross_storage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! cross-storage */ \"./node_modules/cross-storage/lib/index.js\");\n/* harmony import */ var cross_storage__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(cross_storage__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var lodash_extend__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash/extend */ \"./node_modules/lodash/extend.js\");\n/* harmony import */ var lodash_extend__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash_extend__WEBPACK_IMPORTED_MODULE_1__);\n\n\n\nclass EmojidexDataStorage {\n  constructor(hubPath = 'https://www.emojidex.com/hub/1.0.0') {\n    this.hub = new cross_storage__WEBPACK_IMPORTED_MODULE_0__[\"CrossStorageClient\"](hubPath, { frameId: 'emojidex-client-storage-hub' })\n    this.hubCache = {}\n  }\n\n  _getChainedData(query, dataObj, wrap = true) {\n    query = this._getParsedQuery(query)\n    const chainObj = (data, key) => {\n      if (query.array.length === 0) {\n        data[key] = dataObj\n      } else {\n        data[key] = {}\n        chainObj(data[key], query.array.shift())\n      }\n\n      return data\n    }\n\n    const chained = chainObj({}, query.array.shift())\n    return wrap ? chained : chained[query.first]\n  }\n\n  _getHubData(query) {\n    query = query.split('.')\n    return this.hub.onConnect().then(() => {\n      return this.hub.get(query.shift())\n    }).then(hubData => {\n      if (query.length) {\n        for (let i = 0; i < query.length; i++) {\n          const q = query[i]\n          hubData = hubData[q]\n        }\n      }\n\n      return hubData\n    }).catch(error => {\n      console.error(error)\n    })\n  }\n\n  _getParsedQuery(query) {\n    const parsedQuery = query.split('.')\n    return {\n      code: query,\n      array: parsedQuery,\n      first: parsedQuery[0]\n    }\n  }\n\n  get(query) {\n    query = Array.isArray(query) ? query : query.split('.')\n    let cache = this.hubCache\n    if (query.length) {\n      for (let i = 0; i < query.length; i++) {\n        const q = query[i]\n        if (cache[q] === undefined) {\n          return null\n        }\n\n        cache = cache[q]\n      }\n    }\n\n    return cache\n  }\n\n  set(query, data, update) {\n    const firstQuery = query.split('.')[0]\n    return this.hub.onConnect().then(() => {\n      if (update) {\n        const newData = {}\n        newData[firstQuery] = data\n        return this.hub.set(firstQuery, JSON.stringify(newData))\n      }\n\n      return this.hub.set(firstQuery, this._getChainedData(query, data))\n    }).then(() => {\n      return this.updateCache(firstQuery)\n    }).catch(error => {\n      console.error(error)\n    })\n  }\n\n  update(query, data) {\n    const merged = lodash_extend__WEBPACK_IMPORTED_MODULE_1___default()({}, this.get(query.split('.')[0]), this._getChainedData(query, data, false))\n    return this.set(query, merged, true)\n  }\n\n  updateCache(key) {\n    return this.hub.onConnect().then(() => {\n      return key ? key : this.hub.getKeys()\n    }).then(keys => {\n      return this.hub.get(keys)\n    }).then(hubData => {\n      const data = JSON.parse(hubData)\n      if (key) {\n        this.hubCache[key] = data[key]\n        return this.hubCache[key]\n      }\n\n      this.hubCache = data\n      return this.hubCache\n    }).catch(error => {\n      console.error(error)\n    })\n  }\n\n  _remove(query) {\n    query = this._getParsedQuery(query)\n    if (query.array.length === 1) {\n      return this.hub.del(query.code)\n    }\n\n    let scope = this.get(query.array.shift())\n    const target = scope\n    let i = 0\n    while (i < query.array.length - 1) {\n      scope = scope[query.array[i]]\n      i++\n    }\n\n    delete scope[query.array[i]]\n    return this.update(query.first, target)\n  }\n\n  clear() {\n    return this.hub.onConnect().then(() => {\n      return this.hub.clear()\n    }).catch(error => {\n      console.error(error)\n    })\n  }\n\n  keys(query) {\n    if (query) {\n      const keys = []\n      const cache = this.get(query)\n      for (const key in cache) {\n        if (Object.prototype.hasOwnProperty.call(cache, key)) {\n          keys.push(key)\n        }\n      }\n\n      return keys\n    }\n\n    return this.hub.onConnect().then(() => {\n      return this.hub.getKeys()\n    }).catch(error => {\n      console.error(error)\n    })\n  }\n\n  isEmpty(query) {\n    return !this.get(query)\n  }\n\n  isSet(query) {\n    return Boolean(this.get(query))\n  }\n}\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/src/es6/components/data/_storage.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return EmojidexDataStorage; });\n/* harmony import */ var cross_storage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! cross-storage */ \"./node_modules/cross-storage/lib/index.js\");\n/* harmony import */ var cross_storage__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(cross_storage__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var lodash_extend__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash/extend */ \"./node_modules/emojidex-client/node_modules/lodash/extend.js\");\n/* harmony import */ var lodash_extend__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash_extend__WEBPACK_IMPORTED_MODULE_1__);\n\n\n\nclass EmojidexDataStorage {\n  constructor(hubPath = 'https://www.emojidex.com/hub/1.0.0') {\n    this.hub = new cross_storage__WEBPACK_IMPORTED_MODULE_0__[\"CrossStorageClient\"](hubPath, { frameId: 'emojidex-client-storage-hub' })\n    this.hubCache = {}\n  }\n\n  _getChainedData(query, dataObj, wrap = true) {\n    query = this._getParsedQuery(query)\n    const chainObj = (data, key) => {\n      if (query.array.length === 0) {\n        data[key] = dataObj\n      } else {\n        data[key] = {}\n        chainObj(data[key], query.array.shift())\n      }\n\n      return data\n    }\n\n    const chained = chainObj({}, query.array.shift())\n    return wrap ? chained : chained[query.first]\n  }\n\n  _getHubData(query) {\n    query = query.split('.')\n    return this.hub.onConnect().then(() => {\n      return this.hub.get(query.shift())\n    }).then(hubData => {\n      if (query.length) {\n        for (let i = 0; i < query.length; i++) {\n          const q = query[i]\n          hubData = hubData[q]\n        }\n      }\n\n      return hubData\n    }).catch(error => {\n      console.error(error)\n    })\n  }\n\n  _getParsedQuery(query) {\n    const parsedQuery = query.split('.')\n    return {\n      code: query,\n      array: parsedQuery,\n      first: parsedQuery[0]\n    }\n  }\n\n  get(query) {\n    query = Array.isArray(query) ? query : query.split('.')\n    let cache = this.hubCache\n    if (query.length) {\n      for (let i = 0; i < query.length; i++) {\n        const q = query[i]\n        if (cache[q] === undefined) {\n          return null\n        }\n\n        cache = cache[q]\n      }\n    }\n\n    return cache\n  }\n\n  set(query, data, update) {\n    const firstQuery = query.split('.')[0]\n    return this.hub.onConnect().then(() => {\n      if (update) {\n        const newData = {}\n        newData[firstQuery] = data\n        return this.hub.set(firstQuery, JSON.stringify(newData))\n      }\n\n      return this.hub.set(firstQuery, this._getChainedData(query, data))\n    }).then(() => {\n      return this.updateCache(firstQuery)\n    }).catch(error => {\n      console.error(error)\n    })\n  }\n\n  update(query, data) {\n    const merged = lodash_extend__WEBPACK_IMPORTED_MODULE_1___default()({}, this.get(query.split('.')[0]), this._getChainedData(query, data, false))\n    return this.set(query, merged, true)\n  }\n\n  updateCache(key) {\n    return this.hub.onConnect().then(() => {\n      return key ? key : this.hub.getKeys()\n    }).then(keys => {\n      return this.hub.get(keys)\n    }).then(hubData => {\n      const data = JSON.parse(hubData)\n      if (key) {\n        this.hubCache[key] = data[key]\n        return this.hubCache[key]\n      }\n\n      this.hubCache = data\n      return this.hubCache\n    }).catch(error => {\n      console.error(error)\n    })\n  }\n\n  _remove(query) {\n    query = this._getParsedQuery(query)\n    if (query.array.length === 1) {\n      return this.hub.del(query.code)\n    }\n\n    let scope = this.get(query.array.shift())\n    const target = scope\n    let i = 0\n    while (i < query.array.length - 1) {\n      scope = scope[query.array[i]]\n      i++\n    }\n\n    delete scope[query.array[i]]\n    return this.update(query.first, target)\n  }\n\n  clear() {\n    return this.hub.onConnect().then(() => {\n      return this.hub.clear()\n    }).catch(error => {\n      console.error(error)\n    })\n  }\n\n  keys(query) {\n    if (query) {\n      const keys = []\n      const cache = this.get(query)\n      for (const key in cache) {\n        if (Object.prototype.hasOwnProperty.call(cache, key)) {\n          keys.push(key)\n        }\n      }\n\n      return keys\n    }\n\n    return this.hub.onConnect().then(() => {\n      return this.hub.getKeys()\n    }).catch(error => {\n      console.error(error)\n    })\n  }\n\n  isEmpty(query) {\n    return !this.get(query)\n  }\n\n  isSet(query) {\n    return Boolean(this.get(query))\n  }\n}\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/src/es6/components/data/_storage.js?");
 
 /***/ }),
 
@@ -1988,7 +2538,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return EmojidexIndexes; });\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ \"./node_modules/axios/index.js\");\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var lodash_extend__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash/extend */ \"./node_modules/lodash/extend.js\");\n/* harmony import */ var lodash_extend__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash_extend__WEBPACK_IMPORTED_MODULE_1__);\n\n\n\nclass EmojidexIndexes {\n  constructor(EC) {\n    this.EC = EC\n    this.results = []\n    this.curPage = 1\n    this.count = 0\n  }\n\n  _indexesAPI(query, callback, opts, func) {\n    const param = {\n      page: 1,\n      limit: this.EC.limit,\n      detailed: this.EC.detailed\n    }\n    if (this.EC.User.authInfo.token !== null) {\n      lodash_extend__WEBPACK_IMPORTED_MODULE_1___default()(param, { auth_token: this.EC.User.authInfo.token }) // eslint-disable-line camelcase\n    }\n\n    lodash_extend__WEBPACK_IMPORTED_MODULE_1___default()(param, opts)\n\n    if (func) {\n      this.indexedFunc = func\n      this.indexed = {\n        query,\n        callback,\n        param\n      }\n    }\n\n    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(`${this.EC.apiUrl}${query}`, {\n      params: param\n    }).then(response => {\n      if (response.data.emoji) {\n        this.meta = response.data.meta\n        this.results = response.data.emoji\n        this.curPage = response.data.meta.page\n        this.count = response.data.meta.count\n        return this.EC.Emoji.combine(response.data.emoji).then(() => {\n          if (typeof callback === 'function') {\n            callback(response.data.emoji)\n          } else {\n            return response.data\n          }\n        })\n      }\n\n      this.results = []\n      this.curPage = 0\n      this.count = 0\n      if (typeof callback === 'function') {\n        callback([])\n      } else {\n        return response.data\n      }\n    }).catch(error => {\n      this.results = []\n      this.curPage = 0\n      this.count = 0\n      if (typeof callback === 'function') {\n        callback([])\n      } else {\n        console.error(error)\n        return []\n      }\n    })\n  }\n\n  index(callback, opts) {\n    return this._indexesAPI('emoji', callback, opts, this.index)\n  }\n\n  newest(callback, opts) {\n    return this._indexesAPI('newest', callback, opts, this.newest)\n  }\n\n  popular(callback, opts) {\n    return this._indexesAPI('popular', callback, opts, this.popular)\n  }\n\n  user(username, callback, opts) {\n    return this._indexesAPI(`users/${username}/emoji`, callback, opts)\n  }\n\n  static(staticType, language, callback) {\n    let loadedNum = 0\n    let loadedEmoji = []\n\n    const loadStatic = urlString => {\n      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(urlString).then(response => {\n        loadedEmoji = loadedEmoji.concat(response.data)\n        if (++loadedNum === staticType.length) {\n          return this.EC.Emoji.combine(loadedEmoji).then(data => {\n            if (typeof callback === 'function') {\n              callback(data)\n            } else {\n              return data\n            }\n          })\n        }\n      }).catch(error => {\n        console.error(error)\n      })\n    }\n\n    return staticType.map(type =>\n      language ?\n        loadStatic(`${this.EC.apiUrl + type}?locale=${language}`) :\n        loadStatic(`${this.EC.apiUrl + type}`))\n  }\n\n  select(code, callback, opts) {\n    return this.EC.Search.find(code, callback, opts)\n  }\n\n  next() {\n    if (this.count === this.indexed.param.limit) {\n      this.indexed.param.page++\n    }\n\n    return this.indexedFunc(this.indexed.callback, this.indexed.param, this.indexedFunc)\n  }\n\n  prev() {\n    if (this.indexed.param.page > 1) {\n      this.indexed.param.page--\n    }\n\n    return this.indexedFunc(this.indexed.callback, this.indexed.param, this.indexedFunc)\n  }\n}\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/src/es6/components/indexes.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return EmojidexIndexes; });\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ \"./node_modules/axios/index.js\");\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var lodash_extend__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash/extend */ \"./node_modules/emojidex-client/node_modules/lodash/extend.js\");\n/* harmony import */ var lodash_extend__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash_extend__WEBPACK_IMPORTED_MODULE_1__);\n\n\n\nclass EmojidexIndexes {\n  constructor(EC) {\n    this.EC = EC\n    this.results = []\n    this.curPage = 1\n    this.count = 0\n  }\n\n  _indexesAPI(query, callback, opts, func) {\n    const param = {\n      page: 1,\n      limit: this.EC.limit,\n      detailed: this.EC.detailed\n    }\n    if (this.EC.User.authInfo.token !== null) {\n      lodash_extend__WEBPACK_IMPORTED_MODULE_1___default()(param, { auth_token: this.EC.User.authInfo.token }) // eslint-disable-line camelcase\n    }\n\n    lodash_extend__WEBPACK_IMPORTED_MODULE_1___default()(param, opts)\n\n    if (func) {\n      this.indexedFunc = func\n      this.indexed = {\n        query,\n        callback,\n        param\n      }\n    }\n\n    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(`${this.EC.apiUrl}${query}`, {\n      params: param\n    }).then(response => {\n      if (response.data.emoji) {\n        this.meta = response.data.meta\n        this.results = response.data.emoji\n        this.curPage = response.data.meta.page\n        this.count = response.data.meta.count\n        return this.EC.Emoji.combine(response.data.emoji).then(() => {\n          if (typeof callback === 'function') {\n            callback(response.data.emoji)\n          } else {\n            return response.data\n          }\n        })\n      }\n\n      this.results = []\n      this.curPage = 0\n      this.count = 0\n      if (typeof callback === 'function') {\n        callback([])\n      } else {\n        return response.data\n      }\n    }).catch(error => {\n      this.results = []\n      this.curPage = 0\n      this.count = 0\n      if (typeof callback === 'function') {\n        callback([])\n      } else {\n        console.error(error)\n        return []\n      }\n    })\n  }\n\n  index(callback, opts) {\n    return this._indexesAPI('emoji', callback, opts, this.index)\n  }\n\n  newest(callback, opts) {\n    return this._indexesAPI('newest', callback, opts, this.newest)\n  }\n\n  popular(callback, opts) {\n    return this._indexesAPI('popular', callback, opts, this.popular)\n  }\n\n  user(username, callback, opts) {\n    return this._indexesAPI(`users/${username}/emoji`, callback, opts)\n  }\n\n  static(staticType, language, callback) {\n    let loadedNum = 0\n    let loadedEmoji = []\n\n    const loadStatic = urlString => {\n      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(urlString).then(response => {\n        loadedEmoji = loadedEmoji.concat(response.data)\n        if (++loadedNum === staticType.length) {\n          return this.EC.Emoji.combine(loadedEmoji).then(data => {\n            if (typeof callback === 'function') {\n              callback(data)\n            } else {\n              return data\n            }\n          })\n        }\n      }).catch(error => {\n        console.error(error)\n      })\n    }\n\n    return staticType.map(type =>\n      language ?\n        loadStatic(`${this.EC.apiUrl + type}?locale=${language}`) :\n        loadStatic(`${this.EC.apiUrl + type}`))\n  }\n\n  select(code, callback, opts) {\n    return this.EC.Search.find(code, callback, opts)\n  }\n\n  next() {\n    if (this.count === this.indexed.param.limit) {\n      this.indexed.param.page++\n    }\n\n    return this.indexedFunc(this.indexed.callback, this.indexed.param, this.indexedFunc)\n  }\n\n  prev() {\n    if (this.indexed.param.page > 1) {\n      this.indexed.param.page--\n    }\n\n    return this.indexedFunc(this.indexed.callback, this.indexed.param, this.indexedFunc)\n  }\n}\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/src/es6/components/indexes.js?");
 
 /***/ }),
 
@@ -2000,7 +2550,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return EmojidexSearch; });\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ \"./node_modules/axios/index.js\");\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var lodash_extend__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash/extend */ \"./node_modules/lodash/extend.js\");\n/* harmony import */ var lodash_extend__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash_extend__WEBPACK_IMPORTED_MODULE_1__);\n\n\n\nclass EmojidexSearch {\n  constructor(EC) {\n    this.EC = EC\n    this.results = []\n    this.curPage = 1\n    this.count = 0\n  }\n\n  _searchAPI(searchData, callback, opts, callFunc) {\n    const param = {\n      page: 1,\n      limit: this.EC.limit,\n      detailed: this.EC.detailed\n    }\n    if (this.EC.User.authInfo.token !== null) {\n      lodash_extend__WEBPACK_IMPORTED_MODULE_1___default()(param, { auth_token: this.EC.User.authInfo.token }) // eslint-disable-line camelcase\n    }\n\n    lodash_extend__WEBPACK_IMPORTED_MODULE_1___default()(param, opts)\n\n    // TODO: @searchedFunc = unless @EC.closedNet then func.remote else callFunc.local\n    this.searchedFunc = callFunc.remote\n    this.searched = {\n      data: searchData,\n      callback,\n      param\n    }\n\n    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(`${this.EC.apiUrl}search/emoji`, {\n      params: param\n    }).then(response => {\n      if (response.data.emoji) {\n        this.meta = response.data.meta\n        this.results = response.data.emoji\n        this.curPage = response.data.meta.page\n        this.count = response.data.meta.count\n        this.EC.Emoji.combine(response.data.emoji)\n        if (typeof callback === 'function') {\n          callback(response.data.emoji)\n        } else {\n          return response.data\n        }\n      } else {\n        this.results = []\n        this.curPage = 0\n        this.count = 0\n        if (typeof callback === 'function') {\n          callback([])\n        } else {\n          return []\n        }\n      }\n    }).catch(error => {\n      this.results = []\n      this.curPage = 0\n      this.count = 0\n      if (typeof callback === 'function') {\n        callback([])\n      } else {\n        console.error(error)\n        return []\n      }\n    })\n  }\n\n  // Executes a general search (code_cont)\n  search(term, callback, opts) {\n    opts = lodash_extend__WEBPACK_IMPORTED_MODULE_1___default()({ code_cont: this.EC.Util.escapeTerm(term) }, opts) // eslint-disable-line camelcase\n    return this._searchAPI(term, callback, opts, { remote: this.search, local: this.EC.Emoji.search })\n  }\n\n  // Executes a search starting with the given term\n  starting(term, callback, opts) {\n    opts = lodash_extend__WEBPACK_IMPORTED_MODULE_1___default()({ code_sw: this.EC.Util.escapeTerm(term) }, opts) // eslint-disable-line camelcase\n    return this._searchAPI(term, callback, opts, { remote: this.starting, local: this.EC.Emoji.starting })\n  }\n\n  // Executes a search ending with the given term\n  ending(term, callback, opts) {\n    opts = lodash_extend__WEBPACK_IMPORTED_MODULE_1___default()({ code_ew: this.EC.Util.escapeTerm(term) }, opts) // eslint-disable-line camelcase\n    return this._searchAPI(term, callback, opts, { remote: this.ending, local: this.EC.Emoji.ending })\n  }\n\n  // Searches by tags\n  tags(tags, callback, opts) {\n    opts = lodash_extend__WEBPACK_IMPORTED_MODULE_1___default()({ tags: this.EC.Util.breakout(tags) }, opts)\n    return this._searchAPI(tags, callback, opts, { remote: this.tags, local: this.EC.Emoji.tags })\n  }\n\n  // Searches using an array of keys and an array of tags\n  advanced(searchDetails, callback, opts) {\n    /* eslint-disable camelcase */\n    const param = {\n      code_cont: this.EC.Util.escapeTerm(searchDetails.term),\n      tags: this.EC.Util.breakout(searchDetails.tags),\n      categories: this.EC.Util.breakout(searchDetails.categories)\n    }\n    /* eslint-enable camelcase */\n\n    lodash_extend__WEBPACK_IMPORTED_MODULE_1___default()(param, opts)\n    return this._searchAPI(searchDetails, callback, param, { remote: this.advanced, local: this.EC.Emoji.advanced })\n  }\n\n  // Not an actual search, just gets information on the given emoji\n  find(code, callback = null, opts) {\n    const emojiCache = this.EC.Data.emoji()\n    code = this.EC.Util.deEscapeTerm(code)\n    for (let i = 0; i < emojiCache.length; i++) {\n      const emoji = emojiCache[i]\n      if (emoji.code === code) {\n        if (typeof callback === 'function') {\n          callback(emoji)\n        }\n\n        return Promise.resolve(emoji)\n      }\n    }\n\n    const param = { detailed: this.EC.detailed }\n    if (this.EC.User.authInfo.token !== null) {\n      lodash_extend__WEBPACK_IMPORTED_MODULE_1___default()(param, { auth_token: this.EC.User.authInfo.token }) // eslint-disable-line camelcase\n    }\n\n    lodash_extend__WEBPACK_IMPORTED_MODULE_1___default()(param, opts)\n\n    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(`${this.EC.apiUrl}emoji/${this.EC.Util.makeURLSafe(code)}`, {\n    }).then(response => {\n      this.EC.Emoji.combine([response.data])\n      if (typeof callback === 'function') {\n        callback(response.data)\n      }\n\n      return response.data\n    }).catch(error => {\n      if (typeof callback === 'function') {\n        callback(error.response)\n      }\n\n      return error.response\n    })\n  }\n\n  next() {\n    if (this.count === this.searched.param.limit) {\n      this.searched.param.page++\n    }\n\n    return this.searchedFunc(this.searched.data, this.searched.callback, this.searched.param)\n  }\n\n  prev() {\n    if (this.searched.param.page > 1) {\n      this.searched.param.page--\n    }\n\n    return this.searchedFunc(this.searched.data, this.searched.callback, this.searched.param)\n  }\n}\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/src/es6/components/search.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return EmojidexSearch; });\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ \"./node_modules/axios/index.js\");\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var lodash_extend__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash/extend */ \"./node_modules/emojidex-client/node_modules/lodash/extend.js\");\n/* harmony import */ var lodash_extend__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash_extend__WEBPACK_IMPORTED_MODULE_1__);\n\n\n\nclass EmojidexSearch {\n  constructor(EC) {\n    this.EC = EC\n    this.results = []\n    this.curPage = 1\n    this.count = 0\n  }\n\n  _searchAPI(searchData, callback, opts, callFunc) {\n    const param = {\n      page: 1,\n      limit: this.EC.limit,\n      detailed: this.EC.detailed\n    }\n    if (this.EC.User.authInfo.token !== null) {\n      lodash_extend__WEBPACK_IMPORTED_MODULE_1___default()(param, { auth_token: this.EC.User.authInfo.token }) // eslint-disable-line camelcase\n    }\n\n    lodash_extend__WEBPACK_IMPORTED_MODULE_1___default()(param, opts)\n\n    // TODO: @searchedFunc = unless @EC.closedNet then func.remote else callFunc.local\n    this.searchedFunc = callFunc.remote\n    this.searched = {\n      data: searchData,\n      callback,\n      param\n    }\n\n    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(`${this.EC.apiUrl}search/emoji`, {\n      params: param\n    }).then(response => {\n      if (response.data.emoji) {\n        this.meta = response.data.meta\n        this.results = response.data.emoji\n        this.curPage = response.data.meta.page\n        this.count = response.data.meta.count\n        this.EC.Emoji.combine(response.data.emoji)\n        if (typeof callback === 'function') {\n          callback(response.data.emoji)\n        } else {\n          return response.data\n        }\n      } else {\n        this.results = []\n        this.curPage = 0\n        this.count = 0\n        if (typeof callback === 'function') {\n          callback([])\n        } else {\n          return []\n        }\n      }\n    }).catch(error => {\n      this.results = []\n      this.curPage = 0\n      this.count = 0\n      if (typeof callback === 'function') {\n        callback([])\n      } else {\n        console.error(error)\n        return []\n      }\n    })\n  }\n\n  // Executes a general search (code_cont)\n  search(term, callback, opts) {\n    opts = lodash_extend__WEBPACK_IMPORTED_MODULE_1___default()({ code_cont: this.EC.Util.escapeTerm(term) }, opts) // eslint-disable-line camelcase\n    return this._searchAPI(term, callback, opts, { remote: this.search, local: this.EC.Emoji.search })\n  }\n\n  // Executes a search starting with the given term\n  starting(term, callback, opts) {\n    opts = lodash_extend__WEBPACK_IMPORTED_MODULE_1___default()({ code_sw: this.EC.Util.escapeTerm(term) }, opts) // eslint-disable-line camelcase\n    return this._searchAPI(term, callback, opts, { remote: this.starting, local: this.EC.Emoji.starting })\n  }\n\n  // Executes a search ending with the given term\n  ending(term, callback, opts) {\n    opts = lodash_extend__WEBPACK_IMPORTED_MODULE_1___default()({ code_ew: this.EC.Util.escapeTerm(term) }, opts) // eslint-disable-line camelcase\n    return this._searchAPI(term, callback, opts, { remote: this.ending, local: this.EC.Emoji.ending })\n  }\n\n  // Searches by tags\n  tags(tags, callback, opts) {\n    opts = lodash_extend__WEBPACK_IMPORTED_MODULE_1___default()({ tags: this.EC.Util.breakout(tags) }, opts)\n    return this._searchAPI(tags, callback, opts, { remote: this.tags, local: this.EC.Emoji.tags })\n  }\n\n  // Searches using an array of keys and an array of tags\n  advanced(searchDetails, callback, opts) {\n    /* eslint-disable camelcase */\n    const param = {\n      code_cont: this.EC.Util.escapeTerm(searchDetails.term),\n      tags: this.EC.Util.breakout(searchDetails.tags),\n      categories: this.EC.Util.breakout(searchDetails.categories)\n    }\n    /* eslint-enable camelcase */\n\n    lodash_extend__WEBPACK_IMPORTED_MODULE_1___default()(param, opts)\n    return this._searchAPI(searchDetails, callback, param, { remote: this.advanced, local: this.EC.Emoji.advanced })\n  }\n\n  // Not an actual search, just gets information on the given emoji\n  find(code, callback = null, opts) {\n    const emojiCache = this.EC.Data.emoji()\n    code = this.EC.Util.deEscapeTerm(code)\n    for (let i = 0; i < emojiCache.length; i++) {\n      const emoji = emojiCache[i]\n      if (emoji.code === code) {\n        if (typeof callback === 'function') {\n          callback(emoji)\n        }\n\n        return Promise.resolve(emoji)\n      }\n    }\n\n    const param = { detailed: this.EC.detailed }\n    if (this.EC.User.authInfo.token !== null) {\n      lodash_extend__WEBPACK_IMPORTED_MODULE_1___default()(param, { auth_token: this.EC.User.authInfo.token }) // eslint-disable-line camelcase\n    }\n\n    lodash_extend__WEBPACK_IMPORTED_MODULE_1___default()(param, opts)\n\n    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(`${this.EC.apiUrl}emoji/${this.EC.Util.makeURLSafe(code)}`, {\n    }).then(response => {\n      this.EC.Emoji.combine([response.data])\n      if (typeof callback === 'function') {\n        callback(response.data)\n      }\n\n      return response.data\n    }).catch(error => {\n      if (typeof callback === 'function') {\n        callback(error.response)\n      }\n\n      return error.response\n    })\n  }\n\n  next() {\n    if (this.count === this.searched.param.limit) {\n      this.searched.param.page++\n    }\n\n    return this.searchedFunc(this.searched.data, this.searched.callback, this.searched.param)\n  }\n\n  prev() {\n    if (this.searched.param.page > 1) {\n      this.searched.param.page--\n    }\n\n    return this.searchedFunc(this.searched.data, this.searched.callback, this.searched.param)\n  }\n}\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/src/es6/components/search.js?");
 
 /***/ }),
 
@@ -2024,7 +2574,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return EmojidexUserFavorites; });\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ \"./node_modules/axios/index.js\");\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);\n\n\nclass EmojidexUserFavorites {\n  constructor(EC) {\n    this.EC = EC\n    this._favorites = this.EC.Data.favorites()\n    this.curPage = 1\n    this.maxPage = undefined\n  }\n\n  _favoritesAPI(options) {\n    if (this.EC.User.authInfo.token === null || this.EC.User.authInfo.token === undefined) {\n      return Promise.reject(new Error('Require auth token.'))\n    }\n\n    return axios__WEBPACK_IMPORTED_MODULE_0___default()({\n      method: options.type,\n      url: `${this.EC.apiUrl}users/favorites`,\n      params: options.params\n    }).then(response => {\n      return response.data\n    }).catch(error => {\n      return error.response\n    })\n  }\n\n  get(callback, page = 1) {\n    const options = {\n      params: {\n        page,\n        limit: this.EC.limit,\n        detailed: this.EC.detailed,\n        auth_token: this.EC.User.authInfo.token // eslint-disable-line camelcase\n      }\n    }\n    return this._favoritesAPI(options).then(response => {\n      this._favorites = response.emoji\n      this.meta = response.meta\n      this.curPage = response.meta.page\n      this.maxPage = Math.ceil(response.total_count / this.EC.limit)\n\n      return this.EC.Data.favorites(this._favorites)\n    }).then(() => {\n      if (typeof callback === 'function') {\n        callback(this._favorites)\n      } else {\n        return this._favorites\n      }\n    }).catch(error => {\n      console.error(error)\n    })\n  }\n\n  set(emojiCode) {\n    const options = {\n      type: 'POST',\n      params: { auth_token: this.EC.User.authInfo.token, emoji_code: emojiCode } // eslint-disable-line camelcase\n    }\n    return this._favoritesAPI(options).then(response => {\n      this._favorites.push(response)\n      return this.EC.Data.favorites(this._favorites)\n    }).catch(error => {\n      console.error(error)\n    })\n  }\n\n  unset(emojiCode) {\n    const options = {\n      type: 'DELETE',\n      params: { auth_token: this.EC.User.authInfo.token, emoji_code: emojiCode } // eslint-disable-line camelcase\n    }\n    return this._favoritesAPI(options).then(() => {\n      return this.sync()\n    }).catch(error => {\n      console.error(error)\n    })\n  }\n\n  sync() {\n    return this.get() // persistant favorites currently require an account\n  }\n\n  all(callback) {\n    return this.EC.Data.favorites().then(data => {\n      if (typeof callback === 'function') {\n        callback(data)\n      } else {\n        return data\n      }\n    }).catch(error => {\n      console.error(error)\n    })\n  }\n\n  next(callback) {\n    if (this.maxPage === this.curPage) {\n      return\n    }\n\n    return this.get(callback, this.curPage + 1)\n  }\n\n  prev(callback) {\n    if (this.curPage === 1) {\n      return\n    }\n\n    return this.get(callback, this.curPage - 1)\n  }\n}\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/src/es6/components/user/favorites.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return EmojidexUserFavorites; });\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ \"./node_modules/axios/index.js\");\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);\n\n\nclass EmojidexUserFavorites {\n  constructor(EC) {\n    this.EC = EC\n    this._favorites = this.EC.Data.favorites()\n    this.curPage = 1\n    this.maxPage = undefined\n  }\n\n  _favoritesAPI(options) {\n    if (this.EC.User.authInfo.token === null || this.EC.User.authInfo.token === undefined) {\n      return Promise.reject(new Error('Require auth token.'))\n    }\n\n    return axios__WEBPACK_IMPORTED_MODULE_0___default()({\n      method: options.type,\n      url: `${this.EC.apiUrl}users/favorites`,\n      params: options.params\n    }).then(response => {\n      return response.data\n    }).catch(error => {\n      return error.response\n    })\n  }\n\n  get(callback, page = 1) {\n    const options = {\n      params: {\n        page,\n        limit: this.EC.limit,\n        detailed: this.EC.detailed,\n        auth_token: this.EC.User.authInfo.token // eslint-disable-line camelcase\n      }\n    }\n    return this._favoritesAPI(options).then(response => {\n      this._favorites = response.emoji\n      this.meta = response.meta\n      this.curPage = response.meta.page\n      this.maxPage = Math.ceil(response.meta.total_count / this.EC.limit)\n\n      return this.EC.Data.favorites(this._favorites)\n    }).then(() => {\n      if (typeof callback === 'function') {\n        callback(this._favorites)\n      } else {\n        return this._favorites\n      }\n    }).catch(error => {\n      console.error(error)\n    })\n  }\n\n  set(emojiCode) {\n    const options = {\n      type: 'POST',\n      params: { auth_token: this.EC.User.authInfo.token, emoji_code: emojiCode } // eslint-disable-line camelcase\n    }\n    return this._favoritesAPI(options).then(response => {\n      this._favorites.push(response)\n      return this.EC.Data.favorites(this._favorites)\n    }).catch(error => {\n      console.error(error)\n    })\n  }\n\n  unset(emojiCode) {\n    const options = {\n      type: 'DELETE',\n      params: { auth_token: this.EC.User.authInfo.token, emoji_code: emojiCode } // eslint-disable-line camelcase\n    }\n    return this._favoritesAPI(options).then(() => {\n      return this.sync()\n    }).catch(error => {\n      console.error(error)\n    })\n  }\n\n  sync() {\n    return this.get() // persistant favorites currently require an account\n  }\n\n  all(callback) {\n    return this.EC.Data.favorites().then(data => {\n      if (typeof callback === 'function') {\n        callback(data)\n      } else {\n        return data\n      }\n    }).catch(error => {\n      console.error(error)\n    })\n  }\n\n  next(callback) {\n    if (this.maxPage === this.curPage) {\n      return\n    }\n\n    return this.get(callback, this.curPage + 1)\n  }\n\n  prev(callback) {\n    if (this.curPage === 1) {\n      return\n    }\n\n    return this.get(callback, this.curPage - 1)\n  }\n}\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/src/es6/components/user/favorites.js?");
 
 /***/ }),
 
@@ -2048,7 +2598,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return EmojidexUserHistory; });\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ \"./node_modules/axios/index.js\");\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);\n\n\nclass EmojidexUserHistory {\n  constructor(EC) {\n    this.EC = EC\n    this._history = this.EC.Data.history()\n    this.curPage = 1\n    this.maxPage = undefined\n  }\n\n  _historyAPI(options) {\n    if (this.EC.User.authInfo.token === null || this.EC.User.authInfo.token === undefined) {\n      return Promise.reject(new Error('Require auth token.'))\n    }\n\n    return axios__WEBPACK_IMPORTED_MODULE_0___default()({\n      method: options.type,\n      url: options.url ? options.url : `${this.EC.apiUrl}users/history`,\n      params: options.params\n    }).then(response => {\n      return response.data\n    }).catch(error => {\n      return error.response\n    })\n  }\n\n  get(callback, page = 1) {\n    const options = {\n      params: {\n        page,\n        limit: this.EC.limit,\n        detailed: this.EC.detailed,\n        auth_token: this.EC.User.authInfo.token // eslint-disable-line camelcase\n      },\n      url: this.EC.apiUrl + 'users/history/emoji'\n    }\n    return this._historyAPI(options).then(response => {\n      this._history = response.emoji\n      this.meta = response.meta\n      this.curPage = response.meta.page\n      this.maxPage = Math.ceil(response.total_count / this.EC.limit)\n\n      return this.EC.Data.history(this._history)\n    }).then(() => {\n      if (typeof callback === 'function') {\n        callback(this._history)\n      } else {\n        return this._history\n      }\n    }).catch(error => {\n      console.error(error)\n    })\n  }\n\n  getHistoryInfoOnly(callback, page = 1) {\n    const options = {\n      params: {\n        page,\n        limit: this.EC.limit,\n        detailed: this.EC.detailed,\n        auth_token: this.EC.User.authInfo.token // eslint-disable-line camelcase\n      }\n    }\n    return this._historyAPI(options).then(response => {\n      this._historyInfo = response.history\n      this.historyInfoMeta = response.meta\n      this.historyInfoCurPage = response.meta.page\n      this.historyInfoMaxPage = Math.ceil(response.total_count / this.EC.limit)\n\n      if (typeof callback === 'function') {\n        callback(this._historyInfo)\n      } else {\n        return this._historyInfo\n      }\n    }).catch(error => {\n      console.error(error)\n    })\n  }\n\n  set(emojiCode) {\n    const options = {\n      type: 'POST',\n      params: { auth_token: this.EC.User.authInfo.token, emoji_code: emojiCode } // eslint-disable-line camelcase\n    }\n    return this._historyAPI(options).then(response => {\n      for (let i = 0; i < this._history.length; i++) {\n        const entry = this._history[i]\n        if (entry.emoji_code === response.emoji_code) {\n          this._history[i] = response\n          this.EC.Data.history(this._history)\n          return\n        }\n      }\n\n      return response\n    }).catch(error => {\n      console.error(error)\n    })\n  }\n\n  sync() {\n    return this.get()\n  }\n\n  all(callback) {\n    return this.EC.Data.history().then(data => {\n      if (typeof callback === 'function') {\n        callback(data)\n      } else {\n        return data\n      }\n    }).catch(error => {\n      console.error(error)\n    })\n  }\n\n  next(callback) {\n    if (this.maxPage === this.curPage) {\n      return\n    }\n\n    return this.get(callback, this.curPage + 1)\n  }\n\n  prev(callback) {\n    if (this.curPage === 1) {\n      return\n    }\n\n    return this.get(callback, this.curPage - 1)\n  }\n}\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/src/es6/components/user/history.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return EmojidexUserHistory; });\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ \"./node_modules/axios/index.js\");\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);\n\n\nclass EmojidexUserHistory {\n  constructor(EC) {\n    this.EC = EC\n    this._history = this.EC.Data.history()\n    this.curPage = 1\n    this.maxPage = undefined\n  }\n\n  _historyAPI(options) {\n    if (this.EC.User.authInfo.token === null || this.EC.User.authInfo.token === undefined) {\n      return Promise.reject(new Error('Require auth token.'))\n    }\n\n    return axios__WEBPACK_IMPORTED_MODULE_0___default()({\n      method: options.type,\n      url: options.url ? options.url : `${this.EC.apiUrl}users/history`,\n      params: options.params\n    }).then(response => {\n      return response.data\n    }).catch(error => {\n      return error.response\n    })\n  }\n\n  get(callback, page = 1) {\n    const options = {\n      params: {\n        page,\n        limit: this.EC.limit,\n        detailed: this.EC.detailed,\n        auth_token: this.EC.User.authInfo.token // eslint-disable-line camelcase\n      },\n      url: this.EC.apiUrl + 'users/history/emoji'\n    }\n    return this._historyAPI(options).then(response => {\n      this._history = response.emoji\n      this.meta = response.meta\n      this.curPage = response.meta.page\n      this.maxPage = Math.ceil(response.meta.total_count / this.EC.limit)\n\n      return this.EC.Data.history(this._history)\n    }).then(() => {\n      if (typeof callback === 'function') {\n        callback(this._history)\n      } else {\n        return this._history\n      }\n    }).catch(error => {\n      console.error(error)\n    })\n  }\n\n  getHistoryInfoOnly(callback, page = 1) {\n    const options = {\n      params: {\n        page,\n        limit: this.EC.limit,\n        detailed: this.EC.detailed,\n        auth_token: this.EC.User.authInfo.token // eslint-disable-line camelcase\n      }\n    }\n    return this._historyAPI(options).then(response => {\n      this._historyInfo = response.history\n      this.historyInfoMeta = response.meta\n      this.historyInfoCurPage = response.meta.page\n      this.historyInfoMaxPage = Math.ceil(response.meta.total_count / this.EC.limit)\n\n      if (typeof callback === 'function') {\n        callback(this._historyInfo)\n      } else {\n        return this._historyInfo\n      }\n    }).catch(error => {\n      console.error(error)\n    })\n  }\n\n  set(emojiCode) {\n    const options = {\n      type: 'POST',\n      params: { auth_token: this.EC.User.authInfo.token, emoji_code: emojiCode } // eslint-disable-line camelcase\n    }\n    return this._historyAPI(options).then(response => {\n      for (let i = 0; i < this._history.length; i++) {\n        const entry = this._history[i]\n        if (entry.emoji_code === response.emoji_code) {\n          this._history[i] = response\n          this.EC.Data.history(this._history)\n          return\n        }\n      }\n\n      return response\n    }).catch(error => {\n      console.error(error)\n    })\n  }\n\n  sync() {\n    return this.get()\n  }\n\n  all(callback) {\n    return this.EC.Data.history().then(data => {\n      if (typeof callback === 'function') {\n        callback(data)\n      } else {\n        return data\n      }\n    }).catch(error => {\n      console.error(error)\n    })\n  }\n\n  next(callback) {\n    if (this.maxPage === this.curPage) {\n      return\n    }\n\n    return this.get(callback, this.curPage + 1)\n  }\n\n  prev(callback) {\n    if (this.curPage === 1) {\n      return\n    }\n\n    return this.get(callback, this.curPage - 1)\n  }\n}\n\n\n//# sourceURL=webpack:///./node_modules/emojidex-client/src/es6/components/user/history.js?");
 
 /***/ }),
 
@@ -2106,556 +2656,6 @@ eval("var is = __webpack_require__(/*! ./is */ \"./node_modules/good-listener/sr
 /***/ (function(module, exports, __webpack_require__) {
 
 eval("__webpack_require__(/*! !./node_modules/script-loader/addScript.js */ \"./node_modules/script-loader/addScript.js\")(__webpack_require__(/*! !./node_modules/raw-loader!./node_modules/jquery.caret/dist/jquery.caret.min.js */ \"./node_modules/raw-loader/index.js!./node_modules/jquery.caret/dist/jquery.caret.min.js\"))\n\n//# sourceURL=webpack:///./node_modules/jquery.caret/dist/jquery.caret.min.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_Symbol.js":
-/*!****************************************!*\
-  !*** ./node_modules/lodash/_Symbol.js ***!
-  \****************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("var root = __webpack_require__(/*! ./_root */ \"./node_modules/lodash/_root.js\");\n\n/** Built-in value references. */\nvar Symbol = root.Symbol;\n\nmodule.exports = Symbol;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/_Symbol.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_apply.js":
-/*!***************************************!*\
-  !*** ./node_modules/lodash/_apply.js ***!
-  \***************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("/**\n * A faster alternative to `Function#apply`, this function invokes `func`\n * with the `this` binding of `thisArg` and the arguments of `args`.\n *\n * @private\n * @param {Function} func The function to invoke.\n * @param {*} thisArg The `this` binding of `func`.\n * @param {Array} args The arguments to invoke `func` with.\n * @returns {*} Returns the result of `func`.\n */\nfunction apply(func, thisArg, args) {\n  switch (args.length) {\n    case 0: return func.call(thisArg);\n    case 1: return func.call(thisArg, args[0]);\n    case 2: return func.call(thisArg, args[0], args[1]);\n    case 3: return func.call(thisArg, args[0], args[1], args[2]);\n  }\n  return func.apply(thisArg, args);\n}\n\nmodule.exports = apply;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/_apply.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_arrayLikeKeys.js":
-/*!***********************************************!*\
-  !*** ./node_modules/lodash/_arrayLikeKeys.js ***!
-  \***********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("var baseTimes = __webpack_require__(/*! ./_baseTimes */ \"./node_modules/lodash/_baseTimes.js\"),\n    isArguments = __webpack_require__(/*! ./isArguments */ \"./node_modules/lodash/isArguments.js\"),\n    isArray = __webpack_require__(/*! ./isArray */ \"./node_modules/lodash/isArray.js\"),\n    isBuffer = __webpack_require__(/*! ./isBuffer */ \"./node_modules/lodash/isBuffer.js\"),\n    isIndex = __webpack_require__(/*! ./_isIndex */ \"./node_modules/lodash/_isIndex.js\"),\n    isTypedArray = __webpack_require__(/*! ./isTypedArray */ \"./node_modules/lodash/isTypedArray.js\");\n\n/** Used for built-in method references. */\nvar objectProto = Object.prototype;\n\n/** Used to check objects for own properties. */\nvar hasOwnProperty = objectProto.hasOwnProperty;\n\n/**\n * Creates an array of the enumerable property names of the array-like `value`.\n *\n * @private\n * @param {*} value The value to query.\n * @param {boolean} inherited Specify returning inherited property names.\n * @returns {Array} Returns the array of property names.\n */\nfunction arrayLikeKeys(value, inherited) {\n  var isArr = isArray(value),\n      isArg = !isArr && isArguments(value),\n      isBuff = !isArr && !isArg && isBuffer(value),\n      isType = !isArr && !isArg && !isBuff && isTypedArray(value),\n      skipIndexes = isArr || isArg || isBuff || isType,\n      result = skipIndexes ? baseTimes(value.length, String) : [],\n      length = result.length;\n\n  for (var key in value) {\n    if ((inherited || hasOwnProperty.call(value, key)) &&\n        !(skipIndexes && (\n           // Safari 9 has enumerable `arguments.length` in strict mode.\n           key == 'length' ||\n           // Node.js 0.10 has enumerable non-index properties on buffers.\n           (isBuff && (key == 'offset' || key == 'parent')) ||\n           // PhantomJS 2 has enumerable non-index properties on typed arrays.\n           (isType && (key == 'buffer' || key == 'byteLength' || key == 'byteOffset')) ||\n           // Skip index properties.\n           isIndex(key, length)\n        ))) {\n      result.push(key);\n    }\n  }\n  return result;\n}\n\nmodule.exports = arrayLikeKeys;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/_arrayLikeKeys.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_assignValue.js":
-/*!*********************************************!*\
-  !*** ./node_modules/lodash/_assignValue.js ***!
-  \*********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("var baseAssignValue = __webpack_require__(/*! ./_baseAssignValue */ \"./node_modules/lodash/_baseAssignValue.js\"),\n    eq = __webpack_require__(/*! ./eq */ \"./node_modules/lodash/eq.js\");\n\n/** Used for built-in method references. */\nvar objectProto = Object.prototype;\n\n/** Used to check objects for own properties. */\nvar hasOwnProperty = objectProto.hasOwnProperty;\n\n/**\n * Assigns `value` to `key` of `object` if the existing value is not equivalent\n * using [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)\n * for equality comparisons.\n *\n * @private\n * @param {Object} object The object to modify.\n * @param {string} key The key of the property to assign.\n * @param {*} value The value to assign.\n */\nfunction assignValue(object, key, value) {\n  var objValue = object[key];\n  if (!(hasOwnProperty.call(object, key) && eq(objValue, value)) ||\n      (value === undefined && !(key in object))) {\n    baseAssignValue(object, key, value);\n  }\n}\n\nmodule.exports = assignValue;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/_assignValue.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_baseAssignValue.js":
-/*!*************************************************!*\
-  !*** ./node_modules/lodash/_baseAssignValue.js ***!
-  \*************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("var defineProperty = __webpack_require__(/*! ./_defineProperty */ \"./node_modules/lodash/_defineProperty.js\");\n\n/**\n * The base implementation of `assignValue` and `assignMergeValue` without\n * value checks.\n *\n * @private\n * @param {Object} object The object to modify.\n * @param {string} key The key of the property to assign.\n * @param {*} value The value to assign.\n */\nfunction baseAssignValue(object, key, value) {\n  if (key == '__proto__' && defineProperty) {\n    defineProperty(object, key, {\n      'configurable': true,\n      'enumerable': true,\n      'value': value,\n      'writable': true\n    });\n  } else {\n    object[key] = value;\n  }\n}\n\nmodule.exports = baseAssignValue;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/_baseAssignValue.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_baseGetTag.js":
-/*!********************************************!*\
-  !*** ./node_modules/lodash/_baseGetTag.js ***!
-  \********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("var Symbol = __webpack_require__(/*! ./_Symbol */ \"./node_modules/lodash/_Symbol.js\"),\n    getRawTag = __webpack_require__(/*! ./_getRawTag */ \"./node_modules/lodash/_getRawTag.js\"),\n    objectToString = __webpack_require__(/*! ./_objectToString */ \"./node_modules/lodash/_objectToString.js\");\n\n/** `Object#toString` result references. */\nvar nullTag = '[object Null]',\n    undefinedTag = '[object Undefined]';\n\n/** Built-in value references. */\nvar symToStringTag = Symbol ? Symbol.toStringTag : undefined;\n\n/**\n * The base implementation of `getTag` without fallbacks for buggy environments.\n *\n * @private\n * @param {*} value The value to query.\n * @returns {string} Returns the `toStringTag`.\n */\nfunction baseGetTag(value) {\n  if (value == null) {\n    return value === undefined ? undefinedTag : nullTag;\n  }\n  return (symToStringTag && symToStringTag in Object(value))\n    ? getRawTag(value)\n    : objectToString(value);\n}\n\nmodule.exports = baseGetTag;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/_baseGetTag.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_baseIsArguments.js":
-/*!*************************************************!*\
-  !*** ./node_modules/lodash/_baseIsArguments.js ***!
-  \*************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("var baseGetTag = __webpack_require__(/*! ./_baseGetTag */ \"./node_modules/lodash/_baseGetTag.js\"),\n    isObjectLike = __webpack_require__(/*! ./isObjectLike */ \"./node_modules/lodash/isObjectLike.js\");\n\n/** `Object#toString` result references. */\nvar argsTag = '[object Arguments]';\n\n/**\n * The base implementation of `_.isArguments`.\n *\n * @private\n * @param {*} value The value to check.\n * @returns {boolean} Returns `true` if `value` is an `arguments` object,\n */\nfunction baseIsArguments(value) {\n  return isObjectLike(value) && baseGetTag(value) == argsTag;\n}\n\nmodule.exports = baseIsArguments;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/_baseIsArguments.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_baseIsNative.js":
-/*!**********************************************!*\
-  !*** ./node_modules/lodash/_baseIsNative.js ***!
-  \**********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("var isFunction = __webpack_require__(/*! ./isFunction */ \"./node_modules/lodash/isFunction.js\"),\n    isMasked = __webpack_require__(/*! ./_isMasked */ \"./node_modules/lodash/_isMasked.js\"),\n    isObject = __webpack_require__(/*! ./isObject */ \"./node_modules/lodash/isObject.js\"),\n    toSource = __webpack_require__(/*! ./_toSource */ \"./node_modules/lodash/_toSource.js\");\n\n/**\n * Used to match `RegExp`\n * [syntax characters](http://ecma-international.org/ecma-262/7.0/#sec-patterns).\n */\nvar reRegExpChar = /[\\\\^$.*+?()[\\]{}|]/g;\n\n/** Used to detect host constructors (Safari). */\nvar reIsHostCtor = /^\\[object .+?Constructor\\]$/;\n\n/** Used for built-in method references. */\nvar funcProto = Function.prototype,\n    objectProto = Object.prototype;\n\n/** Used to resolve the decompiled source of functions. */\nvar funcToString = funcProto.toString;\n\n/** Used to check objects for own properties. */\nvar hasOwnProperty = objectProto.hasOwnProperty;\n\n/** Used to detect if a method is native. */\nvar reIsNative = RegExp('^' +\n  funcToString.call(hasOwnProperty).replace(reRegExpChar, '\\\\$&')\n  .replace(/hasOwnProperty|(function).*?(?=\\\\\\()| for .+?(?=\\\\\\])/g, '$1.*?') + '$'\n);\n\n/**\n * The base implementation of `_.isNative` without bad shim checks.\n *\n * @private\n * @param {*} value The value to check.\n * @returns {boolean} Returns `true` if `value` is a native function,\n *  else `false`.\n */\nfunction baseIsNative(value) {\n  if (!isObject(value) || isMasked(value)) {\n    return false;\n  }\n  var pattern = isFunction(value) ? reIsNative : reIsHostCtor;\n  return pattern.test(toSource(value));\n}\n\nmodule.exports = baseIsNative;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/_baseIsNative.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_baseIsTypedArray.js":
-/*!**************************************************!*\
-  !*** ./node_modules/lodash/_baseIsTypedArray.js ***!
-  \**************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("var baseGetTag = __webpack_require__(/*! ./_baseGetTag */ \"./node_modules/lodash/_baseGetTag.js\"),\n    isLength = __webpack_require__(/*! ./isLength */ \"./node_modules/lodash/isLength.js\"),\n    isObjectLike = __webpack_require__(/*! ./isObjectLike */ \"./node_modules/lodash/isObjectLike.js\");\n\n/** `Object#toString` result references. */\nvar argsTag = '[object Arguments]',\n    arrayTag = '[object Array]',\n    boolTag = '[object Boolean]',\n    dateTag = '[object Date]',\n    errorTag = '[object Error]',\n    funcTag = '[object Function]',\n    mapTag = '[object Map]',\n    numberTag = '[object Number]',\n    objectTag = '[object Object]',\n    regexpTag = '[object RegExp]',\n    setTag = '[object Set]',\n    stringTag = '[object String]',\n    weakMapTag = '[object WeakMap]';\n\nvar arrayBufferTag = '[object ArrayBuffer]',\n    dataViewTag = '[object DataView]',\n    float32Tag = '[object Float32Array]',\n    float64Tag = '[object Float64Array]',\n    int8Tag = '[object Int8Array]',\n    int16Tag = '[object Int16Array]',\n    int32Tag = '[object Int32Array]',\n    uint8Tag = '[object Uint8Array]',\n    uint8ClampedTag = '[object Uint8ClampedArray]',\n    uint16Tag = '[object Uint16Array]',\n    uint32Tag = '[object Uint32Array]';\n\n/** Used to identify `toStringTag` values of typed arrays. */\nvar typedArrayTags = {};\ntypedArrayTags[float32Tag] = typedArrayTags[float64Tag] =\ntypedArrayTags[int8Tag] = typedArrayTags[int16Tag] =\ntypedArrayTags[int32Tag] = typedArrayTags[uint8Tag] =\ntypedArrayTags[uint8ClampedTag] = typedArrayTags[uint16Tag] =\ntypedArrayTags[uint32Tag] = true;\ntypedArrayTags[argsTag] = typedArrayTags[arrayTag] =\ntypedArrayTags[arrayBufferTag] = typedArrayTags[boolTag] =\ntypedArrayTags[dataViewTag] = typedArrayTags[dateTag] =\ntypedArrayTags[errorTag] = typedArrayTags[funcTag] =\ntypedArrayTags[mapTag] = typedArrayTags[numberTag] =\ntypedArrayTags[objectTag] = typedArrayTags[regexpTag] =\ntypedArrayTags[setTag] = typedArrayTags[stringTag] =\ntypedArrayTags[weakMapTag] = false;\n\n/**\n * The base implementation of `_.isTypedArray` without Node.js optimizations.\n *\n * @private\n * @param {*} value The value to check.\n * @returns {boolean} Returns `true` if `value` is a typed array, else `false`.\n */\nfunction baseIsTypedArray(value) {\n  return isObjectLike(value) &&\n    isLength(value.length) && !!typedArrayTags[baseGetTag(value)];\n}\n\nmodule.exports = baseIsTypedArray;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/_baseIsTypedArray.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_baseKeysIn.js":
-/*!********************************************!*\
-  !*** ./node_modules/lodash/_baseKeysIn.js ***!
-  \********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("var isObject = __webpack_require__(/*! ./isObject */ \"./node_modules/lodash/isObject.js\"),\n    isPrototype = __webpack_require__(/*! ./_isPrototype */ \"./node_modules/lodash/_isPrototype.js\"),\n    nativeKeysIn = __webpack_require__(/*! ./_nativeKeysIn */ \"./node_modules/lodash/_nativeKeysIn.js\");\n\n/** Used for built-in method references. */\nvar objectProto = Object.prototype;\n\n/** Used to check objects for own properties. */\nvar hasOwnProperty = objectProto.hasOwnProperty;\n\n/**\n * The base implementation of `_.keysIn` which doesn't treat sparse arrays as dense.\n *\n * @private\n * @param {Object} object The object to query.\n * @returns {Array} Returns the array of property names.\n */\nfunction baseKeysIn(object) {\n  if (!isObject(object)) {\n    return nativeKeysIn(object);\n  }\n  var isProto = isPrototype(object),\n      result = [];\n\n  for (var key in object) {\n    if (!(key == 'constructor' && (isProto || !hasOwnProperty.call(object, key)))) {\n      result.push(key);\n    }\n  }\n  return result;\n}\n\nmodule.exports = baseKeysIn;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/_baseKeysIn.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_baseRest.js":
-/*!******************************************!*\
-  !*** ./node_modules/lodash/_baseRest.js ***!
-  \******************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("var identity = __webpack_require__(/*! ./identity */ \"./node_modules/lodash/identity.js\"),\n    overRest = __webpack_require__(/*! ./_overRest */ \"./node_modules/lodash/_overRest.js\"),\n    setToString = __webpack_require__(/*! ./_setToString */ \"./node_modules/lodash/_setToString.js\");\n\n/**\n * The base implementation of `_.rest` which doesn't validate or coerce arguments.\n *\n * @private\n * @param {Function} func The function to apply a rest parameter to.\n * @param {number} [start=func.length-1] The start position of the rest parameter.\n * @returns {Function} Returns the new function.\n */\nfunction baseRest(func, start) {\n  return setToString(overRest(func, start, identity), func + '');\n}\n\nmodule.exports = baseRest;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/_baseRest.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_baseSetToString.js":
-/*!*************************************************!*\
-  !*** ./node_modules/lodash/_baseSetToString.js ***!
-  \*************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("var constant = __webpack_require__(/*! ./constant */ \"./node_modules/lodash/constant.js\"),\n    defineProperty = __webpack_require__(/*! ./_defineProperty */ \"./node_modules/lodash/_defineProperty.js\"),\n    identity = __webpack_require__(/*! ./identity */ \"./node_modules/lodash/identity.js\");\n\n/**\n * The base implementation of `setToString` without support for hot loop shorting.\n *\n * @private\n * @param {Function} func The function to modify.\n * @param {Function} string The `toString` result.\n * @returns {Function} Returns `func`.\n */\nvar baseSetToString = !defineProperty ? identity : function(func, string) {\n  return defineProperty(func, 'toString', {\n    'configurable': true,\n    'enumerable': false,\n    'value': constant(string),\n    'writable': true\n  });\n};\n\nmodule.exports = baseSetToString;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/_baseSetToString.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_baseTimes.js":
-/*!*******************************************!*\
-  !*** ./node_modules/lodash/_baseTimes.js ***!
-  \*******************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("/**\n * The base implementation of `_.times` without support for iteratee shorthands\n * or max array length checks.\n *\n * @private\n * @param {number} n The number of times to invoke `iteratee`.\n * @param {Function} iteratee The function invoked per iteration.\n * @returns {Array} Returns the array of results.\n */\nfunction baseTimes(n, iteratee) {\n  var index = -1,\n      result = Array(n);\n\n  while (++index < n) {\n    result[index] = iteratee(index);\n  }\n  return result;\n}\n\nmodule.exports = baseTimes;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/_baseTimes.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_baseUnary.js":
-/*!*******************************************!*\
-  !*** ./node_modules/lodash/_baseUnary.js ***!
-  \*******************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("/**\n * The base implementation of `_.unary` without support for storing metadata.\n *\n * @private\n * @param {Function} func The function to cap arguments for.\n * @returns {Function} Returns the new capped function.\n */\nfunction baseUnary(func) {\n  return function(value) {\n    return func(value);\n  };\n}\n\nmodule.exports = baseUnary;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/_baseUnary.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_copyObject.js":
-/*!********************************************!*\
-  !*** ./node_modules/lodash/_copyObject.js ***!
-  \********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("var assignValue = __webpack_require__(/*! ./_assignValue */ \"./node_modules/lodash/_assignValue.js\"),\n    baseAssignValue = __webpack_require__(/*! ./_baseAssignValue */ \"./node_modules/lodash/_baseAssignValue.js\");\n\n/**\n * Copies properties of `source` to `object`.\n *\n * @private\n * @param {Object} source The object to copy properties from.\n * @param {Array} props The property identifiers to copy.\n * @param {Object} [object={}] The object to copy properties to.\n * @param {Function} [customizer] The function to customize copied values.\n * @returns {Object} Returns `object`.\n */\nfunction copyObject(source, props, object, customizer) {\n  var isNew = !object;\n  object || (object = {});\n\n  var index = -1,\n      length = props.length;\n\n  while (++index < length) {\n    var key = props[index];\n\n    var newValue = customizer\n      ? customizer(object[key], source[key], key, object, source)\n      : undefined;\n\n    if (newValue === undefined) {\n      newValue = source[key];\n    }\n    if (isNew) {\n      baseAssignValue(object, key, newValue);\n    } else {\n      assignValue(object, key, newValue);\n    }\n  }\n  return object;\n}\n\nmodule.exports = copyObject;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/_copyObject.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_coreJsData.js":
-/*!********************************************!*\
-  !*** ./node_modules/lodash/_coreJsData.js ***!
-  \********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("var root = __webpack_require__(/*! ./_root */ \"./node_modules/lodash/_root.js\");\n\n/** Used to detect overreaching core-js shims. */\nvar coreJsData = root['__core-js_shared__'];\n\nmodule.exports = coreJsData;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/_coreJsData.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_createAssigner.js":
-/*!************************************************!*\
-  !*** ./node_modules/lodash/_createAssigner.js ***!
-  \************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("var baseRest = __webpack_require__(/*! ./_baseRest */ \"./node_modules/lodash/_baseRest.js\"),\n    isIterateeCall = __webpack_require__(/*! ./_isIterateeCall */ \"./node_modules/lodash/_isIterateeCall.js\");\n\n/**\n * Creates a function like `_.assign`.\n *\n * @private\n * @param {Function} assigner The function to assign values.\n * @returns {Function} Returns the new assigner function.\n */\nfunction createAssigner(assigner) {\n  return baseRest(function(object, sources) {\n    var index = -1,\n        length = sources.length,\n        customizer = length > 1 ? sources[length - 1] : undefined,\n        guard = length > 2 ? sources[2] : undefined;\n\n    customizer = (assigner.length > 3 && typeof customizer == 'function')\n      ? (length--, customizer)\n      : undefined;\n\n    if (guard && isIterateeCall(sources[0], sources[1], guard)) {\n      customizer = length < 3 ? undefined : customizer;\n      length = 1;\n    }\n    object = Object(object);\n    while (++index < length) {\n      var source = sources[index];\n      if (source) {\n        assigner(object, source, index, customizer);\n      }\n    }\n    return object;\n  });\n}\n\nmodule.exports = createAssigner;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/_createAssigner.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_defineProperty.js":
-/*!************************************************!*\
-  !*** ./node_modules/lodash/_defineProperty.js ***!
-  \************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("var getNative = __webpack_require__(/*! ./_getNative */ \"./node_modules/lodash/_getNative.js\");\n\nvar defineProperty = (function() {\n  try {\n    var func = getNative(Object, 'defineProperty');\n    func({}, '', {});\n    return func;\n  } catch (e) {}\n}());\n\nmodule.exports = defineProperty;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/_defineProperty.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_freeGlobal.js":
-/*!********************************************!*\
-  !*** ./node_modules/lodash/_freeGlobal.js ***!
-  \********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("/* WEBPACK VAR INJECTION */(function(global) {/** Detect free variable `global` from Node.js. */\nvar freeGlobal = typeof global == 'object' && global && global.Object === Object && global;\n\nmodule.exports = freeGlobal;\n\n/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../webpack/buildin/global.js */ \"./node_modules/webpack/buildin/global.js\")))\n\n//# sourceURL=webpack:///./node_modules/lodash/_freeGlobal.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_getNative.js":
-/*!*******************************************!*\
-  !*** ./node_modules/lodash/_getNative.js ***!
-  \*******************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("var baseIsNative = __webpack_require__(/*! ./_baseIsNative */ \"./node_modules/lodash/_baseIsNative.js\"),\n    getValue = __webpack_require__(/*! ./_getValue */ \"./node_modules/lodash/_getValue.js\");\n\n/**\n * Gets the native function at `key` of `object`.\n *\n * @private\n * @param {Object} object The object to query.\n * @param {string} key The key of the method to get.\n * @returns {*} Returns the function if it's native, else `undefined`.\n */\nfunction getNative(object, key) {\n  var value = getValue(object, key);\n  return baseIsNative(value) ? value : undefined;\n}\n\nmodule.exports = getNative;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/_getNative.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_getRawTag.js":
-/*!*******************************************!*\
-  !*** ./node_modules/lodash/_getRawTag.js ***!
-  \*******************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("var Symbol = __webpack_require__(/*! ./_Symbol */ \"./node_modules/lodash/_Symbol.js\");\n\n/** Used for built-in method references. */\nvar objectProto = Object.prototype;\n\n/** Used to check objects for own properties. */\nvar hasOwnProperty = objectProto.hasOwnProperty;\n\n/**\n * Used to resolve the\n * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)\n * of values.\n */\nvar nativeObjectToString = objectProto.toString;\n\n/** Built-in value references. */\nvar symToStringTag = Symbol ? Symbol.toStringTag : undefined;\n\n/**\n * A specialized version of `baseGetTag` which ignores `Symbol.toStringTag` values.\n *\n * @private\n * @param {*} value The value to query.\n * @returns {string} Returns the raw `toStringTag`.\n */\nfunction getRawTag(value) {\n  var isOwn = hasOwnProperty.call(value, symToStringTag),\n      tag = value[symToStringTag];\n\n  try {\n    value[symToStringTag] = undefined;\n    var unmasked = true;\n  } catch (e) {}\n\n  var result = nativeObjectToString.call(value);\n  if (unmasked) {\n    if (isOwn) {\n      value[symToStringTag] = tag;\n    } else {\n      delete value[symToStringTag];\n    }\n  }\n  return result;\n}\n\nmodule.exports = getRawTag;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/_getRawTag.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_getValue.js":
-/*!******************************************!*\
-  !*** ./node_modules/lodash/_getValue.js ***!
-  \******************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("/**\n * Gets the value at `key` of `object`.\n *\n * @private\n * @param {Object} [object] The object to query.\n * @param {string} key The key of the property to get.\n * @returns {*} Returns the property value.\n */\nfunction getValue(object, key) {\n  return object == null ? undefined : object[key];\n}\n\nmodule.exports = getValue;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/_getValue.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_isIndex.js":
-/*!*****************************************!*\
-  !*** ./node_modules/lodash/_isIndex.js ***!
-  \*****************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("/** Used as references for various `Number` constants. */\nvar MAX_SAFE_INTEGER = 9007199254740991;\n\n/** Used to detect unsigned integer values. */\nvar reIsUint = /^(?:0|[1-9]\\d*)$/;\n\n/**\n * Checks if `value` is a valid array-like index.\n *\n * @private\n * @param {*} value The value to check.\n * @param {number} [length=MAX_SAFE_INTEGER] The upper bounds of a valid index.\n * @returns {boolean} Returns `true` if `value` is a valid index, else `false`.\n */\nfunction isIndex(value, length) {\n  var type = typeof value;\n  length = length == null ? MAX_SAFE_INTEGER : length;\n\n  return !!length &&\n    (type == 'number' ||\n      (type != 'symbol' && reIsUint.test(value))) &&\n        (value > -1 && value % 1 == 0 && value < length);\n}\n\nmodule.exports = isIndex;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/_isIndex.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_isIterateeCall.js":
-/*!************************************************!*\
-  !*** ./node_modules/lodash/_isIterateeCall.js ***!
-  \************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("var eq = __webpack_require__(/*! ./eq */ \"./node_modules/lodash/eq.js\"),\n    isArrayLike = __webpack_require__(/*! ./isArrayLike */ \"./node_modules/lodash/isArrayLike.js\"),\n    isIndex = __webpack_require__(/*! ./_isIndex */ \"./node_modules/lodash/_isIndex.js\"),\n    isObject = __webpack_require__(/*! ./isObject */ \"./node_modules/lodash/isObject.js\");\n\n/**\n * Checks if the given arguments are from an iteratee call.\n *\n * @private\n * @param {*} value The potential iteratee value argument.\n * @param {*} index The potential iteratee index or key argument.\n * @param {*} object The potential iteratee object argument.\n * @returns {boolean} Returns `true` if the arguments are from an iteratee call,\n *  else `false`.\n */\nfunction isIterateeCall(value, index, object) {\n  if (!isObject(object)) {\n    return false;\n  }\n  var type = typeof index;\n  if (type == 'number'\n        ? (isArrayLike(object) && isIndex(index, object.length))\n        : (type == 'string' && index in object)\n      ) {\n    return eq(object[index], value);\n  }\n  return false;\n}\n\nmodule.exports = isIterateeCall;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/_isIterateeCall.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_isMasked.js":
-/*!******************************************!*\
-  !*** ./node_modules/lodash/_isMasked.js ***!
-  \******************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("var coreJsData = __webpack_require__(/*! ./_coreJsData */ \"./node_modules/lodash/_coreJsData.js\");\n\n/** Used to detect methods masquerading as native. */\nvar maskSrcKey = (function() {\n  var uid = /[^.]+$/.exec(coreJsData && coreJsData.keys && coreJsData.keys.IE_PROTO || '');\n  return uid ? ('Symbol(src)_1.' + uid) : '';\n}());\n\n/**\n * Checks if `func` has its source masked.\n *\n * @private\n * @param {Function} func The function to check.\n * @returns {boolean} Returns `true` if `func` is masked, else `false`.\n */\nfunction isMasked(func) {\n  return !!maskSrcKey && (maskSrcKey in func);\n}\n\nmodule.exports = isMasked;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/_isMasked.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_isPrototype.js":
-/*!*********************************************!*\
-  !*** ./node_modules/lodash/_isPrototype.js ***!
-  \*********************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("/** Used for built-in method references. */\nvar objectProto = Object.prototype;\n\n/**\n * Checks if `value` is likely a prototype object.\n *\n * @private\n * @param {*} value The value to check.\n * @returns {boolean} Returns `true` if `value` is a prototype, else `false`.\n */\nfunction isPrototype(value) {\n  var Ctor = value && value.constructor,\n      proto = (typeof Ctor == 'function' && Ctor.prototype) || objectProto;\n\n  return value === proto;\n}\n\nmodule.exports = isPrototype;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/_isPrototype.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_nativeKeysIn.js":
-/*!**********************************************!*\
-  !*** ./node_modules/lodash/_nativeKeysIn.js ***!
-  \**********************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("/**\n * This function is like\n * [`Object.keys`](http://ecma-international.org/ecma-262/7.0/#sec-object.keys)\n * except that it includes inherited enumerable properties.\n *\n * @private\n * @param {Object} object The object to query.\n * @returns {Array} Returns the array of property names.\n */\nfunction nativeKeysIn(object) {\n  var result = [];\n  if (object != null) {\n    for (var key in Object(object)) {\n      result.push(key);\n    }\n  }\n  return result;\n}\n\nmodule.exports = nativeKeysIn;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/_nativeKeysIn.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_nodeUtil.js":
-/*!******************************************!*\
-  !*** ./node_modules/lodash/_nodeUtil.js ***!
-  \******************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("/* WEBPACK VAR INJECTION */(function(module) {var freeGlobal = __webpack_require__(/*! ./_freeGlobal */ \"./node_modules/lodash/_freeGlobal.js\");\n\n/** Detect free variable `exports`. */\nvar freeExports =  true && exports && !exports.nodeType && exports;\n\n/** Detect free variable `module`. */\nvar freeModule = freeExports && typeof module == 'object' && module && !module.nodeType && module;\n\n/** Detect the popular CommonJS extension `module.exports`. */\nvar moduleExports = freeModule && freeModule.exports === freeExports;\n\n/** Detect free variable `process` from Node.js. */\nvar freeProcess = moduleExports && freeGlobal.process;\n\n/** Used to access faster Node.js helpers. */\nvar nodeUtil = (function() {\n  try {\n    // Use `util.types` for Node.js 10+.\n    var types = freeModule && freeModule.require && freeModule.require('util').types;\n\n    if (types) {\n      return types;\n    }\n\n    // Legacy `process.binding('util')` for Node.js < 10.\n    return freeProcess && freeProcess.binding && freeProcess.binding('util');\n  } catch (e) {}\n}());\n\nmodule.exports = nodeUtil;\n\n/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../webpack/buildin/module.js */ \"./node_modules/webpack/buildin/module.js\")(module)))\n\n//# sourceURL=webpack:///./node_modules/lodash/_nodeUtil.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_objectToString.js":
-/*!************************************************!*\
-  !*** ./node_modules/lodash/_objectToString.js ***!
-  \************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("/** Used for built-in method references. */\nvar objectProto = Object.prototype;\n\n/**\n * Used to resolve the\n * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)\n * of values.\n */\nvar nativeObjectToString = objectProto.toString;\n\n/**\n * Converts `value` to a string using `Object.prototype.toString`.\n *\n * @private\n * @param {*} value The value to convert.\n * @returns {string} Returns the converted string.\n */\nfunction objectToString(value) {\n  return nativeObjectToString.call(value);\n}\n\nmodule.exports = objectToString;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/_objectToString.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_overRest.js":
-/*!******************************************!*\
-  !*** ./node_modules/lodash/_overRest.js ***!
-  \******************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("var apply = __webpack_require__(/*! ./_apply */ \"./node_modules/lodash/_apply.js\");\n\n/* Built-in method references for those with the same name as other `lodash` methods. */\nvar nativeMax = Math.max;\n\n/**\n * A specialized version of `baseRest` which transforms the rest array.\n *\n * @private\n * @param {Function} func The function to apply a rest parameter to.\n * @param {number} [start=func.length-1] The start position of the rest parameter.\n * @param {Function} transform The rest array transform.\n * @returns {Function} Returns the new function.\n */\nfunction overRest(func, start, transform) {\n  start = nativeMax(start === undefined ? (func.length - 1) : start, 0);\n  return function() {\n    var args = arguments,\n        index = -1,\n        length = nativeMax(args.length - start, 0),\n        array = Array(length);\n\n    while (++index < length) {\n      array[index] = args[start + index];\n    }\n    index = -1;\n    var otherArgs = Array(start + 1);\n    while (++index < start) {\n      otherArgs[index] = args[index];\n    }\n    otherArgs[start] = transform(array);\n    return apply(func, this, otherArgs);\n  };\n}\n\nmodule.exports = overRest;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/_overRest.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_root.js":
-/*!**************************************!*\
-  !*** ./node_modules/lodash/_root.js ***!
-  \**************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("var freeGlobal = __webpack_require__(/*! ./_freeGlobal */ \"./node_modules/lodash/_freeGlobal.js\");\n\n/** Detect free variable `self`. */\nvar freeSelf = typeof self == 'object' && self && self.Object === Object && self;\n\n/** Used as a reference to the global object. */\nvar root = freeGlobal || freeSelf || Function('return this')();\n\nmodule.exports = root;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/_root.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_setToString.js":
-/*!*********************************************!*\
-  !*** ./node_modules/lodash/_setToString.js ***!
-  \*********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("var baseSetToString = __webpack_require__(/*! ./_baseSetToString */ \"./node_modules/lodash/_baseSetToString.js\"),\n    shortOut = __webpack_require__(/*! ./_shortOut */ \"./node_modules/lodash/_shortOut.js\");\n\n/**\n * Sets the `toString` method of `func` to return `string`.\n *\n * @private\n * @param {Function} func The function to modify.\n * @param {Function} string The `toString` result.\n * @returns {Function} Returns `func`.\n */\nvar setToString = shortOut(baseSetToString);\n\nmodule.exports = setToString;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/_setToString.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_shortOut.js":
-/*!******************************************!*\
-  !*** ./node_modules/lodash/_shortOut.js ***!
-  \******************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("/** Used to detect hot functions by number of calls within a span of milliseconds. */\nvar HOT_COUNT = 800,\n    HOT_SPAN = 16;\n\n/* Built-in method references for those with the same name as other `lodash` methods. */\nvar nativeNow = Date.now;\n\n/**\n * Creates a function that'll short out and invoke `identity` instead\n * of `func` when it's called `HOT_COUNT` or more times in `HOT_SPAN`\n * milliseconds.\n *\n * @private\n * @param {Function} func The function to restrict.\n * @returns {Function} Returns the new shortable function.\n */\nfunction shortOut(func) {\n  var count = 0,\n      lastCalled = 0;\n\n  return function() {\n    var stamp = nativeNow(),\n        remaining = HOT_SPAN - (stamp - lastCalled);\n\n    lastCalled = stamp;\n    if (remaining > 0) {\n      if (++count >= HOT_COUNT) {\n        return arguments[0];\n      }\n    } else {\n      count = 0;\n    }\n    return func.apply(undefined, arguments);\n  };\n}\n\nmodule.exports = shortOut;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/_shortOut.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/_toSource.js":
-/*!******************************************!*\
-  !*** ./node_modules/lodash/_toSource.js ***!
-  \******************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("/** Used for built-in method references. */\nvar funcProto = Function.prototype;\n\n/** Used to resolve the decompiled source of functions. */\nvar funcToString = funcProto.toString;\n\n/**\n * Converts `func` to its source code.\n *\n * @private\n * @param {Function} func The function to convert.\n * @returns {string} Returns the source code.\n */\nfunction toSource(func) {\n  if (func != null) {\n    try {\n      return funcToString.call(func);\n    } catch (e) {}\n    try {\n      return (func + '');\n    } catch (e) {}\n  }\n  return '';\n}\n\nmodule.exports = toSource;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/_toSource.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/assignIn.js":
-/*!*****************************************!*\
-  !*** ./node_modules/lodash/assignIn.js ***!
-  \*****************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("var copyObject = __webpack_require__(/*! ./_copyObject */ \"./node_modules/lodash/_copyObject.js\"),\n    createAssigner = __webpack_require__(/*! ./_createAssigner */ \"./node_modules/lodash/_createAssigner.js\"),\n    keysIn = __webpack_require__(/*! ./keysIn */ \"./node_modules/lodash/keysIn.js\");\n\n/**\n * This method is like `_.assign` except that it iterates over own and\n * inherited source properties.\n *\n * **Note:** This method mutates `object`.\n *\n * @static\n * @memberOf _\n * @since 4.0.0\n * @alias extend\n * @category Object\n * @param {Object} object The destination object.\n * @param {...Object} [sources] The source objects.\n * @returns {Object} Returns `object`.\n * @see _.assign\n * @example\n *\n * function Foo() {\n *   this.a = 1;\n * }\n *\n * function Bar() {\n *   this.c = 3;\n * }\n *\n * Foo.prototype.b = 2;\n * Bar.prototype.d = 4;\n *\n * _.assignIn({ 'a': 0 }, new Foo, new Bar);\n * // => { 'a': 1, 'b': 2, 'c': 3, 'd': 4 }\n */\nvar assignIn = createAssigner(function(object, source) {\n  copyObject(source, keysIn(source), object);\n});\n\nmodule.exports = assignIn;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/assignIn.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/constant.js":
-/*!*****************************************!*\
-  !*** ./node_modules/lodash/constant.js ***!
-  \*****************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("/**\n * Creates a function that returns `value`.\n *\n * @static\n * @memberOf _\n * @since 2.4.0\n * @category Util\n * @param {*} value The value to return from the new function.\n * @returns {Function} Returns the new constant function.\n * @example\n *\n * var objects = _.times(2, _.constant({ 'a': 1 }));\n *\n * console.log(objects);\n * // => [{ 'a': 1 }, { 'a': 1 }]\n *\n * console.log(objects[0] === objects[1]);\n * // => true\n */\nfunction constant(value) {\n  return function() {\n    return value;\n  };\n}\n\nmodule.exports = constant;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/constant.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/eq.js":
-/*!***********************************!*\
-  !*** ./node_modules/lodash/eq.js ***!
-  \***********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("/**\n * Performs a\n * [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)\n * comparison between two values to determine if they are equivalent.\n *\n * @static\n * @memberOf _\n * @since 4.0.0\n * @category Lang\n * @param {*} value The value to compare.\n * @param {*} other The other value to compare.\n * @returns {boolean} Returns `true` if the values are equivalent, else `false`.\n * @example\n *\n * var object = { 'a': 1 };\n * var other = { 'a': 1 };\n *\n * _.eq(object, object);\n * // => true\n *\n * _.eq(object, other);\n * // => false\n *\n * _.eq('a', 'a');\n * // => true\n *\n * _.eq('a', Object('a'));\n * // => false\n *\n * _.eq(NaN, NaN);\n * // => true\n */\nfunction eq(value, other) {\n  return value === other || (value !== value && other !== other);\n}\n\nmodule.exports = eq;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/eq.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/extend.js":
-/*!***************************************!*\
-  !*** ./node_modules/lodash/extend.js ***!
-  \***************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("module.exports = __webpack_require__(/*! ./assignIn */ \"./node_modules/lodash/assignIn.js\");\n\n\n//# sourceURL=webpack:///./node_modules/lodash/extend.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/identity.js":
-/*!*****************************************!*\
-  !*** ./node_modules/lodash/identity.js ***!
-  \*****************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("/**\n * This method returns the first argument it receives.\n *\n * @static\n * @since 0.1.0\n * @memberOf _\n * @category Util\n * @param {*} value Any value.\n * @returns {*} Returns `value`.\n * @example\n *\n * var object = { 'a': 1 };\n *\n * console.log(_.identity(object) === object);\n * // => true\n */\nfunction identity(value) {\n  return value;\n}\n\nmodule.exports = identity;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/identity.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/isArguments.js":
-/*!********************************************!*\
-  !*** ./node_modules/lodash/isArguments.js ***!
-  \********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("var baseIsArguments = __webpack_require__(/*! ./_baseIsArguments */ \"./node_modules/lodash/_baseIsArguments.js\"),\n    isObjectLike = __webpack_require__(/*! ./isObjectLike */ \"./node_modules/lodash/isObjectLike.js\");\n\n/** Used for built-in method references. */\nvar objectProto = Object.prototype;\n\n/** Used to check objects for own properties. */\nvar hasOwnProperty = objectProto.hasOwnProperty;\n\n/** Built-in value references. */\nvar propertyIsEnumerable = objectProto.propertyIsEnumerable;\n\n/**\n * Checks if `value` is likely an `arguments` object.\n *\n * @static\n * @memberOf _\n * @since 0.1.0\n * @category Lang\n * @param {*} value The value to check.\n * @returns {boolean} Returns `true` if `value` is an `arguments` object,\n *  else `false`.\n * @example\n *\n * _.isArguments(function() { return arguments; }());\n * // => true\n *\n * _.isArguments([1, 2, 3]);\n * // => false\n */\nvar isArguments = baseIsArguments(function() { return arguments; }()) ? baseIsArguments : function(value) {\n  return isObjectLike(value) && hasOwnProperty.call(value, 'callee') &&\n    !propertyIsEnumerable.call(value, 'callee');\n};\n\nmodule.exports = isArguments;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/isArguments.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/isArray.js":
-/*!****************************************!*\
-  !*** ./node_modules/lodash/isArray.js ***!
-  \****************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("/**\n * Checks if `value` is classified as an `Array` object.\n *\n * @static\n * @memberOf _\n * @since 0.1.0\n * @category Lang\n * @param {*} value The value to check.\n * @returns {boolean} Returns `true` if `value` is an array, else `false`.\n * @example\n *\n * _.isArray([1, 2, 3]);\n * // => true\n *\n * _.isArray(document.body.children);\n * // => false\n *\n * _.isArray('abc');\n * // => false\n *\n * _.isArray(_.noop);\n * // => false\n */\nvar isArray = Array.isArray;\n\nmodule.exports = isArray;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/isArray.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/isArrayLike.js":
-/*!********************************************!*\
-  !*** ./node_modules/lodash/isArrayLike.js ***!
-  \********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("var isFunction = __webpack_require__(/*! ./isFunction */ \"./node_modules/lodash/isFunction.js\"),\n    isLength = __webpack_require__(/*! ./isLength */ \"./node_modules/lodash/isLength.js\");\n\n/**\n * Checks if `value` is array-like. A value is considered array-like if it's\n * not a function and has a `value.length` that's an integer greater than or\n * equal to `0` and less than or equal to `Number.MAX_SAFE_INTEGER`.\n *\n * @static\n * @memberOf _\n * @since 4.0.0\n * @category Lang\n * @param {*} value The value to check.\n * @returns {boolean} Returns `true` if `value` is array-like, else `false`.\n * @example\n *\n * _.isArrayLike([1, 2, 3]);\n * // => true\n *\n * _.isArrayLike(document.body.children);\n * // => true\n *\n * _.isArrayLike('abc');\n * // => true\n *\n * _.isArrayLike(_.noop);\n * // => false\n */\nfunction isArrayLike(value) {\n  return value != null && isLength(value.length) && !isFunction(value);\n}\n\nmodule.exports = isArrayLike;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/isArrayLike.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/isBuffer.js":
-/*!*****************************************!*\
-  !*** ./node_modules/lodash/isBuffer.js ***!
-  \*****************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("/* WEBPACK VAR INJECTION */(function(module) {var root = __webpack_require__(/*! ./_root */ \"./node_modules/lodash/_root.js\"),\n    stubFalse = __webpack_require__(/*! ./stubFalse */ \"./node_modules/lodash/stubFalse.js\");\n\n/** Detect free variable `exports`. */\nvar freeExports =  true && exports && !exports.nodeType && exports;\n\n/** Detect free variable `module`. */\nvar freeModule = freeExports && typeof module == 'object' && module && !module.nodeType && module;\n\n/** Detect the popular CommonJS extension `module.exports`. */\nvar moduleExports = freeModule && freeModule.exports === freeExports;\n\n/** Built-in value references. */\nvar Buffer = moduleExports ? root.Buffer : undefined;\n\n/* Built-in method references for those with the same name as other `lodash` methods. */\nvar nativeIsBuffer = Buffer ? Buffer.isBuffer : undefined;\n\n/**\n * Checks if `value` is a buffer.\n *\n * @static\n * @memberOf _\n * @since 4.3.0\n * @category Lang\n * @param {*} value The value to check.\n * @returns {boolean} Returns `true` if `value` is a buffer, else `false`.\n * @example\n *\n * _.isBuffer(new Buffer(2));\n * // => true\n *\n * _.isBuffer(new Uint8Array(2));\n * // => false\n */\nvar isBuffer = nativeIsBuffer || stubFalse;\n\nmodule.exports = isBuffer;\n\n/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../webpack/buildin/module.js */ \"./node_modules/webpack/buildin/module.js\")(module)))\n\n//# sourceURL=webpack:///./node_modules/lodash/isBuffer.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/isFunction.js":
-/*!*******************************************!*\
-  !*** ./node_modules/lodash/isFunction.js ***!
-  \*******************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("var baseGetTag = __webpack_require__(/*! ./_baseGetTag */ \"./node_modules/lodash/_baseGetTag.js\"),\n    isObject = __webpack_require__(/*! ./isObject */ \"./node_modules/lodash/isObject.js\");\n\n/** `Object#toString` result references. */\nvar asyncTag = '[object AsyncFunction]',\n    funcTag = '[object Function]',\n    genTag = '[object GeneratorFunction]',\n    proxyTag = '[object Proxy]';\n\n/**\n * Checks if `value` is classified as a `Function` object.\n *\n * @static\n * @memberOf _\n * @since 0.1.0\n * @category Lang\n * @param {*} value The value to check.\n * @returns {boolean} Returns `true` if `value` is a function, else `false`.\n * @example\n *\n * _.isFunction(_);\n * // => true\n *\n * _.isFunction(/abc/);\n * // => false\n */\nfunction isFunction(value) {\n  if (!isObject(value)) {\n    return false;\n  }\n  // The use of `Object#toString` avoids issues with the `typeof` operator\n  // in Safari 9 which returns 'object' for typed arrays and other constructors.\n  var tag = baseGetTag(value);\n  return tag == funcTag || tag == genTag || tag == asyncTag || tag == proxyTag;\n}\n\nmodule.exports = isFunction;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/isFunction.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/isLength.js":
-/*!*****************************************!*\
-  !*** ./node_modules/lodash/isLength.js ***!
-  \*****************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("/** Used as references for various `Number` constants. */\nvar MAX_SAFE_INTEGER = 9007199254740991;\n\n/**\n * Checks if `value` is a valid array-like length.\n *\n * **Note:** This method is loosely based on\n * [`ToLength`](http://ecma-international.org/ecma-262/7.0/#sec-tolength).\n *\n * @static\n * @memberOf _\n * @since 4.0.0\n * @category Lang\n * @param {*} value The value to check.\n * @returns {boolean} Returns `true` if `value` is a valid length, else `false`.\n * @example\n *\n * _.isLength(3);\n * // => true\n *\n * _.isLength(Number.MIN_VALUE);\n * // => false\n *\n * _.isLength(Infinity);\n * // => false\n *\n * _.isLength('3');\n * // => false\n */\nfunction isLength(value) {\n  return typeof value == 'number' &&\n    value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;\n}\n\nmodule.exports = isLength;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/isLength.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/isObject.js":
-/*!*****************************************!*\
-  !*** ./node_modules/lodash/isObject.js ***!
-  \*****************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("/**\n * Checks if `value` is the\n * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)\n * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)\n *\n * @static\n * @memberOf _\n * @since 0.1.0\n * @category Lang\n * @param {*} value The value to check.\n * @returns {boolean} Returns `true` if `value` is an object, else `false`.\n * @example\n *\n * _.isObject({});\n * // => true\n *\n * _.isObject([1, 2, 3]);\n * // => true\n *\n * _.isObject(_.noop);\n * // => true\n *\n * _.isObject(null);\n * // => false\n */\nfunction isObject(value) {\n  var type = typeof value;\n  return value != null && (type == 'object' || type == 'function');\n}\n\nmodule.exports = isObject;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/isObject.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/isObjectLike.js":
-/*!*********************************************!*\
-  !*** ./node_modules/lodash/isObjectLike.js ***!
-  \*********************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("/**\n * Checks if `value` is object-like. A value is object-like if it's not `null`\n * and has a `typeof` result of \"object\".\n *\n * @static\n * @memberOf _\n * @since 4.0.0\n * @category Lang\n * @param {*} value The value to check.\n * @returns {boolean} Returns `true` if `value` is object-like, else `false`.\n * @example\n *\n * _.isObjectLike({});\n * // => true\n *\n * _.isObjectLike([1, 2, 3]);\n * // => true\n *\n * _.isObjectLike(_.noop);\n * // => false\n *\n * _.isObjectLike(null);\n * // => false\n */\nfunction isObjectLike(value) {\n  return value != null && typeof value == 'object';\n}\n\nmodule.exports = isObjectLike;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/isObjectLike.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/isTypedArray.js":
-/*!*********************************************!*\
-  !*** ./node_modules/lodash/isTypedArray.js ***!
-  \*********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("var baseIsTypedArray = __webpack_require__(/*! ./_baseIsTypedArray */ \"./node_modules/lodash/_baseIsTypedArray.js\"),\n    baseUnary = __webpack_require__(/*! ./_baseUnary */ \"./node_modules/lodash/_baseUnary.js\"),\n    nodeUtil = __webpack_require__(/*! ./_nodeUtil */ \"./node_modules/lodash/_nodeUtil.js\");\n\n/* Node.js helper references. */\nvar nodeIsTypedArray = nodeUtil && nodeUtil.isTypedArray;\n\n/**\n * Checks if `value` is classified as a typed array.\n *\n * @static\n * @memberOf _\n * @since 3.0.0\n * @category Lang\n * @param {*} value The value to check.\n * @returns {boolean} Returns `true` if `value` is a typed array, else `false`.\n * @example\n *\n * _.isTypedArray(new Uint8Array);\n * // => true\n *\n * _.isTypedArray([]);\n * // => false\n */\nvar isTypedArray = nodeIsTypedArray ? baseUnary(nodeIsTypedArray) : baseIsTypedArray;\n\nmodule.exports = isTypedArray;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/isTypedArray.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/keysIn.js":
-/*!***************************************!*\
-  !*** ./node_modules/lodash/keysIn.js ***!
-  \***************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("var arrayLikeKeys = __webpack_require__(/*! ./_arrayLikeKeys */ \"./node_modules/lodash/_arrayLikeKeys.js\"),\n    baseKeysIn = __webpack_require__(/*! ./_baseKeysIn */ \"./node_modules/lodash/_baseKeysIn.js\"),\n    isArrayLike = __webpack_require__(/*! ./isArrayLike */ \"./node_modules/lodash/isArrayLike.js\");\n\n/**\n * Creates an array of the own and inherited enumerable property names of `object`.\n *\n * **Note:** Non-object values are coerced to objects.\n *\n * @static\n * @memberOf _\n * @since 3.0.0\n * @category Object\n * @param {Object} object The object to query.\n * @returns {Array} Returns the array of property names.\n * @example\n *\n * function Foo() {\n *   this.a = 1;\n *   this.b = 2;\n * }\n *\n * Foo.prototype.c = 3;\n *\n * _.keysIn(new Foo);\n * // => ['a', 'b', 'c'] (iteration order is not guaranteed)\n */\nfunction keysIn(object) {\n  return isArrayLike(object) ? arrayLikeKeys(object, true) : baseKeysIn(object);\n}\n\nmodule.exports = keysIn;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/keysIn.js?");
-
-/***/ }),
-
-/***/ "./node_modules/lodash/stubFalse.js":
-/*!******************************************!*\
-  !*** ./node_modules/lodash/stubFalse.js ***!
-  \******************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("/**\n * This method returns `false`.\n *\n * @static\n * @memberOf _\n * @since 4.13.0\n * @category Util\n * @returns {boolean} Returns `false`.\n * @example\n *\n * _.times(2, _.stubFalse);\n * // => [false, false]\n */\nfunction stubFalse() {\n  return false;\n}\n\nmodule.exports = stubFalse;\n\n\n//# sourceURL=webpack:///./node_modules/lodash/stubFalse.js?");
 
 /***/ }),
 
@@ -3018,7 +3018,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return CategoryTab; });\n/* harmony import */ var core_js_modules_es_array_concat__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.concat */ \"./node_modules/core-js/modules/es.array.concat.js\");\n/* harmony import */ var core_js_modules_es_array_concat__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_concat__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var core_js_modules_es_object_define_property__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.object.define-property */ \"./node_modules/core-js/modules/es.object.define-property.js\");\n/* harmony import */ var core_js_modules_es_object_define_property__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_define_property__WEBPACK_IMPORTED_MODULE_1__);\n\n\n\nfunction _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\"Cannot call a class as a function\"); } }\n\nfunction _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if (\"value\" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }\n\nfunction _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }\n\nvar CategoryTab =\n/*#__PURE__*/\nfunction () {\n  function CategoryTab(palette, category) {\n    var _this = this;\n\n    _classCallCheck(this, CategoryTab);\n\n    this.palette = palette;\n    this.initialized = false;\n    this.sortType = 'score';\n    this.categoryName = category.code;\n    this.tabList = $(\"<li id='tab-\".concat(category.code, \"' data-code='\").concat(category.code, \"'><a href='#tab-content-\").concat(category.code, \"' data-toggle='pill'><i class='emjdx-\").concat(category.code, \"'></a></li>\")); // eslint-disable-line no-undef\n\n    this.tabList.click(function (e) {\n      return _this.setCategory($(e.currentTarget).data('code')); // eslint-disable-line no-undef\n    });\n    this.tabContent = $(\"<div class='tab-pane' id='tab-content-\".concat(category.code, \"'></div>\")); // eslint-disable-line no-undef\n  }\n\n  _createClass(CategoryTab, [{\n    key: \"setCategory\",\n    value: function setCategory(categoryName) {\n      if (this.tabData) {\n        this.palette.EC.Categories.calledData = this.tabData;\n        return this.palette.EC.Categories.calledData;\n      }\n\n      return this.setCategoryTabContent(categoryName);\n    }\n  }, {\n    key: \"setCategoryTabContent\",\n    value: function setCategoryTabContent(categoryName) {\n      var _this2 = this;\n\n      this.initialized = true;\n      this.categoryName = categoryName;\n      return this.palette.EC.Categories.getEmoji(categoryName, function (resultEmoji, calledData) {\n        _this2.tabData = calledData;\n\n        _this2.tabContent.children().remove();\n\n        var capitalizedCategory = _this2.palette.capitalize(_this2.categoryName);\n\n        _this2.tabContent.append(\"<div class=\\\"emojidex-category-name emjdx-\".concat(_this2.categoryName, \"\\\">\").concat(capitalizedCategory, \"</div>\"));\n\n        _this2.tabContent.append(_this2.palette.setEmojiList('category', resultEmoji));\n\n        var curPage = _this2.palette.EC.Categories.meta.total_count === 0 ? 0 : _this2.palette.EC.Categories.curPage;\n        var maxPage = Math.floor(_this2.palette.EC.Categories.meta.total_count / _this2.palette.EC.options.limit);\n\n        if (_this2.palette.EC.Categories.meta.total_count % _this2.palette.EC.options.limit > 0) {\n          maxPage++;\n        }\n\n        var prevFunc = function prevFunc() {\n          return _this2.palette.EC.Categories.prev();\n        };\n\n        var nextFunc = function nextFunc() {\n          return _this2.palette.EC.Categories.next();\n        };\n\n        var pagination = _this2.palette.getPagination('category', prevFunc, nextFunc, curPage, maxPage);\n\n        pagination.append(_this2.palette.getSorting(_this2));\n        return _this2.tabContent.append(pagination);\n      }, {\n        sort: this.sortType\n      });\n    }\n  }, {\n    key: \"resetTabContent\",\n    value: function resetTabContent() {\n      return this.setCategoryTabContent(this.categoryName);\n    }\n  }]);\n\n  return CategoryTab;\n}();\n\n\n\n//# sourceURL=webpack:///./src/es6/emojidexPalette/components/tabs/category.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return CategoryTab; });\n/* harmony import */ var core_js_modules_es_array_concat__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.concat */ \"./node_modules/core-js/modules/es.array.concat.js\");\n/* harmony import */ var core_js_modules_es_array_concat__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_concat__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var core_js_modules_es_object_define_property__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.object.define-property */ \"./node_modules/core-js/modules/es.object.define-property.js\");\n/* harmony import */ var core_js_modules_es_object_define_property__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_define_property__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var emojidex_client_src_es6_components_categories__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! emojidex-client/src/es6/components/categories */ \"./node_modules/emojidex-client/src/es6/components/categories.js\");\n\n\n\nfunction _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\"Cannot call a class as a function\"); } }\n\nfunction _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if (\"value\" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }\n\nfunction _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }\n\n\n\nvar CategoryTab =\n/*#__PURE__*/\nfunction () {\n  function CategoryTab(palette, category) {\n    var _this = this;\n\n    _classCallCheck(this, CategoryTab);\n\n    this.palette = palette;\n    this.initialized = false;\n    this.sortType = 'score';\n    this.categoryName = category.code;\n    this.tabList = $(\"<li id='tab-\".concat(category.code, \"' data-code='\").concat(category.code, \"'><a href='#tab-content-\").concat(category.code, \"' data-toggle='pill'><i class='emjdx-\").concat(category.code, \"'></a></li>\")); // eslint-disable-line no-undef\n\n    this.tabContent = $(\"<div class='tab-pane' id='tab-content-\".concat(category.code, \"'></div>\")); // eslint-disable-line no-undef\n\n    new emojidex_client_src_es6_components_categories__WEBPACK_IMPORTED_MODULE_2__[\"default\"](palette.EC).then(function (ECC) {\n      _this.ECC = ECC;\n\n      _this.tabList.click(function (e) {\n        return _this.setCategory($(e.currentTarget).data('code')); // eslint-disable-line no-undef\n      });\n    });\n  }\n\n  _createClass(CategoryTab, [{\n    key: \"setCategory\",\n    value: function setCategory(categoryName) {\n      if (!this.initialized) {\n        return this.setCategoryTabContent(categoryName);\n      }\n    }\n  }, {\n    key: \"setCategoryTabContent\",\n    value: function setCategoryTabContent(categoryName) {\n      var _this2 = this;\n\n      this.initialized = true;\n      this.categoryName = categoryName;\n      return this.ECC.getEmoji(categoryName, function (resultEmoji) {\n        _this2.tabContent.children().remove();\n\n        var capitalizedCategory = _this2.palette.capitalize(_this2.categoryName);\n\n        _this2.tabContent.append(\"<div class=\\\"emojidex-category-name emjdx-\".concat(_this2.categoryName, \"\\\">\").concat(capitalizedCategory, \"</div>\"));\n\n        _this2.tabContent.append(_this2.palette.setEmojiList('category', resultEmoji));\n\n        var curPage = _this2.ECC.meta.total_count === 0 ? 0 : _this2.ECC.curPage;\n        var maxPage = Math.floor(_this2.ECC.meta.total_count / _this2.palette.EC.options.limit);\n\n        if (_this2.ECC.meta.total_count % _this2.palette.EC.options.limit > 0) {\n          maxPage++;\n        }\n\n        var prevFunc = function prevFunc() {\n          return _this2.ECC.prev();\n        };\n\n        var nextFunc = function nextFunc() {\n          return _this2.ECC.next();\n        };\n\n        var pagination = _this2.palette.getPagination('category', prevFunc, nextFunc, curPage, maxPage);\n\n        pagination.append(_this2.palette.getSorting(_this2));\n        return _this2.tabContent.append(pagination);\n      }, {\n        sort: this.sortType\n      });\n    }\n  }, {\n    key: \"resetTabContent\",\n    value: function resetTabContent() {\n      return this.setCategoryTabContent(this.categoryName);\n    }\n  }]);\n\n  return CategoryTab;\n}();\n\n\n\n//# sourceURL=webpack:///./src/es6/emojidexPalette/components/tabs/category.js?");
 
 /***/ }),
 
@@ -3042,7 +3042,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return IndexTab; });\n/* harmony import */ var core_js_modules_es_object_define_property__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.object.define-property */ \"./node_modules/core-js/modules/es.object.define-property.js\");\n/* harmony import */ var core_js_modules_es_object_define_property__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_define_property__WEBPACK_IMPORTED_MODULE_0__);\n\n\nfunction _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\"Cannot call a class as a function\"); } }\n\nfunction _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if (\"value\" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }\n\nfunction _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }\n\nvar IndexTab =\n/*#__PURE__*/\nfunction () {\n  function IndexTab(palette) {\n    _classCallCheck(this, IndexTab);\n\n    this.palette = palette;\n    this.initialized = false;\n    this.sortType = 'score';\n    this.tabList = $('<li id=\\'tab-index\\' class=\\'active\\'><a href=\\'#tab-content-index\\' data-toggle=\\'pill\\'><i class=\\'emjdx-all\\'></a></li>'); // eslint-disable-line no-undef\n\n    this.tabContent = $('<div class=\\'tab-pane active\\' id=\\'tab-content-index\\'></div>'); // eslint-disable-line no-undef\n\n    this.setTabContent();\n  }\n\n  _createClass(IndexTab, [{\n    key: \"setTabContent\",\n    value: function setTabContent() {\n      var _this = this;\n\n      this.initialized = true;\n      return this.palette.EC.Indexes.index(function (resultEmoji, calledData) {\n        _this.tabData = calledData;\n\n        _this.tabContent.children().remove();\n\n        _this.tabContent.append('<div class=\"emojidex-category-name emjdx-all\">Index</div>');\n\n        _this.tabContent.append(_this.palette.setEmojiList('index', resultEmoji));\n\n        var curPage = _this.palette.EC.Indexes.meta.total_count === 0 ? 0 : _this.palette.EC.Indexes.curPage;\n        var maxPage = Math.floor(_this.palette.EC.Indexes.meta.total_count / _this.palette.EC.options.limit);\n\n        if (_this.palette.EC.Indexes.meta.total_count % _this.palette.EC.options.limit > 0) {\n          maxPage++;\n        }\n\n        var prevFunc = function prevFunc() {\n          return _this.palette.EC.Indexes.prev();\n        };\n\n        var nextFunc = function nextFunc() {\n          return _this.palette.EC.Indexes.next();\n        };\n\n        var pagination = _this.palette.getPagination('index', prevFunc, nextFunc, curPage, maxPage);\n\n        pagination.append(_this.palette.getSorting(_this));\n        return _this.tabContent.append(pagination);\n      }, {\n        sort: this.sortType\n      });\n    }\n  }, {\n    key: \"resetTabContent\",\n    value: function resetTabContent() {\n      return this.setTabContent();\n    }\n  }]);\n\n  return IndexTab;\n}();\n\n\n\n//# sourceURL=webpack:///./src/es6/emojidexPalette/components/tabs/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return IndexTab; });\n/* harmony import */ var core_js_modules_es_object_define_property__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.object.define-property */ \"./node_modules/core-js/modules/es.object.define-property.js\");\n/* harmony import */ var core_js_modules_es_object_define_property__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_define_property__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var emojidex_client_src_es6_components_indexes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! emojidex-client/src/es6/components/indexes */ \"./node_modules/emojidex-client/src/es6/components/indexes.js\");\n\n\nfunction _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\"Cannot call a class as a function\"); } }\n\nfunction _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if (\"value\" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }\n\nfunction _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }\n\n\n\nvar IndexTab =\n/*#__PURE__*/\nfunction () {\n  function IndexTab(palette) {\n    _classCallCheck(this, IndexTab);\n\n    this.ECI = new emojidex_client_src_es6_components_indexes__WEBPACK_IMPORTED_MODULE_1__[\"default\"](palette.EC);\n    this.palette = palette;\n    this.initialized = false;\n    this.sortType = 'score';\n    this.tabList = $('<li id=\\'tab-index\\' class=\\'active\\'><a href=\\'#tab-content-index\\' data-toggle=\\'pill\\'><i class=\\'emjdx-all\\'></a></li>'); // eslint-disable-line no-undef\n\n    this.tabContent = $('<div class=\\'tab-pane active\\' id=\\'tab-content-index\\'></div>'); // eslint-disable-line no-undef\n\n    this.setTabContent();\n  }\n\n  _createClass(IndexTab, [{\n    key: \"setTabContent\",\n    value: function setTabContent() {\n      var _this = this;\n\n      this.initialized = true;\n      return this.ECI.index(function (resultEmoji) {\n        _this.tabContent.children().remove();\n\n        _this.tabContent.append('<div class=\"emojidex-category-name emjdx-all\">Index</div>');\n\n        _this.tabContent.append(_this.palette.setEmojiList('index', resultEmoji));\n\n        var curPage = _this.ECI.meta.total_count === 0 ? 0 : _this.ECI.curPage;\n        var maxPage = Math.floor(_this.ECI.meta.total_count / _this.palette.EC.options.limit);\n\n        if (_this.ECI.meta.total_count % _this.palette.EC.options.limit > 0) {\n          maxPage++;\n        }\n\n        var prevFunc = function prevFunc() {\n          return _this.ECI.prev();\n        };\n\n        var nextFunc = function nextFunc() {\n          return _this.ECI.next();\n        };\n\n        var pagination = _this.palette.getPagination('index', prevFunc, nextFunc, curPage, maxPage);\n\n        pagination.append(_this.palette.getSorting(_this));\n        return _this.tabContent.append(pagination);\n      }, {\n        sort: this.sortType\n      });\n    }\n  }, {\n    key: \"resetTabContent\",\n    value: function resetTabContent() {\n      return this.setTabContent();\n    }\n  }]);\n\n  return IndexTab;\n}();\n\n\n\n//# sourceURL=webpack:///./src/es6/emojidexPalette/components/tabs/index.js?");
 
 /***/ }),
 
@@ -3078,7 +3078,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return FavoriteTab; });\n/* harmony import */ var core_js_modules_es_object_define_property__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.object.define-property */ \"./node_modules/core-js/modules/es.object.define-property.js\");\n/* harmony import */ var core_js_modules_es_object_define_property__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_define_property__WEBPACK_IMPORTED_MODULE_0__);\n\n\nfunction _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\"Cannot call a class as a function\"); } }\n\nfunction _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if (\"value\" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }\n\nfunction _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }\n\nvar FavoriteTab =\n/*#__PURE__*/\nfunction () {\n  function FavoriteTab(userTab) {\n    _classCallCheck(this, FavoriteTab);\n\n    this.EC = userTab.palette.EC;\n    this.palette = userTab.palette;\n    this.tabPane = $('<div class=\\'tab-pane active\\' id=\\'tab-content-user-favorite\\'></div>'); // eslint-disable-line no-undef\n  }\n\n  _createClass(FavoriteTab, [{\n    key: \"createTabContent\",\n    value: function createTabContent() {\n      var _this = this;\n\n      return this.EC.User.Favorites.get().then(function (response) {\n        return _this.setFavoriteEmoji(response);\n      });\n    }\n  }, {\n    key: \"setFavoriteEmoji\",\n    value: function setFavoriteEmoji(favorites) {\n      this.tabPane.children().remove();\n      this.tabPane.append(this.palette.setEmojiList('favorite', favorites));\n      return this.createPagination();\n    }\n  }, {\n    key: \"createPagination\",\n    value: function createPagination() {\n      var _this2 = this;\n\n      var meta = this.EC.User.Favorites.meta;\n      var curPage = meta.total_count === 0 ? 0 : meta.page;\n      var maxPage = curPage === 0 ? 0 : Math.ceil(meta.total_count / this.EC.limit);\n\n      var callback = function callback(response) {\n        _this2.tabPane.children().remove();\n\n        _this2.tabPane.append(_this2.setFavoriteEmoji(response));\n      };\n\n      var prevFunc = function prevFunc() {\n        return _this2.EC.User.Favorites.prev(callback);\n      };\n\n      var nextFunc = function nextFunc() {\n        return _this2.EC.User.Favorites.next(callback);\n      };\n\n      return this.tabPane.append(this.palette.getPagination('favorite', prevFunc, nextFunc, curPage, maxPage));\n    }\n  }]);\n\n  return FavoriteTab;\n}();\n\n\n\n//# sourceURL=webpack:///./src/es6/emojidexPalette/components/tabs/userTabs/favorite.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return FavoriteTab; });\n/* harmony import */ var core_js_modules_es_object_define_property__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.object.define-property */ \"./node_modules/core-js/modules/es.object.define-property.js\");\n/* harmony import */ var core_js_modules_es_object_define_property__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_define_property__WEBPACK_IMPORTED_MODULE_0__);\n\n\nfunction _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\"Cannot call a class as a function\"); } }\n\nfunction _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if (\"value\" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }\n\nfunction _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }\n\nvar FavoriteTab =\n/*#__PURE__*/\nfunction () {\n  function FavoriteTab(userTab) {\n    _classCallCheck(this, FavoriteTab);\n\n    this.EC = userTab.palette.EC;\n    this.palette = userTab.palette;\n    this.tabPane = $('<div class=\\'tab-pane active\\' id=\\'tab-content-user-favorite\\'></div>'); // eslint-disable-line no-undef\n  }\n\n  _createClass(FavoriteTab, [{\n    key: \"createTabContent\",\n    value: function createTabContent() {\n      var _this = this;\n\n      return this.EC.User.Favorites.get().then(function (response) {\n        return _this.setFavoriteEmoji(response);\n      });\n    }\n  }, {\n    key: \"setFavoriteEmoji\",\n    value: function setFavoriteEmoji(favorites) {\n      this.tabPane.children().remove();\n      this.tabPane.append(this.palette.setEmojiList('favorite', favorites));\n      return this.createPagination();\n    }\n  }, {\n    key: \"createPagination\",\n    value: function createPagination() {\n      var _this2 = this;\n\n      var meta = this.EC.User.Favorites.meta;\n      var curPage = meta.total_count === 0 ? 0 : meta.page;\n      var maxPage = curPage === 0 ? 0 : Math.ceil(meta.total_count / this.EC.limit);\n\n      if (!this.EC.User.authInfo.premium && !this.EC.User.authInfo.pro) {\n        maxPage = 1;\n      }\n\n      var callback = function callback(response) {\n        _this2.tabPane.children().remove();\n\n        _this2.tabPane.append(_this2.setFavoriteEmoji(response));\n      };\n\n      var prevFunc = function prevFunc() {\n        return _this2.EC.User.Favorites.prev(callback);\n      };\n\n      var nextFunc = function nextFunc() {\n        return _this2.EC.User.Favorites.next(callback);\n      };\n\n      return this.tabPane.append(this.palette.getPagination('favorite', prevFunc, nextFunc, curPage, maxPage));\n    }\n  }]);\n\n  return FavoriteTab;\n}();\n\n\n\n//# sourceURL=webpack:///./src/es6/emojidexPalette/components/tabs/userTabs/favorite.js?");
 
 /***/ }),
 
@@ -3114,7 +3114,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return HistoryTab; });\n/* harmony import */ var core_js_modules_es_object_define_property__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.object.define-property */ \"./node_modules/core-js/modules/es.object.define-property.js\");\n/* harmony import */ var core_js_modules_es_object_define_property__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_define_property__WEBPACK_IMPORTED_MODULE_0__);\n\n\nfunction _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\"Cannot call a class as a function\"); } }\n\nfunction _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if (\"value\" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }\n\nfunction _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }\n\nvar HistoryTab =\n/*#__PURE__*/\nfunction () {\n  function HistoryTab(userTab) {\n    _classCallCheck(this, HistoryTab);\n\n    this.EC = userTab.palette.EC;\n    this.palette = userTab.palette;\n    this.tabPane = $('<div class=\\'tab-pane\\' id=\\'tab-content-user-history\\'></div>'); // eslint-disable-line no-undef\n  }\n\n  _createClass(HistoryTab, [{\n    key: \"createTabContent\",\n    value: function createTabContent() {\n      var _this = this;\n\n      return this.EC.User.History.get().then(function (response) {\n        return _this.setHistoryEmoji(response);\n      });\n    }\n  }, {\n    key: \"setHistoryEmoji\",\n    value: function setHistoryEmoji(history) {\n      this.tabPane.children().remove();\n      this.tabPane.append(this.palette.setEmojiList('history', history));\n      return this.createPagination();\n    }\n  }, {\n    key: \"createPagination\",\n    value: function createPagination() {\n      var _this2 = this;\n\n      var meta = this.EC.User.History.meta;\n      var curPage = meta.total_count === 0 ? 0 : meta.page;\n      var maxPage = curPage === 0 ? 0 : Math.ceil(meta.total_count / this.EC.limit);\n\n      var callback = function callback(response) {\n        _this2.tabPane.children().remove();\n\n        _this2.tabPane.append(_this2.setHistoryEmoji(response));\n      };\n\n      var prevFunc = function prevFunc() {\n        return _this2.EC.User.History.prev(callback);\n      };\n\n      var nextFunc = function nextFunc() {\n        return _this2.EC.User.History.next(callback);\n      };\n\n      return this.tabPane.append(this.palette.getPagination('history', prevFunc, nextFunc, curPage, maxPage));\n    }\n  }]);\n\n  return HistoryTab;\n}();\n\n\n\n//# sourceURL=webpack:///./src/es6/emojidexPalette/components/tabs/userTabs/history.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return HistoryTab; });\n/* harmony import */ var core_js_modules_es_object_define_property__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.object.define-property */ \"./node_modules/core-js/modules/es.object.define-property.js\");\n/* harmony import */ var core_js_modules_es_object_define_property__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_define_property__WEBPACK_IMPORTED_MODULE_0__);\n\n\nfunction _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\"Cannot call a class as a function\"); } }\n\nfunction _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if (\"value\" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }\n\nfunction _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }\n\nvar HistoryTab =\n/*#__PURE__*/\nfunction () {\n  function HistoryTab(userTab) {\n    _classCallCheck(this, HistoryTab);\n\n    this.EC = userTab.palette.EC;\n    this.palette = userTab.palette;\n    this.tabPane = $('<div class=\\'tab-pane\\' id=\\'tab-content-user-history\\'></div>'); // eslint-disable-line no-undef\n  }\n\n  _createClass(HistoryTab, [{\n    key: \"createTabContent\",\n    value: function createTabContent() {\n      var _this = this;\n\n      return this.EC.User.History.get().then(function (response) {\n        return _this.setHistoryEmoji(response);\n      });\n    }\n  }, {\n    key: \"setHistoryEmoji\",\n    value: function setHistoryEmoji(history) {\n      this.tabPane.children().remove();\n      this.tabPane.append(this.palette.setEmojiList('history', history));\n      return this.createPagination();\n    }\n  }, {\n    key: \"createPagination\",\n    value: function createPagination() {\n      var _this2 = this;\n\n      var meta = this.EC.User.History.meta;\n      var curPage = meta.total_count === 0 ? 0 : meta.page;\n      var maxPage = curPage === 0 ? 0 : Math.ceil(meta.total_count / this.EC.limit);\n\n      if (!this.EC.User.authInfo.premium && !this.EC.User.authInfo.pro) {\n        maxPage = 1;\n      }\n\n      var callback = function callback(response) {\n        _this2.tabPane.children().remove();\n\n        _this2.tabPane.append(_this2.setHistoryEmoji(response));\n      };\n\n      var prevFunc = function prevFunc() {\n        return _this2.EC.User.History.prev(callback);\n      };\n\n      var nextFunc = function nextFunc() {\n        return _this2.EC.User.History.next(callback);\n      };\n\n      return this.tabPane.append(this.palette.getPagination('history', prevFunc, nextFunc, curPage, maxPage));\n    }\n  }]);\n\n  return HistoryTab;\n}();\n\n\n\n//# sourceURL=webpack:///./src/es6/emojidexPalette/components/tabs/userTabs/history.js?");
 
 /***/ }),
 
@@ -3126,7 +3126,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return EmojidexPalette; });\n/* harmony import */ var core_js_modules_es_object_define_property__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.object.define-property */ \"./node_modules/core-js/modules/es.object.define-property.js\");\n/* harmony import */ var core_js_modules_es_object_define_property__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_define_property__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _components_palette__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/palette */ \"./src/es6/emojidexPalette/components/palette.js\");\n\n\nfunction _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\"Cannot call a class as a function\"); } }\n\nfunction _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if (\"value\" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }\n\nfunction _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }\n\n/*\n* emojidexPalette\n*\n* =LICENSE=\n* Licensed under the emojidex Open License\n* https://www.emojidex.com/emojidex/emojidex_open_license\n*\n* Copyright 2013 the emojidex project / K.K. GenSouSha\n*/\n\nvar pluginName = 'emojidexPalette';\nvar defaults = {\n  onComplete: undefined,\n  onEmojiButtonClicked: undefined,\n  paletteEmojisLimit: 50\n};\n\nvar EmojidexPalette =\n/*#__PURE__*/\nfunction () {\n  function EmojidexPalette(element, options) {\n    _classCallCheck(this, EmojidexPalette);\n\n    this.element = element;\n    this.options = $.extend({}, defaults, options); // eslint-disable-line no-undef\n\n    this._defaults = defaults;\n    this._name = pluginName; // start: Plugin --------\n\n    this.palette = new _components_palette__WEBPACK_IMPORTED_MODULE_1__[\"default\"](this);\n  }\n\n  _createClass(EmojidexPalette, null, [{\n    key: \"getName\",\n    value: function getName() {\n      return pluginName;\n    }\n  }]);\n\n  return EmojidexPalette;\n}();\n\n\n\n//# sourceURL=webpack:///./src/es6/emojidexPalette/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return EmojidexPalette; });\n/* harmony import */ var core_js_modules_es_object_define_property__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.object.define-property */ \"./node_modules/core-js/modules/es.object.define-property.js\");\n/* harmony import */ var core_js_modules_es_object_define_property__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_define_property__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _components_palette__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/palette */ \"./src/es6/emojidexPalette/components/palette.js\");\n\n\nfunction _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\"Cannot call a class as a function\"); } }\n\nfunction _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if (\"value\" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }\n\nfunction _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }\n\n/*\n* emojidexPalette\n*\n* =LICENSE=\n* Licensed under the emojidex Open License\n* https://www.emojidex.com/emojidex/emojidex_open_license\n*\n* Copyright 2013 the emojidex project / K.K. GenSouSha\n*/\n\nvar pluginName = 'emojidexPalette';\nvar defaults = {\n  onComplete: undefined,\n  onEmojiButtonClicked: undefined,\n  paletteEmojisLimit: 50 // NOTE: Free users can only view one page [max: 50 emoji] of their usage history and favorite.\n\n};\n\nvar EmojidexPalette =\n/*#__PURE__*/\nfunction () {\n  function EmojidexPalette(element, options) {\n    _classCallCheck(this, EmojidexPalette);\n\n    this.element = element;\n    this.options = $.extend({}, defaults, options); // eslint-disable-line no-undef\n\n    this._defaults = defaults;\n    this._name = pluginName; // start: Plugin --------\n\n    this.palette = new _components_palette__WEBPACK_IMPORTED_MODULE_1__[\"default\"](this);\n  }\n\n  _createClass(EmojidexPalette, null, [{\n    key: \"getName\",\n    value: function getName() {\n      return pluginName;\n    }\n  }]);\n\n  return EmojidexPalette;\n}();\n\n\n\n//# sourceURL=webpack:///./src/es6/emojidexPalette/index.js?");
 
 /***/ }),
 
