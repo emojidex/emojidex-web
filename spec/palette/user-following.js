@@ -8,7 +8,7 @@ describe('emojidexPalette:User:Following', () => {
     afterPalette(done)
   })
 
-  if (hasPremiumAccount) {
+  if (hasPremiumAccount()) {
     it('show following tab [Requires a user account and following user]', done => {
       showPalette().then(() => {
         return watchDOM('#emoji-palette', {trigger: () => {

@@ -159,7 +159,6 @@ function logout() {
   })
 }
 
-
 function beforePalette(done) {
   clearStorage().then(() => {
     return helperBefore()
@@ -177,7 +176,11 @@ function afterPalette(done) {
 }
 
 function hasPremiumAccount() {
-  return typeof premiumUserInfo !== undefined && premiumUserInfo !== null
+  return typeof(premiumUserInfo) !== 'undefined' && premiumUserInfo !== null
+}
+
+function hasUserAccount() {
+  return typeof(userInfo) !== 'undefined' && userInfo !== null
 }
 /* eslint-enable no-unused-vars */
 /* eslint-enable no-undef */

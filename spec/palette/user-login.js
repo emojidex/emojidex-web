@@ -17,7 +17,7 @@ describe('emojidexPalette:User:Login', () => {
     })
   })
 
-  if (userInfo) {
+  if (hasUserAccount()) {
     it('user login [Requires a user account]', done => {
       tryLoginUser(userInfo.auth_user, userInfo.password).then(() => {
         expect($('#tab-user-favorite').length).toBeTruthy()
@@ -45,7 +45,7 @@ describe('emojidexPalette:User:Login', () => {
   //         spec_timer timer_option
   //   spec_timer timer_option
 
-  if (hasPremiumAccount) {
+  if (hasPremiumAccount()) {
     it('premium user login [Require a premium user info]', done => {
       tryLoginUser(premiumUserInfo.auth_user, premiumUserInfo.password).then(() => {
         expect($('#tab-user-favorite').length).toBeTruthy()
@@ -73,7 +73,7 @@ describe('emojidexPalette:User:Login', () => {
   //         spec_timer timer_option
   //   spec_timer timer_option
 
-  if (userInfo || premiumUserInfo) {
+  if (hasUserAccount() || hasPremiumAccount()) {
     let user = userInfo ? userInfo : premiumUserInfo
     it('login with storage data', done => {
       tryLoginUser(user.auth_user, user.password).then(() => {
