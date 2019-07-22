@@ -10,7 +10,7 @@ import watch from 'gulp-watch';
 
 gulp.task('env', (done) => {
   fs.stat('.env', (err, stat) => {
-    if (err === null) {
+    if (err === null && stat.size > 1) {
       console.log("*Found .env file; incorporating user auth data into specs.*");
       console.log("NOTE: if your user is not Premium with R-18 enabled some specs will fail.");
       const dotenv = require('dotenv')
@@ -35,7 +35,7 @@ gulp.task('env', (done) => {
       fs.ensureFileSync('tmp/authinfo.js');
       fs.writeFileSync('tmp/authinfo.js', output);
     } else {
-      console.log("*.env file not found; only some specs will run.*");
+      console.log("*.env file not found or empty; only some specs will run.*");
       console.log("Check the '.env' secion in README.md for details on how to set .env");
       fs.ensureFileSync('tmp/authinfo.js');
       fs.writeFileSync('tmp/authinfo.js', '');
