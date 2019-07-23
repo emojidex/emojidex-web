@@ -15,6 +15,10 @@ html
       (function() {
         $(document).ready((function(_this) {
           return function() {
+            $.ajax('/README.html').then((data) => {
+              $('.doc-content').append(data)
+            })
+            
             $("body").emojidexReplace({
               onComplete: function(element) {
                 return console.log('Completed emojidexReplace!!');
