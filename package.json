@@ -50,6 +50,10 @@
     "jasmine-jquery": "^2.1.1",
     "jquery": "^3.1.0",
     "jquery-watch": "^1.21.0",
+    "karma": "^4.1.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-cli": "^2.0.0",
+    "karma-jasmine": "^2.0.1",
     "keysim": "^2.1.0",
     "mini-css-extract-plugin": "^0.7.0",
     "node-sass": "^4.12.0",
@@ -58,6 +62,7 @@
     "postcss-loader": "^3.0.0",
     "pug": "^2.0.3",
     "pug-loader": "^2.4.0",
+    "puppeteer": "^1.18.1",
     "resolve-url-loader": "^3.1.0",
     "sass-loader": "^7.1.0",
     "script-loader": "^0.7.2",
@@ -69,7 +74,7 @@
   "dependencies": {
     "clipboard": "^1.5.5",
     "core-js": "3",
-    "emojidex-client": "^0.20.0",
+    "emojidex-client": "^0.20.1",
     "jquery.caret": "^0.3.1",
     "textcomplete": "^0.17.1",
     "textcomplete.contenteditable": "^0.1.1"
@@ -79,6 +84,7 @@
     "build-show": "yarn build; yarn show",
     "dev": "webpack --mode development -w",
     "show": "browser-sync start -s 'docs' --port 8080",
-    "test": "gulp clean; webpack --mode development; webpack --mode production; gulp spec"
+    "test": "gulp clean; webpack --mode development; webpack --mode production; gulp test-prepare; karma start --single-run",
+    "test-watch": "webpack --mode development; webpack --mode production; karma start"
   }
 }

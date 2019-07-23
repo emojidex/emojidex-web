@@ -79,17 +79,14 @@ function closePalette() {
   })
 }
 
-function showPalette(callback) {
-  $('.ui-dialog').watch({
-    id: 'dialog',
-    properties: 'display',
-    callback() {
-      removeWatch($('.ui-dialog'), 'dialog')
-      callback()
-    }
-  })
-  specTimer(1000).then(() => {
-    $('.emojidex-palette-button')[0].click()
+function showPalette() {
+  return new Promise(done => {
+    watchDOM('.ui-dialog', {properties: 'display'}).then(() => {
+      done()
+    })
+    specTimer(1000).then(() => {
+      $('.emojidex-palette-button')[0].click()
+    })
   })
 }
 
@@ -111,12 +108,54 @@ function preparePaletteButtons(done, options) {
   })
 }
 
-function loginUser(user, password) {
-  specTimer(1000).then(() => {
-    $('#tab-user a').click()
-    $('#palette-emoji-username-input').val(user)
-    $('#palette-emoji-password-input').val(password)
-    $('#palette-emoji-login-submit').click()
+function watchDOM(selector, options = {}) {
+  options.properties = options.properties || 'prop_innerHTML'
+  return new Promise(done => {
+    $(selector).watch({
+      id: 'watchDOM',
+      properties: options.properties,
+      watchChildren: true,
+      callback(data) {
+        if(options.regex) {
+          if (data.vals[0].match(options.regex)) {
+            removeWatch($(selector), 'watchDOM')
+            done(data)
+          }
+        } else {
+          removeWatch($(selector), 'watchDOM')
+          done(data)
+        }
+      }
+    })
+    options.trigger && options.trigger()
+  })
+}
+
+function tryLoginUser(user, password) {
+  return new Promise(done => {
+    watchDOM('#tab-content-user').then(() => {
+      specTimer(2000).then(() => {
+        done()
+      })
+    })
+
+    specTimer(1000).then(() => {
+      $('#tab-user a').click()
+      $('#palette-emoji-username-input').val(user)
+      $('#palette-emoji-password-input').val(password)
+      $('#palette-emoji-login-submit').click()
+    })
+  })
+}
+
+function logout() {
+  return new Promise(done => {
+    watchDOM('#tab-content-user').then(() => {
+      specTimer(1000).then(() => {
+        done()
+      })
+    })
+    $('#palette-emoji-logout').click()
   })
 }
 
@@ -134,6 +173,14 @@ function afterPalette(done) {
   }).then(() => {
     done()
   })
+}
+
+function hasPremiumAccount() {
+  return typeof(premiumUserInfo) !== 'undefined' && premiumUserInfo !== null
+}
+
+function hasUserAccount() {
+  return typeof(userInfo) !== 'undefined' && userInfo !== null
 }
 /* eslint-enable no-unused-vars */
 /* eslint-enable no-undef */

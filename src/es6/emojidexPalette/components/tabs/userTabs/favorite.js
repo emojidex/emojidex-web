@@ -20,7 +20,10 @@ export default class FavoriteTab {
   createPagination() {
     const { meta } = this.EC.User.Favorites
     const curPage = meta.total_count === 0 ? 0 : meta.page
-    const maxPage = curPage === 0 ? 0 : Math.ceil(meta.total_count / this.EC.limit)
+    let maxPage = curPage === 0 ? 0 : Math.ceil(meta.total_count / this.EC.limit)
+    if (!this.EC.User.authInfo.premium && !this.EC.User.authInfo.pro) {
+      maxPage = 1
+    }
 
     const callback = response => {
       this.tabPane.children().remove()

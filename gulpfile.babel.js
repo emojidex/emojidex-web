@@ -10,7 +10,7 @@ import watch from 'gulp-watch';
 
 gulp.task('env', (done) => {
   fs.stat('.env', (err, stat) => {
-    if (err === null) {
+    if (err === null && stat.size > 1) {
       console.log("*Found .env file; incorporating user auth data into specs.*");
       console.log("NOTE: if your user is not Premium with R-18 enabled some specs will fail.");
       const dotenv = require('dotenv')
@@ -26,14 +26,16 @@ gulp.task('env', (done) => {
           auth_token: '${process.env.AUTH_TOKEN}'
         };
         let premiumUserInfo = {
-          auth_user: '${process.env.USERNAME}',
-          auth_token: '${process.env.AUTH_TOKEN}'
+          auth_user: '${process.env.PREMIUM_USERNAME}',
+          email: '${process.env.PREMIUM_EMAIL}',
+          password: '${process.env.PREMIUM_PASSWORD}',
+          auth_token: '${process.env.PREMIUM_AUTH_TOKEN}'
         };
       `;
       fs.ensureFileSync('tmp/authinfo.js');
       fs.writeFileSync('tmp/authinfo.js', output);
     } else {
-      console.log("*.env file not found; only some specs will run.*");
+      console.log("*.env file not found or empty; only some specs will run.*");
       console.log("Check the '.env' secion in README.md for details on how to set .env");
       fs.ensureFileSync('tmp/authinfo.js');
       fs.writeFileSync('tmp/authinfo.js', '');
@@ -148,4 +150,8 @@ gulp.task('build',
 
 gulp.task('spec',
   gulp.series('md2html', 'copy', 'banner', 'env', 'concat-spec', 'jasmine')
+);
+
+gulp.task('test-prepare',
+  gulp.series('md2html', 'copy', 'banner', 'env', 'concat-spec')
 );

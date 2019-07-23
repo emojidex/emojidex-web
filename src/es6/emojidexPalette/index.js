@@ -14,7 +14,7 @@ const pluginName = 'emojidexPalette'
 const defaults = {
   onComplete: undefined,
   onEmojiButtonClicked: undefined,
-  paletteEmojisLimit: 50
+  paletteEmojisLimit: 50 // NOTE: Free users can only view one page [max: 50 emoji] of their usage history and favorite.
 }
 
 export default class EmojidexPalette {

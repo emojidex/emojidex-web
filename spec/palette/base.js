@@ -16,7 +16,7 @@ describe('emojidexPalette:Base', () => {
   it('show emojidexPalette', done => {
     expect($('.ui-dialog')).toHaveCss({ display: 'none' })
 
-    showPalette(() => {
+    showPalette().then(() => {
       expect($('.ui-dialog')).toHaveCss({ display: 'block' })
       done()
     })

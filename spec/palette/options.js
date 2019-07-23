@@ -14,7 +14,7 @@ describe('emojidexPalette:Options', () => {
 
   it('check onEmojiButtonClicked option', done => {
     preparePaletteButtons(() => {
-      showPalette(() => {
+      showPalette().then(() => {
         $($('.emoji-btn.btn.btn-default.pull-left')[0]).click()
       })
     },
