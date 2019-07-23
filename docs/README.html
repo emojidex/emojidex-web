@@ -1,0 +1,164 @@
+<h1 id="emojidex-web">emojidex-web</h1>
+<p>emojidex-web provides a variety of tools and widgets to quickly incorporate emojidex
+into any website or JavaScript based app. It&#39;s written in CoffeeScript and SLIM which
+compiles into a JavaScript module that can be easily included into your project.  </p>
+<p>By default all emoji assets are dynamically loaded from the emojidex CDN and dynamically
+cached by the client. There is no need to store any assets on your own server or bundle
+them with your app. The module is self contained and enclosed and should not interfere
+with other components of your site or app.  </p>
+<p>Check out the demo at:
+<a href="http://emojidex.github.io/emojidex-web">http://emojidex.github.io/emojidex-web</a></p>
+<h1 id="usage">Usage</h1>
+<p>Basic usage is simple.</p>
+<p>1. First off load up the stylesheets and scripts:</p>
+<pre><code class="language-html">&lt;head&gt;
+  ...
+  &lt;link href=&quot;https://cdn.emojidex.com/scripts/css/emojidex.min.css&quot; rel=&quot;stylesheet&quot; /&gt;
+  &lt;script src=&quot;https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;https://cdn.emojidex.com/scripts/javascript/emojidex.min.js&quot;&gt;&lt;/script&gt;
+  ...
+&lt;/head&gt;</code></pre>
+<p>2. Set emojidex-web<br>In JavaScript / in a script tag</p>
+<pre><code class="language-js">$(document).ready(function() {
+  ...
+  $(&quot;body&quot;).emojidexReplace();
+  $(&quot;.emojidex-plain_text&quot;).emojidexAutocomplete();
+  $(&quot;.emojidex-content_editable&quot;).emojidexAutocomplete();
+  ...
+});</code></pre>
+<p>And you&#39;re all set!</p>
+<h1 id="features">Features</h1>
+<h3 id="emojidexreplace">.emojidexReplace()</h3>
+<p>Scans text in the specified element and replaces any colon &quot;:&quot; encased short codes
+(eg: <code>:smile:</code>) or any UTF emoji (eg: <code>😄</code>) with emojidex emoji images.<br>No conversion occurs when no emoji on emojidex is found that corresponds to the short code or
+UTF code and the text remains unchanged.</p>
+<pre><code>emojidexReplace :kissing_heart:
+
+UTF moji codes to emoji:
+❤🛅😄😡💌💌😈👍💩
+💙💙💙
+
+Acknowledged ZWJ emoji:
+👨‍👩‍👦
+
+:code: to emoji:
+❤:octopus::boar::frog:\:hand_salute: no_match:😄::no match::heart eyes(wh):</code></pre><p>↓</p>
+<p><img src="http://emojidex.github.io/emojidex-web/img/samples/emojidex_replace.png" alt="emojidex replace image"></p>
+<h3 id="options">Options</h3>
+<h4 id="defaults">Defaults</h4>
+<pre><code class="language-js">emojidexReplace({
+  onComplete: undefined,
+  useLoadingImg: true,
+  autoUpdate: true,
+  selector: &#39;*&#39;,
+  ignore: &#39;script, noscript, canvas, img, style, iframe, input, textarea, pre, code&#39;,
+  ignoreContentEditable: true
+});</code></pre>
+<h4 id="optionsoncomplete">options.onComplete</h4>
+<p>Type: <code>Function(jQuery element)</code> Default: <code>undefined</code></p>
+<p>Specifies a method to be run after a code has been converted into an emoji.<br>A jQuery element reference is passed as an argument to the assigned method.  </p>
+<p>Example:</p>
+<pre><code class="language-js">$(&quot;body&quot;).emojidexReplace({
+  onComplete: function(element) {
+    console.log(&#39;Completed emojidexReplace!!&#39;);
+  }
+});</code></pre>
+<h4 id="optionsuseloadingimg">options.useLoadingImg</h4>
+<p>Type: <code>Boolean</code> Default: <code>true</code></p>
+<p>Specifies weather or not to show the loading image [specified in the CSS] while downloading emoji.</p>
+<h4 id="optionsautoupdate">options.autoUpdate</h4>
+<p>Type: <code>Boolean</code> Default: <code>true</code></p>
+<p>Automatically run conversions on AJAX events.</p>
+<h4 id="optionsselector">options.selector</h4>
+<p>Type: <code>String</code> Default: <code>*</code></p>
+<p>Set tags to permission the contents of during blanket conversions.　*Judge after options.ignore.</p>
+<h4 id="optionsignore">options.ignore</h4>
+<p>Type: <code>String</code> Default: <code>script, noscript, canvas, img, style, iframe, input, textarea, pre, code</code></p>
+<p>Set tags to ignore the contents of during blanket conversions.</p>
+<h4 id="optionsignorecontenteditable">options.ignoreContentEditable</h4>
+<p>Type: <code>Boolean</code> Default: <code>true</code></p>
+<p>Defines the behavior of <code>contenteditable=&quot;true&quot;</code> elements. When true, ignore convert.</p>
+<h3 id="emojidexautocomplete">.emojidexAutocomplete()</h3>
+<p>Enables the autocomplete pop when a <code>:</code> colon is entered for <code>input</code>, <code>textarea</code>,
+and elements where <code>contenteditable=&quot;true&quot;</code>.  </p>
+<p>For <code>input</code>s and , <code>textarea</code>s colon enclosed shortcodes are shown as plain text.<br>For <code>contenteditable=&quot;true&quot;</code> elements the codes are converted immediately into emoji images.</p>
+<h3 id="options-1">Options</h3>
+<h4 id="default-options">Default options</h4>
+<pre><code class="language-js">emojidexAutocomplete({
+  listLimit: 15,
+  onComplete: undefined,
+  content_editable: {
+    insertImg: true
+  }
+});</code></pre>
+<h4 id="optionslistlimit">options.listLimit</h4>
+<p>Type: <code>Int</code> Default: <code>15</code></p>
+<p>The maximum number of items displayed in a pop list.</p>
+<h4 id="optionsoncomplete-1">options.onComplete</h4>
+<p>Type: <code>Function</code> Default: <code>undefined</code></p>
+<p>Sets a function to run when an autocomplete finishes.</p>
+<h4 id="optionscontent_editableinsertimg">options.content_editable.insertImg</h4>
+<p>Type: <code>Boolean</code> Default: <code>true</code></p>
+<p>Defines the behavior of <code>contenteditable=&quot;true&quot;</code> elements. When true, codes are automatically
+converted to images. When false they remain as plain text.</p>
+<h3 id="emojidexpalette">.emojidexPalette()</h3>
+<p>Sets an element to open up an emoji palette chooser when clicked.</p>
+<p>emoji are copied to the clipboard when clicked.
+The palette contains a tabbed index, search functionality, and displays history and favorites when
+a user is logged in.</p>
+<h3 id="options-2">Options</h3>
+<h4 id="default-options-1">Default options</h4>
+<pre><code class="language-js">emojidexPalette({
+  onComplete: undefined,
+  onEmojiButtonClicked: undefined,
+  paletteEmojisLimit: 50
+});</code></pre>
+<h4 id="optionsoncomplete-2">options.onComplete</h4>
+<p>Type: <code>Function</code> Default: <code>undefined</code></p>
+<p>Calls the defined method after a palette has been set to an element.</p>
+<h4 id="optionsonemojibuttonclicked">options.onEmojiButtonClicked</h4>
+<p>Type: <code>Function({imageTag: Img tag of clicked emoji, emojiCode: Code of clicked emoji})</code> Default: <code>undefined</code></p>
+<p>Calls the defined method when click an emoji button on the palette.</p>
+<h4 id="optionspaletteemojislimit">options.paletteEmojisLimit</h4>
+<p>Type: <code>Int</code> Default: <code>50</code></p>
+<p>The maximum number of items displayed in a palette.</p>
+<h1 id="building">Building</h1>
+<p>You will need node with a usable npm and yarn.</p>
+<h3 id="get-the-source">Get the source</h3>
+<p>First off we need the actual source to build. Clone this repository if you haven&#39;t already:</p>
+<pre><code class="language-shell">git clone git@github.com:emojidex/emojidex-web.git
+cd emojidex-web</code></pre>
+<h3 id="install-packages-and-obtain-required-sources">Install Packages and Obtain Required Sources</h3>
+<pre><code class="language-shell">yarn install</code></pre>
+<h3 id="build">Build</h3>
+<p>For a regular one-off build:</p>
+<pre><code class="language-shell">yarn gulp</code></pre>
+<p>Modules will be built in the dist directory.</p>
+<p>For development mode with dynamic compilation and dev server:</p>
+<pre><code class="language-shell">yarn gulp dev</code></pre>
+<p>A live version of the latest build will be available at
+<a href="http://localhost:8000/dist/">http://localhost:8000/dist/</a>.</p>
+<h1 id="testing">Testing</h1>
+<p>There are two types of specs: regular specs that use the test account and specs that require a
+premium account with R-18 enabled. As a developer you are eligable to receive a complimentary
+upgrade to a premium account if you are working on either an emojidex package or module or
+integration of emojidex in your own software. Simply contact <a href="mailto:info@emojidex.com">info@emojidex.com</a> with the subject
+&quot;Developer Account&quot; and list the following details:</p>
+<ol>
+<li>Your username on emojidex</li>
+<li>The project(s) you intend to work on</li>
+</ol>
+<p><strong>Testing URL: localhost:8888/?random=false</strong></p>
+<h2 id="env-optional">.env (optional)</h2>
+<p>After obtaining a permium account you can use it for testing. To do this you need to create a
+file named &#39;.env&#39; with the following information:</p>
+<pre><code>USERNAME=Your_UserName
+EMAIL=your@email.com
+PASSWORD=YourPassword123
+AUTH_TOKEN=0123456789abcdef</code></pre><p>replacing the Your_UserName and 0123456789abcdef etc. with your actual username and auth_token...
+The quickest way to find your auth_token is to log in on your browser, open up your user
+settings by clicking on your username in the top right, and scrolling down to the Auth Token
+field (or to do an auth request with CURL as in the developer.emojidex.com documentation).</p>
+<h1 id="license">License</h1>
+<p>emojidex and emojidex tools are licensed under the <a href="https://www.emojidex.com/emojidex/emojidex_open_license">emojidex Open License</a>.</p>
+<p>©2013 the emojidex project / K.K. GenSouSha</p>

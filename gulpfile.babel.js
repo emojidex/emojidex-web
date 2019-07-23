@@ -1,24 +1,25 @@
-import gulp from 'gulp';
-import pkg from './package.json';
-import header from 'gulp-header';
-import del from 'del';
-import concat from 'gulp-concat';
-import * as jasmineBrowser from 'gulp-jasmine-browser';
-import fs from 'fs-extra';
-import markdownDocs from 'gulp-markdown-docs';
-import watch from 'gulp-watch';
+import gulp from 'gulp'
+import pkg from './package.json'
+import header from 'gulp-header'
+import del from 'del'
+import concat from 'gulp-concat'
+import * as jasmineBrowser from 'gulp-jasmine-browser'
+import fs from 'fs-extra'
+import markdown from 'gulp-markdown'
+import watch from 'gulp-watch'
+import dotenv from 'dotenv'
 
-gulp.task('env', (done) => {
+gulp.task('env', done => {
   fs.stat('.env', (err, stat) => {
     if (err === null && stat.size > 1) {
-      console.log("*Found .env file; incorporating user auth data into specs.*");
-      console.log("NOTE: if your user is not Premium with R-18 enabled some specs will fail.");
-      const dotenv = require('dotenv')
+      console.log('*Found .env file; incorporating user auth data into specs.*')
+      console.log('NOTE: if your user is not Premium with R-18 enabled some specs will fail.')
       const envConfig = dotenv.parse(fs.readFileSync('.env'))
-      for (var k in envConfig) {
+      for (const k in envConfig) {
         process.env[k] = envConfig[k]
       }
-      let output = `
+
+      const output = `
         let userInfo = {
           auth_user: '${process.env.USERNAME}',
           email: '${process.env.EMAIL}',
@@ -31,20 +32,20 @@ gulp.task('env', (done) => {
           password: '${process.env.PREMIUM_PASSWORD}',
           auth_token: '${process.env.PREMIUM_AUTH_TOKEN}'
         };
-      `;
-      fs.ensureFileSync('tmp/authinfo.js');
-      fs.writeFileSync('tmp/authinfo.js', output);
+      `
+      fs.ensureFileSync('tmp/authinfo.js')
+      fs.writeFileSync('tmp/authinfo.js', output)
     } else {
-      console.log("*.env file not found or empty; only some specs will run.*");
-      console.log("Check the '.env' secion in README.md for details on how to set .env");
-      fs.ensureFileSync('tmp/authinfo.js');
-      fs.writeFileSync('tmp/authinfo.js', '');
+      console.log('*.env file not found or empty; only some specs will run.*')
+      console.log('Check the \'.env\' secion in README.md for details on how to set .env')
+      fs.ensureFileSync('tmp/authinfo.js')
+      fs.writeFileSync('tmp/authinfo.js', '')
     }
-  });
-  done();
-});
+  })
+  done()
+})
 
-let banner =
+const banner =
   '/*\n' +
   ' * <%= pkg.title || pkg.name %> - v<%= pkg.version %>\n' +
   ' * <%= pkg.description %>\n' +
@@ -62,65 +63,62 @@ let banner =
   ' *\n' +
   ' * Includes:\n' +
   ' * --------------------------------\n' +
-  '*/\n';
+  '*/\n'
 gulp.task('banner-js', () => {
   return gulp
     .src('docs/js/*.js')
-    .pipe(header(banner, { pkg: pkg }))
-    .pipe(gulp.dest('docs/js/'));
-});
+    .pipe(header(banner, { pkg }))
+    .pipe(gulp.dest('docs/js/'))
+})
 gulp.task('banner-css', () => {
   return gulp
     .src('docs/css/*.css')
-    .pipe(header(banner, { pkg: pkg }))
-    .pipe(gulp.dest('docs/css/'));
-});
+    .pipe(header(banner, { pkg }))
+    .pipe(gulp.dest('docs/css/'))
+})
 gulp.task('banner',
   gulp.series(gulp.parallel('banner-js', 'banner-css'))
-);
+)
 
-gulp.task('clean-docs', (done) => {
-  del.sync('docs/**/*');
-  done();
-});
-gulp.task('clean-spec', (done) => {
-  del.sync('build/spec/**/*.js');
-  done();
-});
+gulp.task('clean-docs', done => {
+  del.sync('docs/**/*')
+  done()
+})
+gulp.task('clean-spec', done => {
+  del.sync('build/spec/**/*.js')
+  done()
+})
 gulp.task('clean',
   gulp.parallel('clean-docs', 'clean-spec')
-);
-
-gulp.task('md2html', () => {
-  return gulp
-    .src(['README.md'])
-    .pipe(markdownDocs('index.html', {
-      layoutStylesheetUrl: '',
-      templatePath: 'docs/index.html'
-    }))
-    .pipe(gulp.dest('docs'));
-});
+)
 
 gulp.task('copy-img', () => {
   return gulp
     .src('src/img/**/*')
-    .pipe(gulp.dest('docs/img'));
-});
+    .pipe(gulp.dest('docs/img'))
+})
 gulp.task('copy',
   gulp.series(gulp.parallel('copy-img'))
-);
+)
 
 gulp.task('concat-spec', () => {
-  let file = fs.readFileSync('build/spec/fixture/index.html', 'utf8');
-  fs.writeFileSync('build/spec/fixture/html.js', `var html = \`${file}\``);
+  const file = fs.readFileSync('build/spec/fixture/index.html', 'utf8')
+  fs.writeFileSync('build/spec/fixture/html.js', `var html = \`${file}\``)
   return gulp
     .src(['spec/helpers/method.js', 'build/spec/fixture/html.js'])
     .pipe(concat('html_in_method.js'))
-    .pipe(gulp.dest('build/spec/fixture'));
-});
+    .pipe(gulp.dest('build/spec/fixture'))
+})
+
+gulp.task('md2html', () => {
+  return gulp
+    .src(['README.md'])
+    .pipe(markdown())
+    .pipe(gulp.dest('docs'))
+})
 
 gulp.task('jasmine', () => {
-  let testFiles = [
+  const testFiles = [
     'node_modules/cross-storage/dist/client.js',
     'node_modules/jquery/dist/jquery.js',
     'node_modules/jasmine-jquery/lib/jasmine-jquery.js',
@@ -136,22 +134,22 @@ gulp.task('jasmine', () => {
     'spec/emojidex-autocomplete.js',
     'spec/palette/*.js',
     'spec/emojidex-replace.js'
-  ];
+  ]
   return gulp.src(testFiles)
     .pipe(watch(testFiles))
     .pipe(jasmineBrowser.specRunner())
     // Require random flag, ex: localhost:8888/?random=false
     .pipe(jasmineBrowser.server())
-});
+})
 
 gulp.task('build',
   gulp.series('md2html', 'copy', 'banner')
-);
+)
 
 gulp.task('spec',
   gulp.series('md2html', 'copy', 'banner', 'env', 'concat-spec', 'jasmine')
-);
+)
 
 gulp.task('test-prepare',
   gulp.series('md2html', 'copy', 'banner', 'env', 'concat-spec')
-);
+)
