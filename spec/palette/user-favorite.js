@@ -7,8 +7,7 @@ describe('emojidexPalette:User:Favorite', () => {
   afterAll(done => {
     afterPalette(done)
   })
-  // console.log('hasPremiumAccount() --------')
-  // console.log(hasPremiumAccount())
+
   if (hasPremiumAccount()) {
     it('show favorite tab [Requires a premium user account]', done => {
       showPalette().then(() => {
