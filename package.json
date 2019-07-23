@@ -1,6 +1,6 @@
 {
   "name": "emojidex",
-  "version": "0.20.0",
+  "version": "0.20.1",
   "title": "jQuery emojidex",
   "description": "emojidex plugin for jQuery/Zepto and compatible",
   "author": "emojidex",
@@ -74,7 +74,7 @@
   "dependencies": {
     "clipboard": "^1.5.5",
     "core-js": "3",
-    "emojidex-client": "^0.20.1",
+    "emojidex-client": "^0.20.2",
     "jquery.caret": "^0.3.1",
     "textcomplete": "^0.17.1",
     "textcomplete.contenteditable": "^0.1.1"
