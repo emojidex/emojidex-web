@@ -19,15 +19,15 @@ html
               $('.doc-content').append(data)
             })
             
-            $("body").emojidexReplace({
+            /* $("body").emojidexReplace({
               onComplete: function(element) {
                 return console.log('Completed emojidexReplace!!');
               }
-            });
+            }); */
             $(".emojidex-plain_text").emojidexAutocomplete();
             $(".emojidex-content_editable").emojidexAutocomplete();
-            $("#palette-btn").emojidexPalette();
-            $("#palette-input").emojidexPalette();
+            /* $("#palette-btn").emojidexPalette();
+            $("#palette-input").emojidexPalette(); */
           };
         })(this));
       }).call(this);
