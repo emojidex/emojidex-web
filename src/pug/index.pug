@@ -18,15 +18,19 @@ html
             $.ajax('/README.html').then((data) => {
               $('.doc-content').append(data)
             })
-            
+
+            $(".emojidex-plain_text").emojidexAutocomplete();
+            await $(".emojidex-plain_text").data().plugin_emojidexAutocomplete.autocomplete
+
+            $(".emojidex-content_editable").emojidexAutocomplete();
+            await $(".emojidex-content_editable").data().plugin_emojidexAutocomplete.autocomplete
+
+            /* $("#palette-btn").emojidexPalette();
+            $("#palette-input").emojidexPalette(); */
+
             $("body").emojidexReplace()
             await $('body').data().plugin_emojidexReplace
             console.log('Completed emojidexReplace!!');
-
-            $(".emojidex-plain_text").emojidexAutocomplete();
-            $(".emojidex-content_editable").emojidexAutocomplete();
-            /* $("#palette-btn").emojidexPalette();
-            $("#palette-input").emojidexPalette(); */
           };
         })(this));
       }).call(this);

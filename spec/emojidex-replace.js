@@ -4,13 +4,11 @@ describe('emojidexReplace', () => {
 
   afterAll(() => helperAfter())
 
-  it('replace to emojidex-emoji', done =>
-    $('body').emojidexReplace({
-      onComplete() {
-        expect($('.emojidex_replace')).toContainElement('img.emojidex-emoji')
-        done()
-      }
-    })
-  )
+  it('replace to emojidex-emoji', async done => {
+    $('body').emojidexReplace()
+    await $('body').data().plugin_emojidexReplace
+    expect($('.emojidex_replace')).toContainElement('img.emojidex-emoji')
+    done()
+  })
 })
 /* eslint-enable no-undef */
