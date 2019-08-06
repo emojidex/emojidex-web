@@ -14,16 +14,15 @@ html
     script.
       (function() {
         $(document).ready((function(_this) {
-          return function() {
+          return async function() {
             $.ajax('/README.html').then((data) => {
               $('.doc-content').append(data)
             })
             
-            /* $("body").emojidexReplace({
-              onComplete: function(element) {
-                return console.log('Completed emojidexReplace!!');
-              }
-            }); */
+            $("body").emojidexReplace()
+            await $('body').data().plugin_emojidexReplace
+            console.log('Completed emojidexReplace!!');
+
             $(".emojidex-plain_text").emojidexAutocomplete();
             $(".emojidex-content_editable").emojidexAutocomplete();
             /* $("#palette-btn").emojidexPalette();
