@@ -29,9 +29,8 @@ export default class UserTab {
     })
     tabContent.append(loginButton)
 
-    if (this.palette.EC.Data.storage.hubCache.emojidex.auth_info !== undefined &&
-      this.palette.EC.Data.storage.hubCache.emojidex.auth_info.status === 'verified') {
-      const authInfo = this.palette.EC.Data.storage.hubCache.emojidex.auth_info
+    const authInfo = this.palette.EC.Data.authInfo()
+    if (authInfo.token) {
       this.login(authInfo.user, authInfo.token, 'token')
     }
 
@@ -43,34 +42,33 @@ export default class UserTab {
 
     const username = $('#palette-emoji-username-input').val()
     const password = $('#palette-emoji-password-input').val()
-    if (username.length > 0 && password.length > 0) {
+    if (username.length && password.length) {
       return this.login(username, password, 'plain')
     }
   }
 
-  login(username, password, type) {
-    const callback = authInfo => {
-      if (authInfo.status === 'verified') {
-        this.hideLoginForm()
-        this.setUserTab(authInfo)
-        this.setHistoryTab()
-        this.setFavoriteTab()
-        this.setFollowingTab()
-        if (authInfo.premium) {
-          this.setFollowersTab()
-        }
+  async login(username, password, type) {
+    let authInfo
+    if (type === 'plain') {
+      authInfo = await this.palette.EC.User.plainAuth(username, password)
+    } else {
+      authInfo = await this.palette.EC.User.tokenAuth(username, password)
+    }
 
-        return this.palette.toggleSorting()
+    if (authInfo.status === 'verified') {
+      this.hideLoginForm()
+      this.setUserTab()
+      this.setHistoryTab()
+      this.setFavoriteTab()
+      this.setFollowingTab()
+      if (this.palette.EC.User.isSubscriber()) {
+        this.setFollowersTab()
       }
 
-      return this.showError(authInfo)
+      return this.palette.toggleSorting()
     }
 
-    if (type === 'plain') {
-      return this.palette.EC.User.plainAuth(username, password, authInfo => callback(authInfo))
-    }
-
-    return this.palette.EC.User.tokenAuth(username, password, authInfo => callback(authInfo))
+    return this.showError(authInfo)
   }
 
   showError() {
@@ -92,12 +90,12 @@ export default class UserTab {
     return $('#palette-emoji-login-submit').show()
   }
 
-  setUserTab(authInfo) {
+  setUserTab() {
     const usertabList = $('<ul class="nav nav-tabs mb-m mt-m" id="user-tab-list"></ul>')
     usertabList.append($('<li id="tab-user-favorite" class="active"><a href="#tab-content-user-favorite" data-toggle="tab">Favorite</a></li>'))
     usertabList.append($('<li id="tab-user-history"><a href="#tab-content-user-history" data-toggle="tab">History</a></li>'))
     usertabList.append($('<li id="tab-user-following"><a href="#follow-following" data-toggle="tab">Following</a></li>'))
-    if (authInfo.premium) {
+    if (this.palette.EC.User.isSubscriber()) {
       usertabList.append($('<li id="tab-user-followers"><a href="#follow-followers" data-toggle="tab">Followers</a></li>'))
     }
 
@@ -120,16 +118,14 @@ export default class UserTab {
     return this.tabContent.append(this.userTabContent)
   }
 
-  setHistoryTab() {
-    return this.historyTab.createTabContent().then(content => {
-      return this.userTabContent.append(content)
-    })
+  async setHistoryTab() {
+    const content = await this.historyTab.createTabContent()
+    return this.userTabContent.append(content)
   }
 
-  setFavoriteTab() {
-    return this.favoriteTab.createTabContent().then(content => {
-      return this.userTabContent.append(content)
-    })
+  async setFavoriteTab() {
+    const content = await this.favoriteTab.createTabContent()
+    return this.userTabContent.append(content)
   }
 
   setFollowingTab() {
@@ -140,18 +136,6 @@ export default class UserTab {
   setFollowersTab() {
     this.userTabContent.append(this.followersTab.tabPane)
     this.followersTab.init()
-  }
-
-  setPremiumData(response, kind) {
-    const tabPane = $(`<div class='tab-pane' id='tab-content-user-${kind}'></div>`)
-    if (response.statusText === 'Payment Required') {
-      // TODO: text localization
-      tabPane.append($('<p style="margin-top:15px;"><a class="btn btn-primary" href="https://www.emojidex.com/profile" target="_blank">Premium/Pro user only.</a></p>'))
-    } else {
-      tabPane.append(this.palette.setEmojiList(kind, response))
-    }
-
-    return this.userTabContent.append(tabPane)
   }
 }
 /* eslint-enable no-undef */
