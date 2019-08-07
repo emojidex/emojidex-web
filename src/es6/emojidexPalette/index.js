@@ -12,7 +12,6 @@ import Palette from './components/palette'
 
 const pluginName = 'emojidexPalette'
 const defaults = {
-  onComplete: undefined,
   onEmojiButtonClicked: undefined,
   paletteEmojisLimit: 50 // NOTE: Free users can only view one page [max: 50 emoji] of their usage history and favorite.
 }

@@ -13,27 +13,24 @@ export default class Palette {
     this.plugin = plugin
     this.activeInputArea = null
     this.tabs = []
-    this.EC = new EmojidexClient({
-      limit: this.plugin.options.paletteEmojisLimit,
-      onReady: () => {
-        // start main --------
-        $('input, textarea, [contenteditable="true"]').on('focus keyup mouseup', e => {
-          this.activeInputArea = $(e.currentTarget)
-          return this.activeInputArea
-        })
+    return new EmojidexClient({ limit: this.plugin.options.paletteEmojisLimit }).then(EC => {
+      this.EC = EC
 
-        this.createDialog()
-        this.setPalette(this.plugin.element)
-        if ($(this.plugin.element).attr('type') === 'text' || $(this.plugin.element).prop('tagName') === 'TEXTAREA') {
-          this.addButton(this.plugin.element)
-        } else {
-          this.addPaletteToElement(this.plugin.element)
-        }
+      // start main --------
+      $('input, textarea, [contenteditable="true"]').on('focus keyup mouseup', e => {
+        this.activeInputArea = $(e.currentTarget)
+        return this.activeInputArea
+      })
 
-        if (typeof this.plugin.options.onComplete === 'function') {
-          this.plugin.options.onComplete()
-        }
+      this.createDialog()
+      this.setPalette()
+      if ($(this.plugin.element).attr('type') === 'text' || $(this.plugin.element).prop('tagName') === 'TEXTAREA') {
+        this.addButton(this.plugin.element)
+      } else {
+        this.addPaletteToElement(this.plugin.element)
       }
+
+      return this
     })
   }
 
@@ -70,7 +67,7 @@ export default class Palette {
     })
   }
 
-  setPalette() {
+  async setPalette() {
     if ($('#emoji-palette').length !== 0) {
       return
     }
@@ -78,37 +75,35 @@ export default class Palette {
     const tabList = $('<ul class="nav nav-pills"></ul>')
     const tabContent = $('<div class="tab-content"></div>')
 
-    return this.EC.Categories.sync(categories => {
-      this.tabs.push(new IndexTab(this))
-      for (let i = 0; i < categories.length; i++) {
-        const category = categories[i]
-        this.tabs.push(new CategoryTab(this, category, tabList[0].children.length))
-      }
+    const categories = await this.EC.Categories.sync()
+    this.tabs.push(new IndexTab(this))
+    for (let i = 0; i < categories.length; i++) {
+      const category = categories[i]
+      this.tabs.push(new CategoryTab(this, category, tabList[0].children.length))
+    }
 
-      this.tabs.push(new UserTab(this))
-      this.tabs.push(new SearchTab(this))
-      this.tabs.push(new CustomizationTab(this))
+    this.tabs.push(new UserTab(this))
+    this.tabs.push(new SearchTab(this))
+    this.tabs.push(new CustomizationTab(this))
 
-      for (let j = 0; j < this.tabs.length; j++) {
-        const tab = this.tabs[j]
-        tabList.append(tab.tabList)
-        tabContent.append(tab.tabContent)
-      }
+    for (let j = 0; j < this.tabs.length; j++) {
+      const tab = this.tabs[j]
+      tabList.append(tab.tabList)
+      tabContent.append(tab.tabContent)
+    }
 
-      this.emojiPalette = $('<div id="emoji-palette" class="emoji-palette"></div>')
-      this.emojiPalette.append(tabList.add(tabContent))
-      this.emojiPalette.find('ul').after('<hr>')
+    this.emojiPalette = $('<div id="emoji-palette" class="emoji-palette"></div>')
+    this.emojiPalette.append(tabList.add(tabContent))
+    this.emojiPalette.find('ul').after('<hr>')
 
-      return this.dialog.append(this.emojiPalette)
-    })
+    return this.dialog.append(this.emojiPalette)
   }
 
   setEmojiList(kind, emojiList) {
     const emojiDivs = $(`<div class='${kind}-emoji-list clearfix'></div>`)
     for (let i = 0; i < emojiList.length; i++) {
       const emoji = emojiList[i]
-      const emojiButton = $('<button>',
-        { class: 'emoji-btn btn btn-default pull-left' })
+      const emojiButton = $('<button>', { class: 'emoji-btn btn btn-default pull-left' })
       emojiButton.prop('emoji_data', emoji)
 
       const emojiButtonImage = $('<img>', {
@@ -156,7 +151,7 @@ export default class Palette {
       this.clipboard.destroy()
     }
 
-    if (this.EC.User.authInfo.token !== null) {
+    if (this.EC.User.authInfo.token) {
       this.EC.User.History.set(emoji.code.replace(/\s/g, '_'))
     }
 
@@ -214,12 +209,13 @@ export default class Palette {
   }
 
   toggleSorting() {
-    if (this.EC.User.authInfo.premium || this.EC.User.authInfo.pro) {
+    if (this.EC.User.isSubscriber()) {
       const result = []
       const iterable = this.getInitializedTabs()
       for (let i = 0; i < iterable.length; i++) {
         const tab = iterable[i]
         let item
+        // TODO: elseの時に突っ込まなくていいのか後で確認
         if (!tab.tabContent.find('#sort-selector').length) {
           item = tab.tabContent.find('ul.pagination').after(this.getSorting(tab))
         }
@@ -233,6 +229,7 @@ export default class Palette {
     return this.getInitializedTabs().map(tab => this.removeSorting(tab))
   }
 
+  // TODO: initializedのみにする必要ある？
   getInitializedTabs() {
     const initializedTabs = []
     for (let i = 0; i < this.tabs.length; i++) {
@@ -246,7 +243,7 @@ export default class Palette {
   }
 
   getSorting(targetTab) {
-    if (!this.EC.User.authInfo.premium && !this.EC.User.authInfo.pro) {
+    if (!this.EC.User.isSubscriber()) {
       return ''
     }
 
