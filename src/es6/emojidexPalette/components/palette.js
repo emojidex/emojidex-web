@@ -13,25 +13,27 @@ export default class Palette {
     this.plugin = plugin
     this.activeInputArea = null
     this.tabs = []
-    return new EmojidexClient({ limit: this.plugin.options.paletteEmojisLimit }).then(EC => {
-      this.EC = EC
+    return this.init()
+  }
 
-      // start main --------
-      $('input, textarea, [contenteditable="true"]').on('focus keyup mouseup', e => {
-        this.activeInputArea = $(e.currentTarget)
-        return this.activeInputArea
-      })
+  async init() {
+    this.EC = await new EmojidexClient({ limit: this.plugin.options.paletteEmojisLimit })
 
-      this.createDialog()
-      this.setPalette()
-      if ($(this.plugin.element).attr('type') === 'text' || $(this.plugin.element).prop('tagName') === 'TEXTAREA') {
-        this.addButton(this.plugin.element)
-      } else {
-        this.addPaletteToElement(this.plugin.element)
-      }
-
-      return this
+    // start main --------
+    $('input, textarea, [contenteditable="true"]').on('focus keyup mouseup', e => {
+      this.activeInputArea = $(e.currentTarget)
     })
+
+    this.createDialog()
+    await this.setPalette()
+
+    if ($(this.plugin.element).attr('type') === 'text' || $(this.plugin.element).prop('tagName') === 'TEXTAREA') {
+      this.addButton(this.plugin.element)
+    } else {
+      this.addPaletteToElement(this.plugin.element)
+    }
+
+    return this
   }
 
   createDialog() {
@@ -56,13 +58,13 @@ export default class Palette {
 
         $('.ui-dialog-titlebar').append(closeButton)
         $('.ui-dialog-title').html('<a target="_blank" href="https://www.emojidex.com"><img src="https://cdn.emojidex.com/logo-hdpi.png" alt="emojidex" /></a>')
-        return $('.emojidex-ui-dialog').wrap('<span id="emojidex-emoji-palette"></span>')
+        $('.emojidex-ui-dialog').wrap('<span id="emojidex-emoji-palette"></span>')
       },
 
       open() {
         $('.emojidex-ui-dialog').css('min-height', 455) // height style is ignored, set here.
         $('.ui-dialog :button').blur()
-        return $('.nav.nav-pills a').blur()
+        $('.nav.nav-pills a').blur()
       }
     })
   }
@@ -82,7 +84,8 @@ export default class Palette {
       this.tabs.push(new CategoryTab(this, category, tabList[0].children.length))
     }
 
-    this.tabs.push(new UserTab(this))
+    const userTab = await new UserTab(this)
+    this.tabs.push(userTab)
     this.tabs.push(new SearchTab(this))
     this.tabs.push(new CustomizationTab(this))
 
@@ -96,7 +99,12 @@ export default class Palette {
     this.emojiPalette.append(tabList.add(tabContent))
     this.emojiPalette.find('ul').after('<hr>')
 
-    return this.dialog.append(this.emojiPalette)
+    this.dialog.append(this.emojiPalette)
+
+    const authInfo = await this.EC.Data.authInfo()
+    if (authInfo.token) {
+      await userTab.login(authInfo.user, authInfo.token, 'token')
+    }
   }
 
   setEmojiList(kind, emojiList) {
@@ -116,7 +124,7 @@ export default class Palette {
       let clickFunc
       if (typeof this.plugin.options.onEmojiButtonClicked === 'function') {
         clickFunc = () => {
-          return this.plugin.options.onEmojiButtonClicked(
+          this.plugin.options.onEmojiButtonClicked(
             {
               imageTag: emojiButtonImage.attr('class', 'emojidex-emoji').prop('outerHTML'),
               emojiCode: `:${emoji.code}:`
@@ -125,7 +133,7 @@ export default class Palette {
         }
       } else {
         clickFunc = e => {
-          return this.insertEmojiAtCaret($(e.currentTarget).prop('emoji_data'))
+          this.insertEmojiAtCaret($(e.currentTarget).prop('emoji_data'))
         }
       }
 
@@ -176,7 +184,7 @@ export default class Palette {
       selection.removeAllRanges()
       selection.addRange(range)
 
-      return elem.change()
+      elem.change()
     }
 
     const pos = elem.caret('pos')
@@ -185,7 +193,7 @@ export default class Palette {
     const stopTxt = txt.substring(pos, txt.length)
     elem.val(startTxt + code + stopTxt)
     elem.focus()
-    return elem.caret('pos', pos + code.length)
+    elem.caret('pos', pos + code.length)
   }
 
   getPagination(kind, prevFunc, nextFunc, curPage, maxPage) {
@@ -194,14 +202,14 @@ export default class Palette {
     pagination.find('.pagination')
       .append($(`<li class="palette-pager${(curPage > 1) ? '' : ' disabled'}"><span>&laquo;</span></li>`).click(() => {
         if (curPage > 1) {
-          return prevFunc()
+          prevFunc()
         }
       }))
     pagination.find('.pagination').append($(`<li class='palette-num disabled'><span>${curPage} / ${maxPage}</span></li>`))
     pagination.find('.pagination')
       .append($(`<li class="palette-pager${(curPage < maxPage) ? ' ' : ' disabled'}"><span>&raquo;</span></li>`).click(() => {
         if (curPage < maxPage) {
-          return nextFunc()
+          nextFunc()
         }
       }))
 

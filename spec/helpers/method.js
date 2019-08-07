@@ -22,7 +22,7 @@ function helperAfter() {
 }
 
 function specTimer(time) {
-  return new Promise((resolve, reject) => {
+  return new Promise(resolve => {
     setTimeout(resolve, time)
   })
 }
@@ -62,12 +62,10 @@ function simulateTypingIn($inputor, pos) {
   $inputor.trigger('keyup')
 }
 
-function clearStorage() {
-  const CSC = new CrossStorageClient('https://www.emojidex.com/hub',
-    { frameId: 'emojidex-client-storage-hub' })
-  return CSC.onReadyFrame().then(() => {
-    return CSC.clear()
-  })
+async function clearStorage() {
+  const CSC = new CrossStorageClient('https://www.emojidex.com/hub', { frameId: 'emojidex-client-storage-hub' })
+  await CSC.onReadyFrame()
+  await CSC.clear()
 }
 
 function closePalette() {
@@ -79,33 +77,24 @@ function closePalette() {
   })
 }
 
-function showPalette() {
-  return new Promise(done => {
-    watchDOM('.ui-dialog', {properties: 'display'}).then(() => {
-      done()
-    })
-    specTimer(1000).then(() => {
+async function showPalette() {
+  await watchDOM('.ui-dialog', {
+    properties: 'display',
+    trigger: () => {
       $('.emojidex-palette-button')[0].click()
-    })
+    }
   })
 }
 
-function preparePaletteButtons(done, options) {
+async function preparePaletteButtons(options) {
   const limitForSpec = 1
   $('#palette-btn').emojidexPalette({
     paletteEmojisLimit: limitForSpec,
-    onEmojiButtonClicked: options && options.onEmojiButtonClicked ? options.onEmojiButtonClicked : undefined,
-    onComplete: () => {
-      $('#palette-input').emojidexPalette({
-        paletteEmojisLimit: limitForSpec,
-        onComplete: () => {
-          specTimer(3000).then(() => {
-            done()
-          })
-        }
-      })
-    }
+    onEmojiButtonClicked: options && options.onEmojiButtonClicked ? options.onEmojiButtonClicked : undefined
   })
+  await $('#palette-btn').data().plugin_emojidexPalette
+  $('#palette-input').emojidexPalette({ paletteEmojisLimit: limitForSpec })
+  await $('#palette-input').data().plugin_emojidexPalette
 }
 
 function watchDOM(selector, options = {}) {
@@ -116,7 +105,7 @@ function watchDOM(selector, options = {}) {
       properties: options.properties,
       watchChildren: true,
       callback(data) {
-        if(options.regex) {
+        if (options.regex) {
           if (data.vals[0].match(options.regex)) {
             removeWatch($(selector), 'watchDOM')
             done(data)
@@ -127,60 +116,45 @@ function watchDOM(selector, options = {}) {
         }
       }
     })
-    options.trigger && options.trigger()
+
+    if (options.trigger) {
+      options.trigger()
+    }
   })
 }
 
-function tryLoginUser(user, password) {
-  return new Promise(done => {
-    watchDOM('#tab-content-user').then(() => {
-      specTimer(2000).then(() => {
-        done()
-      })
-    })
-
-    specTimer(1000).then(() => {
-      $('#tab-user a').click()
-      $('#palette-emoji-username-input').val(user)
-      $('#palette-emoji-password-input').val(password)
-      $('#palette-emoji-login-submit').click()
-    })
-  })
+async function tryLoginUser(user, password) {
+  $('#tab-user a').click()
+  $('#palette-emoji-username-input').val(user)
+  $('#palette-emoji-password-input').val(password)
+  await watchDOM('#tab-content-user', { trigger: () => {
+    $('#palette-emoji-login-submit').click()
+  } })
 }
 
-function logout() {
-  return new Promise(done => {
-    watchDOM('#tab-content-user').then(() => {
-      specTimer(1000).then(() => {
-        done()
-      })
-    })
+async function logout() {
+  await watchDOM('#tab-content-user', { trigger: () => {
     $('#palette-emoji-logout').click()
-  })
+  } })
 }
 
-function beforePalette(done) {
-  clearStorage().then(() => {
-    return helperBefore()
-  }).then(() => {
-    preparePaletteButtons(done)
-  })
+async function beforePalette() {
+  await clearStorage()
+  await helperBefore()
+  await preparePaletteButtons()
 }
 
-function afterPalette(done) {
-  closePalette().then(() => {
-    return helperAfter()
-  }).then(() => {
-    done()
-  })
+async function afterPalette() {
+  await closePalette()
+  await helperAfter()
 }
 
 function hasPremiumAccount() {
-  return typeof(premiumUserInfo) !== 'undefined' && premiumUserInfo !== null
+  return typeof premiumUserInfo !== 'undefined' && premiumUserInfo !== null
 }
 
 function hasUserAccount() {
-  return typeof(userInfo) !== 'undefined' && userInfo !== null
+  return typeof userInfo !== 'undefined' && userInfo !== null
 }
 /* eslint-enable no-unused-vars */
 /* eslint-enable no-undef */

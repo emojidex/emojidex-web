@@ -1,35 +1,34 @@
 /* eslint-disable no-undef */
 describe('emojidexPalette:User:Login', () => {
-  beforeAll(done => {
-    beforePalette(done)
+  beforeAll(async done => {
+    await beforePalette()
+    done()
   })
 
-  afterAll(done => {
-    afterPalette(done)
+  afterAll(async done => {
+    await afterPalette()
+    done()
   })
 
-  it('login (Failure)', done => {
-    showPalette().then(() => {
-      return tryLoginUser('aaa', 'aaa')
-    }).then(() => {
-      expect($('#login-error span').text()).toBe('Login failed. Please check your username and password or login here.')
-      done()
-    })
+  it('login (Failure)', async done => {
+    await showPalette()
+    await tryLoginUser('aaa', 'aaa')
+    expect($('#login-error span').text()).toBe('Login failed. Please check your username and password or login here.')
+    done()
   })
 
   if (hasUserAccount()) {
-    it('user login [Requires a user account]', done => {
-      tryLoginUser(userInfo.auth_user, userInfo.password).then(() => {
-        expect($('#tab-user-favorite').length).toBeTruthy()
-        done()
-      })
+    it('user login [Requires a user account]', async done => {
+      await tryLoginUser(userInfo.auth_user, userInfo.password)
+      await specTimer(2000)
+      expect($('#tab-user-favorite').length).toBeTruthy()
+      done()
     })
 
-    it('logout', done => {
-      logout().then(() => {
-        expect($('#palette-emoji-username-input')).toHaveCss({ display: 'block' })
-        done()
-      })
+    it('logout', async done => {
+      await logout()
+      expect($('#palette-emoji-username-input')).toHaveCss({ display: 'block' })
+      done()
     })
   }
 
@@ -46,18 +45,16 @@ describe('emojidexPalette:User:Login', () => {
   //   spec_timer timer_option
 
   if (hasPremiumAccount()) {
-    it('premium user login [Require a premium user info]', done => {
-      tryLoginUser(premiumUserInfo.auth_user, premiumUserInfo.password).then(() => {
-        expect($('#tab-user-favorite').length).toBeTruthy()
-        done()
-      })
+    it('premium user login [Require a premium user info]', async done => {
+      await tryLoginUser(premiumUserInfo.auth_user, premiumUserInfo.password)
+      expect($('#tab-user-favorite').length).toBeTruthy()
+      done()
     })
 
-    it('logout', done => {
-      logout().then(() => {
-        expect($('#palette-emoji-username-input')).toHaveCss({ display: 'block' })
-        done()
-      })
+    it('logout', async done => {
+      await logout()
+      expect($('#palette-emoji-username-input')).toHaveCss({ display: 'block' })
+      done()
     })
   }
 
@@ -74,25 +71,23 @@ describe('emojidexPalette:User:Login', () => {
   //   spec_timer timer_option
 
   if (hasUserAccount() || hasPremiumAccount()) {
-    let user = userInfo ? userInfo : premiumUserInfo
-    it('login with storage data', done => {
-      tryLoginUser(user.auth_user, user.password).then(() => {
-        $('#palette-btn').removeData().unbind()
-        $('#emojidex-emoji-palette, .emojidex-palette-div').remove()
+    const user = userInfo ? userInfo : premiumUserInfo
+    it('login with storage data', async done => {
+      await tryLoginUser(user.auth_user, user.password)
+      $('#palette-btn').removeData().unbind()
+      $('#emojidex-emoji-palette, .emojidex-palette-div').remove()
 
-        $('#palette-btn').emojidexPalette({
-          onComplete: () => {
-            showPalette().then(() => {
-              return watchDOM('#tab-content-user', {trigger: () => {
-                $('#tab-user a').click()
-              }})
-            }).then(() => {
-              expect($('#tab-user-favorite').length).toBeTruthy()
-              done()
-            })
-          }
-        })
+      $('#palette-btn').emojidexPalette()
+      await $('#palette-btn').data().plugin_emojidexPalette
+      await showPalette()
+      await watchDOM('#tab-content-user', {
+        trigger: () => {
+          $('#tab-user a').click()
+        },
+        regex: /favorite-emoji-list/
       })
+      expect($('#tab-user-favorite').length).toBeTruthy()
+      done()
     })
   }
 })

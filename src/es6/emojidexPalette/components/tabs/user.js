@@ -8,33 +8,29 @@ export default class UserTab {
   constructor(palette) {
     this.palette = palette
     this.tabList = '<li id=\'tab-user\' class=\'pull-right\'><a href=\'#tab-content-user\' data-toggle=\'pill\'><i class=\'emjdx-user\'></a></li>'
-    this.tabContent = this.getTabContent()
+    this.tabContent = $('<div class="tab-pane" id="tab-content-user"><input type="text" class="form-control" id="palette-emoji-username-input" placeholder="Username"><input type="password" class="form-control mt-m" id="palette-emoji-password-input" placeholder="Password"></div>')
+
     this.historyTab = new HistoryTab(this)
     this.favoriteTab = new FavoriteTab(this)
     this.followingTab = new FollowingTab(this)
     this.followersTab = new FollowersTab(this)
+    this.setTabContent()
   }
 
-  getTabContent() {
-    const tabContent = $('<div class="tab-pane" id="tab-content-user"><input type="text" class="form-control" id="palette-emoji-username-input" placeholder="Username"><input type="password" class="form-control mt-m" id="palette-emoji-password-input" placeholder="Password"></div>')
-    tabContent.find('#palette-emoji-password-input').keypress(e => {
+  setTabContent() {
+    this.tabContent.find('#palette-emoji-password-input').keypress(e => {
       if (e.keyCode === 13) {
-        return this.checkInput()
+        this.checkInput()
       }
     })
 
     const loginButton = $('<div class="btn btn-primary btn-block mt-m" id="palette-emoji-login-submit">Login</div>')
     loginButton.click(() => {
-      return this.checkInput()
+      this.checkInput()
     })
-    tabContent.append(loginButton)
+    this.tabContent.append(loginButton)
 
-    const authInfo = this.palette.EC.Data.authInfo()
-    if (authInfo.token) {
-      this.login(authInfo.user, authInfo.token, 'token')
-    }
-
-    return tabContent
+    return this
   }
 
   checkInput() {
@@ -55,25 +51,21 @@ export default class UserTab {
       authInfo = await this.palette.EC.User.tokenAuth(username, password)
     }
 
-    if (authInfo.status === 'verified') {
-      this.hideLoginForm()
-      this.setUserTab()
-      this.setHistoryTab()
-      this.setFavoriteTab()
-      this.setFollowingTab()
-      if (this.palette.EC.User.isSubscriber()) {
-        this.setFollowersTab()
-      }
-
-      return this.palette.toggleSorting()
+    if (authInfo.status !== 'verified') {
+      this.showError(authInfo)
+      return
     }
 
-    return this.showError(authInfo)
+    this.hideLoginForm()
+    this.setUserTab()
+    await Promise.all([this.setHistoryTab(), this.setFavoriteTab(), this.setFollowingTab(), this.setFollowersTab()])
+
+    this.palette.toggleSorting()
   }
 
   showError() {
     // TODO: error text localization
-    return this.tabContent.prepend($('<div id="login-error"><span style="color:red">Login failed. Please check your username and password or <a href="https://www.emojidex.com/users/sign_in">login here</a>.</span><div>'))
+    this.tabContent.prepend($('<div id="login-error"><span style="color:red">Login failed. Please check your username and password or <a href="https://www.emojidex.com/users/sign_in">login here</a>.</span><div>'))
   }
 
   hideLoginForm() {
@@ -81,13 +73,13 @@ export default class UserTab {
     $('#palette-emoji-password-input').val('')
     $('#palette-emoji-username-input').hide()
     $('#palette-emoji-password-input').hide()
-    return $('#palette-emoji-login-submit').hide()
+    $('#palette-emoji-login-submit').hide()
   }
 
   showLoginForm() {
     $('#palette-emoji-username-input').show()
     $('#palette-emoji-password-input').show()
-    return $('#palette-emoji-login-submit').show()
+    $('#palette-emoji-login-submit').show()
   }
 
   setUserTab() {
@@ -100,42 +92,45 @@ export default class UserTab {
     }
 
     const logoutButton = $('<button class="btn btn-default btm-sm pull-right" id="palette-emoji-logout">LogOut</button>')
-    logoutButton.click(() => {
-      this.palette.EC.User.logout()
-
+    logoutButton.click(async () => {
+      await this.palette.EC.User.logout()
+      this.showLoginForm()
+      this.palette.toggleSorting()
       $('#user-tab-list').remove()
       $('#user-tab-content').children().removeClass('active')
-      this.favoriteTab.tabPane.addClass('active')
       $('#user-tab-content').remove()
-      this.showLoginForm()
-      return this.palette.toggleSorting()
+      this.favoriteTab.tabPane.addClass('active')
     })
     usertabList.append(logoutButton)
 
     this.userTabContent = $('<div class="tab-content mt-m" id="user-tab-content"></div>')
 
     this.tabContent.append(usertabList)
-    return this.tabContent.append(this.userTabContent)
+    this.tabContent.append(this.userTabContent)
   }
 
   async setHistoryTab() {
     const content = await this.historyTab.createTabContent()
-    return this.userTabContent.append(content)
+    this.userTabContent.append(content)
   }
 
   async setFavoriteTab() {
     const content = await this.favoriteTab.createTabContent()
-    return this.userTabContent.append(content)
+    this.userTabContent.append(content)
   }
 
-  setFollowingTab() {
+  async setFollowingTab() {
     this.userTabContent.append(this.followingTab.tabPane)
-    this.followingTab.init()
+    await this.followingTab.init()
   }
 
-  setFollowersTab() {
+  async setFollowersTab() {
+    if (!this.palette.EC.User.isSubscriber()) {
+      return
+    }
+
     this.userTabContent.append(this.followersTab.tabPane)
-    this.followersTab.init()
+    await this.followersTab.init()
   }
 }
 /* eslint-enable no-undef */

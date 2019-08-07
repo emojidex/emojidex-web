@@ -24,7 +24,10 @@ export default class EmojidexPalette {
     this._name = pluginName
 
     // start: Plugin --------
-    this.palette = new Palette(this)
+    return new Palette(this).then(palette => {
+      this.palette = palette
+      return this.palette
+    })
   }
 
   static getName() {
