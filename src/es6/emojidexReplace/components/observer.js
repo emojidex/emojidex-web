@@ -9,28 +9,20 @@ export default class Observer {
     this.flagReEntry = true
   }
 
-  doQueue() {
-    return new Promise(resolve => {
-      const body = $('body')[0] // eslint-disable-line no-undef
-      if (this.queues.indexOf(body) === -1) {
-        let queueLimit = 100
-        const checkComplete = () => {
-          if (this.queues.length > 0 && queueLimit-- > 0) {
-            const queue = this.queues.pop()
-            this.replacer.loadEmoji(queue).then(() => {
-              checkComplete()
-            })
-          } else {
-            resolve()
-          }
+  async doQueue() {
+    const body = $('body')[0] // eslint-disable-line no-undef
+    if (this.queues.indexOf(body) === -1) {
+      // TODO: 処理が重くなるので現時点では最大100個まで変換する。いずれ100個ずつ全部変換するようにしたい
+      const tasks = this.queues.slice(0, 100).map(queue => {
+        return () => {
+          return this.replacer.loadEmoji(queue)
         }
+      })
+      return Promise.all(tasks.map(task => task()))
+    }
 
-        checkComplete()
-      } else {
-        this.queues = []
-        this.replacer.loadEmoji($(body)).then(() => resolve()) // eslint-disable-line no-undef
-      }
-    })
+    this.queues = []
+    await this.replacer.loadEmoji($(body))// eslint-disable-line no-undef
   }
 
   domObserve() {
@@ -46,37 +38,32 @@ export default class Observer {
     this.domObserver.disconnect()
   }
 
-  reloadEmoji() {
-    this.replacer.loadEmoji().then(() => {
-      if (typeof this.plugin.options.onComplete === 'function') {
-        this.plugin.options.onComplete(this.plugin.element)
-      }
+  async reloadEmoji() {
+    await this.replacer.loadEmoji()
 
-      this.domObserver = new MutationObserver(mutations => {
-        if (this.flagReEntry) {
-          this.disconnect()
-          this.flagReEntry = false
-          for (let i = 0; i < mutations.length; i++) {
-            const mutation = mutations[i]
-            if (mutation.type === 'childList') {
-              if (mutation.addedNodes) {
-                for (let j = 0; j < mutation.addedNodes.length; j++) {
-                  const addedNode = mutation.addedNodes[j]
-                  if (this.queues.indexOf(addedNode) === -1) {
-                    this.queues.push(addedNode)
-                  }
-                }
-              }
-            }
+    this.domObserver = new MutationObserver(async mutations => {
+      if (this.flagReEntry) {
+        this.disconnect()
+        this.flagReEntry = false
+        for (let i = 0; i < mutations.length; i++) {
+          const mutation = mutations[i]
+          if (mutation.type !== 'childList' || !mutation.addedNodes) {
+            continue
           }
 
-          this.doQueue().then(() => {
-            this.flagReEntry = true
-            this.domObserve()
-          })
+          for (let j = 0; j < mutation.addedNodes.length; j++) {
+            const addedNode = mutation.addedNodes[j]
+            if (this.queues.indexOf(addedNode) === -1) {
+              this.queues.push(addedNode)
+            }
+          }
         }
-      })
+      }
+
+      await this.doQueue()
+      this.flagReEntry = true
       this.domObserve()
     })
+    this.domObserve()
   }
 }

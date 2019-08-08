@@ -14,20 +14,23 @@ html
     script.
       (function() {
         $(document).ready((function(_this) {
-          return function() {
+          return async function() {
             $.ajax('/README.html').then((data) => {
               $('.doc-content').append(data)
             })
-            
-            /* $("body").emojidexReplace({
-              onComplete: function(element) {
-                return console.log('Completed emojidexReplace!!');
-              }
-            }); */
+
             $(".emojidex-plain_text").emojidexAutocomplete();
+            await $(".emojidex-plain_text").data().plugin_emojidexAutocomplete.autocomplete
+
             $(".emojidex-content_editable").emojidexAutocomplete();
+            await $(".emojidex-content_editable").data().plugin_emojidexAutocomplete.autocomplete
+
             /* $("#palette-btn").emojidexPalette();
             $("#palette-input").emojidexPalette(); */
+
+            $("body").emojidexReplace()
+            await $('body').data().plugin_emojidexReplace
+            console.log('Completed emojidexReplace!!');
           };
         })(this));
       }).call(this);

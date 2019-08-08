@@ -15,7 +15,6 @@ import AutoComplete from './components/autocomplete'
 const pluginName = 'emojidexAutocomplete'
 const defaults = {
   listLimit: 15,
-  onComplete: undefined,
   contentEditable: {
     insertImg: true
   }
