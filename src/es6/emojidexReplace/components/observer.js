@@ -14,11 +14,13 @@ export default class Observer {
     if (this.queues.indexOf(body) === -1) {
       // TODO: 処理が重くなるので現時点では最大100個まで変換する。いずれ100個ずつ全部変換するようにしたい
       const tasks = this.queues.slice(0, 100).map(queue => {
-        return () => {
-          return this.replacer.loadEmoji(queue)
-        }
+        return (async () => {
+          await this.replacer.loadEmoji(queue)
+        })()
       })
-      return Promise.all(tasks.map(task => task()))
+
+      this.queues = []
+      return Promise.all(tasks)
     }
 
     this.queues = []
@@ -47,7 +49,7 @@ export default class Observer {
         this.flagReEntry = false
         for (let i = 0; i < mutations.length; i++) {
           const mutation = mutations[i]
-          if (mutation.type !== 'childList' || !mutation.addedNodes) {
+          if (mutation.type !== 'childList' || !mutation.addedNodes.length) {
             continue
           }
 
