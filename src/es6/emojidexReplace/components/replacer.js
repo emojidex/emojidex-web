@@ -16,12 +16,14 @@ export default class Replacer {
     }
 
     const tasks = this.targets.map(targetNode => {
-      return async () => {
+      return (async () => {
         const newText = await this.plugin.EC.Util.emojifyToHTML(targetNode.data)
         $(targetNode).replaceWith(newText) // eslint-disable-line no-undef
-      }
+      })()
     })
-    return Promise.all(tasks.map(task => task()))
+
+    this.targets = []
+    return Promise.all(tasks)
   }
 
   tagEscape(string) {
