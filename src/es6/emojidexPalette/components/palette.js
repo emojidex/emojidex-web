@@ -224,7 +224,7 @@ export default class Palette {
         const tab = iterable[i]
         let item
         // TODO: elseの時に突っ込まなくていいのか後で確認
-        if (!tab.tabContent.find('#sort-selector').length) {
+        if (!tab.tabContent.find('.sort-selector').length) {
           item = tab.tabContent.find('ul.pagination').after(this.getSorting(tab))
         }
 
@@ -255,7 +255,7 @@ export default class Palette {
       return ''
     }
 
-    const sortSelector = $('<select id="sort-selector" class="form-control pull-right"></select>')
+    const sortSelector = $('<select class="sort-selector form-control pull-right"></select>')
     sortSelector.append($('<option value="score">Score</option>'))
     sortSelector.append($('<option value="newest">Newest</option>'))
     sortSelector.append($('<option value="liked">Most Liked</option>'))
@@ -268,7 +268,7 @@ export default class Palette {
   }
 
   removeSorting(targetTab) {
-    targetTab.tabContent.find('#sort-selector').remove()
+    targetTab.tabContent.find('.sort-selector').remove()
     return targetTab.resetTabContent()
   }
 

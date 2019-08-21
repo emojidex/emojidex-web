@@ -12,7 +12,7 @@ describe('emojidexPalette:User:Login', () => {
 
   it('login (Failure)', async done => {
     await showPalette()
-    await tryLoginUser('aaa', 'aaa')
+    await tryLoginUser('aaa', 'aaa', false)
     expect($('#login-error span').text()).toBe('Login failed. Please check your username and password or login here.')
     done()
   })
@@ -20,7 +20,6 @@ describe('emojidexPalette:User:Login', () => {
   if (hasUserAccount()) {
     it('user login [Requires a user account]', async done => {
       await tryLoginUser(userInfo.auth_user, userInfo.password)
-      await specTimer(2000)
       expect($('#tab-user-favorite').length).toBeTruthy()
       done()
     })
@@ -77,7 +76,7 @@ describe('emojidexPalette:User:Login', () => {
       $('#palette-btn').removeData().unbind()
       $('#emojidex-emoji-palette, .emojidex-palette-div').remove()
 
-      $('#palette-btn').emojidexPalette()
+      $('#palette-btn').emojidexPalette({ paletteEmojisLimit: 1 })
       await $('#palette-btn').data().plugin_emojidexPalette
       await showPalette()
       await watchDOM('#tab-content-user', {

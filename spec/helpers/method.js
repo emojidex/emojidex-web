@@ -81,7 +81,7 @@ async function showPalette() {
   await watchDOM('.ui-dialog', {
     properties: 'display',
     trigger: () => {
-      $('.emojidex-palette-button')[0].click()
+      $('#palette-btn').click()
     }
   })
 }
@@ -123,19 +123,26 @@ function watchDOM(selector, options = {}) {
   })
 }
 
-async function tryLoginUser(user, password) {
+async function tryLoginUser(user, password, success = true) {
   $('#tab-user a').click()
   $('#palette-emoji-username-input').val(user)
   $('#palette-emoji-password-input').val(password)
-  await watchDOM('#tab-content-user', { trigger: () => {
-    $('#palette-emoji-login-submit').click()
-  } })
+  await watchDOM('#tab-content-user', {
+    trigger: () => {
+      $('#palette-emoji-login-submit').click()
+    },
+    regex: success ? /favorite-emoji-list/ : null
+  })
 }
 
 async function logout() {
-  await watchDOM('#tab-content-user', { trigger: () => {
-    $('#palette-emoji-logout').click()
-  } })
+  await watchDOM('#tab-content-user #palette-emoji-username-input', {
+    trigger: () => {
+      $('#palette-emoji-logout').click()
+    },
+    properties: 'display',
+    regex: /block/
+  })
 }
 
 async function beforePalette() {

@@ -83,6 +83,10 @@ export default class UserTab {
   }
 
   setUserTab() {
+    if ($('#user-tab-list').length !== 0) {
+      return
+    }
+
     const usertabList = $('<ul class="nav nav-tabs mb-m mt-m" id="user-tab-list"></ul>')
     usertabList.append($('<li id="tab-user-favorite" class="active"><a href="#tab-content-user-favorite" data-toggle="tab">Favorite</a></li>'))
     usertabList.append($('<li id="tab-user-history"><a href="#tab-content-user-history" data-toggle="tab">History</a></li>'))
@@ -94,12 +98,11 @@ export default class UserTab {
     const logoutButton = $('<button class="btn btn-default btm-sm pull-right" id="palette-emoji-logout">LogOut</button>')
     logoutButton.click(async () => {
       await this.palette.EC.User.logout()
-      this.showLoginForm()
-      this.palette.toggleSorting()
       $('#user-tab-list').remove()
       $('#user-tab-content').children().removeClass('active')
       $('#user-tab-content').remove()
-      this.favoriteTab.tabPane.addClass('active')
+      this.showLoginForm()
+      this.palette.toggleSorting()
     })
     usertabList.append(logoutButton)
 
