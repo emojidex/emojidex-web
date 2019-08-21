@@ -24,19 +24,14 @@ export default class FavoriteTab {
       maxPage = 1
     }
 
-    const resetEmoji = response => {
-      this.tabPane.children().remove()
-      this.tabPane.append(this.setFavoriteEmoji(response))
-    }
-
     const prevFunc = async () => {
       const response = await this.EC.User.Favorites.prev()
-      resetEmoji(response)
+      this.setFavoriteEmoji(response)
     }
 
     const nextFunc = async () => {
       const response = await this.EC.User.Favorites.next()
-      resetEmoji(response)
+      this.setFavoriteEmoji(response)
     }
 
     return this.tabPane.append(this.palette.getPagination('favorite', prevFunc, nextFunc, curPage, maxPage))

@@ -24,19 +24,14 @@ export default class HistoryTab {
       maxPage = 1
     }
 
-    const resetEmoji = response => {
-      this.tabPane.children().remove()
-      this.tabPane.append(this.setHistoryEmoji(response))
-    }
-
     const prevFunc = async () => {
       const response = await this.EC.User.History.prev()
-      resetEmoji(response)
+      this.setHistoryEmoji(response)
     }
 
     const nextFunc = async () => {
-      const response = this.EC.User.History.next()
-      resetEmoji(response)
+      const response = await this.EC.User.History.next()
+      this.setHistoryEmoji(response)
     }
 
     return this.tabPane.append(this.palette.getPagination('history', prevFunc, nextFunc, curPage, maxPage))
