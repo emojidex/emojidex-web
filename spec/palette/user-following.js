@@ -1,54 +1,64 @@
 /* eslint-disable no-undef */
 describe('emojidexPalette:User:Following', () => {
-  beforeAll(done => {
-    beforePalette(done)
+  beforeAll(async done => {
+    await beforePalette()
+    done()
   })
 
-  afterAll(done => {
-    afterPalette(done)
+  afterAll(async done => {
+    await afterPalette()
+    done()
   })
 
-  if (hasPremiumAccount()) {
-    it('show following tab [Requires a user account and following user]', done => {
-      showPalette().then(() => {
-        return watchDOM('#emoji-palette', {trigger: () => {
-            tryLoginUser(premiumUserInfo.auth_user, premiumUserInfo.password)
-          }, regex: /favorite-emoji-list/
+  if (hasPremiumAccount() || hasUserAccount()) {
+    const user = premiumUserInfo || userInfo
+
+    describe('Requires a user info and following user', () => {
+      it('show following tab', async done => {
+        await showPalette()
+        await tryLoginUser(user.auth_user, user.password)
+        await watchDOM('#follow-following', {
+          trigger: () => {
+            $('#tab-user-following a').click()
+          },
+          regex: /btn btn-default/
         })
-      }).then(() => {
-        return watchDOM('#follow-following', {trigger: () => {
-          $('#tab-user-following a').click()
-        }, regex: /btn btn-default/})
-      }).then(() => {
         expect($('#follow-following .users .btn').length).toBeTruthy()
         done()
       })
-    })
 
-    it('show following user info [Requires a user account and following user]', done => {
-      watchDOM('#follow-following .user-info', {regex: /emoji-btn btn btn-default/}).then((data) => {
+      it('show following user info', async done => {
+        await watchDOM('#follow-following .user-info', {
+          trigger: () => {
+            $($('#follow-following .users .btn')[0]).click()
+          },
+          regex: /emoji-btn btn btn-default/
+        })
         expect($('#follow-following .user-info.on .emoji-btn').length).toBeTruthy()
         done()
       })
-      $($('#follow-following .users .btn')[0]).click()
-    })
 
-    it('show following user emoji next [Requires a user account and following user]', done => {
-      const selectorCurrentUserInfo = '#follow-following .user-info.on'
-      watchDOM(selectorCurrentUserInfo).then(() => {
+      it('show following user emoji next', async done => {
+        const selectorCurrentUserInfo = '#follow-following .user-info.on'
+        await watchDOM(selectorCurrentUserInfo, {
+          trigger: () => {
+            $($(`${selectorCurrentUserInfo} .palette-pager`)[1]).click()
+          }
+        })
         expect($(`${selectorCurrentUserInfo} .palette-num span`).text().charAt(0)).toBe('2')
         done()
       })
-      $($(`${selectorCurrentUserInfo} .palette-pager`)[1]).click()
-    })
 
-    it('show following user emoji previous [Requires a user account and following user]', done => {
-      const selectorCurrentUserInfo = '#follow-following .user-info.on'
-      watchDOM(selectorCurrentUserInfo).then(() => {
+      it('show following user emoji previous', async done => {
+        const selectorCurrentUserInfo = '#follow-following .user-info.on'
+        await watchDOM(selectorCurrentUserInfo, {
+          trigger: () => {
+            $($(`${selectorCurrentUserInfo} .palette-pager`)[0]).click()
+          }
+        })
         expect($(`${selectorCurrentUserInfo} .palette-num span`).text().charAt(0)).toBe('1')
         done()
       })
-      $($(`${selectorCurrentUserInfo} .palette-pager`)[0]).click()
     })
   }
 })

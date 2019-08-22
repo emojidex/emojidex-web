@@ -9,7 +9,7 @@ describe('emojidexPalette:Indexes', () => {
   })
 
   // if (hasPremiumAccount()) {
-  //   it('show sort selector [Requires a premium user account]', done => {
+  //   it('show sort selector [Requires a premium user info]', done => {
       // TODO: indexesタブを修正したら追加する
     //   showPalette().then(() => {
     //     return watchDOM('#emoji-palette', {trigger: () => {

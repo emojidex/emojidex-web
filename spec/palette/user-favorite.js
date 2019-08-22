@@ -11,7 +11,7 @@ describe('emojidexPalette:User:Favorite', () => {
   })
 
   if (hasUserAccount()) {
-    describe('general user [Requires a user account]', () => {
+    describe('general user [Requires a user info]', () => {
       it('show favorite tab', async done => {
         await showPalette()
         await tryLoginUser(userInfo.auth_user, userInfo.password)

@@ -18,7 +18,7 @@ describe('emojidexPalette:User:Login', () => {
   })
 
   if (hasUserAccount()) {
-    it('user login [Requires a user account]', async done => {
+    it('user login [Requires a user info]', async done => {
       await tryLoginUser(userInfo.auth_user, userInfo.password)
       expect($('#tab-user-favorite').length).toBeTruthy()
       done()

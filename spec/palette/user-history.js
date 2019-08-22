@@ -11,7 +11,7 @@ describe('emojidexPalette:User:History', () => {
   })
 
   if (hasUserAccount()) {
-    describe('general user [Requires a user account]', () => {
+    describe('general user [Requires a user info]', () => {
       it('show history tab', async done => {
         await showPalette()
         await tryLoginUser(userInfo.auth_user, userInfo.password)
@@ -24,7 +24,7 @@ describe('emojidexPalette:User:History', () => {
         expect($('#tab-content-user-history').find('img').length).toBeTruthy()
         done()
       })
-    
+
       it('cannot switches to the prev/next page', done => {
         const pagers = $('.history-pagination').find('.palette-pager')
         expect(pagers[0]).toHaveClass('disabled')
