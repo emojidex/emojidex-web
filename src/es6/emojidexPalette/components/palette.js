@@ -42,7 +42,7 @@ export default class Palette {
     }
 
     this.dialog = $('<div id="emojidex-dialog-content"></div>')
-    return this.dialog.dialog({
+    this.dialog.dialog({
       classes: {
         'ui-dialog': 'emojidex-ui-dialog'
       },
@@ -102,8 +102,8 @@ export default class Palette {
     this.dialog.append(this.emojiPalette)
 
     const authInfo = await this.EC.Data.authInfo()
-    if (authInfo.token) {
-      await userTab.login(authInfo.user, authInfo.token, 'token')
+    if (authInfo && authInfo.token) {
+      await userTab.login({ authtype: 'session' })
     }
   }
 
@@ -185,6 +185,7 @@ export default class Palette {
       selection.addRange(range)
 
       elem.change()
+      return
     }
 
     const pos = elem.caret('pos')
@@ -216,6 +217,7 @@ export default class Palette {
     return pagination
   }
 
+  // TODO: resultを何に使っているのか、indexesを修正後に確認する
   toggleSorting() {
     if (this.EC.User.isSubscriber()) {
       const result = []
@@ -223,7 +225,6 @@ export default class Palette {
       for (let i = 0; i < iterable.length; i++) {
         const tab = iterable[i]
         let item
-        // TODO: elseの時に突っ込まなくていいのか後で確認
         if (!tab.tabContent.find('.sort-selector').length) {
           item = tab.tabContent.find('ul.pagination').after(this.getSorting(tab))
         }
@@ -262,18 +263,18 @@ export default class Palette {
     sortSelector.val(targetTab.sortType)
     sortSelector.change(() => {
       targetTab.sortType = sortSelector.val()
-      return targetTab.resetTabContent()
+      targetTab.resetTabContent()
     })
     return sortSelector
   }
 
   removeSorting(targetTab) {
     targetTab.tabContent.find('.sort-selector').remove()
-    return targetTab.resetTabContent()
+    targetTab.resetTabContent()
   }
 
   openDialog() {
-    return $('#emojidex-dialog-content').dialog('open')
+    $('#emojidex-dialog-content').dialog('open')
   }
 
   addButton(element) {
@@ -295,13 +296,11 @@ export default class Palette {
     $(element).focus(reposition)
     reposition()
 
-    return $(element).after(paletteButton)
+    $(element).after(paletteButton)
   }
 
   addPaletteToElement(element) {
-    return $(element).click(() => {
-      this.openDialog()
-    })
+    $(element).click(() => this.openDialog())
   }
 
   capitalize(text) {

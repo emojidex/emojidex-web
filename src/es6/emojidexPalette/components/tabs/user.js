@@ -9,6 +9,7 @@ export default class UserTab {
     this.palette = palette
     this.tabList = '<li id=\'tab-user\' class=\'pull-right\'><a href=\'#tab-content-user\' data-toggle=\'pill\'><i class=\'emjdx-user\'></a></li>'
     this.tabContent = $('<div class="tab-pane" id="tab-content-user"><input type="text" class="form-control" id="palette-emoji-username-input" placeholder="Username"><input type="password" class="form-control mt-m" id="palette-emoji-password-input" placeholder="Password"></div>')
+    this.userTabContent = $('<div class="tab-content mt-m" id="user-tab-content"></div>')
 
     this.historyTab = new HistoryTab(this)
     this.favoriteTab = new FavoriteTab(this)
@@ -33,26 +34,20 @@ export default class UserTab {
     return this
   }
 
-  checkInput() {
+  async checkInput() {
     $('#login-error').remove()
 
     const username = $('#palette-emoji-username-input').val()
     const password = $('#palette-emoji-password-input').val()
     if (username.length && password.length) {
-      return this.login(username, password, 'plain')
+      await this.login({ authtype: 'plain', username, password })
     }
   }
 
-  async login(username, password, type) {
-    let authInfo
-    if (type === 'plain') {
-      authInfo = await this.palette.EC.User.plainAuth(username, password)
-    } else {
-      authInfo = await this.palette.EC.User.tokenAuth(username, password)
-    }
-
+  async login(options) {
+    const authInfo = await this.palette.EC.User.login(options)
     if (authInfo.status !== 'verified') {
-      this.showError(authInfo)
+      this.showError()
       return
     }
 
@@ -101,14 +96,12 @@ export default class UserTab {
       $('#user-tab-list').remove()
       $('#user-tab-content').children().removeClass('active')
       $('#user-tab-content').remove()
-      this.showLoginForm()
       this.palette.toggleSorting()
+      this.showLoginForm()
     })
     usertabList.append(logoutButton)
-
-    this.userTabContent = $('<div class="tab-content mt-m" id="user-tab-content"></div>')
-
     this.tabContent.append(usertabList)
+
     this.tabContent.append(this.userTabContent)
   }
 
