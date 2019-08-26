@@ -14,7 +14,7 @@ module.exports = function(config) {
     client: {
       jasmine: {
         random: false,
-        timeoutInterval: 10000
+        timeoutInterval: 20000
       }
     },
 
@@ -33,9 +33,10 @@ module.exports = function(config) {
 	    'docs/img/logo.png',
 	    'docs/css/document.min.css',
 	    'docs/css/emojidex.min.css',
-	    'spec/emojidex-autocomplete.js',
+	    // 'spec/emojidex-autocomplete.js',
 	    // 'spec/palette/*.js',
-	    'spec/emojidex-replace.js'
+      'spec/palette/user-*.js'
+	    // 'spec/emojidex-replace.js'
     ],
 
 

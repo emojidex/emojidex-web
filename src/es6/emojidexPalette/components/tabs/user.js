@@ -11,8 +11,8 @@ export default class UserTab {
     this.tabContent = $('<div class="tab-pane" id="tab-content-user"><input type="text" class="form-control" id="palette-emoji-username-input" placeholder="Username"><input type="password" class="form-control mt-m" id="palette-emoji-password-input" placeholder="Password"></div>')
     this.userTabContent = $('<div class="tab-content mt-m" id="user-tab-content"></div>')
 
-    this.historyTab = new HistoryTab(this)
     this.favoriteTab = new FavoriteTab(this)
+    this.historyTab = new HistoryTab(this)
     this.followingTab = new FollowingTab(this)
     this.followersTab = new FollowersTab(this)
     this.setTabContent()
@@ -53,8 +53,10 @@ export default class UserTab {
 
     this.hideLoginForm()
     this.setUserTab()
-    await Promise.all([this.setHistoryTab(), this.setFavoriteTab(), this.setFollowingTab(), this.setFollowersTab()])
-
+    await this.setFavoriteTab()
+    await this.setHistoryTab()
+    await this.setFollowingTab()
+    await this.setFollowersTab()
     this.palette.toggleSorting()
   }
 
@@ -94,8 +96,7 @@ export default class UserTab {
     logoutButton.click(async () => {
       await this.palette.EC.User.logout()
       $('#user-tab-list').remove()
-      $('#user-tab-content').children().removeClass('active')
-      $('#user-tab-content').remove()
+      this.userTabContent.empty()
       this.palette.toggleSorting()
       this.showLoginForm()
     })
@@ -105,13 +106,13 @@ export default class UserTab {
     this.tabContent.append(this.userTabContent)
   }
 
-  async setHistoryTab() {
-    const content = await this.historyTab.createTabContent()
+  async setFavoriteTab() {
+    const content = await this.favoriteTab.createTabContent()
     this.userTabContent.append(content)
   }
 
-  async setFavoriteTab() {
-    const content = await this.favoriteTab.createTabContent()
+  async setHistoryTab() {
+    const content = await this.historyTab.createTabContent()
     this.userTabContent.append(content)
   }
 

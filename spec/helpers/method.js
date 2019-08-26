@@ -131,7 +131,7 @@ async function tryLoginUser(user, password, success = true) {
     trigger: () => {
       $('#palette-emoji-login-submit').click()
     },
-    regex: success ? /favorite-emoji-list/ : null
+    regex: success ? /user-emoji-list/ : null
   })
 }
 

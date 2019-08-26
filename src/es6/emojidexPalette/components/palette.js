@@ -77,17 +77,18 @@ export default class Palette {
     const tabList = $('<ul class="nav nav-pills"></ul>')
     const tabContent = $('<div class="tab-content"></div>')
 
-    const categories = await this.EC.Categories.sync()
-    this.tabs.push(new IndexTab(this))
-    for (let i = 0; i < categories.length; i++) {
-      const category = categories[i]
-      this.tabs.push(new CategoryTab(this, category, tabList[0].children.length))
-    }
+    // TODO: おそらく処理の順番の関係で動作が不安定になっているのだけれども、今はユーザータブを修正しているところなので後で直す
+    // this.tabs.push(new IndexTab(this))
+    // const categories = await this.EC.Categories.sync()
+    // for (let i = 0; i < categories.length; i++) {
+    //   const category = categories[i]
+    //   this.tabs.push(new CategoryTab(this, category, tabList[0].children.length))
+    // }
 
     const userTab = await new UserTab(this)
     this.tabs.push(userTab)
-    this.tabs.push(new SearchTab(this))
-    this.tabs.push(new CustomizationTab(this))
+    // this.tabs.push(new SearchTab(this))
+    // this.tabs.push(new CustomizationTab(this))
 
     for (let j = 0; j < this.tabs.length; j++) {
       const tab = this.tabs[j]
