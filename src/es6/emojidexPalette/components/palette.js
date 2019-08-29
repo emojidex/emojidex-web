@@ -1,11 +1,11 @@
 import Clipboard from 'clipboard'
 import EmojidexClient from 'emojidex-client/src/es6/client.js'
 
-import CategoryTab from './tabs/category'
-import IndexTab from './tabs/index'
-import SearchTab from './tabs/search'
+// import CategoryTab from './tabs/category'
+// import IndexTab from './tabs/index'
+// import SearchTab from './tabs/search'
 import UserTab from './tabs/user'
-import CustomizationTab from './tabs/customization'
+// import CustomizationTab from './tabs/customization'
 
 /* eslint-disable no-undef */
 export default class Palette {

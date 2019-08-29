@@ -143,6 +143,7 @@ async function logout() {
     properties: 'display',
     regex: /block/
   })
+  await specTimer(3000)
 }
 
 async function beforePalette() {
