@@ -133,7 +133,7 @@ gulp.task('jasmine', () => {
     'docs/css/emojidex.min.css',
     // 'spec/emojidex-autocomplete.js',
     // 'spec/palette/*.js',
-    'spec/palette/user-*.js'
+    'spec/palette/customization.js'
     // 'spec/emojidex-replace.js'
   ]
   return gulp.src(testFiles)

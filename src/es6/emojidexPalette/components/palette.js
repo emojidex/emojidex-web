@@ -5,7 +5,7 @@ import EmojidexClient from 'emojidex-client/src/es6/client.js'
 // import IndexTab from './tabs/index'
 // import SearchTab from './tabs/search'
 import UserTab from './tabs/user'
-// import CustomizationTab from './tabs/customization'
+import CustomizationTab from './tabs/customization'
 
 /* eslint-disable no-undef */
 export default class Palette {
@@ -88,7 +88,7 @@ export default class Palette {
     const userTab = await new UserTab(this)
     this.tabs.push(userTab)
     // this.tabs.push(new SearchTab(this))
-    // this.tabs.push(new CustomizationTab(this))
+    this.tabs.push(new CustomizationTab(this))
 
     for (let j = 0; j < this.tabs.length; j++) {
       const tab = this.tabs[j]
