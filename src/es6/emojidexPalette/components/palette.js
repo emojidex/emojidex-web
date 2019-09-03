@@ -1,11 +1,11 @@
 import Clipboard from 'clipboard'
 import EmojidexClient from 'emojidex-client/src/es6/client.js'
 
-import CategoryTab from './tabs/category'
-import IndexTab from './tabs/index'
-import SearchTab from './tabs/search'
+// import CategoryTab from './tabs/category'
+// import IndexTab from './tabs/index'
+// import SearchTab from './tabs/search'
 import UserTab from './tabs/user'
-import CustomizationTab from './tabs/customization'
+// import CustomizationTab from './tabs/customization'
 
 /* eslint-disable no-undef */
 export default class Palette {
@@ -13,28 +13,27 @@ export default class Palette {
     this.plugin = plugin
     this.activeInputArea = null
     this.tabs = []
-    this.EC = new EmojidexClient({
-      limit: this.plugin.options.paletteEmojisLimit,
-      onReady: () => {
-        // start main --------
-        $('input, textarea, [contenteditable="true"]').on('focus keyup mouseup', e => {
-          this.activeInputArea = $(e.currentTarget)
-          return this.activeInputArea
-        })
+    return this.init()
+  }
 
-        this.createDialog()
-        this.setPalette(this.plugin.element)
-        if ($(this.plugin.element).attr('type') === 'text' || $(this.plugin.element).prop('tagName') === 'TEXTAREA') {
-          this.addButton(this.plugin.element)
-        } else {
-          this.addPaletteToElement(this.plugin.element)
-        }
+  async init() {
+    this.EC = await new EmojidexClient({ limit: this.plugin.options.paletteEmojisLimit })
 
-        if (typeof this.plugin.options.onComplete === 'function') {
-          this.plugin.options.onComplete()
-        }
-      }
+    // start main --------
+    $('input, textarea, [contenteditable="true"]').on('focus keyup mouseup', e => {
+      this.activeInputArea = $(e.currentTarget)
     })
+
+    this.createDialog()
+    await this.setPalette()
+
+    if ($(this.plugin.element).attr('type') === 'text' || $(this.plugin.element).prop('tagName') === 'TEXTAREA') {
+      this.addButton(this.plugin.element)
+    } else {
+      this.addPaletteToElement(this.plugin.element)
+    }
+
+    return this
   }
 
   createDialog() {
@@ -43,7 +42,7 @@ export default class Palette {
     }
 
     this.dialog = $('<div id="emojidex-dialog-content"></div>')
-    return this.dialog.dialog({
+    this.dialog.dialog({
       classes: {
         'ui-dialog': 'emojidex-ui-dialog'
       },
@@ -59,18 +58,18 @@ export default class Palette {
 
         $('.ui-dialog-titlebar').append(closeButton)
         $('.ui-dialog-title').html('<a target="_blank" href="https://www.emojidex.com"><img src="https://cdn.emojidex.com/logo-hdpi.png" alt="emojidex" /></a>')
-        return $('.emojidex-ui-dialog').wrap('<span id="emojidex-emoji-palette"></span>')
+        $('.emojidex-ui-dialog').wrap('<span id="emojidex-emoji-palette"></span>')
       },
 
       open() {
         $('.emojidex-ui-dialog').css('min-height', 455) // height style is ignored, set here.
         $('.ui-dialog :button').blur()
-        return $('.nav.nav-pills a').blur()
+        $('.nav.nav-pills a').blur()
       }
     })
   }
 
-  setPalette() {
+  async setPalette() {
     if ($('#emoji-palette').length !== 0) {
       return
     }
@@ -78,37 +77,42 @@ export default class Palette {
     const tabList = $('<ul class="nav nav-pills"></ul>')
     const tabContent = $('<div class="tab-content"></div>')
 
-    return this.EC.Categories.sync(categories => {
-      this.tabs.push(new IndexTab(this))
-      for (let i = 0; i < categories.length; i++) {
-        const category = categories[i]
-        this.tabs.push(new CategoryTab(this, category, tabList[0].children.length))
-      }
+    // TODO: おそらく処理の順番の関係で動作が不安定になっているのだけれども、今はユーザータブを修正しているところなので後で直す
+    // this.tabs.push(new IndexTab(this))
+    // const categories = await this.EC.Categories.sync()
+    // for (let i = 0; i < categories.length; i++) {
+    //   const category = categories[i]
+    //   this.tabs.push(new CategoryTab(this, category, tabList[0].children.length))
+    // }
 
-      this.tabs.push(new UserTab(this))
-      this.tabs.push(new SearchTab(this))
-      this.tabs.push(new CustomizationTab(this))
+    const userTab = await new UserTab(this)
+    this.tabs.push(userTab)
+    // this.tabs.push(new SearchTab(this))
+    // this.tabs.push(new CustomizationTab(this))
 
-      for (let j = 0; j < this.tabs.length; j++) {
-        const tab = this.tabs[j]
-        tabList.append(tab.tabList)
-        tabContent.append(tab.tabContent)
-      }
+    for (let j = 0; j < this.tabs.length; j++) {
+      const tab = this.tabs[j]
+      tabList.append(tab.tabList)
+      tabContent.append(tab.tabContent)
+    }
 
-      this.emojiPalette = $('<div id="emoji-palette" class="emoji-palette"></div>')
-      this.emojiPalette.append(tabList.add(tabContent))
-      this.emojiPalette.find('ul').after('<hr>')
+    this.emojiPalette = $('<div id="emoji-palette" class="emoji-palette"></div>')
+    this.emojiPalette.append(tabList.add(tabContent))
+    this.emojiPalette.find('ul').after('<hr>')
 
-      return this.dialog.append(this.emojiPalette)
-    })
+    this.dialog.append(this.emojiPalette)
+
+    const authInfo = await this.EC.Data.authInfo()
+    if (authInfo && authInfo.token) {
+      await userTab.login({ authtype: 'session' })
+    }
   }
 
   setEmojiList(kind, emojiList) {
     const emojiDivs = $(`<div class='${kind}-emoji-list clearfix'></div>`)
     for (let i = 0; i < emojiList.length; i++) {
       const emoji = emojiList[i]
-      const emojiButton = $('<button>',
-        { class: 'emoji-btn btn btn-default pull-left' })
+      const emojiButton = $('<button>', { class: 'emoji-btn btn btn-default pull-left' })
       emojiButton.prop('emoji_data', emoji)
 
       const emojiButtonImage = $('<img>', {
@@ -121,7 +125,7 @@ export default class Palette {
       let clickFunc
       if (typeof this.plugin.options.onEmojiButtonClicked === 'function') {
         clickFunc = () => {
-          return this.plugin.options.onEmojiButtonClicked(
+          this.plugin.options.onEmojiButtonClicked(
             {
               imageTag: emojiButtonImage.attr('class', 'emojidex-emoji').prop('outerHTML'),
               emojiCode: `:${emoji.code}:`
@@ -130,7 +134,7 @@ export default class Palette {
         }
       } else {
         clickFunc = e => {
-          return this.insertEmojiAtCaret($(e.currentTarget).prop('emoji_data'))
+          this.insertEmojiAtCaret($(e.currentTarget).prop('emoji_data'))
         }
       }
 
@@ -156,7 +160,7 @@ export default class Palette {
       this.clipboard.destroy()
     }
 
-    if (this.EC.User.authInfo.token !== null) {
+    if (this.EC.User.authInfo.token) {
       this.EC.User.History.set(emoji.code.replace(/\s/g, '_'))
     }
 
@@ -181,7 +185,8 @@ export default class Palette {
       selection.removeAllRanges()
       selection.addRange(range)
 
-      return elem.change()
+      elem.change()
+      return
     }
 
     const pos = elem.caret('pos')
@@ -190,7 +195,7 @@ export default class Palette {
     const stopTxt = txt.substring(pos, txt.length)
     elem.val(startTxt + code + stopTxt)
     elem.focus()
-    return elem.caret('pos', pos + code.length)
+    elem.caret('pos', pos + code.length)
   }
 
   getPagination(kind, prevFunc, nextFunc, curPage, maxPage) {
@@ -199,28 +204,29 @@ export default class Palette {
     pagination.find('.pagination')
       .append($(`<li class="palette-pager${(curPage > 1) ? '' : ' disabled'}"><span>&laquo;</span></li>`).click(() => {
         if (curPage > 1) {
-          return prevFunc()
+          prevFunc()
         }
       }))
     pagination.find('.pagination').append($(`<li class='palette-num disabled'><span>${curPage} / ${maxPage}</span></li>`))
     pagination.find('.pagination')
       .append($(`<li class="palette-pager${(curPage < maxPage) ? ' ' : ' disabled'}"><span>&raquo;</span></li>`).click(() => {
         if (curPage < maxPage) {
-          return nextFunc()
+          nextFunc()
         }
       }))
 
     return pagination
   }
 
+  // TODO: resultを何に使っているのか、indexesを修正後に確認する
   toggleSorting() {
-    if (this.EC.User.authInfo.premium || this.EC.User.authInfo.pro) {
+    if (this.EC.User.isSubscriber()) {
       const result = []
       const iterable = this.getInitializedTabs()
       for (let i = 0; i < iterable.length; i++) {
         const tab = iterable[i]
         let item
-        if (!tab.tabContent.find('#sort-selector').length) {
+        if (!tab.tabContent.find('.sort-selector').length) {
           item = tab.tabContent.find('ul.pagination').after(this.getSorting(tab))
         }
 
@@ -233,6 +239,7 @@ export default class Palette {
     return this.getInitializedTabs().map(tab => this.removeSorting(tab))
   }
 
+  // TODO: initializedのみにする必要ある？
   getInitializedTabs() {
     const initializedTabs = []
     for (let i = 0; i < this.tabs.length; i++) {
@@ -246,29 +253,29 @@ export default class Palette {
   }
 
   getSorting(targetTab) {
-    if (!this.EC.User.authInfo.premium && !this.EC.User.authInfo.pro) {
+    if (!this.EC.User.isSubscriber()) {
       return ''
     }
 
-    const sortSelector = $('<select id="sort-selector" class="form-control pull-right"></select>')
+    const sortSelector = $('<select class="sort-selector form-control pull-right"></select>')
     sortSelector.append($('<option value="score">Score</option>'))
     sortSelector.append($('<option value="newest">Newest</option>'))
     sortSelector.append($('<option value="liked">Most Liked</option>'))
     sortSelector.val(targetTab.sortType)
     sortSelector.change(() => {
       targetTab.sortType = sortSelector.val()
-      return targetTab.resetTabContent()
+      targetTab.resetTabContent()
     })
     return sortSelector
   }
 
   removeSorting(targetTab) {
-    targetTab.tabContent.find('#sort-selector').remove()
-    return targetTab.resetTabContent()
+    targetTab.tabContent.find('.sort-selector').remove()
+    targetTab.resetTabContent()
   }
 
   openDialog() {
-    return $('#emojidex-dialog-content').dialog('open')
+    $('#emojidex-dialog-content').dialog('open')
   }
 
   addButton(element) {
@@ -290,13 +297,11 @@ export default class Palette {
     $(element).focus(reposition)
     reposition()
 
-    return $(element).after(paletteButton)
+    $(element).after(paletteButton)
   }
 
   addPaletteToElement(element) {
-    return $(element).click(() => {
-      this.openDialog()
-    })
+    $(element).click(() => this.openDialog())
   }
 
   capitalize(text) {

@@ -1,54 +1,73 @@
 /* eslint-disable no-undef */
 describe('emojidexPalette:User:Followers', () => {
-  beforeAll(done => {
-    beforePalette(done)
+  beforeAll(async done => {
+    await beforePalette()
+    done()
   })
 
-  afterAll(done => {
-    afterPalette(done)
+  afterAll(async done => {
+    await afterPalette()
+    done()
   })
+
+  if (hasUserAccount()) {
+    describe('general user [Requires a user info]', () => {
+      it('cannot show followers tab', async done => {
+        await showPalette()
+        await tryLoginUser(userInfo.auth_user, userInfo.password)
+        expect($('#tab-user-followers').length).toBe(0)
+        done()
+      })
+    })
+  }
 
   if (hasPremiumAccount()) {
-    it('show followers tab [Requires a premium user account and followers user]', done => {
-      showPalette().then(() => {
-        return watchDOM('#emoji-palette', {trigger: () => {
-            tryLoginUser(premiumUserInfo.auth_user, premiumUserInfo.password)
-          }, regex: /favorite-emoji-list/
+    describe('premium user [Requires a premium user info and followers user]', () => {
+      it('show followers tab', async done => {
+        await logout()
+        await tryLoginUser(premiumUserInfo.auth_user, premiumUserInfo.password)
+        await watchDOM('#follow-followers', {
+          trigger: () => {
+            $('#tab-user-followers a').click()
+          },
+          regex: /btn btn-default/
         })
-      }).then(() => {
-        return watchDOM('#follow-followers', {trigger: () => {
-          $('#tab-user-followers a').click()
-        }, regex: /btn btn-default/})
-      }).then(() => {
         expect($('#follow-followers .users .btn').length).toBeTruthy()
         done()
       })
-    })
 
-    it('show followers user info [Requires a premium user account and followers user]', done => {
-      watchDOM('#follow-followers .user-info', {regex: /emoji-btn btn btn-default/}).then((data) => {
+      it('show followers user info', async done => {
+        await watchDOM('#follow-followers .user-info', {
+          trigger: () => {
+            $($('#follow-followers .users .btn')[0]).click()
+          },
+          regex: /emoji-btn btn btn-default/
+        })
         expect($('#follow-followers .user-info.on .emoji-btn').length).toBeTruthy()
         done()
       })
-      $($('#follow-followers .users .btn')[0]).click()
-    })
 
-    it('show followers user emoji next [Requires premium a user account and followers user]', done => {
-      const selectorCurrentUserInfo = '#follow-followers .user-info.on'
-      watchDOM(selectorCurrentUserInfo).then(() => {
+      it('show followers user emoji next', async done => {
+        const selectorCurrentUserInfo = '#follow-followers .user-info.on'
+        await watchDOM(selectorCurrentUserInfo, {
+          trigger: () => {
+            $($(`${selectorCurrentUserInfo} .palette-pager`)[1]).click()
+          }
+        })
         expect($(`${selectorCurrentUserInfo} .palette-num span`).text().charAt(0)).toBe('2')
         done()
       })
-      $($(`${selectorCurrentUserInfo} .palette-pager`)[1]).click()
-    })
 
-    it('show followers user emoji previous [Requires a premium user account and followers user]', done => {
-      const selectorCurrentUserInfo = '#follow-followers .user-info.on'
-      watchDOM(selectorCurrentUserInfo).then(() => {
+      it('show followers user emoji previous', async done => {
+        const selectorCurrentUserInfo = '#follow-followers .user-info.on'
+        await watchDOM(selectorCurrentUserInfo, {
+          trigger: () => {
+            $($(`${selectorCurrentUserInfo} .palette-pager`)[0]).click()
+          }
+        })
         expect($(`${selectorCurrentUserInfo} .palette-num span`).text().charAt(0)).toBe('1')
         done()
       })
-      $($(`${selectorCurrentUserInfo} .palette-pager`)[0]).click()
     })
   }
 })

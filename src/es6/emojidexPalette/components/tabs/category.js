@@ -9,6 +9,7 @@ export default class CategoryTab {
     this.tabList = $(`<li id='tab-${category.code}' data-code='${category.code}'><a href='#tab-content-${category.code}' data-toggle='pill'><i class='emjdx-${category.code}'></a></li>`) // eslint-disable-line no-undef
     this.tabContent = $(`<div class='tab-pane' id='tab-content-${category.code}'></div>`) // eslint-disable-line no-undef
 
+    // TODO: CategoryTabの数だけcategories.syncが行われるので何とかしたい
     new EmojidexClientCategories(palette.EC).then(ECC => {
       this.ECC = ECC
       this.tabList.click(e => {

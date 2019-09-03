@@ -1,4 +1,6 @@
 /* eslint-disable no-undef */
+import UserEmojiTab from './emoji'
+
 export default class FollowersTab {
   constructor(userTab) {
     this.EC = userTab.palette.EC
@@ -14,16 +16,15 @@ export default class FollowersTab {
     `)
   }
 
-  init() {
+  async init() {
     $(this.selectorUsers).children().remove()
     $(`${this.selectorTabPane} > .user-info`).remove()
 
-    this.EC.User.Follow.getFollowers(followers => {
-      for (const userName of followers) {
-        this.setUserButton(userName)
-        this.setUserInfo(userName)
-      }
-    })
+    const followers = await this.EC.User.Follow.getFollowers()
+    for (const userName of followers) {
+      this.setUserButton(userName)
+      this.setUserInfo(userName)
+    }
   }
 
   setUserButton(userName) {
@@ -54,38 +55,9 @@ export default class FollowersTab {
     this.setUserEmojisInfo(userInfo)
   }
 
-  setUserEmojisInfo(userInfo, option = {}) {
-    const userName = userInfo.attr('id')
-    return this.EC.Indexes.user(userName, undefined, option).then(response => {
-      userInfo.data(response.meta)
-      userInfo.data({ userName, maxPage: Math.ceil(response.meta.total_count / this.EC.limit ? response.meta.total_count / this.EC.limit : 1) })
-
-      userInfo.find('.user-emoji-list').children().remove()
-      userInfo.find('.followers-pagination').remove()
-
-      userInfo.find('.user-emoji-list').append(this.palette.setEmojiList('followers', response.emoji))
-      this.setPagination(userInfo)
-    })
-  }
-
-  setPagination(userInfo) {
-    const meta = userInfo.data()
-
-    const prevFunc = () => {
-      const option = { page: meta.page - 1 }
-      if (option.page > 0) {
-        this.setUserEmojisInfo(userInfo, option)
-      }
-    }
-
-    const nextFunc = () => {
-      const option = { page: meta.page + 1 }
-      if (option.page <= meta.maxPage) {
-        this.setUserEmojisInfo(userInfo, option)
-      }
-    }
-
-    userInfo.append(this.palette.getPagination('followers', prevFunc, nextFunc, meta.page, meta.maxPage))
+  setUserEmojisInfo(userInfo) {
+    const userEmojiTab = new UserEmojiTab(this, userInfo, userInfo.attr('id'))
+    userEmojiTab.init()
   }
 }
 /* eslint-enable no-undef */

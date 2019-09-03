@@ -5,10 +5,9 @@ export default class FavoriteTab {
     this.tabPane = $('<div class=\'tab-pane active\' id=\'tab-content-user-favorite\'></div>') // eslint-disable-line no-undef
   }
 
-  createTabContent() {
-    return this.EC.User.Favorites.get().then(response => {
-      return this.setFavoriteEmoji(response)
-    })
+  async createTabContent() {
+    const response = await this.EC.User.Favorites.get()
+    return this.setFavoriteEmoji(response)
   }
 
   setFavoriteEmoji(favorites) {
@@ -21,17 +20,19 @@ export default class FavoriteTab {
     const { meta } = this.EC.User.Favorites
     const curPage = meta.total_count === 0 ? 0 : meta.page
     let maxPage = curPage === 0 ? 0 : Math.ceil(meta.total_count / this.EC.limit)
-    if (!this.EC.User.authInfo.premium && !this.EC.User.authInfo.pro) {
+    if (!this.EC.User.isSubscriber() && maxPage > 1) {
       maxPage = 1
     }
 
-    const callback = response => {
-      this.tabPane.children().remove()
-      this.tabPane.append(this.setFavoriteEmoji(response))
+    const prevFunc = async () => {
+      const response = await this.EC.User.Favorites.prev()
+      this.setFavoriteEmoji(response)
     }
 
-    const prevFunc = () => this.EC.User.Favorites.prev(callback)
-    const nextFunc = () => this.EC.User.Favorites.next(callback)
+    const nextFunc = async () => {
+      const response = await this.EC.User.Favorites.next()
+      this.setFavoriteEmoji(response)
+    }
 
     return this.tabPane.append(this.palette.getPagination('favorite', prevFunc, nextFunc, curPage, maxPage))
   }
