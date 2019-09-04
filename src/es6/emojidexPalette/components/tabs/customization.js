@@ -29,13 +29,9 @@ export default class CustomizationTab {
     })
     this.tabContent.append(emojiList)
 
-    const { meta } = this.palette.EC.Customizations
-    if (meta.total_count === 0) {
-      return
-    }
+    const curPage = this.palette.EC.Customizations.meta.total_count === 0 ? 0 : this.palette.EC.Customizations.curPage
+    const maxPage = curPage === 0 ? 0 : this.palette.EC.Customizations.maxPage
 
-    const curPage = meta.total_count === 0 ? 0 : meta.page
-    const maxPage = curPage === 0 ? 0 : Math.ceil(meta.total_count / this.palette.EC.limit)
     const prevFunc = async () => {
       const response = await this.palette.EC.Customizations.prev()
       this.createSelectBaseEmojiPage(response)

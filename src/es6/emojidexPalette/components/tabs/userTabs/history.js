@@ -17,9 +17,8 @@ export default class HistoryTab {
   }
 
   createPagination() {
-    const { meta } = this.EC.User.History
-    const curPage = meta.total_count === 0 ? 0 : meta.page
-    let maxPage = curPage === 0 ? 0 : Math.ceil(meta.total_count / this.EC.limit)
+    const curPage = this.EC.User.History.meta.total_count === 0 ? 0 : this.EC.User.History.curPage
+    let maxPage = curPage === 0 ? 0 : this.EC.User.History.maxPage
     if (!this.EC.User.isSubscriber() && maxPage > 1) {
       maxPage = 1
     }
