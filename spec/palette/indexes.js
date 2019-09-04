@@ -9,7 +9,7 @@ describe('emojidexPalette:Indexes', () => {
     await afterPalette()
     done()
   })
-  
+
   it('index tab', async done => {
     await showPalette()
     expect($('#tab-content-index').find('img').length).toBeTruthy()
