@@ -5,15 +5,15 @@ export default class CustomizationTab {
     this.initialized = false
     this.tabList = $('<li id="tab-customization" class="pull-right"><a href="#tab-content-customization" data-toggle="pill"><i class="emjdx-customization"></a></li>')
     this.tabContent = $('<div class="tab-pane" id="tab-content-customization"><div class="emojidex-category-name emjdx-customization">Customization</div></div>')
-    this.getBaseEmoji()
+    this.createCustomizationTab()
   }
 
-  async getBaseEmoji() {
+  async createCustomizationTab() {
     const response = await this.palette.EC.Customizations.get()
-    this.createCustomizationPage(response)
+    this.createSelectBaseEmojiPage(response)
   }
 
-  createCustomizationPage(response) {
+  createSelectBaseEmojiPage(response) {
     $('.customization-emoji-list').remove()
     $('.customization-pagination').remove()
     const emojiList = $('<div class="customization-emoji-list clearfix"></div>')
@@ -38,12 +38,12 @@ export default class CustomizationTab {
     const maxPage = curPage === 0 ? 0 : Math.ceil(meta.total_count / this.palette.EC.limit)
     const prevFunc = async () => {
       const response = await this.palette.EC.Customizations.prev()
-      this.createCustomizationPage(response)
+      this.createSelectBaseEmojiPage(response)
     }
 
     const nextFunc = async () => {
       const response = await this.palette.EC.Customizations.next()
-      this.createCustomizationPage(response)
+      this.createSelectBaseEmojiPage(response)
     }
 
     const pagination = this.palette.getPagination('customization', prevFunc, nextFunc, curPage, maxPage)

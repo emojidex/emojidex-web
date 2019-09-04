@@ -35,7 +35,8 @@ module.exports = function(config) {
 	    'docs/css/emojidex.min.css',
 	    // 'spec/emojidex-autocomplete.js',
 	    // 'spec/palette/*.js',
-      'spec/palette/user-*.js'
+      'spec/palette/customization.js',
+      'spec/palette/search.js'
 	    // 'spec/emojidex-replace.js'
     ],
 
