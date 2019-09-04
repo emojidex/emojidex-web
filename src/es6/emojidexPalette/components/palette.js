@@ -2,7 +2,7 @@ import Clipboard from 'clipboard'
 import EmojidexClient from 'emojidex-client/src/es6/client.js'
 
 // import CategoryTab from './tabs/category'
-// import IndexTab from './tabs/index'
+import IndexTab from './tabs/index'
 import SearchTab from './tabs/search'
 import UserTab from './tabs/user'
 import CustomizationTab from './tabs/customization'
@@ -78,7 +78,7 @@ export default class Palette {
     const tabContent = $('<div class="tab-content"></div>')
 
     // TODO: おそらく処理の順番の関係で動作が不安定になっているのだけれども、今はユーザータブを修正しているところなので後で直す
-    // this.tabs.push(new IndexTab(this))
+    this.tabs.push(new IndexTab(this))
     // const categories = await this.EC.Categories.sync()
     // for (let i = 0; i < categories.length; i++) {
     //   const category = categories[i]
