@@ -119,6 +119,7 @@ gulp.task('md2html', () => {
 
 gulp.task('jasmine', () => {
   const testFiles = [
+    'node_modules/clipboard/dist/clipboard.js',
     'node_modules/cross-storage/dist/client.js',
     'node_modules/jquery/dist/jquery.js',
     'node_modules/jasmine-jquery/lib/jasmine-jquery.js',
@@ -131,10 +132,9 @@ gulp.task('jasmine', () => {
     'docs/img/logo.png',
     'docs/css/document.min.css',
     'docs/css/emojidex.min.css',
-    // 'spec/emojidex-autocomplete.js',
-    // 'spec/palette/*.js',
-    'spec/palette/category.js'
-    // 'spec/emojidex-replace.js'
+    'spec/emojidex-autocomplete.js',
+    'spec/palette/*.js',
+    'spec/emojidex-replace.js'
   ]
   return gulp.src(testFiles)
     .pipe(watch(testFiles))

@@ -21,6 +21,7 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+      'node_modules/clipboard/dist/clipboard.js',
 			'node_modules/cross-storage/dist/client.js',
 	    'node_modules/jquery/dist/jquery.js',
 	    'node_modules/jasmine-jquery/lib/jasmine-jquery.js',
@@ -33,10 +34,9 @@ module.exports = function(config) {
 	    'docs/img/logo.png',
 	    'docs/css/document.min.css',
 	    'docs/css/emojidex.min.css',
-	    // 'spec/emojidex-autocomplete.js',
-	    // 'spec/palette/*.js',
-      'spec/palette/category.js'
-	    // 'spec/emojidex-replace.js'
+	    'spec/emojidex-autocomplete.js',
+	    'spec/palette/*.js',
+	    'spec/emojidex-replace.js'
     ],
 
 
