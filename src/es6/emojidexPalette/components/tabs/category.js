@@ -1,58 +1,52 @@
-import EmojidexClientCategories from 'emojidex-client/src/es6/components/categories'
-
 export default class CategoryTab {
   constructor(palette, category) {
     this.palette = palette
     this.initialized = false
     this.sortType = 'score'
-    this.categoryName = category.code
+    this.category = category
     this.tabList = $(`<li id='tab-${category.code}' data-code='${category.code}'><a href='#tab-content-${category.code}' data-toggle='pill'><i class='emjdx-${category.code}'></a></li>`) // eslint-disable-line no-undef
     this.tabContent = $(`<div class='tab-pane' id='tab-content-${category.code}'></div>`) // eslint-disable-line no-undef
-
-    // TODO: CategoryTabの数だけcategories.syncが行われるので何とかしたい
-    new EmojidexClientCategories(palette.EC).then(ECC => {
-      this.ECC = ECC
-      this.tabList.click(e => {
-        return this.setCategory($(e.currentTarget).data('code')) // eslint-disable-line no-undef
-      })
+    this.tabList.click(() => {
+      this.setCategory()
     })
   }
 
-  setCategory(categoryName) {
+  setCategory() {
     if (!this.initialized) {
-      return this.setCategoryTabContent(categoryName)
+      this.initialized = true
+      this.setCategoryTabContent()
     }
   }
 
-  setCategoryTabContent(categoryName) {
-    this.initialized = true
-    this.categoryName = categoryName
-    return this.ECC.getEmoji(
-      categoryName,
-      resultEmoji => {
-        this.tabContent.children().remove()
+  async setCategoryTabContent() {
+    const response = await this.palette.EC.Categories.getEmoji(this.category.code, { sort: this.sortType })
+    this.createCategoryPage(response)
+  }
 
-        const capitalizedCategory = this.palette.capitalize(this.categoryName)
-        this.tabContent.append(`<div class="emojidex-category-name emjdx-${this.categoryName}">${capitalizedCategory}</div>`)
-        this.tabContent.append(this.palette.setEmojiList('category', resultEmoji))
+  createCategoryPage(response) {
+    this.tabContent.children().remove()
+    this.tabContent.append(`<div class="emojidex-category-name emjdx-${this.category.code}">${this.category.name}</div>`)
+    this.tabContent.append(this.palette.setEmojiList('category', response))
 
-        const curPage = this.ECC.meta.total_count === 0 ? 0 : this.ECC.curPage
-        let maxPage = Math.floor(this.ECC.meta.total_count / this.palette.EC.options.limit)
-        if (this.ECC.meta.total_count % this.palette.EC.options.limit > 0) {
-          maxPage++
-        }
+    const curPage = this.palette.EC.Categories.meta.total_count === 0 ? 0 : this.palette.EC.Categories.curPage
+    const maxPage = curPage === 0 ? 0 : this.palette.EC.Categories.maxPage
 
-        const prevFunc = () => this.ECC.prev()
-        const nextFunc = () => this.ECC.next()
-        const pagination = this.palette.getPagination('category', prevFunc, nextFunc, curPage, maxPage)
-        pagination.append(this.palette.getSorting(this))
-        return this.tabContent.append(pagination)
-      },
-      { sort: this.sortType }
-    )
+    const prevFunc = async () => {
+      const response = await this.palette.EC.Categories.getEmoji(this.category.code, { page: curPage - 1, sort: this.sortType })
+      this.createCategoryPage(response)
+    }
+
+    const nextFunc = async () => {
+      const response = await this.palette.EC.Categories.getEmoji(this.category.code, { page: curPage + 1, sort: this.sortType })
+      this.createCategoryPage(response)
+    }
+
+    const pagination = this.palette.getPagination('category', prevFunc, nextFunc, curPage, maxPage)
+    pagination.append(this.palette.getSorting(this))
+    this.tabContent.append(pagination)
   }
 
   resetTabContent() {
-    return this.setCategoryTabContent(this.categoryName)
+    this.setCategoryTabContent()
   }
 }

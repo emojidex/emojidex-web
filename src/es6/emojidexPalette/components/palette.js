@@ -1,7 +1,7 @@
 import Clipboard from 'clipboard'
 import EmojidexClient from 'emojidex-client/src/es6/client.js'
 
-// import CategoryTab from './tabs/category'
+import CategoryTab from './tabs/category'
 import IndexTab from './tabs/index'
 import SearchTab from './tabs/search'
 import UserTab from './tabs/user'
@@ -77,21 +77,18 @@ export default class Palette {
     const tabList = $('<ul class="nav nav-pills"></ul>')
     const tabContent = $('<div class="tab-content"></div>')
 
-    // TODO: おそらく処理の順番の関係で動作が不安定になっているのだけれども、今はユーザータブを修正しているところなので後で直す
     this.tabs.push(new IndexTab(this))
-    // const categories = await this.EC.Categories.sync()
-    // for (let i = 0; i < categories.length; i++) {
-    //   const category = categories[i]
-    //   this.tabs.push(new CategoryTab(this, category, tabList[0].children.length))
-    // }
+    const categories = await this.EC.Categories.sync()
+    const categoryTabs = await Promise.all(categories.map(category => new CategoryTab(this, category)))
+    this.tabs = this.tabs.concat(categoryTabs)
 
     const userTab = await new UserTab(this)
     this.tabs.push(userTab)
     this.tabs.push(new SearchTab(this))
     this.tabs.push(new CustomizationTab(this))
 
-    for (let j = 0; j < this.tabs.length; j++) {
-      const tab = this.tabs[j]
+    for (let i = 0; i < this.tabs.length; i++) {
+      const tab = this.tabs[i]
       tabList.append(tab.tabList)
       tabContent.append(tab.tabContent)
     }
@@ -218,28 +215,22 @@ export default class Palette {
     return pagination
   }
 
-  // TODO: resultを何に使っているのか、indexesを修正後に確認する
   toggleSorting() {
     if (this.EC.User.isSubscriber()) {
-      const result = []
       const iterable = this.getInitializedTabs()
       for (let i = 0; i < iterable.length; i++) {
         const tab = iterable[i]
-        let item
         if (!tab.tabContent.find('.sort-selector').length) {
-          item = tab.tabContent.find('ul.pagination').after(this.getSorting(tab))
+          tab.tabContent.find('ul.pagination').after(this.getSorting(tab))
         }
-
-        result.push(item)
       }
 
-      return result
+      return
     }
 
-    return this.getInitializedTabs().map(tab => this.removeSorting(tab))
+    this.getInitializedTabs().map(tab => this.removeSorting(tab))
   }
 
-  // TODO: initializedのみにする必要ある？
   getInitializedTabs() {
     const initializedTabs = []
     for (let i = 0; i < this.tabs.length; i++) {
@@ -302,10 +293,6 @@ export default class Palette {
 
   addPaletteToElement(element) {
     $(element).click(() => this.openDialog())
-  }
-
-  capitalize(text) {
-    return text.charAt(0).toUpperCase() + text.slice(1)
   }
 }
 /* eslint-enable no-undef */
