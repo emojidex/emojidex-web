@@ -166,5 +166,45 @@ function hasPremiumAccount() {
 function hasUserAccount() {
   return typeof userInfo !== 'undefined' && userInfo !== null
 }
+
+this.ECSpec = null
+async function prepareEmojidexClient() {
+  if (this.ECSpec) {
+    return Promise.resolve()
+  }
+
+  const palette = await $('#palette-btn').data().plugin_emojidexPalette
+  this.ECSpec = palette.EC
+}
+
+async function getEmojiCodeFromIndexAPI(sortType) {
+  await prepareEmojidexClient()
+  const response = await this.ECSpec.Indexes.index({ sort: sortType })
+  return response[0].code
+}
+
+async function getEmojiCodeFromCategoriesAPI(category, sortType) {
+  await prepareEmojidexClient()
+  const response = await this.ECSpec.Categories.getEmoji(category, { sort: sortType })
+  return response[0].code
+}
+
+async function getEmojiCodeFromSearchAPI(searchWord, sortType) {
+  await prepareEmojidexClient()
+  const response = await this.ECSpec.Search.search(searchWord, { sort: sortType })
+  return response[0].code
+}
+
+const sortTypes = ['score', 'unpopular', 'newest', 'oldest', 'liked', 'unliked', 'shortest']
+async function changeSortSelector(target, sortType, regex) {
+  await watchDOM(target, {
+    trigger: () => {
+      $(target).find('.sort-selector').val(sortType)
+      $(target).find('.sort-selector').change()
+    },
+    regex
+  })
+}
+
 /* eslint-enable no-unused-vars */
 /* eslint-enable no-undef */

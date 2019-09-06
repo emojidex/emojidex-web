@@ -56,22 +56,23 @@ describe('emojidexPalette:Search', () => {
       it('show sort selector', async done => {
         await tryLoginUser(premiumUserInfo.auth_user, premiumUserInfo.password)
         await watchDOM('#tab-content-search')
+        $('#tab-search a').click()
         const selector = $('#tab-content-search').find('.sort-selector')
         expect(selector.length).toEqual(1)
         done()
       })
 
-      it('sort', async done => {
-        const firstEmojiBeforeSort = $($('#tab-content-search').find('img')[0]).attr('title')
-        await watchDOM('#tab-content-search', {
-          trigger: () => {
-            $('#tab-content-search').find('.sort-selector').val('newest')
-            $('#tab-content-search').find('.sort-selector').change()
-          },
-          regex: /search-emoji-list/
-        })
-        expect($($('#tab-content-search').find('img')[0]).attr('title')).not.toEqual(firstEmojiBeforeSort)
-        done()
+      describe('sort', () => {
+        const target = '#tab-content-search'
+        for (let i = 0; i < sortTypes.length; i++) {
+          const sortType = sortTypes[i]
+          it(`sort: ${sortType}`, async done => {
+            const emojiName = await getEmojiCodeFromSearchAPI('face', sortType)
+            await changeSortSelector(target, sortType, /search-emoji-list/)
+            expect($($(target).find('img')[0]).attr('title')).toEqual(emojiName)
+            done()
+          })
+        }
       })
     })
   }
