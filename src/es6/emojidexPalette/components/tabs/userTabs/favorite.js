@@ -19,6 +19,7 @@ export default class FavoriteTab {
   createPagination() {
     const curPage = this.EC.User.Favorites.meta.total_count === 0 ? 0 : this.EC.User.Favorites.curPage
     let maxPage = curPage === 0 ? 0 : this.EC.User.Favorites.maxPage
+    // NOTE: 現時点のAPIではlimitをいくつに設定していようと１ページ目しか返ってこないので、実質ページ移動が不可能である。
     if (!this.EC.User.isSubscriber() && maxPage > 1) {
       maxPage = 1
     }
