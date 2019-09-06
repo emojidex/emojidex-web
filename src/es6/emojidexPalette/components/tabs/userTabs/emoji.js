@@ -19,8 +19,7 @@ export default class UserEmojiTab {
   }
 
   createPagination() {
-    const { meta } = this.EUE
-    const curPage = meta.total_count === 0 ? 0 : meta.page
+    const curPage = this.EUE.meta.total_count === 0 ? 0 : this.EUE.curPage
     const maxPage = curPage === 0 ? 0 : this.EUE.maxPage
 
     const resetEmoji = response => {

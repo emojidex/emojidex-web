@@ -17,9 +17,8 @@ export default class FavoriteTab {
   }
 
   createPagination() {
-    const { meta } = this.EC.User.Favorites
-    const curPage = meta.total_count === 0 ? 0 : meta.page
-    let maxPage = curPage === 0 ? 0 : Math.ceil(meta.total_count / this.EC.limit)
+    const curPage = this.EC.User.Favorites.meta.total_count === 0 ? 0 : this.EC.User.Favorites.curPage
+    let maxPage = curPage === 0 ? 0 : this.EC.User.Favorites.maxPage
     if (!this.EC.User.isSubscriber() && maxPage > 1) {
       maxPage = 1
     }

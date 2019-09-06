@@ -31,18 +31,6 @@ describe('emojidexPalette:User:Login', () => {
     })
   }
 
-  // it 'general user can not see the newest/popular emoji', (done) ->
-  //   pending() unless userInfo?
-  //   timer_option =
-  //     callback: ->
-  //       if $('#tab-content-user-newest').length
-  //         $('#tab-user-newest a').click()
-  //         expect($('#tab-content-user-newest').find('a').text()).toBe 'Premium/Pro user only.'
-  //         done()
-  //       else
-  //         spec_timer timer_option
-  //   spec_timer timer_option
-
   if (hasPremiumAccount()) {
     it('premium user login [Require a premium user info]', async done => {
       await tryLoginUser(premiumUserInfo.auth_user, premiumUserInfo.password)
@@ -56,18 +44,6 @@ describe('emojidexPalette:User:Login', () => {
       done()
     })
   }
-
-  // it 'premium user can see the newest/popular emoji', (done) ->
-  //   pending() unless premiumUserInfo?
-  //   timer_option =
-  //     callback: ->
-  //       if $('#tab-content-user-newest').length
-  //         $('#tab-user-newest a').click()
-  //         expect($('#tab-content-user-newest').find('img').length).toBeTruthy()
-  //         done()
-  //       else
-  //         spec_timer timer_option
-  //   spec_timer timer_option
 
   if (hasUserAccount() || hasPremiumAccount()) {
     const user = userInfo ? userInfo : premiumUserInfo

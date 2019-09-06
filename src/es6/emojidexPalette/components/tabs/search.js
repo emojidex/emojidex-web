@@ -45,10 +45,7 @@ export default class SearchTab {
     this.tabContent.append(this.palette.setEmojiList('search', response))
 
     const curPage = this.palette.EC.Search.meta.total_count === 0 ? 0 : this.palette.EC.Search.curPage
-    let maxPage = Math.floor(this.palette.EC.Search.meta.total_count / this.palette.EC.options.limit)
-    if (this.palette.EC.Search.meta.total_count % this.palette.EC.options.limit > 0) {
-      maxPage++
-    }
+    const maxPage = curPage === 0 ? 0 : this.palette.EC.Search.maxPage
 
     const prevFunc = async () => {
       const response = await this.palette.EC.Search.prev()

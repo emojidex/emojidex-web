@@ -1,8 +1,5 @@
-import EmojidexClientIndexes from 'emojidex-client/src/es6/components/indexes'
-
 export default class IndexTab {
   constructor(palette) {
-    this.ECI = new EmojidexClientIndexes(palette.EC)
     this.palette = palette
     this.initialized = false
     this.sortType = 'score'
@@ -11,33 +8,37 @@ export default class IndexTab {
     this.setTabContent()
   }
 
-  setTabContent() {
+  async setTabContent() {
     this.initialized = true
-    return this.ECI.index(
-      resultEmoji => {
-        this.tabContent.children().remove()
+    this.tabContent.children().remove()
 
-        this.tabContent.append('<div class="emojidex-category-name emjdx-all">Index</div>')
-        this.tabContent.append(this.palette.setEmojiList('index', resultEmoji))
+    const response = await this.palette.EC.Indexes.index({ sort: this.sortType })
+    this.createIndexPage(response)
+  }
 
-        const curPage = this.ECI.meta.total_count === 0 ? 0 : this.ECI.curPage
-        let maxPage = Math.floor(this.ECI.meta.total_count / this.palette.EC.options.limit)
-        if (this.ECI.meta.total_count % this.palette.EC.options.limit > 0) {
-          maxPage++
-        }
+  createIndexPage(response) {
+    this.tabContent.append('<div class="emojidex-category-name emjdx-all">Index</div>')
+    this.tabContent.append(this.palette.setEmojiList('index', response))
 
-        const prevFunc = () => this.ECI.prev()
-        const nextFunc = () => this.ECI.next()
-        const pagination = this.palette.getPagination('index', prevFunc, nextFunc, curPage, maxPage)
-        pagination.append(this.palette.getSorting(this))
-        return this.tabContent.append(pagination)
-      }
-      ,
-      { sort: this.sortType }
-    )
+    const curPage = this.palette.EC.Indexes.meta.total_count === 0 ? 0 : this.palette.EC.Indexes.curPage
+    const maxPage = curPage === 0 ? 0 : this.palette.EC.Indexes.maxPage
+
+    const prevFunc = async () => {
+      const response = await this.palette.EC.Indexes.prev()
+      this.createIndexPage(response)
+    }
+
+    const nextFunc = async () => {
+      const response = await this.palette.EC.Indexes.next()
+      this.createIndexPage(response)
+    }
+
+    const pagination = this.palette.getPagination('index', prevFunc, nextFunc, curPage, maxPage)
+    pagination.append(this.palette.getSorting(this))
+    this.tabContent.append(pagination)
   }
 
   resetTabContent() {
-    return this.setTabContent()
+    this.setTabContent()
   }
 }
