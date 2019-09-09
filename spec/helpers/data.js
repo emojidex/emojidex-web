@@ -1,8 +1,6 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 /* eslint-disable camelcase */
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000
-
 const emojiKiss = {
   code: 'kiss',
   moji: '💋',
