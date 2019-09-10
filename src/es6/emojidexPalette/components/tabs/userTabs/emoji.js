@@ -6,11 +6,17 @@ export default class UserEmojiTab {
     this.EUE = new EmojidexUserEmoji(parentTab.palette.EC)
     this.userName = userName
     this.container = container
+    this.initialized = false
   }
 
   async init() {
+    if (this.initialized) {
+      return
+    }
+
     await this.createTabContent()
     await this.createPagination()
+    this.initialized = true
   }
 
   async createTabContent() {
