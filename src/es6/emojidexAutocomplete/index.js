@@ -29,6 +29,7 @@ export default class EmojidexAutocomplete {
 
     // start: Plugin --------
     this.autocomplete = new AutoComplete(this)
+    return this.autocomplete
   }
 
   static getName() {

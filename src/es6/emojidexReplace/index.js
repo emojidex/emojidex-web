@@ -46,7 +46,7 @@ export default class EmojidexReplace {
       this.replacer = await new Replacer(this).loadEmoji()
     }
 
-    return this
+    return this.replacer
   }
 
   static getName() {
