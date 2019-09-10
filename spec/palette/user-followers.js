@@ -41,7 +41,8 @@ describe('emojidexPalette:User:Followers', () => {
           trigger: () => {
             $($('#follow-followers .users .btn')[0]).click()
           },
-          regex: /emoji-btn btn btn-default/
+          properties: 'display',
+          regex: /block/
         })
         expect($('#follow-followers .user-info.on .emoji-btn').length).toBeTruthy()
         done()
@@ -52,7 +53,8 @@ describe('emojidexPalette:User:Followers', () => {
         await watchDOM(selectorCurrentUserInfo, {
           trigger: () => {
             $($(`${selectorCurrentUserInfo} .palette-pager`)[1]).click()
-          }
+          },
+          regex: /user-emoji-list/
         })
         expect($(`${selectorCurrentUserInfo} .palette-num span`).text().charAt(0)).toBe('2')
         done()
@@ -63,7 +65,8 @@ describe('emojidexPalette:User:Followers', () => {
         await watchDOM(selectorCurrentUserInfo, {
           trigger: () => {
             $($(`${selectorCurrentUserInfo} .palette-pager`)[0]).click()
-          }
+          },
+          regex: /user-emoji-list/
         })
         expect($(`${selectorCurrentUserInfo} .palette-num span`).text().charAt(0)).toBe('1')
         done()
