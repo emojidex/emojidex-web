@@ -26,22 +26,23 @@ describe('emojidexPalette:Indexes', () => {
     it('show sort selector [Requires a premium user info]', async done => {
       await tryLoginUser(premiumUserInfo.auth_user, premiumUserInfo.password)
       await watchDOM('#tab-content-index')
+      $('#tab-index a').click()
       const selector = $('#tab-content-index').find('.sort-selector')
       expect(selector.length).toEqual(1)
       done()
     })
 
-    it('sort', async done => {
-      const firstEmojiBeforeSort = $($('#tab-content-index').find('img')[0]).attr('title')
-      await watchDOM('#tab-content-index', {
-        trigger: () => {
-          $('#tab-content-index').find('.sort-selector').val('newest')
-          $('#tab-content-index').find('.sort-selector').change()
-        },
-        regex: /index-emoji-list/
-      })
-      expect($($('#tab-content-index').find('img')[0]).attr('title')).not.toEqual(firstEmojiBeforeSort)
-      done()
+    describe('sort', () => {
+      const target = '#tab-content-index'
+      for (let i = 0; i < sortTypes.length; i++) {
+        const sortType = sortTypes[i]
+        it(`sort: ${sortType}`, async done => {
+          const emojiName = await getEmojiCodeFromIndexAPI(sortType)
+          await changeSortSelector(target, sortType, /index-emoji-list/)
+          expect($($(target).find('img')[0]).attr('title')).toEqual(emojiName)
+          done()
+        })
+      }
     })
   }
 })

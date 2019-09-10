@@ -10,13 +10,13 @@ export default class IndexTab {
 
   async setTabContent() {
     this.initialized = true
-    this.tabContent.children().remove()
 
     const response = await this.palette.EC.Indexes.index({ sort: this.sortType })
     this.createIndexPage(response)
   }
 
   createIndexPage(response) {
+    this.tabContent.children().remove()
     this.tabContent.append('<div class="emojidex-category-name emjdx-all">Index</div>')
     this.tabContent.append(this.palette.setEmojiList('index', response))
 

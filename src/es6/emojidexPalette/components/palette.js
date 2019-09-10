@@ -250,8 +250,12 @@ export default class Palette {
 
     const sortSelector = $('<select class="sort-selector form-control pull-right"></select>')
     sortSelector.append($('<option value="score">Score</option>'))
+    sortSelector.append($('<option value="unpopular">Lowest Score</option>'))
     sortSelector.append($('<option value="newest">Newest</option>'))
+    sortSelector.append($('<option value="oldest">Oldest</option>'))
     sortSelector.append($('<option value="liked">Most Liked</option>'))
+    sortSelector.append($('<option value="unliked">Least Liked</option>'))
+    sortSelector.append($('<option value="shortest">Shortest Code</option>'))
     sortSelector.val(targetTab.sortType)
     sortSelector.change(() => {
       targetTab.sortType = sortSelector.val()

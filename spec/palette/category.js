@@ -55,22 +55,23 @@ describe('emojidexPalette:Category', () => {
       it('show sort selector', async done => {
         await tryLoginUser(premiumUserInfo.auth_user, premiumUserInfo.password)
         await watchDOM('#tab-content-faces')
+        $('#tab-faces a').click()
         const selector = $('#tab-content-faces').find('.sort-selector')
         expect(selector.length).toEqual(1)
         done()
       })
 
-      it('sort', async done => {
-        const firstEmojiBeforeSort = $($('#tab-content-faces').find('img')[0]).attr('title')
-        await watchDOM('#tab-content-faces', {
-          trigger: () => {
-            $('#tab-content-faces').find('.sort-selector').val('newest')
-            $('#tab-content-faces').find('.sort-selector').change()
-          },
-          regex: /category-emoji-list/
-        })
-        expect($($('#tab-content-faces').find('img')[0]).attr('title')).not.toEqual(firstEmojiBeforeSort)
-        done()
+      describe('sort', () => {
+        const target = '#tab-content-faces'
+        for (let i = 0; i < sortTypes.length; i++) {
+          const sortType = sortTypes[i]
+          it(`sort: ${sortType}`, async done => {
+            const emojiName = await getEmojiCodeFromCategoriesAPI('faces', sortType)
+            await changeSortSelector(target, sortType, /category-emoji-list/)
+            expect($($(target).find('img')[0]).attr('title')).toEqual(emojiName)
+            done()
+          })
+        }
       })
     })
   }
