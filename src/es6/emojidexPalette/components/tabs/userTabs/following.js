@@ -22,21 +22,26 @@ export default class FollowingTab {
 
     const following = await this.EC.User.Follow.getFollowing()
     for (const userName of following) {
-      this.setUserButton(userName)
-      this.setUserInfo(userName)
+      const userInfo = this.setUserInfo(userName)
+      this.setUserButton(userName, userInfo)
     }
   }
 
-  setUserButton(userName) {
-    const userButton = $(`<div class='btn btn-default'>${userName}</div>`).click(e => {
-      $(this.selectorTabPane).find(`#${$(e.currentTarget).text()}`).addClass('on')
+  setUserButton(userName, userInfo) {
+    const userEmojiTab = new UserEmojiTab(this, userInfo, userName)
+    const userButton = $(`<div class='btn btn-default'>${userName}</div>`).click(async () => {
+      if (!userEmojiTab.initialized) {
+        await userEmojiTab.init()
+      }
+
+      $(this.selectorTabPane).find(`#following-${userName}`).addClass('on')
     })
     $(this.selectorUsers).append(userButton)
   }
 
   setUserInfo(userName) {
     const userInfo = $(`
-      <div id='${userName}' class='user-info'>
+      <div id='following-${userName}' class='user-info'>
         <div class='btn-close' aria-hidden='true'><i class='emjdx-abstract flip-vertical'></i></div>
         <div class='user-name'>${userName}</div>
         <div class="clearfix"/>
@@ -52,12 +57,7 @@ export default class FollowingTab {
     })
     $(this.selectorTabPane).append(userInfo)
 
-    this.setUserEmojisInfo(userInfo)
-  }
-
-  setUserEmojisInfo(userInfo) {
-    const userEmojiTab = new UserEmojiTab(this, userInfo, userInfo.attr('id'))
-    userEmojiTab.init()
+    return userInfo
   }
 }
 /* eslint-enable no-undef */

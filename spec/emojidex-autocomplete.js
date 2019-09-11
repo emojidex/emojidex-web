@@ -9,7 +9,7 @@ describe('emojidexAutocomplete', () => {
   it('show autocomplete view (If this spec failed, test in browser.) ' +
     'and inserts a text emoji code in an element marked as emojidex-plain_text', async done => {
     const plainText = $('.emojidex-plain_text').emojidexAutocomplete()
-    await plainText.data().plugin_emojidexAutocomplete.autocomplete
+    await plainText.data().plugin_emojidexAutocomplete
     expect($('.dropdown-textarea').css('display')).toEqual('none')
 
     plainText.caret('pos', 5)
@@ -26,7 +26,7 @@ describe('emojidexAutocomplete', () => {
 
   it('inserts an emoji image in an element marked as emojidex-content_editable', async done => {
     const contentEditable = $('.emojidex-content_editable').emojidexAutocomplete()
-    await contentEditable.data().plugin_emojidexAutocomplete.autocomplete
+    await contentEditable.data().plugin_emojidexAutocomplete
     contentEditable.caret('pos', 5)
     keyboard.dispatchEventsForInput(':face', contentEditable[0])
     await specTimer(3000)
