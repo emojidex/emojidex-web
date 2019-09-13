@@ -32,8 +32,11 @@ In JavaScript / in a script tag
 $(document).ready(function() {
   ...
   $("body").emojidexReplace();
+  await $('body').data().plugin_emojidexReplace; // Wait for initialization
   $(".emojidex-plain_text").emojidexAutocomplete();
+  await $(".emojidex-plain_text").data().plugin_emojidexAutocomplete; // Wait for initialization
   $(".emojidex-content_editable").emojidexAutocomplete();
+  await $(".emojidex-content_editable").data().plugin_emojidexAutocomplete // Wait for initialization
   ...
 });
 ```
@@ -69,27 +72,11 @@ Acknowledged ZWJ emoji:
 #### Defaults
 ```js
 emojidexReplace({
-  onComplete: undefined,
   useLoadingImg: true,
   autoUpdate: true,
   selector: '*',
   ignore: 'script, noscript, canvas, img, style, iframe, input, textarea, pre, code',
   ignoreContentEditable: true
-});
-```
-
-#### options.onComplete
-Type: `Function(jQuery element)` Default: `undefined`
-
-Specifies a method to be run after a code has been converted into an emoji.  
-A jQuery element reference is passed as an argument to the assigned method.  
-
-Example:
-```js
-$("body").emojidexReplace({
-  onComplete: function(element) {
-    console.log('Completed emojidexReplace!!');
-  }
 });
 ```
 
@@ -131,7 +118,6 @@ For `contenteditable="true"` elements the codes are converted immediately into e
 ```js
 emojidexAutocomplete({
   listLimit: 15,
-  onComplete: undefined,
   content_editable: {
     insertImg: true
   }
@@ -142,11 +128,6 @@ emojidexAutocomplete({
 Type: `Int` Default: `15`
 
 The maximum number of items displayed in a pop list.
-
-#### options.onComplete
-Type: `Function` Default: `undefined`
-
-Sets a function to run when an autocomplete finishes.
 
 #### options.content_editable.insertImg
 Type: `Boolean` Default: `true`
@@ -166,16 +147,10 @@ a user is logged in.
 #### Default options
 ```js
 emojidexPalette({
-  onComplete: undefined,
   onEmojiButtonClicked: undefined,
   paletteEmojisLimit: 50
 });
 ```
-
-#### options.onComplete
-Type: `Function` Default: `undefined`
-
-Calls the defined method after a palette has been set to an element.
 
 #### options.onEmojiButtonClicked
 Type: `Function({imageTag: Img tag of clicked emoji, emojiCode: Code of clicked emoji})` Default: `undefined`
@@ -208,13 +183,13 @@ yarn install
 ### Build
 For a regular one-off build:
 ```shell
-yarn gulp
+yarn build
 ```
 Modules will be built in the dist directory.
 
 For development mode with dynamic compilation and dev server:
 ```shell
-yarn gulp dev
+yarn dev
 ```
 A live version of the latest build will be available at
 [http://localhost:8000/dist/](http://localhost:8000/dist/).
