@@ -70,27 +70,11 @@ Acknowledged ZWJ emoji:
 #### Defaults
 ```js
 emojidexReplace({
-  onComplete: undefined,
   useLoadingImg: true,
   autoUpdate: true,
   selector: '*',
   ignore: 'script, noscript, canvas, img, style, iframe, input, textarea, pre, code',
   ignoreContentEditable: true
-});
-```
-
-#### options.onComplete
-Type: `Function(jQueryエレメント)` Default: `undefined`
-
-絵文字が置き換わった後に実行する関数を指定する事が出来ます。引数に置換が完了した、
-ターゲットエレメントのjQueryエレメントが入ります。
-
-例：
-```js
-$("body").emojidexReplace({
-  onComplete: function(element) {
-    console.log('Completed emojidexReplace!!');
-  }
 });
 ```
 
@@ -132,7 +116,6 @@ input, textareaでは候補を選択すると「:【対応する絵文字コー�
 ```js
 emojidexAutocomplete({
   listLimit: 15,
-  onComplete: undefined,
   content_editable: {
     insertImg: true
   }
@@ -143,11 +126,6 @@ emojidexAutocomplete({
 Type: `Int` Default: `15`
 
 候補リストの最大数を設定出来ます。
-
-#### options.onComplete
-Type: `Function` Default: `undefined`
-
-オートコンプリートの設置が完了した際に実行される関数を設定する事が出来ます。
 
 #### options.content_editable.insertImg
 Type: `Boolean` Default: `true`
@@ -167,16 +145,10 @@ Type: `Boolean` Default: `true`
 #### Default options
 ```js
 emojidexPalette({
-  onComplete: undefined,
   onEmojiButtonClicked: undefined,
   paletteEmojisLimit: 50
 });
 ```
-
-#### options.onComplete
-Type: `Function` Default: `undefined`
-
-パレットの設置が完了した際に実行される関数を設定する事が出来ます。
 
 #### options.onEmojiButtonClicked
 Type: `Function({imageTag: クリックした絵文字のimgタグ, emojiCode: クリックした絵文字のcode})` Default: `undefined`
@@ -209,13 +181,13 @@ yarn install
 ### ビルド
 一発ビルド:
 ```shell
-yarn gulp
+yarn build
 ```
 distフォルダ内に出力されます。
 
 開発用の動的ビルド:
 ```shell
-yarn gulp dev
+yarn dev
 ```
 編集の際に再コンパイルされ、
 [http://localhost:8000/dist/](http://localhost:8000/dist/)
@@ -244,6 +216,8 @@ __テストURL: localhost:8888/?random=false__
 
 ```shell
 yarn gulp spec
+もしくは
+yarn test
 ```
 
 プレミアムアカウントを使用したテスト
@@ -264,6 +238,8 @@ AUTH_TOKEN=0123456789abcdef
 
 ```shell
 yarn gulp spec
+もしくは
+yarn test
 ```
 
 ライセンス
