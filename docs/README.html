@@ -22,8 +22,11 @@ with other components of your site or app.  </p>
 <pre><code class="language-js">$(document).ready(function() {
   ...
   $(&quot;body&quot;).emojidexReplace();
+  await $(&#39;body&#39;).data().plugin_emojidexReplace; // Wait for initialization
   $(&quot;.emojidex-plain_text&quot;).emojidexAutocomplete();
+  await $(&quot;.emojidex-plain_text&quot;).data().plugin_emojidexAutocomplete; // Wait for initialization
   $(&quot;.emojidex-content_editable&quot;).emojidexAutocomplete();
+  await $(&quot;.emojidex-content_editable&quot;).data().plugin_emojidexAutocomplete // Wait for initialization
   ...
 });</code></pre>
 <p>And you&#39;re all set!</p>
@@ -47,21 +50,11 @@ Acknowledged ZWJ emoji:
 <h3 id="options">Options</h3>
 <h4 id="defaults">Defaults</h4>
 <pre><code class="language-js">emojidexReplace({
-  onComplete: undefined,
   useLoadingImg: true,
   autoUpdate: true,
   selector: &#39;*&#39;,
   ignore: &#39;script, noscript, canvas, img, style, iframe, input, textarea, pre, code&#39;,
   ignoreContentEditable: true
-});</code></pre>
-<h4 id="optionsoncomplete">options.onComplete</h4>
-<p>Type: <code>Function(jQuery element)</code> Default: <code>undefined</code></p>
-<p>Specifies a method to be run after a code has been converted into an emoji.<br>A jQuery element reference is passed as an argument to the assigned method.  </p>
-<p>Example:</p>
-<pre><code class="language-js">$(&quot;body&quot;).emojidexReplace({
-  onComplete: function(element) {
-    console.log(&#39;Completed emojidexReplace!!&#39;);
-  }
 });</code></pre>
 <h4 id="optionsuseloadingimg">options.useLoadingImg</h4>
 <p>Type: <code>Boolean</code> Default: <code>true</code></p>
@@ -86,7 +79,6 @@ and elements where <code>contenteditable=&quot;true&quot;</code>.  </p>
 <h4 id="default-options">Default options</h4>
 <pre><code class="language-js">emojidexAutocomplete({
   listLimit: 15,
-  onComplete: undefined,
   content_editable: {
     insertImg: true
   }
@@ -94,9 +86,6 @@ and elements where <code>contenteditable=&quot;true&quot;</code>.  </p>
 <h4 id="optionslistlimit">options.listLimit</h4>
 <p>Type: <code>Int</code> Default: <code>15</code></p>
 <p>The maximum number of items displayed in a pop list.</p>
-<h4 id="optionsoncomplete-1">options.onComplete</h4>
-<p>Type: <code>Function</code> Default: <code>undefined</code></p>
-<p>Sets a function to run when an autocomplete finishes.</p>
 <h4 id="optionscontent_editableinsertimg">options.content_editable.insertImg</h4>
 <p>Type: <code>Boolean</code> Default: <code>true</code></p>
 <p>Defines the behavior of <code>contenteditable=&quot;true&quot;</code> elements. When true, codes are automatically
@@ -109,13 +98,9 @@ a user is logged in.</p>
 <h3 id="options-2">Options</h3>
 <h4 id="default-options-1">Default options</h4>
 <pre><code class="language-js">emojidexPalette({
-  onComplete: undefined,
   onEmojiButtonClicked: undefined,
   paletteEmojisLimit: 50
 });</code></pre>
-<h4 id="optionsoncomplete-2">options.onComplete</h4>
-<p>Type: <code>Function</code> Default: <code>undefined</code></p>
-<p>Calls the defined method after a palette has been set to an element.</p>
 <h4 id="optionsonemojibuttonclicked">options.onEmojiButtonClicked</h4>
 <p>Type: <code>Function({imageTag: Img tag of clicked emoji, emojiCode: Code of clicked emoji})</code> Default: <code>undefined</code></p>
 <p>Calls the defined method when click an emoji button on the palette.</p>
@@ -132,10 +117,10 @@ cd emojidex-web</code></pre>
 <pre><code class="language-shell">yarn install</code></pre>
 <h3 id="build">Build</h3>
 <p>For a regular one-off build:</p>
-<pre><code class="language-shell">yarn gulp</code></pre>
+<pre><code class="language-shell">yarn build</code></pre>
 <p>Modules will be built in the dist directory.</p>
 <p>For development mode with dynamic compilation and dev server:</p>
-<pre><code class="language-shell">yarn gulp dev</code></pre>
+<pre><code class="language-shell">yarn dev</code></pre>
 <p>A live version of the latest build will be available at
 <a href="http://localhost:8000/dist/">http://localhost:8000/dist/</a>.</p>
 <h1 id="testing">Testing</h1>
