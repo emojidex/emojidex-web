@@ -32,8 +32,11 @@ In JavaScript / in a script tag
 $(document).ready(function() {
   ...
   $("body").emojidexReplace();
+  await $('body').data().plugin_emojidexReplace; // Wait for initialization
   $(".emojidex-plain_text").emojidexAutocomplete();
+  await $(".emojidex-plain_text").data().plugin_emojidexAutocomplete; // Wait for initialization
   $(".emojidex-content_editable").emojidexAutocomplete();
+  await $(".emojidex-content_editable").data().plugin_emojidexAutocomplete // Wait for initialization
   ...
 });
 ```
