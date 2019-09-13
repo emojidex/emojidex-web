@@ -2492,10 +2492,9 @@ cross-spawn@^3.0.0:
     lru-cache "^4.0.1"
     which "^1.2.9"
 
-"cross-storage@https://github.com/snowsunny/cross-storage.git":
+"cross-storage@git+https://github.com/snowsunny/cross-storage.git":
   version "1.0.0"
-  uid "9703e9b0f6d98a185fe3ed8d859102ed2a78e8b9"
-  resolved "https://github.com/snowsunny/cross-storage.git#9703e9b0f6d98a185fe3ed8d859102ed2a78e8b9"
+  resolved "git+https://github.com/snowsunny/cross-storage.git#9703e9b0f6d98a185fe3ed8d859102ed2a78e8b9"
 
 crypto-browserify@^3.11.0:
   version "3.12.0"
@@ -3071,9 +3070,10 @@ emoji-regex@^7.0.1:
   resolved "https://registry.yarnpkg.com/emoji-regex/-/emoji-regex-7.0.3.tgz#933a04052860c85e83c122479c4748a8e4c72156"
   integrity sha512-CwBLREIQ7LvYFB0WyRvwhq5N5qPhc6PMjD6bYggFlI5YyDgl+0vxq5VHbMOFqLg7hfWzmu8T5Z1QofhmTIhItA==
 
-emojidex-client@emojidex/emojidex-web-client#feature-async_await:
-  version "0.20.2"
-  resolved "https://codeload.github.com/emojidex/emojidex-web-client/tar.gz/19d9c14d39c84a90e55d78cc77de994fe4aeffdd"
+emojidex-client@^0.21.0:
+  version "0.21.0"
+  resolved "https://registry.yarnpkg.com/emojidex-client/-/emojidex-client-0.21.0.tgz#2edb69e66b3ce55b4791fc4ffbfe40a8291fe96c"
+  integrity sha512-wPam5AXkwKNYue2hGWK8lydYf3f1XWLIOgMAm+Htm9QrBgHpqCwiKtHeX/f23xcuuy2Or0elMrQq5FEeSrkscA==
   dependencies:
     axios "^0.19.0"
     core-js "3"
