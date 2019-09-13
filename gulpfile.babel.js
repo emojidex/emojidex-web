@@ -119,6 +119,7 @@ gulp.task('md2html', () => {
 
 gulp.task('jasmine', () => {
   const testFiles = [
+    'node_modules/clipboard/dist/clipboard.js',
     'node_modules/cross-storage/dist/client.js',
     'node_modules/jquery/dist/jquery.js',
     'node_modules/jasmine-jquery/lib/jasmine-jquery.js',

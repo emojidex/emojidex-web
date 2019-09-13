@@ -54,6 +54,7 @@
     "karma-chrome-launcher": "^2.2.0",
     "karma-cli": "^2.0.0",
     "karma-jasmine": "^2.0.1",
+    "karma-stacktrace": "^2.0.1",
     "keysim": "^2.1.0",
     "mini-css-extract-plugin": "^0.7.0",
     "node-sass": "^4.12.0",
@@ -74,7 +75,7 @@
   "dependencies": {
     "clipboard": "^1.5.5",
     "core-js": "3",
-    "emojidex-client": "^0.20.2",
+    "emojidex-client": "^0.21.0",
     "jquery.caret": "^0.3.1",
     "textcomplete": "^0.17.1",
     "textcomplete.contenteditable": "^0.1.1"

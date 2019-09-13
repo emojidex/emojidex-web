@@ -15,7 +15,6 @@ import AutoComplete from './components/autocomplete'
 const pluginName = 'emojidexAutocomplete'
 const defaults = {
   listLimit: 15,
-  onComplete: undefined,
   contentEditable: {
     insertImg: true
   }
@@ -30,6 +29,7 @@ export default class EmojidexAutocomplete {
 
     // start: Plugin --------
     this.autocomplete = new AutoComplete(this)
+    return this.autocomplete
   }
 
   static getName() {

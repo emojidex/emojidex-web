@@ -5,10 +5,9 @@ export default class HistoryTab {
     this.tabPane = $('<div class=\'tab-pane\' id=\'tab-content-user-history\'></div>') // eslint-disable-line no-undef
   }
 
-  createTabContent() {
-    return this.EC.User.History.get().then(response => {
-      return this.setHistoryEmoji(response)
-    })
+  async createTabContent() {
+    const response = await this.EC.User.History.get()
+    return this.setHistoryEmoji(response)
   }
 
   setHistoryEmoji(history) {
@@ -18,20 +17,22 @@ export default class HistoryTab {
   }
 
   createPagination() {
-    const { meta } = this.EC.User.History
-    const curPage = meta.total_count === 0 ? 0 : meta.page
-    let maxPage = curPage === 0 ? 0 : Math.ceil(meta.total_count / this.EC.limit)
-    if (!this.EC.User.authInfo.premium && !this.EC.User.authInfo.pro) {
+    const curPage = this.EC.User.History.meta.total_count === 0 ? 0 : this.EC.User.History.curPage
+    let maxPage = curPage === 0 ? 0 : this.EC.User.History.maxPage
+    // NOTE: 現時点のAPIではlimitをいくつに設定していようと１ページ目しか返ってこないので、実質ページ移動が不可能である。
+    if (!this.EC.User.isSubscriber() && maxPage > 1) {
       maxPage = 1
     }
 
-    const callback = response => {
-      this.tabPane.children().remove()
-      this.tabPane.append(this.setHistoryEmoji(response))
+    const prevFunc = async () => {
+      const response = await this.EC.User.History.prev()
+      this.setHistoryEmoji(response)
     }
 
-    const prevFunc = () => this.EC.User.History.prev(callback)
-    const nextFunc = () => this.EC.User.History.next(callback)
+    const nextFunc = async () => {
+      const response = await this.EC.User.History.next()
+      this.setHistoryEmoji(response)
+    }
 
     return this.tabPane.append(this.palette.getPagination('history', prevFunc, nextFunc, curPage, maxPage))
   }

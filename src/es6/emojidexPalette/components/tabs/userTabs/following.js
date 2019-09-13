@@ -1,4 +1,6 @@
 /* eslint-disable no-undef */
+import UserEmojiTab from './emoji'
+
 export default class FollowingTab {
   constructor(userTab) {
     this.EC = userTab.palette.EC
@@ -14,28 +16,32 @@ export default class FollowingTab {
     `)
   }
 
-  init() {
+  async init() {
     $(this.selectorUsers).children().remove()
     $(`${this.selectorTabPane} > .user-info`).remove()
 
-    this.EC.User.Follow.getFollowing(following => {
-      for (const userName of following) {
-        this.setUserButton(userName)
-        this.setUserInfo(userName)
-      }
-    })
+    const following = await this.EC.User.Follow.getFollowing()
+    for (const userName of following) {
+      const userInfo = this.setUserInfo(userName)
+      this.setUserButton(userName, userInfo)
+    }
   }
 
-  setUserButton(userName) {
-    const userButton = $(`<div class='btn btn-default'>${userName}</div>`).click(e => {
-      $(this.selectorTabPane).find(`#${$(e.currentTarget).text()}`).addClass('on')
+  setUserButton(userName, userInfo) {
+    const userEmojiTab = new UserEmojiTab(this, userInfo, userName)
+    const userButton = $(`<div class='btn btn-default'>${userName}</div>`).click(async () => {
+      if (!userEmojiTab.initialized) {
+        await userEmojiTab.init()
+      }
+
+      $(this.selectorTabPane).find(`#following-${userName}`).addClass('on')
     })
     $(this.selectorUsers).append(userButton)
   }
 
   setUserInfo(userName) {
     const userInfo = $(`
-      <div id='${userName}' class='user-info'>
+      <div id='following-${userName}' class='user-info'>
         <div class='btn-close' aria-hidden='true'><i class='emjdx-abstract flip-vertical'></i></div>
         <div class='user-name'>${userName}</div>
         <div class="clearfix"/>
@@ -51,41 +57,7 @@ export default class FollowingTab {
     })
     $(this.selectorTabPane).append(userInfo)
 
-    this.setUserEmojisInfo(userInfo)
-  }
-
-  setUserEmojisInfo(userInfo, option = {}) {
-    const userName = userInfo.attr('id')
-    return this.EC.Indexes.user(userName, undefined, option).then(response => {
-      userInfo.data(response.meta)
-      userInfo.data({ userName, maxPage: Math.ceil(response.meta.total_count / this.EC.limit ? response.meta.total_count / this.EC.limit : 1) })
-
-      userInfo.find('.user-emoji-list').children().remove()
-      userInfo.find('.following-pagination').remove()
-
-      userInfo.find('.user-emoji-list').append(this.palette.setEmojiList('following', response.emoji))
-      this.setPagination(userInfo)
-    })
-  }
-
-  setPagination(userInfo) {
-    const meta = userInfo.data()
-
-    const prevFunc = () => {
-      const option = { page: meta.page - 1 }
-      if (option.page > 0) {
-        this.setUserEmojisInfo(userInfo, option)
-      }
-    }
-
-    const nextFunc = () => {
-      const option = { page: meta.page + 1 }
-      if (option.page <= meta.maxPage) {
-        this.setUserEmojisInfo(userInfo, option)
-      }
-    }
-
-    userInfo.append(this.palette.getPagination('following', prevFunc, nextFunc, meta.page, meta.maxPage))
+    return userInfo
   }
 }
 /* eslint-enable no-undef */

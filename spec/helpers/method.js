@@ -1,5 +1,7 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000
+
 function helperBefore() {
   // TODO: fixtureの読み込み方法
   // jasmine.getFixtures().fixturesPath = 'build/spec/fixture/';
@@ -22,7 +24,7 @@ function helperAfter() {
 }
 
 function specTimer(time) {
-  return new Promise((resolve, reject) => {
+  return new Promise(resolve => {
     setTimeout(resolve, time)
   })
 }
@@ -62,12 +64,10 @@ function simulateTypingIn($inputor, pos) {
   $inputor.trigger('keyup')
 }
 
-function clearStorage() {
-  const CSC = new CrossStorageClient('https://www.emojidex.com/hub',
-    { frameId: 'emojidex-client-storage-hub' })
-  return CSC.onReadyFrame().then(() => {
-    return CSC.clear()
-  })
+async function clearStorage() {
+  const CSC = new CrossStorageClient('https://www.emojidex.com/hub', { frameId: 'emojidex-client-storage-hub' })
+  await CSC.onReadyFrame()
+  await CSC.clear()
 }
 
 function closePalette() {
@@ -79,33 +79,24 @@ function closePalette() {
   })
 }
 
-function showPalette() {
-  return new Promise(done => {
-    watchDOM('.ui-dialog', {properties: 'display'}).then(() => {
-      done()
-    })
-    specTimer(1000).then(() => {
-      $('.emojidex-palette-button')[0].click()
-    })
+async function showPalette() {
+  await watchDOM('.ui-dialog', {
+    properties: 'display',
+    trigger: () => {
+      $('#palette-btn').click()
+    }
   })
 }
 
-function preparePaletteButtons(done, options) {
+async function preparePaletteButtons(options) {
   const limitForSpec = 1
   $('#palette-btn').emojidexPalette({
     paletteEmojisLimit: limitForSpec,
-    onEmojiButtonClicked: options && options.onEmojiButtonClicked ? options.onEmojiButtonClicked : undefined,
-    onComplete: () => {
-      $('#palette-input').emojidexPalette({
-        paletteEmojisLimit: limitForSpec,
-        onComplete: () => {
-          specTimer(3000).then(() => {
-            done()
-          })
-        }
-      })
-    }
+    onEmojiButtonClicked: options && options.onEmojiButtonClicked ? options.onEmojiButtonClicked : undefined
   })
+  await $('#palette-btn').data().plugin_emojidexPalette
+  $('#palette-input').emojidexPalette({ paletteEmojisLimit: limitForSpec })
+  await $('#palette-input').data().plugin_emojidexPalette
 }
 
 function watchDOM(selector, options = {}) {
@@ -116,7 +107,7 @@ function watchDOM(selector, options = {}) {
       properties: options.properties,
       watchChildren: true,
       callback(data) {
-        if(options.regex) {
+        if (options.regex) {
           if (data.vals[0].match(options.regex)) {
             removeWatch($(selector), 'watchDOM')
             done(data)
@@ -127,60 +118,93 @@ function watchDOM(selector, options = {}) {
         }
       }
     })
-    options.trigger && options.trigger()
+
+    if (options.trigger) {
+      options.trigger()
+    }
   })
 }
 
-function tryLoginUser(user, password) {
-  return new Promise(done => {
-    watchDOM('#tab-content-user').then(() => {
-      specTimer(2000).then(() => {
-        done()
-      })
-    })
-
-    specTimer(1000).then(() => {
-      $('#tab-user a').click()
-      $('#palette-emoji-username-input').val(user)
-      $('#palette-emoji-password-input').val(password)
+async function tryLoginUser(user, password, success = true) {
+  $('#tab-user a').click()
+  $('#palette-emoji-username-input').val(user)
+  $('#palette-emoji-password-input').val(password)
+  await watchDOM('#tab-content-user', {
+    trigger: () => {
       $('#palette-emoji-login-submit').click()
-    })
+    },
+    regex: success ? /user-emoji-list/ : null
   })
 }
 
-function logout() {
-  return new Promise(done => {
-    watchDOM('#tab-content-user').then(() => {
-      specTimer(1000).then(() => {
-        done()
-      })
-    })
-    $('#palette-emoji-logout').click()
+async function logout() {
+  await watchDOM('#tab-content-user #palette-emoji-username-input', {
+    trigger: () => {
+      $('#palette-emoji-logout').click()
+    },
+    properties: 'display',
+    regex: /block/
   })
+  await specTimer(3000)
 }
 
-function beforePalette(done) {
-  clearStorage().then(() => {
-    return helperBefore()
-  }).then(() => {
-    preparePaletteButtons(done)
-  })
+async function beforePalette() {
+  await clearStorage()
+  await helperBefore()
+  await preparePaletteButtons()
 }
 
-function afterPalette(done) {
-  closePalette().then(() => {
-    return helperAfter()
-  }).then(() => {
-    done()
-  })
+async function afterPalette() {
+  await closePalette()
+  await helperAfter()
 }
 
 function hasPremiumAccount() {
-  return typeof(premiumUserInfo) !== 'undefined' && premiumUserInfo !== null
+  return typeof premiumUserInfo !== 'undefined' && premiumUserInfo !== null
 }
 
 function hasUserAccount() {
-  return typeof(userInfo) !== 'undefined' && userInfo !== null
+  return typeof userInfo !== 'undefined' && userInfo !== null
 }
+
+this.ECSpec = null
+async function prepareEmojidexClient() {
+  if (this.ECSpec) {
+    return Promise.resolve()
+  }
+
+  const palette = await $('#palette-btn').data().plugin_emojidexPalette
+  this.ECSpec = palette.EC
+}
+
+async function getEmojiCodeFromIndexAPI(sortType) {
+  await prepareEmojidexClient()
+  const response = await this.ECSpec.Indexes.index({ sort: sortType })
+  return response[0].code
+}
+
+async function getEmojiCodeFromCategoriesAPI(category, sortType) {
+  await prepareEmojidexClient()
+  const response = await this.ECSpec.Categories.getEmoji(category, { sort: sortType })
+  return response[0].code
+}
+
+async function getEmojiCodeFromSearchAPI(searchWord, sortType) {
+  await prepareEmojidexClient()
+  const response = await this.ECSpec.Search.search(searchWord, { sort: sortType })
+  return response[0].code
+}
+
+const sortTypes = ['score', 'unpopular', 'newest', 'oldest', 'liked', 'unliked', 'shortest']
+async function changeSortSelector(target, sortType, regex) {
+  await watchDOM(target, {
+    trigger: () => {
+      $(target).find('.sort-selector').val(sortType)
+      $(target).find('.sort-selector').change()
+    },
+    regex
+  })
+}
+
 /* eslint-enable no-unused-vars */
 /* eslint-enable no-undef */

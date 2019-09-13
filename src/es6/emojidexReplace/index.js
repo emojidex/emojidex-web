@@ -13,7 +13,6 @@ import Observer from './components/observer'
 
 const pluginName = 'emojidexReplace'
 const defaults = {
-  onComplete: undefined,
   useLoadingImg: true,
   autoUpdate: true,
   selector: '*',
@@ -32,25 +31,22 @@ export default class EmojidexReplace {
       this._defaults = defaults
       this._name = pluginName
 
-      this.EC = new EmojidexClient({
-        onReady: () => {
-          this.EC.User.login('session')
-          this.replace()
-        }
+      return new EmojidexClient().then(EC => {
+        this.EC = EC
+        this.EC.User.login()
+        return this.replace()
       })
     }
   }
 
-  replace() {
+  async replace() {
     if (this.options.autoUpdate) {
-      this.replacer = new Observer(this).reloadEmoji()
+      this.replacer = await new Observer(this).reloadEmoji()
     } else {
-      this.replacer = new Replacer(this).loadEmoji().then(() => {
-        if (typeof this.options.onComplete === 'function') {
-          this.options.onComplete()
-        }
-      })
+      this.replacer = await new Replacer(this).loadEmoji()
     }
+
+    return this.replacer
   }
 
   static getName() {

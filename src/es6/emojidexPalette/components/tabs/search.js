@@ -12,13 +12,13 @@ export default class SearchTab {
     const tabContent = $('<div class="tab-pane" id="tab-content-search"><div class="input-group"><input type="text" name="search" id="palette-emoji-search-input" class="form-control" placeholder="Search emoji"><span class="input-group-btn"></span></div></div>')
     tabContent.find('#palette-emoji-search-input').keypress(e => {
       if (e.keyCode === 13) {
-        return this.searchEmojiInput()
+        this.searchEmojiInput()
       }
     })
 
     const searchButton = $('<div class="btn btn-primary" id="palette-emoji-search-submit"><span class="glyphicon glyphicon-search"></span></div>')
     searchButton.click(() => {
-      return this.searchEmojiInput()
+      this.searchEmojiInput()
     })
     tabContent.find('.input-group-btn').append(searchButton)
 
@@ -29,34 +29,41 @@ export default class SearchTab {
     this.initialized = true
     const searchWord = $('#palette-emoji-search-input').val()
     if (searchWord.length > 0) {
-      return this.search(searchWord)
+      this.search(searchWord)
     }
   }
 
-  search(searchWord) {
+  async search(searchWord) {
     this.searchWord = searchWord
-    return this.palette.EC.Search.search(searchWord, resultEmoji => {
-      $('.search-emoji-list').remove()
-      $('.search-pagination').remove()
-      this.tabContent.append(this.palette.setEmojiList('search', resultEmoji))
+    const response = await this.palette.EC.Search.search(searchWord, { sort: this.sortType })
+    this.createSearchResultPage(response)
+  }
 
-      const curPage = this.palette.EC.Search.meta.total_count === 0 ? 0 : this.palette.EC.Search.curPage
-      let maxPage = Math.floor(this.palette.EC.Search.meta.total_count / this.palette.EC.options.limit)
-      if (this.palette.EC.Search.meta.total_count % this.palette.EC.options.limit > 0) {
-        maxPage++
-      }
+  createSearchResultPage(response) {
+    $('.search-emoji-list').remove()
+    $('.search-pagination').remove()
+    this.tabContent.append(this.palette.setEmojiList('search', response))
 
-      const prevFunc = () => this.palette.EC.Search.prev()
-      const nextFunc = () => this.palette.EC.Search.next()
-      const pagination = this.palette.getPagination('search', prevFunc, nextFunc, curPage, maxPage)
-      pagination.append(this.palette.getSorting(this))
-      return this.tabContent.append(pagination)
+    const curPage = this.palette.EC.Search.meta.total_count === 0 ? 0 : this.palette.EC.Search.curPage
+    const maxPage = curPage === 0 ? 0 : this.palette.EC.Search.maxPage
+
+    const prevFunc = async () => {
+      const response = await this.palette.EC.Search.prev()
+      this.createSearchResultPage(response)
     }
-    , { sort: this.sortType })
+
+    const nextFunc = async () => {
+      const response = await this.palette.EC.Search.next()
+      this.createSearchResultPage(response)
+    }
+
+    const pagination = this.palette.getPagination('search', prevFunc, nextFunc, curPage, maxPage)
+    pagination.append(this.palette.getSorting(this))
+    this.tabContent.append(pagination)
   }
 
   resetTabContent() {
-    return this.search(this.searchWord)
+    this.search(this.searchWord)
   }
 }
 /* eslint-enable no-undef */

@@ -5,39 +5,45 @@ export default class CustomizationTab {
     this.initialized = false
     this.tabList = $('<li id="tab-customization" class="pull-right"><a href="#tab-content-customization" data-toggle="pill"><i class="emjdx-customization"></a></li>')
     this.tabContent = $('<div class="tab-pane" id="tab-content-customization"><div class="emojidex-category-name emjdx-customization">Customization</div></div>')
-    this.getBaseEmoji()
+    this.createCustomizationTab()
   }
 
-  getBaseEmoji() {
-    return this.palette.EC.Customizations.get(result => {
-      $('.customization-emoji-list').remove()
-      $('.customization-pagination').remove()
+  async createCustomizationTab() {
+    const response = await this.palette.EC.Customizations.get()
+    this.createSelectBaseEmojiPage(response)
+  }
 
-      const emojiList = $('<div class="customization-emoji-list clearfix"></div>')
-      result.forEach(emoji => {
-        const button = $(`<button class='emoji-btn btn btn-default pull-left'>
-          <img alt='${emoji.code}' title='${emoji.code}' class='img-responsive center-block' src='https://cdn.emojidex.com/emoji/px32/${emoji.code}.png'>
-        </button>`)
-        button.click(() => {
-          this.createEditView(emoji)
-        })
-        emojiList.append(button)
+  createSelectBaseEmojiPage(response) {
+    $('.customization-emoji-list').remove()
+    $('.customization-pagination').remove()
+    const emojiList = $('<div class="customization-emoji-list clearfix"></div>')
+
+    response.forEach(emoji => {
+      const button = $(`<button class='emoji-btn btn btn-default pull-left'>
+        <img alt='${emoji.code}' title='${emoji.code}' class='img-responsive center-block' src='https://cdn.emojidex.com/emoji/px32/${emoji.code}.png'>
+      </button>`)
+      button.click(() => {
+        this.createEditView(emoji)
       })
-      this.tabContent.append(emojiList)
-
-      if (this.palette.EC.Customizations.meta.total_count === 0) {
-        return
-      }
-
-      const pagination = this.palette.getPagination(
-        'customization',
-        () => this.palette.EC.Customizations.prev(),
-        () => this.palette.EC.Customizations.next(),
-        this.palette.EC.Customizations.curPage,
-        this.palette.EC.Customizations.maxPage
-      )
-      return this.tabContent.append(pagination)
+      emojiList.append(button)
     })
+    this.tabContent.append(emojiList)
+
+    const curPage = this.palette.EC.Customizations.meta.total_count === 0 ? 0 : this.palette.EC.Customizations.curPage
+    const maxPage = curPage === 0 ? 0 : this.palette.EC.Customizations.maxPage
+
+    const prevFunc = async () => {
+      const response = await this.palette.EC.Customizations.prev()
+      this.createSelectBaseEmojiPage(response)
+    }
+
+    const nextFunc = async () => {
+      const response = await this.palette.EC.Customizations.next()
+      this.createSelectBaseEmojiPage(response)
+    }
+
+    const pagination = this.palette.getPagination('customization', prevFunc, nextFunc, curPage, maxPage)
+    this.tabContent.append(pagination)
   }
 
   createEditView(emoji) {
@@ -53,7 +59,6 @@ export default class CustomizationTab {
         <div class="text-center mt-m"><button class="insert-button btn btn-default">Insert</button></div>
       </div>
     </div>`)
-
     content.find('.insert-button').click(() => {
       if ($('.customization-preview').children()) {
         this.insertEmoji()
@@ -62,69 +67,54 @@ export default class CustomizationTab {
     content.find('.btn-close').click(() => {
       $('.customization-info').remove()
     })
-
     this.tabContent.append(content)
+
     this.createSelect(emoji)
   }
 
-  createSelect(emoji) {
+  async createSelect(emoji) {
     const { components } = emoji.customizations[0]
-    const selectPromises = []
+    const selects = []
     for (let i = 0; i < components.length; i++) {
-      selectPromises.push(new Promise(selectResolve => {
-        // create options
-        const component = components[i]
-        const optionPromises = []
-        for (let j = 0; j < component.length; j++) {
-          if (component[j]) {
-            optionPromises.push(new Promise(optionResolve => {
-              this.palette.EC.Search.find(component[j], result => {
-                const url = `https://${this.palette.EC.env.cdnAddr}/emoji/px32/${emoji.customizations[0].base}/${i}/${this.palette.EC.Util.escapeTerm(result.code)}.png`
-                optionResolve({ order: j, element: $(`<option value="${result.moji}" data-url="${url}">${result.code}</option>`) })
-              })
-            }))
-          } else {
-            optionPromises.push(new Promise(optionResolve => {
-              optionResolve({ order: j, element: $('<option></option>') })
-            }))
-          }
+      // create options
+      const component = components[i]
+      const optionPromises = []
+      for (let j = 0; j < component.length; j++) {
+        if (component[j]) {
+          optionPromises.push(async () => {
+            const result = await this.palette.EC.Search.find(component[j])
+            const url = `https://${this.palette.EC.env.cdnAddr}/emoji/px32/${emoji.customizations[0].base}/${i}/${this.palette.EC.Util.escapeTerm(result.code)}.png`
+            return { order: j, element: $(`<option value="${result.moji}" data-url="${url}">${result.code}</option>`) }
+          })
+        } else {
+          optionPromises.push(() => {
+            return { order: j, element: $('<option></option>') }
+          })
         }
+      }
 
-        // set options to select-tag
-        Promise.all(optionPromises).then(options => {
-          const select = $('<select class="form-control zwj-selects"></select>')
-          options.sort((a, b) => {
-            return a.order < b.order ? -1 : 1
-          })
-          options.forEach(option => {
-            select.append(option.element)
-          })
-          selectResolve({ order: i, element: $('<div class="mt-m"></div>').append(select) })
-        })
-      }))
+      // set options to select-tag
+      const options = await Promise.all(optionPromises.map(o => o())) // eslint-disable-line no-await-in-loop
+      const select = $('<select class="form-control zwj-selects"></select>')
+      options.sort((a, b) => a.order < b.order ? -1 : 1)
+      options.forEach(option => select.append(option.element))
+      selects.push({ order: i, element: $('<div class="mt-m"></div>').append(select) })
     }
 
-    // set selects to div-tag
-    Promise.all(selectPromises).then(selects => {
-      selects.sort((a, b) => {
-        return a.order < b.order ? -1 : 1
-      })
-      selects.forEach(select => {
-        $('.customization-select').append(select.element)
-      })
-      this.setZWJEmojis()
-      this.setIconSelectMenu()
-    })
+    selects.sort((a, b) => a.order < b.order ? -1 : 1)
+    selects.forEach(select => $('.customization-select').append(select.element))
+
+    this.setZWJEmojis()
+    this.setIconSelectMenu()
   }
 
-  setZWJEmojis() {
+  async setZWJEmojis() {
     $('.customization-preview').empty()
 
     const reg = new RegExp(`${this.palette.EC.defaults.cdnUrl}[a-z0-9]+/`, 'g')
     const size = `${this.palette.EC.defaults.cdnUrl}seal/`
-    this.palette.EC.Util.emojifyToHTML(this.getZWJEmojis()).then(result => {
-      $('.customization-preview').append(result.replace(reg, size))
-    })
+    const result = await this.palette.EC.Util.emojifyToHTML(this.getZWJEmojis())
+    $('.customization-preview').append(result.replace(reg, size))
   }
 
   getZWJEmojis() {
@@ -187,7 +177,8 @@ export default class CustomizationTab {
       selection.removeAllRanges()
       selection.addRange(range)
 
-      return elem.change()
+      elem.change()
+      return
     }
 
     const pos = elem.caret('pos')
@@ -196,7 +187,7 @@ export default class CustomizationTab {
     const stopTxt = txt.substring(pos, txt.length)
     elem.val(startTxt + codes + stopTxt)
     elem.focus()
-    return elem.caret('pos', pos + codes.length)
+    elem.caret('pos', pos + codes.length)
   }
 }
 /* eslint-enable no-undef */
