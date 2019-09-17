@@ -11,7 +11,25 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['jasmine', 'stacktrace'],
+    frameworks: ['parallel', 'jasmine', 'stacktrace'],
+    plugins: [
+      'karma-jasmine',
+      'karma-chrome-launcher',
+      'karma-parallel',
+      'karma-stacktrace'
+    ],
+    parallelOptions: {
+      executors: 8, // Defaults to cpu-count - 1
+      shardStrategy: 'round-robin'
+      // shardStrategy: 'description-length'
+      // shardStrategy: 'custom'
+      // customShardStrategy: function(config) {
+      //   config.executors // number, the executors set above
+      //   config.shardIndex // number, the specific index for the shard currently running
+      //   config.description // string, the name of the top-level describe string. Useful for determining how to shard the current specs
+      //   return config.
+      // }
+    },
     client: {
       jasmine: {
         random: false
