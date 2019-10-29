@@ -1,0 +1,42 @@
+doctype html
+html
+  head
+    meta(charset="utf-8")
+    title emojidex-web 3D test
+    meta(content="" name="description")
+    meta(content="width=device-width" name="viewport")
+    link(href="css/document.css" rel="stylesheet")
+    link(href="css/emojidex.css" rel="stylesheet")
+    script(src="https://code.jquery.com/jquery-3.4.1.min.js")
+    script(src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous")
+    script(src="js/emojidex.js")
+    style(type='text/css').
+      <!--
+        .text-wrap-20 {
+          display: flex;
+          font-size: 20px;
+        }
+        .text-wrap-30 {
+          display: flex;
+          font-size: 30px;
+        }
+        .text-wrap-40 {
+          display: flex;
+          font-size: 40px;
+        }
+      -->
+    script.
+      (function() {
+        $(document).ready((function(_this) {
+          return async function() {
+            $('body').emojidexReplace({ threed: true })
+            await $('body').data().plugin_emojidexReplace
+          };
+        })(this));
+      }).call(this);
+    
+  body
+    .text-wrap-20 💩aaa:poop:bbb💩aaa:poop:bbb💩aaa:poop:bbb
+    .text-wrap-30 ⛩ccc:shinto_shrine:ddd⛩ccc:shinto_shrine:ddd⛩ccc:shinto_shrine:ddd
+    .text-wrap-40 ☆eee:star:fff☆eee:star:fff☆eee:star:fff
+    .text-wrap-20 Not replaced💩⛩☆

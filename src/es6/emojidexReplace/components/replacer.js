@@ -2,6 +2,8 @@ export default class Replacer {
   constructor(plugin) {
     this.plugin = plugin
     this.targets = []
+    this.limit = 16
+    this.count = 0
   }
 
   async loadEmoji(element) {
@@ -15,15 +17,30 @@ export default class Replacer {
       return
     }
 
-    const tasks = this.targets.map(targetNode => {
-      return (async () => {
-        const newText = await this.plugin.EC.Util.emojifyToHTML(targetNode.data)
-        $(targetNode).replaceWith(newText) // eslint-disable-line no-undef
-      })()
-    })
+    for (let i = 0; i < this.targets.length; i++) {
+      const targetNode = this.targets[i]
+      let newText
+      if (this.plugin.options.threed && this.count < this.limit) {
+        newText = await this.plugin.EC.Util.emojifyToThreed(targetNode.data, this.count === 0) // eslint-disable-line no-await-in-loop
+        this.count += newText.split('emojidex-scene').length - 1
+      } else {
+        newText = await this.plugin.EC.Util.emojifyToHTML(targetNode.data) // eslint-disable-line no-await-in-loop
+      }
+
+      $(targetNode).replaceWith(newText) // eslint-disable-line no-undef
+    }
 
     this.targets = []
-    return Promise.all(tasks)
+
+    if (this.plugin.options.threed) {
+      this.plugin.EC.Threed.initialize($('#emojidex-canvas')[0]) // eslint-disable-line no-undef
+
+      const elements = $('.emojidex-scene') // eslint-disable-line no-undef
+      for (let i = 0; i < elements.length; i++) {
+        const element = elements[i]
+        this.plugin.EC.Threed.addScene(element.dataset.code, element.dataset.address, element)
+      }
+    }
   }
 
   tagEscape(string) {

@@ -95,6 +95,11 @@ module.exports = (env, argv) => {
         inject: false
       }),
       new HtmlWebpackPlugin({
+        filename: 'threed_test.html',
+        template: 'src/pug/threed_test.pug',
+        inject: false
+      }),
+      new HtmlWebpackPlugin({
         filename: '../build/spec/fixture/index.html',
         template: 'spec/fixture/index.pug',
         inject: false

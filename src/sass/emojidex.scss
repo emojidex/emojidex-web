@@ -59,3 +59,13 @@ img.emojidex-emoji {
     }
   }
 }
+
+#emojidex-canvas {
+  position: absolute;
+  left: 0;
+}
+
+.emojidex-scene {
+  @include emoji;
+  top: 0em;
+}
