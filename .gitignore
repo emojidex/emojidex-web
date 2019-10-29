@@ -11,3 +11,4 @@ build
 .env
 tmp
 *.orig
+yarn-error.log

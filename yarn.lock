@@ -3075,15 +3075,17 @@ emoji-regex@^7.0.1:
   resolved "https://registry.yarnpkg.com/emoji-regex/-/emoji-regex-7.0.3.tgz#933a04052860c85e83c122479c4748a8e4c72156"
   integrity sha512-CwBLREIQ7LvYFB0WyRvwhq5N5qPhc6PMjD6bYggFlI5YyDgl+0vxq5VHbMOFqLg7hfWzmu8T5Z1QofhmTIhItA==
 
-emojidex-client@^0.21.0:
+"emojidex-client@https://github.com/emojidex/emojidex-web-client.git#add_threed":
   version "0.21.0"
-  resolved "https://registry.yarnpkg.com/emojidex-client/-/emojidex-client-0.21.0.tgz#2edb69e66b3ce55b4791fc4ffbfe40a8291fe96c"
-  integrity sha512-wPam5AXkwKNYue2hGWK8lydYf3f1XWLIOgMAm+Htm9QrBgHpqCwiKtHeX/f23xcuuy2Or0elMrQq5FEeSrkscA==
+  resolved "https://github.com/emojidex/emojidex-web-client.git#bf95f28e7e01f71a831dd833081b0e310552455d"
   dependencies:
     axios "^0.19.0"
     core-js "3"
     cross-storage "https://github.com/snowsunny/cross-storage.git"
     lodash "^4.17.14"
+    three "^0.109.0"
+    three-gltf-loader "^1.109.0"
+    three-orbitcontrols "^2.108.1"
 
 emojis-list@^2.0.0:
   version "2.1.0"
@@ -9285,6 +9287,21 @@ thenify@^3.1.1:
   integrity sha1-5p44obq+lpsBCCB5eLn2K4hgSDk=
   dependencies:
     any-promise "^1.0.0"
+
+three-gltf-loader@^1.109.0:
+  version "1.109.0"
+  resolved "https://registry.yarnpkg.com/three-gltf-loader/-/three-gltf-loader-1.109.0.tgz#64ebaa0d14704431c7b5f0be0938ad346a618d70"
+  integrity sha512-XI6ZG+DYEOjlfI0hv8qFvkw7mMDN6DhofzZta2/crh2eUBa6GgeLKWNxnMxuDkSyMCNRq6OfwibIbFT2MDdG6w==
+
+three-orbitcontrols@^2.108.1:
+  version "2.108.1"
+  resolved "https://registry.yarnpkg.com/three-orbitcontrols/-/three-orbitcontrols-2.108.1.tgz#3b7877390ee5cde151805646064de3c0be313474"
+  integrity sha512-822+Y0iI4Hi9iNC4Rnfp3vP68yHYdeNtpUHI+/43eihe7UzH+26uiP0ISWDH9/T4hNpGYt+JDxf5cGLV0TeZ8Q==
+
+three@^0.109.0:
+  version "0.109.0"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.109.0.tgz#611c9ef860d10bd107695cead6c6abcd2422e5fd"
+  integrity sha512-XT99T3Hvgh2CEvwPdHYEunNE+clLK6KiT1U8En7YOgIqTUw4MrLeIc8zxQAJ6wbP8hhJaY5+Cff3jwBPpBa0gA==
 
 through2-filter@^3.0.0:
   version "3.0.0"
