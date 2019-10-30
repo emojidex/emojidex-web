@@ -104,6 +104,11 @@ module.exports = (env, argv) => {
         template: 'spec/fixture/index.pug',
         inject: false
       }),
+      new HtmlWebpackPlugin({
+        filename: '../build/spec/fixture/threed.html',
+        template: 'spec/fixture/threed.pug',
+        inject: false
+      }),
       new FixStyleOnlyEntriesPlugin({
         extensions: ['sass', 'scss']
       }),

@@ -23,6 +23,28 @@ function helperAfter() {
   })
 }
 
+function helperBeforeForThreed() {
+  return new Promise(resolve => {
+    if ($('#spec-wrap').length === 0) {
+      $('body').append(`<div id='spec-wrap'>${threedHtml}</div>`)
+      resolve()
+    } else {
+      resolve()
+    }
+  })
+}
+
+function helperAfterForReplace() {
+  return new Promise(async resolve => {
+    const replacer = await $('body').data().plugin_emojidexReplace
+    replacer.disconnect()
+    $('body').removeData().unbind()
+    window.emojidexReplacerOnce = false
+    $('#spec-wrap').remove()
+    resolve()
+  })
+}
+
 function specTimer(time) {
   return new Promise(resolve => {
     setTimeout(resolve, time)

@@ -103,7 +103,8 @@ gulp.task('copy',
 
 gulp.task('concat-spec', () => {
   const file = fs.readFileSync('build/spec/fixture/index.html', 'utf8')
-  fs.writeFileSync('build/spec/fixture/html.js', `var html = \`${file}\``)
+  const threedFile = fs.readFileSync('build/spec/fixture/threed.html', 'utf8')
+  fs.writeFileSync('build/spec/fixture/html.js', `var html = \`${file}\`; var threedHtml = \`${threedFile}\``)
   return gulp
     .src(['spec/helpers/method.js', 'build/spec/fixture/html.js'])
     .pipe(concat('html_in_method.js'))

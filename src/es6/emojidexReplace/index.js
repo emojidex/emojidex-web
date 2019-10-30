@@ -17,7 +17,8 @@ const defaults = {
   autoUpdate: true,
   selector: '*',
   ignore: 'script, noscript, canvas, img, style, iframe, input, textarea, pre, code',
-  ignoreContentEditable: true
+  ignoreContentEditable: true,
+  threed: false
 }
 
 export default class EmojidexReplace {
@@ -41,9 +42,11 @@ export default class EmojidexReplace {
 
   async replace() {
     if (this.options.autoUpdate) {
-      this.replacer = await new Observer(this).reloadEmoji()
+      this.replacer = new Observer(this)
+      await this.replacer.reloadEmoji()
     } else {
-      this.replacer = await new Replacer(this).loadEmoji()
+      this.replacer = new Replacer(this)
+      await this.replacer.loadEmoji()
     }
 
     return this.replacer
