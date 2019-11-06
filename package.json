@@ -75,7 +75,7 @@
   },
   "dependencies": {
     "clipboard": "^1.5.5",
-    "core-js": "3",
+    "core-js": "^3.3.6",
     "emojidex-client": "https://github.com/emojidex/emojidex-web-client.git#add_threed",
     "jquery.caret": "^0.3.1",
     "textcomplete": "^0.17.1",
