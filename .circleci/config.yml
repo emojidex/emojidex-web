@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:carbon-browsers
+      - image: circleci/node:erbium-browsers
 
     steps:
       - checkout
@@ -18,9 +18,9 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-      
+
       - run:
           name: create .env
           command:
-            echo -e ${env} >> .env      
+            echo -e ${env} >> .env
       - run: yarn test
