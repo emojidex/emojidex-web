@@ -66,22 +66,22 @@ const banner =
   '*/\n'
 gulp.task('banner-js', () => {
   return gulp
-    .src('docs/js/*.js')
+    .src('dist/js/*.js')
     .pipe(header(banner, { pkg }))
-    .pipe(gulp.dest('docs/js/'))
+    .pipe(gulp.dest('dist/js/'))
 })
 gulp.task('banner-css', () => {
   return gulp
-    .src('docs/css/*.css')
+    .src('dist/css/*.css')
     .pipe(header(banner, { pkg }))
-    .pipe(gulp.dest('docs/css/'))
+    .pipe(gulp.dest('dist/css/'))
 })
 gulp.task('banner',
   gulp.series(gulp.parallel('banner-js', 'banner-css'))
 )
 
-gulp.task('clean-docs', done => {
-  del.sync('docs/**/*')
+gulp.task('clean-dist', done => {
+  del.sync('dist/**/*')
   done()
 })
 gulp.task('clean-spec', done => {
@@ -89,13 +89,19 @@ gulp.task('clean-spec', done => {
   done()
 })
 gulp.task('clean',
-  gulp.parallel('clean-docs', 'clean-spec')
+  gulp.parallel('clean-dist', 'clean-spec')
 )
+
+gulp.task('copy-dist-to-docs', () => {
+  return gulp
+    .src('dist/**/*')
+    .pipe(gulp.dest('docs'))
+})
 
 gulp.task('copy-img', () => {
   return gulp
     .src('src/img/**/*')
-    .pipe(gulp.dest('docs/img'))
+    .pipe(gulp.dest('dist/img'))
 })
 gulp.task('copy',
   gulp.series(gulp.parallel('copy-img'))
@@ -114,7 +120,7 @@ gulp.task('md2html', () => {
   return gulp
     .src(['README.md'])
     .pipe(markdown())
-    .pipe(gulp.dest('docs'))
+    .pipe(gulp.dest('dist'))
 })
 
 gulp.task('jasmine', () => {
@@ -125,13 +131,13 @@ gulp.task('jasmine', () => {
     'node_modules/jasmine-jquery/lib/jasmine-jquery.js',
     'node_modules/jquery-watch/jquery-watch.js',
     'node_modules/keysim/dist/keysim.js',
-    'docs/js/emojidex.js',
+    'dist/js/emojidex.js',
     'spec/helpers/data.js',
     'build/spec/fixture/html_in_method.js',
     'tmp/authinfo.js',
-    'docs/img/logo.png',
-    'docs/css/document.min.css',
-    'docs/css/emojidex.min.css',
+    'dist/img/logo.png',
+    'dist/css/document.min.css',
+    'dist/css/emojidex.min.css',
     'spec/emojidex-autocomplete.js',
     'spec/palette/*.js',
     'spec/emojidex-replace.js'
@@ -144,13 +150,13 @@ gulp.task('jasmine', () => {
 })
 
 gulp.task('build',
-  gulp.series('md2html', 'copy', 'banner')
+  gulp.series('md2html', 'copy', 'banner', 'copy-dist-to-docs')
 )
 
 gulp.task('spec',
-  gulp.series('md2html', 'copy', 'banner', 'env', 'concat-spec', 'jasmine')
+  gulp.series('build', 'env', 'concat-spec', 'jasmine')
 )
 
 gulp.task('test-prepare',
-  gulp.series('md2html', 'copy', 'banner', 'env', 'concat-spec')
+  gulp.series('build', 'env', 'concat-spec')
 )

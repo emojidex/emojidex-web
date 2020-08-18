@@ -82,10 +82,10 @@
     "textcomplete.contenteditable": "^0.1.1"
   },
   "scripts": {
-    "build": "gulp clean-docs; webpack --mode development; webpack --mode production; gulp build",
+    "build": "gulp clean-dist; webpack --mode development; webpack --mode production; gulp build",
     "build-show": "yarn build; yarn show",
     "dev": "webpack --mode development -w",
-    "show": "browser-sync start -s 'docs' --port 8080",
+    "show": "browser-sync start -s 'dist' --port 8080",
     "test": "gulp clean; webpack --mode development; webpack --mode production; gulp test-prepare; karma start --single-run",
     "test-watch": "webpack --mode development; webpack --mode production; karma start"
   }

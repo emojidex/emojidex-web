@@ -24,7 +24,7 @@ module.exports = (env, argv) => {
     },
     output: {
       filename: `[name].${isProduction ? 'min.' : ''}js`,
-      path: path.join(__dirname, './docs'),
+      path: path.join(__dirname, './dist'),
       libraryTarget: 'umd'
     },
     module: {
@@ -108,7 +108,7 @@ module.exports = (env, argv) => {
       new BrowserSyncPlugin({
         host: 'localhost',
         port: 8080,
-        server: { baseDir: ['docs'] },
+        server: { baseDir: ['dist'] },
         // browser: ['google chrome', 'google-chrome', 'firefox']
       }),
     ],
