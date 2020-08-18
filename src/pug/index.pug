@@ -15,7 +15,7 @@ html
       (function() {
         $(document).ready((function(_this) {
           return async function() {
-            $.ajax('/README.html').then((data) => {
+            $.ajax('./README.html').then((data) => {
               $('.doc-content').append(data)
             })
 
