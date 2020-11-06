@@ -111,9 +111,6 @@ module.exports = (env, argv) => {
         server: { baseDir: ['dist'] },
         // browser: ['google chrome', 'google-chrome', 'firefox']
       }),
-    ],
-    // node: {
-    //   fs: 'empty'
-    // }
+    ]
   }
 }
