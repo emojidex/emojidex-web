@@ -199,7 +199,7 @@ Testing
 There are two types of specs: regular specs that use the test account and specs that require a
 premium account with R-18 enabled. As a developer you are eligable to receive a complimentary
 upgrade to a premium account if you are working on either an emojidex package or module or
-integration of emojidex in your own software. Simply contact info@emojidex.com with the subject
+integration of emojidex in your own software. Simply contact <a href='mailto:info@emojidex.com'>info@emojidex.com</a> with the subject
 "Developer Account" and list the following details:
 1. Your username on emojidex
 2. The project(s) you intend to work on
