@@ -8,7 +8,6 @@ module.exports = function(config) {
     basePath: '',
     browserNoActivityTimeout: 60000,
 
-
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
     frameworks: ['parallel', 'jasmine', 'stacktrace'],
@@ -20,7 +19,7 @@ module.exports = function(config) {
     ],
     parallelOptions: {
       executors: 8, // Defaults to cpu-count - 1
-      shardStrategy: 'round-robin'
+      // shardStrategy: 'round-robin'
       // shardStrategy: 'description-length'
       // shardStrategy: 'custom'
       // customShardStrategy: function(config) {
@@ -39,22 +38,22 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'node_modules/clipboard/dist/clipboard.js',
-      'node_modules/cross-storage/dist/client.js',
-      'node_modules/jquery/dist/jquery.js',
-      'node_modules/jasmine-jquery/lib/jasmine-jquery.js',
-      'node_modules/jquery-watch/jquery-watch.js',
-      'node_modules/keysim/dist/keysim.js',
-      'dist/js/emojidex.js',
-      'spec/helpers/data.js',
-      'build/spec/fixture/html_in_method.js',
-      'tmp/authinfo.js',
-      'dist/img/logo.png',
-      'dist/css/document.min.css',
-      'dist/css/emojidex.min.css',
-      'spec/emojidex-autocomplete.js',
-      'spec/palette/*.js',
-      'spec/emojidex-replace.js'
+      {pattern: 'node_modules/clipboard/dist/clipboard.js', type: 'js'},
+      {pattern: 'node_modules/cross-storage/dist/client.js', type: 'js'},
+      {pattern: 'node_modules/jquery/dist/jquery.js', type: 'js'},
+      {pattern: 'node_modules/jasmine-jquery/lib/jasmine-jquery.js', type: 'js'},
+      {pattern: 'node_modules/jquery-watch/jquery-watch.js', type: 'js'},
+      {pattern: 'node_modules/keysim/dist/keysim.js', type: 'js'},
+      {pattern: 'dist/js/emojidex.js', type: 'js'},
+      {pattern: 'spec/helpers/data.js', type: 'js'},
+      {pattern: 'build/spec/fixture/html_in_method.js', type: 'js'},
+      {pattern: 'tmp/authinfo.js', type: 'js'},
+      {pattern: 'dist/img/logo.png', type: 'dom'},
+      {pattern: 'dist/css/document.min.css', type: 'css'},
+      {pattern: 'dist/css/emojidex.min.css', type: 'css'},
+      {pattern: 'spec/emojidex-autocomplete.js', type: 'js'},
+      {pattern: 'spec/palette/*.js', type: 'js'},
+      {pattern: 'spec/emojidex-replace.js', type: 'js'}
     ],
 
 
@@ -80,6 +79,8 @@ module.exports = function(config) {
 
 
     // enable / disable colors in the output (reporters and logs)
+
+
     colors: true,
 
 
@@ -92,9 +93,16 @@ module.exports = function(config) {
     autoWatch: true,
 
 
-    // start these browsers
-    // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['ChromeHeadless'],
+    browsers: ['ChromeHeadlessDisableWebSecurity'],
+    customLaunchers: {
+      ChromeHeadlessDisableWebSecurity: {
+        base: 'ChromeHeadless',
+        flags: [
+          '--disable-web-security'
+        ]
+      }
+    },
+
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
