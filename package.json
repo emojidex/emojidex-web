@@ -64,7 +64,7 @@
     "postcss-loader": "^3.0.0",
     "pug": "^2.0.3",
     "pug-loader": "^2.4.0",
-    "puppeteer": "^1.18.1",
+    "puppeteer": "^5.4.1",
     "resolve-url-loader": "^3.1.0",
     "sass-loader": "^7.1.0",
     "script-loader": "^0.7.2",
