@@ -112,8 +112,8 @@ module.exports = (env, argv) => {
         // browser: ['google chrome', 'google-chrome', 'firefox']
       }),
     ],
-    node: {
-      fs: 'empty'
-    }
+    // node: {
+    //   fs: 'empty'
+    // }
   }
 }
