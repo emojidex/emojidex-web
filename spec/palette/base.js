@@ -15,7 +15,7 @@ describe('emojidexPalette:Base', () => {
     done()
   })
 
-  it('show emojidexPalette', async done => {
+  xit('show emojidexPalette', async done => {
     expect($('.ui-dialog')).toHaveCss({ display: 'none' })
 
     await showPalette()
@@ -23,7 +23,7 @@ describe('emojidexPalette:Base', () => {
     done()
   })
 
-  it('copy emoji code to clipboard', done => {
+  xit('copy emoji code to clipboard', done => {
     const clipboard = new Clipboard('.emoji-btn', {
       text: trigger => {
         return $(trigger).find('img').attr('title')
@@ -35,7 +35,7 @@ describe('emojidexPalette:Base', () => {
     done()
   })
 
-  it('close emojidexPalette', () => {
+  xit('close emojidexPalette', () => {
     $('button.pull-right[aria-label="Close"]').click()
     expect($('.ui-dialog')).toHaveCss({ display: 'none' })
   })

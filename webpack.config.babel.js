@@ -19,9 +19,10 @@ module.exports = (env, argv) => {
         'node_modules'
       ]
     },
-    optimization: {
-      minimizer: [new TerserPlugin({}), new OptimizeCSSAssetsPlugin({})],
-    },
+    // optimization: {
+    //   usedExports: false,
+    //   minimizer: [new TerserPlugin({}), new OptimizeCSSAssetsPlugin({})],
+    // },
     output: {
       filename: `[name].${isProduction ? 'min.' : ''}js`,
       path: path.join(__dirname, './dist'),

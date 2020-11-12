@@ -18,7 +18,8 @@ module.exports = function(config) {
       'karma-stacktrace'
     ],
     parallelOptions: {
-      executors: 8, // Defaults to cpu-count - 1
+      // executors: 16, // Defaults to cpu-count - 1
+      executors: 1, // Defaults to cpu-count - 1
       // shardStrategy: 'round-robin'
       // shardStrategy: 'description-length'
       // shardStrategy: 'custom'
@@ -44,6 +45,7 @@ module.exports = function(config) {
       {pattern: 'node_modules/jasmine-jquery/lib/jasmine-jquery.js', type: 'js'},
       {pattern: 'node_modules/jquery-watch/jquery-watch.js', type: 'js'},
       {pattern: 'node_modules/keysim/dist/keysim.js', type: 'js'},
+      // {pattern: 'dist/js/emojidex.min.js', type: 'js'},
       {pattern: 'dist/js/emojidex.js', type: 'js'},
       {pattern: 'spec/helpers/data.js', type: 'js'},
       {pattern: 'build/spec/fixture/html_in_method.js', type: 'js'},
@@ -51,9 +53,10 @@ module.exports = function(config) {
       {pattern: 'dist/img/logo.png', type: 'dom'},
       {pattern: 'dist/css/document.min.css', type: 'css'},
       {pattern: 'dist/css/emojidex.min.css', type: 'css'},
-      {pattern: 'spec/emojidex-autocomplete.js', type: 'js'},
-      {pattern: 'spec/palette/*.js', type: 'js'},
-      {pattern: 'spec/emojidex-replace.js', type: 'js'}
+      // {pattern: 'spec/emojidex-autocomplete.js', type: 'js'},
+      {pattern: 'spec/palette/base.js', type: 'js'},
+      // {pattern: 'spec/palette/indexes.js', type: 'js'},
+      // {pattern: 'spec/emojidex-replace.js', type: 'js'}
     ],
 
 
@@ -93,6 +96,7 @@ module.exports = function(config) {
     autoWatch: true,
 
 
+    // browsers: ['Chrome'],
     browsers: ['ChromeHeadlessDisableWebSecurity'],
     customLaunchers: {
       ChromeHeadlessDisableWebSecurity: {

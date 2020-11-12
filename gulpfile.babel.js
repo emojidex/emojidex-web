@@ -138,9 +138,11 @@ gulp.task('jasmine', () => {
     'dist/img/logo.png',
     'dist/css/document.min.css',
     'dist/css/emojidex.min.css',
-    'spec/emojidex-autocomplete.js',
-    'spec/palette/*.js',
-    'spec/emojidex-replace.js'
+    // 'spec/emojidex-autocomplete.js',
+    // 'spec/palette/*.js',
+    'spec/palette/indexes.js',
+    // 'spec/palette/base.js',
+    // 'spec/emojidex-replace.js'
   ]
   return gulp.src(testFiles)
     .pipe(watch(testFiles))

@@ -66,8 +66,11 @@ function simulateTypingIn($inputor, pos) {
 
 async function clearStorage() {
   const CSC = new CrossStorageClient('https://www.emojidex.com/hub', { frameId: 'emojidex-client-storage-hub' })
+  console.log(2111)
   await CSC.onReadyFrame()
+  console.log(2222)
   await CSC.clear()
+  console.log(2333)
 }
 
 function closePalette() {
@@ -149,9 +152,13 @@ async function logout() {
 }
 
 async function beforePalette() {
+  console.log(111)
   await clearStorage()
+  console.log(222)
   await helperBefore()
+  console.log(333)
   await preparePaletteButtons()
+  console.log(444)
 }
 
 async function afterPalette() {
