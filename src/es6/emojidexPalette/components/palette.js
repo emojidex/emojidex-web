@@ -17,7 +17,7 @@ export default class Palette {
   }
 
   async init() {
-    this.EC = await new EmojidexClient({ limit: this.plugin.options.paletteEmojisLimit })
+    this.EC = await new EmojidexClient({ limit: this.plugin.options.paletteEmojisLimit, storageHubPath: 'http://localhost:9999' })
 
     // start main --------
     $('input, textarea, [contenteditable="true"]').on('focus keyup mouseup', e => {

@@ -2643,9 +2643,9 @@ cross-spawn@^7.0.0:
     shebang-command "^2.0.0"
     which "^2.0.1"
 
-"cross-storage@https://github.com/snowsunny/cross-storage.git":
-  version "1.0.0"
-  resolved "https://github.com/snowsunny/cross-storage.git#9703e9b0f6d98a185fe3ed8d859102ed2a78e8b9"
+cross-storage@snowsunny/cross-storage.git:
+  version "1.1.0"
+  resolved "https://codeload.github.com/snowsunny/cross-storage/tar.gz/6863b773a6388ebaf52804decf054179e41e17df"
 
 css-color-names@0.0.4, css-color-names@^0.0.4:
   version "0.0.4"
@@ -3182,14 +3182,14 @@ emoji-regex@^8.0.0:
   resolved "https://registry.yarnpkg.com/emoji-regex/-/emoji-regex-8.0.0.tgz#e818fd69ce5ccfcb404594f842963bf53164cc37"
   integrity sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==
 
-emojidex-client@^0.21.1:
+emojidex-client@emojidex/emojidex-web-client#update_cross-storage:
   version "0.21.1"
-  resolved "https://registry.yarnpkg.com/emojidex-client/-/emojidex-client-0.21.1.tgz#2a3a4af4f6494fd46c838ada7ec136dd87907f8e"
-  integrity sha512-o7PgfbrWr3QrO6f54ypc9aOEbY+RGmpnL6XpXXMOHDhao10JD6xqpooFoWf046gUuWsrCRX7vQDHkheja0lbCw==
+  resolved "https://codeload.github.com/emojidex/emojidex-web-client/tar.gz/b7672006925d90b0e022c9a75aac72f3a324b250"
   dependencies:
     axios "^0.19.0"
     core-js "3"
-    cross-storage "https://github.com/snowsunny/cross-storage.git"
+    cross-storage snowsunny/cross-storage.git
+    localforage "^1.9.0"
     lodash "^4.17.14"
 
 emojis-list@^2.0.0:
@@ -4849,6 +4849,11 @@ ignore@^4.0.6:
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-4.0.6.tgz#750e3db5862087b4737ebac8207ffd1ef27b25fc"
   integrity sha512-cyFDKrqc/YdcWFniJhzI42+AzS+gNwmUzOSFcRCQYwySuBBBy/KjuxWLZ/FHEH6Moq1NizMOBWyTcv8O4OZIMg==
 
+immediate@~3.0.5:
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/immediate/-/immediate-3.0.6.tgz#9db1dbd0faf8de6fbe0f5dd5e56bb606280de69b"
+  integrity sha1-nbHb0Pr43m++D13V5Wu2BigN5ps=
+
 immutable@^3:
   version "3.8.2"
   resolved "https://registry.yarnpkg.com/immutable/-/immutable-3.8.2.tgz#c2439951455bb39913daf281376f1530e104adf3"
@@ -5747,6 +5752,13 @@ levn@^0.3.0, levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
+lie@3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/lie/-/lie-3.1.1.tgz#9a436b2cc7746ca59de7a41fa469b3efb76bd87e"
+  integrity sha1-mkNrLMd0bKWd56QfpGmz77dr2H4=
+  dependencies:
+    immediate "~3.0.5"
+
 liftoff@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/liftoff/-/liftoff-3.1.0.tgz#c9ba6081f908670607ee79062d700df062c52ed3"
@@ -5826,6 +5838,13 @@ loader-utils@^2.0.0:
     big.js "^5.2.2"
     emojis-list "^3.0.0"
     json5 "^2.1.2"
+
+localforage@^1.9.0:
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/localforage/-/localforage-1.9.0.tgz#f3e4d32a8300b362b4634cc4e066d9d00d2f09d1"
+  integrity sha512-rR1oyNrKulpe+VM9cYmcFn6tsHuokyVHFaCM3+osEmxaHTbEk8oQu6eGDfS6DQLWi/N67XRmB8ECG37OES368g==
+  dependencies:
+    lie "3.1.1"
 
 localtunnel@^2.0.0:
   version "2.0.0"
@@ -6578,7 +6597,7 @@ opn@5.3.0:
   dependencies:
     is-wsl "^1.1.0"
 
-optimize-css-assets-webpack-plugin@^5.4.0:
+optimize-css-assets-webpack-plugin@^5.0.4:
   version "5.0.4"
   resolved "https://registry.yarnpkg.com/optimize-css-assets-webpack-plugin/-/optimize-css-assets-webpack-plugin-5.0.4.tgz#85883c6528aaa02e30bbad9908c92926bb52dc90"
   integrity sha512-wqd6FdI2a5/FdoiCNNkEvLeA//lHHfG24Ln2Xm2qqdIk4aOlsR18jwpyOihqQ8849W3qu2DX8fOYxpvTMj+93A==

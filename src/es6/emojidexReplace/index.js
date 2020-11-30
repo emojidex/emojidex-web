@@ -31,7 +31,7 @@ export default class EmojidexReplace {
       this._defaults = defaults
       this._name = pluginName
 
-      return new EmojidexClient().then(EC => {
+      return new EmojidexClient({ storageHubPath: 'http://localhost:9999' }).then(EC => {
         this.EC = EC
         this.EC.User.login()
         return this.replace()

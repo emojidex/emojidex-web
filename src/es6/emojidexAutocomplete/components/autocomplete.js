@@ -5,7 +5,7 @@ import Contenteditable from 'textcomplete.contenteditable'
 export default class AutoComplete {
   constructor(plugin) {
     this.plugin = plugin
-    return new EmojidexClient().then(EC => {
+    return new EmojidexClient({ storageHubPath: 'http://localhost:9999' }).then(EC => {
       this.EC = EC
       this.EC.User.login()
       return this.setAutoComplete()
