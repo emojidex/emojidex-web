@@ -17,6 +17,60 @@
  * --------------------------------
 */
 /*
+ * jQuery emojidex - v0.21.2
+ * emojidex plugin for jQuery/Zepto and compatible
+ * https://github.com/emojidex/emojidex-web
+ *
+ * Includes:
+ *   emojidexReplace, emojidexAutocomplete
+ *
+ * =LICENSE=
+ * Licensed under the emojidex Open License
+ * https://www.emojidex.com/emojidex/emojidex_open_license
+ *
+ * Copyright 2013 the emojidex project / K.K. GenSouSha
+ *
+ *
+ * Includes:
+ * --------------------------------
+*/
+/*
+ * jQuery emojidex - v0.21.2
+ * emojidex plugin for jQuery/Zepto and compatible
+ * https://github.com/emojidex/emojidex-web
+ *
+ * Includes:
+ *   emojidexReplace, emojidexAutocomplete
+ *
+ * =LICENSE=
+ * Licensed under the emojidex Open License
+ * https://www.emojidex.com/emojidex/emojidex_open_license
+ *
+ * Copyright 2013 the emojidex project / K.K. GenSouSha
+ *
+ *
+ * Includes:
+ * --------------------------------
+*/
+/*
+ * jQuery emojidex - v0.21.2
+ * emojidex plugin for jQuery/Zepto and compatible
+ * https://github.com/emojidex/emojidex-web
+ *
+ * Includes:
+ *   emojidexReplace, emojidexAutocomplete
+ *
+ * =LICENSE=
+ * Licensed under the emojidex Open License
+ * https://www.emojidex.com/emojidex/emojidex_open_license
+ *
+ * Copyright 2013 the emojidex project / K.K. GenSouSha
+ *
+ *
+ * Includes:
+ * --------------------------------
+*/
+/*
  * ATTENTION: The "eval" devtool has been used (maybe by default in mode: "development").
  * This devtool is not neither made for production nor for readable output files.
  * It uses "eval()" calls to create a separate source file in the browser devtools.
