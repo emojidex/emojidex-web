@@ -65,14 +65,9 @@ function simulateTypingIn($inputor, pos) {
 }
 
 async function clearStorage() {
-  console.log('localStorage.clear --------')
-  localStorage.clear()
-  // const CSC = new CrossStorageClient('https://www.emojidex.com/hub', { frameId: 'emojidex-client-storage-hub' })
-  // console.log(2111)
-  // await CSC.onReadyFrame()
-  // console.log(2222)
-  // await CSC.clear()
-  // console.log(2333)
+  const CSC = new CrossStorageClient('http://localhost:9999', { frameId: 'emojidex-client-storage-hub' })
+  await CSC.onReadyFrame()
+  await CSC.clear()
 }
 
 function closePalette() {
@@ -95,11 +90,13 @@ async function showPalette() {
 
 async function preparePaletteButtons(options) {
   const limitForSpec = 1
+
   $('#palette-btn').emojidexPalette({
     paletteEmojisLimit: limitForSpec,
     onEmojiButtonClicked: options && options.onEmojiButtonClicked ? options.onEmojiButtonClicked : undefined
   })
   await $('#palette-btn').data().plugin_emojidexPalette
+
   $('#palette-input').emojidexPalette({ paletteEmojisLimit: limitForSpec })
   await $('#palette-input').data().plugin_emojidexPalette
 }
@@ -154,13 +151,9 @@ async function logout() {
 }
 
 async function beforePalette() {
-  console.log(111)
   await clearStorage()
-  console.log(222)
   await helperBefore()
-  console.log(333)
   await preparePaletteButtons()
-  console.log(444)
 }
 
 async function afterPalette() {

@@ -141,7 +141,8 @@ gulp.task('jasmine', () => {
     // 'spec/emojidex-autocomplete.js',
     // 'spec/palette/*.js',
     // 'spec/palette/indexes.js',
-    'spec/palette/base.js',
+    // 'spec/palette/base.js',
+    'spec/palette/user-login.js',
     // 'spec/emojidex-replace.js'
   ]
   return gulp.src(testFiles)
