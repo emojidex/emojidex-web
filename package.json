@@ -62,7 +62,7 @@
     "optimize-css-assets-webpack-plugin": "^5.0.1",
     "plugin-error": "^1.0.1",
     "postcss-loader": "^3.0.0",
-    "pug": "^2.0.3",
+    "pug": "^3.0.1",
     "pug-loader": "^2.4.0",
     "puppeteer": "^1.18.1",
     "resolve-url-loader": "^3.1.0",
